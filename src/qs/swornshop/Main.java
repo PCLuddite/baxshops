@@ -20,7 +20,8 @@ public class Main extends JavaPlugin implements Listener {
 	
 	public static final HashMap<String, CommandHelp> help = new HashMap<String, CommandHelp>();
 	
-	public static final CommandHelp cmdHelp = new CommandHelp("shop help", "h", "[action]", "show help with shops");
+	public static final CommandHelp cmdHelp = new CommandHelp("shop help", "h", "[action]", "show help with shops",
+			CommandHelp.arg("action", "get help on a /shop action, e.g. /shop h create"));
 	public static final CommandHelp cmdCreate = new CommandHelp("shop create", "c", "<owner>", "create a new shop", 
 			CommandHelp.arg("owner", "the owner of the shop"));
 	public static final CommandHelp cmdRemove = new CommandHelp("shop remove", "rm", null, "removes this shop");
