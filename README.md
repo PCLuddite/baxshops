@@ -1,2 +1,4 @@
+SwornShop
+=========
+
 SwornShop is a shop plugin for Bukkit.
-Source code to be pushed ASAP
