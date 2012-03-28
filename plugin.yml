@@ -1,0 +1,10 @@
+name: SwornShop
+main: qs.swornshop.Main
+description: Shop plugin
+version: 1.0
+commands:
+    shop:
+        description: manage shops
+        usage: |
+          /shop <action> <arguments...>
+          §6Help: §f/shop help
