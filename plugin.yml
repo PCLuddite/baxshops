@@ -8,3 +8,13 @@ commands:
         usage: |
           /shop <action> <arguments...>
           §6Help: §f/shop help
+permissions:
+  shops.*:
+    description: All SwornShop permissions
+    default: op
+    children:
+      shops.admin: true
+  shops.admin:
+    description: allows the user to create and remove shops
+    default: op
+    

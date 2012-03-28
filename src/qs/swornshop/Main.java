@@ -3,6 +3,8 @@ package qs.swornshop;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -13,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -24,6 +27,8 @@ public class Main extends JavaPlugin implements Listener {
 	public static final CommandHelp cmdHelp = new CommandHelp("shop help", "h", "[action]", "show help with shops");
 	public static final CommandHelp cmdCreate = new CommandHelp("shop create", "c", "<owner>", "create a new shop", 
 			CommandHelp.arg("owner", "the owner of the shop"));
+	public static final CommandHelp cmdRemove = new CommandHelp("shop remove", "rm", "", "removes the shop at your location");
+	
 	public static final CommandHelp cmdPending = new CommandHelp("shop pending", "p", null, "view pending shop requests", 
 			"Shows a list of pending offers to sell items to your shops",
 			"Use /shop accept and /shop reject on these offers.");
@@ -51,6 +56,8 @@ public class Main extends JavaPlugin implements Listener {
 		help.put("h", cmdHelp);
 		help.put("create", cmdCreate);
 		help.put("c", cmdCreate);
+		help.put("remove", cmdRemove);
+		help.put("rm", cmdRemove);
 		help.put("pending", cmdPending);
 		help.put("p", cmdPending);
 		help.put("buy", cmdBuy);
@@ -59,6 +66,8 @@ public class Main extends JavaPlugin implements Listener {
 		help.put("s", cmdSell);
 		help.put("add", cmdAdd);
 		help.put("a", cmdAdd);
+		
+		
 	}
 	
 	public static final String[] shopHelp = {
@@ -106,23 +115,57 @@ public class Main extends JavaPlugin implements Listener {
 			if ((action.equalsIgnoreCase("create")  || 
 					action.equalsIgnoreCase("c")) &&
 					args.length > 1) {
-				
-				Location loc = pl.getLocation();
-				World world = pl.getWorld();
-				Block b = world.getBlockAt(loc);
-				byte angle = (byte) ((((int) loc.getYaw() + 225) / 90) << 2);
-				b.setTypeIdAndData(SIGN, angle, false);
-				
-				Sign sign = (Sign) b.getState();
-				String owner = args[1];
-				sign.setLine(1, (owner.length() < 13 ? owner : owner.substring(0, 12) + 'É') + "'s");
-				sign.setLine(2, "shop");
-				sign.update();
-				
-				Shop shop = new Shop();
-				shop.owner = owner;
-				shops.put(b.getLocation(), shop);
-			} else if ((action.equalsIgnoreCase("help") ||
+				if(sender.hasPermission("shops.admin")){
+					Location loc = pl.getLocation();
+					World world = pl.getWorld();
+					Block b = world.getBlockAt(loc);
+					byte angle = (byte) ((((int) loc.getYaw() + 225) / 90) << 2);
+					b.setTypeIdAndData(SIGN, angle, false);
+
+					Sign sign = (Sign) b.getState();
+					String owner = args[1];
+					sign.setLine(1, (owner.length() < 13 ? owner : owner.substring(0, 12) + 'É') + "'s");
+					sign.setLine(2, "shop");
+					sign.update();
+
+					Shop shop = new Shop();
+					shop.owner = owner;
+					shops.put(b.getLocation(), shop);
+				}
+			}
+			else if (action.equalsIgnoreCase("remove") || action.equalsIgnoreCase("rm")){
+				if(sender.hasPermission("shops.admin") && sender instanceof Player){
+					Player player = (Bukkit.getServer().getPlayer(sender.getName()));
+					Location loc = player.getLocation();
+					Block b = loc.getBlock();
+					if(b != null && b.getTypeId() == SIGN){
+						Shop shop = shops.get(b.getLocation());
+						if(shop != null){
+							
+							if(player.hasPermission("shop.admin") || player.getName().equals(shop.owner)){
+								player.sendMessage(ChatColor.RED + "The shop has been removed");
+								shops.remove(b.getLocation());
+								Sign sign = (Sign) b.getState();
+								sign.setLine(0, "this shop is");
+								sign.setLine(1, "out of");
+								sign.setLine(2, "buisness!");
+								sign.setLine(3, "sorry! D:");
+								sign.update();
+								
+								
+							}
+							else{
+								pl.sendMessage("You do not have permission to remove shops");
+								
+								
+							}
+							
+							
+						}
+					}
+				}
+			}
+			else if ((action.equalsIgnoreCase("help") ||
 					action.equalsIgnoreCase("h")) &&
 					args.length > 1) {
 				String helpCmd = args[1];
@@ -168,6 +211,7 @@ public class Main extends JavaPlugin implements Listener {
 			Shop shop = shops.get(b.getLocation());
 			if (shop != null) {
 				Player pl = event.getPlayer();
+				
 				boolean isOwner = shop.owner.equals(pl.getName());
 				
 				ShopSelection selection = selectedShops.get(pl);
@@ -182,9 +226,16 @@ public class Main extends JavaPlugin implements Listener {
 							String.format("¤FWelcome to ¤B%s¤F's shop.", shop.owner),
 					"¤7For help with shops, type ¤3/shop help¤7."
 				});
+				
 				return PlayerInteractEvent.Result.DENY;
+				
 			}
 		}
 		return PlayerInteractEvent.Result.DEFAULT;
+	}
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onBlockBreak(BlockBreakEvent event){
+
+		
 	}
 }
