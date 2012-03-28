@@ -81,7 +81,7 @@ public class Main extends JavaPlugin implements Listener {
 		cmdSell.toIndexString()
 	};
 	public static final String[] shopOwnerHelp = {
-		"¤B/shop add¤3(¤Ba¤3) ¤3<buy-price> [sell-price=can't-sell] ¤7-¤F add your held item to this shop"
+		"ï¿½B/shop addï¿½3(ï¿½Baï¿½3) ï¿½3<buy-price> [sell-price=can't-sell] ï¿½7-ï¿½F add your held item to this shop"
 	};
 	
 	protected HashMap<Location, Shop> shops = new HashMap<Location, Shop>();
@@ -124,7 +124,7 @@ public class Main extends JavaPlugin implements Listener {
 
 					Sign sign = (Sign) b.getState();
 					String owner = args[1];
-					sign.setLine(1, (owner.length() < 13 ? owner : owner.substring(0, 12) + 'É') + "'s");
+					sign.setLine(1, (owner.length() < 13 ? owner : owner.substring(0, 12) + 'ï¿½') + "'s");
 					sign.setLine(2, "shop");
 					sign.update();
 
@@ -155,12 +155,8 @@ public class Main extends JavaPlugin implements Listener {
 								
 							}
 							else{
-								pl.sendMessage("You do not have permission to remove shops");
-								
-								
-							}
-							
-							
+								pl.sendMessage("You do not have permission to remove shops");	
+							}	
 						}
 					}
 				}
@@ -222,9 +218,9 @@ public class Main extends JavaPlugin implements Listener {
 				selectedShops.put(pl, selection);
 				
 				pl.sendMessage(new String[] {
-					isOwner ? "¤FWelcome to your shop." :
-							String.format("¤FWelcome to ¤B%s¤F's shop.", shop.owner),
-					"¤7For help with shops, type ¤3/shop help¤7."
+					isOwner ? "ï¿½FWelcome to your shop." :
+							String.format("ï¿½FWelcome to ï¿½B%sï¿½F's shop.", shop.owner),
+					"ï¿½7For help with shops, type ï¿½3/shop helpï¿½7."
 				});
 				
 				return PlayerInteractEvent.Result.DENY;
