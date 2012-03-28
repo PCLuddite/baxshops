@@ -201,7 +201,7 @@ public class Main extends JavaPlugin implements Listener {
 		sender.sendMessage("§C" + message);
 	}
 	
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler
 	public PlayerInteractEvent.Result onPlayerInteract(PlayerInteractEvent event) {
 		Block b = event.getClickedBlock();
 		if (b != null && b.getTypeId() == SIGN) {
@@ -230,9 +230,13 @@ public class Main extends JavaPlugin implements Listener {
 		}
 		return PlayerInteractEvent.Result.DEFAULT;
 	}
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onBlockBreak(BlockBreakEvent event){
-
-		
+	
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void onBlockBreak(BlockBreakEvent event) {
+		Block b = event.getBlock();
+		if (b != null && shops.containsKey(b.getLocation())) {
+			event.setCancelled(true);
+			b.getState().update();
+		}
 	}
 }
