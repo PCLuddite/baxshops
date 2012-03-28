@@ -10,9 +10,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -161,9 +160,8 @@ public class Main extends JavaPlugin implements Listener {
 					pl.sendMessage(h.toHelpString());
 				else
 					showHelp(pl, selection);
-				
 			} else {
-				showHelp(pl);
+				showHelp(pl, selection);
 			}
 			return true;
 		}
@@ -202,7 +200,7 @@ public class Main extends JavaPlugin implements Listener {
 	}
 	
 	@EventHandler
-	public PlayerInteractEvent.Result onPlayerInteract(PlayerInteractEvent event) {
+	public void onPlayerInteract(PlayerInteractEvent event) {
 		Block b = event.getClickedBlock();
 		if (b != null && b.getTypeId() == SIGN) {
 			Shop shop = shops.get(b.getLocation());
@@ -224,19 +222,11 @@ public class Main extends JavaPlugin implements Listener {
 					"§7For help with shops, type §3/shop help§7."
 				});
 				
-				return PlayerInteractEvent.Result.DENY;
-				
+				event.setCancelled(true);
+				if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
+					b.getState().update();
+				}
 			}
-		}
-		return PlayerInteractEvent.Result.DEFAULT;
-	}
-	
-	@EventHandler(priority = EventPriority.LOWEST)
-	public void onBlockBreak(BlockBreakEvent event) {
-		Block b = event.getBlock();
-		if (b != null && shops.containsKey(b.getLocation())) {
-			event.setCancelled(true);
-			b.getState().update();
 		}
 	}
 }
