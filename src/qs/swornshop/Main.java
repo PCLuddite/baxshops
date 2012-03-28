@@ -11,6 +11,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -49,16 +50,17 @@ public class Main extends JavaPlugin implements Listener {
 				sender.sendMessage(shopHelp);
 				return true;
 			}
-			if (args[0].equalsIgnoreCase("create") || 
+			if (args[0].equalsIgnoreCase("create")  &&
+					args.length == 2 &&
+					sender instanceof Player|| 
 					args[0].equalsIgnoreCase("c") &&
-					args.length > 1 &&
+					args.length == 2 &&
 					sender instanceof Player) {
 				
 				Player pl = (Player) sender;
 				Location loc = pl.getLocation();
 				World world = pl.getWorld();
 				Block b = world.getBlockAt(loc);
-				
 				byte angle = (byte) ((((int) loc.getYaw() + 225) / 90) << 2);
 				b.setTypeIdAndData(SIGN, angle, false);
 				
@@ -80,7 +82,7 @@ public class Main extends JavaPlugin implements Listener {
 		return false;
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public PlayerInteractEvent.Result onPlayerInteract(PlayerInteractEvent event) {
 		Block b = event.getClickedBlock();
 		if (b.getTypeId() == SIGN) {

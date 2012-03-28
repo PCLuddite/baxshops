@@ -8,4 +8,5 @@ public class Shop {
 	public Shop() { }
 	public String owner;
 	public HashMap<ItemStack, ShopEntry> inventory = new HashMap<ItemStack, ShopEntry>();
+	
 }
