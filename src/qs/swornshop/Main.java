@@ -50,10 +50,8 @@ public class Main extends JavaPlugin implements Listener {
 				sender.sendMessage(shopHelp);
 				return true;
 			}
-			if (args[0].equalsIgnoreCase("create")  &&
-					args.length == 2 &&
-					sender instanceof Player|| 
-					args[0].equalsIgnoreCase("c") &&
+			if ((args[0].equalsIgnoreCase("create")  || 
+					args[0].equalsIgnoreCase("c")) &&
 					args.length == 2 &&
 					sender instanceof Player) {
 				
