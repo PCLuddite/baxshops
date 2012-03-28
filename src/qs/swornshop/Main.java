@@ -129,6 +129,8 @@ public class Main extends JavaPlugin implements Listener {
 				CommandHelp h = help.get(helpCmd);
 				if (h != null)
 					pl.sendMessage(h.toHelpString());
+				else
+					showHelp(pl, selection);
 			} else {
 				showHelp(pl);
 			}
