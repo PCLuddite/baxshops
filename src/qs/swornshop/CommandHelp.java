@@ -58,19 +58,19 @@ public class CommandHelp {
 		if (indexString != null) 
 			return indexString;
 		StringBuilder b = new StringBuilder().
-			append("¤B/").
+			append("Â§B/").
 			append(command).
-			append("¤3");
+			append("Â§3");
 		if (alias != null) {
-			b.append("(¤B").
+			b.append("(Â§B").
 				append(alias).
-				append("¤3)");
+				append("Â§3)");
 		}
 		if (args != null) {
 			b.append(' ');
 			b.append(args);
 		}
-		b.append(" ¤7-¤F ").
+		b.append(" Â§7-Â§F ").
 			append(description);
 		return indexString = b.toString();
 	}
@@ -85,9 +85,9 @@ public class CommandHelp {
 			return helpString;
 		ArrayList<String> h = new ArrayList<String>();
 		h.add(header("Help: /" + command));
-		h.add("¤F" + description);
+		h.add("Â§F" + description);
 		StringBuilder b = new StringBuilder().
-				append("¤BUsage: ¤F").
+				append("Â§BUsage: Â§F").
 				append('/').
 				append(command);
 			if (args != null) {
@@ -96,7 +96,7 @@ public class CommandHelp {
 			}
 			h.add(b.toString());
 		if (alias != null)
-			h.add("¤BAlias: ¤F" + alias);
+			h.add("Â§BAlias: Â§F" + alias);
 		if (help != null) {
 			h.add("");
 			h.addAll(help);
@@ -110,7 +110,7 @@ public class CommandHelp {
 	 * @return the chat header
 	 */
 	public static String header(String title) {
-		return "¤7------------¤B " + title + " ¤7------------";
+		return "Â§7------------Â§B " + title + " Â§7------------";
 	}
 	
 	/**
@@ -120,7 +120,7 @@ public class CommandHelp {
 	 * @return the string
 	 */
 	public static String arg(String name, String description) {
-		return "¤B" + name + " ¤7-¤F " + description;
+		return "Â§B" + name + " Â§7-Â§F " + description;
 	}
 	
 	/**

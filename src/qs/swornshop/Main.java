@@ -3,10 +3,7 @@ package qs.swornshop;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
@@ -27,7 +24,7 @@ public class Main extends JavaPlugin implements Listener {
 	public static final CommandHelp cmdHelp = new CommandHelp("shop help", "h", "[action]", "show help with shops");
 	public static final CommandHelp cmdCreate = new CommandHelp("shop create", "c", "<owner>", "create a new shop", 
 			CommandHelp.arg("owner", "the owner of the shop"));
-	public static final CommandHelp cmdRemove = new CommandHelp("shop remove", "rm", "", "removes the shop at your location");
+	public static final CommandHelp cmdRemove = new CommandHelp("shop remove", "rm", null, "removes this shop");
 	
 	public static final CommandHelp cmdPending = new CommandHelp("shop pending", "p", null, "view pending shop requests", 
 			"Shows a list of pending offers to sell items to your shops",
@@ -66,8 +63,6 @@ public class Main extends JavaPlugin implements Listener {
 		help.put("s", cmdSell);
 		help.put("add", cmdAdd);
 		help.put("a", cmdAdd);
-		
-		
 	}
 	
 	public static final String[] shopHelp = {
@@ -81,7 +76,7 @@ public class Main extends JavaPlugin implements Listener {
 		cmdSell.toIndexString()
 	};
 	public static final String[] shopOwnerHelp = {
-		"�B/shop add�3(�Ba�3) �3<buy-price> [sell-price=can't-sell] �7-�F add your held item to this shop"
+		cmdAdd.toIndexString()
 	};
 	
 	protected HashMap<Location, Shop> shops = new HashMap<Location, Shop>();
@@ -103,7 +98,7 @@ public class Main extends JavaPlugin implements Listener {
 			String label, String[] args) {
 		if (command.getName().equalsIgnoreCase("shop")) {
 			if (!(sender instanceof Player)) {
-				sender.sendMessage("/shop can only be used by a player");
+				sendError(sender, "/shop can only be used by a player");
 			}
 			Player pl = (Player) sender;
 			ShopSelection selection = selectedShops.get(pl);
@@ -115,53 +110,49 @@ public class Main extends JavaPlugin implements Listener {
 			if ((action.equalsIgnoreCase("create")  || 
 					action.equalsIgnoreCase("c")) &&
 					args.length > 1) {
-				if(sender.hasPermission("shops.admin")){
-					Location loc = pl.getLocation();
-					World world = pl.getWorld();
-					Block b = world.getBlockAt(loc);
-					byte angle = (byte) ((((int) loc.getYaw() + 225) / 90) << 2);
-					b.setTypeIdAndData(SIGN, angle, false);
-
-					Sign sign = (Sign) b.getState();
-					String owner = args[1];
-					sign.setLine(1, (owner.length() < 13 ? owner : owner.substring(0, 12) + '�') + "'s");
-					sign.setLine(2, "shop");
-					sign.update();
-
-					Shop shop = new Shop();
-					shop.owner = owner;
-					shops.put(b.getLocation(), shop);
+				if (!sender.hasPermission("shops.admin")) {
+					sendError(pl, "You cannot create shops");
+					return true;
 				}
-			}
-			else if (action.equalsIgnoreCase("remove") || action.equalsIgnoreCase("rm")){
-				if(sender.hasPermission("shops.admin") && sender instanceof Player){
-					Player player = (Bukkit.getServer().getPlayer(sender.getName()));
-					Location loc = player.getLocation();
-					Block b = loc.getBlock();
-					if(b != null && b.getTypeId() == SIGN){
-						Shop shop = shops.get(b.getLocation());
-						if(shop != null){
-							
-							if(player.hasPermission("shop.admin") || player.getName().equals(shop.owner)){
-								player.sendMessage(ChatColor.RED + "The shop has been removed");
-								shops.remove(b.getLocation());
-								Sign sign = (Sign) b.getState();
-								sign.setLine(0, "this shop is");
-								sign.setLine(1, "out of");
-								sign.setLine(2, "buisness!");
-								sign.setLine(3, "sorry! D:");
-								sign.update();
-								
-								
-							}
-							else{
-								pl.sendMessage("You do not have permission to remove shops");	
-							}	
-						}
-					}
+				Location loc = pl.getLocation();
+				Block b = loc.getBlock();
+				byte angle = (byte) ((((int) loc.getYaw() + 225) / 90) << 2);
+				b.setTypeIdAndData(SIGN, angle, false);
+
+				Sign sign = (Sign) b.getState();
+				String owner = args[1];
+				sign.setLine(1, (owner.length() < 13 ? owner : owner.substring(0, 12) + '…') + "'s");
+				sign.setLine(2, "shop");
+				sign.update();
+
+				Shop shop = new Shop();
+				shop.owner = owner;
+				shop.location = b.getLocation();
+				shops.put(shop.location, shop);
+				
+			} else if (action.equalsIgnoreCase("remove") || 
+					action.equalsIgnoreCase("rm")) {
+				if (selection == null) {
+					sendError(pl, "You must select a shop to remove");
+					return true;
 				}
-			}
-			else if ((action.equalsIgnoreCase("help") ||
+				if (!pl.hasPermission("shop.admin") && !selection.isOwner) {
+					sendError(pl, "You cannot remove this shop");
+					return true;
+				}
+				Location loc = selection.shop.location;
+				Block b = loc.getBlock();
+				Sign sign = (Sign) b.getState();
+				sign.setLine(0, "This shop is");
+				sign.setLine(1, "out of");
+				sign.setLine(2, "business.");
+				sign.setLine(3, "Sorry! D:");
+				sign.update();
+				shops.remove(loc);
+				
+				pl.sendMessage("§B" + selection.shop.owner + "§F's shop has been removed");
+				
+			} else if ((action.equalsIgnoreCase("help") ||
 					action.equalsIgnoreCase("h")) &&
 					args.length > 1) {
 				String helpCmd = args[1];
@@ -170,6 +161,7 @@ public class Main extends JavaPlugin implements Listener {
 					pl.sendMessage(h.toHelpString());
 				else
 					showHelp(pl, selection);
+				
 			} else {
 				showHelp(pl);
 			}
@@ -199,6 +191,15 @@ public class Main extends JavaPlugin implements Listener {
 				sender.sendMessage(shopSelectedHelp);
 		}
 	}
+
+	/**
+	 * Informs a player of an error
+	 * @param sender the player
+	 * @param message the error message
+	 */
+	protected void sendError(CommandSender sender, String message) {
+		sender.sendMessage("§C" + message);
+	}
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public PlayerInteractEvent.Result onPlayerInteract(PlayerInteractEvent event) {
@@ -218,9 +219,9 @@ public class Main extends JavaPlugin implements Listener {
 				selectedShops.put(pl, selection);
 				
 				pl.sendMessage(new String[] {
-					isOwner ? "�FWelcome to your shop." :
-							String.format("�FWelcome to �B%s�F's shop.", shop.owner),
-					"�7For help with shops, type �3/shop help�7."
+					isOwner ? "§FWelcome to your shop." :
+							String.format("§FWelcome to §B%s§F's shop.", shop.owner),
+					"§7For help with shops, type §3/shop help§7."
 				});
 				
 				return PlayerInteractEvent.Result.DENY;
