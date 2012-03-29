@@ -68,10 +68,16 @@ public class Main extends JavaPlugin implements Listener {
 	public static final String[] shopHelp = {
 		CommandHelp.header("Shop Help"),
 		cmdHelp.toIndexString(),
-		cmdCreate.toIndexString(),
 		cmdPending.toIndexString()
 	};
-	public static final String[] shopSelectedHelp = {
+	public static final String[] shopSelectedHelp = { };
+	public static final String[] shopAdminHelp = {
+		cmdCreate.toIndexString()
+	};
+	public static final String[] shopSelectedAdminHelp = {
+		cmdRemove.toIndexString()
+	};
+	public static final String[] shopNotOwnerHelp = {
 		cmdBuy.toIndexString(),
 		cmdSell.toIndexString()
 	};
@@ -107,9 +113,12 @@ public class Main extends JavaPlugin implements Listener {
 				return true;
 			}
 			String action = args[0];
-			if ((action.equalsIgnoreCase("create")  || 
-					action.equalsIgnoreCase("c")) &&
-					args.length > 1) {
+			if (action.equalsIgnoreCase("create")  || 
+					action.equalsIgnoreCase("c")) {
+				if (args.length < 2) {
+					sendError(pl, cmdCreate.toUsageString());
+					return true;
+				}
 				if (!sender.hasPermission("shops.admin")) {
 					sendError(pl, "You cannot create shops");
 					return true;
@@ -160,7 +169,7 @@ public class Main extends JavaPlugin implements Listener {
 				if (h != null)
 					pl.sendMessage(h.toHelpString());
 				else
-					showHelp(pl, selection);
+					sendError(pl, String.format("'/shop %s' is not an action", helpCmd));
 			} else {
 				showHelp(pl, selection);
 			}
@@ -183,11 +192,16 @@ public class Main extends JavaPlugin implements Listener {
 	 */
 	protected void showHelp(CommandSender sender, ShopSelection selection) {
 		sender.sendMessage(shopHelp);
+		if (sender.hasPermission("shops.admin"))
+			sender.sendMessage(shopAdminHelp);
 		if (selection != null) {
+			sender.sendMessage(shopSelectedHelp);
+			if (sender.hasPermission("shops.admin"))
+				sender.sendMessage(shopSelectedAdminHelp);
 			if (selection.isOwner)
 				sender.sendMessage(shopOwnerHelp);
 			else
-				sender.sendMessage(shopSelectedHelp);
+				sender.sendMessage(shopNotOwnerHelp);
 		}
 	}
 

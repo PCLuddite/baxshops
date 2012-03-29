@@ -46,7 +46,7 @@ public class CommandHelp {
 	public List<String> help;
 	
 	// for memoizing to*String() functions
-	private String indexString = null;
+	private String indexString = null, usageString = null;
 	private String[] helpString = null;
 	
 	/**
@@ -75,6 +75,19 @@ public class CommandHelp {
 		return indexString = b.toString();
 	}
 	
+	public String toUsageString() {
+		if (usageString != null) 
+			return usageString;
+		StringBuilder b = new StringBuilder().
+			append("Usage: /").
+			append(command);
+		if (args != null) {
+			b.append(' ');
+			b.append(args);
+		}
+		return usageString = b.toString();
+	}
+	
 	/**
 	 * Generates a full help string suitable for use in a help page for this command.
 	 * This method is memoized so the string is only created once.
@@ -87,14 +100,14 @@ public class CommandHelp {
 		h.add(header("Help: /" + command));
 		h.add("§F" + description);
 		StringBuilder b = new StringBuilder().
-				append("§BUsage: §F").
-				append('/').
-				append(command);
-			if (args != null) {
-				b.append(' ').
-					append(args);
-			}
-			h.add(b.toString());
+			append("§BUsage: §F").
+			append('/').
+			append(command);
+		if (args != null) {
+			b.append(' ').
+				append(args);
+		}
+		h.add(b.toString());
 		if (alias != null)
 			h.add("§BAlias: §F" + alias);
 		if (help != null) {
