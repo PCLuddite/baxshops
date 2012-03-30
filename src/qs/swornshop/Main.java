@@ -177,6 +177,7 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, "You cannot add items to this shop");
 					return true;
 				}
+				
 				float retailAmount, refundAmount;
 				try {
 					retailAmount = Integer.parseInt(args[1]);
