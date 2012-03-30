@@ -1,7 +1,16 @@
 package qs.swornshop;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.Scanner;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -85,6 +94,7 @@ public class Main extends JavaPlugin implements Listener {
 	public static final String[] shopOwnerHelp = {
 		cmdAdd.toIndexString()
 	};
+	public static HashMap<String, Long> aliases = new HashMap<String, Long>();
 	
 	protected HashMap<Location, Shop> shops = new HashMap<Location, Shop>();
 	protected HashMap<Player, ShopSelection> selectedShops = new HashMap<Player, ShopSelection>();
@@ -96,6 +106,8 @@ public class Main extends JavaPlugin implements Listener {
 	public void onEnable() {
         getServer().getPluginManager().registerEvents(this, this);
 		log = this.getLogger();
+		aliases = parseItems();
+		System.out.println(aliases.get("wood"));
 	}
 	@Override
 	public void onDisable() {}
@@ -200,7 +212,25 @@ public class Main extends JavaPlugin implements Listener {
 				selection.shop.inventory.put(stack, newEntry);
 				pl.getItemInHand().setAmount(0);
 				
-			} else if ((action.equalsIgnoreCase("help") ||
+			}
+			else if((action.equalsIgnoreCase("testlookup"))){
+				if(args.length == 2){
+					Long alias = aliases.get(args[1]);
+					if(alias != null){
+						
+						int id = (int) (alias >> 16);
+						int damage = (int) (alias & 0xFFFF);
+						sender.sendMessage(args[1] + " is an alias for: " + id + ":" + damage);
+					}
+					else{
+						sender.sendMessage("that is not a valid alias!");
+					}
+				}
+				else{
+					sender.sendMessage("Invalid arguments");
+				}
+			}
+			else if ((action.equalsIgnoreCase("help") ||
 					action.equalsIgnoreCase("h")) &&
 					args.length > 1) {
 				String helpCmd = args[1];
@@ -285,4 +315,41 @@ public class Main extends JavaPlugin implements Listener {
 			}
 		}
 	}
+	
+	public HashMap<String, Long> parseItems(){
+		File f = new File(this.getDataFolder(), "aliases.txt");
+		FileInputStream fstream;
+		HashMap<String, Long> itemNames = new HashMap<String, Long>();
+		try {
+			fstream = new FileInputStream(f);
+			DataInputStream in = new DataInputStream(fstream);
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			String strLine; 
+			while ((strLine = br.readLine()) != null){
+				if(strLine.charAt(0) == '#'){continue;}		
+				Scanner current = new Scanner(strLine);
+				String name = current.next();
+				int typeId = current.nextInt();
+				int damageValue = 0;
+				long output;
+				if(!current.hasNext()){
+					output = typeId << 16 | damageValue;
+					itemNames.put(name, output);
+					continue;
+				}
+				damageValue = current.nextInt();
+				 output = typeId << 16 | damageValue;
+				itemNames.put(name, output);
+				
+			}
+			in.close();
+		}catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return itemNames;
+	}
+	
 }
