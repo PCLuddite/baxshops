@@ -183,6 +183,7 @@ public class Main extends JavaPlugin implements Listener {
 							newEntry.buyPrice = buyAmmount;
 							newEntry.sellPrice = sellAmmount;
 							selection.shop.inventory.put(stack, newEntry);
+							pl.getItemInHand().setAmount(0);
 							
 						}
 						else{
