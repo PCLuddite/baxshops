@@ -106,6 +106,7 @@ public class Main extends JavaPlugin implements Listener {
 		if (command.getName().equalsIgnoreCase("shop")) {
 			if (!(sender instanceof Player)) {
 				sendError(sender, "/shop can only be used by a player");
+				return true;
 			}
 			Player pl = (Player) sender;
 			ShopSelection selection = selectedShops.get(pl);
@@ -143,7 +144,7 @@ public class Main extends JavaPlugin implements Listener {
 			} else if (action.equalsIgnoreCase("remove") || 
 					action.equalsIgnoreCase("rm")) {
 				if (selection == null) {
-					sendError(pl, "You must select a shop to remove");
+					sendError(pl, "You must select a shop");
 					return true;
 				}
 				if (!pl.hasPermission("shop.admin") && !selection.isOwner) {
@@ -162,47 +163,53 @@ public class Main extends JavaPlugin implements Listener {
 				
 				pl.sendMessage("§B" + selection.shop.owner + "§F's shop has been removed");
 				
-			}
-			else if ((action.equalsIgnoreCase("add"))){
-				if(selection == null){
-					sender.sendMessage("you must have your shop selected");
+			} else if ((action.equalsIgnoreCase("add") ||
+					action.equalsIgnoreCase("a"))) {
+				if (args.length < 2) {
+					sendError(pl, cmdAdd.toUsageString());
+					return true;
 				}
-				else{
-					if(selection.isOwner){
-						if(args.length >= 2){
-							float sellAmmount = Integer.parseInt(args[1]);
-							float buyAmmount;
-							if(args.length == 3){
-								buyAmmount = Integer.parseInt(args[2]);
-							}
-							else{
-								buyAmmount = -1;
-							}
-							ItemStack stack = pl.getItemInHand().clone();
-							ShopEntry newEntry = new ShopEntry();
-							newEntry.buyPrice = buyAmmount;
-							newEntry.sellPrice = sellAmmount;
-							selection.shop.inventory.put(stack, newEntry);
-							
-						}
-						else{
-							sender.sendMessage("Invalid arguments");
-						}
-					}
-					else{
-						sender.sendMessage("you are not the owner of this shop!");
-					}
+				if (selection == null) {
+					sendError(pl, "You must select a shop");
+					return true;
 				}
-			}
-			else if ((action.equalsIgnoreCase("help") ||
+				if (!selection.isOwner && !pl.hasPermission("shops.admin")) {
+					sendError(pl, "You cannot add items to this shop");
+					return true;
+				}
+				float retailAmount, refundAmount;
+				try {
+					retailAmount = Integer.parseInt(args[1]);
+				} catch (NumberFormatException e) {
+					sendError(pl, "Invalid buy price");
+					sendError(pl, cmdAdd.toUsageString());
+					return true;
+				}
+				try {
+					refundAmount = args.length > 2 ? Integer.parseInt(args[2]) : -1;
+				} catch (NumberFormatException e) {
+					sendError(pl, "Invalid sell price");
+					sendError(pl, cmdAdd.toUsageString());
+					return true;
+				}
+				ItemStack stack = pl.getItemInHand().clone();
+				ShopEntry newEntry = new ShopEntry();
+				newEntry.retailPrice = retailAmount;
+				newEntry.refundPrice = refundAmount;
+				selection.shop.inventory.put(stack, newEntry);
+				pl.getItemInHand().setAmount(0);
+				
+			} else if ((action.equalsIgnoreCase("help") ||
 					action.equalsIgnoreCase("h")) &&
 					args.length > 1) {
 				String helpCmd = args[1];
 				CommandHelp h = help.get(helpCmd);
-				if (h != null)
-					pl.sendMessage(h.toHelpString());
-				else
+				if (h == null) {
 					sendError(pl, String.format("'/shop %s' is not an action", helpCmd));
+					return true;
+				}
+				pl.sendMessage(h.toHelpString());
+				
 			} else {
 				showHelp(pl, selection);
 			}

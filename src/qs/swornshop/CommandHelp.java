@@ -75,6 +75,11 @@ public class CommandHelp {
 		return indexString = b.toString();
 	}
 	
+	/**
+	 * Generates a single line string suitable for indicating the correct usage of this command.
+	 * This method is memoized so the string is only created once
+	 * @return the usage string
+	 */
 	public String toUsageString() {
 		if (usageString != null) 
 			return usageString;
@@ -91,7 +96,7 @@ public class CommandHelp {
 	/**
 	 * Generates a full help string suitable for use in a help page for this command.
 	 * This method is memoized so the string is only created once.
-	 * @return the string
+	 * @return an array of lines
 	 */
 	public String[] toHelpString() {
 		if (helpString != null) 
