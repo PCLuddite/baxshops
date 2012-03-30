@@ -13,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin implements Listener {
@@ -161,7 +162,39 @@ public class Main extends JavaPlugin implements Listener {
 				
 				pl.sendMessage("§B" + selection.shop.owner + "§F's shop has been removed");
 				
-			} else if ((action.equalsIgnoreCase("help") ||
+			}
+			else if ((action.equalsIgnoreCase("add"))){
+				if(selection == null){
+					sender.sendMessage("you must have your shop selected");
+				}
+				else{
+					if(selection.isOwner){
+						if(args.length >= 2){
+							float sellAmmount = Integer.parseInt(args[1]);
+							float buyAmmount;
+							if(args.length == 3){
+								buyAmmount = Integer.parseInt(args[2]);
+							}
+							else{
+								buyAmmount = -1;
+							}
+							ItemStack stack = pl.getItemInHand().clone();
+							ShopEntry newEntry = new ShopEntry();
+							newEntry.buyPrice = buyAmmount;
+							newEntry.sellPrice = sellAmmount;
+							selection.shop.inventory.put(stack, newEntry);
+							
+						}
+						else{
+							sender.sendMessage("Invalid arguments");
+						}
+					}
+					else{
+						sender.sendMessage("you are not the owner of this shop!");
+					}
+				}
+			}
+			else if ((action.equalsIgnoreCase("help") ||
 					action.equalsIgnoreCase("h")) &&
 					args.length > 1) {
 				String helpCmd = args[1];
