@@ -1,0 +1,105 @@
+0 Air
+1 Smooth Stone
+2 Grass Block
+3 Dirt
+4 Cobblestone
+5 Wooden Planks
+| 1 Wooden Planks (Birch)
+| 2 Wooden Planks (Spruce)
+| 3 Wooden Planks (Jungle)
+6 Sapling
+| 1 Sapling (Spruce)
+| 2 Sapling (Birch)
+| 3 Sapling (Jungle)
+7 Bedrock
+8 Water
+9 Water (Still)
+10 Lava
+11 Lava (Still)
+12 Sand
+13 Gravel
+14 Gold Ore
+15 Iron Ore
+16 Coal Ore
+17 Wood
+18 Leaves
+19 Sponge
+20 Glass
+21 Lapis Lazuli Ore
+22 Block of Lapis Lazuli
+23 Dispenser
+24 Sandstone
+|  1 Sandstone (Heiroglyph)
+|  2 Sandstone (Smooth)
+25 Note Block
+26 Bed
+27 Powered Rail
+28 Detector Rail
+29 Sticky Piston
+30 Cobweb
+31 Tall Grass
+32 Dead Bush
+33 Piston
+34 Piston Extension
+35 Wool
+|  1 Orange Wool
+|  2 Magenta Wool
+|  3 Light Blue Wool
+|  4 Yellow Wool
+|  5 Lime Wool
+|  6 Pink Wool
+|  7 Gray Wool
+|  8 Light Gray Wool
+|  9 Cyan Wool
+|  a Purple Wool
+|  b Blue Wool
+|  c Brown Wool
+|  d Green Wool
+|  e Red Wool
+|  f Black Wool
+36 Moving Piston
+37 Flower
+38 Rose
+39 Mushroom (Brown)
+40 Mushroom (Red)
+41 Block of Gold
+42 Block of Iron
+43 Double Slab
+|  1 Double Slab (Sandstone)
+|  2 Double Slab (Wood)
+|  3 Double Slab (Cobblestone)
+|  4 Double Slab (Brick)
+|  5 Double Slab (Stone Bricks)
+44 Slab
+|  1 Slab (Sandstone)
+|  2 Slab (Wood)
+|  3 Slab (Cobblestone)
+|  4 Slab (Brick)
+|  5 Slab (Stone Bricks)
+45 Bricks
+46 TNT
+47 Bookshelf
+48 Moss Stone
+49 Obsidian
+50 Torch
+51 Fire
+52 Monster Spawner
+53 Wooden Stairs
+54 Chest
+55 Redstone Wire
+56 Diamond Ore
+57 Block of Diamond
+58 Crafting Table
+59 Wheat Block
+60 Farmland
+61 Furnace
+62 Burning Furnace
+63 Sign Post
+64 Wooden Door (Block)
+65 Ladder
+66 Rail
+67 Cobblestone Stairs
+68 Wall Sign
+69 Lever
+70 Stone Pressure Plate
+71 Wooden Pressure Plate

@@ -1,16 +1,12 @@
 package qs.swornshop;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -58,6 +54,9 @@ public class Main extends JavaPlugin implements Listener {
 				"sell-price", "the selling price of a single item in the stack (by default the item cannot be sold)"
 			));
 	
+	public static final CommandHelp cmdLookup = new CommandHelp("shop lookup", null, "<item-name>", "look up an item's ID and damage value",
+			CommandHelp.arg("item-name", "the name of an alias for an item"));
+	
 	static {
 		help.put("help", cmdHelp);
 		help.put("h", cmdHelp);
@@ -94,7 +93,9 @@ public class Main extends JavaPlugin implements Listener {
 	public static final String[] shopOwnerHelp = {
 		cmdAdd.toIndexString()
 	};
+
 	public static HashMap<String, Long> aliases = new HashMap<String, Long>();
+	public static HashMap<Long, String> itemNames = new HashMap<Long, String>();
 	
 	protected HashMap<Location, Shop> shops = new HashMap<Location, Shop>();
 	protected HashMap<Player, ShopSelection> selectedShops = new HashMap<Player, ShopSelection>();
@@ -106,7 +107,8 @@ public class Main extends JavaPlugin implements Listener {
 	public void onEnable() {
         getServer().getPluginManager().registerEvents(this, this);
 		log = this.getLogger();
-		aliases = parseItems();
+		loadItemNames();
+		loadAliases();
 		System.out.println(aliases.get("wood"));
 	}
 	@Override
@@ -206,31 +208,29 @@ public class Main extends JavaPlugin implements Listener {
 					return true;
 				}
 				ItemStack stack = pl.getItemInHand().clone();
+				Long item = (long) stack.getTypeId() << 16 | stack.getDurability();
 				ShopEntry newEntry = new ShopEntry();
+				newEntry.item = stack;
 				newEntry.retailPrice = retailAmount;
 				newEntry.refundPrice = refundAmount;
-				selection.shop.inventory.put(stack, newEntry);
+				selection.shop.inventory.put(item, newEntry);
 				pl.getItemInHand().setAmount(0);
 				
-			}
-			else if((action.equalsIgnoreCase("testlookup"))){
-				if(args.length == 2){
-					Long alias = aliases.get(args[1]);
-					if(alias != null){
-						
-						int id = (int) (alias >> 16);
-						int damage = (int) (alias & 0xFFFF);
-						sender.sendMessage(args[1] + " is an alias for: " + id + ":" + damage);
-					}
-					else{
-						sender.sendMessage("that is not a valid alias!");
-					}
+			} else if (action.equalsIgnoreCase("lookup")) {
+				if (args.length < 2) {
+					sendError(pl, cmdLookup.toUsageString());
+					return true;
 				}
-				else{
-					sender.sendMessage("Invalid arguments");
+				Long alias = getItemFromAlias(args[1]);
+				if (alias == null) {
+					sendError(pl, "Alias not found");
+					return true;
 				}
-			}
-			else if ((action.equalsIgnoreCase("help") ||
+				int id = (int) (alias >> 16);
+				int damage = (int) (alias & 0xFFFF);
+				sender.sendMessage(String.format("%s is an alias for %d:%d", args[1], id, damage));
+				
+			} else if ((action.equalsIgnoreCase("help") ||
 					action.equalsIgnoreCase("h")) &&
 					args.length > 1) {
 				String helpCmd = args[1];
@@ -249,6 +249,16 @@ public class Main extends JavaPlugin implements Listener {
 		return false;
 	}
 	
+	/**
+	 * Attempt to find an item which matches the given item name (alias)
+	 * @param alias the item name
+	 * @return a Long which contains the item ID and damage value as follows: (id << 16) | (damage)
+	 */
+	public Long getItemFromAlias(String alias) {
+		alias = alias.toLowerCase();
+		return aliases.get(alias);
+	}
+
 	/**
 	 * Shows generic shop help to a player
 	 * @param sender the player
@@ -288,68 +298,122 @@ public class Main extends JavaPlugin implements Listener {
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		Block b = event.getClickedBlock();
-		if (b != null && b.getTypeId() == SIGN) {
-			Shop shop = shops.get(b.getLocation());
-			if (shop != null) {
-				Player pl = event.getPlayer();
-				
-				boolean isOwner = shop.owner.equals(pl.getName());
-				
-				ShopSelection selection = selectedShops.get(pl);
-				if (selection == null) selection = new ShopSelection();
-				selection.isOwner = isOwner;
-				selection.shop = shop;
-				selection.page = 0;
-				selectedShops.put(pl, selection);
-				
-				pl.sendMessage(new String[] {
-					isOwner ? "§FWelcome to your shop." :
-							String.format("§FWelcome to §B%s§F's shop.", shop.owner),
-					"§7For help with shops, type §3/shop help§7."
-				});
-				
-				event.setCancelled(true);
-				if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
-					b.getState().update();
-				}
+		if (b == null || b.getTypeId() != SIGN) return;
+		
+		Shop shop = shops.get(b.getLocation());
+		if (shop == null) return;
+		
+		Player pl = event.getPlayer();
+		
+		boolean isOwner = shop.owner.equals(pl.getName());
+		
+		ShopSelection selection = selectedShops.get(pl);
+		if (selection == null) {
+			selection = new ShopSelection();
+			selectedShops.put(pl, selection);
+		}
+		if (selection.shop == shop) {
+			selection.page = (selection.page + 1) % shop.getPages();
+		} else {
+			selection.isOwner = isOwner;
+			selection.shop = shop;
+			selection.page = 0;
+		}
+		
+		pl.sendMessage(new String[] {
+			isOwner ? "§FWelcome to your shop." :
+					String.format("§FWelcome to §B%s§F's shop.", shop.owner),
+			"§7For help with shops, type §3/shop help§7."
+		});
+		
+		event.setCancelled(true);
+		if (event.getAction() == Action.LEFT_CLICK_BLOCK)
+			b.getState().update();
+	}
+	
+	/**
+	 * Load the alias map from the aliases.txt resource.
+	 */
+	public void loadAliases() {
+		InputStream stream = getResource("aliases.txt");
+		if (stream == null)
+			return;
+		try {
+			BufferedReader br = new BufferedReader(new InputStreamReader(stream));
+			String line;
+			while ((line = br.readLine()) != null) {
+				if (line.length() == 0 || line.charAt(0) == '#') continue;
+				Scanner current = new Scanner(line);
+				String name = current.next();
+				int id = current.nextInt();
+				int damage = current.hasNext() ? current.nextInt() : 0;
+				aliases.put(name, (long) id << 16 | damage);
 			}
+			stream.close();
+		} catch (IOException e) {
+			log.warning("Failed to load aliases: " + e.toString());
 		}
 	}
 	
-	public HashMap<String, Long> parseItems(){
-		File f = new File(this.getDataFolder(), "aliases.txt");
-		FileInputStream fstream;
-		HashMap<String, Long> itemNames = new HashMap<String, Long>();
+	/**
+	 * Load the item names map from the items.txt resource.
+	 */
+	public void loadItemNames() {
+		InputStream stream = getResource("items.txt");
+		if (stream == null)
+			return;
 		try {
-			fstream = new FileInputStream(f);
-			DataInputStream in = new DataInputStream(fstream);
-			BufferedReader br = new BufferedReader(new InputStreamReader(in));
-			String strLine; 
-			while ((strLine = br.readLine()) != null){
-				if(strLine.charAt(0) == '#'){continue;}		
-				Scanner current = new Scanner(strLine);
-				String name = current.next();
-				int typeId = current.nextInt();
-				int damageValue = 0;
-				long output;
-				if(!current.hasNext()){
-					output = typeId << 16 | damageValue;
-					itemNames.put(name, output);
-					continue;
+			BufferedReader br = new BufferedReader(new InputStreamReader(stream));
+			String line = br.readLine();
+			while (line != null) {
+				if (line.length() == 0 || line.charAt(0) == '#') continue;
+				Scanner current = new Scanner(line);
+				int id = current.nextInt(),
+					damage = 0;
+				String name = "";
+				while (current.hasNext()) {
+					name += ' ' + current.next();
 				}
-				damageValue = current.nextInt();
-				 output = typeId << 16 | damageValue;
-				itemNames.put(name, output);
-				
+				if (name.length() == 0) {
+					log.info(String.format("%s: %s", line, name));
+					break;
+				}
+				itemNames.put((long) id << 16 | damage, name.substring(1));
+				line = br.readLine();
+				if (line != null && line.charAt(0) == '|') {
+					do {
+						if (line.length() == 0 || line.charAt(0) == '#') continue;
+						current = new Scanner(line);
+						if (!current.next().equals("|")) break;
+						if (!current.hasNextInt(16)) break;
+						damage = current.nextInt(16);
+						name = "";
+						while (current.hasNext()) {
+							name += ' ' + current.next();
+						}
+						itemNames.put((long) id << 16 | damage, name.substring(1));
+					} while ((line = br.readLine()) != null);
+				}
 			}
-			in.close();
-		}catch (FileNotFoundException e) {
-			e.printStackTrace();
+			stream.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.warning("Failed to load item names: " + e.toString());
 		}
-		
-		return itemNames;
+		log.info("Item names: " + itemNames);
+	}
+
+	/**
+	 * Get the name of an item.
+	 * @param item an item stack
+	 * @return the item's name
+	 */
+	public String getItemName(ItemStack item) {
+		String name = itemNames.get(item.getTypeId() << 16 | item.getDurability());
+		if (name == null) {
+			name = itemNames.get(item.getTypeId() << 16);
+			if (name == null) return String.format("%d:%d", item.getType(), item.getDurability());
+		}
+		return name;
 	}
 	
 }

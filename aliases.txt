@@ -1,0 +1,229 @@
+# Blocks
+air 0
+stone 1
+smoothstone 1
+grass 2
+dirt 3
+cobblestone 4
+woodenplanks 5
+woodplanks 5
+planks 5
+oakplanks 5
+birchplanks 5 1
+pineplanks 5 2
+spruceplanks 5 2
+jungleplanks 5 3
+sapling 6
+saplings 6
+bedrock 7
+adminium 7
+water 8
+stillwater 9
+stationarywater 9
+lava 10
+stilllava 11
+stationarylava 11
+sand 12
+gravel 13
+goldore 14
+oregold 14
+ironore 15
+oreiron 15
+coalore 16
+orecoal 16
+wood 17
+log 17
+logs 17
+leaves 18
+oakleaves 18
+pinelaves 18 1
+spruceleaves 18 1
+birchleaves 18 2
+jungleleaves 18 3
+spone 19
+glass 20
+lapislazuliore 21
+orelapislazuli 21
+lapisore 21
+orelapis 21
+lapisblock 22
+blockoflapis 22
+dispenser 23
+sandstone 24
+heiroglyph 24 1
+smoothsandstone 24 2
+noteblock 25
+bed 26
+bedfoot 26 8
+poweredrail 27
+podetectorrail 28
+stickypiston 29
+cobweb 30
+web 30
+tallgrass 31
+deadbush 32
+piston 33
+pistonextension 34
+wool 35
+orangewool 35 1
+magentawool 35 2
+lightbluewool 35 3
+yellowwool 35 4
+limewool 35 5
+pinkwool 35 6
+graywool 35 7
+lightgraywool 35 8
+silverwool 35 8
+cyanwool 35 9
+purplewool 35 10
+bluewool 35 11
+brownwool 35 12
+greenwool 35 13
+darkgreenwool 35 13
+redwool 35 14
+blackwool 35 15
+pistonmoving 36
+blockmovedbypiston 36
+flower 37
+dandelion 37
+rose 38
+brownmushroom 39
+redmushroom 40
+goldblock 41
+blockofgold 41
+ironblock 42
+blockofiron 42
+doubleslab 43
+doublesandstoneslab 43 1
+doublewoodenslab 43 2
+doublewoodslab 43 2
+doublecobbleslab 43 3
+doublecobblestoneslab 43 3
+doublebrickslab 43 4
+doublestonebrickslab 43 5
+doublestonebricksslab 43 5
+slab 44
+sandstoneslab 44 1
+woodenslab 44 2
+woodslab 44 2
+cobbleslab 44 3
+cobblestoneslab 44 3
+brickslab 44 4
+stonebrickslab 44 5
+stonebricksslab 44 5
+bricks 45
+tnt 46
+joy 46
+bookshelf 47
+bookshelves 47
+bookcase 47
+mossstone 48
+mosstone 48
+obsidian 49
+torch 50
+fire 51
+spawner 52
+monsterspawner 52
+woodenstairs 53
+woodstairs 53
+chest 54
+redstonewire 55
+diamondore 56
+orediamond 56
+diamondblock 57
+blockofdiamond 57
+craftingtable 58
+workbench 58
+wheatblock 59
+farmland 60
+furnace 61
+burningfurnace 62
+litfurnace 62
+signpost 63
+woodendoor 64
+wooddoor 64
+woodoor 64
+ladder 65
+rail 66
+cobblestairs 67
+cobblestonestairs 67
+wallsign 68
+lever 69
+stonepressureplate 70
+irondoor 71
+woodpressureplate 72
+redstoneore 73
+oreredstone 73
+glowingredstoneore 74
+oreredstoneglowing 74
+redstonetorchoff 75
+redstonetorch 76
+redstonetorchoff 76
+button 77
+stonebutton 77
+snow 78
+ice 79
+snowblock 80
+blockofsnow 80
+cactus 81
+clayblock 82
+blockofclay 82
+sugarcane 83
+jukebox 84
+fence 85
+pumpkin 86
+netherrack 87
+soulsand 88
+glowstone 89
+portal 90
+jackolantern 91
+cakeblock 92
+redstonerepeateroff 93
+redstonerepeateron 94
+lockedchest 95
+trapdoor 96
+silverfishstone 97 0
+silverfishcobble 97 1
+silverfishcobblestone 97 1
+silverfishstonebrick 97 2
+silverfishstonebricks 97 2
+stonebrick 98 0
+stonebricks 98 0
+mossystonebrick 98 1
+mossystonebricks 98 1
+crackedstonebrick 98 2
+crackedstonebricks 98 2
+circlestonebrick 98 3
+circlestonebricks 98 3
+hugebrownmushroom 99
+hugeredmushroom 100
+ironbars 101
+glasspane 102
+melon 103
+pumpkinstem 104
+melonstem 105
+vines 106
+fencegate 107
+brickstairs 108
+bricksstairs 108
+stonebrickstairs 109
+stonebricksstairs 109
+mycelium 110
+lilypad 111
+netherbrick 112
+netherbrickfence 113
+netherbrickstairs 114
+netherwart 115
+enchantmenttable 116
+enchantingtable 116
+brewingstand 117
+cauldron 118
+endportal 119
+endportalframe 120
+endstone 121
+dragonegg 122
+redstonelamp 123
+redstonelamplit 124
+litredstonelamp 124
+
+# Items
