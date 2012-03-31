@@ -53,6 +53,7 @@ public class Main extends JavaPlugin implements Listener {
 				"buy-price", "the price of a single item in the stack",
 				"sell-price", "the selling price of a single item in the stack (by default the item cannot be sold)"
 			));
+	public static final CommandHelp cmdRestock = new CommandHelp("shop restock", "r", null, "restock this shop with your held item");
 	
 	public static final CommandHelp cmdLookup = new CommandHelp("shop lookup", null, "<item-name>", "look up an item's ID and damage value",
 			CommandHelp.arg("item-name", "the name of an alias for an item"));
@@ -72,6 +73,8 @@ public class Main extends JavaPlugin implements Listener {
 		help.put("s", cmdSell);
 		help.put("add", cmdAdd);
 		help.put("a", cmdAdd);
+		help.put("restock", cmdRestock);
+		help.put("r", cmdRestock);
 	}
 	
 	public static final String[] shopHelp = {
@@ -194,27 +197,61 @@ public class Main extends JavaPlugin implements Listener {
 				
 				float retailAmount, refundAmount;
 				try {
-					retailAmount = Integer.parseInt(args[1]);
+					retailAmount = Math.round(100f * Float.parseFloat(args[1])) / 100f;
 				} catch (NumberFormatException e) {
 					sendError(pl, "Invalid buy price");
 					sendError(pl, cmdAdd.toUsageString());
 					return true;
 				}
 				try {
-					refundAmount = args.length > 2 ? Integer.parseInt(args[2]) : -1;
+					refundAmount = args.length > 2 ? Math.round(100f * Float.parseFloat(args[2])) / 100f : -1;
 				} catch (NumberFormatException e) {
 					sendError(pl, "Invalid sell price");
 					sendError(pl, cmdAdd.toUsageString());
 					return true;
 				}
-				ItemStack stack = pl.getItemInHand().clone();
-				Long item = (long) stack.getTypeId() << 16 | stack.getDurability();
+				ItemStack stack = pl.getItemInHand();
+				if (stack == null || stack.getTypeId() == 0) {
+					sendError(pl, "You must be holding the item you wisth to add to this shop");
+					return true;
+				}
+				if (selection.shop.containsItem(stack)) {
+					sendError(pl, "That item has already been added to this shop");
+					sendError(pl, "Use /shop restock to restock");
+					return true;
+				}
 				ShopEntry newEntry = new ShopEntry();
 				newEntry.item = stack;
 				newEntry.retailPrice = retailAmount;
 				newEntry.refundPrice = refundAmount;
-				selection.shop.inventory.put(item, newEntry);
-				pl.getItemInHand().setAmount(0);
+				selection.shop.addEntry(newEntry);
+				
+				pl.setItemInHand(null);
+				
+			}  else if ((action.equalsIgnoreCase("restock") ||
+					action.equalsIgnoreCase("r"))) {
+				if (selection == null) {
+					sendError(pl, "You must select a shop");
+					return true;
+				}
+				if (!selection.isOwner && !pl.hasPermission("shops.admin")) {
+					sendError(pl, "You cannot restock this shop");
+					return true;
+				}
+				
+				ItemStack stack = pl.getItemInHand();
+				if (stack == null || stack.getTypeId() == 0) {
+					sendError(pl, "You must be holding the item you wish to add to this shop");
+					return true;
+				}
+				ShopEntry entry = selection.shop.findEntry(stack);
+				if (entry == null) {
+					sendError(pl, "That item has not been added to this shop");
+					sendError(pl, "Use /shop add to add a new item");
+					return true;
+				}
+				entry.item.setAmount(entry.item.getAmount() + stack.getAmount());
+				pl.setItemInHand(null);
 				
 			} else if (action.equalsIgnoreCase("lookup")) {
 				if (args.length < 2) {
@@ -295,6 +332,33 @@ public class Main extends JavaPlugin implements Listener {
 		sender.sendMessage("§C" + message);
 	}
 	
+	protected void showListing(CommandSender sender, ShopSelection selection) {
+		Shop shop = selection.shop;
+		int pages = shop.getPages();
+		if (pages == 0) {
+			sender.sendMessage(CommandHelp.header("Empty"));
+			sender.sendMessage("");
+			sender.sendMessage("This shop has no items");
+			int stop = Shop.ITEMS_PER_PAGE - 2;
+			if (selection.isOwner) {
+				sender.sendMessage("Use /shop add to add items");
+				--stop;
+			}
+			for (int i = 0; i < stop; ++i) {
+				sender.sendMessage("");
+			}
+			return;
+		}
+		sender.sendMessage(CommandHelp.header(String.format("Page %d/%d", selection.page + 1, pages)));
+		int i = selection.page * Shop.ITEMS_PER_PAGE,
+			stop = (selection.page + 1) * Shop.ITEMS_PER_PAGE,
+			max = Math.min(stop, shop.getInventorySize());
+		for (; i < max; ++i)
+			sender.sendMessage(shop.getEntryAt(i).toString(this));
+		for (; i < stop; ++i)
+			sender.sendMessage("");
+	}
+	
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		Block b = event.getClickedBlock();
@@ -313,18 +377,28 @@ public class Main extends JavaPlugin implements Listener {
 			selectedShops.put(pl, selection);
 		}
 		if (selection.shop == shop) {
-			selection.page = (selection.page + 1) % shop.getPages();
+			int pages = shop.getPages();
+			if (pages == 0) {
+				selection.page = 0;
+			} else {
+				int delta = event.getAction() == Action.LEFT_CLICK_BLOCK ? -1 : 1;
+				selection.page = (((selection.page + delta) % pages) + pages) % pages;
+			}
+			pl.sendMessage("");
+			pl.sendMessage("");
 		} else {
 			selection.isOwner = isOwner;
 			selection.shop = shop;
 			selection.page = 0;
+			
+			pl.sendMessage(new String[] {
+				isOwner ? "§FWelcome to your shop." :
+						String.format("§FWelcome to §B%s§F's shop.", shop.owner),
+				"§7For help with shops, type §3/shop help§7."
+			});
 		}
 		
-		pl.sendMessage(new String[] {
-			isOwner ? "§FWelcome to your shop." :
-					String.format("§FWelcome to §B%s§F's shop.", shop.owner),
-			"§7For help with shops, type §3/shop help§7."
-		});
+		showListing(pl, selection);
 		
 		event.setCancelled(true);
 		if (event.getAction() == Action.LEFT_CLICK_BLOCK)
@@ -399,7 +473,6 @@ public class Main extends JavaPlugin implements Listener {
 		} catch (IOException e) {
 			log.warning("Failed to load item names: " + e.toString());
 		}
-		log.info("Item names: " + itemNames);
 	}
 
 	/**
@@ -408,10 +481,10 @@ public class Main extends JavaPlugin implements Listener {
 	 * @return the item's name
 	 */
 	public String getItemName(ItemStack item) {
-		String name = itemNames.get(item.getTypeId() << 16 | item.getDurability());
+		String name = itemNames.get((long) item.getTypeId() << 16 | item.getDurability());
 		if (name == null) {
-			name = itemNames.get(item.getTypeId() << 16);
-			if (name == null) return String.format("%d:%d", item.getType(), item.getDurability());
+			name = itemNames.get((long) item.getTypeId() << 16);
+			if (name == null) return String.format("%d:%d", item.getTypeId(), item.getDurability());
 		}
 		return name;
 	}
