@@ -60,6 +60,8 @@ public class Main extends JavaPlugin implements Listener {
 			));
 	public static final CommandHelp cmdRestock = new CommandHelp("shop restock", "r", null, "restock this shop with your held item");
 	
+	public static final CommandHelp cmdReprice = new CommandHelp("shop reprice", null, null, "<item-name> <new-price>", "sets a new price for the given item");
+	
 	public static final CommandHelp cmdLookup = new CommandHelp("shop lookup", null, "<item-name>", "look up an item's ID and damage value",
 			CommandHelp.arg("item-name", "the name of an alias for an item"));
 	
@@ -80,6 +82,7 @@ public class Main extends JavaPlugin implements Listener {
 		help.put("a", cmdAdd);
 		help.put("restock", cmdRestock);
 		help.put("r", cmdRestock);
+		help.put("reprice", cmdReprice);
 	}
 	
 	public static final String[] shopHelp = {
@@ -193,6 +196,19 @@ public class Main extends JavaPlugin implements Listener {
 				pl.sendMessage("§B" + selection.shop.owner + "§F's shop has been removed");
 				
 			}
+			else if(action.equalsIgnoreCase("reprice")){
+				if(!selection.isOwner){
+					sender.sendMessage(ChatColor.RED + "you do not own this shop");
+					return true;
+				}
+				if(args.length != 3){
+					sendError(pl,cmdReprice.toUsageString());
+					return true;
+				}
+				
+				
+			}
+			
 			else if(action.equalsIgnoreCase("buy") ||
 					action.equalsIgnoreCase("b")){
 				if(args.length != 3){
@@ -578,5 +594,6 @@ public class Main extends JavaPlugin implements Listener {
         econ = rsp.getProvider();
         return econ != null;
     }
+	
 	
 }
