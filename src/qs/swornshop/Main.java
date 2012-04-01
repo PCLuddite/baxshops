@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
+import net.milkbowl.vault.economy.Economy;
+
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -19,9 +22,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin implements Listener {
+	
 	private static final int SIGN = 63;
 	
 	public static final HashMap<String, CommandHelp> help = new HashMap<String, CommandHelp>();
@@ -96,6 +101,7 @@ public class Main extends JavaPlugin implements Listener {
 	public static final String[] shopOwnerHelp = {
 		cmdAdd.toIndexString()
 	};
+	public static Economy econ;
 
 	public static HashMap<String, Long> aliases = new HashMap<String, Long>();
 	public static HashMap<Long, String> itemNames = new HashMap<Long, String>();
@@ -112,6 +118,12 @@ public class Main extends JavaPlugin implements Listener {
 		log = this.getLogger();
 		loadItemNames();
 		loadAliases();
+		if(!economysetup()){
+			log.info("WARNING");
+			log.info("Could not set up server economy!");
+			log.info("This could be caused by Vault not being installed.");
+			log.info("SwornShops may not funciton correctly");
+		}
 		System.out.println(aliases.get("wood"));
 	}
 	@Override
@@ -180,7 +192,64 @@ public class Main extends JavaPlugin implements Listener {
 				
 				pl.sendMessage("§B" + selection.shop.owner + "§F's shop has been removed");
 				
-			} else if ((action.equalsIgnoreCase("add") ||
+			}
+			else if(action.equalsIgnoreCase("buy") ||
+					action.equalsIgnoreCase("b")){
+				if(args.length != 3){
+					sendError(pl, cmdBuy.toUsageString());
+					return true;
+				}
+				if(selection == null){
+					sendError(pl, "You must select a shop");
+					return true;
+				}
+				Shop shop = selection.shop;
+				if(shop.owner.equals(pl.getName())){
+					sendError(pl, "You cannot buy from your own shop!");
+					return true;
+				}
+				long item =  getItemFromAlias(args[1]);
+				int id = (int) (item >> 16);
+				short damage = (short) (item & 0xFFFF);
+				int ammountToBuy = Integer.parseInt(args[2]);
+				if(!shop.containsItem(id, damage)){
+					sendError(pl, "That item is not in the selected shop!");
+					return true;
+				}
+				ShopEntry stack = shop.findEntry(id, damage);
+				if(stack.item.getAmount() < ammountToBuy){
+					sendError(pl, "There are not enough of that item in the shop!");
+					return true;
+				}
+				if(ammountToBuy > 64){
+					sendError(pl, "You may only buy 64 items per transaction!");
+					return true;
+				}
+				if(!(econ.has(pl.getName(), ammountToBuy * stack.retailPrice))){
+					sendError(pl, "You do not have sufficient funds");
+					return true;
+				}
+				ItemStack giveToPlayer = stack.item.clone();
+				giveToPlayer.setAmount(ammountToBuy);
+				
+				HashMap<Integer, ItemStack> didNotTransfer =  pl.getInventory().addItem(giveToPlayer);
+				int refunded = 0;
+				if((didNotTransfer.size() > 0)){
+					refunded = didNotTransfer.size();
+					if(didNotTransfer.size() == ammountToBuy){
+						sender.sendMessage(ChatColor.RED + "You do not have any room in your inventory");
+					}
+					else{
+						sender.sendMessage(ChatColor.AQUA + "You did not have enough room in your inventory so you only bought");
+						sender.sendMessage((ammountToBuy - didNotTransfer.size() + " and were refunded $"  + (ammountToBuy - didNotTransfer.size() * stack.retailPrice)));
+					}
+				}
+				econ.withdrawPlayer(pl.getName(), (ammountToBuy - refunded) * stack.retailPrice);
+				stack.item.setAmount(stack.item.getAmount() - (ammountToBuy - refunded));
+				econ.depositPlayer(shop.owner, (ammountToBuy - refunded) * stack.retailPrice);
+				
+			}
+			else if ((action.equalsIgnoreCase("add") ||
 					action.equalsIgnoreCase("a"))) {
 				if (args.length < 2) {
 					sendError(pl, cmdAdd.toUsageString());
@@ -215,6 +284,7 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, "You must be holding the item you wisth to add to this shop");
 					return true;
 				}
+				
 				if (selection.shop.containsItem(stack)) {
 					sendError(pl, "That item has already been added to this shop");
 					sendError(pl, "Use /shop restock to restock");
@@ -277,6 +347,13 @@ public class Main extends JavaPlugin implements Listener {
 					return true;
 				}
 				pl.sendMessage(h.toHelpString());
+				if(helpCmd.equalsIgnoreCase("add") ||
+						helpCmd.equalsIgnoreCase("a")){
+					pl.sendMessage("");
+					pl.sendMessage("WARNING: once you put an item in your shop, you cannot");
+					pl.sendMessage("retrieve it, or buy it from yourself. It will be there");
+					pl.sendMessage("till it's sold");
+				}
 				
 			} else {
 				showHelp(pl, selection);
@@ -333,6 +410,8 @@ public class Main extends JavaPlugin implements Listener {
 	}
 	
 	protected void showListing(CommandSender sender, ShopSelection selection) {
+		//TODO fix the bug where a item that is out of stock will display as air with a quantity of zero
+		//TODO instead of the correct item with a quantity of 0
 		Shop shop = selection.shop;
 		int pages = shop.getPages();
 		if (pages == 0) {
@@ -488,5 +567,16 @@ public class Main extends JavaPlugin implements Listener {
 		}
 		return name;
 	}
+	private boolean economysetup() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            return false;
+        }
+        econ = rsp.getProvider();
+        return econ != null;
+    }
 	
 }

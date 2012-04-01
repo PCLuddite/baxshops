@@ -80,6 +80,15 @@ public class Shop {
 		}
 		return false;
 	}
+	public boolean containsItem(int id, int damage){
+		for (ShopEntry e : inventory) {
+			if (e.item.getTypeId() == id &&
+					e.item.getDurability() == damage) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	/**
 	 * Find an entry for an item in this shop's inventory.
@@ -90,6 +99,15 @@ public class Shop {
 		for (ShopEntry e : inventory) {
 			if (e.item.getTypeId() == stack.getTypeId() &&
 				e.item.getDurability() == stack.getDurability()) {
+				return e;
+			}
+		}
+		return null;
+	}
+	public ShopEntry findEntry(int id, int damage) {
+		for (ShopEntry e : inventory) {
+			if (e.item.getTypeId() == id &&
+					e.item.getDurability() == damage) {
 				return e;
 			}
 		}
