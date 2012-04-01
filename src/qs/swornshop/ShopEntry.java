@@ -20,6 +20,23 @@ public class ShopEntry {
 	 * The item stack associated with this shop entry
 	 */
 	public ItemStack item;
+	/**
+	 * The item's ID
+	 */
+	public int itemID;
+	/**
+	 * The item's damage value (durability)
+	 */
+	public int itemDamage;
+	
+	/**
+	 * Sets the item associated with this shop entry.
+	 */
+	public void setItem(ItemStack item) {
+		this.item = item;
+		this.itemID = item.getTypeId();
+		this.itemDamage = item.getDurability();
+	}
 	
 	public String toString(Main p) {
 		int quantity = item.getAmount();
@@ -27,10 +44,10 @@ public class ShopEntry {
 			String.format(quantity == 0 ?
 				"§C(%d) %s ($%.2f)" :
 				"§7(%d) §F%s §B($%.2f)",
-				quantity, p.getItemName(item), retailPrice) :
+				quantity, p.getItemName(itemID, itemDamage), retailPrice) :
 			String.format(quantity == 0 ?
 				"§C(%d) %s ($%.2f) ($%.2f)" :
 				"§7(%d) §F%s §B($%.2f) §7($%.2f)",
-				quantity, p.getItemName(item), retailPrice, refundPrice);
+				quantity, p.getItemName(itemID, itemDamage), retailPrice, refundPrice);
 	}
 }

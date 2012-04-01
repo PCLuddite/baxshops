@@ -10,7 +10,6 @@ import java.util.logging.Logger;
 
 import net.milkbowl.vault.economy.Economy;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -28,6 +27,15 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Main extends JavaPlugin implements Listener {
 	
 	private static final int SIGN = 63;
+	
+	private static String[] concat(String[] a, String[] b) {
+		String[] result = new String[a.length + b.length];
+		for (int i = 0; i < a.length; ++i)
+			result[i] = a[i];
+		for (int i = 0; i < b.length; ++i)
+			result[i + a.length] = b[i];
+		return result;
+	}
 	
 	public static final HashMap<String, CommandHelp> help = new HashMap<String, CommandHelp>();
 	
@@ -54,13 +62,20 @@ public class Main extends JavaPlugin implements Listener {
 			));
 	
 	public static final CommandHelp cmdAdd = new CommandHelp("shop add", "a", "<buy-price> [sell-price=none]", "add your held item to this shop",
-			CommandHelp.args(
+			concat(CommandHelp.args(
 				"buy-price", "the price of a single item in the stack",
 				"sell-price", "the selling price of a single item in the stack (by default the item cannot be sold)"
-			));
+			), new String[] {
+				"§BWarning:§F Once you add an item to a shop, you cannot remove it."
+			}));
 	public static final CommandHelp cmdRestock = new CommandHelp("shop restock", "r", null, "restock this shop with your held item");
 	
-	public static final CommandHelp cmdReprice = new CommandHelp("shop reprice", null, null, "<item-name> <new-price>", "sets a new price for the given item");
+	public static final CommandHelp cmdSet = new CommandHelp("shop set", null, "<item> <buy-price> <sell-price>", "changes the price of an item",
+			CommandHelp.args(
+				"item", "the ID or name of the item to modify",
+				"buy-price", "the new price of a single item in the stack",
+				"sell-price", "the selling price of a single item in the stack (by default the item cannot be sold)"
+			));
 	
 	public static final CommandHelp cmdLookup = new CommandHelp("shop lookup", null, "<item-name>", "look up an item's ID and damage value",
 			CommandHelp.arg("item-name", "the name of an alias for an item"));
@@ -82,7 +97,7 @@ public class Main extends JavaPlugin implements Listener {
 		help.put("a", cmdAdd);
 		help.put("restock", cmdRestock);
 		help.put("r", cmdRestock);
-		help.put("reprice", cmdReprice);
+		help.put("set", cmdSet);
 	}
 	
 	public static final String[] shopHelp = {
@@ -102,7 +117,9 @@ public class Main extends JavaPlugin implements Listener {
 		cmdSell.toIndexString()
 	};
 	public static final String[] shopOwnerHelp = {
-		cmdAdd.toIndexString()
+		cmdAdd.toIndexString(),
+		cmdRestock.toIndexString(),
+		cmdSet.toIndexString()
 	};
 	public static Economy econ;
 
@@ -121,7 +138,7 @@ public class Main extends JavaPlugin implements Listener {
 		log = this.getLogger();
 		loadItemNames();
 		loadAliases();
-		if(!economysetup()){
+		if(!economySetup()){
 			log.info("WARNING");
 			log.info("Could not set up server economy!");
 			log.info("This could be caused by Vault not being installed.");
@@ -147,7 +164,7 @@ public class Main extends JavaPlugin implements Listener {
 				return true;
 			}
 			String action = args[0];
-			if (action.equalsIgnoreCase("create")  || 
+			if (action.equalsIgnoreCase("create") || 
 					action.equalsIgnoreCase("c")) {
 				if (args.length < 2) {
 					sendError(pl, cmdCreate.toUsageString());
@@ -195,78 +212,8 @@ public class Main extends JavaPlugin implements Listener {
 				
 				pl.sendMessage("§B" + selection.shop.owner + "§F's shop has been removed");
 				
-			}
-			else if(action.equalsIgnoreCase("reprice")){
-				if(!selection.isOwner){
-					sender.sendMessage(ChatColor.RED + "you do not own this shop");
-					return true;
-				}
-				if(args.length != 3){
-					sendError(pl,cmdReprice.toUsageString());
-					return true;
-				}
-				
-				
-			}
-			
-			else if(action.equalsIgnoreCase("buy") ||
-					action.equalsIgnoreCase("b")){
-				if(args.length != 3){
-					sendError(pl, cmdBuy.toUsageString());
-					return true;
-				}
-				if(selection == null){
-					sendError(pl, "You must select a shop");
-					return true;
-				}
-				Shop shop = selection.shop;
-				if(shop.owner.equals(pl.getName())){
-					sendError(pl, "You cannot buy from your own shop!");
-					return true;
-				}
-				long item =  getItemFromAlias(args[1]);
-				int id = (int) (item >> 16);
-				short damage = (short) (item & 0xFFFF);
-				int ammountToBuy = Integer.parseInt(args[2]);
-				if(!shop.containsItem(id, damage)){
-					sendError(pl, "That item is not in the selected shop!");
-					return true;
-				}
-				ShopEntry stack = shop.findEntry(id, damage);
-				if(stack.item.getAmount() < ammountToBuy){
-					sendError(pl, "There are not enough of that item in the shop!");
-					return true;
-				}
-				if(ammountToBuy > 64){
-					sendError(pl, "You may only buy 64 items per transaction!");
-					return true;
-				}
-				if(!(econ.has(pl.getName(), ammountToBuy * stack.retailPrice))){
-					sendError(pl, "You do not have sufficient funds");
-					return true;
-				}
-				ItemStack giveToPlayer = stack.item.clone();
-				giveToPlayer.setAmount(ammountToBuy);
-				
-				HashMap<Integer, ItemStack> didNotTransfer =  pl.getInventory().addItem(giveToPlayer);
-				int refunded = 0;
-				if((didNotTransfer.size() > 0)){
-					refunded = didNotTransfer.size();
-					if(didNotTransfer.size() == ammountToBuy){
-						sender.sendMessage(ChatColor.RED + "You do not have any room in your inventory");
-					}
-					else{
-						sender.sendMessage(ChatColor.AQUA + "You did not have enough room in your inventory so you only bought");
-						sender.sendMessage((ammountToBuy - didNotTransfer.size() + " and were refunded $"  + (ammountToBuy - didNotTransfer.size() * stack.retailPrice)));
-					}
-				}
-				econ.withdrawPlayer(pl.getName(), (ammountToBuy - refunded) * stack.retailPrice);
-				stack.item.setAmount(stack.item.getAmount() - (ammountToBuy - refunded));
-				econ.depositPlayer(shop.owner, (ammountToBuy - refunded) * stack.retailPrice);
-				
-			}
-			else if ((action.equalsIgnoreCase("add") ||
-					action.equalsIgnoreCase("a"))) {
+			} else if (action.equalsIgnoreCase("add") ||
+					action.equalsIgnoreCase("a")) {
 				if (args.length < 2) {
 					sendError(pl, cmdAdd.toUsageString());
 					return true;
@@ -307,14 +254,14 @@ public class Main extends JavaPlugin implements Listener {
 					return true;
 				}
 				ShopEntry newEntry = new ShopEntry();
-				newEntry.item = stack;
+				newEntry.setItem(stack);
 				newEntry.retailPrice = retailAmount;
 				newEntry.refundPrice = refundAmount;
 				selection.shop.addEntry(newEntry);
 				
 				pl.setItemInHand(null);
 				
-			}  else if ((action.equalsIgnoreCase("restock") ||
+			} else if ((action.equalsIgnoreCase("restock") ||
 					action.equalsIgnoreCase("r"))) {
 				if (selection == null) {
 					sendError(pl, "You must select a shop");
@@ -338,6 +285,120 @@ public class Main extends JavaPlugin implements Listener {
 				}
 				entry.item.setAmount(entry.item.getAmount() + stack.getAmount());
 				pl.setItemInHand(null);
+				
+			} else if (action.equalsIgnoreCase("set")) {
+				if (!selection.isOwner && !pl.hasPermission("shop.admin")) {
+					sendError(pl, "You cannot change this shop's prices");
+					return true;
+				}
+				if (args.length < 3) {
+					sendError(pl, cmdSet.toUsageString());
+					return true;
+				}
+				
+				long item = getItemFromAlias(args[1]);
+				int id = (int) (item >> 16);
+				short damage = (short) (item & 0xFFFF);
+				
+				Shop shop = selection.shop;
+				ShopEntry entry = shop.findEntry(id, damage);
+				if (entry == null) {
+					sendError(pl, "That item is not in this shop");
+					return true;
+				}
+				
+				float retailAmount, refundAmount;
+				try {
+					retailAmount = Math.round(100f * Float.parseFloat(args[1])) / 100f;
+				} catch (NumberFormatException e) {
+					sendError(pl, "Invalid buy price");
+					sendError(pl, cmdAdd.toUsageString());
+					return true;
+				}
+				try {
+					refundAmount = args.length > 2 ? Math.round(100f * Float.parseFloat(args[2])) / 100f : -1;
+				} catch (NumberFormatException e) {
+					sendError(pl, "Invalid sell price");
+					sendError(pl, cmdAdd.toUsageString());
+					return true;
+				}
+				
+				entry.retailPrice = retailAmount;
+				entry.refundPrice = refundAmount;
+				
+			} else if (action.equalsIgnoreCase("buy") ||
+					action.equalsIgnoreCase("b")) {
+				if (args.length < 3) {
+					sendError(pl, cmdBuy.toUsageString());
+					return true;
+				}
+				if (selection == null) {
+					sendError(pl, "You must select a shop");
+					return true;
+				}
+				if (selection.isOwner) {
+					sendError(pl, "You cannot buy items from this shop");
+					return true;
+				}
+				
+				int amount;
+				try {
+					amount = Integer.parseInt(args[2]);
+				} catch (NumberFormatException e) {
+					sendError(pl, cmdBuy.toUsageString());
+					return true;
+				}
+				if (amount <= 0) {
+					sendError(pl, "You must buy a positive number of this item");
+					return true;
+				}
+				
+				long item = getItemFromAlias(args[1]);
+				int id = (int) (item >> 16);
+				short damage = (short) (item & 0xFFFF);
+				
+				Shop shop = selection.shop;
+				ShopEntry entry = shop.findEntry(id, damage);
+				if (entry == null) {
+					sendError(pl, "That item is not in this shop");
+					return true;
+				}
+				if (entry.item.getAmount() < amount) {
+					sendError(pl, "There are not enough of that item in the shop");
+					return true;
+				}
+				int max = entry.item.getMaxStackSize();
+				String itemName = getItemName(entry.item);
+				if (max > -1 && amount > max) {
+					sendError(pl, String.format("You may only buy §B%d %s§C at once", max, itemName));
+					return true;
+				}
+				if(!(econ.has(pl.getName(), amount * entry.retailPrice))){
+					sendError(pl, "You do not have sufficient funds");
+					return true;
+				}
+				ItemStack purchased = entry.item.clone();
+				purchased.setAmount(amount);
+				
+				HashMap<Integer, ItemStack> overflow =  pl.getInventory().addItem(purchased);
+				int refunded = 0;
+				if (overflow.size() > 0) {
+					refunded = overflow.get(0).getAmount();
+					if (overflow.size() == amount) {
+						sendError(pl, "You do not have any room in your inventory");
+						return true;
+					}
+					sender.sendMessage(String.format(
+							"Only §B%d %s§F fit in your inventory. You were charged §B$%.2f§F.",
+							amount - refunded, itemName, (amount - refunded) * entry.retailPrice));
+				} else {
+					sender.sendMessage(String.format(
+							"You bought §B%d %s§F for §B$%.2f§F.",
+							amount, itemName, amount * entry.retailPrice));
+				}
+				econ.withdrawPlayer(pl.getName(), (amount - refunded) * entry.retailPrice);
+				entry.item.setAmount(entry.item.getAmount() - (amount - refunded));
+				econ.depositPlayer(shop.owner, (amount - refunded) * entry.retailPrice);
 				
 			} else if (action.equalsIgnoreCase("lookup")) {
 				if (args.length < 2) {
@@ -363,13 +424,6 @@ public class Main extends JavaPlugin implements Listener {
 					return true;
 				}
 				pl.sendMessage(h.toHelpString());
-				if(helpCmd.equalsIgnoreCase("add") ||
-						helpCmd.equalsIgnoreCase("a")){
-					pl.sendMessage("");
-					pl.sendMessage("WARNING: once you put an item in your shop, you cannot");
-					pl.sendMessage("retrieve it, or buy it from yourself. It will be there");
-					pl.sendMessage("till it's sold");
-				}
 				
 			} else {
 				showHelp(pl, selection);
@@ -425,9 +479,12 @@ public class Main extends JavaPlugin implements Listener {
 		sender.sendMessage("§C" + message);
 	}
 	
+	/**
+	 * Show a page of a shop's inventory listing
+	 * @param sender the player to which the listing is shown
+	 * @param selection the player's shop selection
+	 */
 	protected void showListing(CommandSender sender, ShopSelection selection) {
-		//TODO fix the bug where a item that is out of stock will display as air with a quantity of zero
-		//TODO instead of the correct item with a quantity of 0
 		Shop shop = selection.shop;
 		int pages = shop.getPages();
 		if (pages == 0) {
@@ -571,19 +628,34 @@ public class Main extends JavaPlugin implements Listener {
 	}
 
 	/**
-	 * Get the name of an item.
+	 * Gets the name of an item.
 	 * @param item an item stack
 	 * @return the item's name
 	 */
 	public String getItemName(ItemStack item) {
-		String name = itemNames.get((long) item.getTypeId() << 16 | item.getDurability());
+		return getItemName(item.getTypeId(), item.getDurability());
+	}
+
+	/**
+	 * Gets the name of an item.
+	 * @param id the item's id
+	 * @param damage the item's damage value (durability)
+	 * @return the item's name
+	 */
+	public String getItemName(int id, int damage) {
+		String name = itemNames.get((long) id << 16 | damage);
 		if (name == null) {
-			name = itemNames.get((long) item.getTypeId() << 16);
-			if (name == null) return String.format("%d:%d", item.getTypeId(), item.getDurability());
+			name = itemNames.get((long) id << 16);
+			if (name == null) return String.format("%d:%d", id, damage);
 		}
 		return name;
 	}
-	private boolean economysetup() {
+	
+	/**
+	 * Sets up Vault.
+	 * @return true on success, false otherwise
+	 */
+	private boolean economySetup() {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
             return false;
         }
@@ -594,6 +666,5 @@ public class Main extends JavaPlugin implements Listener {
         econ = rsp.getProvider();
         return econ != null;
     }
-	
 	
 }

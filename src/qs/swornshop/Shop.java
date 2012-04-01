@@ -72,15 +72,15 @@ public class Shop {
 	 * @return whether the shop contains the item
 	 */
 	public boolean containsItem(ItemStack stack) {
-		for (ShopEntry e : inventory) {
-			if (e.item.getTypeId() == stack.getTypeId() &&
-				e.item.getDurability() == stack.getDurability()) {
-				return true;
-			}
-		}
-		return false;
+		return containsItem(stack.getTypeId(), stack.getDurability());
 	}
-	public boolean containsItem(int id, int damage){
+	/**
+	 * Checks if this shop's inventory contains an item.
+	 * @param item the item's ID
+	 * @param damage the item's damage value (durability)
+	 * @return whether the shop contains the item
+	 */
+	public boolean containsItem(int id, int damage) {
 		for (ShopEntry e : inventory) {
 			if (e.item.getTypeId() == id &&
 					e.item.getDurability() == damage) {
@@ -96,20 +96,19 @@ public class Shop {
 	 * @return the item's entry, or null
 	 */
 	public ShopEntry findEntry(ItemStack stack) {
-		for (ShopEntry e : inventory) {
-			if (e.item.getTypeId() == stack.getTypeId() &&
-				e.item.getDurability() == stack.getDurability()) {
-				return e;
-			}
-		}
-		return null;
+		return findEntry(stack.getTypeId(), stack.getDurability());
 	}
+	/**
+	 * Find an entry for an item in this shop's inventory.
+	 * @param id the item's ID
+	 * @param damage the item's damage value (durability)
+	 * @return the item's entry, or null
+	 */
 	public ShopEntry findEntry(int id, int damage) {
 		for (ShopEntry e : inventory) {
 			if (e.item.getTypeId() == id &&
-					e.item.getDurability() == damage) {
+					e.item.getDurability() == damage)
 				return e;
-			}
 		}
 		return null;
 	}
