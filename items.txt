@@ -135,7 +135,7 @@
 100 Huge Mushroom (Red)
 101 Iron Bars
 102 Glass Pane
-103 Melon
+103 Melon (Block)
 104 Pumpkin Stem
 105 Melon Stem
 106 Vines
@@ -276,7 +276,7 @@
 357 Cookie
 358 Map
 359 Shears
-360 Melon Slice
+360 Melon
 361 Pumpkin Seeds
 362 Melon Seeds
 363 Raw Beef
