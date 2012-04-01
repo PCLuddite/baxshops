@@ -45,11 +45,9 @@ public class Main extends JavaPlugin implements Listener {
 		log = this.getLogger();
 		loadItemNames();
 		loadAliases();
-		if(!economySetup()){
-			log.info("WARNING");
-			log.info("Could not set up server economy!");
-			log.info("This could be caused by Vault not being installed.");
-			log.info("SwornShops may not funciton correctly");
+		if (!economySetup()) {
+			log.warning("Could not set up server economy! Is Vault installed?");
+			throw new Error("Vault setup failed");
 		}
 		System.out.println(aliases.get("wood"));
 	}
