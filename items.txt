@@ -165,6 +165,7 @@
 261 Bow
 262 Arrow
 263 Coal
+|   1 Charcoal
 264 Diamond
 265 Iron Ingot
 266 Gold Ingot
