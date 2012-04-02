@@ -329,8 +329,13 @@ public class Main extends JavaPlugin implements Listener {
 				}
 				Shop shop = selection.shop;
 				ShopEntry entry = shop.findEntry(itemsToSell.getTypeId(), itemsToSell.getDurability());
+				
 				if(entry == null){
 					sendError(pl, "The item your are holding is not in this shop!");
+					return true;
+				}
+				if(entry.refundPrice == -1){
+					sendError(pl, "The owner is not buying that item");
 					return true;
 				}
 				if(econ.getBalance(shop.owner) < (entry.item.getAmount() * entry.refundPrice)){
@@ -395,14 +400,42 @@ public class Main extends JavaPlugin implements Listener {
 						
 					}
 					else if(args[1].equalsIgnoreCase("accept")){
-						if(!firstPending.toOwner){
-							pl.sendMessage("You successfully sold " + firstPending.item.getAmount() + " of: " + getItemName(firstPending.item) + " to " + firstPending.shopOwner);
-							pl.sendMessage("and were credited $" + (firstPending.price * firstPending.item.getAmount()));
-							pl.sendMessage("this message has been auto-removed from your pending requests");
-							notifications.removeFirst();
-							pending.put(pl.getName(), notifications);
+						if(!firstPending.toOwner && firstPending.accepted){
+							sendError(pl, "This notification has no conditions to accept/decline!");
+							sendError(pl, "type /shop pending show to view, than (automatically) remove the notification");
 							return true;
 						}
+						Boolean hasFreeSpace = false;
+						int i = 0;
+						ItemStack[] slotToCheck = pl.getInventory().getContents();
+						while(i < pl.getInventory().getSize()){
+							if(slotToCheck[i] == null){
+								hasFreeSpace = true;
+							}
+							i++;
+						}
+						if(hasFreeSpace == false){
+							sendError(pl, "You must have at least one free slot in your inventory!");
+							return true;
+						}
+						if(firstPending.toOwner){
+							if(!(econ.has(pl.getName(), (firstPending.item.getAmount() * firstPending.price)))){
+								sendError(pl, "you do not have sufficient funds to accept this offer!");
+								return true;
+							}
+							econ.withdrawPlayer(pl.getName(), (firstPending.item.getAmount() * firstPending.price));
+							econ.depositPlayer(firstPending.seller, (firstPending.item.getAmount() * firstPending.price));
+						}
+						pl.getInventory().addItem(firstPending.item);
+						
+						PendingEntry reply = new PendingEntry(firstPending.shopOwner, firstPending.shop,
+								firstPending.sellprice, false, true);
+						reply.setItem(firstPending.item);
+						ArrayDeque<PendingEntry> sendTo = pending.get(firstPending.seller);
+						sendTo.add(reply);
+						pending.put(firstPending.seller, sendTo);
+						notifications.removeFirst();
+						pending.put(pl.getName(), notifications);
 					}
 				}
 				
