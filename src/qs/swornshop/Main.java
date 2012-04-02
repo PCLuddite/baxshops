@@ -4,12 +4,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
 import net.milkbowl.vault.economy.Economy;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -17,9 +19,11 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -35,6 +39,7 @@ public class Main extends JavaPlugin implements Listener {
 	
 	protected HashMap<Location, Shop> shops = new HashMap<Location, Shop>();
 	protected HashMap<Player, ShopSelection> selectedShops = new HashMap<Player, ShopSelection>();
+	protected HashMap<String, ArrayDeque<PendingEntry>> pending = new HashMap<String,ArrayDeque<PendingEntry>>();
 	protected Logger log;
 	
 	public Main() {}
@@ -94,6 +99,7 @@ public class Main extends JavaPlugin implements Listener {
 				shop.owner = owner;
 				shop.location = b.getLocation();
 				shops.put(shop.location, shop);
+				
 				
 			} else if (action.equalsIgnoreCase("remove") || 
 					action.equalsIgnoreCase("rm")) {
@@ -305,7 +311,102 @@ public class Main extends JavaPlugin implements Listener {
 				entry.item.setAmount(entry.item.getAmount() - (amount - refunded));
 				econ.depositPlayer(shop.owner, (amount - refunded) * entry.retailPrice);
 				
-			} else if (action.equalsIgnoreCase("lookup")) {
+			}else if(action.equalsIgnoreCase("sell") ||
+					action.equalsIgnoreCase("s")){
+				if(selection == null){
+					sendError(pl, "You must select a shop");
+					return true;
+				}
+				if(selection.isOwner){
+					sendError(pl, "You cannot sell items to your own shop");
+					sendError(pl, "to add items, use /shop add");
+					return true;
+				}
+				ItemStack itemsToSell = pl.getItemInHand();
+				if(itemsToSell == null || itemsToSell.getTypeId() == 0){
+					sendError(pl, "You must be holding the item you wish to sell");
+					return true;
+				}
+				Shop shop = selection.shop;
+				ShopEntry entry = shop.findEntry(itemsToSell.getTypeId(), itemsToSell.getDurability());
+				if(entry == null){
+					sendError(pl, "The item your are holding is not in this shop!");
+					return true;
+				}
+				if(econ.getBalance(shop.owner) < (entry.item.getAmount() * entry.refundPrice)){
+					sendError(pl, "The shop owner does not have sufficient funds!");
+					return true;
+				}
+				PendingEntry p = new PendingEntry(shop.owner, shop, entry.refundPrice, pl.getName(), true);
+				p.setItem(itemsToSell);
+				ArrayDeque<PendingEntry> pendingLocal = pending.get(shop.owner);
+				pendingLocal.add(p);
+				pending.put(shop.owner, pendingLocal);
+				pl.setItemInHand(null);
+				pl.sendMessage("§BYour sale is now pending, §Fand the funds will be transfered, or");
+				pl.sendMessage("§Fyour items will be returned when the request is accepted, or denied");
+				
+			}else if(action.equalsIgnoreCase("pending") ||
+					action.equalsIgnoreCase("p")){
+				ArrayDeque<PendingEntry> notifications = pending.get(pl.getName());
+				PendingEntry firstPending = notifications.getFirst();
+				if(args.length == 1){
+					if(notifications.isEmpty()){
+						pl.sendMessage("§FYou have no new notifications");
+						return true;
+					}
+					pl.sendMessage(String.format("§FYou have §B%i §Fpending shop requests,", notifications.size()));
+					pl.sendMessage("§FTo read the first message, type /shop pending show");
+					return true;
+				}
+				if(args[1].equalsIgnoreCase("show")){
+					if(notifications.isEmpty()){
+						pl.sendMessage("§FYou have no new notifications");
+						return true;
+					}
+					
+					if(firstPending == null){
+						sendError(pl, "An unknown error occured when fetching notificatiosn!");
+						sendError(pl, "please try again later, and if possible report this to an Admin.");
+						return true;
+					}
+					if(firstPending.toOwner){
+						pl.sendMessage(ChatColor.AQUA + firstPending.seller + " would like to sell you " +
+								firstPending.item.getAmount() + " of: " + getItemName(firstPending.item) + " for " + 
+								"$" + Math.round(firstPending.sellprice * firstPending.item.getAmount()));
+						pl.sendMessage("§FTo respond, type §3/shop pending accept§F, or §3/shop peding deny");
+						return true;
+					}
+					if(!firstPending.toOwner){
+						if(firstPending.accepted){
+							pl.sendMessage("You successfully sold " + firstPending.item.getAmount() + " of: " + getItemName(firstPending.item) + " to " + firstPending.shopOwner);
+							pl.sendMessage("and were credited $" + (firstPending.price * firstPending.item.getAmount()));
+							pl.sendMessage("this message has been auto-removed from your pending requests");
+							notifications.removeFirst();
+							pending.put(pl.getName(), notifications);
+							return true;
+						}
+						else{
+							pl.sendMessage("§F" + firstPending.shopOwner + " denied your sale, and you were refunded: "
+									+ firstPending.item.getAmount() + " of " + getItemName(firstPending.item));
+							pl.sendMessage("§Ftype §3/shop pending accept §Fto retrieve your item");
+							return true;
+						}
+						
+					}
+					else if(args[1].equalsIgnoreCase("accept")){
+						if(!firstPending.toOwner){
+							pl.sendMessage("You successfully sold " + firstPending.item.getAmount() + " of: " + getItemName(firstPending.item) + " to " + firstPending.shopOwner);
+							pl.sendMessage("and were credited $" + (firstPending.price * firstPending.item.getAmount()));
+							pl.sendMessage("this message has been auto-removed from your pending requests");
+							notifications.removeFirst();
+							pending.put(pl.getName(), notifications);
+							return true;
+						}
+					}
+				}
+				
+			}else if (action.equalsIgnoreCase("lookup")) {
 				if (args.length < 2) {
 					sendError(pl, Help.lookup.toUsageString());
 					return true;
@@ -382,6 +483,19 @@ public class Main extends JavaPlugin implements Listener {
 		event.setCancelled(true);
 		if (event.getAction() == Action.LEFT_CLICK_BLOCK)
 			b.getState().update();
+	}
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onPlayerJoin(PlayerJoinEvent event){
+		if(!(pending.containsKey(event.getPlayer().getName()))){
+			pending.put(event.getPlayer().getName(), new ArrayDeque<PendingEntry>());
+		}
+		else{
+			ArrayDeque<PendingEntry> p = pending.get(event.getPlayer().getName());
+			if(!p.isEmpty()){
+				event.getPlayer().sendMessage("You have pending shop requests!");
+				event.getPlayer().sendMessage("type /shop pending to display them");
+			}
+		}
 	}
 
 	/**
