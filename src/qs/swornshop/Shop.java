@@ -25,15 +25,9 @@ public class Shop {
 	 */
 	public Location location;
 	
-	//private static final int BIG = Integer.MAX_VALUE;
-	//private static final float BIGF = BIG;
 	private int ceil(float x) {
-		//return BIG - (int) (BIGF - x);
 		return (int) Math.ceil(x);
 	}
-	/*private int floor(float x) {
-		return (int) x;
-	}*/
 	
 	/**
 	 * Gets the number of pages in this shop's inventory.
@@ -82,8 +76,8 @@ public class Shop {
 	 */
 	public boolean containsItem(int id, int damage) {
 		for (ShopEntry e : inventory) {
-			if (e.item.getTypeId() == id &&
-					e.item.getDurability() == damage) {
+			if (e.itemID == id &&
+					e.itemDamage == damage) {
 				return true;
 			}
 		}
@@ -106,8 +100,8 @@ public class Shop {
 	 */
 	public ShopEntry findEntry(int id, int damage) {
 		for (ShopEntry e : inventory) {
-			if (e.item.getTypeId() == id &&
-					e.item.getDurability() == damage)
+			if (e.itemID == id &&
+					e.itemDamage == damage)
 				return e;
 		}
 		return null;

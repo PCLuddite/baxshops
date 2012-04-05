@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 
 import net.milkbowl.vault.economy.Economy;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -24,13 +23,22 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import qs.swornshop.notification.Claimable;
+import qs.swornshop.notification.Notification;
+import qs.swornshop.notification.Request;
+import qs.swornshop.notification.SellRequest;
+
 public class Main extends JavaPlugin implements Listener {
 	
+	// TODO: Timed notifications
+	
 	private static final int SIGN = 63;
+	public static Main instance;
 	
 	public static Economy econ;
 
@@ -39,7 +47,7 @@ public class Main extends JavaPlugin implements Listener {
 	
 	protected HashMap<Location, Shop> shops = new HashMap<Location, Shop>();
 	protected HashMap<Player, ShopSelection> selectedShops = new HashMap<Player, ShopSelection>();
-	protected HashMap<String, ArrayDeque<PendingEntry>> pending = new HashMap<String,ArrayDeque<PendingEntry>>();
+	protected HashMap<String, ArrayDeque<Notification>> pending = new HashMap<String, ArrayDeque<Notification>>();
 	protected Logger log;
 	
 	public Main() {}
@@ -47,6 +55,7 @@ public class Main extends JavaPlugin implements Listener {
 	@Override
 	public void onEnable() {
         getServer().getPluginManager().registerEvents(this, this);
+        instance = this;
 		log = this.getLogger();
 		loadItemNames();
 		loadAliases();
@@ -75,7 +84,7 @@ public class Main extends JavaPlugin implements Listener {
 			}
 			String action = args[0];
 			if (action.equalsIgnoreCase("create") || 
-					action.equalsIgnoreCase("c")) {
+					action.equalsIgnoreCase("mk")) {
 				if (args.length < 2) {
 					sendError(pl, Help.create.toUsageString());
 					return true;
@@ -124,7 +133,8 @@ public class Main extends JavaPlugin implements Listener {
 				pl.sendMessage("§B" + selection.shop.owner + "§F's shop has been removed");
 				
 			} else if (action.equalsIgnoreCase("add") ||
-					action.equalsIgnoreCase("a")) {
+					action.equalsIgnoreCase("+") ||
+					action.equalsIgnoreCase("ad")) {
 				if (args.length < 2) {
 					sendError(pl, Help.add.toUsageString());
 					return true;
@@ -194,7 +204,7 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, "Use /shop add to add a new item");
 					return true;
 				}
-				entry.item.setAmount(entry.item.getAmount() + stack.getAmount());
+				entry.setAmount(entry.item.getAmount() + stack.getAmount());
 				pl.setItemInHand(null);
 				
 			} else if (action.equalsIgnoreCase("set")) {
@@ -220,14 +230,14 @@ public class Main extends JavaPlugin implements Listener {
 				
 				float retailAmount, refundAmount;
 				try {
-					retailAmount = Math.round(100f * Float.parseFloat(args[1])) / 100f;
+					retailAmount = Math.round(100f * Float.parseFloat(args[2])) / 100f;
 				} catch (NumberFormatException e) {
 					sendError(pl, "Invalid buy price");
 					sendError(pl, Help.set.toUsageString());
 					return true;
 				}
 				try {
-					refundAmount = args.length > 2 ? Math.round(100f * Float.parseFloat(args[2])) / 100f : -1;
+					refundAmount = args.length > 2 ? Math.round(100f * Float.parseFloat(args[3])) / 100f : -1;
 				} catch (NumberFormatException e) {
 					sendError(pl, "Invalid sell price");
 					sendError(pl, Help.set.toUsageString());
@@ -247,7 +257,7 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, "You must select a shop");
 					return true;
 				}
-				if (selection.isOwner) {
+				if (selection.isOwner && !pl.hasPermission("shops.self")) {
 					sendError(pl, "You cannot buy items from this shop");
 					return true;
 				}
@@ -311,135 +321,101 @@ public class Main extends JavaPlugin implements Listener {
 				entry.item.setAmount(entry.item.getAmount() - (amount - refunded));
 				econ.depositPlayer(shop.owner, (amount - refunded) * entry.retailPrice);
 				
-			}else if(action.equalsIgnoreCase("sell") ||
-					action.equalsIgnoreCase("s")){
-				if(selection == null){
+			} else if (action.equalsIgnoreCase("sell") ||
+					action.equalsIgnoreCase("s")) {
+				if (selection == null) {
 					sendError(pl, "You must select a shop");
 					return true;
 				}
-				if(selection.isOwner){
+				if (selection.isOwner && !pl.hasPermission("shops.self")) {
 					sendError(pl, "You cannot sell items to your own shop");
-					sendError(pl, "to add items, use /shop add");
+					sendError(pl, "To add items, use /shop add");
 					return true;
 				}
+				
 				ItemStack itemsToSell = pl.getItemInHand();
-				if(itemsToSell == null || itemsToSell.getTypeId() == 0){
+				if (itemsToSell == null || itemsToSell.getTypeId() == 0) {
 					sendError(pl, "You must be holding the item you wish to sell");
 					return true;
 				}
+				
 				Shop shop = selection.shop;
 				ShopEntry entry = shop.findEntry(itemsToSell.getTypeId(), itemsToSell.getDurability());
+				if (entry == null || entry.refundPrice < 0) {
+					sendError(pl, "You cannot sell that item");
+					return true;
+				}
 				
-				if(entry == null){
-					sendError(pl, "The item your are holding is not in this shop!");
-					return true;
-				}
-				if(entry.refundPrice == -1){
-					sendError(pl, "The owner is not buying that item");
-					return true;
-				}
-				if(econ.getBalance(shop.owner) < (entry.item.getAmount() * entry.refundPrice)){
-					sendError(pl, "The shop owner does not have sufficient funds!");
-					return true;
-				}
-				PendingEntry p = new PendingEntry(shop.owner, shop, entry.refundPrice, pl.getName(), true);
-				p.setItem(itemsToSell);
-				ArrayDeque<PendingEntry> pendingLocal = pending.get(shop.owner);
-				pendingLocal.add(p);
-				pending.put(shop.owner, pendingLocal);
 				pl.setItemInHand(null);
-				pl.sendMessage("§BYour sale is now pending, §Fand the funds will be transfered, or");
-				pl.sendMessage("§Fyour items will be returned when the request is accepted, or denied");
 				
-			}else if(action.equalsIgnoreCase("pending") ||
-					action.equalsIgnoreCase("p")){
-				ArrayDeque<PendingEntry> notifications = pending.get(pl.getName());
-				PendingEntry firstPending = notifications.getFirst();
-				if(args.length == 1){
-					if(notifications.isEmpty()){
-						pl.sendMessage("§FYou have no new notifications");
-						return true;
-					}
-					pl.sendMessage(String.format("§FYou have §B%i §Fpending shop requests,", notifications.size()));
-					pl.sendMessage("§FTo read the first message, type /shop pending show");
+				String name = getItemName(itemsToSell);
+				pl.sendMessage(String.format(
+						"Your request to sell §B%d %s§F for §B$%.2f§F has been sent",
+						itemsToSell.getAmount(), name, entry.refundPrice * itemsToSell.getAmount()));
+				pl.sendMessage("§7You will be notified when this offer is accepted or rejected");
+				
+				ShopEntry req = new ShopEntry();
+				req.setItem(itemsToSell);
+				req.refundPrice = entry.refundPrice;
+				SellRequest request = new SellRequest(shop, req, pl.getName());
+				sendNotification(shop.owner, request);
+				
+			} else if (action.equalsIgnoreCase("pending") ||
+					action.equalsIgnoreCase("p") ||
+					action.equalsIgnoreCase("notifications") ||
+					action.equalsIgnoreCase("n")) {
+				showNotification(pl);
+				
+			} else if (action.equalsIgnoreCase("accept") ||
+					action.equalsIgnoreCase("yes") ||
+					action.equalsIgnoreCase("a") ||
+					action.equalsIgnoreCase("claim") ||
+					action.equalsIgnoreCase("c")) {
+				ArrayDeque<Notification> notifications = getNotifications(pl);
+				if (notifications.isEmpty()) {
+					sendError(pl, "You have no notifications");
 					return true;
 				}
-				if(args[1].equalsIgnoreCase("show")){
-					if(notifications.isEmpty()){
-						pl.sendMessage("§FYou have no new notifications");
-						return true;
-					}
-					
-					if(firstPending == null){
-						sendError(pl, "An unknown error occured when fetching notificatiosn!");
-						sendError(pl, "please try again later, and if possible report this to an Admin.");
-						return true;
-					}
-					if(firstPending.toOwner){
-						pl.sendMessage(ChatColor.AQUA + firstPending.seller + " would like to sell you " +
-								firstPending.item.getAmount() + " of: " + getItemName(firstPending.item) + " for " + 
-								"$" + Math.round(firstPending.sellprice * firstPending.item.getAmount()));
-						pl.sendMessage("§FTo respond, type §3/shop pending accept§F, or §3/shop peding deny");
-						return true;
-					}
-					if(!firstPending.toOwner){
-						if(firstPending.accepted){
-							pl.sendMessage("You successfully sold " + firstPending.item.getAmount() + " of: " + getItemName(firstPending.item) + " to " + firstPending.shopOwner);
-							pl.sendMessage("and were credited $" + (firstPending.price * firstPending.item.getAmount()));
-							pl.sendMessage("this message has been auto-removed from your pending requests");
-							notifications.removeFirst();
-							pending.put(pl.getName(), notifications);
-							return true;
-						}
-						else{
-							pl.sendMessage("§F" + firstPending.shopOwner + " denied your sale, and you were refunded: "
-									+ firstPending.item.getAmount() + " of " + getItemName(firstPending.item));
-							pl.sendMessage("§Ftype §3/shop pending accept §Fto retrieve your item");
-							return true;
-						}
-						
-					}
-					else if(args[1].equalsIgnoreCase("accept")){
-						if(!firstPending.toOwner && firstPending.accepted){
-							sendError(pl, "This notification has no conditions to accept/decline!");
-							sendError(pl, "type /shop pending show to view, than (automatically) remove the notification");
-							return true;
-						}
-						Boolean hasFreeSpace = false;
-						int i = 0;
-						ItemStack[] slotToCheck = pl.getInventory().getContents();
-						while(i < pl.getInventory().getSize()){
-							if(slotToCheck[i] == null){
-								hasFreeSpace = true;
-							}
-							i++;
-						}
-						if(hasFreeSpace == false){
-							sendError(pl, "You must have at least one free slot in your inventory!");
-							return true;
-						}
-						if(firstPending.toOwner){
-							if(!(econ.has(pl.getName(), (firstPending.item.getAmount() * firstPending.price)))){
-								sendError(pl, "you do not have sufficient funds to accept this offer!");
-								return true;
-							}
-							econ.withdrawPlayer(pl.getName(), (firstPending.item.getAmount() * firstPending.price));
-							econ.depositPlayer(firstPending.seller, (firstPending.item.getAmount() * firstPending.price));
-						}
-						pl.getInventory().addItem(firstPending.item);
-						
-						PendingEntry reply = new PendingEntry(firstPending.shopOwner, firstPending.shop,
-								firstPending.sellprice, false, true);
-						reply.setItem(firstPending.item);
-						ArrayDeque<PendingEntry> sendTo = pending.get(firstPending.seller);
-						sendTo.add(reply);
-						pending.put(firstPending.seller, sendTo);
+				Notification n = notifications.getFirst();
+				if (n instanceof Request) {
+					Request r = (Request) n;
+					if (r.accept(pl))
 						notifications.removeFirst();
-						pending.put(pl.getName(), notifications);
-					}
+				} else if (n instanceof Claimable) {
+					Claimable c = (Claimable) n;
+					if (c.claim(pl))
+						notifications.removeFirst();
+				}
+
+				showNotification(pl);
+				
+			} else if (action.equalsIgnoreCase("reject") ||
+					action.equalsIgnoreCase("no")) {
+				ArrayDeque<Notification> notifications = getNotifications(pl);
+				if (notifications.isEmpty()) {
+					sendError(pl, "You have no notifications");
+					return true;
+				}
+				Notification n = notifications.getFirst();
+				if (n instanceof Request) {
+					Request r = (Request) n;
+					if (r.reject(pl))
+						notifications.removeFirst();
 				}
 				
-			}else if (action.equalsIgnoreCase("lookup")) {
+				showNotification(pl);
+				
+			} else if (action.equalsIgnoreCase("skip") ||
+					action.equalsIgnoreCase("sk")) {
+				ArrayDeque<Notification> notifications = getNotifications(pl);
+				if (notifications.isEmpty()) {
+					sendError(pl, "You have no notifications");
+					return true;
+				}
+				notifications.add(notifications.removeFirst());
+				showNotification(pl);
+				
+			} else if (action.equalsIgnoreCase("lookup")) {
 				if (args.length < 2) {
 					sendError(pl, Help.lookup.toUsageString());
 					return true;
@@ -471,7 +447,7 @@ public class Main extends JavaPlugin implements Listener {
 		}
 		return false;
 	}
-	
+
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		Block b = event.getClickedBlock();
@@ -517,18 +493,12 @@ public class Main extends JavaPlugin implements Listener {
 		if (event.getAction() == Action.LEFT_CLICK_BLOCK)
 			b.getState().update();
 	}
-	@EventHandler(priority = EventPriority.HIGHEST)
+	
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerJoin(PlayerJoinEvent event){
-		if(!(pending.containsKey(event.getPlayer().getName()))){
-			pending.put(event.getPlayer().getName(), new ArrayDeque<PendingEntry>());
-		}
-		else{
-			ArrayDeque<PendingEntry> p = pending.get(event.getPlayer().getName());
-			if(!p.isEmpty()){
-				event.getPlayer().sendMessage("You have pending shop requests!");
-				event.getPlayer().sendMessage("type /shop pending to display them");
-			}
-		}
+		ArrayDeque<Notification> p = getNotifications(event.getPlayer());
+		if (!p.isEmpty())
+			event.getPlayer().sendMessage("You have shop notifications. Use §B/shop pending§F to view them");
 	}
 
 	/**
@@ -542,11 +512,153 @@ public class Main extends JavaPlugin implements Listener {
 	}
 
 	/**
+	 * Gets the name of an item.
+	 * @param item an item stack
+	 * @return the item's name
+	 */
+	public String getItemName(ItemStack item) {
+		return getItemName(item.getTypeId(), item.getDurability());
+	}
+
+	/**
+	 * Gets the name of an item.
+	 * @param item an item stack
+	 * @return the item's name
+	 */
+	public String getItemName(ShopEntry entry) {
+		return getItemName(entry.itemID, entry.itemDamage);
+	}
+
+	/**
+	 * Gets the name of an item.
+	 * @param id the item's id
+	 * @param damage the item's damage value (durability)
+	 * @return the item's name
+	 */
+	public String getItemName(int id, int damage) {
+		String name = itemNames.get((long) id << 16 | damage);
+		if (name == null) {
+			name = itemNames.get((long) id << 16);
+			if (name == null) return String.format("%d:%d", id, damage);
+		}
+		return name;
+	}
+	
+	/**
+	 * Gets a list of notifications for a player.
+	 * @param pl the player
+	 * @return the player's notifications
+	 */
+	public ArrayDeque<Notification> getNotifications(Player pl) {
+		return getNotifications(pl.getName());
+	}
+	
+	/**
+	 * Gets a list of notifications for a player.
+	 * @param player the player
+	 * @return the player's notifications
+	 */
+	public ArrayDeque<Notification> getNotifications(String player) {
+		ArrayDeque<Notification> n = pending.get(player);
+		if (n == null) {
+			n = new ArrayDeque<Notification>();
+			pending.put(player, n);
+		}
+		return n;
+	}
+	
+	/**
+	 * Shows a player his/her most recent notification.
+	 * Also shows the notification count.
+	 * @param pl the player
+	 */
+	public void showNotification(Player pl) {
+		showNotification(pl, true);
+	}
+
+	/**
+	 * Shows a player his/her most recent notification.
+	 * @param pl the player
+	 * @param showCount whether the notification count should be shown as well
+	 */
+	public void showNotification(Player pl, boolean showCount) {
+		ArrayDeque<Notification> notifications = getNotifications(pl);
+		if (notifications.isEmpty()) {
+			if (showCount)
+				pl.sendMessage("§7You have no notifications");
+			return;
+		}
+		if (showCount) {
+			int size = notifications.size();
+			pl.sendMessage(size == 1 ? "§7You have §31§7 notification" : String.format("§7You have §3%d§7 notifications", size));
+		}
+		
+		Notification n = notifications.getFirst();
+		pl.sendMessage(n.getMessage(pl));
+		if (n instanceof Request)
+			pl.sendMessage("§7Use §3/shop accept§7 and §3/shop reject§7 to manage this request");
+		else if (n instanceof Claimable)
+			pl.sendMessage("§7Use §3/shop claim§7 to claim and remove this notification");
+		else notifications.removeFirst();
+	}
+
+	/**
+	 * Sends a notification to a player.
+	 * @param pl the player
+	 * @param n the notification
+	 */
+	public void sendNotification(Player pl, Notification n) {
+		sendNotification(pl.getName(), n);
+	}
+
+	/**
+	 * Sends a notification to a player.
+	 * @param player the player
+	 * @param n the notification
+	 */
+	public void sendNotification(String player, Notification n) {
+		ArrayDeque<Notification> ns = getNotifications(player);
+		ns.add(n);
+		Player pl = getServer().getPlayer(player);
+		if (pl != null && pl.isOnline())
+			showNotification(pl, false);
+	}
+	
+	/**
+	 * Checks whether an item stack will fit in a player's inventory.
+	 * @param pl the player
+	 * @param item the item
+	 * @return whether the item will fit
+	 */
+	public static boolean inventoryFitsItem(Player pl, ItemStack item) {
+		int quantity = item.getAmount(),
+			id = item.getTypeId(),
+			damage = item.getDurability(),
+			max = item.getMaxStackSize();
+		Inventory inv = pl.getInventory();
+		ItemStack[] contents = inv.getContents();
+		ItemStack s;
+		if (max == -1) max = inv.getMaxStackSize();
+		for (int i = 0; i < contents.length; ++i) {
+			if ((s = contents[i]) == null || s.getTypeId() == 0) {
+				quantity -= max;
+				if (quantity <= 0) return true;
+				continue;
+			}
+			if (s.getTypeId() == id && s.getDurability() == damage) {
+				quantity -= max - s.getAmount();
+				if (quantity <= 0) return true;
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Informs a player of an error.
 	 * @param sender the player
 	 * @param message the error message
 	 */
-	protected void sendError(CommandSender sender, String message) {
+	public static void sendError(CommandSender sender, String message) {
 		sender.sendMessage("§C" + message);
 	}
 	
@@ -555,7 +667,7 @@ public class Main extends JavaPlugin implements Listener {
 	 * @param sender the player to which the listing is shown
 	 * @param selection the player's shop selection
 	 */
-	protected void showListing(CommandSender sender, ShopSelection selection) {
+	public static void showListing(CommandSender sender, ShopSelection selection) {
 		Shop shop = selection.shop;
 		int pages = shop.getPages();
 		if (pages == 0) {
@@ -577,7 +689,7 @@ public class Main extends JavaPlugin implements Listener {
 			stop = (selection.page + 1) * Shop.ITEMS_PER_PAGE,
 			max = Math.min(stop, shop.getInventorySize());
 		for (; i < max; ++i)
-			sender.sendMessage(shop.getEntryAt(i).toString(this));
+			sender.sendMessage(shop.getEntryAt(i).toString());
 		for (; i < stop; ++i)
 			sender.sendMessage("");
 	}
@@ -650,30 +762,6 @@ public class Main extends JavaPlugin implements Listener {
 		} catch (IOException e) {
 			log.warning("Failed to load item names: " + e.toString());
 		}
-	}
-
-	/**
-	 * Gets the name of an item.
-	 * @param item an item stack
-	 * @return the item's name
-	 */
-	public String getItemName(ItemStack item) {
-		return getItemName(item.getTypeId(), item.getDurability());
-	}
-
-	/**
-	 * Gets the name of an item.
-	 * @param id the item's id
-	 * @param damage the item's damage value (durability)
-	 * @return the item's name
-	 */
-	public String getItemName(int id, int damage) {
-		String name = itemNames.get((long) id << 16 | damage);
-		if (name == null) {
-			name = itemNames.get((long) id << 16);
-			if (name == null) return String.format("%d:%d", id, damage);
-		}
-		return name;
 	}
 	
 	/**

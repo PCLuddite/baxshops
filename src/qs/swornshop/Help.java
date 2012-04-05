@@ -8,13 +8,21 @@ public class Help {
 	
 	public static final CommandHelp help = new CommandHelp("shop help", "h", "[action]", "show help with shops",
 			CommandHelp.arg("action", "get help on a /shop action, e.g. /shop h create"));
-	public static final CommandHelp create = new CommandHelp("shop create", "c", "<owner>", "create a new shop", 
+	public static final CommandHelp create = new CommandHelp("shop create", "mk", "<owner>", "create a new shop", 
 			CommandHelp.arg("owner", "the owner of the shop"));
 	public static final CommandHelp remove = new CommandHelp("shop remove", "rm", null, "removes this shop");
 	
-	public static final CommandHelp pending = new CommandHelp("shop pending", "p", null, "view pending shop requests", 
-			"Shows a list of pending offers to sell items to your shops",
-			"Use /shop accept and /shop reject on these offers.");
+	public static final CommandHelp notifications = new CommandHelp("shop notifications", "n,pending,p", null, "view pending shop notifications", 
+			"Shows a list of notifications to sell items to your shops",
+			"These can be offers (e.g., someone wishes to sell you an item)",
+			"or messages (e.g., an offer was accepted).",
+			"Use /shop accept and /shop reject on offers.");
+	
+	public static final CommandHelp accept = new CommandHelp("shop accept", "yes,a", null, "accept your most recent notification");
+	public static final CommandHelp claim = new CommandHelp("shop claim", "c", null, "claim your most recent notification");
+	public static final CommandHelp reject = new CommandHelp("shop reject", "no", null, "reject your most recent notification");
+	public static final CommandHelp skip = new CommandHelp("shop skip", "sk", null, "skip your most recent notification",
+			"Moves your most recent notification to the end of the list");
 	
 	public static final CommandHelp buy = new CommandHelp("shop buy", "b", "<item> <quantity>", "buy an item from this shop", 
 			CommandHelp.args(
@@ -28,7 +36,7 @@ public class Help {
 				"price", "the price (for the entire quantity); defaults to the store's price times the quantity"
 			));
 	
-	public static final CommandHelp add = new CommandHelp("shop add", "a", "<buy-price> [sell-price=none]", "add your held item to this shop",
+	public static final CommandHelp add = new CommandHelp("shop add", "+,ad", "<buy-price> [sell-price=none]", "add your held item to this shop",
 			concat(CommandHelp.args(
 				"buy-price", "the price of a single item in the stack",
 				"sell-price", "the selling price of a single item in the stack (by default the item cannot be sold)"
@@ -50,7 +58,11 @@ public class Help {
 	public static final String[] index = {
 		CommandHelp.header("Shop Help"),
 		help.toIndexString(),
-		pending.toIndexString()
+		notifications.toIndexString(),
+		accept.toIndexString(),
+		reject.toIndexString(),
+		claim.toIndexString(),
+		skip.toIndexString()
 	};
 	public static final String[] indexSelected = { };
 	public static final String[] indexAdmin = {
@@ -110,22 +122,42 @@ public class Help {
 	
 	static {
 		commands.put("help", help);
-		commands.put("h", help);
-		commands.put("create", create);
-		commands.put("c", create);
-		commands.put("remove", remove);
-		commands.put("rm", remove);
-		commands.put("pending", pending);
-		commands.put("p", pending);
+		commands.put("notifications", notifications);
+		commands.put("pending", notifications);
+		commands.put("accept", accept);
+		commands.put("reject", reject);
+		commands.put("claim", claim);
+		commands.put("skip", skip);
+		
 		commands.put("buy", buy);
-		commands.put("b", buy);
 		commands.put("sell", sell);
-		commands.put("s", sell);
+		
 		commands.put("add", add);
-		commands.put("a", add);
 		commands.put("restock", restock);
-		commands.put("r", restock);
 		commands.put("set", set);
+
+		commands.put("create", create);
+		commands.put("remove", remove);
+		
+		commands.put("h", help);
+		commands.put("n", notifications);
+		commands.put("p", notifications);
+		commands.put("a", accept);
+		commands.put("yes", accept);
+		commands.put("no", reject);
+		commands.put("c", claim);
+		commands.put("sk", skip);
+		
+		commands.put("b", buy);
+		commands.put("s", sell);
+		
+		commands.put("ad", add);
+		commands.put("+", add);
+		commands.put("r", restock);
+
+		commands.put("c", create);
+		commands.put("mk", create);
+		commands.put("rm", remove);
 	}
 
 	private static final String[] concat(String[] a, String[] b) {

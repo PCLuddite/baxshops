@@ -11,11 +11,11 @@ public class ShopEntry {
 	/**
 	 * The price per unit to buy this item from the store
 	 */
-	public float retailPrice;
+	public float retailPrice = -1;
 	/**
 	 * The price per unit to sell this item to the store
 	 */
-	public float refundPrice;
+	public float refundPrice = -1;
 	/**
 	 * The item stack associated with this shop entry
 	 */
@@ -38,16 +38,27 @@ public class ShopEntry {
 		this.itemDamage = item.getDurability();
 	}
 	
-	public String toString(Main p) {
+	public String toString() {
 		int quantity = item.getAmount();
 		return refundPrice < 0 ?
 			String.format(quantity == 0 ?
-				"§C(%d) %s ($%.2f)" :
+				"§C§M(%d) %s ($%.2f)" :
 				"§7(%d) §F%s §B($%.2f)",
-				quantity, p.getItemName(itemID, itemDamage), retailPrice) :
+				quantity, Main.instance.getItemName(this), retailPrice) :
 			String.format(quantity == 0 ?
-				"§C(%d) %s ($%.2f) ($%.2f)" :
+				"§C§M(%d) %s ($%.2f) ($%.2f)" :
 				"§7(%d) §F%s §B($%.2f) §7($%.2f)",
-				quantity, p.getItemName(itemID, itemDamage), retailPrice, refundPrice);
+				quantity, Main.instance.getItemName(this), retailPrice, refundPrice);
+	}
+
+	/**
+	 * Sets the amount of the item stack associated with this entry.
+	 * @param amount the quantity of the item
+	 */
+	public void setAmount(int amount) {
+		if (item.getAmount() == 0)
+			item = new ItemStack(itemID, amount, (short) itemDamage);
+		else
+			item.setAmount(amount);
 	}
 }
