@@ -9,12 +9,21 @@ commands:
           /shop <action> <arguments...>
           §6Help: §f/shop help
 permissions:
-  shops.*:
-    description: All SwornShop permissions
-    default: op
-    children:
-      shops.admin: true
-  shops.admin:
-    description: allows the user to create and remove shops
-    default: op
-    
+    swornshop.*:
+        description: All SwornShop permissions
+        default: op
+        children:
+            shops.admin: true
+            shops.trader: true
+    swornshop.trader:
+        description: Allows you to buy and sell from shops
+        default: true
+        children:
+    	    swornshop.buy: true
+            swornshop.sell: true
+    swornshop.admin:
+        description: Allows you to create and remove shops
+        default: op
+    swornshop.self:
+        description: Allows you to manipulate your own shops as if they were others
+        default: op

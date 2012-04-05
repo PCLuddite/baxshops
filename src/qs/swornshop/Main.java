@@ -89,7 +89,7 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, Help.create.toUsageString());
 					return true;
 				}
-				if (!sender.hasPermission("shops.admin")) {
+				if (!sender.hasPermission("swornshop.admin")) {
 					sendError(pl, "You cannot create shops");
 					return true;
 				}
@@ -143,7 +143,7 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, "You must select a shop");
 					return true;
 				}
-				if (!selection.isOwner && !pl.hasPermission("shops.admin")) {
+				if (!selection.isOwner && !pl.hasPermission("swornshop.admin")) {
 					sendError(pl, "You cannot add items to this shop");
 					return true;
 				}
@@ -188,7 +188,7 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, "You must select a shop");
 					return true;
 				}
-				if (!selection.isOwner && !pl.hasPermission("shops.admin")) {
+				if (!selection.isOwner && !pl.hasPermission("swornshop.admin")) {
 					sendError(pl, "You cannot restock this shop");
 					return true;
 				}
@@ -257,7 +257,7 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, "You must select a shop");
 					return true;
 				}
-				if (selection.isOwner && !pl.hasPermission("shops.self")) {
+				if (selection.isOwner && !pl.hasPermission("swornshop.self")) {
 					sendError(pl, "You cannot buy items from this shop");
 					return true;
 				}
@@ -327,7 +327,7 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, "You must select a shop");
 					return true;
 				}
-				if (selection.isOwner && !pl.hasPermission("shops.self")) {
+				if (selection.isOwner && !pl.hasPermission("swornshop.self")) {
 					sendError(pl, "You cannot sell items to your own shop");
 					sendError(pl, "To add items, use /shop add");
 					return true;
