@@ -6,6 +6,9 @@ import qs.swornshop.Main;
 import qs.swornshop.Shop;
 import qs.swornshop.ShopEntry;
 
+/**
+ * A SaleRejection notifies a seller that his/her offer was rejected.
+ */
 public class SaleRejection implements Claimable {
 	
 	/**
@@ -21,6 +24,12 @@ public class SaleRejection implements Claimable {
 	 */
 	public String seller;
 	
+	/**
+	 * Constructs a new notification.
+	 * @param shop the shop to which the seller was selling
+	 * @param entry an entry for the item (note: not the one in the shop)
+	 * @param seller the seller of the item
+	 */
 	public SaleRejection(Shop shop, ShopEntry entry, String seller) {
 		this.shop = shop;
 		this.entry = entry;

@@ -6,6 +6,10 @@ import qs.swornshop.Main;
 import qs.swornshop.Shop;
 import qs.swornshop.ShopEntry;
 
+/**
+ * A SaleNotification notifies a player that his/her sale of an
+ * item was successful.
+ */
 public class SaleNotification implements Notification {
 	
 	/**
@@ -21,6 +25,12 @@ public class SaleNotification implements Notification {
 	 */
 	public String seller;
 	
+	/**
+	 * Constructs a new notification.
+	 * @param shop the shop to which the seller was selling
+	 * @param entry an entry for the item (note: not the one in the shop)
+	 * @param seller the seller of the item
+	 */
 	public SaleNotification(Shop shop, ShopEntry entry, String seller) {
 		this.shop = shop;
 		this.entry = entry;

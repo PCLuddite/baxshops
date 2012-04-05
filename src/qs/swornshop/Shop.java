@@ -9,6 +9,9 @@ import org.bukkit.inventory.ItemStack;
  * A Shop represents a user's shop and its inventory of items.
  */
 public class Shop {
+	/**
+	 * The number of items in each page of a shop's listing
+	 */
 	public static final int ITEMS_PER_PAGE = 7;
 	
 	public Shop() { }

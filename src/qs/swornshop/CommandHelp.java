@@ -42,7 +42,26 @@ public class CommandHelp {
 		this.help = Arrays.asList(help);
 		this.alias = alias;
 	}
-	public String command, alias, args, description;
+	/**
+	 * The command's name
+	 */
+	public String command;
+	/**
+	 * A comma-separated list of command aliases
+	 */
+	public String alias;
+	/**
+	 * A list of arguments for the command in this format:
+	 * <code>&lt;arg-1&gt; &lt;arg-2&gt; ... [optional-1] [optional-2] ...</code>
+	 */
+	public String args;
+	/**
+	 * A short (one-line) description of the command
+	 */
+	public String description;
+	/**
+	 * Additional help for the command
+	 */
 	public List<String> help;
 	
 	// for memoizing to*String() functions

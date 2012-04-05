@@ -11,6 +11,11 @@ import qs.swornshop.Main;
 import qs.swornshop.Shop;
 import qs.swornshop.ShopEntry;
 
+/**
+ * A SellRequest notifies a shop owner that someone has requested
+ * to sell him/her an item.
+ * SellRequests expire after five days.
+ */
 public class SellRequest implements Request, TimedNotification {
 	
 	/**
@@ -30,6 +35,12 @@ public class SellRequest implements Request, TimedNotification {
 	 */
 	public String seller;
 	
+	/**
+	 * Constructs a new notification.
+	 * @param shop the shop to which the seller was selling
+	 * @param entry an entry for the item (note: not the one in the shop)
+	 * @param seller the seller of the item
+	 */
 	public SellRequest(Shop shop, ShopEntry entry, String seller) {
 		this.shop = shop;
 		this.entry = entry;

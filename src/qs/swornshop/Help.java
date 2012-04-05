@@ -4,6 +4,10 @@ import java.util.HashMap;
 
 import org.bukkit.command.CommandSender;
 
+/**
+ * Help stores all help-related information, such as help for each
+ * command and context-sensitive index topics.
+ */
 public class Help {
 	
 	public static final CommandHelp help = new CommandHelp("shop help", "h", "[action]", "show help with shops",
@@ -55,6 +59,9 @@ public class Help {
 	public static final CommandHelp lookup = new CommandHelp("shop lookup", null, "<item-name>", "look up an item's ID and damage value",
 			CommandHelp.arg("item-name", "the name of an alias for an item"));
 	
+	/**
+	 * The general index of commands
+	 */
 	public static final String[] index = {
 		CommandHelp.header("Shop Help"),
 		help.toIndexString(),
@@ -64,17 +71,37 @@ public class Help {
 		claim.toIndexString(),
 		skip.toIndexString()
 	};
+	/**
+	 * An index of commands only usable when a shop is selected
+	 */
 	public static final String[] indexSelected = { };
+	/**
+	 * An index of commands only usable by an admin (a player 
+	 * with the swornshop.admin permission)
+	 */
 	public static final String[] indexAdmin = {
 		create.toIndexString()
 	};
+	/**
+	 * An index of commands only usable by an admin (a player
+	 * with the swornshop.admin permission) who has selected
+	 * a shop
+	 */
 	public static final String[] indexSelectedAdmin = {
 		remove.toIndexString()
 	};
+	/**
+	 * An index of commands only usable by a player who has
+	 * selected a shop which he/she does not own
+	 */
 	public static final String[] indexNotOwner = {
 		buy.toIndexString(),
 		sell.toIndexString()
 	};
+	/**
+	 * An index of commands only usable by a player who has
+	 * selected a shop which he/she owns
+	 */
 	public static final String[] indexOwner = {
 		add.toIndexString(),
 		restock.toIndexString(),
@@ -160,6 +187,13 @@ public class Help {
 		commands.put("rm", remove);
 	}
 
+	/**
+	 * Concatenate two String arrays
+	 * @param a the first String array
+	 * @param b the second String array
+	 * @return a String array with the elements of a followed by the
+	 * elements of b
+	 */
 	private static final String[] concat(String[] a, String[] b) {
 		String[] result = new String[a.length + b.length];
 		for (int i = 0; i < a.length; ++i)

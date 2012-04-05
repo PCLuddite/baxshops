@@ -37,17 +37,46 @@ public class Main extends JavaPlugin implements Listener {
 	
 	// TODO: Timed notifications
 	
+	/**
+	 * The block ID for a signpost
+	 */
 	private static final int SIGN = 63;
+	/**
+	 * A single instance of Main for external access
+	 */
 	public static Main instance;
 	
+	/**
+	 * The Valut economy
+	 */
 	public static Economy econ;
 
-	public static HashMap<String, Long> aliases = new HashMap<String, Long>();
-	public static HashMap<Long, String> itemNames = new HashMap<Long, String>();
+	/**
+	 * A lookup table for aliases.
+	 * Aliases are stored as <code>alias =&gt; (ID &lt;&lt; 16) | (damageValue)</code>
+	 */
+	protected static HashMap<String, Long> aliases = new HashMap<String, Long>();
+	/**
+	 * A lookup table for item names.
+	 * Item names are stored as <code>(ID &lt;&lt; 16) | (damageValue) =&gt; itemName</code>
+	 */
+	protected static HashMap<Long, String> itemNames = new HashMap<Long, String>();
 	
+	/**
+	 * A map of shops, accessed by their location in the world
+	 */
 	protected HashMap<Location, Shop> shops = new HashMap<Location, Shop>();
+	/**
+	 * A map containing each player's currently selected shop and other selection data
+	 */
 	protected HashMap<Player, ShopSelection> selectedShops = new HashMap<Player, ShopSelection>();
+	/**
+	 * A map containing each player's notifications
+	 */
 	protected HashMap<String, ArrayDeque<Notification>> pending = new HashMap<String, ArrayDeque<Notification>>();
+	/**
+	 * The plugin logger
+	 */
 	protected Logger log;
 	
 	public Main() {}
@@ -61,9 +90,9 @@ public class Main extends JavaPlugin implements Listener {
 		loadAliases();
 		if (!economySetup()) {
 			log.warning("Could not set up server economy! Is Vault installed?");
-			throw new Error("Vault setup failed");
+			getPluginLoader().disablePlugin(this);
+			return;
 		}
-		System.out.println(aliases.get("wood"));
 	}
 	@Override
 	public void onDisable() {}
