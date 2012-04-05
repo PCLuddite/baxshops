@@ -199,7 +199,7 @@ hugebrownmushroom 99
 hugeredmushroom 100
 ironbars 101
 glasspane 102
-melon 103
+melonblock 103
 pumpkinstem 104
 melonstem 105
 vines 106
