@@ -1,5 +1,7 @@
 package qs.swornshop.notification;
 
+import java.io.Serializable;
+
 import org.bukkit.entity.Player;
 
 /**
@@ -13,7 +15,7 @@ import org.bukkit.entity.Player;
  * A Notification is regarded as a message and will be deleted
  * once viewed, unless the notification is a Request or Claimable
  */
-public interface Notification {
+public interface Notification extends Serializable {
 	/**
 	 * Gets a short message suitable for this notification.
 	 * @param player the player to which the message will be sent (may be null)
