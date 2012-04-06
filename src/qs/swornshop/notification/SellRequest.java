@@ -19,6 +19,10 @@ import qs.swornshop.ShopEntry;
 public class SellRequest implements Request, TimedNotification {
 	
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
 	 * An entry for the offered item
 	 */
 	public ShopEntry entry;

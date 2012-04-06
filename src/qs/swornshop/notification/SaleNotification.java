@@ -13,6 +13,10 @@ import qs.swornshop.ShopEntry;
 public class SaleNotification implements Notification {
 	
 	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	/**
 	 * An entry for the offered item
 	 */
 	public ShopEntry entry;

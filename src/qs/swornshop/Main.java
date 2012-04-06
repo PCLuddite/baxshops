@@ -1,16 +1,25 @@
 package qs.swornshop;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayDeque;
 import java.util.HashMap;
+import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
 import net.milkbowl.vault.economy.Economy;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -93,6 +102,20 @@ public class Main extends JavaPlugin implements Listener {
 			getPluginLoader().disablePlugin(this);
 			return;
 		}
+		State loadState = load();
+		if(loadState != null){
+			shops = loadState.shopsRecreate();
+			pending = loadState.pending;
+			log.info("Successfully loaded state!");
+		}
+		else{
+			log.info("State could not be loaded! If this is the first launch of the plugin, " +
+					"ignore this, otherwise, your data files may be corrupt. Try replacing " +
+					"state.dat with your backup (state_old.dat)");
+			
+		}
+		
+		
 	}
 	@Override
 	public void onDisable() {}
@@ -102,8 +125,10 @@ public class Main extends JavaPlugin implements Listener {
 			String label, String[] args) {
 		if (command.getName().equalsIgnoreCase("shop")) {
 			if (!(sender instanceof Player)) {
-				sendError(sender, "/shop can only be used by a player");
-				return true;
+				if(!(args[0].equalsIgnoreCase("save") || args[0].equalsIgnoreCase("backup"))){
+					sendError(sender, "/shop commands (excluding save and backup) can only be used by a player");
+					return true;
+				}
 			}
 			Player pl = (Player) sender;
 			ShopSelection selection = selectedShops.get(pl);
@@ -129,7 +154,7 @@ public class Main extends JavaPlugin implements Listener {
 
 				Sign sign = (Sign) b.getState();
 				String owner = args[1];
-				sign.setLine(1, (owner.length() < 13 ? owner : owner.substring(0, 12) + 'â€¦') + "'s");
+				sign.setLine(1, (owner.length() < 13 ? owner : owner.substring(0, 12) + 'É') + "'s");
 				sign.setLine(2, "shop");
 				sign.update();
 
@@ -159,7 +184,7 @@ public class Main extends JavaPlugin implements Listener {
 				sign.update();
 				shops.remove(loc);
 				
-				pl.sendMessage("Â§B" + selection.shop.owner + "Â§F's shop has been removed");
+				pl.sendMessage("¤B" + selection.shop.owner + "¤F's shop has been removed");
 				
 			} else if (action.equalsIgnoreCase("add") ||
 					action.equalsIgnoreCase("+") ||
@@ -320,7 +345,7 @@ public class Main extends JavaPlugin implements Listener {
 				int max = entry.item.getMaxStackSize();
 				String itemName = getItemName(entry.item);
 				if (max > -1 && amount > max) {
-					sendError(pl, String.format("You may only buy Â§B%d %sÂ§C at once", max, itemName));
+					sendError(pl, String.format("You may only buy ¤B%d %s¤C at once", max, itemName));
 					return true;
 				}
 				if(!(econ.has(pl.getName(), amount * entry.retailPrice))){
@@ -339,11 +364,11 @@ public class Main extends JavaPlugin implements Listener {
 						return true;
 					}
 					sender.sendMessage(String.format(
-							"Only Â§B%d %sÂ§F fit in your inventory. You were charged Â§B$%.2fÂ§F.",
+							"Only ¤B%d %s¤F fit in your inventory. You were charged ¤B$%.2f¤F.",
 							amount - refunded, itemName, (amount - refunded) * entry.retailPrice));
 				} else {
 					sender.sendMessage(String.format(
-							"You bought Â§B%d %sÂ§F for Â§B$%.2fÂ§F.",
+							"You bought ¤B%d %s¤F for ¤B$%.2f¤F.",
 							amount, itemName, amount * entry.retailPrice));
 				}
 				econ.withdrawPlayer(pl.getName(), (amount - refunded) * entry.retailPrice);
@@ -379,9 +404,9 @@ public class Main extends JavaPlugin implements Listener {
 				
 				String name = getItemName(itemsToSell);
 				pl.sendMessage(String.format(
-						"Your request to sell Â§B%d %sÂ§F for Â§B$%.2fÂ§F has been sent",
+						"Your request to sell ¤B%d %s¤F for ¤B$%.2f¤F has been sent",
 						itemsToSell.getAmount(), name, entry.refundPrice * itemsToSell.getAmount()));
-				pl.sendMessage("Â§7You will be notified when this offer is accepted or rejected");
+				pl.sendMessage("¤7You will be notified when this offer is accepted or rejected");
 				
 				ShopEntry req = new ShopEntry();
 				req.setItem(itemsToSell);
@@ -469,7 +494,22 @@ public class Main extends JavaPlugin implements Listener {
 				}
 				pl.sendMessage(h.toHelpString());
 				
-			} else {
+			}else if(action.equalsIgnoreCase("save")){
+				
+				if((!(sender instanceof Player)) || sender.hasPermission("shop.admin")){
+					this.getServer().broadcastMessage(ChatColor.AQUA + "[SwornShops]: saving shops, expect lag");
+					save();
+					this.getServer().broadcastMessage(ChatColor.AQUA + "[SwornShops]: save complete");
+				}
+				
+			}else if(action.equalsIgnoreCase("backup")){
+				if((!(sender instanceof Player)) || sender.hasPermission("shop.admin")){
+					this.getServer().broadcastMessage(ChatColor.AQUA + "[SwornShops]: Backing up shops, expect lag");
+					backUp();
+					this.getServer().broadcastMessage(ChatColor.AQUA + "[SwornShops]: backup complete");
+				}
+				
+			}else {
 				Help.showHelp(pl, selection);
 			}
 			return true;
@@ -510,9 +550,9 @@ public class Main extends JavaPlugin implements Listener {
 			selection.page = 0;
 			
 			pl.sendMessage(new String[] {
-				isOwner ? "Â§FWelcome to your shop." :
-						String.format("Â§FWelcome to Â§B%sÂ§F's shop.", shop.owner),
-				"Â§7For help with shops, type Â§3/shop helpÂ§7."
+				isOwner ? "¤FWelcome to your shop." :
+						String.format("¤FWelcome to ¤B%s¤F's shop.", shop.owner),
+				"¤7For help with shops, type ¤3/shop help¤7."
 			});
 		}
 		
@@ -527,7 +567,7 @@ public class Main extends JavaPlugin implements Listener {
 	public void onPlayerJoin(PlayerJoinEvent event){
 		ArrayDeque<Notification> p = getNotifications(event.getPlayer());
 		if (!p.isEmpty())
-			event.getPlayer().sendMessage("You have shop notifications. Use Â§B/shop pendingÂ§F to view them");
+			event.getPlayer().sendMessage("You have shop notifications. Use ¤B/shop pending¤F to view them");
 	}
 
 	/**
@@ -614,20 +654,20 @@ public class Main extends JavaPlugin implements Listener {
 		ArrayDeque<Notification> notifications = getNotifications(pl);
 		if (notifications.isEmpty()) {
 			if (showCount)
-				pl.sendMessage("Â§7You have no notifications");
+				pl.sendMessage("¤7You have no notifications");
 			return;
 		}
 		if (showCount) {
 			int size = notifications.size();
-			pl.sendMessage(size == 1 ? "Â§7You have Â§31Â§7 notification" : String.format("Â§7You have Â§3%dÂ§7 notifications", size));
+			pl.sendMessage(size == 1 ? "¤7You have ¤31¤7 notification" : String.format("¤7You have ¤3%d¤7 notifications", size));
 		}
 		
 		Notification n = notifications.getFirst();
 		pl.sendMessage(n.getMessage(pl));
 		if (n instanceof Request)
-			pl.sendMessage("Â§7Use Â§3/shop acceptÂ§7 and Â§3/shop rejectÂ§7 to manage this request");
+			pl.sendMessage("¤7Use ¤3/shop accept¤7 and ¤3/shop reject¤7 to manage this request");
 		else if (n instanceof Claimable)
-			pl.sendMessage("Â§7Use Â§3/shop claimÂ§7 to claim and remove this notification");
+			pl.sendMessage("¤7Use ¤3/shop claim¤7 to claim and remove this notification");
 		else notifications.removeFirst();
 	}
 
@@ -688,7 +728,7 @@ public class Main extends JavaPlugin implements Listener {
 	 * @param message the error message
 	 */
 	public static void sendError(CommandSender sender, String message) {
-		sender.sendMessage("Â§C" + message);
+		sender.sendMessage("¤C" + message);
 	}
 	
 	/**
@@ -808,5 +848,98 @@ public class Main extends JavaPlugin implements Listener {
         econ = rsp.getProvider();
         return econ != null;
     }
+	public void save(){
+		backUp();
+		State state = new State();
+		
+		for (Entry<Location, Shop> entry : shops.entrySet()) {
+		    Location key = entry.getKey();
+		    String wName = key.getWorld().getName();
+		    double x = key.getX();
+		    double y = key.getY();
+		    double z = key.getZ();
+		    String save = (wName + "," + x + "," + y + "," + z);
+		    Shop value = entry.getValue();
+		    int i = 0;
+		    while(i < value.inventory.size()){
+		    	value.inventory.get(i).quantity = value.inventory.get(i).item.getAmount();
+		    	i++;
+		    }
+		    state.shops.put(save, entry.getValue());
+		 //   Shop value = entry.getValue();
+		    // ...
+		}
+	//	state.shops = this.shops;
+		state.pending = this.pending;
+		File saveLocation = new File("plugins/SwornShop/state.dat");
+		
+		try {
+			FileOutputStream outFS = new FileOutputStream(saveLocation);
+			ObjectOutputStream outOS = new ObjectOutputStream(outFS);
+			outOS.writeObject(state);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	public Boolean backUp(){
+		File stateLocation = new File("plugins/SwornShop/state.dat");
+		if(stateLocation.exists()){
+			File backup = new File("plugins/SwornShop/state_backup.dat");
+			try {
+				InputStream in = new FileInputStream(stateLocation);
+				OutputStream out = new FileOutputStream(backup);
+				 byte[] buf = new byte[1024];
+				 int i;
+				 while ((i = in.read(buf)) > 0){
+					  out.write(buf, 0, i);
+				 }
+				  in.close();
+				  out.close();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return false;
+			}
+			return true;
+		}
+		else{
+			return false;
+		}
+		
+	}
+	public State load(){
+		File stateLocation = new File("plugins/SwornShop/state.dat");
+		if(stateLocation.exists()){
+			try {
+				FileInputStream inFS = new FileInputStream(stateLocation);
+				ObjectInputStream inOS = new ObjectInputStream(inFS);
+				Object obj = inOS.readObject();
+				if(obj instanceof State){
+					
+;					return (State) obj;
+				}
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return null;
+		
+	}
 	
 }

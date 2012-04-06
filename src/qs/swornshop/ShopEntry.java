@@ -1,5 +1,7 @@
 package qs.swornshop;
 
+import java.io.Serializable;
+
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -7,7 +9,11 @@ import org.bukkit.inventory.ItemStack;
  * with a retail (buy) price and a refund (sell) price. If the item's
  * refund price is -1, the item cannot be sold to the shop.
  */
-public class ShopEntry {
+public class ShopEntry implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	/**
 	 * The price per unit to buy this item from the store
 	 */
@@ -19,7 +25,10 @@ public class ShopEntry {
 	/**
 	 * The item stack associated with this shop entry
 	 */
-	public ItemStack item;
+	public transient ItemStack item;
+	
+	public int quantity;
+	
 	/**
 	 * The item's ID
 	 */

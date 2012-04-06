@@ -19,7 +19,7 @@ permissions:
         description: Allows you to buy and sell from shops
         default: true
         children:
-    	    swornshop.buy: true
+            swornshop.buy: true
             swornshop.sell: true
     swornshop.admin:
         description: Allows you to create and remove shops

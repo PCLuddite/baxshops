@@ -1,5 +1,6 @@
 package qs.swornshop;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import org.bukkit.Location;
@@ -8,7 +9,11 @@ import org.bukkit.inventory.ItemStack;
 /**
  * A Shop represents a user's shop and its inventory of items.
  */
-public class Shop {
+public class Shop implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	/**
 	 * The number of items in each page of a shop's listing
 	 */
@@ -26,11 +31,12 @@ public class Shop {
 	/**
 	 * The block location of this shop
 	 */
-	public Location location;
+	public transient Location location;
 	
 	private int ceil(float x) {
 		return (int) Math.ceil(x);
 	}
+	
 	
 	/**
 	 * Gets the number of pages in this shop's inventory.
