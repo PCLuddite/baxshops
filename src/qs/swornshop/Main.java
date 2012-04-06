@@ -14,6 +14,7 @@ import java.io.OutputStream;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
@@ -32,6 +33,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -50,6 +52,12 @@ public class Main extends JavaPlugin implements Listener {
 	 * The block ID for a signpost
 	 */
 	private static final int SIGN = 63;
+	
+	/**
+	 * The distance from the sign in any direction which the player can go before they leave the shop
+	 */
+	private static final int SHOP_RANGE = 3;
+	
 	/**
 	 * A single instance of Main for external access
 	 */
@@ -59,6 +67,8 @@ public class Main extends JavaPlugin implements Listener {
 	 * The Valut economy
 	 */
 	public static Economy econ;
+	
+	
 
 	/**
 	 * A lookup table for aliases.
@@ -115,10 +125,20 @@ public class Main extends JavaPlugin implements Listener {
 			
 		}
 		
-		
+		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
+
+		    public void run() {
+		    	Main.instance.getServer().broadcastMessage(ChatColor.AQUA + "[SwornShops]: saving shops, expect lag");
+				save();
+				Main.instance.getServer().broadcastMessage(ChatColor.AQUA + "[SwornShops]: save complete");
+		    }
+		}, 6000L, 36000L);
 	}
 	@Override
-	public void onDisable() {}
+	public void onDisable() {
+		save();
+		log.info("shop state saved");
+	}
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command,
@@ -130,6 +150,7 @@ public class Main extends JavaPlugin implements Listener {
 					return true;
 				}
 			}
+			
 			Player pl = (Player) sender;
 			ShopSelection selection = selectedShops.get(pl);
 			if (args.length == 0) {
@@ -157,10 +178,16 @@ public class Main extends JavaPlugin implements Listener {
 				sign.setLine(1, (owner.length() < 13 ? owner : owner.substring(0, 12) + '§') + "'s");
 				sign.setLine(2, "shop");
 				sign.update();
-
+				
 				Shop shop = new Shop();
 				shop.owner = owner;
 				shop.location = b.getLocation();
+				if(args.length == 3 && args[2].equalsIgnoreCase("yes")){
+					shop.infinite = true;
+				}
+				else{
+					shop.infinite = false;
+				}
 				shops.put(shop.location, shop);
 				
 				
@@ -230,6 +257,9 @@ public class Main extends JavaPlugin implements Listener {
 				}
 				ShopEntry newEntry = new ShopEntry();
 				newEntry.setItem(stack);
+				if(selection.shop.infinite){
+					newEntry.setAmount(64);
+				}
 				newEntry.retailPrice = retailAmount;
 				newEntry.refundPrice = refundAmount;
 				selection.shop.addEntry(newEntry);
@@ -244,6 +274,10 @@ public class Main extends JavaPlugin implements Listener {
 				}
 				if (!selection.isOwner && !pl.hasPermission("swornshop.admin")) {
 					sendError(pl, "You cannot restock this shop");
+					return true;
+				}
+				if(selection.shop.infinite){
+					sendError(pl, "You can't restock an infinte shop... duh...");
 					return true;
 				}
 				
@@ -338,7 +372,7 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, "That item is not in this shop");
 					return true;
 				}
-				if (entry.item.getAmount() < amount) {
+				if (entry.item.getAmount() < amount && shop.infinite == false) {
 					sendError(pl, "There are not enough of that item in the shop");
 					return true;
 				}
@@ -372,7 +406,9 @@ public class Main extends JavaPlugin implements Listener {
 							amount, itemName, amount * entry.retailPrice));
 				}
 				econ.withdrawPlayer(pl.getName(), (amount - refunded) * entry.retailPrice);
-				entry.item.setAmount(entry.item.getAmount() - (amount - refunded));
+				if(!shop.infinite){
+					entry.item.setAmount(entry.item.getAmount() - (amount - refunded));
+				}
 				econ.depositPlayer(shop.owner, (amount - refunded) * entry.retailPrice);
 				
 			} else if (action.equalsIgnoreCase("sell") ||
@@ -384,6 +420,10 @@ public class Main extends JavaPlugin implements Listener {
 				if (selection.isOwner && !pl.hasPermission("swornshop.self")) {
 					sendError(pl, "You cannot sell items to your own shop");
 					sendError(pl, "To add items, use /shop add");
+					return true;
+				}
+				if(selection.shop.infinite){
+					sendError(pl, "You cannot sell to an infinite shop!");
 					return true;
 				}
 				
@@ -548,10 +588,16 @@ public class Main extends JavaPlugin implements Listener {
 			selection.isOwner = isOwner;
 			selection.shop = shop;
 			selection.page = 0;
-			
+			String infinite;
+			if(selection.shop.infinite){
+				infinite = "infinite";
+			}
+			else{
+				infinite = "";
+			}
 			pl.sendMessage(new String[] {
 				isOwner ? "§FWelcome to your shop." :
-						String.format("§FWelcome to §B%s§F's shop.", shop.owner),
+						String.format("§FWelcome to §B%s§F's %s shop.", shop.owner, infinite),
 				"§7For help with shops, type §3/shop help§7."
 			});
 		}
@@ -569,6 +615,23 @@ public class Main extends JavaPlugin implements Listener {
 		if (!p.isEmpty())
 			event.getPlayer().sendMessage("You have shop notifications. Use §B/shop pending§F to view them");
 	}
+	@EventHandler(priority = EventPriority.MONITOR)
+	public void onPlayerMove(PlayerMoveEvent event){
+		if(selectedShops.get(event.getPlayer()) != null && selectedShops.get(event.getPlayer()).shop != null){
+			Location shopLoc = selectedShops.get(event.getPlayer()).shop.location;
+			Location pLoc = event.getTo();
+			
+			if(Math.abs(shopLoc.getX() - pLoc.getX()) > SHOP_RANGE ||
+					Math.abs(shopLoc.getZ() - pLoc.getZ()) > SHOP_RANGE ||
+					Math.abs(shopLoc.getY() - pLoc.getY()) > 8){
+				event.getPlayer().sendMessage(ChatColor.AQUA + "Thank you for using swornshops! Come again!");
+				selectedShops.remove(event.getPlayer());
+			}
+			
+			
+		}
+	}
+	
 
 	/**
 	 * Attempts to find an item which matches the given item name (alias).
@@ -770,9 +833,11 @@ public class Main extends JavaPlugin implements Listener {
 		InputStream stream = getResource("aliases.txt");
 		if (stream == null)
 			return;
+		int i = 1;
 		try {
 			BufferedReader br = new BufferedReader(new InputStreamReader(stream));
 			String line;
+			
 			while ((line = br.readLine()) != null) {
 				if (line.length() == 0 || line.charAt(0) == '#') continue;
 				Scanner current = new Scanner(line);
@@ -780,11 +845,16 @@ public class Main extends JavaPlugin implements Listener {
 				int id = current.nextInt();
 				int damage = current.hasNext() ? current.nextInt() : 0;
 				aliases.put(name, (long) id << 16 | damage);
+				i++;
 			}
 			stream.close();
 		} catch (IOException e) {
 			log.warning("Failed to load aliases: " + e.toString());
+		}catch (NoSuchElementException e){
+			log.info("loadAliases broke at line: " + i);
+			e.printStackTrace();
 		}
+		
 	}
 	
 	/**

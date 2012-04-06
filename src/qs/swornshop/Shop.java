@@ -24,6 +24,9 @@ public class Shop implements Serializable {
 	 * The username of the player who owns this shop
 	 */
 	public String owner;
+	
+	public Boolean infinite;
+	
 	/**
 	 * This shop's inventory
 	 */

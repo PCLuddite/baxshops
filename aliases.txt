@@ -225,5 +225,283 @@ dragonegg 122
 redstonelamp 123
 redstonelamplit 124
 litredstonelamp 124
-
 # Items
+ishovel 256
+ironshovel 256
+ispade 256
+ironspade 256
+ipickaxe 257
+ipick 257
+ironpick 257
+ironpickaxe 257
+iaxe 258
+ironaxe 258
+flintandsteel 259
+fire 259
+apple 260
+bow 261
+arrow 262
+coal 263
+diamond 264
+iingot 265
+ironingot 265
+ingot 265
+iron 265
+gingot 266
+goldingot 266
+gold 266
+isword 267
+ironsword 267
+wsword 268
+woodensword 268
+wshovel 269
+woodenshovel 269
+wspade 269
+woodenspade 269
+wpick 270
+woodenpick 270
+woodenpickaxe 270
+wpickaxe 270
+waxe 271
+woodenaxe 271
+ssword 272
+stonesword 272
+sshovel 273
+sspade 273
+stoneshovel 273
+stonespade 273
+spick 274
+spickaxe 274
+stonepick 274
+stonepickaxe 274
+saxe 275
+stoneaxe 275
+dsword 276
+diamondsword 276
+dspade 277
+dshovel 277
+diamondspade 277
+diamondshovel 277
+dpick 278
+dpickaxe 278
+diamondpick 278
+diamondpickaxe 278
+daxe 279
+diamondaxe 279
+stick 280
+bowl 281
+soup 282
+mushroomsoup 282
+mooshroomdelight 282
+gsword 283
+goldensword 283
+gshovel 284
+gspade 284
+goldenshovel 284
+goldenspade 284
+gpick 285
+goldenpick 285
+gpickaxe 285
+goldenpickaxe 285
+gaxe 286
+goldenaxe 286
+string 287
+feather 288
+gunpowder 289
+sulfur 289
+whoe 290
+woodenhoe 290
+shoe 291
+stonehoe 291
+ihoe 292
+ironhoe 292
+dhoe 293
+diamondhoe 293
+ghoe 294
+goldenhoe 294
+seeds 295
+wheat 296
+bread 297
+lcap 298
+lhat 298
+lhelmet 298
+leathercap 298
+leatherhat 298
+leatherhelmet 298
+lchest 299
+leatherchest 299
+lshirt 299
+leathershirt 299
+lbreastplate 299
+leatherbreastplate 299
+lpants 300
+leatherpants 300
+lleggings 300
+leatherleggings 300
+lfeet 301
+leatherfeet 301
+lboots 301
+leatherboots 301
+chainhelmet 302
+chainshirt 303
+chainpants 304
+chainboots 305
+ihelmet 306
+ironhelmet 306
+ihat 306
+ironhat 306
+ichest 307
+ironchest 307
+ishirt 307
+ironshirt 307
+ilegs 308
+ipants 308
+ironlegs 308
+ironpands 308
+iboots 309
+ironboots 309
+dhelmet 310
+diamondhelmet 310
+dhat 310
+diamondhat 310
+dchest 311
+dshirt 311
+diamondchest 311
+diamondshirt 311
+dlegs 312
+diamondlegs 312
+dpands 312
+diamondpants 312
+dboots 313
+diamondboots 313
+ghelmet 314
+goldenhelmet 314
+ghat 314
+goldenhat 314
+gchest 315
+goldenchest 315
+gshirt 315
+goldenshirt 315
+glegs 316
+goldlegs 316
+gboots 317
+gfeet 317
+goldenboots 317
+goldboots 317
+goldfeet 317
+goldenfeet 317
+flint 318
+rawporkchop 319
+rpork 319
+rawpork 319
+rporkchop 319
+porkchop 320
+painting 321
+goldapple 322
+goldenapple 322
+gapple 322
+sign 323
+wooddoor 324
+door 324
+bucket 325
+water 326
+waterbucket 326
+lava 327
+lavabucket 327
+minecart 328
+saddle 329
+idoor 330
+irondoor 330
+lockeddoor 330
+redstone 331
+snowball 332
+boat 333
+leather 334
+milk 335
+brick 336
+clay 337
+sugarcane 338
+paper 339
+book 340
+slimeball 341
+minecartwithchest 342
+mcwithchest 342
+chestcart 342
+minecartwithfurnace 343
+mcwithfurnace 343
+poweredcar 343
+egg 344
+compass 345
+fishingrod 346
+rod 346
+fishing 346
+clock 347
+glowstonedust 348
+glowdust 348
+gstonedust 348
+dust 348
+rawfish 349
+fish 350
+ink 351 0
+reddye 351 1
+greendye 351 2
+browndye 351 3
+bluedye 351 4
+purpledye 351 5
+cyandye 351 6
+lightgraydye 351 7
+graydye 351 8
+pinkdye 351 9
+limedye 351 10
+yellowdye 351 11
+lightbluedye 351 12
+magentadye 351 13
+orangedye 351 14
+bonemeal 351 15
+bone 352
+sugar 353
+cake 354
+bed 355
+repeater 356
+cookie 357
+map 358
+shears 359
+melon 360
+pumpkinseeds 361
+melonseeds 362
+rawbeef 363
+beef 363
+steak 364
+rawchicken 365
+chicken 366
+rottenflesh 367
+enderpearl 368
+blazerod 369
+ghasttear 370
+gnugget 371
+goldnugget 371
+netherwart 372
+potions 373
+glassbottle 374
+spidereye 375
+fspidereye 376
+fermentedspidereye 376
+blazepowder 377
+magmacream 378
+brewingstand 379
+cauldron 380
+eyeofender 381
+glisteningmelon 382
+gmelon 382
+spawnegg 383
+
+
+
+
+
+
+
+
+
+
+
