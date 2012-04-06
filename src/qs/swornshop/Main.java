@@ -154,7 +154,7 @@ public class Main extends JavaPlugin implements Listener {
 
 				Sign sign = (Sign) b.getState();
 				String owner = args[1];
-				sign.setLine(1, (owner.length() < 13 ? owner : owner.substring(0, 12) + 'É') + "'s");
+				sign.setLine(1, (owner.length() < 13 ? owner : owner.substring(0, 12) + 'Â§') + "'s");
 				sign.setLine(2, "shop");
 				sign.update();
 
@@ -184,7 +184,7 @@ public class Main extends JavaPlugin implements Listener {
 				sign.update();
 				shops.remove(loc);
 				
-				pl.sendMessage("¤B" + selection.shop.owner + "¤F's shop has been removed");
+				pl.sendMessage("Â§B" + selection.shop.owner + "Â§F's shop has been removed");
 				
 			} else if (action.equalsIgnoreCase("add") ||
 					action.equalsIgnoreCase("+") ||
@@ -345,7 +345,7 @@ public class Main extends JavaPlugin implements Listener {
 				int max = entry.item.getMaxStackSize();
 				String itemName = getItemName(entry.item);
 				if (max > -1 && amount > max) {
-					sendError(pl, String.format("You may only buy ¤B%d %s¤C at once", max, itemName));
+					sendError(pl, String.format("You may only buy Â§B%d %sÂ§C at once", max, itemName));
 					return true;
 				}
 				if(!(econ.has(pl.getName(), amount * entry.retailPrice))){
@@ -364,11 +364,11 @@ public class Main extends JavaPlugin implements Listener {
 						return true;
 					}
 					sender.sendMessage(String.format(
-							"Only ¤B%d %s¤F fit in your inventory. You were charged ¤B$%.2f¤F.",
+							"Only Â§B%d %sÂ§F fit in your inventory. You were charged Â§B$%.2fÂ§F.",
 							amount - refunded, itemName, (amount - refunded) * entry.retailPrice));
 				} else {
 					sender.sendMessage(String.format(
-							"You bought ¤B%d %s¤F for ¤B$%.2f¤F.",
+							"You bought Â§B%d %sÂ§F for Â§B$%.2fÂ§F.",
 							amount, itemName, amount * entry.retailPrice));
 				}
 				econ.withdrawPlayer(pl.getName(), (amount - refunded) * entry.retailPrice);
@@ -404,9 +404,9 @@ public class Main extends JavaPlugin implements Listener {
 				
 				String name = getItemName(itemsToSell);
 				pl.sendMessage(String.format(
-						"Your request to sell ¤B%d %s¤F for ¤B$%.2f¤F has been sent",
+						"Your request to sell Â§B%d %sÂ§F for Â§B$%.2fÂ§F has been sent",
 						itemsToSell.getAmount(), name, entry.refundPrice * itemsToSell.getAmount()));
-				pl.sendMessage("¤7You will be notified when this offer is accepted or rejected");
+				pl.sendMessage("Â§7You will be notified when this offer is accepted or rejected");
 				
 				ShopEntry req = new ShopEntry();
 				req.setItem(itemsToSell);
@@ -550,9 +550,9 @@ public class Main extends JavaPlugin implements Listener {
 			selection.page = 0;
 			
 			pl.sendMessage(new String[] {
-				isOwner ? "¤FWelcome to your shop." :
-						String.format("¤FWelcome to ¤B%s¤F's shop.", shop.owner),
-				"¤7For help with shops, type ¤3/shop help¤7."
+				isOwner ? "Â§FWelcome to your shop." :
+						String.format("Â§FWelcome to Â§B%sÂ§F's shop.", shop.owner),
+				"Â§7For help with shops, type Â§3/shop helpÂ§7."
 			});
 		}
 		
@@ -567,7 +567,7 @@ public class Main extends JavaPlugin implements Listener {
 	public void onPlayerJoin(PlayerJoinEvent event){
 		ArrayDeque<Notification> p = getNotifications(event.getPlayer());
 		if (!p.isEmpty())
-			event.getPlayer().sendMessage("You have shop notifications. Use ¤B/shop pending¤F to view them");
+			event.getPlayer().sendMessage("You have shop notifications. Use Â§B/shop pendingÂ§F to view them");
 	}
 
 	/**
@@ -654,20 +654,20 @@ public class Main extends JavaPlugin implements Listener {
 		ArrayDeque<Notification> notifications = getNotifications(pl);
 		if (notifications.isEmpty()) {
 			if (showCount)
-				pl.sendMessage("¤7You have no notifications");
+				pl.sendMessage("Â§7You have no notifications");
 			return;
 		}
 		if (showCount) {
 			int size = notifications.size();
-			pl.sendMessage(size == 1 ? "¤7You have ¤31¤7 notification" : String.format("¤7You have ¤3%d¤7 notifications", size));
+			pl.sendMessage(size == 1 ? "Â§7You have Â§31Â§7 notification" : String.format("Â§7You have Â§3%dÂ§7 notifications", size));
 		}
 		
 		Notification n = notifications.getFirst();
 		pl.sendMessage(n.getMessage(pl));
 		if (n instanceof Request)
-			pl.sendMessage("¤7Use ¤3/shop accept¤7 and ¤3/shop reject¤7 to manage this request");
+			pl.sendMessage("Â§7Use Â§3/shop acceptÂ§7 and Â§3/shop rejectÂ§7 to manage this request");
 		else if (n instanceof Claimable)
-			pl.sendMessage("¤7Use ¤3/shop claim¤7 to claim and remove this notification");
+			pl.sendMessage("Â§7Use Â§3/shop claimÂ§7 to claim and remove this notification");
 		else notifications.removeFirst();
 	}
 
@@ -728,7 +728,7 @@ public class Main extends JavaPlugin implements Listener {
 	 * @param message the error message
 	 */
 	public static void sendError(CommandSender sender, String message) {
-		sender.sendMessage("¤C" + message);
+		sender.sendMessage("Â§C" + message);
 	}
 	
 	/**
