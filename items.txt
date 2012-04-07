@@ -132,6 +132,9 @@
 |  1 Silverfish (Cobblestone)
 |  2 Silverfish (Stone Bricks)
 98 Stone Bricks
+|  1 Stone Bricks (Mossy)
+|  2 Stone Bricks (Cracked)
+|  3 Stone Bricks (Circle)
 99 Huge Mushroom (Brown)
 100 Huge Mushroom (Red)
 101 Iron Bars
