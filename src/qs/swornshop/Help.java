@@ -32,9 +32,9 @@ public class Help {
 	public static final CommandHelp save = new CommandHelp("shop save", null, null, "saves all shops");
 	public static final CommandHelp backup = new CommandHelp("shop backup", null, null, "backs up shops");
 	
-	public static final CommandHelp buy = new CommandHelp("shop buy", "b", "<item> <quantity>", "buy an item from this shop", 
+	public static final CommandHelp buy = new CommandHelp("shop buy", "b", "[item] <amount>", "buy an item from this shop", 
 			CommandHelp.args(
-				"item", "the name of the item",
+				"item", "the name of the item or an entry number in the shop.    §LNote:§R enchanted items must be bought with an entry number",
 				"quantity", "the quantity you wish to buy"
 			));
 	public static final CommandHelp sell = new CommandHelp("shop sell", "s", "<item> <quantity> [price=auto]", "request to sell an item to this shop",

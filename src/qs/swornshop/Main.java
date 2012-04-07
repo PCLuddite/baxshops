@@ -3,6 +3,7 @@ package qs.swornshop;
 import java.io.*;
 import java.util.ArrayDeque;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -15,6 +16,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -169,8 +171,10 @@ public class Main extends JavaPlugin implements Listener {
 
 				Sign sign = (Sign) b.getState();
 				String owner = args[1];
+				sign.setLine(0, "");
 				sign.setLine(1, (owner.length() < 13 ? owner : owner.substring(0, 12) + '§') + "'s");
 				sign.setLine(2, "shop");
+				sign.setLine(3, "");
 				sign.update();
 				
 				Shop shop = new Shop();
@@ -320,7 +324,7 @@ public class Main extends JavaPlugin implements Listener {
 				
 			} else if (action.equalsIgnoreCase("buy") ||
 					action.equalsIgnoreCase("b")) {
-				if (args.length < 3) {
+				if (args.length < 2) {
 					sendError(pl, Help.buy.toUsageString());
 					return true;
 				}
@@ -334,23 +338,35 @@ public class Main extends JavaPlugin implements Listener {
 				}
 				
 				int amount;
-				try {
-					amount = Integer.parseInt(args[2]);
-				} catch (NumberFormatException e) {
-					sendError(pl, Help.buy.toUsageString());
-					return true;
+				if (args.length < 3) {
+					amount = 1;
+				} else {
+					try {
+						amount = Integer.parseInt(args[2]);
+					} catch (NumberFormatException e) {
+						sendError(pl, Help.buy.toUsageString());
+						return true;
+					}
 				}
 				if (amount <= 0) {
 					sendError(pl, "You must buy a positive number of this item");
 					return true;
 				}
-				
-				long item = getItemFromAlias(args[1]);
-				int id = (int) (item >> 16);
-				short damage = (short) (item & 0xFFFF);
-				
+
 				Shop shop = selection.shop;
-				ShopEntry entry = shop.findEntry(id, damage);
+				ShopEntry entry;
+				try {
+					int index = Integer.parseInt(args[1]);
+					entry = shop.getEntryAt(index - 1);
+				} catch (NumberFormatException e) {
+					long item = getItemFromAlias(args[1]);
+					int id = (int) (item >> 16);
+					short damage = (short) (item & 0xFFFF);
+					entry = shop.findEntry(id, damage);
+				} catch (IndexOutOfBoundsException e) {
+					sendError(pl, "That item is not in this shop");
+					return true;
+				}
 				if (entry == null) {
 					sendError(pl, "That item is not in this shop");
 					return true;
@@ -684,7 +700,7 @@ public class Main extends JavaPlugin implements Listener {
 		Notification n = notifications.getFirst();
 		pl.sendMessage(n.getMessage(pl));
 		if (n instanceof Request)
-			pl.sendMessage("§7Use §3/shop accept§7 and §3/shop reject§7 to manage this request");
+			pl.sendMessage("§7Use §3/shop accept§7 or §3/shop reject§7 to manage this request");
 		else if (n instanceof Claimable)
 			pl.sendMessage("§7Use §3/shop claim§7 to claim and remove this notification");
 		else notifications.removeFirst();
@@ -777,7 +793,7 @@ public class Main extends JavaPlugin implements Listener {
 			stop = (selection.page + 1) * Shop.ITEMS_PER_PAGE,
 			max = Math.min(stop, shop.getInventorySize());
 		for (; i < max; ++i)
-			sender.sendMessage(shop.getEntryAt(i).toString());
+			sender.sendMessage(shop.getEntryAt(i).toString(i + 1));
 		for (; i < stop; ++i)
 			sender.sendMessage("");
 	}
@@ -832,10 +848,8 @@ public class Main extends JavaPlugin implements Listener {
 				while (current.hasNext()) {
 					name += ' ' + current.next();
 				}
-				if (name.length() == 0) {
-					log.info(String.format("%s: %s", line, name));
+				if (name.length() == 0)
 					break;
-				}
 				itemNames.put((long) id << 16 | damage, name.substring(1));
 				line = br.readLine();
 				if (line != null && line.charAt(0) == '|') {
@@ -885,8 +899,13 @@ public class Main extends JavaPlugin implements Listener {
 		State state = new State();
 		for (Entry<Location, Shop> entry : shops.entrySet()) {
 		    Shop shop = entry.getValue();
-		    for (ShopEntry e : shop.inventory)
+		    for (ShopEntry e : shop.inventory) {
 		    	e.quantity = e.item.getAmount();
+		    	Map<Enchantment, Integer> enchantments = e.item.getEnchantments();
+		    	e.enchantments = new HashMap<Integer, Integer>(enchantments.size());
+		    	for (Entry<Enchantment, Integer> en : enchantments.entrySet())
+		    		e.enchantments.put(en.getKey().getId(), en.getValue());
+		    }
 		    state.shops.put(new BlockLocation(entry.getKey()), shop);
 		}
 		state.pending = this.pending;

@@ -1,7 +1,11 @@
 package qs.swornshop;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -38,6 +42,11 @@ public class ShopEntry implements Serializable {
 	public int itemDamage;
 	
 	/**
+	 * The item's enchantments
+	 */
+	public HashMap<Integer, Integer> enchantments;
+	
+	/**
 	 * Sets the item associated with this shop entry.
 	 */
 	public void setItem(ItemStack item) {
@@ -46,25 +55,34 @@ public class ShopEntry implements Serializable {
 		this.itemDamage = item.getDurability();
 	}
 	
-	public String toString() {
+	public String toString(int index) {
 		int quantity = item.getAmount();
+		String name = Main.instance.getItemName(this);
+		Map<Enchantment, Integer> enchantments = item.getEnchantments();
+		if (enchantments.size() > 0) {
+			name = "§D" + name + " (";
+			for (Entry<Enchantment, Integer> e : enchantments.entrySet()) {
+				name += e.getKey().getName().substring(0, 3) + e.getValue().toString() + ", ";
+			}
+			name = name.substring(0, name.length() - 2) + ")";
+		}
 		return refundPrice < 0 ?
 			(quantity == -8 ? 
 				String.format(
-					"§7(§E99§7) §F%s §B($%.2f)",
-					Main.instance.getItemName(this), retailPrice) :
+					"%d§7. (§E99§7) §F%s §B($%.2f)",
+					index, name, retailPrice) :
 				String.format(quantity == 0 ?
-					"§C§M(%d) %s ($%.2f)" :
-					"§7(%d) §F%s §B($%.2f)",
-					quantity, Main.instance.getItemName(this), retailPrice)) :
+					"§C§M%d. (%d) %s ($%.2f)" :
+					"%d§7. (%d) §F%s §B($%.2f)",
+					index, quantity, name, retailPrice)) :
 			(quantity == -8 ? 
 				String.format(
-					"§7(§E99§7) §F%s §B($%.2f) §7($%.2f)",
-					Main.instance.getItemName(this), retailPrice, refundPrice) :
+					"%d§7. (§E99§7) §F%s §B($%.2f) §7($%.2f)",
+					index, name, retailPrice, refundPrice) :
 				String.format(quantity == 0 ?
-					"§C§M(%d) %s ($%.2f) ($%.2f)" :
-					"§7(%d) §F%s §B($%.2f) §7($%.2f)",
-					quantity, Main.instance.getItemName(this), retailPrice, refundPrice));
+					"§C§M%d. (%d) %s ($%.2f) ($%.2f)" :
+					"%d.§7 (%d) §F%s §B($%.2f) §7($%.2f)",
+					index, quantity, name, retailPrice, refundPrice));
 	}
 
 	/**
