@@ -455,7 +455,34 @@ public class Main extends JavaPlugin implements Listener {
 					action.equalsIgnoreCase("n")) {
 				showNotification(pl);
 				
-			} else if (action.equalsIgnoreCase("accept") ||
+			}else if (action.equalsIgnoreCase("sign")){
+				if (pl.hasPermission("swornshop.admin") || selection.isOwner){
+					Sign sign = (Sign) selection.shop.location.getBlock().getState();
+					StringBuilder sb = new StringBuilder();
+					int i = 1;
+					while(i < args.length){
+						sb.append(args[i]);
+						sb.append(" ");
+					}
+					if(sb.length() > 60){
+						sendError(pl, "The given string is too large!");
+						return true;
+					}
+					String[] textPerLine = sb.toString().split("l");
+					i = 0;
+					while(i < textPerLine.length){
+						if(textPerLine[i].length() > 15){
+							sendError(pl, "One of your lines is too long, lines may only be 15 characters, and are separated by |");
+							return true;
+						}
+
+					}
+					sign.setLine(0, textPerLine[0]);
+					sign.setLine(1, textPerLine[1]);
+					sign.setLine(2, textPerLine[2]);
+					sign.setLine(3, textPerLine[3]);
+				}
+			}else if (action.equalsIgnoreCase("accept") ||
 					action.equalsIgnoreCase("yes") ||
 					action.equalsIgnoreCase("a") ||
 					action.equalsIgnoreCase("claim") ||
