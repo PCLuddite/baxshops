@@ -17,10 +17,6 @@ import qs.swornshop.ShopEntry;
  * SellRequests expire after five days.
  */
 public class SellRequest implements Request, TimedNotification {
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	/**
 	 * An entry for the offered item
@@ -62,7 +58,7 @@ public class SellRequest implements Request, TimedNotification {
 			String.format("%s wants to sell %s §B%d %s§F for §B$%.2f§F",
 					seller, shop.owner, entry.item.getAmount(), Main.instance.getItemName(entry),
 					entry.refundPrice * entry.item.getAmount()) :
-			String.format("%s wants to sell you §B%d %s§F for §B%.2f§F",
+			String.format("%s wants to sell you §B%d %s§F for §B$%.2f§F",
 					seller, entry.item.getAmount(), Main.instance.getItemName(entry),
 					entry.refundPrice * entry.item.getAmount());
 	}

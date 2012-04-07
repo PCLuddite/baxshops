@@ -11,10 +11,6 @@ import qs.swornshop.ShopEntry;
  * item was successful.
  */
 public class SaleNotification implements Notification {
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	/**
 	 * An entry for the offered item
@@ -47,7 +43,7 @@ public class SaleNotification implements Notification {
 			String.format("%s accepted %s's request to sell §B%d %s§F for §B$%.2f§F",
 					shop.owner, seller, entry.item.getAmount(), Main.instance.getItemName(entry),
 					entry.refundPrice * entry.item.getAmount()) :
-			String.format("%s accepted your request to sell §B%d %s§F for §B%.2f§F",
+			String.format("%s accepted your request to sell §B%d %s§F for §B$%.2f§F",
 					shop.owner, entry.item.getAmount(), Main.instance.getItemName(entry),
 					entry.refundPrice * entry.item.getAmount());
 	}

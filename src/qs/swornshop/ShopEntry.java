@@ -10,9 +10,6 @@ import org.bukkit.inventory.ItemStack;
  * refund price is -1, the item cannot be sold to the shop.
  */
 public class ShopEntry implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	/**
 	 * The price per unit to buy this item from the store
@@ -27,8 +24,10 @@ public class ShopEntry implements Serializable {
 	 */
 	public transient ItemStack item;
 	
+	/**
+	 * The item's quantity
+	 */
 	public int quantity;
-	
 	/**
 	 * The item's ID
 	 */
@@ -50,14 +49,22 @@ public class ShopEntry implements Serializable {
 	public String toString() {
 		int quantity = item.getAmount();
 		return refundPrice < 0 ?
-			String.format(quantity == 0 ?
-				"§C§M(%d) %s ($%.2f)" :
-				"§7(%d) §F%s §B($%.2f)",
-				quantity, Main.instance.getItemName(this), retailPrice) :
-			String.format(quantity == 0 ?
-				"§C§M(%d) %s ($%.2f) ($%.2f)" :
-				"§7(%d) §F%s §B($%.2f) §7($%.2f)",
-				quantity, Main.instance.getItemName(this), retailPrice, refundPrice);
+			(quantity == -8 ? 
+				String.format(
+					"§7(§E99§7) §F%s §B($%.2f)",
+					Main.instance.getItemName(this), retailPrice) :
+				String.format(quantity == 0 ?
+					"§C§M(%d) %s ($%.2f)" :
+					"§7(%d) §F%s §B($%.2f)",
+					quantity, Main.instance.getItemName(this), retailPrice)) :
+			(quantity == -8 ? 
+				String.format(
+					"§7(§E99§7) §F%s §B($%.2f) §7($%.2f)",
+					Main.instance.getItemName(this), retailPrice, refundPrice) :
+				String.format(quantity == 0 ?
+					"§C§M(%d) %s ($%.2f) ($%.2f)" :
+					"§7(%d) §F%s §B($%.2f) §7($%.2f)",
+					quantity, Main.instance.getItemName(this), retailPrice, refundPrice));
 	}
 
 	/**

@@ -10,10 +10,6 @@ import qs.swornshop.ShopEntry;
  * A SaleRejection notifies a seller that his/her offer was rejected.
  */
 public class SaleRejection implements Claimable {
-	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	/**
 	 * An entry for the offered item
@@ -46,7 +42,7 @@ public class SaleRejection implements Claimable {
 			String.format("%s rejected %s's request to sell §B%d %s§F for §B$%.2f§F",
 					shop.owner, seller, entry.item.getAmount(), Main.instance.getItemName(entry),
 					entry.refundPrice * entry.item.getAmount()) :
-			String.format("%s rejected your request to sell §B%d %s§F for §B%.2f§F",
+			String.format("%s rejected your request to sell §B%d %s§F for §B$%.2f§F",
 					shop.owner, entry.item.getAmount(), Main.instance.getItemName(entry),
 					entry.refundPrice * entry.item.getAmount());
 	}

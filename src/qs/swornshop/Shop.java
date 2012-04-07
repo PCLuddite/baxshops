@@ -10,9 +10,6 @@ import org.bukkit.inventory.ItemStack;
  * A Shop represents a user's shop and its inventory of items.
  */
 public class Shop implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	/**
 	 * The number of items in each page of a shop's listing
@@ -25,7 +22,7 @@ public class Shop implements Serializable {
 	 */
 	public String owner;
 	
-	public Boolean infinite;
+	public Boolean isInfinite;
 	
 	/**
 	 * This shop's inventory

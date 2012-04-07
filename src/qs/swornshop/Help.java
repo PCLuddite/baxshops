@@ -12,8 +12,10 @@ public class Help {
 	
 	public static final CommandHelp help = new CommandHelp("shop help", "h", "[action]", "show help with shops",
 			CommandHelp.arg("action", "get help on a /shop action, e.g. /shop h create"));
-	public static final CommandHelp create = new CommandHelp("shop create", "mk", "<owner>", "create a new shop", 
-			CommandHelp.arg("owner", "the owner of the shop"));
+	public static final CommandHelp create = new CommandHelp("shop create", "mk", "<owner> [inf=no]", "create a new shop", 
+			CommandHelp.args(
+				"owner", "the owner of the shop",
+				"inf", "whether the shop is infinite"));
 	public static final CommandHelp remove = new CommandHelp("shop remove", "rm", null, "removes this shop");
 	
 	public static final CommandHelp notifications = new CommandHelp("shop notifications", "n,pending,p", null, "view pending shop notifications", 
@@ -27,6 +29,8 @@ public class Help {
 	public static final CommandHelp reject = new CommandHelp("shop reject", "no", null, "reject your most recent notification");
 	public static final CommandHelp skip = new CommandHelp("shop skip", "sk", null, "skip your most recent notification",
 			"Moves your most recent notification to the end of the list");
+	public static final CommandHelp save = new CommandHelp("shop save", null, null, "saves all shops");
+	public static final CommandHelp backup = new CommandHelp("shop backup", null, null, "backs up shops");
 	
 	public static final CommandHelp buy = new CommandHelp("shop buy", "b", "<item> <quantity>", "buy an item from this shop", 
 			CommandHelp.args(
@@ -48,7 +52,6 @@ public class Help {
 				"§BWarning:§F Once you add an item to a shop, you cannot remove it."
 			}));
 	public static final CommandHelp restock = new CommandHelp("shop restock", "r", null, "restock this shop with your held item");
-	
 	public static final CommandHelp set = new CommandHelp("shop set", null, "<item> <buy-price> <sell-price>", "changes the price of an item",
 			CommandHelp.args(
 				"item", "the ID or name of the item to modify",
@@ -80,7 +83,9 @@ public class Help {
 	 * with the swornshop.admin permission)
 	 */
 	public static final String[] indexAdmin = {
-		create.toIndexString()
+		create.toIndexString(),
+		save.toIndexString(),
+		backup.toIndexString()
 	};
 	/**
 	 * An index of commands only usable by an admin (a player

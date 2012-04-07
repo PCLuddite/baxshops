@@ -1,16 +1,6 @@
 package qs.swornshop;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -20,7 +10,6 @@ import java.util.logging.Logger;
 
 import net.milkbowl.vault.economy.Economy;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -43,6 +32,8 @@ import qs.swornshop.notification.Claimable;
 import qs.swornshop.notification.Notification;
 import qs.swornshop.notification.Request;
 import qs.swornshop.notification.SellRequest;
+import qs.swornshop.serialization.BlockLocation;
+import qs.swornshop.serialization.State;
 
 public class Main extends JavaPlugin implements Listener {
 	
@@ -56,7 +47,7 @@ public class Main extends JavaPlugin implements Listener {
 	/**
 	 * The distance from the sign in any direction which the player can go before they leave the shop
 	 */
-	private static final int SHOP_RANGE = 3;
+	private static final int SHOP_RANGE = 4*4;
 	
 	/**
 	 * A single instance of Main for external access
@@ -64,11 +55,9 @@ public class Main extends JavaPlugin implements Listener {
 	public static Main instance;
 	
 	/**
-	 * The Valut economy
+	 * The Vault economy
 	 */
 	public static Economy econ;
-	
-	
 
 	/**
 	 * A lookup table for aliases.
@@ -112,43 +101,49 @@ public class Main extends JavaPlugin implements Listener {
 			getPluginLoader().disablePlugin(this);
 			return;
 		}
-		State loadState = load();
-		if(loadState != null){
-			shops = loadState.shopsRecreate();
-			pending = loadState.pending;
-			log.info("Successfully loaded state!");
-		}
-		else{
-			log.info("State could not be loaded! If this is the first launch of the plugin, " +
-					"ignore this, otherwise, your data files may be corrupt. Try replacing " +
-					"state.dat with your backup (state_old.dat)");
-			
+		State state = reloadAll();
+		if (state != null) {
+			shops = state.getShops();
+			pending = state.pending;
+		} else{
+			log.info("Shops could not be loaded. If this is the first launch of the plugin, " +
+					"this is expected. If not, your data files may be corrupt. Try replacing " +
+					"state.dat with your backup (state.dat_old)");
 		}
 		
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
-
+			@Override
 		    public void run() {
-		    	Main.instance.getServer().broadcastMessage(ChatColor.AQUA + "[SwornShops]: saving shops, expect lag");
-				save();
-				Main.instance.getServer().broadcastMessage(ChatColor.AQUA + "[SwornShops]: save complete");
+				saveAll();
 		    }
 		}, 6000L, 36000L);
 	}
+	
 	@Override
 	public void onDisable() {
-		save();
-		log.info("shop state saved");
+		saveAll();
 	}
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command,
 			String label, String[] args) {
 		if (command.getName().equalsIgnoreCase("shop")) {
+			String action = args.length == 0 ? "" : args[0];
+			
+			if (action.equalsIgnoreCase("save")) {
+				if (!(sender instanceof Player) || sender.hasPermission("shop.admin"))
+					saveAll();
+				return true;
+				
+			} else if (action.equalsIgnoreCase("backup")) {
+				if (!(sender instanceof Player) || sender.hasPermission("shop.admin"))
+					backup();
+				return true;
+				
+			}
 			if (!(sender instanceof Player)) {
-				if(!(args[0].equalsIgnoreCase("save") || args[0].equalsIgnoreCase("backup"))){
-					sendError(sender, "/shop commands (excluding save and backup) can only be used by a player");
-					return true;
-				}
+				sendError(sender, "/shop commands can only be used by a player");
+				return true;
 			}
 			
 			Player pl = (Player) sender;
@@ -157,7 +152,6 @@ public class Main extends JavaPlugin implements Listener {
 				Help.showHelp(pl, selection);
 				return true;
 			}
-			String action = args[0];
 			if (action.equalsIgnoreCase("create") || 
 					action.equalsIgnoreCase("mk")) {
 				if (args.length < 2) {
@@ -182,14 +176,8 @@ public class Main extends JavaPlugin implements Listener {
 				Shop shop = new Shop();
 				shop.owner = owner;
 				shop.location = b.getLocation();
-				if(args.length == 3 && args[2].equalsIgnoreCase("yes")){
-					shop.infinite = true;
-				}
-				else{
-					shop.infinite = false;
-				}
+				shop.isInfinite = args.length > 2 && (args[2].equalsIgnoreCase("yes") || args[2].equalsIgnoreCase("true"));
 				shops.put(shop.location, shop);
-				
 				
 			} else if (action.equalsIgnoreCase("remove") || 
 					action.equalsIgnoreCase("rm")) {
@@ -255,11 +243,10 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, "Use /shop restock to restock");
 					return true;
 				}
+				if (selection.shop.isInfinite)
+					stack.setAmount(-8);
 				ShopEntry newEntry = new ShopEntry();
 				newEntry.setItem(stack);
-				if(selection.shop.infinite){
-					newEntry.setAmount(64);
-				}
 				newEntry.retailPrice = retailAmount;
 				newEntry.refundPrice = refundAmount;
 				selection.shop.addEntry(newEntry);
@@ -272,12 +259,8 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, "You must select a shop");
 					return true;
 				}
-				if (!selection.isOwner && !pl.hasPermission("swornshop.admin")) {
+				if (!selection.isOwner && !pl.hasPermission("swornshop.admin") && selection.shop.isInfinite) {
 					sendError(pl, "You cannot restock this shop");
-					return true;
-				}
-				if(selection.shop.infinite){
-					sendError(pl, "You can't restock an infinte shop... duh...");
 					return true;
 				}
 				
@@ -325,7 +308,7 @@ public class Main extends JavaPlugin implements Listener {
 					return true;
 				}
 				try {
-					refundAmount = args.length > 2 ? Math.round(100f * Float.parseFloat(args[3])) / 100f : -1;
+					refundAmount = args.length > 3 ? Math.round(100f * Float.parseFloat(args[3])) / 100f : -1;
 				} catch (NumberFormatException e) {
 					sendError(pl, "Invalid sell price");
 					sendError(pl, Help.set.toUsageString());
@@ -372,7 +355,7 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, "That item is not in this shop");
 					return true;
 				}
-				if (entry.item.getAmount() < amount && shop.infinite == false) {
+				if (entry.item.getAmount() < amount && !shop.isInfinite) {
 					sendError(pl, "There are not enough of that item in the shop");
 					return true;
 				}
@@ -406,7 +389,7 @@ public class Main extends JavaPlugin implements Listener {
 							amount, itemName, amount * entry.retailPrice));
 				}
 				econ.withdrawPlayer(pl.getName(), (amount - refunded) * entry.retailPrice);
-				if(!shop.infinite){
+				if (!shop.isInfinite) {
 					entry.item.setAmount(entry.item.getAmount() - (amount - refunded));
 				}
 				econ.depositPlayer(shop.owner, (amount - refunded) * entry.retailPrice);
@@ -420,10 +403,6 @@ public class Main extends JavaPlugin implements Listener {
 				if (selection.isOwner && !pl.hasPermission("swornshop.self")) {
 					sendError(pl, "You cannot sell items to your own shop");
 					sendError(pl, "To add items, use /shop add");
-					return true;
-				}
-				if(selection.shop.infinite){
-					sendError(pl, "You cannot sell to an infinite shop!");
 					return true;
 				}
 				
@@ -534,22 +513,7 @@ public class Main extends JavaPlugin implements Listener {
 				}
 				pl.sendMessage(h.toHelpString());
 				
-			}else if(action.equalsIgnoreCase("save")){
-				
-				if((!(sender instanceof Player)) || sender.hasPermission("shop.admin")){
-					this.getServer().broadcastMessage(ChatColor.AQUA + "[SwornShops]: saving shops, expect lag");
-					save();
-					this.getServer().broadcastMessage(ChatColor.AQUA + "[SwornShops]: save complete");
-				}
-				
-			}else if(action.equalsIgnoreCase("backup")){
-				if((!(sender instanceof Player)) || sender.hasPermission("shop.admin")){
-					this.getServer().broadcastMessage(ChatColor.AQUA + "[SwornShops]: Backing up shops, expect lag");
-					backUp();
-					this.getServer().broadcastMessage(ChatColor.AQUA + "[SwornShops]: backup complete");
-				}
-				
-			}else {
+			} else {
 				Help.showHelp(pl, selection);
 			}
 			return true;
@@ -588,16 +552,9 @@ public class Main extends JavaPlugin implements Listener {
 			selection.isOwner = isOwner;
 			selection.shop = shop;
 			selection.page = 0;
-			String infinite;
-			if(selection.shop.infinite){
-				infinite = "infinite";
-			}
-			else{
-				infinite = "";
-			}
 			pl.sendMessage(new String[] {
 				isOwner ? "§FWelcome to your shop." :
-						String.format("§FWelcome to §B%s§F's %s shop.", shop.owner, infinite),
+						String.format("§FWelcome to §B%s§F's shop.", shop.owner),
 				"§7For help with shops, type §3/shop help§7."
 			});
 		}
@@ -615,20 +572,19 @@ public class Main extends JavaPlugin implements Listener {
 		if (!p.isEmpty())
 			event.getPlayer().sendMessage("You have shop notifications. Use §B/shop pending§F to view them");
 	}
+	
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPlayerMove(PlayerMoveEvent event){
-		if(selectedShops.get(event.getPlayer()) != null && selectedShops.get(event.getPlayer()).shop != null){
-			Location shopLoc = selectedShops.get(event.getPlayer()).shop.location;
+		Player pl = event.getPlayer();
+		ShopSelection s = selectedShops.get(pl);
+		if (s != null) {
+			Location shopLoc = s.shop.location;
 			Location pLoc = event.getTo();
-			
-			if(Math.abs(shopLoc.getX() - pLoc.getX()) > SHOP_RANGE ||
-					Math.abs(shopLoc.getZ() - pLoc.getZ()) > SHOP_RANGE ||
-					Math.abs(shopLoc.getY() - pLoc.getY()) > 8){
-				event.getPlayer().sendMessage(ChatColor.AQUA + "Thank you for using swornshops! Come again!");
+			if (shopLoc.distanceSquared(pLoc) > SHOP_RANGE) {
+				pl.sendMessage(s.isOwner ? "§7[§FLeaving your shop§7]" : 
+					String.format("§7[§FLeaving §B%s§F's shop§7]", s.shop.owner));
 				selectedShops.remove(event.getPlayer());
 			}
-			
-			
 		}
 	}
 	
@@ -918,98 +874,93 @@ public class Main extends JavaPlugin implements Listener {
         econ = rsp.getProvider();
         return econ != null;
     }
-	public void save(){
-		backUp();
-		State state = new State();
+	
+	/**
+	 * Saves all shops
+	 */
+	public void saveAll() {
+		if (!backup())
+			log.warning("Failed to back up shops");
 		
+		State state = new State();
 		for (Entry<Location, Shop> entry : shops.entrySet()) {
-		    Location key = entry.getKey();
-		    String wName = key.getWorld().getName();
-		    double x = key.getX();
-		    double y = key.getY();
-		    double z = key.getZ();
-		    String save = (wName + "," + x + "," + y + "," + z);
-		    Shop value = entry.getValue();
-		    int i = 0;
-		    while(i < value.inventory.size()){
-		    	value.inventory.get(i).quantity = value.inventory.get(i).item.getAmount();
-		    	i++;
-		    }
-		    state.shops.put(save, entry.getValue());
-		 //   Shop value = entry.getValue();
-		    // ...
+		    Shop shop = entry.getValue();
+		    for (ShopEntry e : shop.inventory)
+		    	e.quantity = e.item.getAmount();
+		    state.shops.put(new BlockLocation(entry.getKey()), shop);
 		}
-	//	state.shops = this.shops;
 		state.pending = this.pending;
-		File saveLocation = new File("plugins/SwornShop/state.dat");
 		
 		try {
-			FileOutputStream outFS = new FileOutputStream(saveLocation);
-			ObjectOutputStream outOS = new ObjectOutputStream(outFS);
-			outOS.writeObject(state);
+			File f = new File(getDataFolder(), "shops.dat");
+			FileOutputStream fs = new FileOutputStream(f);
+			ObjectOutputStream out = new ObjectOutputStream(fs);
+			out.writeObject(state);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
+			log.warning("Save failed");
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			log.warning("Save failed");
 			e.printStackTrace();
 		}
 	}
-	public Boolean backUp(){
-		File stateLocation = new File("plugins/SwornShop/state.dat");
-		if(stateLocation.exists()){
-			File backup = new File("plugins/SwornShop/state_backup.dat");
+	
+	/**
+	 * Attempts to back up the shops.dat savefile.
+	 * @return a boolean indicating success
+	 */
+	public boolean backup() {
+		File stateLocation = new File(getDataFolder(), "shops.dat");
+		if (stateLocation.exists()) {
+			File backup = new File(getDataFolder(), "shops.dat_old");
 			try {
 				InputStream in = new FileInputStream(stateLocation);
 				OutputStream out = new FileOutputStream(backup);
-				 byte[] buf = new byte[1024];
-				 int i;
-				 while ((i = in.read(buf)) > 0){
-					  out.write(buf, 0, i);
-				 }
-				  in.close();
-				  out.close();
+				byte[] buf = new byte[1024];
+				int i;
+				while ((i = in.read(buf)) > 0) {
+					out.write(buf, 0, i);
+				}
+				in.close();
+				out.close();
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
+				log.warning("Backup failed");
 				e.printStackTrace();
 				return false;
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				log.warning("Backup failed");
 				e.printStackTrace();
 				return false;
 			}
 			return true;
 		}
-		else{
-			return false;
-		}
-		
+		log.warning("Aborting backup: shops.dat not found");
+		return false;
 	}
-	public State load(){
-		File stateLocation = new File("plugins/SwornShop/state.dat");
-		if(stateLocation.exists()){
+	
+	
+	/**
+	 * Loads all shops from the shops.dat savefile.
+	 * @return the saved State
+	 */
+	public State reloadAll() {
+		File stateLocation = new File(getDataFolder(), "shops.dat");
+		if (stateLocation.exists()) {
 			try {
-				FileInputStream inFS = new FileInputStream(stateLocation);
-				ObjectInputStream inOS = new ObjectInputStream(inFS);
-				Object obj = inOS.readObject();
-				if(obj instanceof State){
-					
+				FileInputStream fs = new FileInputStream(stateLocation);
+				ObjectInputStream stream = new ObjectInputStream(fs);
+				Object obj = stream.readObject();
+				if (obj instanceof State)
 ;					return (State) obj;
-				}
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		
 		return null;
-		
 	}
 	
 }
