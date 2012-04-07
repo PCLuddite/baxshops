@@ -102,7 +102,8 @@
 68 Wall Sign
 69 Lever
 70 Stone Pressure Plate
-71 Wooden Pressure Plate
+71 Iron Door
+72 Wooden Pressure Plate
 73 Redstone Ore
 74 Redstone Ore (Glowing)
 75 Redstone Torch (Off)
@@ -290,7 +291,37 @@
 370 Ghast Tear
 371 Gold Nugget
 372 Nether Wart
-373 Potions
+373 Water Bottle
+|   16 Awkward Potion
+|   32 Thick Potion
+|   64 Mundane Potion (extended)
+|   8192 Mundane Potion
+|   8193 Potion of Regeneration
+|   8194 Potion of Swiftness
+|   8195 Potion of Fire Resistance
+|   8196 Potion of Poison
+|   8197 Potion of Instant Health
+|   8200 Potion of Weakness
+|   8201 Potion of Strength
+|   8202 Potion of Slowness
+|   8204 Potion of Harming
+|   8225 Potion of Regeneration II
+|   8226 Potion of Swiftness II
+|   8228 Potion of Poison II
+|   8229 Potion of Instant Health II
+|   8232 Potion of Weakness II
+|   8233 Potion of Strength II
+|   8234 Potion of Slowness II
+|   8236 Potion of Harming II
+|   8257 Potion of Regeneration (Extended)
+|   8258 Potion of Swiftness (Extended)
+|   8259 Potion of Fire Resistance (Extended)
+|   8260 Potion of Poison (Extended)
+|   8264 Potion of Weakness (Extended)
+|   8265 Potion of Strength (Extended)
+|   8266 Potion of Slowness (Extended)
+|   8289 Potion of Regeneration II (Extended)
+|   8290 Potion of Swiftness II (Extended)
 374 Glass Bottle
 375 Spider Eye
 376 Fermented Spider Eye
