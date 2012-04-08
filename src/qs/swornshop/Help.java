@@ -17,8 +17,10 @@ public class Help {
 				"owner", "the owner of the shop",
 				"inf", "whether the shop is infinite"));
 	public static final CommandHelp remove = new CommandHelp("shop remove", "rm", null, "removes this shop");
+	public static final CommandHelp save = new CommandHelp("shop save", null, null, "saves all shops");
+	public static final CommandHelp backup = new CommandHelp("shop backup", null, null, "backs up shops");
 	
-	public static final CommandHelp notifications = new CommandHelp("shop notifications", "n,pending,p", null, "view pending shop notifications", 
+	public static final CommandHelp notifications = new CommandHelp("shop notifications", "n,pending,p", null, "view notifications", 
 			"Shows a list of notifications to sell items to your shops",
 			"These can be offers (e.g., someone wishes to sell you an item)",
 			"or messages (e.g., an offer was accepted).",
@@ -29,8 +31,6 @@ public class Help {
 	public static final CommandHelp reject = new CommandHelp("shop reject", "no", null, "reject your most recent notification");
 	public static final CommandHelp skip = new CommandHelp("shop skip", "sk", null, "skip your most recent notification",
 			"Moves your most recent notification to the end of the list");
-	public static final CommandHelp save = new CommandHelp("shop save", null, null, "saves all shops");
-	public static final CommandHelp backup = new CommandHelp("shop backup", null, null, "backs up shops");
 	
 	public static final CommandHelp buy = new CommandHelp("shop buy", "b", "[item] <amount>", "buy an item from this shop", 
 			CommandHelp.args(
@@ -44,7 +44,7 @@ public class Help {
 				"price", "the price (for the entire quantity); defaults to the store's price times the quantity"
 			));
 	
-	public static final CommandHelp add = new CommandHelp("shop add", "+,ad", "<buy-price> [sell-price=none]", "add your held item to this shop",
+	public static final CommandHelp add = new CommandHelp("shop add", "+,ad", "<$buy> [$sell=no]", "add held item to this shop",
 			concat(CommandHelp.args(
 				"buy-price", "the price of a single item in the stack",
 				"sell-price", "the selling price of a single item in the stack (by default the item cannot be sold)"
@@ -52,12 +52,14 @@ public class Help {
 				"§BWarning:§F Once you add an item to a shop, you cannot remove it."
 			}));
 	public static final CommandHelp restock = new CommandHelp("shop restock", "r", null, "restock this shop with your held item");
-	public static final CommandHelp set = new CommandHelp("shop set", null, "<item> <buy-price> <sell-price>", "changes the price of an item",
+	public static final CommandHelp set = new CommandHelp("shop set", null, "<item> <$buy> <$sell>", "change an item's price",
 			CommandHelp.args(
 				"item", "the ID or name of the item to modify",
 				"buy-price", "the new price of a single item in the stack",
 				"sell-price", "the selling price of a single item in the stack (by default the item cannot be sold)"
 			));
+	public static final CommandHelp sign = new CommandHelp("shop sign", null, "<line1>|<line2>…", "changes a shop's sign",
+			CommandHelp.arg("text", "the new text of the sign, separated by |'s"));
 	
 	public static final CommandHelp lookup = new CommandHelp("shop lookup", null, "<item-name>", "look up an item's ID and damage value",
 			CommandHelp.arg("item-name", "the name of an alias for an item"));
@@ -77,7 +79,9 @@ public class Help {
 	/**
 	 * An index of commands only usable when a shop is selected
 	 */
-	public static final String[] indexSelected = { };
+	public static final String[] indexSelected = {
+		"§ELeft- and right-click to browse this shop's items"
+	};
 	/**
 	 * An index of commands only usable by an admin (a player 
 	 * with the swornshop.admin permission)
@@ -110,7 +114,8 @@ public class Help {
 	public static final String[] indexOwner = {
 		add.toIndexString(),
 		restock.toIndexString(),
-		set.toIndexString()
+		set.toIndexString(),
+		sign.toIndexString()
 	};
 
 	/**
@@ -131,13 +136,13 @@ public class Help {
 		if (sender.hasPermission("shops.admin"))
 			sender.sendMessage(Help.indexAdmin);
 		if (selection != null) {
-			sender.sendMessage(Help.indexSelected);
 			if (sender.hasPermission("shops.admin"))
 				sender.sendMessage(Help.indexSelectedAdmin);
 			if (selection.isOwner)
 				sender.sendMessage(Help.indexOwner);
 			else
 				sender.sendMessage(Help.indexNotOwner);
+			sender.sendMessage(Help.indexSelected);
 		}
 	}
 
@@ -167,9 +172,12 @@ public class Help {
 		commands.put("add", add);
 		commands.put("restock", restock);
 		commands.put("set", set);
+		commands.put("sign", sign);
 
 		commands.put("create", create);
 		commands.put("remove", remove);
+		commands.put("save", save);
+		commands.put("backup", backup);
 		
 		commands.put("h", help);
 		commands.put("n", notifications);

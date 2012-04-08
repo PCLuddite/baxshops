@@ -455,34 +455,55 @@ public class Main extends JavaPlugin implements Listener {
 					action.equalsIgnoreCase("n")) {
 				showNotification(pl);
 				
-			}else if (action.equalsIgnoreCase("sign")){
-				if (pl.hasPermission("swornshop.admin") || selection.isOwner){
-					Sign sign = (Sign) selection.shop.location.getBlock().getState();
-					StringBuilder sb = new StringBuilder();
-					int i = 1;
-					while(i < args.length){
-						sb.append(args[i]);
-						sb.append(" ");
-					}
-					if(sb.length() > 60){
-						sendError(pl, "The given string is too large!");
+			} else if (action.equalsIgnoreCase("sign")) {
+				if (selection == null) {
+					sendError(pl, "You must select a shop");
+					return true;
+				}
+				if (!pl.hasPermission("swornshop.admin") && !selection.isOwner) {
+					sendError(pl, "You cannot change this sign's text");
+					return true;
+				}
+				Block b = selection.shop.location.getBlock();
+				if (b.getTypeId() != SIGN) {
+					log.warning(String.format("%s's shop is missing a sign", selection.shop.owner));
+					return true;
+				}
+				
+				Sign sign = (Sign) b.getState();
+				StringBuilder sb = new StringBuilder();
+				for (int i = 1; i < args.length; ++i) {
+					sb.append(args[i]);
+					sb.append(" ");
+				}
+				int len = sb.length();
+				if (len > 0) {
+					sb.deleteCharAt(sb.length() - 1);
+				}
+				if (len > 60) {
+					sendError(pl, "That sign text is too long");
+					return true;
+				}
+				String[] lines = sb.toString().split("\\|");
+				for (int i = 0; i < lines.length; ++i)
+					if (lines[i].length() > 15) {
+						sendError(pl, String.format("Line %d is too long. Lines may only be 15 characters", i + 1));
 						return true;
 					}
-					String[] textPerLine = sb.toString().split("l");
-					i = 0;
-					while(i < textPerLine.length){
-						if(textPerLine[i].length() > 15){
-							sendError(pl, "One of your lines is too long, lines may only be 15 characters, and are separated by |");
-							return true;
-						}
-
-					}
-					sign.setLine(0, textPerLine[0]);
-					sign.setLine(1, textPerLine[1]);
-					sign.setLine(2, textPerLine[2]);
-					sign.setLine(3, textPerLine[3]);
+				if (lines.length < 3) {
+					sign.setLine(0, "");
+					sign.setLine(1, lines[0]);
+					sign.setLine(2, lines.length > 1 ? lines[1] : "");
+					sign.setLine(3, "");
+				} else {
+					sign.setLine(0, lines[0]);
+					sign.setLine(1, lines.length > 1 ? lines[1] : "");
+					sign.setLine(2, lines.length > 2 ? lines[2] : "");
+					sign.setLine(3, lines.length > 3 ? lines[3] : "");
 				}
-			}else if (action.equalsIgnoreCase("accept") ||
+				sign.update();
+				
+			} else if (action.equalsIgnoreCase("accept") ||
 					action.equalsIgnoreCase("yes") ||
 					action.equalsIgnoreCase("a") ||
 					action.equalsIgnoreCase("claim") ||
@@ -624,8 +645,8 @@ public class Main extends JavaPlugin implements Listener {
 			Location shopLoc = s.shop.location;
 			Location pLoc = event.getTo();
 			if (shopLoc.distanceSquared(pLoc) > SHOP_RANGE) {
-				pl.sendMessage(s.isOwner ? "§7[§FLeaving your shop§7]" : 
-					String.format("§7[§FLeaving §B%s§F's shop§7]", s.shop.owner));
+				pl.sendMessage(s.isOwner ? "§7[Left your shop]" : 
+					String.format("§7[Left §3%s§7's shop] §FThank you, and come again!", s.shop.owner));
 				selectedShops.remove(event.getPlayer());
 			}
 		}
@@ -938,7 +959,9 @@ public class Main extends JavaPlugin implements Listener {
 		state.pending = this.pending;
 		
 		try {
-			File f = new File(getDataFolder(), "shops.dat");
+			File dir = getDataFolder();
+			if (!dir.exists()) dir.mkdirs();
+			File f = new File(dir, "shops.dat");
 			FileOutputStream fs = new FileOutputStream(f);
 			ObjectOutputStream out = new ObjectOutputStream(fs);
 			out.writeObject(state);
