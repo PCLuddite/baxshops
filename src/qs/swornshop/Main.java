@@ -30,6 +30,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import qs.swornshop.notification.BuyNotification;
 import qs.swornshop.notification.Claimable;
 import qs.swornshop.notification.Notification;
 import qs.swornshop.notification.Request;
@@ -381,7 +382,7 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, String.format("You may only buy §B%d %s§C at once", max, itemName));
 					return true;
 				}
-				if(!(econ.has(pl.getName(), amount * entry.retailPrice))){
+				if (!econ.has(pl.getName(), amount * entry.retailPrice)) {
 					sendError(pl, "You do not have sufficient funds");
 					return true;
 				}
@@ -409,6 +410,11 @@ public class Main extends JavaPlugin implements Listener {
 					entry.item.setAmount(entry.item.getAmount() - (amount - refunded));
 				}
 				econ.depositPlayer(shop.owner, (amount - refunded) * entry.retailPrice);
+				
+				ShopEntry e = new ShopEntry();
+				e.setItem(purchased);
+				e.retailPrice = entry.retailPrice;
+				sendNotification(pl, new BuyNotification(shop, e, pl.getName()));
 				
 			} else if (action.equalsIgnoreCase("sell") ||
 					action.equalsIgnoreCase("s")) {
