@@ -145,6 +145,9 @@ public class Main extends JavaPlugin implements Listener {
 				
 			}
 			if (!(sender instanceof Player)) {
+				if(action.equalsIgnoreCase("removeallnotifications")){
+					pending.clear();
+				}
 				sendError(sender, "/shop commands can only be used by a player");
 				return true;
 			}
@@ -316,8 +319,6 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, "That item is not in this shop");
 					return true;
 				}
-				
-				
 				
 				if (entry == null) {
 					sendError(pl, "That item is not in this shop");
