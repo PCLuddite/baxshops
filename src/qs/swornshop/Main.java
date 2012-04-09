@@ -376,12 +376,8 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, "There are not enough of that item in the shop");
 					return true;
 				}
-				int max = entry.item.getMaxStackSize();
+				
 				String itemName = getItemName(entry.item);
-				if (max > -1 && amount > max) {
-					sendError(pl, String.format("You may only buy §B%d %s§C at once", max, itemName));
-					return true;
-				}
 				if (!econ.has(pl.getName(), amount * entry.retailPrice)) {
 					sendError(pl, "You do not have sufficient funds");
 					return true;
@@ -414,7 +410,7 @@ public class Main extends JavaPlugin implements Listener {
 				ShopEntry e = new ShopEntry();
 				e.setItem(purchased);
 				e.retailPrice = entry.retailPrice;
-				sendNotification(pl, new BuyNotification(shop, e, pl.getName()));
+				sendNotification(shop.owner, new BuyNotification(shop, e, pl.getName()));
 				
 			} else if (action.equalsIgnoreCase("sell") ||
 					action.equalsIgnoreCase("s")) {
