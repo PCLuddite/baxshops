@@ -268,8 +268,9 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, "You cannot restock this shop");
 					return true;
 				}
-				
 				ItemStack stack = pl.getItemInHand();
+				
+				
 				if (stack == null || stack.getTypeId() == 0) {
 					sendError(pl, "You must be holding the item you wish to add to this shop");
 					return true;
@@ -302,15 +303,17 @@ public class Main extends JavaPlugin implements Listener {
 					int index = Integer.parseInt(args[1]);
 					entry = shop.getEntryAt(index - 1);
 				} catch (NumberFormatException e) {
-					item = getItemFromAlias(args[1]);
-					id = (int) (item >> 16);
-					damage = (short) (item & 0xFFFF);
-					entry = shop.findEntry(id, damage);
+					try{
+						item = getItemFromAlias(args[1]);
+						id = (int) (item >> 16);
+						damage = (short) (item & 0xFFFF);
+						entry = shop.findEntry(id, damage);
+					} catch (NullPointerException ex){
+						sendError(pl, "That is not a valid alias for an item!");
+						return true;
+					}
 				} catch (IndexOutOfBoundsException e) {
 					sendError(pl, "That item is not in this shop");
-					return true;
-				} catch (NullPointerException e){
-					sendError(pl, "That is not a valid alias for an item");
 					return true;
 				}
 				
@@ -377,15 +380,17 @@ public class Main extends JavaPlugin implements Listener {
 					int index = Integer.parseInt(args[1]);
 					entry = shop.getEntryAt(index - 1);
 				} catch (NumberFormatException e) {
-					long item = getItemFromAlias(args[1]);
-					int id = (int) (item >> 16);
-					short damage = (short) (item & 0xFFFF);
-					entry = shop.findEntry(id, damage);
+					try{
+						long item = getItemFromAlias(args[1]);
+						int id = (int) (item >> 16);
+						short damage = (short) (item & 0xFFFF);
+						entry = shop.findEntry(id, damage);
+					} catch (NullPointerException ex){
+						sendError(pl, "That is not a valid alias for an item!");
+						return true;
+					}
 				} catch (IndexOutOfBoundsException e) {
 					sendError(pl, "That item is not in this shop");
-					return true;
-				} catch (NullPointerException e){
-					sendError(pl, "That is not a valid alias for an item");
 					return true;
 				}
 				if (entry == null) {
