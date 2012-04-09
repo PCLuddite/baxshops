@@ -650,6 +650,12 @@ public class Main extends JavaPlugin implements Listener {
 		if (s != null) {
 			Location shopLoc = s.shop.location;
 			Location pLoc = event.getTo();
+			if(shopLoc.getWorld() != pl.getWorld()){
+				pl.sendMessage(s.isOwner ? "§7[Left your shop]" : 
+					String.format("§7[Left §3%s§7's shop] §FThank you, and come again!", s.shop.owner));
+				selectedShops.remove(event.getPlayer());
+				return;
+			}
 			if (shopLoc.distanceSquared(pLoc) > SHOP_RANGE) {
 				pl.sendMessage(s.isOwner ? "§7[Left your shop]" : 
 					String.format("§7[Left §3%s§7's shop] §FThank you, and come again!", s.shop.owner));
