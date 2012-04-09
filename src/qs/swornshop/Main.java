@@ -130,7 +130,7 @@ public class Main extends JavaPlugin implements Listener {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command,
 			String label, String[] args) {
-		if (command.getName().equalsIgnoreCase("shop")) {
+		if (command.getName().equalsIgnoreCase("shop") || command.getName().equalsIgnoreCase("s")) {
 			String action = args.length == 0 ? "" : args[0];
 			
 			if (action.equalsIgnoreCase("save")) {
