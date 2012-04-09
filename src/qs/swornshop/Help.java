@@ -16,7 +16,7 @@ public class Help {
 			CommandHelp.args(
 				"owner", "the owner of the shop",
 				"inf", "whether the shop is infinite"));
-	public static final CommandHelp remove = new CommandHelp("shop remove", "rm", null, "removes this shop");
+	public static final CommandHelp remove = new CommandHelp("shop delete", "del", null, "removes this shop");
 	public static final CommandHelp save = new CommandHelp("shop save", null, null, "saves all shops");
 	public static final CommandHelp backup = new CommandHelp("shop backup", null, null, "backs up shops");
 	
@@ -175,7 +175,7 @@ public class Help {
 		commands.put("sign", sign);
 
 		commands.put("create", create);
-		commands.put("remove", remove);
+		commands.put("delete", remove);
 		commands.put("save", save);
 		commands.put("backup", backup);
 		
@@ -197,7 +197,7 @@ public class Help {
 
 		commands.put("c", create);
 		commands.put("mk", create);
-		commands.put("rm", remove);
+		commands.put("del", remove);
 	}
 
 	/**

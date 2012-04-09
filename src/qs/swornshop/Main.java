@@ -134,12 +134,12 @@ public class Main extends JavaPlugin implements Listener {
 			String action = args.length == 0 ? "" : args[0];
 			
 			if (action.equalsIgnoreCase("save")) {
-				if (!(sender instanceof Player) || sender.hasPermission("shop.admin"))
+				if (!(sender instanceof Player) || sender.hasPermission("swornshop.admin"))
 					saveAll();
 				return true;
 				
 			} else if (action.equalsIgnoreCase("backup")) {
-				if (!(sender instanceof Player) || sender.hasPermission("shop.admin"))
+				if (!(sender instanceof Player) || sender.hasPermission("swornshop.admin"))
 					backup();
 				return true;
 				
@@ -187,13 +187,13 @@ public class Main extends JavaPlugin implements Listener {
 				shop.isInfinite = args.length > 2 && (args[2].equalsIgnoreCase("yes") || args[2].equalsIgnoreCase("true"));
 				shops.put(shop.location, shop);
 				
-			} else if (action.equalsIgnoreCase("remove") || 
-					action.equalsIgnoreCase("rm")) {
+			} else if (action.equalsIgnoreCase("delete") || 
+					action.equalsIgnoreCase("del")) {
 				if (selection == null) {
 					sendError(pl, "You must select a shop");
 					return true;
 				}
-				if (!pl.hasPermission("shop.admin") && !selection.isOwner) {
+				if (!pl.hasPermission("swornshop.admin") && !selection.isOwner) {
 					sendError(pl, "You cannot remove this shop");
 					return true;
 				}
@@ -288,7 +288,7 @@ public class Main extends JavaPlugin implements Listener {
 				pl.setItemInHand(null);
 				
 			} else if (action.equalsIgnoreCase("set")) {
-				if (!selection.isOwner && !pl.hasPermission("shop.admin")) {
+				if (!selection.isOwner && !pl.hasPermission("swornshop.admin")) {
 					sendError(pl, "You cannot change this shop's prices");
 					return true;
 				}
