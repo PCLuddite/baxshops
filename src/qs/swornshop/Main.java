@@ -292,13 +292,30 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, Help.set.toUsageString());
 					return true;
 				}
-				
-				long item = getItemFromAlias(args[1]);
-				int id = (int) (item >> 16);
-				short damage = (short) (item & 0xFFFF);
+				long item;
+				int id;
+				short damage;
 				
 				Shop shop = selection.shop;
-				ShopEntry entry = shop.findEntry(id, damage);
+				ShopEntry entry;
+				try {
+					int index = Integer.parseInt(args[1]);
+					entry = shop.getEntryAt(index - 1);
+				} catch (NumberFormatException e) {
+					item = getItemFromAlias(args[1]);
+					id = (int) (item >> 16);
+					damage = (short) (item & 0xFFFF);
+					entry = shop.findEntry(id, damage);
+				} catch (IndexOutOfBoundsException e) {
+					sendError(pl, "That item is not in this shop");
+					return true;
+				} catch (NullPointerException e){
+					sendError(pl, "That is not a valid alias for an item");
+					return true;
+				}
+				
+				
+				
 				if (entry == null) {
 					sendError(pl, "That item is not in this shop");
 					return true;
@@ -366,6 +383,9 @@ public class Main extends JavaPlugin implements Listener {
 					entry = shop.findEntry(id, damage);
 				} catch (IndexOutOfBoundsException e) {
 					sendError(pl, "That item is not in this shop");
+					return true;
+				} catch (NullPointerException e){
+					sendError(pl, "That is not a valid alias for an item");
 					return true;
 				}
 				if (entry == null) {
