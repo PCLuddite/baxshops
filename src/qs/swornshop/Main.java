@@ -1,8 +1,19 @@
 package qs.swornshop;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayDeque;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
@@ -22,6 +33,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -147,6 +159,7 @@ public class Main extends JavaPlugin implements Listener {
 			if (!(sender instanceof Player)) {
 				if(action.equalsIgnoreCase("removeallnotifications")){
 					pending.clear();
+					return true;
 				}
 				sendError(sender, "/shop commands can only be used by a player");
 				return true;
@@ -168,8 +181,17 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, "You cannot create shops");
 					return true;
 				}
+				
 				Location loc = pl.getLocation();
+				Location locUnder = pl.getLocation();
+				locUnder.setY(locUnder.getY() - 1);
 				Block b = loc.getBlock();
+				Block blockUnder = loc.getBlock();
+				if (blockUnder.getTypeId() == 0 ||
+						blockUnder.getTypeId() == 46){
+					sendError(pl, "This is not a valid block to place a shop on!");
+					return true;
+				}
 				byte angle = (byte) ((((int) loc.getYaw() + 225) / 90) << 2);
 				b.setTypeIdAndData(SIGN, angle, false);
 
@@ -616,10 +638,20 @@ public class Main extends JavaPlugin implements Listener {
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		Block b = event.getClickedBlock();
-		if (b == null || b.getTypeId() != SIGN) return;
+		if (b == null || b.getTypeId() != SIGN){
+			Location loc = b.getLocation();
+			loc.setY(loc.getY() + 1);
+			if(loc.getBlock().getTypeId() == SIGN){
+				if(shops.containsKey(loc)){
+					event.setCancelled(true);
+					return;
+				}
+			}
+			return;
+		}
 		
 		Shop shop = shops.get(b.getLocation());
-		if (shop == null) return;
+		
 		
 		Player pl = event.getPlayer();
 		
@@ -658,6 +690,32 @@ public class Main extends JavaPlugin implements Listener {
 			b.getState().update();
 	}
 	
+	@EventHandler(priority = EventPriority.HIGH)
+	public void onExplosion(EntityExplodeEvent event){
+		List<Block> blocks = event.blockList();
+		int i = 0;
+		while(i < blocks.size()){
+			Block block = blocks.get(i);
+			if(block.getTypeId() == SIGN){
+				if(shops.containsKey(block.getLocation())){
+					event.setCancelled(true);
+					return;
+				}
+			}
+			
+				Location loc = block.getLocation();
+				loc.setY(loc.getY() + 1);
+				if(shops.containsKey(loc)){
+					event.setCancelled(true);
+					
+					return;
+				}
+				
+			
+			i++;
+		}
+	}
+	
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerJoin(PlayerJoinEvent event){
 		ArrayDeque<Notification> p = getNotifications(event.getPlayer());
@@ -685,6 +743,7 @@ public class Main extends JavaPlugin implements Listener {
 			}
 		}
 	}
+	
 	
 
 	/**
