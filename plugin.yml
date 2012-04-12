@@ -8,11 +8,7 @@ commands:
         usage: |
           /shop <action> <arguments...>
           §6Help: §f/shop help
-    s:
-        description: an alias for shop
-        usage: |
-          /s <action> <arguments...>
-          §6Help: §f/shop help
+        aliases: s
 permissions:
     swornshop.*:
         description: All SwornShop permissions

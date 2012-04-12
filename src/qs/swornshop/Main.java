@@ -13,7 +13,6 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayDeque;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
@@ -142,7 +141,7 @@ public class Main extends JavaPlugin implements Listener {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command,
 			String label, String[] args) {
-		if (command.getName().equalsIgnoreCase("shop") || command.getName().equalsIgnoreCase("s")) {
+		if (command.getName().equalsIgnoreCase("shop")) {
 			String action = args.length == 0 ? "" : args[0];
 			
 			if (action.equalsIgnoreCase("save")) {
