@@ -702,7 +702,7 @@ public class Main extends JavaPlugin implements Listener {
 	public void onPlayerJoin(PlayerJoinEvent event){
 		ArrayDeque<Notification> p = getNotifications(event.getPlayer());
 		if (!p.isEmpty())
-			event.getPlayer().sendMessage("You have shop notifications. Use §B/shop pending§F to view them");
+			event.getPlayer().sendMessage("You have new notifications. Use §B/shop notifications§F to view them");
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR)
