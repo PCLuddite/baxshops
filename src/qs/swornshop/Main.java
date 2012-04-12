@@ -292,9 +292,8 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, "You cannot restock this shop");
 					return true;
 				}
+				
 				ItemStack stack = pl.getItemInHand();
-				
-				
 				if (stack == null || stack.getTypeId() == 0) {
 					sendError(pl, "You must be holding the item you wish to add to this shop");
 					return true;
@@ -317,9 +316,6 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, Help.set.toUsageString());
 					return true;
 				}
-				long item;
-				int id;
-				short damage;
 				
 				Shop shop = selection.shop;
 				ShopEntry entry;
@@ -327,15 +323,14 @@ public class Main extends JavaPlugin implements Listener {
 					int index = Integer.parseInt(args[1]);
 					entry = shop.getEntryAt(index - 1);
 				} catch (NumberFormatException e) {
-					try{
-						item = getItemFromAlias(args[1]);
-						id = (int) (item >> 16);
-						damage = (short) (item & 0xFFFF);
-						entry = shop.findEntry(id, damage);
-					} catch (NullPointerException ex){
-						sendError(pl, "That is not a valid alias for an item!");
+					Long item = getItemFromAlias(args[1]);
+					if (item == null) {
+						sendError(pl, "That item alias does not exist");
 						return true;
 					}
+					int id = (int) (item >> 16);
+					int damage = (short) (item & 0xFFFF);
+					entry = shop.findEntry(id, damage);
 				} catch (IndexOutOfBoundsException e) {
 					sendError(pl, "That item is not in this shop");
 					return true;
@@ -402,15 +397,14 @@ public class Main extends JavaPlugin implements Listener {
 					int index = Integer.parseInt(args[1]);
 					entry = shop.getEntryAt(index - 1);
 				} catch (NumberFormatException e) {
-					try{
-						long item = getItemFromAlias(args[1]);
-						int id = (int) (item >> 16);
-						short damage = (short) (item & 0xFFFF);
-						entry = shop.findEntry(id, damage);
-					} catch (NullPointerException ex){
-						sendError(pl, "That is not a valid alias for an item!");
+					Long item = getItemFromAlias(args[1]);
+					if (item == null) {
+						sendError(pl, "That item alias does not exist");
 						return true;
 					}
+					int id = (int) (item >> 16);
+					short damage = (short) (item & 0xFFFF);
+					entry = shop.findEntry(id, damage);
 				} catch (IndexOutOfBoundsException e) {
 					sendError(pl, "That item is not in this shop");
 					return true;
