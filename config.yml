@@ -1,11 +1,10 @@
 #################################################
+#      __   ____ _____ ___ ___ __  __ ____      #
 #     / _ \|  _ \_   _|_ _/ _ \| \ | / ___|     #
 #    | | | | |_) || |  | | | | |  \| \___ \     #
 #    | |_| |  __/ | |  | | |_| | |\  |___) |    #
 #     \___/|_|    |_| |___\___/|_| \_|____/     #
 #################################################
-
-# General Options
 
 # Number of items that can be purchased at one time.
 # Use -1 to set this to the max stack size of the item
@@ -18,4 +17,7 @@ Distance: 3
 # Please delete all your backups if you chose to modify this after creating many backups
 Backups: -1
 
-
+Lollipops:
+  tastiness: 80 # default tastiness (0-100)
+  radius: 0.2 # (in blocks)
+  thickness: 0.05 # (in blocks)
