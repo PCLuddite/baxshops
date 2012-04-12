@@ -1,0 +1,20 @@
+#################################################
+#     / _ \|  _ \_   _|_ _/ _ \| \ | / ___|     #
+#    | | | | |_) || |  | | | | |  \| \___ \     #
+#    | |_| |  __/ | |  | | |_| | |\  |___) |    #
+#     \___/|_|    |_| |___\___/|_| \_|____/     #
+#################################################
+
+# General Options
+
+# Number of items that can be purchased at one time.
+# Use -1 to set this to the max stack size of the item
+Max purchase: -1
+
+# The distance you can move away from a shop before you leave it
+Distance: 3
+
+# Number of backups to keep. Set this to -1 to never delete old backups
+Backups: 5
+
+
