@@ -156,7 +156,7 @@ public class Main extends JavaPlugin implements Listener {
 				
 			}
 			if (!(sender instanceof Player)) {
-				if(action.equalsIgnoreCase("removeallnotifications")){
+				if (action.equalsIgnoreCase("removeallnotifications")) {
 					pending.clear();
 					return true;
 				}
@@ -631,15 +631,12 @@ public class Main extends JavaPlugin implements Listener {
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		Block b = event.getClickedBlock();
-		if (b == null || b.getTypeId() != SIGN){
-			Location loc = b.getLocation();
-			loc.setY(loc.getY() + 1);
-			if(loc.getBlock().getTypeId() == SIGN){
-				if(shops.containsKey(loc)){
-					event.setCancelled(true);
-					return;
-				}
-			}
+		if (b == null) return;
+		
+		Location loc = b.getLocation();
+		loc.setY(loc.getY() + 1);
+		if (loc.getBlock().getTypeId() == SIGN && shops.containsKey(loc)) {
+			event.setCancelled(true);
 			return;
 		}
 		
