@@ -13,7 +13,6 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayDeque;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
@@ -106,8 +105,8 @@ public class Main extends JavaPlugin implements Listener {
 
 	@Override
 	public void onEnable() {
-        getServer().getPluginManager().registerEvents(this, this);
-        instance = this;
+		getServer().getPluginManager().registerEvents(this, this);
+		instance = this;
 		log = this.getLogger();
 		loadItemNames();
 		loadAliases();
@@ -128,9 +127,9 @@ public class Main extends JavaPlugin implements Listener {
 		
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
 			@Override
-		    public void run() {
+			public void run() {
 				saveAll();
-		    }
+			}
 		}, 6000L, 36000L);
 	}
 	
@@ -142,7 +141,7 @@ public class Main extends JavaPlugin implements Listener {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command,
 			String label, String[] args) {
-		if (command.getName().equalsIgnoreCase("shop") || command.getName().equalsIgnoreCase("s")) {
+		if (command.getName().equalsIgnoreCase("shop")) {
 			String action = args.length == 0 ? "" : args[0];
 			
 			if (action.equalsIgnoreCase("save")) {
@@ -157,7 +156,7 @@ public class Main extends JavaPlugin implements Listener {
 				
 			}
 			if (!(sender instanceof Player)) {
-				if(action.equalsIgnoreCase("removeallnotifications")){
+				if (action.equalsIgnoreCase("removeallnotifications")) {
 					pending.clear();
 					return true;
 				}
@@ -293,9 +292,8 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, "You cannot restock this shop");
 					return true;
 				}
+				
 				ItemStack stack = pl.getItemInHand();
-				
-				
 				if (stack == null || stack.getTypeId() == 0) {
 					sendError(pl, "You must be holding the item you wish to add to this shop");
 					return true;
@@ -318,9 +316,6 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, Help.set.toUsageString());
 					return true;
 				}
-				long item;
-				int id;
-				short damage;
 				
 				Shop shop = selection.shop;
 				ShopEntry entry;
@@ -328,15 +323,14 @@ public class Main extends JavaPlugin implements Listener {
 					int index = Integer.parseInt(args[1]);
 					entry = shop.getEntryAt(index - 1);
 				} catch (NumberFormatException e) {
-					try{
-						item = getItemFromAlias(args[1]);
-						id = (int) (item >> 16);
-						damage = (short) (item & 0xFFFF);
-						entry = shop.findEntry(id, damage);
-					} catch (NullPointerException ex){
-						sendError(pl, "That is not a valid alias for an item!");
+					Long item = getItemFromAlias(args[1]);
+					if (item == null) {
+						sendError(pl, "That item alias does not exist");
 						return true;
 					}
+					int id = (int) (item >> 16);
+					int damage = (short) (item & 0xFFFF);
+					entry = shop.findEntry(id, damage);
 				} catch (IndexOutOfBoundsException e) {
 					sendError(pl, "That item is not in this shop");
 					return true;
@@ -403,15 +397,14 @@ public class Main extends JavaPlugin implements Listener {
 					int index = Integer.parseInt(args[1]);
 					entry = shop.getEntryAt(index - 1);
 				} catch (NumberFormatException e) {
-					try{
-						long item = getItemFromAlias(args[1]);
-						int id = (int) (item >> 16);
-						short damage = (short) (item & 0xFFFF);
-						entry = shop.findEntry(id, damage);
-					} catch (NullPointerException ex){
-						sendError(pl, "That is not a valid alias for an item!");
+					Long item = getItemFromAlias(args[1]);
+					if (item == null) {
+						sendError(pl, "That item alias does not exist");
 						return true;
 					}
+					int id = (int) (item >> 16);
+					short damage = (short) (item & 0xFFFF);
+					entry = shop.findEntry(id, damage);
 				} catch (IndexOutOfBoundsException e) {
 					sendError(pl, "That item is not in this shop");
 					return true;
@@ -638,23 +631,17 @@ public class Main extends JavaPlugin implements Listener {
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		Block b = event.getClickedBlock();
-		if (b == null || b.getTypeId() != SIGN){
-			Location loc = b.getLocation();
-			loc.setY(loc.getY() + 1);
-			if(loc.getBlock().getTypeId() == SIGN){
-				if(shops.containsKey(loc)){
-					event.setCancelled(true);
-					return;
-				}
-			}
+		if (b == null) return;
+		
+		Location loc = b.getLocation();
+		loc.setY(loc.getY() + 1);
+		if (loc.getBlock().getTypeId() == SIGN && shops.containsKey(loc)) {
+			event.setCancelled(true);
 			return;
 		}
 		
 		Shop shop = shops.get(b.getLocation());
-		
-		
 		Player pl = event.getPlayer();
-		
 		boolean isOwner = shop.owner.equals(pl.getName());
 		
 		ShopSelection selection = selectedShops.get(pl);
@@ -692,27 +679,19 @@ public class Main extends JavaPlugin implements Listener {
 	
 	@EventHandler(priority = EventPriority.HIGH)
 	public void onExplosion(EntityExplodeEvent event){
-		List<Block> blocks = event.blockList();
-		int i = 0;
-		while(i < blocks.size()){
-			Block block = blocks.get(i);
-			if(block.getTypeId() == SIGN){
-				if(shops.containsKey(block.getLocation())){
-					event.setCancelled(true);
-					return;
-				}
+		for (Block b : event.blockList()) {
+			if (b.getTypeId() != SIGN) continue;
+			
+			Location loc = b.getLocation();
+			if (shops.containsKey(loc)) {
+				event.setCancelled(true);
+				return;
 			}
-			
-				Location loc = block.getLocation();
-				loc.setY(loc.getY() + 1);
-				if(shops.containsKey(loc)){
-					event.setCancelled(true);
-					
-					return;
-				}
-				
-			
-			i++;
+			loc.setY(loc.getY() + 1);
+			if (shops.containsKey(loc)) {
+				event.setCancelled(true);
+				return;
+			}
 		}
 	}
 	
@@ -720,7 +699,7 @@ public class Main extends JavaPlugin implements Listener {
 	public void onPlayerJoin(PlayerJoinEvent event){
 		ArrayDeque<Notification> p = getNotifications(event.getPlayer());
 		if (!p.isEmpty())
-			event.getPlayer().sendMessage("You have shop notifications. Use §B/shop pending§F to view them");
+			event.getPlayer().sendMessage("You have new notifications. Use §B/shop notifications§F to view them");
 	}
 	
 	@EventHandler(priority = EventPriority.MONITOR)
@@ -730,13 +709,7 @@ public class Main extends JavaPlugin implements Listener {
 		if (s != null) {
 			Location shopLoc = s.shop.location;
 			Location pLoc = event.getTo();
-			if(shopLoc.getWorld() != pl.getWorld()){
-				pl.sendMessage(s.isOwner ? "§7[Left your shop]" : 
-					String.format("§7[Left §3%s§7's shop] §FThank you, and come again!", s.shop.owner));
-				selectedShops.remove(event.getPlayer());
-				return;
-			}
-			if (shopLoc.distanceSquared(pLoc) > SHOP_RANGE) {
+			if (shopLoc.getWorld() != pl.getWorld() || shopLoc.distanceSquared(pLoc) > SHOP_RANGE) {
 				pl.sendMessage(s.isOwner ? "§7[Left your shop]" : 
 					String.format("§7[Left §3%s§7's shop] §FThank you, and come again!", s.shop.owner));
 				selectedShops.remove(event.getPlayer());
@@ -1019,16 +992,14 @@ public class Main extends JavaPlugin implements Listener {
 	 * @return true on success, false otherwise
 	 */
 	private boolean economySetup() {
-        if (getServer().getPluginManager().getPlugin("Vault") == null) {
-            return false;
-        }
-        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-        if (rsp == null) {
-            return false;
-        }
-        econ = rsp.getProvider();
-        return econ != null;
-    }
+		if (getServer().getPluginManager().getPlugin("Vault") == null) return false;
+		
+		RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+		if (rsp == null) return false;
+		
+		econ = rsp.getProvider();
+		return econ != null;
+	}
 	
 	/**
 	 * Saves all shops
@@ -1039,15 +1010,15 @@ public class Main extends JavaPlugin implements Listener {
 		
 		State state = new State();
 		for (Entry<Location, Shop> entry : shops.entrySet()) {
-		    Shop shop = entry.getValue();
-		    for (ShopEntry e : shop.inventory) {
-		    	e.quantity = e.item.getAmount();
-		    	Map<Enchantment, Integer> enchantments = e.item.getEnchantments();
-		    	e.enchantments = new HashMap<Integer, Integer>(enchantments.size());
-		    	for (Entry<Enchantment, Integer> en : enchantments.entrySet())
-		    		e.enchantments.put(en.getKey().getId(), en.getValue());
-		    }
-		    state.shops.put(new BlockLocation(entry.getKey()), shop);
+			Shop shop = entry.getValue();
+			for (ShopEntry e : shop.inventory) {
+				e.quantity = e.item.getAmount();
+				Map<Enchantment, Integer> enchantments = e.item.getEnchantments();
+				e.enchantments = new HashMap<Integer, Integer>(enchantments.size());
+				for (Entry<Enchantment, Integer> en : enchantments.entrySet())
+					e.enchantments.put(en.getKey().getId(), en.getValue());
+			}
+			state.shops.put(new BlockLocation(entry.getKey()), shop);
 		}
 		state.pending = this.pending;
 		
@@ -1113,7 +1084,7 @@ public class Main extends JavaPlugin implements Listener {
 				ObjectInputStream stream = new ObjectInputStream(fs);
 				Object obj = stream.readObject();
 				if (obj instanceof State)
-;					return (State) obj;
+					return (State) obj;
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (IOException e) {
