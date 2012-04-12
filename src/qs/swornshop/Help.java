@@ -51,6 +51,7 @@ public class Help {
 			), new String[] {
 				"§BWarning:§F Once you add an item to a shop, you cannot remove it."
 			}));
+	public static final CommandHelp remove = new CommandHelp("shop remove", "rm", "<item-name>", "returns 2/3 the quantity of the item to you, the rest is lost");
 	public static final CommandHelp restock = new CommandHelp("shop restock", "r", null, "restock this shop with your held item");
 	public static final CommandHelp set = new CommandHelp("shop set", null, "<item> <$buy> <$sell>", "change an item's price",
 			CommandHelp.args(
@@ -113,6 +114,7 @@ public class Help {
 	 */
 	public static final String[] indexOwner = {
 		add.toIndexString(),
+		remove.toIndexString(),
 		restock.toIndexString(),
 		set.toIndexString(),
 		sign.toIndexString()
@@ -170,6 +172,7 @@ public class Help {
 		commands.put("sell", sell);
 		
 		commands.put("add", add);
+		commands.put("remove", remove);
 		commands.put("restock", restock);
 		commands.put("set", set);
 		commands.put("sign", sign);
@@ -192,6 +195,7 @@ public class Help {
 		commands.put("s", sell);
 		
 		commands.put("ad", add);
+		commands.put("rm", remove);
 		commands.put("+", add);
 		commands.put("r", restock);
 

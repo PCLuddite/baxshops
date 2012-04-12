@@ -12,6 +12,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.ArrayDeque;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -122,7 +123,7 @@ public class Main extends JavaPlugin implements Listener {
 		} else{
 			log.info("Shops could not be loaded. If this is the first launch of the plugin, " +
 					"this is expected. If not, your data files may be corrupt. Try replacing " +
-					"state.dat with your backup (state.dat_old)");
+					"state.dat with one of the .dat files in the backups folder)");
 		}
 		
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
@@ -130,7 +131,9 @@ public class Main extends JavaPlugin implements Listener {
 			public void run() {
 				saveAll();
 			}
-		}, 6000L, 36000L);
+		}, 6000L, 36000L); 
+		//runs an initial save 5 mins after starting, than a recurring save every 30 mintes
+		//after the first save
 	}
 	
 	@Override
@@ -147,11 +150,13 @@ public class Main extends JavaPlugin implements Listener {
 			if (action.equalsIgnoreCase("save")) {
 				if (!(sender instanceof Player) || sender.hasPermission("swornshop.admin"))
 					saveAll();
+				sender.sendMessage("§bShops successfully saved");
 				return true;
 				
 			} else if (action.equalsIgnoreCase("backup")) {
 				if (!(sender instanceof Player) || sender.hasPermission("swornshop.admin"))
 					backup();
+				sender.sendMessage("§bShops successfully backed up state.dat");
 				return true;
 				
 			}
@@ -185,7 +190,7 @@ public class Main extends JavaPlugin implements Listener {
 				Location locUnder = pl.getLocation();
 				locUnder.setY(locUnder.getY() - 1);
 				Block b = loc.getBlock();
-				Block blockUnder = loc.getBlock();
+				Block blockUnder = locUnder.getBlock();
 				if (blockUnder.getTypeId() == 0 ||
 						blockUnder.getTypeId() == 46){
 					sendError(pl, "This is not a valid block to place a shop on!");
@@ -492,6 +497,54 @@ public class Main extends JavaPlugin implements Listener {
 				SellRequest request = new SellRequest(shop, req, pl.getName());
 				sendNotification(shop.owner, request);
 				
+			} else if (action.equalsIgnoreCase("remove") || action.equalsIgnoreCase("rm")){
+				if (!selection.isOwner) {
+					sendError(pl, "You cannot remove items from this shop");
+					return true;
+				}
+				if (args.length < 2) {
+					sendError(pl, Help.set.toUsageString());
+					return true;
+				}
+				
+				Shop shop = selection.shop;
+				ShopEntry entry;
+				try {
+					int index = Integer.parseInt(args[1]);
+					entry = shop.getEntryAt(index - 1);
+				} catch (NumberFormatException e) {
+					Long item = getItemFromAlias(args[1]);
+					if (item == null) {
+						sendError(pl, "That item alias does not exist");
+						return true;
+					}
+					int id = (int) (item >> 16);
+					int damage = (short) (item & 0xFFFF);
+					entry = shop.findEntry(id, damage);
+				} catch (IndexOutOfBoundsException e) {
+					sendError(pl, "That item is not in this shop");
+					return true;
+				}
+				if (entry == null) {
+					sendError(pl, "That item is not in this shop");
+					return true;
+				}
+				if (entry.item.getAmount() < 3 && entry.item.getAmount() != 0 && !shop.isInfinite) {
+					sendError(pl, "The quantity of an item must be at least 3 for you to remove it");
+					return true;
+				}
+				
+				
+				entry.item.setAmount((int) (entry.item.getAmount() / 3) * 2);
+				if(!shop.isInfinite){
+					pl.getInventory().addItem(entry.item);
+				}
+				
+				if (!shop.inventory.remove(entry)) {
+					log.info("item removal failed");
+				}
+				pl.sendMessage("§bThe item was removed");
+				return true;
 			} else if (action.equalsIgnoreCase("pending") ||
 					action.equalsIgnoreCase("p") ||
 					action.equalsIgnoreCase("notifications") ||
@@ -1045,7 +1098,15 @@ public class Main extends JavaPlugin implements Listener {
 	public boolean backup() {
 		File stateLocation = new File(getDataFolder(), "shops.dat");
 		if (stateLocation.exists()) {
-			File backup = new File(getDataFolder(), "shops.dat_old");
+			Date currentDate = new Date();
+			File backupFolder = new File(getDataFolder(), "backups");
+			if(!backupFolder.exists()){
+				backupFolder.mkdir();
+			}
+			
+			File backup = new File(getDataFolder(), "backups/-" + currentDate.getTime() + "-.dat");
+			
+			
 			try {
 				InputStream in = new FileInputStream(stateLocation);
 				OutputStream out = new FileOutputStream(backup);
@@ -1064,6 +1125,31 @@ public class Main extends JavaPlugin implements Listener {
 				log.warning("Backup failed");
 				e.printStackTrace();
 				return false;
+			}
+			File[] backups = backupFolder.listFiles();
+			if ((getConfig().getInt("Backups") > 0) && backups.length >= getConfig().getInt("Backups")) {
+				int i = 0;
+				File delete = null;
+				long leastRecent = Long.MAX_VALUE;
+				while (i < backups.length) {
+					if (!backups[i].isHidden()) {
+						String[] sTime = backups[i].getName().split("-");
+						try {
+							long compare = Long.parseLong(sTime[1]);
+							if (compare < leastRecent && compare != currentDate.getTime()) {
+								leastRecent = compare;
+								delete = backups[i];
+							}
+						} catch (NumberFormatException e) {
+
+						}
+					}
+					i++;
+				}
+				if (delete.exists() && delete != null) {
+					delete.delete();
+				}
+				
 			}
 			return true;
 		}

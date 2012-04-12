@@ -15,6 +15,7 @@ Max purchase: -1
 Distance: 3
 
 # Number of backups to keep. Set this to -1 to never delete old backups
-Backups: 5
+# Please delete all your backups if you chose to modify this after creating many backups
+Backups: -1
 
 
