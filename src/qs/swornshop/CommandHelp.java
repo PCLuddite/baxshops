@@ -133,7 +133,7 @@ public class CommandHelp {
 		}
 		h.add(b.toString());
 		if (alias != null)
-			h.add("§BAlias: §F" + alias);
+			h.add("§BAliases: §F" + alias);
 		if (help != null) {
 			h.add("");
 			h.addAll(help);
