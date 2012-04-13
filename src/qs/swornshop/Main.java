@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -1098,23 +1099,42 @@ public class Main extends JavaPlugin implements Listener {
 	public boolean backup() {
 		File stateLocation = new File(getDataFolder(), "shops.dat");
 		if (stateLocation.exists()) {
-			Date currentDate = new Date();
+			long timestamp = new Date().getTime();
 			File backupFolder = new File(getDataFolder(), "backups");
-			if(!backupFolder.exists()){
-				backupFolder.mkdir();
+			if (!backupFolder.exists()) backupFolder.mkdirs();
+			
+			File[] backups = backupFolder.listFiles(new FilenameFilter() {
+				@Override
+				public boolean accept(File f, String name) {
+					return name.endsWith(".dat");
+				}
+			});
+			int b = getConfig().getInt("Backups");
+			if (b > 0 && backups.length >= b) {
+				File delete = null;
+				long oldest = Long.MAX_VALUE;
+				for (File f : backups) {
+					String name = f.getName();
+					int i = name.indexOf('.');
+					try {
+						long compare = Long.parseLong(name.substring(0, i));
+						if (compare < oldest) {
+							oldest = compare;
+							delete = f;
+						}
+					} catch (NumberFormatException e) { }
+				}
+				if (delete != null) delete.delete();
 			}
 			
-			File backup = new File(getDataFolder(), "backups/-" + currentDate.getTime() + "-.dat");
-			
-			
 			try {
+				File backup = new File(getDataFolder(), String.format("backups/%d.dat", timestamp));
 				InputStream in = new FileInputStream(stateLocation);
 				OutputStream out = new FileOutputStream(backup);
 				byte[] buf = new byte[1024];
 				int i;
-				while ((i = in.read(buf)) > 0) {
+				while ((i = in.read(buf)) > 0)
 					out.write(buf, 0, i);
-				}
 				in.close();
 				out.close();
 			} catch (FileNotFoundException e) {
@@ -1125,31 +1145,6 @@ public class Main extends JavaPlugin implements Listener {
 				log.warning("Backup failed");
 				e.printStackTrace();
 				return false;
-			}
-			File[] backups = backupFolder.listFiles();
-			if ((getConfig().getInt("Backups") > 0) && backups.length >= getConfig().getInt("Backups")) {
-				int i = 0;
-				File delete = null;
-				long leastRecent = Long.MAX_VALUE;
-				while (i < backups.length) {
-					if (!backups[i].isHidden()) {
-						String[] sTime = backups[i].getName().split("-");
-						try {
-							long compare = Long.parseLong(sTime[1]);
-							if (compare < leastRecent && compare != currentDate.getTime()) {
-								leastRecent = compare;
-								delete = backups[i];
-							}
-						} catch (NumberFormatException e) {
-
-						}
-					}
-					i++;
-				}
-				if (delete.exists() && delete != null) {
-					delete.delete();
-				}
-				
 			}
 			return true;
 		}
