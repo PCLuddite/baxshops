@@ -19,5 +19,3 @@ Backups: -1
 
 Lollipops:
   tastiness: 80 # default tastiness (0-100)
-  radius: 0.2 # (in blocks)
-  thickness: 0.05 # (in blocks)
