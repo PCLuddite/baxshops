@@ -338,8 +338,7 @@ public class Main extends JavaPlugin implements Listener {
 					int damage = (short) (item & 0xFFFF);
 					entry = shop.findEntry(id, damage);
 				} catch (IndexOutOfBoundsException e) {
-					sendError(pl, "That item is not in this shop");
-					return true;
+					entry = null;
 				}
 				
 				if (entry == null) {
@@ -368,6 +367,10 @@ public class Main extends JavaPlugin implements Listener {
 				
 			} else if (action.equalsIgnoreCase("buy") ||
 					action.equalsIgnoreCase("b")) {
+				if (!pl.hasPermission("swornshop.buy")) {
+					sendError(pl, "You cannot buy items");
+					return true;
+				}
 				if (args.length < 2) {
 					sendError(pl, Help.buy.toUsageString());
 					return true;
@@ -412,8 +415,7 @@ public class Main extends JavaPlugin implements Listener {
 					short damage = (short) (item & 0xFFFF);
 					entry = shop.findEntry(id, damage);
 				} catch (IndexOutOfBoundsException e) {
-					sendError(pl, "That item is not in this shop");
-					return true;
+					entry = null;
 				}
 				if (entry == null) {
 					sendError(pl, "That item is not in this shop");
@@ -461,6 +463,10 @@ public class Main extends JavaPlugin implements Listener {
 				
 			} else if (action.equalsIgnoreCase("sell") ||
 					action.equalsIgnoreCase("s")) {
+				if (!pl.hasPermission("swornshop.sell")) {
+					sendError(pl, "You cannot sell items");
+					return true;
+				}
 				if (selection == null) {
 					sendError(pl, "You must select a shop");
 					return true;
@@ -499,7 +505,7 @@ public class Main extends JavaPlugin implements Listener {
 				sendNotification(shop.owner, request);
 				
 			} else if (action.equalsIgnoreCase("remove") || action.equalsIgnoreCase("rm")){
-				if (!selection.isOwner) {
+				if (!selection.isOwner && !pl.hasPermission("swornshop.admin")) {
 					sendError(pl, "You cannot remove items from this shop");
 					return true;
 				}
@@ -523,28 +529,20 @@ public class Main extends JavaPlugin implements Listener {
 					int damage = (short) (item & 0xFFFF);
 					entry = shop.findEntry(id, damage);
 				} catch (IndexOutOfBoundsException e) {
-					sendError(pl, "That item is not in this shop");
-					return true;
+					entry = null;
 				}
 				if (entry == null) {
 					sendError(pl, "That item is not in this shop");
 					return true;
 				}
-				if (entry.item.getAmount() < 3 && entry.item.getAmount() != 0 && !shop.isInfinite) {
-					sendError(pl, "The quantity of an item must be at least 3 for you to remove it");
-					return true;
-				}
 				
-				
-				entry.item.setAmount((int) (entry.item.getAmount() / 3) * 2);
-				if(!shop.isInfinite){
+				if (entry.item.getAmount() > 0 && !shop.isInfinite) {
+					entry.item.setAmount(entry.item.getAmount() * 2 / 3);
 					pl.getInventory().addItem(entry.item);
 				}
 				
-				if (!shop.inventory.remove(entry)) {
-					log.info("item removal failed");
-				}
-				pl.sendMessage("§bThe item was removed");
+				shop.inventory.remove(entry);
+				pl.sendMessage(String.format("§B%s§F was removed from this shop", getItemName(entry.item)));
 				return true;
 			} else if (action.equalsIgnoreCase("pending") ||
 					action.equalsIgnoreCase("p") ||

@@ -114,9 +114,9 @@ public class Help {
 	 */
 	public static final String[] indexOwner = {
 		add.toIndexString(),
-		remove.toIndexString(),
 		restock.toIndexString(),
 		set.toIndexString(),
+		remove.toIndexString(),
 		sign.toIndexString()
 	};
 
