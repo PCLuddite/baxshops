@@ -54,6 +54,8 @@ public class Help {
 	public static final CommandHelp remove = new CommandHelp("shop remove", "rm", "<item>", "remove an item and get 2/3 back",
 			CommandHelp.arg("item", "the name or entry number of the item"));
 	public static final CommandHelp restock = new CommandHelp("shop restock", "r", null, "restock this shop with your held item");
+	public static final CommandHelp restockall = new CommandHelp("shop restockall", null, null, 
+			"restocks using all items of the same type");
 	public static final CommandHelp set = new CommandHelp("shop set", null, "<item> <$buy> <$sell>", "change an item's price",
 			CommandHelp.args(
 				"item", "the ID or name of the item to modify",
@@ -116,6 +118,7 @@ public class Help {
 	public static final String[] indexOwner = {
 		add.toIndexString(),
 		restock.toIndexString(),
+		restockall.toIndexString(),
 		set.toIndexString(),
 		remove.toIndexString(),
 		sign.toIndexString()
@@ -175,6 +178,7 @@ public class Help {
 		commands.put("add", add);
 		commands.put("remove", remove);
 		commands.put("restock", restock);
+		commands.put("restockall", restockall);
 		commands.put("set", set);
 		commands.put("sign", sign);
 

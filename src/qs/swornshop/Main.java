@@ -311,6 +311,46 @@ public class Main extends JavaPlugin implements Listener {
 				entry.setAmount(entry.quantity + stack.getAmount());
 				pl.setItemInHand(null);
 				
+			} else if (action.equalsIgnoreCase("restockall")) {
+				if (selection == null) {
+					sendError(pl, "You must select a shop");
+					return true;
+				}
+				if (!selection.isOwner && !pl.hasPermission("swornshop.admin") && selection.shop.isInfinite) {
+					sendError(pl, "You cannot restock this shop");
+					return true;
+				}
+				
+				ItemStack stack = pl.getItemInHand();
+				if (stack == null || stack.getTypeId() == 0) {
+					sendError(pl, "You must be holding the item you wish to add to this shop");
+					return true;
+				}
+				ShopEntry entry = selection.shop.findEntry(stack);
+				if (entry == null) {
+					sendError(pl, "That item has not been added to this shop");
+					sendError(pl, "Use /shop add to add a new item");
+					return true;
+				}
+				Inventory inv = pl.getInventory();
+				int i = 0;
+				int addSize = 0;
+				while (i < inv.getSize()){
+				/*	if (e.itemID == id &&
+							e.itemDamage == damage) */
+					if(inv.getItem(i) != null &&
+							inv.getItem(i).getTypeId() != 0 &&
+							inv.getItem(i).getTypeId() == entry.itemID &&
+							inv.getItem(i).getDurability() == entry.itemDamage){
+						
+						addSize = addSize + inv.getItem(i).getAmount();
+						inv.clear(i);
+						
+					}
+					i++;
+				}
+				entry.setAmount(entry.quantity + addSize);
+				
 			} else if (action.equalsIgnoreCase("set")) {
 				if (!selection.isOwner && !pl.hasPermission("swornshop.admin")) {
 					sendError(pl, "You cannot change this shop's prices");
@@ -876,7 +916,6 @@ public class Main extends JavaPlugin implements Listener {
 			pl.sendMessage("§7Use §3/shop claim§7 to claim and remove this notification");
 		else notifications.removeFirst();
 	}
-
 	/**
 	 * Sends a notification to a player.
 	 * @param pl the player
