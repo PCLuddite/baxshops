@@ -41,11 +41,11 @@ public class SaleNotification implements Notification {
 	public String getMessage(Player player) {
 		return player == null || !player.getName().equals(seller) ?
 			String.format("%s accepted %s's request to sell §B%d %s§F for §B$%.2f§F",
-					shop.owner, seller, entry.item.getAmount(), Main.instance.getItemName(entry),
-					entry.refundPrice * entry.item.getAmount()) :
+					shop.owner, seller, entry.quantity, Main.instance.getItemName(entry),
+					entry.refundPrice * entry.quantity) :
 			String.format("%s accepted your request to sell §B%d %s§F for §B$%.2f§F",
-					shop.owner, entry.item.getAmount(), Main.instance.getItemName(entry),
-					entry.refundPrice * entry.item.getAmount());
+					shop.owner, entry.quantity, Main.instance.getItemName(entry),
+					entry.refundPrice * entry.quantity);
 	}
 
 }

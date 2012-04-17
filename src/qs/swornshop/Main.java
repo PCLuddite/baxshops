@@ -15,7 +15,6 @@ import java.io.OutputStream;
 import java.util.ArrayDeque;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -28,7 +27,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -278,12 +276,12 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, "Use /shop restock to restock");
 					return true;
 				}
-				if (selection.shop.isInfinite)
-					stack.setAmount(-8);
 				ShopEntry newEntry = new ShopEntry();
 				newEntry.setItem(stack);
 				newEntry.retailPrice = retailAmount;
 				newEntry.refundPrice = refundAmount;
+				if (selection.shop.isInfinite)
+					newEntry.quantity = -8;
 				selection.shop.addEntry(newEntry);
 				
 				pl.setItemInHand(null);
@@ -310,7 +308,7 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, "Use /shop add to add a new item");
 					return true;
 				}
-				entry.setAmount(entry.item.getAmount() + stack.getAmount());
+				entry.setAmount(entry.quantity + stack.getAmount());
 				pl.setItemInHand(null);
 				
 			} else if (action.equalsIgnoreCase("set")) {
@@ -421,17 +419,17 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, "That item is not in this shop");
 					return true;
 				}
-				if (entry.item.getAmount() < amount && !shop.isInfinite) {
+				if (entry.quantity < amount && !shop.isInfinite) {
 					sendError(pl, "There are not enough of that item in the shop");
 					return true;
 				}
 				
-				String itemName = getItemName(entry.item);
+				String itemName = getItemName(entry);
 				if (!econ.has(pl.getName(), amount * entry.retailPrice)) {
 					sendError(pl, "You do not have sufficient funds");
 					return true;
 				}
-				ItemStack purchased = entry.item.clone();
+				ItemStack purchased = entry.toItemStack();
 				purchased.setAmount(amount);
 				
 				HashMap<Integer, ItemStack> overflow =  pl.getInventory().addItem(purchased);
@@ -451,9 +449,9 @@ public class Main extends JavaPlugin implements Listener {
 							amount, itemName, amount * entry.retailPrice));
 				}
 				econ.withdrawPlayer(pl.getName(), (amount - refunded) * entry.retailPrice);
-				if (!shop.isInfinite) {
-					entry.item.setAmount(entry.item.getAmount() - (amount - refunded));
-				}
+				if (!shop.isInfinite)
+					entry.quantity = entry.quantity - (amount - refunded);
+				
 				econ.depositPlayer(shop.owner, (amount - refunded) * entry.retailPrice);
 				
 				ShopEntry e = new ShopEntry();
@@ -536,13 +534,14 @@ public class Main extends JavaPlugin implements Listener {
 					return true;
 				}
 				
-				if (entry.item.getAmount() > 0 && !shop.isInfinite) {
-					entry.item.setAmount(entry.item.getAmount() * 2 / 3);
-					pl.getInventory().addItem(entry.item);
+				if (entry.quantity > 0 && !shop.isInfinite) {
+					entry.quantity = entry.quantity * 2 / 3;
+					pl.getInventory().addItem(entry.toItemStack());
 				}
 				
 				shop.inventory.remove(entry);
-				pl.sendMessage(String.format("§B%s§F was removed from this shop", getItemName(entry.item)));
+				pl.sendMessage(String.format("§B%s§F was removed from this shop", 
+						getItemName(entry)));
 				return true;
 			} else if (action.equalsIgnoreCase("pending") ||
 					action.equalsIgnoreCase("p") ||
@@ -1063,13 +1062,6 @@ public class Main extends JavaPlugin implements Listener {
 		State state = new State();
 		for (Entry<Location, Shop> entry : shops.entrySet()) {
 			Shop shop = entry.getValue();
-			for (ShopEntry e : shop.inventory) {
-				e.quantity = e.item.getAmount();
-				Map<Enchantment, Integer> enchantments = e.item.getEnchantments();
-				e.enchantments = new HashMap<Integer, Integer>(enchantments.size());
-				for (Entry<Enchantment, Integer> en : enchantments.entrySet())
-					e.enchantments.put(en.getKey().getId(), en.getValue());
-			}
 			state.shops.put(new BlockLocation(entry.getKey()), shop);
 		}
 		state.pending = this.pending;

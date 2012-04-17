@@ -1,6 +1,7 @@
 package qs.swornshop.notification;
 
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import qs.swornshop.Main;
 import qs.swornshop.Shop;
@@ -40,20 +41,21 @@ public class SaleRejection implements Claimable {
 	public String getMessage(Player player) {
 		return player == null || !player.getName().equals(seller) ?
 			String.format("%s rejected %s's request to sell §B%d %s§F for §B$%.2f§F",
-					shop.owner, seller, entry.item.getAmount(), Main.instance.getItemName(entry),
-					entry.refundPrice * entry.item.getAmount()) :
+					shop.owner, seller, entry.quantity, Main.instance.getItemName(entry),
+					entry.refundPrice * entry.quantity) :
 			String.format("%s rejected your request to sell §B%d %s§F for §B$%.2f§F",
-					shop.owner, entry.item.getAmount(), Main.instance.getItemName(entry),
-					entry.refundPrice * entry.item.getAmount());
+					shop.owner, entry.quantity, Main.instance.getItemName(entry),
+					entry.refundPrice * entry.quantity);
 	}
 
 	@Override
 	public boolean claim(Player player) {
-		if (!Main.inventoryFitsItem(player, entry.item)){
+		ItemStack item = entry.toItemStack();
+		if (!Main.inventoryFitsItem(player, item)){
 			Main.sendError(player, "Your inventory is full");
 			return false;
 		}
-		player.getInventory().addItem(entry.item);
+		player.getInventory().addItem(item);
 		return true;
 	}
 

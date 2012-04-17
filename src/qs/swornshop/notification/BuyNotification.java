@@ -41,11 +41,11 @@ public class BuyNotification implements Notification {
 	public String getMessage(Player player) {
 		return player == null || !player.getName().equals(shop.owner) ?
 			String.format("%s bought §B%d %s§F from %s for §B$%.2f§F",
-					buyer, entry.item.getAmount(), Main.instance.getItemName(entry),
-					shop.owner, entry.retailPrice * entry.item.getAmount()) :
+					buyer, entry.quantity, Main.instance.getItemName(entry),
+					shop.owner, entry.retailPrice * entry.quantity) :
 			String.format("%s bought §B%d %s§F from you for §B$%.2f§F",
-					buyer, entry.item.getAmount(), Main.instance.getItemName(entry),
-					entry.retailPrice * entry.item.getAmount());
+					buyer, entry.quantity, Main.instance.getItemName(entry),
+					entry.retailPrice * entry.quantity);
 	}
 
 }

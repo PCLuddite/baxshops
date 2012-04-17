@@ -6,6 +6,7 @@ import java.util.Date;
 import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import qs.swornshop.Main;
 import qs.swornshop.Shop;
@@ -56,21 +57,22 @@ public class SellRequest implements Request, TimedNotification {
 	public String getMessage(Player player) {
 		return player == null || !player.getName().equals(shop.owner) ?
 			String.format("%s wants to sell %s §B%d %s§F for §B$%.2f§F",
-					seller, shop.owner, entry.item.getAmount(), Main.instance.getItemName(entry),
-					entry.refundPrice * entry.item.getAmount()) :
+					seller, shop.owner, entry.quantity, Main.instance.getItemName(entry),
+					entry.refundPrice * entry.quantity) :
 			String.format("%s wants to sell you §B%d %s§F for §B$%.2f§F",
-					seller, entry.item.getAmount(), Main.instance.getItemName(entry),
-					entry.refundPrice * entry.item.getAmount());
+					seller, entry.quantity, Main.instance.getItemName(entry),
+					entry.refundPrice * entry.quantity);
 	}
 	
 	@Override
 	public boolean accept(Player player) {
-		if (!Main.inventoryFitsItem(player, entry.item)){
+		ItemStack item = entry.toItemStack();
+		if (!Main.inventoryFitsItem(player, item)){
 			Main.sendError(player, "Your inventory is full");
 			return false;
 		}
 		Economy econ = Main.econ;
-		float price = entry.item.getAmount() * entry.refundPrice;
+		float price = entry.quantity * entry.refundPrice;
 		if (!econ.has(shop.owner, price)) {
 			Main.sendError(player, "You do not have sufficient funds to accept this offer");
 			return false;
@@ -78,7 +80,7 @@ public class SellRequest implements Request, TimedNotification {
 		econ.withdrawPlayer(shop.owner, price);
 		econ.depositPlayer(seller, price);
 		
-		player.getInventory().addItem(entry.item);
+		player.getInventory().addItem(item);
 		
 		SaleNotification n = new SaleNotification(shop, entry, seller);
 		Main.instance.sendNotification(seller, n);

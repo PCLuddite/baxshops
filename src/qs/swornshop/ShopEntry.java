@@ -2,7 +2,6 @@ package qs.swornshop;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.enchantments.Enchantment;
@@ -24,11 +23,6 @@ public class ShopEntry implements Serializable {
 	 */
 	public float refundPrice = -1;
 	/**
-	 * The item stack associated with this shop entry
-	 */
-	public transient ItemStack item;
-	
-	/**
 	 * The item's quantity
 	 */
 	public int quantity;
@@ -44,26 +38,30 @@ public class ShopEntry implements Serializable {
 	/**
 	 * The item's enchantments
 	 */
-	public HashMap<Integer, Integer> enchantments;
+	public HashMap<Integer, Integer> enchantments = new HashMap<Integer, Integer>();
 	
 	/**
 	 * Sets the item associated with this shop entry.
 	 */
 	public void setItem(ItemStack item) {
-		this.item = item;
+		this.quantity = item.getAmount();
 		this.itemID = item.getTypeId();
 		this.itemDamage = item.getDurability();
+		this.extractEnchantments(item);
+	}
+	
+	protected void extractEnchantments(ItemStack item) {
+		for (Entry<Enchantment, Integer> entry : item.getEnchantments().entrySet())
+			enchantments.put(entry.getKey().getId(), entry.getValue());
 	}
 	
 	public String toString(int index) {
-		int quantity = item.getAmount();
 		String name = Main.instance.getItemName(this);
-		Map<Enchantment, Integer> enchantments = item.getEnchantments();
 		if (enchantments.size() > 0) {
 			name = "§D" + name + " (";
-			for (Entry<Enchantment, Integer> e : enchantments.entrySet()) {
-				name += e.getKey().getName().substring(0, 3) + e.getValue().toString() + ", ";
-			}
+			for (Entry<Integer, Integer> e : enchantments.entrySet())
+				name += Enchantment.getById(e.getKey()).getName().substring(0, 3) + 
+						e.getValue().toString() + ", ";
 			name = name.substring(0, name.length() - 2) + ")";
 		}
 		return refundPrice < 0 ?
@@ -90,9 +88,17 @@ public class ShopEntry implements Serializable {
 	 * @param amount the quantity of the item
 	 */
 	public void setAmount(int amount) {
-		if (item.getAmount() == 0)
-			item = new ItemStack(itemID, amount, (short) itemDamage);
-		else
-			item.setAmount(amount);
+		this.quantity = amount;
+	}
+
+	/**
+	 * Converts this entry to an item stack.
+	 * @return an item stack
+	 */
+	public ItemStack toItemStack() {
+		ItemStack i = new ItemStack(itemID, quantity, (short) itemDamage);
+		for (Entry<Integer, Integer> entry : enchantments.entrySet())
+			i.addUnsafeEnchantment(Enchantment.getById(entry.getKey()), entry.getValue());
+		return i;
 	}
 }

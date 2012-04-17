@@ -3,15 +3,11 @@ package qs.swornshop.serialization;
 import java.io.Serializable;
 import java.util.ArrayDeque;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.Location;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemStack;
 
 import qs.swornshop.Shop;
-import qs.swornshop.ShopEntry;
 import qs.swornshop.notification.Notification;
 
 /**
@@ -37,18 +33,8 @@ public class State implements Serializable {
 	public HashMap<Location, Shop> getShops() {
 		HashMap<Location, Shop> deserialized = new HashMap<Location, Shop>();
 		for (Entry<BlockLocation, Shop> entry : shops.entrySet()) {
-			Location loc = entry.getKey().toLocation();
 		    Shop shop = entry.getValue();
-		    shop.location = loc;
-		    Map<org.bukkit.enchantments.Enchantment, Integer> enchantments;
-		    for (ShopEntry e : shop.inventory) {
-		    	e.item = new ItemStack(e.itemID, e.quantity, (short) e.itemDamage);
-		    	enchantments = new HashMap<Enchantment, Integer>(e.enchantments.size());
-		    	for (Entry<Integer, Integer> en : e.enchantments.entrySet())
-		    		enchantments.put(Enchantment.getById(en.getKey()), en.getValue());
-		    	e.item.addEnchantments(enchantments);
-		    }
-		   deserialized.put(loc, shop);
+		    deserialized.put(shop.location = entry.getKey().toLocation(), shop);
 		}
 		return deserialized;
 	}
