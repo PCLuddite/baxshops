@@ -693,7 +693,13 @@ public class Main extends JavaPlugin implements Listener {
 		
 		Shop shop = shops.get(b.getLocation());
 		Player pl = event.getPlayer();
-		boolean isOwner = shop.owner.equals(pl.getName());
+		if(shop == null){
+			return;
+		}
+		Boolean isOwner = shop.owner.equals(pl.getName());
+		if(isOwner == null){
+			isOwner = false;
+		}
 		
 		ShopSelection selection = selectedShops.get(pl);
 		if (selection == null) {
