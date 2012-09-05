@@ -1,4 +1,4 @@
-package qs.swornshop.notification;
+package qs.shops.notification;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -8,9 +8,9 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import qs.swornshop.Main;
-import qs.swornshop.Shop;
-import qs.swornshop.ShopEntry;
+import qs.shops.Main;
+import qs.shops.Shop;
+import qs.shops.ShopEntry;
 
 /**
  * A SellRequest notifies a shop owner that someone has requested

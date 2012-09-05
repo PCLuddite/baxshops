@@ -1,4 +1,4 @@
-package qs.swornshop;
+package qs.shops;
 
 import java.io.Serializable;
 import java.util.HashMap;

@@ -1,11 +1,11 @@
-package qs.swornshop.notification;
+package qs.shops.notification;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import qs.swornshop.Main;
-import qs.swornshop.Shop;
-import qs.swornshop.ShopEntry;
+import qs.shops.Main;
+import qs.shops.Shop;
+import qs.shops.ShopEntry;
 
 /**
  * A SaleRejection notifies a seller that his/her offer was rejected.

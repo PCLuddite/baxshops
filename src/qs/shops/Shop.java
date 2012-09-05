@@ -1,9 +1,12 @@
-package qs.swornshop;
+package qs.shops;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.bukkit.Location;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -75,7 +78,20 @@ public class Shop implements Serializable {
 	 * @return whether the shop contains the item
 	 */
 	public boolean containsItem(ItemStack stack) {
-		return containsItem(stack.getTypeId(), stack.getDurability());
+		//return containsItem(stack.getTypeId(), stack.getDurability());
+		for(ShopEntry e : inventory){
+			if(e.itemID == stack.getTypeId() &&
+					e.itemDamage == stack.getDurability()){
+				HashMap<Integer, Integer> compare = new HashMap<Integer, Integer>();
+				for(Map.Entry<Enchantment, Integer> entry : stack.getEnchantments().entrySet()){
+					compare.put(entry.getKey().getId(), entry.getValue());
+				}
+				if(compare.equals(e.enchantments)){
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	/**
 	 * Checks if this shop's inventory contains an item.
@@ -99,7 +115,19 @@ public class Shop implements Serializable {
 	 * @return the item's entry, or null
 	 */
 	public ShopEntry findEntry(ItemStack stack) {
-		return findEntry(stack.getTypeId(), stack.getDurability());
+		for(ShopEntry e : inventory){
+			if(e.itemID == stack.getTypeId() &&
+					e.itemDamage == stack.getDurability()){
+				HashMap<Integer, Integer> compare = new HashMap<Integer, Integer>();
+				for(Map.Entry<Enchantment, Integer> entry : stack.getEnchantments().entrySet()){
+					compare.put(entry.getKey().getId(), entry.getValue());
+				}
+				if(compare.equals(e.enchantments)){
+					return e;
+				}
+			}
+		}
+		return null;
 	}
 	/**
 	 * Find an entry for an item in this shop's inventory.

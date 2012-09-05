@@ -1,7 +1,7 @@
-name: SwornShop
-main: qs.swornshop.Main
-description: Shop plugin
-version: 1.0
+name: Shops
+main: qs.shops.Main
+description: A plugin that ads shops to minecraft using vaults economy feature
+version: 2.0
 commands:
     shop:
         description: manage shops
@@ -10,21 +10,21 @@ commands:
           §6Help: §f/shop help
         aliases: s
 permissions:
-    swornshop.*:
-        description: All SwornShop permissions
+    shops.*:
+        description: All Shops permissions
         default: op
         children:
             shops.admin: true
             shops.trader: true
-    swornshop.trader:
+    shops.trader:
         description: Allows you to buy and sell from shops
         default: true
         children:
-            swornshop.buy: true
-            swornshop.sell: true
-    swornshop.admin:
+            shops.buy: true
+            shops.sell: true
+    shops.admin:
         description: Allows you to create and remove shops
         default: op
-    swornshop.self:
+    shops.self:
         description: Allows you to manipulate your own shops as if they were others
         default: op

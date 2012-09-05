@@ -1,4 +1,4 @@
-package qs.swornshop;
+package qs.shops;
 
 import java.util.HashMap;
 
@@ -88,7 +88,7 @@ public class Help {
 	};
 	/**
 	 * An index of commands only usable by an admin (a player 
-	 * with the swornshop.admin permission)
+	 * with the shops.admin permission)
 	 */
 	public static final String[] indexAdmin = {
 		create.toIndexString(),
@@ -97,7 +97,7 @@ public class Help {
 	};
 	/**
 	 * An index of commands only usable by an admin (a player
-	 * with the swornshop.admin permission) who has selected
+	 * with the shops.admin permission) who has selected
 	 * a shop
 	 */
 	public static final String[] indexSelectedAdmin = {

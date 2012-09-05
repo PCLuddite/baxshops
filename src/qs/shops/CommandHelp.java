@@ -1,4 +1,4 @@
-package qs.swornshop;
+package qs.shops;
 
 import java.util.ArrayList;
 import java.util.Arrays;

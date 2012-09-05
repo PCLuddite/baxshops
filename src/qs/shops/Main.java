@@ -1,4 +1,4 @@
-package qs.swornshop;
+package qs.shops;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -41,13 +41,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import qs.swornshop.notification.BuyNotification;
-import qs.swornshop.notification.Claimable;
-import qs.swornshop.notification.Notification;
-import qs.swornshop.notification.Request;
-import qs.swornshop.notification.SellRequest;
-import qs.swornshop.serialization.BlockLocation;
-import qs.swornshop.serialization.State;
+import qs.shops.notification.BuyNotification;
+import qs.shops.notification.Claimable;
+import qs.shops.notification.Notification;
+import qs.shops.notification.Request;
+import qs.shops.notification.SellRequest;
+import qs.shops.serialization.BlockLocation;
+import qs.shops.serialization.State;
 
 public class Main extends JavaPlugin implements Listener {
 	
@@ -147,13 +147,13 @@ public class Main extends JavaPlugin implements Listener {
 			String action = args.length == 0 ? "" : args[0];
 			
 			if (action.equalsIgnoreCase("save")) {
-				if (!(sender instanceof Player) || sender.hasPermission("swornshop.admin"))
+				if (!(sender instanceof Player) || sender.hasPermission("shops.admin"))
 					saveAll();
 				sender.sendMessage("§bShops successfully saved");
 				return true;
 				
 			} else if (action.equalsIgnoreCase("backup")) {
-				if (!(sender instanceof Player) || sender.hasPermission("swornshop.admin"))
+				if (!(sender instanceof Player) || sender.hasPermission("shops.admin"))
 					backup();
 				sender.sendMessage("§bShops successfully backed up state.dat");
 				return true;
@@ -180,7 +180,7 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, Help.create.toUsageString());
 					return true;
 				}
-				if (!sender.hasPermission("swornshop.admin")) {
+				if (!sender.hasPermission("shops.admin")) {
 					sendError(pl, "You cannot create shops");
 					return true;
 				}
@@ -218,7 +218,7 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, "You must select a shop");
 					return true;
 				}
-				if (!pl.hasPermission("swornshop.admin") && !selection.isOwner) {
+				if (!pl.hasPermission("shops.admin") && !selection.isOwner) {
 					sendError(pl, "You cannot remove this shop");
 					return true;
 				}
@@ -245,7 +245,7 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, "You must select a shop");
 					return true;
 				}
-				if (!selection.isOwner && !pl.hasPermission("swornshop.admin")) {
+				if (!selection.isOwner && !pl.hasPermission("shops.admin")) {
 					sendError(pl, "You cannot add items to this shop");
 					return true;
 				}
@@ -292,7 +292,7 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, "You must select a shop");
 					return true;
 				}
-				if (!selection.isOwner && !pl.hasPermission("swornshop.admin") && selection.shop.isInfinite) {
+				if (!selection.isOwner && !pl.hasPermission("shops.admin") && selection.shop.isInfinite) {
 					sendError(pl, "You cannot restock this shop");
 					return true;
 				}
@@ -316,7 +316,7 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, "You must select a shop");
 					return true;
 				}
-				if (!selection.isOwner && !pl.hasPermission("swornshop.admin") && selection.shop.isInfinite) {
+				if (!selection.isOwner && !pl.hasPermission("shops.admin") && selection.shop.isInfinite) {
 					sendError(pl, "You cannot restock this shop");
 					return true;
 				}
@@ -352,7 +352,7 @@ public class Main extends JavaPlugin implements Listener {
 				entry.setAmount(entry.quantity + addSize);
 				
 			} else if (action.equalsIgnoreCase("set")) {
-				if (!selection.isOwner && !pl.hasPermission("swornshop.admin")) {
+				if (!selection.isOwner && !pl.hasPermission("shops.admin")) {
 					sendError(pl, "You cannot change this shop's prices");
 					return true;
 				}
@@ -405,7 +405,7 @@ public class Main extends JavaPlugin implements Listener {
 				
 			} else if (action.equalsIgnoreCase("buy") ||
 					action.equalsIgnoreCase("b")) {
-				if (!pl.hasPermission("swornshop.buy")) {
+				if (!pl.hasPermission("shops.buy")) {
 					sendError(pl, "You cannot buy items");
 					return true;
 				}
@@ -417,7 +417,7 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, "You must select a shop");
 					return true;
 				}
-				if (selection.isOwner && !pl.hasPermission("swornshop.self")) {
+				if (selection.isOwner && !pl.hasPermission("shops.self")) {
 					sendError(pl, "You cannot buy items from this shop");
 					return true;
 				}
@@ -501,7 +501,7 @@ public class Main extends JavaPlugin implements Listener {
 				
 			} else if (action.equalsIgnoreCase("sell") ||
 					action.equalsIgnoreCase("s")) {
-				if (!pl.hasPermission("swornshop.sell")) {
+				if (!pl.hasPermission("shops.sell")) {
 					sendError(pl, "You cannot sell items");
 					return true;
 				}
@@ -509,7 +509,7 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, "You must select a shop");
 					return true;
 				}
-				if (selection.isOwner && !pl.hasPermission("swornshop.self")) {
+				if (selection.isOwner && !pl.hasPermission("shops.self")) {
 					sendError(pl, "You cannot sell items to your own shop");
 					sendError(pl, "To add items, use /shop add");
 					return true;
@@ -543,7 +543,7 @@ public class Main extends JavaPlugin implements Listener {
 				sendNotification(shop.owner, request);
 				
 			} else if (action.equalsIgnoreCase("remove") || action.equalsIgnoreCase("rm")){
-				if (!selection.isOwner && !pl.hasPermission("swornshop.admin")) {
+				if (!selection.isOwner && !pl.hasPermission("shops.admin")) {
 					sendError(pl, "You cannot remove items from this shop");
 					return true;
 				}
@@ -594,7 +594,7 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, "You must select a shop");
 					return true;
 				}
-				if (!pl.hasPermission("swornshop.admin") && !selection.isOwner) {
+				if (!pl.hasPermission("shops.admin") && !selection.isOwner) {
 					sendError(pl, "You cannot change this sign's text");
 					return true;
 				}

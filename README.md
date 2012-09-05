@@ -1,4 +1,4 @@
-SwornShop
+Shops
 =========
 
-SwornShop is a shop plugin for Bukkit.
+Shops is a shop plugin for Bukkit.

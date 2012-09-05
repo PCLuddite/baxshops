@@ -1,4 +1,4 @@
-package qs.swornshop;
+package qs.shops;
 
 /**
  * A ShopSelection represents a user's selected shop.

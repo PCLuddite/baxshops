@@ -1,4 +1,4 @@
-package qs.swornshop.notification;
+package qs.shops.notification;
 
 import java.util.Date;
 

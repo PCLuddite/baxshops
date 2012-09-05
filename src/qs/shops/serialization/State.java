@@ -1,4 +1,4 @@
-package qs.swornshop.serialization;
+package qs.shops.serialization;
 
 import java.io.Serializable;
 import java.util.ArrayDeque;
@@ -7,8 +7,8 @@ import java.util.Map.Entry;
 
 import org.bukkit.Location;
 
-import qs.swornshop.Shop;
-import qs.swornshop.notification.Notification;
+import qs.shops.Shop;
+import qs.shops.notification.Notification;
 
 /**
  * State saves the whole state of the Shops plugin in a serializable class.

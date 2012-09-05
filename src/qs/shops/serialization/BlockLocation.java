@@ -1,10 +1,10 @@
-package qs.swornshop.serialization;
+package qs.shops.serialization;
 
 import java.io.Serializable;
 
 import org.bukkit.Location;
 
-import qs.swornshop.Main;
+import qs.shops.Main;
 
 /**
  * A BlockLocation is a Location suitable for serialization.
