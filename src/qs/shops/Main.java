@@ -851,6 +851,7 @@ public class Main extends JavaPlugin implements Listener {
 	 * @return the item's name
 	 */
 	public String getItemName(int id, int damage) {
+		
 		String name = itemNames.get((long) id << 16 | damage);
 		if (name == null) {
 			name = itemNames.get((long) id << 16);

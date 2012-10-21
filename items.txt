@@ -161,6 +161,27 @@
 122 Dragon Egg
 123 Redstone Lamp
 124 Redstone Lamp (Lit)
+125 Wooden Double Slab Block
+126 Wooden Slab Block
+127 Coacoa Pod
+128 Sandstone Stairs
+129 Emerald Ore
+130 Ender Chest
+131 Tripwire Hook
+132 Tripwire
+133 Emerald Block
+134 Spruce Wood Stairs
+135 Birch Wood Stairs
+136 Jungle Wood Stairs
+137 Command Block
+138 Beacon
+139 Cobblestone Wall
+140 Flower Pot
+141 Carrot Block
+142 Potatoe Block
+143 Wooden Button
+144 Head (block)
+145 Anvil
 256 Iron Shovel
 257 Iron Pickaxe
 258 Iron Axe
@@ -540,6 +561,21 @@
 383 Spawn Egg
 384 Bottle o' Enchanting
 385 Fire Charge
+386 Book and Quill
+387 Written Book
+388 Emerald
+389 Item Frame
+390 Flower Pot
+391 Carrot
+392 Potato
+393 Baked Potato
+394 Poisonous Potato
+395 Blank Map
+396 Golden Carrot
+397 Head
+398 Carrot on a Stick
+399 Nether Star
+400 Pumpkin Pie
 2256 Music Disk (C418 - 13)
 2257 Music Disk (C418 - cat)
 2258 Music Disk (C418 - blocks)

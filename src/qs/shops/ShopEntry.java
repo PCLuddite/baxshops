@@ -34,7 +34,7 @@ public class ShopEntry implements Serializable {
 	 * The item's damage value (durability)
 	 */
 	public int itemDamage;
-	
+
 	/**
 	 * The item's enchantments
 	 */
@@ -64,6 +64,7 @@ public class ShopEntry implements Serializable {
 						e.getValue().toString() + ", ";
 			name = name.substring(0, name.length() - 2) + ")";
 		}
+		
 		return refundPrice < 0 ?
 			(quantity == -8 ? 
 				String.format(
@@ -101,4 +102,5 @@ public class ShopEntry implements Serializable {
 			i.addUnsafeEnchantment(Enchantment.getById(entry.getKey()), entry.getValue());
 		return i;
 	}
+	
 }

@@ -82,6 +82,7 @@ public class Shop implements Serializable {
 		for(ShopEntry e : inventory){
 			if(e.itemID == stack.getTypeId() &&
 					e.itemDamage == stack.getDurability()){
+				
 				HashMap<Integer, Integer> compare = new HashMap<Integer, Integer>();
 				for(Map.Entry<Enchantment, Integer> entry : stack.getEnchantments().entrySet()){
 					compare.put(entry.getKey().getId(), entry.getValue());
