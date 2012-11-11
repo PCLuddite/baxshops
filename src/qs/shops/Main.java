@@ -43,6 +43,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import qs.shops.notification.BuyNotification;
 import qs.shops.notification.Claimable;
+import qs.shops.notification.LollipopNotification;
 import qs.shops.notification.Notification;
 import qs.shops.notification.Request;
 import qs.shops.notification.SellRequest;
@@ -701,7 +702,23 @@ public class Main extends JavaPlugin implements Listener {
 				int id = (int) (alias >> 16);
 				int damage = (int) (alias & 0xFFFF);
 				sender.sendMessage(String.format("%s is an alias for %d:%d", args[1], id, damage));
-				
+
+			} else if (action.equalsIgnoreCase("lollipop") || action.equalsIgnoreCase("lol")) {
+				double tastiness = LollipopNotification.DEFAULT_TASTINESS;
+				if (args.length > 1) {
+					if (args.length > 2) {
+						try {
+							tastiness = Double.parseDouble(args[2]);
+						} catch (NumberFormatException e) {
+							sendError(pl, "Invalid tastiness");
+							return true;
+						}
+					}
+					sendNotification(args[1], new LollipopNotification(pl.getName(), tastiness));
+					return true;
+				}
+				for (Player p : getServer().getOnlinePlayers())
+					sendNotification(p, new LollipopNotification(pl.getName(), tastiness));
 			} else if ((action.equalsIgnoreCase("help") ||
 					action.equalsIgnoreCase("h")) &&
 					args.length > 1) {

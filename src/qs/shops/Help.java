@@ -27,6 +27,11 @@ public class Help {
 			"or messages (e.g., an offer was accepted).",
 			"Use /shop accept and /shop reject on offers.");
 	
+	public static final CommandHelp lollipop = new CommandHelp("shop lollipop", "lol", "[player [tastiness]]", CommandHelp.args(
+				"player", "the player",
+				"tastiness", "the tastiness (0-100)"
+			));
+	
 	public static final CommandHelp accept = new CommandHelp("shop accept", "yes,a", null, "accept your most recent notification");
 	public static final CommandHelp claim = new CommandHelp("shop claim", "c", null, "claim your most recent notification");
 	public static final CommandHelp reject = new CommandHelp("shop reject", "no", null, "reject your most recent notification");

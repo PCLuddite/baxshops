@@ -16,6 +16,3 @@ Distance: 3
 # Number of backups to keep. Set this to -1 to never delete old backups
 # Please delete all your backups if you chose to modify this after creating many backups
 Backups: -1
-
-Lollipops:
-  tastiness: 80 # default tastiness (0-100)
