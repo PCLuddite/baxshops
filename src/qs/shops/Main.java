@@ -124,15 +124,15 @@ public class Main extends JavaPlugin implements Listener {
 					"this is expected. If not, your data files may be corrupt. Try replacing " +
 					"state.dat with one of the .dat files in the backups folder)");
 		}
-		
+
+		// run an initial save 5 minutes after starting, then a recurring save
+		// every 30 minutes after the first save
 		this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
 			@Override
 			public void run() {
 				saveAll();
 			}
-		}, 6000L, 36000L); 
-		//runs an initial save 5 mins after starting, than a recurring save every 30 mintes
-		//after the first save
+		}, 6000L, 36000L);
 	}
 	
 	@Override
@@ -174,17 +174,19 @@ public class Main extends JavaPlugin implements Listener {
 				Help.showHelp(pl, selection);
 				return true;
 			}
-			if (action.equalsIgnoreCase("create") || 
-					action.equalsIgnoreCase("mk")) {
-				if (args.length < 2) {
-					sendError(pl, Help.create.toUsageString());
-					return true;
+			if (action.equalsIgnoreCase("create") ||  action.equalsIgnoreCase("mk")) {
+				boolean user = sender.hasPermission("shops.owner");
+				boolean admin = sender.hasPermission("shops.admin"); 
+				if (admin) {
+					if (args.length < 2) {
+						sendError(pl, Help.create.toUsageString());
+						return true;
+					}
 				}
-				if (!sender.hasPermission("shops.admin")) {
+				if (!admin && !user) {
 					sendError(pl, "You cannot create shops");
 					return true;
 				}
-				
 				Location loc = pl.getLocation();
 				Location locUnder = pl.getLocation();
 				locUnder.setY(locUnder.getY() - 1);
@@ -199,9 +201,9 @@ public class Main extends JavaPlugin implements Listener {
 				b.setTypeIdAndData(SIGN, angle, false);
 
 				Sign sign = (Sign) b.getState();
-				String owner = args[1];
+				String owner = user ? pl.getName() : args[1];
 				sign.setLine(0, "");
-				sign.setLine(1, (owner.length() < 13 ? owner : owner.substring(0, 12) + '§') + "'s");
+				sign.setLine(1, (owner.length() < 13 ? owner : owner.substring(0, 12) + '…') + "'s");
 				sign.setLine(2, "shop");
 				sign.setLine(3, "");
 				sign.update();
@@ -209,7 +211,7 @@ public class Main extends JavaPlugin implements Listener {
 				Shop shop = new Shop();
 				shop.owner = owner;
 				shop.location = b.getLocation();
-				shop.isInfinite = args.length > 2 && (args[2].equalsIgnoreCase("yes") || args[2].equalsIgnoreCase("true"));
+				shop.isInfinite = admin && args.length > 2 && (args[2].equalsIgnoreCase("yes") || args[2].equalsIgnoreCase("true"));
 				shops.put(shop.location, shop);
 				
 			} else if (action.equalsIgnoreCase("delete") || 
@@ -548,7 +550,7 @@ public class Main extends JavaPlugin implements Listener {
 					return true;
 				}
 				if (args.length < 2) {
-					sendError(pl, Help.set.toUsageString());
+					sendError(pl, Help.remove.toUsageString());
 					return true;
 				}
 				

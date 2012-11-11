@@ -16,6 +16,7 @@ public class Help {
 			CommandHelp.args(
 				"owner", "the owner of the shop",
 				"inf", "whether the shop is infinite"));
+	public static final CommandHelp createOwner = new CommandHelp("shop create", "mk", null, "create a new shop");
 	public static final CommandHelp delete = new CommandHelp("shop delete", "del", null, "removes this shop");
 	public static final CommandHelp save = new CommandHelp("shop save", null, null, "saves all shops");
 	public static final CommandHelp backup = new CommandHelp("shop backup", null, null, "backs up shops");
