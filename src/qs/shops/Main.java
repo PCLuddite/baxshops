@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 import net.milkbowl.vault.economy.Economy;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
@@ -38,6 +39,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -188,6 +190,7 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, "You cannot create shops");
 					return true;
 				}
+				
 				Location loc = pl.getLocation();
 				Location locUnder = pl.getLocation();
 				locUnder.setY(locUnder.getY() - 1);
@@ -197,6 +200,15 @@ public class Main extends JavaPlugin implements Listener {
 						blockUnder.getTypeId() == 46){
 					sendError(pl, "This is not a valid block to place a shop on!");
 					return true;
+				}
+				//Use up a sign if the user is not an admin
+				if (!admin && user) {
+					PlayerInventory inv = pl.getInventory();
+					if (!(inv.contains(Material.SIGN))) {
+						sendError(pl, "You must have a sign to make a shop!");
+						return true;
+					}
+					inv.remove(new ItemStack(Material.SIGN, 1));
 				}
 				byte angle = (byte) ((((int) loc.getYaw() + 225) / 90) << 2);
 				b.setTypeIdAndData(SIGN, angle, false);
