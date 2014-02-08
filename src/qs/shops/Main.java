@@ -196,8 +196,8 @@ public class Main extends JavaPlugin implements Listener {
 				locUnder.setY(locUnder.getY() - 1);
 				Block b = loc.getBlock();
 				Block blockUnder = locUnder.getBlock();
-				if (blockUnder.getTypeId() == 0 ||
-						blockUnder.getTypeId() == 46){
+				if (blockUnder.getType() == Material.AIR ||
+						blockUnder.getType() == Material.TNT){
 					sendError(pl, "This is not a valid block to place a shop on!");
 					return true;
 				}
@@ -210,9 +210,11 @@ public class Main extends JavaPlugin implements Listener {
 					}
 					inv.remove(new ItemStack(Material.SIGN, 1));
 				}
+				
 				byte angle = (byte) ((((int) loc.getYaw() + 225) / 90) << 2);
-				b.setTypeIdAndData(SIGN, angle, false);
-
+				//(SIGN, angle, false)
+				b.setType(Material.SIGN);
+				b.setData(angle, false);
 				Sign sign = (Sign) b.getState();
 				String owner = user ? pl.getName() : args[1];
 				sign.setLine(0, "");
@@ -281,11 +283,10 @@ public class Main extends JavaPlugin implements Listener {
 					return true;
 				}
 				ItemStack stack = pl.getItemInHand();
-				if (stack == null || stack.getTypeId() == 0) {
+				if (stack == null || stack.getType() == Material.AIR) {
 					sendError(pl, "You must be holding the item you wisth to add to this shop");
 					return true;
 				}
-				
 				if (selection.shop.containsItem(stack)) {
 					sendError(pl, "That item has already been added to this shop");
 					sendError(pl, "Use /shop restock to restock");
@@ -313,7 +314,7 @@ public class Main extends JavaPlugin implements Listener {
 				}
 				
 				ItemStack stack = pl.getItemInHand();
-				if (stack == null || stack.getTypeId() == 0) {
+				if (stack == null || stack.getType() == Material.AIR) {
 					sendError(pl, "You must be holding the item you wish to add to this shop");
 					return true;
 				}
@@ -337,7 +338,7 @@ public class Main extends JavaPlugin implements Listener {
 				}
 				
 				ItemStack stack = pl.getItemInHand();
-				if (stack == null || stack.getTypeId() == 0) {
+				if (stack == null || stack.getType() == Material.AIR) {
 					sendError(pl, "You must be holding the item you wish to add to this shop");
 					return true;
 				}
@@ -354,13 +355,12 @@ public class Main extends JavaPlugin implements Listener {
 				/*	if (e.itemID == id &&
 							e.itemDamage == damage) */
 					if(inv.getItem(i) != null &&
-							inv.getItem(i).getTypeId() != 0 &&
-							inv.getItem(i).getTypeId() == entry.itemID &&
-							inv.getItem(i).getDurability() == entry.itemDamage){
+							inv.getItem(i).getType() != Material.AIR &&
+							inv.getItem(i).getType() == Material.getMaterial(entry.itemID) &&
+							inv.getItem(i).getDurability() == entry.itemDamage) {
 						
 						addSize = addSize + inv.getItem(i).getAmount();
 						inv.clear(i);
-						
 					}
 					i++;
 				}
@@ -542,9 +542,29 @@ public class Main extends JavaPlugin implements Listener {
 					sendError(pl, "You cannot sell that item");
 					return true;
 				}
-				
-				pl.setItemInHand(null);
-				
+				if (args.length >= 2) {
+					try {
+						int amount = Integer.parseInt(args[1]);
+						if (amount > itemsToSell.getAmount()) {
+							sendError(pl, "You can only sell as many items as you have in your hand");
+							return true;
+						}
+						int refundAmount = itemsToSell.getAmount() - amount;
+						ItemStack refund = itemsToSell.clone();
+						refund.setAmount(refundAmount);
+						if (refund.getAmount() == 0) {
+							pl.setItemInHand(null);
+						} else {
+							pl.setItemInHand(refund);
+						}
+						itemsToSell.setAmount(amount);
+					} catch (NumberFormatException e) {
+						sendError(pl, "Invalid amount");
+						return true;
+					}
+				} else {
+					pl.setItemInHand(null);
+				}
 				String name = getItemName(itemsToSell);
 				pl.sendMessage(String.format(
 						"Your request to sell §B%d %s§F for §B$%.2f§F has been sent",
