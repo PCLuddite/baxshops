@@ -1,0 +1,851 @@
+0 Air
+1 Stone
+| 1 Granite
+| 2 Polished Granite
+| 3 Diorite
+| 4 Polished Diorite
+| 5 Andesite
+| 6 Polished Andesite
+2 Grass Block
+3 Dirt
+| 1 Coarse Dirt
+| 2 Podzol
+4 Cobblestone
+5 Wooden Planks (Oak)
+| 1 Wooden Planks (Spruce)
+| 2 Wooden Planks (Birch)
+| 3 Wooden Planks (Jungle)
+| 4 Wooden Planks (Acacia)
+| 5 Wooden Planks (Dark Oak)
+6 Sapling (Oak)
+| 1 Sapling (Spruce)
+| 2 Sapling (Birch)
+| 3 Sapling (Jungle)
+| 4 Sapling (Acacia)
+| 5 Sapling (Dark Oak)
+7 Bedrock
+8 Water
+9 Water (Still)
+10 Lava
+11 Lava (Still)
+12 Sand
+| 1 Red Sand
+13 Gravel
+14 Gold Ore
+15 Iron Ore
+16 Coal Ore
+17 Wood (Oak)
+| 1 Wood (Spruce)
+| 2 Wood (Birch)
+| 3 Wood (Jungle)
+| 4 Wood (Acacia)
+| 5 Wood (Dark Oak)
+18 Leaves (Oak)
+| 1 Leaves (Spruce)
+| 2 Leaves (Birch)
+| 3 Leaves (Jungle)
+19 Sponge
+| 1 Wet Sponge
+20 Glass
+21 Lapis Lazuli Ore
+22 Block of Lapis Lazuli
+23 Dispenser
+24 Sandstone
+| 1 Sandstone (Chiseled)
+| 2 Sandstone (Smooth)
+25 Note Block
+26 Bed
+27 Powered Rail
+28 Detector Rail
+29 Sticky Piston
+30 Cobweb
+31 Tall Grass (Dead Shrub)
+| 1 Tall Grass
+| 2 Tall Grass (Fern)
+32 Dead Bush
+33 Piston
+34 Piston Extension
+35 Wool
+| 1 Orange Wool
+| 2 Magenta Wool
+| 3 Light Blue Wool
+| 4 Yellow Wool
+| 5 Lime Wool
+| 6 Pink Wool
+| 7 Gray Wool
+| 8 Light Gray Wool
+| 9 Cyan Wool
+| A Purple Wool
+| B Blue Wool
+| C Brown Wool
+| D Green Wool
+| E Red Wool
+| F Black Wool
+36 Moving Piston
+37 Dandelion
+38 Poppy
+| 1 Blue Orchid
+| 2 Allium
+| 3 Azure Bluet
+| 4 Red Tulip
+| 5 Orange Tulip
+| 6 White Tulip
+| 7 Pink Tulip
+| 8 Oxeye Daisy
+39 Brown Mushroom
+40 Red Mushroom
+41 Block of Gold
+42 Block of Iron
+43 Double Slab (Stone)
+| 1 Double Slab (Sandstone)
+| 2 Double Slab (Wood)
+| 3 Double Slab (Cobblestone)
+| 4 Double Slab (Brick)
+| 5 Double Slab (Stone Bricks)
+| 6 Double Slab (Nether Brick)
+| 7 Double Slab (Quartz Block)
+| 8 Double Slab (Smooth Stone)
+| 9 Double Slab (Smooth Sandstone)
+44 Slab
+| 1 Slab (Sandstone)
+| 2 Slab (Wood)
+| 3 Slab (Cobblestone)
+| 4 Slab (Brick)
+| 5 Slab (Stone Bricks)
+| 6 Slab (Nether Brick)
+| 7 Slab (Quartz)
+45 Brick
+46 TNT
+47 Bookshelf
+48 Moss Stone
+49 Obsidian
+50 Torch
+51 Fire
+52 Monster Spawner
+53 Wooden Stairs
+54 Chest
+55 Redstone Wire
+56 Diamond Ore
+57 Block of Diamond
+58 Crafting Table
+59 Wheat Block
+60 Farmland
+61 Furnace
+62 Burning Furnace
+63 Sign Post
+64 Wooden Door (Block)
+65 Ladder
+66 Rail
+67 Cobblestone Stairs
+68 Wall Sign
+69 Lever
+70 Stone Pressure Plate
+71 Iron Door
+72 Wooden Pressure Plate
+73 Redstone Ore
+74 Redstone Ore (Glowing)
+75 Redstone Torch (Off)
+76 Redstone Torch
+77 Button
+78 Snow
+79 Ice
+80 Snow (Block)
+81 Cactus
+82 Clay
+83 Sugarcane (Block)
+84 Jukebox
+85 Fence
+86 Pumpkin
+87 Netherrack
+88 Soul Sand
+89 Glowstone
+90 Portal
+91 Jack-O-Lantern
+92 Cake (Block)
+93 Redstone Repeater (Off)
+94 Redstone Repeater (On)
+95 Stained Glass (White)
+| 1 Stained Glass (Orange)
+| 2 Stained Glass (Magenta)
+| 3 Stained Glass (Light Blue)
+| 4 Stained Glass (Yellow)
+| 5 Stained Glass (Lime)
+| 6 Stained Glass (Pink)
+| 7 Stained Glass (Grey)
+| 8 Stained Glass (Light Grey)
+| 9 Stained Glass (Cyan)
+| A Stained Glass (Purple)
+| B Stained Glass (Blue)
+| C Stained Glass (Brown)
+| D Stained Glass (Green)
+| E Stained Glass (Red)
+| F Stained Glass (Black)
+96 Trapdoor
+97 Stone (Monster Egg)
+| 1 Silverfish (Cobblestone)
+| 2 Stonebricks (Monster Egg)
+| 3 Silverfish (Mossy Stone Brick)
+| 4 Silverfish (Cracked Stone)
+| 5 Silverfish (Chiseled Stone)
+98 Stone Bricks
+| 1 Stone Bricks (Mossy)
+| 2 Stone Bricks (Cracked)
+| 3 Stone Bricks (Chiseled)
+99 Huge Mushroom (Brown)
+100 Huge Mushroom (Red)
+101 Iron Bars
+102 Glass Pane
+103 Melon (Block)
+104 Pumpkin Stem
+105 Melon Stem
+106 Vines
+107 Fence Gate
+108 Brick Stairs
+109 Stone Bricks Stairs
+110 Mycelium
+111 Lily Pad
+112 Nether Brick
+113 Nether Brick Fence
+114 Nether Brick Stairs
+115 Nether Wart (Block)
+116 Enchantment Table
+117 Brewing Stand
+118 Cauldron
+119 End Portal
+120 End Portal Frame
+121 End Stone
+122 Dragon Egg
+123 Redstone Lamp
+124 Redstone Lamp (Lit)
+125 Doable Slab (Oak Wood)
+| 1 Double Slab (Spruce Wood)
+| 2 Double Slab (Birch Wood)
+| 3 Double Slab (Jungle Wood)
+| 4 Double Slab (Acacia Wood)
+| 5 Double Slab (Dark Oak Wood)
+126 Oak-Wood Slab
+| 1 Slab (Spruce Wood)
+| 2 Slab (Birch Wood)
+| 3 Slab (Jungle Wood)
+| 4 Slab (Acacia Wood)
+| 5 Slab (Dark Oak Wood)
+127 Coacoa Pod
+128 Sandstone Stairs
+129 Emerald Ore
+130 Ender Chest
+131 Tripwire Hook
+132 Tripwire
+133 Emerald Block
+134 Spruce Wood Stairs
+135 Birch Wood Stairs
+136 Jungle Wood Stairs
+137 Command Block
+138 Beacon
+139 Cobblestone Wall
+140 Flower Pot
+141 Carrot Block
+142 Potato Block
+143 Wooden Button
+144 Head (Skeleton)
+| 1 Head (Wither)
+| 2 Head (Zombie)
+| 3 Head (Steve)
+| 4 Head (Creeper)
+145 Anvil
+| 1 Anvil (Sligtly Damaged)
+| 2 Anvil (Very Damaged)
+146 Trapped Chest
+147 Weighted Pressure Plate (Light)
+148 Weighted Pressure Plate (Heavy)
+149 Redstone Comparator (Off)
+150 Redstone Comparator (On)
+151 Daylight Sensor
+152 Block of Redstone
+153 Nether Quartz Ore
+154 Hopper
+155 Quartz Block
+| 1 Chiseled Quartz Block
+| 2 Pillar Quartz Block
+156 Quartz Stairs
+157 Rail (Activator)
+158 Dropper
+159 Stained Clay (White)
+| 1 Stained Clay (Orange)
+| 2 Stained Clay (Magenta)
+| 3 Stained Clay (Light Blue)
+| 4 Stained Clay (Yellow)
+| 5 Stained Clay (Lime)
+| 6 Stained Clay (Pink)
+| 7 Stained Clay (Grey)
+| 8 Stained Clay (Light Grey)
+| 9 Stained Clay (Cyan)
+| A Stained Clay (Purple)
+| B Stained Clay (Blue)
+| C Stained Clay (Brown)
+| D Stained Clay (Green)
+| E Stained Clay (Red)
+| F Stained Clay (Black)
+160 Stained Glass Pane (White)
+| 1 Stained Glass Pane (Orange)
+| 2 Stained Glass Pane (Magenta)
+| 3 Stained Glass Pane (Light Blue)
+| 4 Stained Glass Pane (Yellow)
+| 5 Stained Glass Pane (Lime)
+| 6 Stained Glass Pane (Pink)
+| 7 Stained Glass Pane (Grey)
+| 8 Stained Glass Pane (Light Grey)
+| 9 Stained Glass Pane (Cyan)
+| A Stained Glass Pane (Purple)
+| B Stained Glass Pane (Blue)
+| C Stained Glass Pane (Brown)
+| D Stained Glass Pane (Green)
+| E Stained Glass Pane (Red)
+| F Stained Glass Pane (Black)
+162 Wood (Acacia)
+| 1 Wood (Dark Oak)
+163 Wooden Stairs (Acacia)
+164 Wooden Stairs (Dark Oak)
+165 Slime Block
+166 Barrier
+167 Iron Trapdoor
+168 Prismarine
+| 1 Prismarine Bricks
+| 2 Dark Prismarine
+169 Sea Lantern
+170 Hay Bale
+171 Carpet (White)
+| 1 Carpet (Orange)
+| 2 Carpet (Magenta)
+| 3 Carpet (Light Blue)
+| 4 Carpet (Yellow)
+| 5 Carpet (Lime)
+| 6 Carpet (Pink)
+| 7 Carpet (Grey)
+| 8 Carpet (Light Grey)
+| 9 Carpet (Cyan)
+| A Carpet (Purple)
+| B Carpet (Blue)
+| C Carpet (Brown)
+| D Carpet (Green)
+| E Carpet (Red)
+| F Carpet (Black)
+172 Hardened Clay
+173 Block of Coal
+174 Packed Ice
+175 Sunflower
+| 1 Lilac
+| 2 Double Tallgrass
+| 3 Large Fern
+| 4 Rose Bush
+| 5 Peony
+256 Iron Shovel
+257 Iron Pickaxe
+258 Iron Axe
+259 Flint and Steel
+260 Red Apple
+261 Bow
+262 Arrow
+263 Coal
+| 1 Charcoal
+264 Diamond
+265 Iron Ingot
+266 Gold Ingot
+267 Iron Sword
+268 Wooden Sword
+269 Wooden Shovel
+270 Wooden Pickaxe
+271 Wooden Axe
+272 Stone Sword
+273 Stone Shovel
+274 Stone Pickaxe
+275 Stone Axe
+276 Diamond Sword
+277 Diamond Shovel
+278 Diamond Pickaxe
+279 Diamond Axe
+280 Stick
+281 Bowl
+282 Mushroom Stew
+283 Golden Sword
+284 Golden Shovel
+285 Golden Pickaxe
+286 Golden Axe
+287 String
+288 Feather
+289 Gunpowder
+290 Wooden Hoe
+291 Stone Hoe
+292 Iron Hoe
+293 Diamond Hoe
+294 Golden Hoe
+295 Seeds
+296 Wheat
+297 Bread
+298 Leather Cap
+299 Leather Tunic
+300 Leather Pants
+301 Leather Boots
+302 Chain Helmet
+303 Chain Chestplate
+304 Chain Leggings
+305 Chain Boots
+306 Iron Helmet
+307 Iron Chestplate
+308 Iron Leggings
+309 Iron Boots
+310 Diamond Helment
+311 Diamond Chestplate
+312 Diamond Leggings
+313 Diamond Boots
+314 Golden Helmet
+315 Golden Chestplate
+316 Golden Leggings
+317 Golden Boots
+318 Flint
+319 Raw Porkchop
+320 Cooked Porkchop
+321 Painting
+322 Golden Apple
+323 Sign
+324 Wooden Door
+325 Bucket
+326 Water Bucket
+327 Lava Bucket
+328 Minecart
+329 Saddle
+330 Iron Door
+331 Redstone Dust
+332 Snowball
+333 Boat
+334 Leather
+335 Milk
+336 Clay Brick
+337 Clay
+338 Sugar Canes
+339 Paper
+340 Book
+341 Slimeball
+342 Minecart with Chest
+343 Minecart with Furnace
+344 Egg
+345 Compass
+346 Fishing Rod
+347 Clock
+348 Glowstone Dust
+349 Raw Fish
+| 1 Raw Salmon
+| 2 Clownfish
+| 3 Pufferfish
+350 Cooked Fish
+| 1 Cooked Salmon
+| 2 Cooked Clownfish
+| 3 Cooked Pufferfish
+351 Ink Sac
+| 1 Rose Red
+| 2 Cactus Green
+| 3 Cocoa Beans
+| 4 Lapis Lazuli
+| 5 Purple Dye
+| 6 Cyan Dye
+| 7 Light Gray Dye
+| 8 Gray Dye
+| 9 Pink Dye
+| A Lime Dye
+| B Dandelion Yellow
+| C Light Blue Dye
+| D Magenta Dye
+| E Orange Dye
+| F Bone Meal
+352 Bone
+353 Sugar
+354 Cake
+355 Bed
+356 Redstone Repeater
+357 Cookie
+358 Map
+359 Shears
+360 Melon (Slice)
+361 Pumpkin Seeds
+362 Melon Seeds
+363 Raw Beef
+364 Steak
+365 Raw Chicken
+366 Cooked Chicken
+367 Rotten Flesh
+368 Ender Pearl
+369 Blaze Rod
+370 Ghast Tear
+371 Gold Nugget
+372 Nether Wart Seeds
+373 Water Bottle
+|   10 Awkward Potion
+|   20 Thick Potion
+|   30 Mundane Potion (extended)
+|   2000 Mundane Potion
+|   2020 Mundane Potion II
+|   2040 Mundane Potion (Ex)
+|   2060 Mundane Potion II (Ex)
+|   4000 Splash Mundane Potion
+|   4020 Splash Mundane Potion II
+|   4040 Splash Mundane Potion (Ex)
+|   4060 Splash Mundane Potion II (Ex)
+|   2001 Potion of Regeneration
+|   2021 Potion of Regeneration II
+|   2041 Potion of Regeneration (Ex)
+|   2061 Potion of Regeneration II (Ex)
+|   4001 Splash Potion of Regeneration
+|   4021 Splash Potion of Regeneration II
+|   4041 Splash Potion of Regeneration (Ex)
+|   4061 Splash Potion of Regeneration II (Ex)
+|   2002 Potion of Swiftness
+|   2022 Potion of Swiftness II
+|   2042 Potion of Swiftness (Ex)
+|   2062 Potion of Swiftness II (Ex)
+|   4002 Splash Potion of Swiftness
+|   4022 Splash Potion of Swiftness II
+|   4042 Splash Potion of Swiftness (Ex)
+|   4062 Splash Potion of Swiftness II (Ex)
+|   2003 Potion of Fire Resistance
+|   2023 Potion of Fire Resistance II
+|   2043 Potion of Fire Resistance (Ex)
+|   2063 Potion of Fire Resistance II (Ex)
+|   4003 Splash Potion of Fire Resistance
+|   4023 Splash Potion of Fire Resistance II
+|   4043 Splash Potion of Fire Resistance (Ex)
+|   4063 Splash Potion of Fire Resistance II (Ex)
+|   2004 Potion of Poison
+|   2024 Potion of Poison II
+|   2044 Potion of Poison (Ex)
+|   2064 Potion of Poison II (Ex)
+|   4004 Splash Potion of Poison
+|   4024 Splash Potion of Poison II
+|   4044 Splash Potion of Poison (Ex)
+|   4064 Splash Potion of Poison II (Ex)
+|   2005 Potion of Instant Health
+|   2025 Potion of Instant Health II
+|   2045 Potion of Instant Health (Ex)
+|   2065 Potion of Instant Health II (Ex)
+|   4005 Splash Potion of Instant Health
+|   4025 Splash Potion of Instant Health II
+|   4045 Splash Potion of Instant Health (Ex)
+|   4065 Splash Potion of Instant Health II (Ex)
+|   2008 Potion of Weakness
+|   2028 Potion of Weakness II
+|   2048 Potion of Weakness (Ex)
+|   2068 Potion of Weakness II (Ex)
+|   4008 Splash Potion of Weakness
+|   4028 Splash Potion of Weakness II
+|   4048 Splash Potion of Weakness (Ex)
+|   4068 Splash Potion of Weakness II (Ex)
+|   2009 Potion of Strength
+|   2029 Potion of Strength II
+|   2049 Potion of Strength (Ex)
+|   2069 Potion of Strength II (Ex)
+|   4009 Splash Potion of Strength
+|   4029 Splash Potion of Strength II
+|   4049 Splash Potion of Strength (Ex)
+|   4069 Splash Potion of Strength II (Ex)
+|   200a Potion of Slowness
+|   202a Potion of Slowness II
+|   204a Potion of Slowness (Ex)
+|   206a Potion of Slowness II (Ex)
+|   400a Splash Potion of Slowness
+|   402a Splash Potion of Slowness II
+|   404a Splash Potion of Slowness (Ex)
+|   406a Splash Potion of Slowness II (Ex)
+|   200c Potion of Harming
+|   202c Potion of Harming II
+|   204c Potion of Harming (Ex)
+|   206c Potion of Harming II (Ex)
+|   400c Splash Potion of Harming
+|   402c Splash Potion of Harming II
+|   404c Splash Potion of Harming (Ex)
+|   406c Splash Potion of Harming II (Ex)
+|   6 Clear Potion
+|   46 Clear Potion
+|   2006 Clear Potion
+|   4006 Splash Clear Potion
+|   4046 Splash Clear Potion
+|   6006 Splash Clear Potion
+|   7 Clear Potion
+|   47 Clear Potion
+|   2007 Clear Potion
+|   4007 Splash Clear Potion
+|   4047 Splash Clear Potion
+|   6007 Splash Clear Potion
+|   b Diffuse Potion
+|   4b Diffuse Potion
+|   200b Diffuse Potion
+|   400b Splash Diffuse Potion
+|   404b Splash Diffuse Potion
+|   600b Splash Diffuse Potion
+|   d Artless Potion
+|   4d Artless Potion
+|   200d Artless Potion
+|   400d Splash Artless Potion
+|   404d Splash Artless Potion
+|   600d Splash Artless Potion
+|   e Thin Potion
+|   4e Thin Potion
+|   200e Thin Potion
+|   400e Splash Thin Potion
+|   404e Splash Thin Potion
+|   600e Splash Thin Potion
+|   f Thin Potion
+|   4f Thin Potion
+|   200f Thin Potion
+|   400f Splash Thin Potion
+|   404f Splash Thin Potion
+|   600f Splash Thin Potion
+|   16 Bungling Potion
+|   56 Bungling Potion
+|   2016 Bungling Potion
+|   4016 Splash Bungling Potion
+|   4056 Splash Bungling Potion
+|   6016 Splash Bungling Potion
+|   17 Bungling Potion
+|   57 Bungling Potion
+|   2017 Bungling Potion
+|   4017 Splash Bungling Potion
+|   4057 Splash Bungling Potion
+|   6017 Splash Bungling Potion
+|   1b Smooth Potion
+|   5b Smooth Potion
+|   201b Smooth Potion
+|   401b Splash Smooth Potion
+|   405b Splash Smooth Potion
+|   601b Splash Smooth Potion
+|   1d Suave Potion
+|   5d Suave Potion
+|   201d Suave Potion
+|   401d Splash Suave Potion
+|   405d Splash Suave Potion
+|   601d Splash Suave Potion
+|   1e Debonair Potion
+|   5e Debonair Potion
+|   201e Debonair Potion
+|   401e Splash Debonair Potion
+|   405e Splash Debonair Potion
+|   601e Splash Debonair Potion
+|   1f Debonair Potion
+|   5f Debonair Potion
+|   201f Debonair Potion
+|   401f Splash Debonair Potion
+|   405f Splash Debonair Potion
+|   601f Splash Debonair Potion
+|   26 Charming Potion
+|   66 Charming Potion
+|   2026 Charming Potion
+|   4026 Splash Charming Potion
+|   4066 Splash Charming Potion
+|   6026 Splash Charming Potion
+|   27 Charming Potion
+|   67 Charming Potion
+|   2027 Charming Potion
+|   4027 Splash Charming Potion
+|   4067 Splash Charming Potion
+|   6027 Splash Charming Potion
+|   2b Refined Potion
+|   6b Refined Potion
+|   202b Refined Potion
+|   402b Splash Refined Potion
+|   406b Splash Refined Potion
+|   602b Splash Refined Potion
+|   2d Cordial Potion
+|   6d Cordial Potion
+|   202d Cordial Potion
+|   402d Splash Cordial Potion
+|   406d Splash Cordial Potion
+|   602d Splash Cordial Potion
+|   2e Sparkling Potion
+|   6e Sparkling Potion
+|   202e Sparkling Potion
+|   402e Splash Sparkling Potion
+|   406e Splash Sparkling Potion
+|   602e Splash Sparkling Potion
+|   2f Sparkling Potion
+|   6f Sparkling Potion
+|   202f Sparkling Potion
+|   402f Splash Sparkling Potion
+|   406f Splash Sparkling Potion
+|   602f Splash Sparkling Potion
+|   30 Potent Potion
+|   70 Potent Potion
+|   2030 Potent Potion
+|   4030 Splash Potent Potion
+|   4070 Splash Potent Potion
+|   6030 Splash Potent Potion
+|   36 Rank Potion
+|   76 Rank Potion
+|   2036 Rank Potion
+|   4036 Splash Rank Potion
+|   4076 Splash Rank Potion
+|   6036 Splash Rank Potion
+|   37 Rank Potion
+|   77 Rank Potion
+|   2037 Rank Potion
+|   4037 Splash Rank Potion
+|   4077 Splash Rank Potion
+|   6037 Splash Rank Potion
+|   3b Acrid Potion
+|   7b Acrid Potion
+|   203b Acrid Potion
+|   403b Splash Acrid Potion
+|   407b Splash Acrid Potion
+|   603b Splash Acrid Potion
+|   3d Gross Potion
+|   7d Gross Potion
+|   203d Gross Potion
+|   403d Splash Gross Potion
+|   407d Splash Gross Potion
+|   603d Splash Gross Potion
+|   3e Stinky Potion
+|   7e Stinky Potion
+|   203e Stinky Potion
+|   403e Splash Stinky Potion
+|   407e Splash Stinky Potion
+|   603e Splash Stinky Potion
+|   3f Stinky Potion
+|   7f Stinky Potion
+|   203f Stinky Potion
+|   403f Splash Stinky Potion
+|   407f Splash Stinky Potion
+|   603f Splash Stinky Potion
+374 Glass Bottle
+375 Spider Eye
+376 Fermented Spider Eye
+377 Blaze Powder
+378 Magma Cream
+379 Brewing Stand
+380 Cauldron
+381 Eye of Ender
+382 Glistering Melon (Slice)
+383 Spawn Egg
+| 32 Spawn Egg (Creeper)
+| 33 Spawn Egg (Skeleton)
+| 34 Spawn Egg (Spider)
+| 36 Spawn Egg (Zombie)
+| 37 Spawn Egg (Slime)
+| 38 Spawn Egg (Ghast)
+| 39 Spawn Egg (Zombie Pigmen)
+| 3a Spawn Egg (Endermen)
+| 3b Spawn Egg (Cave Spider)
+| 3c Spawn Egg (Silverfish)
+| 3d Spawn Egg (Blaze)
+| 3e Spawn Egg (Magma Cube)
+| 41 Spawn Egg (Bat)
+| 42 Spawn Egg (Witch)
+| 43 Spawn Egg (Endermite)
+| 44 Spawn Egg (Guardian)
+| 5a Spawn Egg (Pig)
+| 5b Spawn Egg (Sheep)
+| 5c Spawn Egg (Cow)
+| 5d Spawn Egg (Chicken)
+| 5e Spawn Egg (Squid)
+| 5f Spawn Egg (Wolf)
+| 60 Spawn Egg (Mooshroom)
+| 62 Spawn Egg (Ocelot)
+| 64 Spawn Egg (Horse)
+| 65 Spawn Egg (Rabbit)
+| 78 Spawn Egg (Villager)
+384 Bottle of Enchanting
+385 Fire Charge
+386 Book and Quill
+387 Written Book
+388 Emerald
+389 Item Frame
+390 Flower Pot
+391 Carrot
+392 Potato
+393 Baked Potato
+394 Poisonous Potato
+395 Blank Map
+396 Golden Carrot
+397 Head
+398 Carrot on a Stick
+399 Nether Star
+400 Pumpkin Pie
+401 Firework Rocket
+402 Firework Star
+403 Enchanted Book
+404 Redstone Commparator
+405 Nether Brick (Item)
+406 Nether Quartz
+407 Minecart (TNT)
+408 Minecart (Hopper)
+409 Prismarine Shard
+410 Prismarine Crystals
+417 Iron Horse Armor
+418 Gold Horse Armor
+419 Diamond Horse Armor
+420 Lead
+421 Name Tag
+422 Minecart (Command Block)
+2256 Music Disk (C418 - 13)
+2257 Music Disk (C418 - cat)
+2258 Music Disk (C418 - blocks)
+2259 Music Disk (C418 - chirp)
+2260 Music Disk (C418 - far)
+2261 Music Disk (C418 - mall)
+2262 Music Disk (C418 - mellohi)
+2263 Music Disk (C418 - stal)
+2264 Music Disk (C418 - strad)
+2265 Music Disk (C418 - ward)
+2266 Music Disk (C418 - 11)
+2267 Wait Disk
+161 Leaves (Acacia)
+| 1 Leaves (Dark Oak)
+| 14 Dark Prismarine
+176 Standing Banner
+177 Wall Banner
+178 Inverted Daylight Sensor
+179 Red Sandstone
+| 1 Red Sandstone (Chiseled)
+| 2 Red Sandstone (Smooth)
+180 Stairs (Red Sandstone)
+181 Red Sandstone Slab (Double)
+182 Red Sandstone Slab
+183 Fence Gate (Spruce)
+184 Fence Gate (Birch)
+185 Fence Gate (Jungle)
+186 Fence Gate (Dark Oak)
+187 Fence Gate (Acacia)
+188 Fence (Spruce)
+189 Fence (Birch)
+190 Fence (Jungle)
+191 Fence (Dark Oak)
+192 Fence (Acacia)
+193 Door Block (Spruce)
+194 Door Block (Birch)
+195 Door Block (Jungle)
+196 Door Block (Acacia)
+197 Door Block (Dark Oak)
+411 Raw Rabbit
+412 Cooked Rabbit
+413 Rabbit Stew
+414 Rabbit Foot
+415 Rabbit Hide
+416 Amor Stand
+423 Mutton
+424 Cooked Mutton
+425 Banner
+| 1 Banner (Orange)
+| 2 Banner (Magenta)
+| 3 Banner (Light Blue)
+| 4 Banner (Yellow)
+| 5 Banner (Lime)
+| 6 Banner (Pink)
+| 7 Banner (Grey)
+| 8 Banner (Light Grey)
+| 9 Banner (Cyan)
+| A Banner (Purple)
+| B Banner (Blue)
+| C Banner (Brown)
+| D Banner (Green)
+| E Banner (Red)
+| F Banner (White)
+427 Wooden Door (Spruce)
+428 Wooden Door (Birch)
+429 Wooden Door (Jungle)
+430 Wooden Door (Acacia)
+431 Wooden Door (Dark Oak)

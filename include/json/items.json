@@ -1,0 +1,2742 @@
+{
+	"items": [ {
+		"id": 0,
+		"name": "Air"
+	}, {
+		"id": 1,
+		"name": "Stone",
+		"subitems": [ {
+			"id": 1,
+			"name": "Granite"
+		}, {
+			"id": 2,
+			"name": "Polished Granite"
+		}, {
+			"id": 3,
+			"name": "Diorite"
+		}, {
+			"id": 4,
+			"name": "Polished Diorite"
+		}, {
+			"id": 5,
+			"name": "Andesite"
+		}, {
+			"id": 6,
+			"name": "Polished Andesite"
+		} ]
+	}, {
+		"id": 2,
+		"name": "Grass Block",
+		"match": [ "(blockof)?grass(es)?", "grass(block(s)?)?" ]
+	}, {
+		"id": 3,
+		"name": "Dirt",
+		"subitems": [ {
+			"id": 1,
+			"name": "Coarse Dirt"
+		}, {
+			"id": 2,
+			"name": "Podzol"
+		} ]
+	}, {
+		"id": 4,
+		"name": "Cobblestone"
+	}, {
+		"id": 5,
+		"name": "Wooden Planks (Oak)",
+		"match": [ "(oak)?wood(en)?plank(s)?" ],
+		"subitems": [ {
+			"id": 1,
+			"name": "Wooden Planks (Spruce)",
+			"match": [ "(spruce|pine)wood(en)?plank(s)?" ]
+		}, {
+			"id": 2,
+			"name": "Wooden Planks (Birch)",
+			"match": [ "birchwood(en)?plank(s)?" ]
+		}, {
+			"id": 3,
+			"name": "Wooden Planks (Jungle)",
+			"match": [ "junglewood(en)?plank(s)?" ]
+		}, {
+			"id": 4,
+			"name": "Wooden Planks (Acacia)",
+			"match": [ "aca(c|d)iawood(en)?plank(s)?" ]
+		}, {
+			"id": 5,
+			"name": "Wooden Planks (Dark Oak)",
+			"match": [ "darkoakwood(en)?plank(s)?" ]
+		} ]
+	}, {
+		"id": 6,
+		"name": "Sapling (Oak)",
+		"match": [ "(oak)?sapling(s)?" ],
+		"subitems": [ {
+			"id": 1,
+			"name": "Sapling (Spruce)",
+			"match": [ "(spruce|pine)sapling(s)?" ]
+		}, {
+			"id": 2,
+			"name": "Sapling (Birch)"
+		}, {
+			"id": 3,
+			"name": "Sapling (Jungle)"
+		}, {
+			"id": 4,
+			"name": "Sapling (Acacia)",
+			"match": [ "aca(c|d)iasapling(s)?" ]
+		}, {
+			"id": 5,
+			"name": "Sapling (Dark Oak)"
+		} ]
+	}, {
+		"id": 7,
+		"name": "Bedrock"
+	}, {
+		"id": 8,
+		"name": "Water"
+	}, {
+		"id": 9,
+		"name": "Water (Still)"
+	}, {
+		"id": 10,
+		"name": "Lava"
+	}, {
+		"id": 11,
+		"name": "Lava (Still)"
+	}, {
+		"id": 12,
+		"name": "Sand",
+		"subitems": [ {
+			"id": 1,
+			"name": "Red Sand"
+		} ]
+	}, {
+		"id": 13,
+		"name": "Gravel"
+	}, {
+		"id": 14,
+		"name": "Gold Ore"
+	}, {
+		"id": 15,
+		"name": "Iron Ore"
+	}, {
+		"id": 16,
+		"name": "Coal Ore"
+	}, {
+		"id": 17,
+		"name": "Wood (Oak)",
+		"match": [ "(oak)?(wood|log)" ],
+		"subitems": [ {
+			"id": 1,
+			"name": "Wood (Spruce)",
+			"match": [ "(spruce|pine)(wood|log)", "(wood|log)(spruce|pine)" ]
+		}, {
+			"id": 2,
+			"name": "Wood (Birch)",
+			"match": [ "birch(wood|log)", "(wood|log)birch" ]
+		}, {
+			"id": 3,
+			"name": "Wood (Jungle)",
+			"match": [ "jungle(wood|log)", "(wood|log)jungle" ]
+		}, {
+			"id": 4,
+			"name": "Wood (Acacia)",
+			"match": [ "aca(c|d)ia(wood|log)", "(wood|log)aca(c|d)ia" ]
+		}, {
+			"id": 5,
+			"name": "Wood (Dark Oak)",
+			"match": [ "darkoak(wood|log)", "(wood|log)darkoak" ]
+		} ]
+	}, {
+		"id": 18,
+		"name": "Leaves (Oak)",
+		"subitems": [ {
+			"id": 1,
+			"name": "Leaves (Spruce)",
+			"match": [ "(spruce|pine)leaves", "leaves(spruce|pine)" ]
+		}, {
+			"id": 2,
+			"name": "Leaves (Birch)"
+		}, {
+			"id": 3,
+			"name": "Leaves (Jungle)"
+		}, {
+			"id": 4,
+			"name": "Leaves (Acacia)",
+			"match": [ "leavesaca(c|d)ia", "aca(c|d)ialeaves" ]
+		}, {
+			"id": 5,
+			"name": "Leaves (Dark Oak)"
+		} ]
+	}, {
+		"id": 19,
+		"name": "Sponge",
+		"subitems": [ {
+			"id": 1,
+			"name": "Wet Sponge"
+		} ]
+	}, {
+		"id": 20,
+		"name": "Glass"
+	}, {
+		"id": 21,
+		"name": "Lapis Lazuli Ore",
+		"match": [ "lapis(lazuli)?ore" ]
+	}, {
+		"id": 22,
+		"name": "Block of Lapis Lazuli",
+		"match": [ "blockoflapis(lazuli)?", "lapis(lazuli)?block" ]
+	}, {
+		"id": 23,
+		"name": "Dispenser"
+	}, {
+		"id": 24,
+		"name": "Sandstone",
+		"subitems": [ {
+			"id": 1,
+			"name": "Sandstone (Chiseled)"
+		}, {
+			"id": 2,
+			"name": "Sandstone (Smooth)"
+		} ]
+	}, {
+		"id": 25,
+		"name": "Note Block"
+	}, {
+		"id": 26,
+		"name": "Bed",
+		"subitems": [ {
+			"id": 8,
+			"name": "Bed (foot)"
+		} ]
+	}, {
+		"id": 27,
+		"name": "Powered Rail"
+	}, {
+		"id": 28,
+		"name": "Detector Rail"
+	}, {
+		"id": 29,
+		"name": "Sticky Piston"
+	}, {
+		"id": 30,
+		"name": "Cobweb"
+	}, {
+		"id": 31,
+		"name": "Tall Grass (Dead Shrub)",
+		"subitems": [ {
+			"id": 1,
+			"name": "Tall Grass"
+		}, {
+			"id": 2,
+			"name": "Tall Grass (Fern)"
+		} ]
+	}, {
+		"id": 32,
+		"name": "Dead Bush"
+	}, {
+		"id": 33,
+		"name": "Piston"
+	}, {
+		"id": 34,
+		"name": "Piston Extension"
+	}, {
+		"id": 35,
+		"name": "Wool",
+		"subitems": [ {
+			"id": 1,
+			"name": "Orange Wool"
+		}, {
+			"id": 2,
+			"name": "Magenta Wool"
+		}, {
+			"id": 3,
+			"name": "Light Blue Wool"
+		}, {
+			"id": 4,
+			"name": "Yellow Wool"
+		}, {
+			"id": 5,
+			"name": "Lime Wool"
+		}, {
+			"id": 6,
+			"name": "Pink Wool"
+		}, {
+			"id": 7,
+			"name": "Grey Wool",
+			"match": [ "gr(a|e)ywool", "woolgr(a|e)y" ]
+		}, {
+			"id": 8,
+			"name": "Light Grey Wool",
+			"match": [ "(lightgr(a|e)y|silver)wool", "wool(lightgr(a|e)y|silver)" ]
+		}, {
+			"id": 9,
+			"name": "Cyan Wool"
+		}, {
+			"id": 10,
+			"name": "Purple Wool"
+		}, {
+			"id": 11,
+			"name": "Blue Wool"
+		}, {
+			"id": 12,
+			"name": "Brown Wool"
+		}, {
+			"id": 13,
+			"name": "Green Wool"
+		}, {
+			"id": 14,
+			"name": "Red Wool"
+		}, {
+			"id": 15,
+			"name": "Black Wool"
+		} ]
+	}, {
+		"id": 36,
+		"name": "Moving Piston"
+	}, {
+		"id": 37,
+		"name": "Dandelion"
+	}, {
+		"id": 38,
+		"name": "Poppy",
+		"subitems": [ {
+			"id": 1,
+			"name": "Blue Orchid"
+		}, {
+			"id": 2,
+			"name": "Allium"
+		}, {
+			"id": 4,
+			"name": "Red Tulip"
+		}, {
+			"id": 5,
+			"name": "Orange Tulip"
+		}, {
+			"id": 6,
+			"name": "White Tulip"
+		}, {
+			"id": 7,
+			"name": "Pink Tulip"
+		}, {
+			"id": 8,
+			"name": "Oxeye Daisy"
+		}, {
+			"id": 3,
+			"name": "Azure Bluet"
+		} ]
+	}, {
+		"id": 39,
+		"name": "Brown Mushroom"
+	}, {
+		"id": 40,
+		"name": "Red Mushroom"
+	}, {
+		"id": 41,
+		"name": "Block of Gold",
+		"match": [ "block(of)?gold", "goldblock" ]
+	}, {
+		"id": 42,
+		"name": "Block of Iron",
+		"match": [ "block(of)?iron", "goldiron" ]
+	}, {
+		"id": 43,
+		"name": "Double Slab (Stone)",
+		"subitems": [ {
+			"id": 1,
+			"name": "Double Slab (Sandstone)"
+		}, {
+			"id": 2,
+			"name": "Double Slab (Wood)"
+		}, {
+			"id": 3,
+			"name": "Double Slab (Cobblestone)"
+		}, {
+			"id": 4,
+			"name": "Double Slab (Brick)"
+		}, {
+			"id": 5,
+			"name": "Double Slab (Stone Bricks)"
+		}, {
+			"id": 6,
+			"name": "Double Slab (Nether Brick)"
+		}, {
+			"id": 7,
+			"name": "Double Slab (Quartz Block)"
+		}, {
+			"id": 8,
+			"name": "Double Slab (Smooth Stone)"
+		}, {
+			"id": 9,
+			"name": "Double Slab (Smooth Sandstone)"
+		} ]
+	}, {
+		"id": 44,
+		"name": "Slab",
+		"subitems": [ {
+			"id": 1,
+			"name": "Slab (Sandstone)"
+		}, {
+			"id": 2,
+			"name": "Slab (Wood)"
+		}, {
+			"id": 3,
+			"name": "Slab (Cobblestone)"
+		}, {
+			"id": 4,
+			"name": "Slab (Brick)"
+		}, {
+			"id": 5,
+			"name": "Slab (Stone Bricks)"
+		}, {
+			"id": 6,
+			"name": "Slab (Nether Brick)"
+		}, {
+			"id": 7,
+			"name": "Slab (Quartz)"
+		} ]
+	}, {
+		"id": 45,
+		"name": "Brick"
+	}, {
+		"id": 46,
+		"name": "TNT"
+	}, {
+		"id": 47,
+		"name": "Bookshelf"
+	}, {
+		"id": 48,
+		"name": "Moss Stone"
+	}, {
+		"id": 49,
+		"name": "Obsidian"
+	}, {
+		"id": 50,
+		"name": "Torch"
+	}, {
+		"id": 51,
+		"name": "Fire"
+	}, {
+		"id": 52,
+		"name": "Monster Spawner"
+	}, {
+		"id": 53,
+		"name": "Wooden Stairs"
+	}, {
+		"id": 54,
+		"name": "Chest"
+	}, {
+		"id": 55,
+		"name": "Redstone Wire"
+	}, {
+		"id": 56,
+		"name": "Diamond Ore"
+	}, {
+		"id": 57,
+		"name": "Block of Diamond",
+		"match": [ "block(of)?diamond", "diamondblock" ]
+	}, {
+		"id": 58,
+		"name": "Crafting Table"
+	}, {
+		"id": 59,
+		"name": "Wheat Block"
+	}, {
+		"id": 60,
+		"name": "Farmland"
+	}, {
+		"id": 61,
+		"name": "Furnace"
+	}, {
+		"id": 62,
+		"name": "Burning Furnace"
+	}, {
+		"id": 63,
+		"name": "Sign Post"
+	}, {
+		"id": 64,
+		"name": "Wooden Door (Block)"
+	}, {
+		"id": 65,
+		"name": "Ladder"
+	}, {
+		"id": 66,
+		"name": "Rail"
+	}, {
+		"id": 67,
+		"name": "Cobblestone Stairs"
+	}, {
+		"id": 68,
+		"name": "Wall Sign"
+	}, {
+		"id": 69,
+		"name": "Lever"
+	}, {
+		"id": 70,
+		"name": "Stone Pressure Plate"
+	}, {
+		"id": 71,
+		"name": "Iron Door"
+	}, {
+		"id": 72,
+		"name": "Wooden Pressure Plate"
+	}, {
+		"id": 73,
+		"name": "Redstone Ore"
+	}, {
+		"id": 74,
+		"name": "Redstone Ore (Glowing)"
+	}, {
+		"id": 75,
+		"name": "Redstone Torch (Off)"
+	}, {
+		"id": 76,
+		"name": "Redstone Torch"
+	}, {
+		"id": 77,
+		"name": "Button"
+	}, {
+		"id": 78,
+		"name": "Snow"
+	}, {
+		"id": 79,
+		"name": "Ice"
+	}, {
+		"id": 80,
+		"name": "Snow (Block)"
+	}, {
+		"id": 81,
+		"name": "Cactus"
+	}, {
+		"id": 82,
+		"name": "Clay"
+	}, {
+		"id": 83,
+		"name": "Sugarcane (Block)"
+	}, {
+		"id": 84,
+		"name": "Jukebox"
+	}, {
+		"id": 85,
+		"name": "Fence"
+	}, {
+		"id": 86,
+		"name": "Pumpkin"
+	}, {
+		"id": 87,
+		"name": "Netherrack"
+	}, {
+		"id": 88,
+		"name": "Soul Sand"
+	}, {
+		"id": 89,
+		"name": "Glowstone"
+	}, {
+		"id": 90,
+		"name": "Portal"
+	}, {
+		"id": 91,
+		"name": "Jack-O-Lantern"
+	}, {
+		"id": 92,
+		"name": "Cake (Block)"
+	}, {
+		"id": 93,
+		"name": "Redstone Repeater (Off)"
+	}, {
+		"id": 94,
+		"name": "Redstone Repeater (On)"
+	}, {
+		"id": 95,
+		"name": "Stained Glass (White)",
+		"subitems": [ {
+			"id": 1,
+			"name": "Stained Glass (Orange)"
+		}, {
+			"id": 2,
+			"name": "Stained Glass (Magenta)"
+		}, {
+			"id": 3,
+			"name": "Stained Glass (Light Blue)"
+		}, {
+			"id": 4,
+			"name": "Stained Glass (Yellow)"
+		}, {
+			"id": 5,
+			"name": "Stained Glass (Lime)"
+		}, {
+			"id": 6,
+			"name": "Stained Glass (Pink)"
+		}, {
+			"id": 7,
+			"name": "Stained Glass (Grey)",
+			"match": [ "stainedglassgr(a|e)y", "gr(a|e)ystainedglass" ]
+		}, {
+			"id": 8,
+			"name": "Stained Glass (Light Grey)",
+			"match": [ "stainedglass(lightgr(a|e)y|silver)", "(lightgr(a|e)y|silver)stainedglass" ]
+		}, {
+			"id": 9,
+			"name": "Stained Glass (Cyan)"
+		}, {
+			"id": 10,
+			"name": "Stained Glass (Purple)"
+		}, {
+			"id": 11,
+			"name": "Stained Glass (Blue)"
+		}, {
+			"id": 12,
+			"name": "Stained Glass (Brown)"
+		}, {
+			"id": 13,
+			"name": "Stained Glass (Green)"
+		}, {
+			"id": 14,
+			"name": "Stained Glass (Red)"
+		}, {
+			"id": 15,
+			"name": "Stained Glass (Black)"
+		} ]
+	}, {
+		"id": 96,
+		"name": "Trapdoor"
+	}, {
+		"id": 97,
+		"name": "Silverfish (Stone)",
+		"subitems": [ {
+			"id": 1,
+			"name": "Silverfish (Cobblestone)"
+		}, {
+			"id": 2,
+			"name": "Silverfish (Stone Bricks)"
+		}, {
+			"id": 3,
+			"name": "Silverfish (Mossy Stone Brick)"
+		}, {
+			"id": 4,
+			"name": "Silverfish (Cracked Stone)"
+		}, {
+			"id": 5,
+			"name": "Silverfish (Chiseled Stone)"
+		} ]
+	}, {
+		"id": 98,
+		"name": "Stone Bricks",
+		"subitems": [ {
+			"id": 1,
+			"name": "Stone Bricks (Mossy)"
+		}, {
+			"id": 2,
+			"name": "Stone Bricks (Cracked)"
+		}, {
+			"id": 3,
+			"name": "Stone Bricks (Chiseled)"
+		} ]
+	}, {
+		"id": 99,
+		"name": "Huge Mushroom (Brown)"
+	}, {
+		"id": 100,
+		"name": "Huge Mushroom (Red)"
+	}, {
+		"id": 101,
+		"name": "Iron Bars"
+	}, {
+		"id": 102,
+		"name": "Glass Pane"
+	}, {
+		"id": 103,
+		"name": "Melon (Block)"
+	}, {
+		"id": 104,
+		"name": "Pumpkin Stem"
+	}, {
+		"id": 105,
+		"name": "Melon Stem"
+	}, {
+		"id": 106,
+		"name": "Vines"
+	}, {
+		"id": 107,
+		"name": "Fence Gate",
+		"match": [ "(fence)?gate" ]
+	}, {
+		"id": 108,
+		"name": "Brick Stairs"
+	}, {
+		"id": 109,
+		"name": "Stone Bricks Stairs"
+	}, {
+		"id": 110,
+		"name": "Mycelium"
+	}, {
+		"id": 111,
+		"name": "Lily Pad"
+	}, {
+		"id": 112,
+		"name": "Nether Brick"
+	}, {
+		"id": 113,
+		"name": "Nether Brick Fence"
+	}, {
+		"id": 114,
+		"name": "Nether Brick Stairs"
+	}, {
+		"id": 115,
+		"name": "Nether Wart (Block)"
+	}, {
+		"id": 116,
+		"name": "Enchantment Table"
+	}, {
+		"id": 117,
+		"name": "Brewing Stand"
+	}, {
+		"id": 118,
+		"name": "Cauldron"
+	}, {
+		"id": 119,
+		"name": "End Portal"
+	}, {
+		"id": 120,
+		"name": "End Portal Frame"
+	}, {
+		"id": 121,
+		"name": "End Stone"
+	}, {
+		"id": 122,
+		"name": "Dragon Egg"
+	}, {
+		"id": 123,
+		"name": "Redstone Lamp"
+	}, {
+		"id": 124,
+		"name": "Redstone Lamp (Lit)"
+	}, {
+		"id": 125,
+		"name": "Oak-Wood Slab (Double)",
+		"subitems": [ {
+			"id": 1,
+			"name": "Spruce-Wood Slab (Double)"
+		}, {
+			"id": 2,
+			"name": "Birch-Wood Slab (Double)"
+		}, {
+			"id": 3,
+			"name": "Jungle-Wood Slab (Double)"
+		}, {
+			"id": 4,
+			"name": "Acacia Wood Slab (Double)"
+		}, {
+			"id": 5,
+			"name": "Dark Oak Wood Slab (Double)"
+		} ]
+	}, {
+		"id": 126,
+		"name": "Oak-Wood Slab",
+		"subitems": [ {
+			"id": 1,
+			"name": "Spruce-Wood Slab"
+		}, {
+			"id": 2,
+			"name": "Birch-Wood Slab"
+		}, {
+			"id": 3,
+			"name": "Jungle-Wood Slab"
+		}, {
+			"id": 4,
+			"name": "Acacia Wood Slab"
+		}, {
+			"id": 5,
+			"name": "Dark Oak Wood Slab"
+		} ]
+	}, {
+		"id": 127,
+		"name": "Coacoa Pod"
+	}, {
+		"id": 128,
+		"name": "Sandstone Stairs"
+	}, {
+		"id": 129,
+		"name": "Emerald Ore"
+	}, {
+		"id": 130,
+		"name": "Ender Chest"
+	}, {
+		"id": 131,
+		"name": "Tripwire Hook"
+	}, {
+		"id": 132,
+		"name": "Tripwire"
+	}, {
+		"id": 133,
+		"name": "Emerald Block",
+		"match": [ "emeraldblock(s)?", "block(of)?emerald(s)?" ]
+	}, {
+		"id": 134,
+		"name": "Spruce Wood Stairs"
+	}, {
+		"id": 135,
+		"name": "Birch Wood Stairs"
+	}, {
+		"id": 136,
+		"name": "Jungle Wood Stairs"
+	}, {
+		"id": 137,
+		"name": "Command Block"
+	}, {
+		"id": 138,
+		"name": "Beacon"
+	}, {
+		"id": 139,
+		"name": "Cobblestone Wall"
+	}, {
+		"id": 140,
+		"name": "Flower Pot"
+	}, {
+		"id": 141,
+		"name": "Carrot Block"
+	}, {
+		"id": 142,
+		"name": "Potato Block"
+	}, {
+		"id": 143,
+		"name": "Wooden Button"
+	}, {
+		"id": 144,
+		"name": "Head Block (Skeleton)",
+		"subitems": [ {
+			"id": 1,
+			"name": "Head Block (Wither)"
+		}, {
+			"id": 2,
+			"name": "Head Block (Zombie)"
+		}, {
+			"id": 3,
+			"name": "Head Block (Steve)"
+		}, {
+			"id": 4,
+			"name": "Head Block (Creeper)"
+		} ]
+	}, {
+		"id": 145,
+		"name": "Anvil",
+		"subitems": [ {
+			"id": 1,
+			"name": "Anvil (Sligtly Damaged)"
+		}, {
+			"id": 2,
+			"name": "Anvil (Very Damaged)"
+		} ]
+	}, {
+		"id": 146,
+		"name": "Trapped Chest"
+	}, {
+		"id": 147,
+		"name": "Weighted Pressure Plate (Light)"
+	}, {
+		"id": 148,
+		"name": "Weighted Pressure Plate (Heavy)"
+	}, {
+		"id": 149,
+		"name": "Redstone Comparator (Off)"
+	}, {
+		"id": 150,
+		"name": "Redstone Comparator (On)"
+	}, {
+		"id": 151,
+		"name": "Daylight Sensor"
+	}, {
+		"id": 152,
+		"name": "Block of Redstone"
+	}, {
+		"id": 153,
+		"name": "Nether Quartz Ore"
+	}, {
+		"id": 154,
+		"name": "Hopper"
+	}, {
+		"id": 155,
+		"name": "Quartz Block",
+		"subitems": [ {
+			"id": 1,
+			"name": "Chiseled Quartz Block"
+		}, {
+			"id": 2,
+			"name": "Pillar Quartz Block"
+		} ]
+	}, {
+		"id": 156,
+		"name": "Quartz Stairs"
+	}, {
+		"id": 157,
+		"name": "Rail (Activator)"
+	}, {
+		"id": 158,
+		"name": "Dropper"
+	}, {
+		"id": 159,
+		"name": "Stained Clay (White)",
+		"subitems": [ {
+			"id": 1,
+			"name": "Stained Clay (Orange)"
+		}, {
+			"id": 2,
+			"name": "Stained Clay (Magenta)"
+		}, {
+			"id": 3,
+			"name": "Stained Clay (Light Blue)"
+		}, {
+			"id": 4,
+			"name": "Stained Clay (Yellow)"
+		}, {
+			"id": 5,
+			"name": "Stained Clay (Lime)"
+		}, {
+			"id": 6,
+			"name": "Stained Clay (Pink)"
+		}, {
+			"id": 7,
+			"name": "Stained Clay (Grey)",
+			"match": [ "stainedclaygr(a|e)y", "gr(a|e)ystainedclay" ]
+		}, {
+			"id": 8,
+			"name": "Stained Clay (Light Grey)",
+			"match": [ "stainedclay(lightgr(a|e)y|silver)", "(silver|gr(a|e)y)stainedclay" ]
+		}, {
+			"id": 9,
+			"name": "Stained Clay (Cyan)"
+		}, {
+			"id": 10,
+			"name": "Stained Clay (Purple)"
+		}, {
+			"id": 11,
+			"name": "Stained Clay (Blue)"
+		}, {
+			"id": 12,
+			"name": "Stained Clay (Brown)"
+		}, {
+			"id": 13,
+			"name": "Stained Clay (Green)"
+		}, {
+			"id": 14,
+			"name": "Stained Clay (Red)"
+		}, {
+			"id": 15,
+			"name": "Stained Clay (Black)"
+		} ]
+	}, {
+		"id": 160,
+		"name": "Stained Glass Pane (White)",
+		"subitems": [ {
+			"id": 1,
+			"name": "Stained Glass Pane (Orange)"
+		}, {
+			"id": 2,
+			"name": "Stained Glass Pane (Magenta)"
+		}, {
+			"id": 3,
+			"name": "Stained Glass Pane (Light Blue)"
+		}, {
+			"id": 4,
+			"name": "Stained Glass Pane (Yellow)"
+		}, {
+			"id": 5,
+			"name": "Stained Glass Pane (Lime)"
+		}, {
+			"id": 6,
+			"name": "Stained Glass Pane (Pink)"
+		}, {
+			"id": 7,
+			"name": "Stained Glass Pane (Grey)",
+			"match": [ "stainedglasspanegr(a|e)y", "gr(a|e)ystainedglasspane" ]
+		}, {
+			"id": 8,
+			"name": "Stained Glass Pane (Light Grey)",
+			"match": [ "stainedglasspane(lightgr(a|e)y|silver)", "(silver|gr(a|e)y)stainedglasspane" ]
+		}, {
+			"id": 9,
+			"name": "Stained Glass Pane (Cyan)"
+		}, {
+			"id": 10,
+			"name": "Stained Glass Pane (Purple)"
+		}, {
+			"id": 11,
+			"name": "Stained Glass Pane (Blue)"
+		}, {
+			"id": 12,
+			"name": "Stained Glass Pane (Brown)"
+		}, {
+			"id": 13,
+			"name": "Stained Glass Pane (Green)"
+		}, {
+			"id": 14,
+			"name": "Stained Glass Pane (Red)"
+		}, {
+			"id": 15,
+			"name": "Stained Glass Pane (Black)"
+		} ]
+	}, {
+		"id": 162,
+		"name": "Wood (Acacia)",
+		"match": [ "aca(c|d)ia(wood|log)", "(wood|log)aca(c|d)ia" ]
+	}, {
+		"id": 163,
+		"name": "Wooden Stairs (Acacia)",
+		"match": [ "(wood(en)?)?stairsaca(c|d)ia", "aca(c|d)ia(wood(en)?)?stairs" ]
+	}, {
+		"id": 164,
+		"name": "Wooden Stairs (Dark Oak)",
+		"match": [ "(wood(en)?)?stairsdarkoak", "darkoak(wood(en)?)?stairs" ]
+	}, {
+		"id": 165,
+		"name": "Slime Block"
+	}, {
+		"id": 166,
+		"name": "Barrier"
+	}, {
+		"id": 167,
+		"name": "Iron Trapdoor"
+	}, {
+		"id": 168,
+		"name": "Prismarine",
+		"subitems": [ {
+			"id": 1,
+			"name": "Prismarine Bricks"
+		}, {
+			"id": 2,
+			"name": "Dark Prismarine"
+		} ]
+	}, {
+		"id": 169,
+		"name": "Sea Lantern"
+	}, {
+		"id": 170,
+		"name": "Hay Bale"
+	}, {
+		"id": 171,
+		"name": "Carpet (White)",
+		"subitems": [ {
+			"id": 1,
+			"name": "Carpet (Orange)"
+		}, {
+			"id": 2,
+			"name": "Carpet (Magenta)"
+		}, {
+			"id": 3,
+			"name": "Carpet (Light Blue)"
+		}, {
+			"id": 4,
+			"name": "Carpet (Yellow)"
+		}, {
+			"id": 5,
+			"name": "Carpet (Lime)"
+		}, {
+			"id": 6,
+			"name": "Carpet (Pink)"
+		}, {
+			"id": 7,
+			"name": "Carpet (Grey)",
+			"match": [ "carpetgr(a|e)y", "gr(a|e)ycarpet" ]
+		}, {
+			"id": 8,
+			"name": "Carpet (Light Grey)",
+			"match": [ "carpet(lightgr(a|e)y|silver)", "(lightgr(a|e)y|silver)carpet" ]
+		}, {
+			"id": 9,
+			"name": "Carpet (Cyan)"
+		}, {
+			"id": 10,
+			"name": "Carpet (Purple)"
+		}, {
+			"id": 11,
+			"name": "Carpet (Blue)"
+		}, {
+			"id": 12,
+			"name": "Carpet (Brown)"
+		}, {
+			"id": 13,
+			"name": "Carpet (Green)"
+		}, {
+			"id": 14,
+			"name": "Carpet (Red)"
+		}, {
+			"id": 15,
+			"name": "Carpet (Black)"
+		} ]
+	}, {
+		"id": 172,
+		"name": "Hardened Clay"
+	}, {
+		"id": 173,
+		"name": "Block of Coal"
+	}, {
+		"id": 174,
+		"name": "Packed Ice"
+	}, {
+		"id": 175,
+		"name": "Sunflower",
+		"subitems": [ {
+			"id": 1,
+			"name": "Lilac"
+		}, {
+			"id": 2,
+			"name": "Double Tallgrass"
+		}, {
+			"id": 3,
+			"name": "Large Fern"
+		}, {
+			"id": 4,
+			"name": "Rose Bush"
+		}, {
+			"id": 5,
+			"name": "Peony"
+		} ]
+	}, {
+		"id": 256,
+		"name": "Iron Shovel",
+		"showDamage": true
+	}, {
+		"id": 257,
+		"name": "Iron Pickaxe",
+		"showDamage": true
+	}, {
+		"id": 258,
+		"name": "Iron Axe",
+		"showDamage": true
+	}, {
+		"id": 259,
+		"name": "Flint and Steel",
+		"showDamage": true
+	}, {
+		"id": 260,
+		"name": "Red Apple",
+		"match": [ "(red)?apple" ]
+	}, {
+		"id": 261,
+		"name": "Bow",
+		"showDamage": true
+	}, {
+		"id": 262,
+		"name": "Arrow"
+	}, {
+		"id": 263,
+		"name": "Coal",
+		"subitems": [ {
+			"id": 1,
+			"name": "Charcoal"
+		} ]
+	}, {
+		"id": 264,
+		"name": "Diamond"
+	}, {
+		"id": 265,
+		"name": "Iron Ingot",
+		"match": [ "iron(ingot)?" ]
+	}, {
+		"id": 266,
+		"name": "Gold Ingot",
+		"match": [ "gold(ingot)?" ]
+	}, {
+		"id": 267,
+		"name": "Iron Sword",
+		"showDamage": true
+	}, {
+		"id": 268,
+		"name": "Wooden Sword",
+		"showDamage": true
+	}, {
+		"id": 269,
+		"name": "Wooden Shovel",
+		"showDamage": true
+	}, {
+		"id": 270,
+		"name": "Wooden Pickaxe",
+		"showDamage": true
+	}, {
+		"id": 271,
+		"name": "Wooden Axe",
+		"showDamage": true
+	}, {
+		"id": 272,
+		"name": "Stone Sword",
+		"showDamage": true
+	}, {
+		"id": 273,
+		"name": "Stone Shovel",
+		"showDamage": true
+	}, {
+		"id": 274,
+		"name": "Stone Pickaxe",
+		"showDamage": true
+	}, {
+		"id": 275,
+		"name": "Stone Axe",
+		"showDamage": true
+	}, {
+		"id": 276,
+		"name": "Diamond Sword",
+		"showDamage": true
+	}, {
+		"id": 277,
+		"name": "Diamond Shovel",
+		"showDamage": true
+	}, {
+		"id": 278,
+		"name": "Diamond Pickaxe",
+		"showDamage": true
+	}, {
+		"id": 279,
+		"name": "Diamond Axe",
+		"showDamage": true
+	}, {
+		"id": 280,
+		"name": "Stick"
+	}, {
+		"id": 281,
+		"name": "Bowl"
+	}, {
+		"id": 282,
+		"name": "Mushroom Stew"
+	}, {
+		"id": 283,
+		"name": "Golden Sword",
+		"showDamage": true
+	}, {
+		"id": 284,
+		"name": "Golden Shovel",
+		"showDamage": true
+	}, {
+		"id": 285,
+		"name": "Golden Pickaxe",
+		"showDamage": true
+	}, {
+		"id": 286,
+		"name": "Golden Axe",
+		"showDamage": true
+	}, {
+		"id": 287,
+		"name": "String"
+	}, {
+		"id": 288,
+		"name": "Feather"
+	}, {
+		"id": 289,
+		"name": "Gunpowder"
+	}, {
+		"id": 290,
+		"name": "Wooden Hoe",
+		"showDamage": true
+	}, {
+		"id": 291,
+		"name": "Stone Hoe",
+		"showDamage": true
+	}, {
+		"id": 292,
+		"name": "Iron Hoe",
+		"showDamage": true
+	}, {
+		"id": 293,
+		"name": "Diamond Hoe",
+		"showDamage": true
+	}, {
+		"id": 294,
+		"name": "Golden Hoe",
+		"showDamage": true
+	}, {
+		"id": 295,
+		"name": "Seeds"
+	}, {
+		"id": 296,
+		"name": "Wheat"
+	}, {
+		"id": 297,
+		"name": "Bread"
+	}, {
+		"id": 298,
+		"name": "Leather Cap",
+		"match": [ "leather(cap|helmet)" ],
+		"showDamage": true
+	}, {
+		"id": 299,
+		"name": "Leather Tunic",
+		"match": [ "leather(tunic|chestplate)" ],
+		"showDamage": true
+	}, {
+		"id": 300,
+		"name": "Leather Pants",
+		"match": [ "leather(pants|leggings)" ],
+		"showDamage": true
+	}, {
+		"id": 301,
+		"name": "Leather Boots",
+		"showDamage": true
+	}, {
+		"id": 302,
+		"name": "Chain Helmet",
+		"showDamage": true
+	}, {
+		"id": 303,
+		"name": "Chain Chestplate",
+		"showDamage": true
+	}, {
+		"id": 304,
+		"name": "Chain Leggings",
+		"showDamage": true
+	}, {
+		"id": 305,
+		"name": "Chain Boots",
+		"showDamage": true
+	}, {
+		"id": 306,
+		"name": "Iron Helmet",
+		"showDamage": true
+	}, {
+		"id": 307,
+		"name": "Iron Chestplate",
+		"showDamage": true
+	}, {
+		"id": 308,
+		"name": "Iron Leggings",
+		"showDamage": true
+	}, {
+		"id": 309,
+		"name": "Iron Boots",
+		"showDamage": true
+	}, {
+		"id": 310,
+		"name": "Diamond Helment",
+		"showDamage": true
+	}, {
+		"id": 311,
+		"name": "Diamond Chestplate",
+		"showDamage": true
+	}, {
+		"id": 312,
+		"name": "Diamond Leggings",
+		"showDamage": true
+	}, {
+		"id": 313,
+		"name": "Diamond Boots",
+		"showDamage": true
+	}, {
+		"id": 314,
+		"name": "Golden Helmet",
+		"match": [ "gold(en)?helmet" ],
+		"showDamage": true
+	}, {
+		"id": 315,
+		"name": "Golden Chestplate",
+		"match": [ "gold(en)?chestplate" ],
+		"showDamage": true
+	}, {
+		"id": 316,
+		"name": "Golden Leggings",
+		"match": [ "gold(en)?leggings" ],
+		"showDamage": true
+	}, {
+		"id": 317,
+		"name": "Golden Boots",
+		"match": [ "gold(en)?boots" ],
+		"showDamage": true
+	}, {
+		"id": 318,
+		"name": "Flint"
+	}, {
+		"id": 319,
+		"name": "Raw Porkchop"
+	}, {
+		"id": 320,
+		"name": "Cooked Porkchop"
+	}, {
+		"id": 321,
+		"name": "Painting"
+	}, {
+		"id": 322,
+		"name": "Golden Apple"
+	}, {
+		"id": 323,
+		"name": "Sign"
+	}, {
+		"id": 324,
+		"name": "Wooden Door"
+	}, {
+		"id": 325,
+		"name": "Bucket"
+	}, {
+		"id": 326,
+		"name": "Water Bucket"
+	}, {
+		"id": 327,
+		"name": "Lava Bucket"
+	}, {
+		"id": 328,
+		"name": "Minecart"
+	}, {
+		"id": 329,
+		"name": "Saddle"
+	}, {
+		"id": 330,
+		"name": "Iron Door"
+	}, {
+		"id": 331,
+		"name": "Redstone Dust",
+		"match": [ "redstone(dust)?" ]
+	}, {
+		"id": 332,
+		"name": "Snowball"
+	}, {
+		"id": 333,
+		"name": "Boat"
+	}, {
+		"id": 334,
+		"name": "Leather"
+	}, {
+		"id": 335,
+		"name": "Milk"
+	}, {
+		"id": 336,
+		"name": "Clay Brick"
+	}, {
+		"id": 337,
+		"name": "Clay"
+	}, {
+		"id": 338,
+		"name": "Sugar Canes"
+	}, {
+		"id": 339,
+		"name": "Paper"
+	}, {
+		"id": 340,
+		"name": "Book"
+	}, {
+		"id": 341,
+		"name": "Slimeball"
+	}, {
+		"id": 342,
+		"name": "Minecart with Chest"
+	}, {
+		"id": 343,
+		"name": "Minecart with Furnace"
+	}, {
+		"id": 344,
+		"name": "Egg"
+	}, {
+		"id": 345,
+		"name": "Compass"
+	}, {
+		"id": 346,
+		"name": "Fishing Rod",
+		"showDamage": true
+	}, {
+		"id": 347,
+		"name": "Clock"
+	}, {
+		"id": 348,
+		"name": "Glowstone Dust"
+	}, {
+		"id": 349,
+		"name": "Raw Fish",
+		"subitems": [ {
+			"id": 1,
+			"name": "Raw Salmon"
+		}, {
+			"id": 2,
+			"name": "Clownfish",
+			"match": [ "clownfish", "nemo" ]
+		}, {
+			"id": 3,
+			"name": "Pufferfish"
+		} ]
+	}, {
+		"id": 350,
+		"name": "Cooked Fish",
+		"subitems": [ {
+			"id": 1,
+			"name": "Cooked Salmon"
+		}, {
+			"id": 2,
+			"name": "Cooked Clownfish",
+			"match": [ "cookedclownfish", "cookednemo" ]
+		}, {
+			"id": 3,
+			"name": "Cooked Pufferfish"
+		} ]
+	}, {
+		"id": 351,
+		"name": "Ink Sac",
+		"match": [ "ink(sac)?" ],
+		"subitems": [ {
+			"id": 1,
+			"name": "Rose Red",
+			"match": [ "(rose)?red" ]
+		}, {
+			"id": 2,
+			"name": "Cactus Green",
+			"match": [ "(cactus)?green" ]
+		}, {
+			"id": 3,
+			"name": "Cocoa Beans",
+			"match": [ "cocoa(bean(s)?)?" ]
+		}, {
+			"id": 4,
+			"name": "Lapis Lazuli",
+			"match": [ "lapis(lazuli)?" ]
+		}, {
+			"id": 5,
+			"name": "Purple Dye",
+			"match": [ "purple(dye)?" ]
+		}, {
+			"id": 6,
+			"name": "Cyan Dye",
+			"match": [ "cyan(dye)?" ]
+		}, {
+			"id": 7,
+			"name": "Light Grey Dye",
+			"match": [ "(lightgr(a|e)y|silver)(dye)?" ]
+		}, {
+			"id": 8,
+			"name": "Grey Dye",
+			"match": [ "gr(a|e)y(dye)?" ]
+		}, {
+			"id": 9,
+			"name": "Pink Dye",
+			"match": [ "pink(dye)?" ]
+		}, {
+			"id": 10,
+			"name": "Lime Dye",
+			"match": [ "lime(dye)?" ]
+		}, {
+			"id": 11,
+			"name": "Dandelion Yellow",
+			"match": [ "(dandelion)?yellow" ]
+		}, {
+			"id": 12,
+			"name": "Light Blue Dye",
+			"match": [ "lightblue(dye)?" ]
+		}, {
+			"id": 13,
+			"name": "Magenta Dye",
+			"match": [ "magenta(dye)?" ]
+		}, {
+			"id": 14,
+			"name": "Orange Dye",
+			"match": [ "orange(dye)?" ]
+		}, {
+			"id": 15,
+			"name": "Bone Meal"
+		} ]
+	}, {
+		"id": 352,
+		"name": "Bone"
+	}, {
+		"id": 353,
+		"name": "Sugar"
+	}, {
+		"id": 354,
+		"name": "Cake"
+	}, {
+		"id": 355,
+		"name": "Bed"
+	}, {
+		"id": 356,
+		"name": "Redstone Repeater",
+		"match": [ "(redstone)?repeater" ]
+	}, {
+		"id": 357,
+		"name": "Cookie"
+	}, {
+		"id": 358,
+		"name": "Map"
+	}, {
+		"id": 359,
+		"name": "Shears",
+		"showDamage": true
+	}, {
+		"id": 360,
+		"name": "Melon (Slice)"
+	}, {
+		"id": 361,
+		"name": "Pumpkin Seeds"
+	}, {
+		"id": 362,
+		"name": "Melon Seeds"
+	}, {
+		"id": 363,
+		"name": "Raw Beef"
+	}, {
+		"id": 364,
+		"name": "Steak"
+	}, {
+		"id": 365,
+		"name": "Raw Chicken"
+	}, {
+		"id": 366,
+		"name": "Cooked Chicken"
+	}, {
+		"id": 367,
+		"name": "Rotten Flesh"
+	}, {
+		"id": 368,
+		"name": "Ender Pearl"
+	}, {
+		"id": 369,
+		"name": "Blaze Rod"
+	}, {
+		"id": 370,
+		"name": "Ghast Tear"
+	}, {
+		"id": 371,
+		"name": "Gold Nugget"
+	}, {
+		"id": 372,
+		"name": "Nether Wart Seeds"
+	}, {
+		"id": 373,
+		"name": "Water Bottle",
+		"subitems": [ {
+			"id": 16,
+			"name": "Awkward Potion"
+		}, {
+			"id": 32,
+			"name": "Thick Potion"
+		}, {
+			"id": 48,
+			"name": "Potent Potion"
+		}, {
+			"id": 8192,
+			"name": "Mundane Potion"
+		}, {
+			"id": 8224,
+			"name": "Mundane Potion II"
+		}, {
+			"id": 8256,
+			"name": "Mundane Potion (Ex)"
+		}, {
+			"id": 8288,
+			"name": "Mundane Potion II (Ex)"
+		}, {
+			"id": 16384,
+			"name": "Splash Mundane Potion"
+		}, {
+			"id": 16416,
+			"name": "Splash Mundane Potion II"
+		}, {
+			"id": 16448,
+			"name": "Splash Mundane Potion (Ex)"
+		}, {
+			"id": 16480,
+			"name": "Splash Mundane Potion II (Ex)"
+		}, {
+			"id": 8193,
+			"name": "Potion of Regeneration"
+		}, {
+			"id": 8225,
+			"name": "Potion of Regeneration II"
+		}, {
+			"id": 8257,
+			"name": "Potion of Regeneration (Ex)"
+		}, {
+			"id": 8289,
+			"name": "Potion of Regeneration II (Ex)"
+		}, {
+			"id": 16385,
+			"name": "Splash Potion of Regeneration"
+		}, {
+			"id": 16417,
+			"name": "Splash Potion of Regeneration II"
+		}, {
+			"id": 16449,
+			"name": "Splash Potion of Regeneration (Ex)"
+		}, {
+			"id": 16481,
+			"name": "Splash Potion of Regeneration II (Ex)"
+		}, {
+			"id": 8194,
+			"name": "Potion of Swiftness"
+		}, {
+			"id": 8226,
+			"name": "Potion of Swiftness II"
+		}, {
+			"id": 8258,
+			"name": "Potion of Swiftness (Ex)"
+		}, {
+			"id": 8290,
+			"name": "Potion of Swiftness II (Ex)"
+		}, {
+			"id": 16386,
+			"name": "Splash Potion of Swiftness"
+		}, {
+			"id": 16418,
+			"name": "Splash Potion of Swiftness II"
+		}, {
+			"id": 16450,
+			"name": "Splash Potion of Swiftness (Ex)"
+		}, {
+			"id": 16482,
+			"name": "Splash Potion of Swiftness II (Ex)"
+		}, {
+			"id": 8195,
+			"name": "Potion of Fire Resistance"
+		}, {
+			"id": 8227,
+			"name": "Potion of Fire Resistance II"
+		}, {
+			"id": 8259,
+			"name": "Potion of Fire Resistance (Ex)"
+		}, {
+			"id": 8291,
+			"name": "Potion of Fire Resistance II (Ex)"
+		}, {
+			"id": 16387,
+			"name": "Splash Potion of Fire Resistance"
+		}, {
+			"id": 16419,
+			"name": "Splash Potion of Fire Resistance II"
+		}, {
+			"id": 16451,
+			"name": "Splash Potion of Fire Resistance (Ex)"
+		}, {
+			"id": 16483,
+			"name": "Splash Potion of Fire Resistance II (Ex)"
+		}, {
+			"id": 8196,
+			"name": "Potion of Poison"
+		}, {
+			"id": 8228,
+			"name": "Potion of Poison II"
+		}, {
+			"id": 8260,
+			"name": "Potion of Poison (Ex)"
+		}, {
+			"id": 8292,
+			"name": "Potion of Poison II (Ex)"
+		}, {
+			"id": 16388,
+			"name": "Splash Potion of Poison"
+		}, {
+			"id": 16420,
+			"name": "Splash Potion of Poison II"
+		}, {
+			"id": 16452,
+			"name": "Splash Potion of Poison (Ex)"
+		}, {
+			"id": 16484,
+			"name": "Splash Potion of Poison II (Ex)"
+		}, {
+			"id": 8197,
+			"name": "Potion of Instant Health"
+		}, {
+			"id": 8229,
+			"name": "Potion of Instant Health II"
+		}, {
+			"id": 8261,
+			"name": "Potion of Instant Health (Ex)"
+		}, {
+			"id": 8293,
+			"name": "Potion of Instant Health II (Ex)"
+		}, {
+			"id": 16389,
+			"name": "Splash Potion of Instant Health"
+		}, {
+			"id": 16421,
+			"name": "Splash Potion of Instant Health II"
+		}, {
+			"id": 16453,
+			"name": "Splash Potion of Instant Health (Ex)"
+		}, {
+			"id": 16485,
+			"name": "Splash Potion of Instant Health II (Ex)"
+		}, {
+			"id": 8200,
+			"name": "Potion of Weakness"
+		}, {
+			"id": 8232,
+			"name": "Potion of Weakness II"
+		}, {
+			"id": 8264,
+			"name": "Potion of Weakness (Ex)"
+		}, {
+			"id": 8296,
+			"name": "Potion of Weakness II (Ex)"
+		}, {
+			"id": 16392,
+			"name": "Splash Potion of Weakness"
+		}, {
+			"id": 16424,
+			"name": "Splash Potion of Weakness II"
+		}, {
+			"id": 16456,
+			"name": "Splash Potion of Weakness (Ex)"
+		}, {
+			"id": 16488,
+			"name": "Splash Potion of Weakness II (Ex)"
+		}, {
+			"id": 8201,
+			"name": "Potion of Strength"
+		}, {
+			"id": 8233,
+			"name": "Potion of Strength II"
+		}, {
+			"id": 8265,
+			"name": "Potion of Strength (Ex)"
+		}, {
+			"id": 8297,
+			"name": "Potion of Strength II (Ex)"
+		}, {
+			"id": 16393,
+			"name": "Splash Potion of Strength"
+		}, {
+			"id": 16425,
+			"name": "Splash Potion of Strength II"
+		}, {
+			"id": 16457,
+			"name": "Splash Potion of Strength (Ex)"
+		}, {
+			"id": 16489,
+			"name": "Splash Potion of Strength II (Ex)"
+		}, {
+			"id": 8202,
+			"name": "Potion of Slowness"
+		}, {
+			"id": 8234,
+			"name": "Potion of Slowness II"
+		}, {
+			"id": 8266,
+			"name": "Potion of Slowness (Ex)"
+		}, {
+			"id": 8298,
+			"name": "Potion of Slowness II (Ex)"
+		}, {
+			"id": 16394,
+			"name": "Splash Potion of Slowness"
+		}, {
+			"id": 16426,
+			"name": "Splash Potion of Slowness II"
+		}, {
+			"id": 16458,
+			"name": "Splash Potion of Slowness (Ex)"
+		}, {
+			"id": 16490,
+			"name": "Splash Potion of Slowness II (Ex)"
+		}, {
+			"id": 8204,
+			"name": "Potion of Harming"
+		}, {
+			"id": 8236,
+			"name": "Potion of Harming II"
+		}, {
+			"id": 8268,
+			"name": "Potion of Harming (Ex)"
+		}, {
+			"id": 8300,
+			"name": "Potion of Harming II (Ex)"
+		}, {
+			"id": 16396,
+			"name": "Splash Potion of Harming"
+		}, {
+			"id": 16428,
+			"name": "Splash Potion of Harming II"
+		}, {
+			"id": 16460,
+			"name": "Splash Potion of Harming (Ex)"
+		}, {
+			"id": 16492,
+			"name": "Splash Potion of Harming II (Ex)"
+		}, {
+			"id": 6,
+			"name": "Clear Potion"
+		}, {
+			"id": 70,
+			"name": "Clear Potion"
+		}, {
+			"id": 8198,
+			"name": "Clear Potion"
+		}, {
+			"id": 16390,
+			"name": "Splash Clear Potion"
+		}, {
+			"id": 16454,
+			"name": "Splash Clear Potion"
+		}, {
+			"id": 24582,
+			"name": "Splash Clear Potion"
+		}, {
+			"id": 7,
+			"name": "Clear Potion"
+		}, {
+			"id": 71,
+			"name": "Clear Potion"
+		}, {
+			"id": 8199,
+			"name": "Clear Potion"
+		}, {
+			"id": 16391,
+			"name": "Splash Clear Potion"
+		}, {
+			"id": 16455,
+			"name": "Splash Clear Potion"
+		}, {
+			"id": 24583,
+			"name": "Splash Clear Potion"
+		}, {
+			"id": 11,
+			"name": "Diffuse Potion"
+		}, {
+			"id": 75,
+			"name": "Diffuse Potion"
+		}, {
+			"id": 8203,
+			"name": "Diffuse Potion"
+		}, {
+			"id": 16395,
+			"name": "Splash Diffuse Potion"
+		}, {
+			"id": 16459,
+			"name": "Splash Diffuse Potion"
+		}, {
+			"id": 24587,
+			"name": "Splash Diffuse Potion"
+		}, {
+			"id": 13,
+			"name": "Artless Potion"
+		}, {
+			"id": 77,
+			"name": "Artless Potion"
+		}, {
+			"id": 8205,
+			"name": "Artless Potion"
+		}, {
+			"id": 16397,
+			"name": "Splash Artless Potion"
+		}, {
+			"id": 16461,
+			"name": "Splash Artless Potion"
+		}, {
+			"id": 24589,
+			"name": "Splash Artless Potion"
+		}, {
+			"id": 14,
+			"name": "Thin Potion"
+		}, {
+			"id": 78,
+			"name": "Thin Potion"
+		}, {
+			"id": 8206,
+			"name": "Thin Potion"
+		}, {
+			"id": 16398,
+			"name": "Splash Thin Potion"
+		}, {
+			"id": 16462,
+			"name": "Splash Thin Potion"
+		}, {
+			"id": 24590,
+			"name": "Splash Thin Potion"
+		}, {
+			"id": 15,
+			"name": "Thin Potion"
+		}, {
+			"id": 79,
+			"name": "Thin Potion"
+		}, {
+			"id": 8207,
+			"name": "Thin Potion"
+		}, {
+			"id": 16399,
+			"name": "Splash Thin Potion"
+		}, {
+			"id": 16463,
+			"name": "Splash Thin Potion"
+		}, {
+			"id": 24591,
+			"name": "Splash Thin Potion"
+		}, {
+			"id": 22,
+			"name": "Bungling Potion"
+		}, {
+			"id": 86,
+			"name": "Bungling Potion"
+		}, {
+			"id": 8214,
+			"name": "Bungling Potion"
+		}, {
+			"id": 16406,
+			"name": "Splash Bungling Potion"
+		}, {
+			"id": 16470,
+			"name": "Splash Bungling Potion"
+		}, {
+			"id": 24598,
+			"name": "Splash Bungling Potion"
+		}, {
+			"id": 23,
+			"name": "Bungling Potion"
+		}, {
+			"id": 87,
+			"name": "Bungling Potion"
+		}, {
+			"id": 8215,
+			"name": "Bungling Potion"
+		}, {
+			"id": 16407,
+			"name": "Splash Bungling Potion"
+		}, {
+			"id": 16471,
+			"name": "Splash Bungling Potion"
+		}, {
+			"id": 24599,
+			"name": "Splash Bungling Potion"
+		}, {
+			"id": 27,
+			"name": "Smooth Potion"
+		}, {
+			"id": 91,
+			"name": "Smooth Potion"
+		}, {
+			"id": 8219,
+			"name": "Smooth Potion"
+		}, {
+			"id": 16411,
+			"name": "Splash Smooth Potion"
+		}, {
+			"id": 16475,
+			"name": "Splash Smooth Potion"
+		}, {
+			"id": 24603,
+			"name": "Splash Smooth Potion"
+		}, {
+			"id": 29,
+			"name": "Suave Potion"
+		}, {
+			"id": 93,
+			"name": "Suave Potion"
+		}, {
+			"id": 8221,
+			"name": "Suave Potion"
+		}, {
+			"id": 16413,
+			"name": "Splash Suave Potion"
+		}, {
+			"id": 16477,
+			"name": "Splash Suave Potion"
+		}, {
+			"id": 24605,
+			"name": "Splash Suave Potion"
+		}, {
+			"id": 30,
+			"name": "Debonair Potion"
+		}, {
+			"id": 94,
+			"name": "Debonair Potion"
+		}, {
+			"id": 8222,
+			"name": "Debonair Potion"
+		}, {
+			"id": 16414,
+			"name": "Splash Debonair Potion"
+		}, {
+			"id": 16478,
+			"name": "Splash Debonair Potion"
+		}, {
+			"id": 24606,
+			"name": "Splash Debonair Potion"
+		}, {
+			"id": 31,
+			"name": "Debonair Potion"
+		}, {
+			"id": 95,
+			"name": "Debonair Potion"
+		}, {
+			"id": 8223,
+			"name": "Debonair Potion"
+		}, {
+			"id": 16415,
+			"name": "Splash Debonair Potion"
+		}, {
+			"id": 16479,
+			"name": "Splash Debonair Potion"
+		}, {
+			"id": 24607,
+			"name": "Splash Debonair Potion"
+		}, {
+			"id": 38,
+			"name": "Charming Potion"
+		}, {
+			"id": 102,
+			"name": "Charming Potion"
+		}, {
+			"id": 8230,
+			"name": "Charming Potion"
+		}, {
+			"id": 16422,
+			"name": "Splash Charming Potion"
+		}, {
+			"id": 16486,
+			"name": "Splash Charming Potion"
+		}, {
+			"id": 24614,
+			"name": "Splash Charming Potion"
+		}, {
+			"id": 39,
+			"name": "Charming Potion"
+		}, {
+			"id": 103,
+			"name": "Charming Potion"
+		}, {
+			"id": 8231,
+			"name": "Charming Potion"
+		}, {
+			"id": 16423,
+			"name": "Splash Charming Potion"
+		}, {
+			"id": 16487,
+			"name": "Splash Charming Potion"
+		}, {
+			"id": 24615,
+			"name": "Splash Charming Potion"
+		}, {
+			"id": 43,
+			"name": "Refined Potion"
+		}, {
+			"id": 107,
+			"name": "Refined Potion"
+		}, {
+			"id": 8235,
+			"name": "Refined Potion"
+		}, {
+			"id": 16427,
+			"name": "Splash Refined Potion"
+		}, {
+			"id": 16491,
+			"name": "Splash Refined Potion"
+		}, {
+			"id": 24619,
+			"name": "Splash Refined Potion"
+		}, {
+			"id": 45,
+			"name": "Cordial Potion"
+		}, {
+			"id": 109,
+			"name": "Cordial Potion"
+		}, {
+			"id": 8237,
+			"name": "Cordial Potion"
+		}, {
+			"id": 16429,
+			"name": "Splash Cordial Potion"
+		}, {
+			"id": 16493,
+			"name": "Splash Cordial Potion"
+		}, {
+			"id": 24621,
+			"name": "Splash Cordial Potion"
+		}, {
+			"id": 46,
+			"name": "Sparkling Potion"
+		}, {
+			"id": 110,
+			"name": "Sparkling Potion"
+		}, {
+			"id": 8238,
+			"name": "Sparkling Potion"
+		}, {
+			"id": 16430,
+			"name": "Splash Sparkling Potion"
+		}, {
+			"id": 16494,
+			"name": "Splash Sparkling Potion"
+		}, {
+			"id": 24622,
+			"name": "Splash Sparkling Potion"
+		}, {
+			"id": 47,
+			"name": "Sparkling Potion"
+		}, {
+			"id": 111,
+			"name": "Sparkling Potion"
+		}, {
+			"id": 8239,
+			"name": "Sparkling Potion"
+		}, {
+			"id": 16431,
+			"name": "Splash Sparkling Potion"
+		}, {
+			"id": 16495,
+			"name": "Splash Sparkling Potion"
+		}, {
+			"id": 24623,
+			"name": "Splash Sparkling Potion"
+		}, {
+			"id": 112,
+			"name": "Potent Potion"
+		}, {
+			"id": 8240,
+			"name": "Potent Potion"
+		}, {
+			"id": 16432,
+			"name": "Splash Potent Potion"
+		}, {
+			"id": 16496,
+			"name": "Splash Potent Potion"
+		}, {
+			"id": 24624,
+			"name": "Splash Potent Potion"
+		}, {
+			"id": 54,
+			"name": "Rank Potion"
+		}, {
+			"id": 118,
+			"name": "Rank Potion"
+		}, {
+			"id": 8246,
+			"name": "Rank Potion"
+		}, {
+			"id": 16438,
+			"name": "Splash Rank Potion"
+		}, {
+			"id": 16502,
+			"name": "Splash Rank Potion"
+		}, {
+			"id": 24630,
+			"name": "Splash Rank Potion"
+		}, {
+			"id": 55,
+			"name": "Rank Potion"
+		}, {
+			"id": 119,
+			"name": "Rank Potion"
+		}, {
+			"id": 8247,
+			"name": "Rank Potion"
+		}, {
+			"id": 16439,
+			"name": "Splash Rank Potion"
+		}, {
+			"id": 16503,
+			"name": "Splash Rank Potion"
+		}, {
+			"id": 24631,
+			"name": "Splash Rank Potion"
+		}, {
+			"id": 59,
+			"name": "Acrid Potion"
+		}, {
+			"id": 123,
+			"name": "Acrid Potion"
+		}, {
+			"id": 8251,
+			"name": "Acrid Potion"
+		}, {
+			"id": 16443,
+			"name": "Splash Acrid Potion"
+		}, {
+			"id": 16507,
+			"name": "Splash Acrid Potion"
+		}, {
+			"id": 24635,
+			"name": "Splash Acrid Potion"
+		}, {
+			"id": 61,
+			"name": "Gross Potion"
+		}, {
+			"id": 125,
+			"name": "Gross Potion"
+		}, {
+			"id": 8253,
+			"name": "Gross Potion"
+		}, {
+			"id": 16445,
+			"name": "Splash Gross Potion"
+		}, {
+			"id": 16509,
+			"name": "Splash Gross Potion"
+		}, {
+			"id": 24637,
+			"name": "Splash Gross Potion"
+		}, {
+			"id": 62,
+			"name": "Stinky Potion"
+		}, {
+			"id": 126,
+			"name": "Stinky Potion"
+		}, {
+			"id": 8254,
+			"name": "Stinky Potion"
+		}, {
+			"id": 16446,
+			"name": "Splash Stinky Potion"
+		}, {
+			"id": 16510,
+			"name": "Splash Stinky Potion"
+		}, {
+			"id": 24638,
+			"name": "Splash Stinky Potion"
+		}, {
+			"id": 63,
+			"name": "Stinky Potion"
+		}, {
+			"id": 127,
+			"name": "Stinky Potion"
+		}, {
+			"id": 8255,
+			"name": "Stinky Potion"
+		}, {
+			"id": 16447,
+			"name": "Splash Stinky Potion"
+		}, {
+			"id": 16511,
+			"name": "Splash Stinky Potion"
+		}, {
+			"id": 24639,
+			"name": "Splash Stinky Potion"
+		} ]
+	}, {
+		"id": 374,
+		"name": "Glass Bottle",
+		"match": [ "(glass)?bottle" ]
+	}, {
+		"id": 375,
+		"name": "Spider Eye"
+	}, {
+		"id": 376,
+		"name": "Fermented Spider Eye"
+	}, {
+		"id": 377,
+		"name": "Blaze Powder"
+	}, {
+		"id": 378,
+		"name": "Magma Cream"
+	}, {
+		"id": 379,
+		"name": "Brewing Stand"
+	}, {
+		"id": 380,
+		"name": "Cauldron"
+	}, {
+		"id": 381,
+		"name": "Eye of Ender",
+		"match": [ "eye(of)?ender", "endereye" ]
+	}, {
+		"id": 382,
+		"name": "Glistering Melon (Slice)"
+	}, {
+		"id": 383,
+		"name": "Spawn Egg",
+		"subitems": [ {
+			"id": 50,
+			"name": "Spawn Egg (Creeper)"
+		}, {
+			"id": 51,
+			"name": "Spawn Egg (Skeleton)"
+		}, {
+			"id": 52,
+			"name": "Spawn Egg (Spider)"
+		}, {
+			"id": 54,
+			"name": "Spawn Egg (Zombie)"
+		}, {
+			"id": 55,
+			"name": "Spawn Egg (Slime)"
+		}, {
+			"id": 56,
+			"name": "Spawn Egg (Ghast)"
+		}, {
+			"id": 57,
+			"name": "Spawn Egg (Zombie Pigmen)"
+		}, {
+			"id": 58,
+			"name": "Spawn Egg (Endermen)"
+		}, {
+			"id": 59,
+			"name": "Spawn Egg (Cave Spider)"
+		}, {
+			"id": 60,
+			"name": "Spawn Egg (Silverfish)"
+		}, {
+			"id": 61,
+			"name": "Spawn Egg (Blaze)"
+		}, {
+			"id": 62,
+			"name": "Spawn Egg (Magma Cube)"
+		}, {
+			"id": 65,
+			"name": "Spawn Egg (Bat)"
+		}, {
+			"id": 66,
+			"name": "Spawn Egg (Witch)"
+		}, {
+			"id": 68,
+			"name": "Spawn Egg (Guardian)"
+		}, {
+			"id": 90,
+			"name": "Spawn Egg (Pig)"
+		}, {
+			"id": 91,
+			"name": "Spawn Egg (Sheep)"
+		}, {
+			"id": 92,
+			"name": "Spawn Egg (Cow)"
+		}, {
+			"id": 93,
+			"name": "Spawn Egg (Chicken)"
+		}, {
+			"id": 94,
+			"name": "Spawn Egg (Squid)"
+		}, {
+			"id": 95,
+			"name": "Spawn Egg (Wolf)"
+		}, {
+			"id": 96,
+			"name": "Spawn Egg (Mooshroom)"
+		}, {
+			"id": 98,
+			"name": "Spawn Egg (Ocelot)"
+		}, {
+			"id": 100,
+			"name": "Spawn Egg (Horse)"
+		}, {
+			"id": 120,
+			"name": "Spawn Egg (Villager)"
+		}, {
+			"id": 67,
+			"name": "Spawn Egg (Endermite)"
+		}, {
+			"id": 101,
+			"name": "Spawn Egg (Rabbit)"
+		} ]
+	}, {
+		"id": 384,
+		"name": "Bottle of Enchanting"
+	}, {
+		"id": 385,
+		"name": "Fire Charge"
+	}, {
+		"id": 386,
+		"name": "Book and Quill"
+	}, {
+		"id": 387,
+		"name": "Written Book"
+	}, {
+		"id": 388,
+		"name": "Emerald"
+	}, {
+		"id": 389,
+		"name": "Item Frame"
+	}, {
+		"id": 390,
+		"name": "Flower Pot"
+	}, {
+		"id": 391,
+		"name": "Carrot"
+	}, {
+		"id": 392,
+		"name": "Potato"
+	}, {
+		"id": 393,
+		"name": "Baked Potato"
+	}, {
+		"id": 394,
+		"name": "Poisonous Potato"
+	}, {
+		"id": 395,
+		"name": "Blank Map"
+	}, {
+		"id": 396,
+		"name": "Golden Carrot"
+	}, {
+		"id": 397,
+		"name": "Head (Skeleton)",
+		"subitems": [ {
+			"id": 1,
+			"name": "Head (Wither)"
+		}, {
+			"id": 2,
+			"name": "Head (Zombie)"
+		}, {
+			"id": 3,
+			"name": "Head (Steve)"
+		}, {
+			"id": 4,
+			"name": "Head (Creeper)"
+		} ]
+	}, {
+		"id": 398,
+		"name": "Carrot on a Stick"
+	}, {
+		"id": 399,
+		"name": "Nether Star"
+	}, {
+		"id": 400,
+		"name": "Pumpkin Pie"
+	}, {
+		"id": 401,
+		"name": "Firework Rocket"
+	}, {
+		"id": 402,
+		"name": "Firework Star"
+	}, {
+		"id": 403,
+		"name": "Enchanted Book"
+	}, {
+		"id": 404,
+		"name": "Redstone Commparator"
+	}, {
+		"id": 405,
+		"name": "Nether Brick (Item)"
+	}, {
+		"id": 406,
+		"name": "Nether Quartz"
+	}, {
+		"id": 407,
+		"name": "Minecart (TNT)"
+	}, {
+		"id": 408,
+		"name": "Minecart (Hopper)"
+	}, {
+		"id": 409,
+		"name": "Prismarine Shard"
+	}, {
+		"id": 410,
+		"name": "Prismarine Crystals"
+	}, {
+		"id": 417,
+		"name": "Iron Horse Armor"
+	}, {
+		"id": 418,
+		"name": "Gold Horse Armor"
+	}, {
+		"id": 419,
+		"name": "Diamond Horse Armor"
+	}, {
+		"id": 420,
+		"name": "Lead"
+	}, {
+		"id": 421,
+		"name": "Name Tag"
+	}, {
+		"id": 422,
+		"name": "Minecart (Command Block)"
+	}, {
+		"id": 2256,
+		"name": "Music Disk (C418 - 13)"
+	}, {
+		"id": 2257,
+		"name": "Music Disk (C418 - cat)"
+	}, {
+		"id": 2258,
+		"name": "Music Disk (C418 - blocks)"
+	}, {
+		"id": 2259,
+		"name": "Music Disk (C418 - chirp)"
+	}, {
+		"id": 2260,
+		"name": "Music Disk (C418 - far)"
+	}, {
+		"id": 2261,
+		"name": "Music Disk (C418 - mall)"
+	}, {
+		"id": 2262,
+		"name": "Music Disk (C418 - mellohi)"
+	}, {
+		"id": 2263,
+		"name": "Music Disk (C418 - stal)"
+	}, {
+		"id": 2264,
+		"name": "Music Disk (C418 - strad)"
+	}, {
+		"id": 2265,
+		"name": "Music Disk (C418 - ward)"
+	}, {
+		"id": 2266,
+		"name": "Music Disk (C418 - 11)"
+	}, {
+		"id": 161,
+		"name": "Acacia Leaves",
+		"match": [ "aca(c|d)ialeaves" ],
+		"subitems": [ {
+			"id": 1,
+			"name": "Dark Oak Leaves"
+		} ]
+	}, {
+		"id": 176,
+		"name": "Standing Banner (Block)"
+	}, {
+		"id": 177,
+		"name": "Wall Banner (Block)"
+	}, {
+		"id": 178,
+		"name": "Inverted Daylight Sensor"
+	}, {
+		"id": 179,
+		"name": "Red Sandstone",
+		"subitems": [ {
+			"id": 1,
+			"name": "Red Sandstone (Chiseled)"
+		}, {
+			"id": 2,
+			"name": "Red Sandstone (Smooth)"
+		} ]
+	}, {
+		"id": 180,
+		"name": "Red Sandstone Stairs"
+	}, {
+		"id": 181,
+		"name": "Red Sandstone Slab (Double)"
+	}, {
+		"id": 182,
+		"name": "Red Sandstone Slab"
+	}, {
+		"id": 183,
+		"name": "Fence Gate (Spruce)",
+		"match": [ "(spruce|pine)(wood(en)?)?(fence)?gate", "(fence)?gate(spruce|pine)" ]
+	}, {
+		"id": 184,
+		"name": "Fence Gate (Birch)",
+		"match": [ "birch(wood(en)?)?(fence)?gate", "(fence)?gatebirch" ]
+	}, {
+		"id": 185,
+		"name": "Fence Gate (Jungle)",
+		"match": [ "jungle(wood(en)?)?(fence)?gate", "(fence)?gatejungle" ]
+	}, {
+		"id": 186,
+		"name": "Fence Gate (Dark Oak)",
+		"match": [ "darkoak(wood(en)?)?(fence)?gate", "(fence)?gatedarkoak" ]
+	}, {
+		"id": 187,
+		"name": "Fence Gate (Acacia)",
+		"match": [ "aca(c|d)ia(wood(en)?)?(fence)?gate", "(fence)?gateaca(c|d)ia" ]
+	}, {
+		"id": 188,
+		"name": "Fence (Spruce)",
+		"match": [ "(spruce|pine)(wood(en)?)?fence", "fence(spruce|pine)(wood(en)?)?" ]
+	}, {
+		"id": 189,
+		"name": "Fence (Birch)",
+		"match": [ "birch(wood(en)?)?fence", "fencebirch(wood(en)?)?" ]
+	}, {
+		"id": 190,
+		"name": "Fence (Jungle)",
+		"match": [ "jungle(wood(en)?)?fence", "fencejungle(wood(en)?)?" ]
+	}, {
+		"id": 191,
+		"name": "Fence (Dark Oak)",
+		"match": [ "darkoak(wood(en)?)?fence", "fencedarkoak(wood(en)?)?" ]
+	}, {
+		"id": 192,
+		"name": "Fence (Acacia)",
+		"match": [ "aca(c|d)ia(wood(en)?)?fence", "fenceaca(c|d)ia(wood(en)?)?" ]
+	}, {
+		"id": 193,
+		"name": "Wooden Door Block (Spruce)"
+	}, {
+		"id": 194,
+		"name": "Wooden Door Block (Birch)"
+	}, {
+		"id": 195,
+		"name": "Wooden Door Block (Jungle)"
+	}, {
+		"id": 196,
+		"name": "Wooden Door Block (Acacia)"
+	}, {
+		"id": 197,
+		"name": "Wooden Door Block (Dark Oak)"
+	}, {
+		"id": 411,
+		"name": "Raw Rabbit"
+	}, {
+		"id": 412,
+		"name": "Cooked Rabbit"
+	}, {
+		"id": 413,
+		"name": "Rabbit Stew"
+	}, {
+		"id": 414,
+		"name": "Rabbit's Foot"
+	}, {
+		"id": 415,
+		"name": "Rabbit Hide"
+	}, {
+		"id": 416,
+		"name": "Armor Stand"
+	}, {
+		"id": 423,
+		"name": "Raw Mutton"
+	}, {
+		"id": 424,
+		"name": "Cooked Mutton"
+	}, {
+		"id": 425,
+		"name": "Banner",
+		"subitems": [ {
+			"id": 1,
+			"name": "Banner (Orange)"
+		}, {
+			"id": 2,
+			"name": "Banner (Magenta)"
+		}, {
+			"id": 3,
+			"name": "Banner (Light Blue)"
+		}, {
+			"id": 4,
+			"name": "Banner (Yellow)"
+		}, {
+			"id": 5,
+			"name": "Banner (Lime)"
+		}, {
+			"id": 6,
+			"name": "Banner (Pink)"
+		}, {
+			"id": 7,
+			"name": "Banner (Grey)",
+			"match": [ "bannergr(a|e)y", "gr(a|e)ybanner" ]
+		}, {
+			"id": 8,
+			"name": "Banner (Light Grey)",
+			"match": [ "banner(lightgr(a|e)y|silver)", "(lightgr(a|e)y|silver)banner" ]
+		}, {
+			"id": 9,
+			"name": "Banner (Cyan)"
+		}, {
+			"id": 10,
+			"name": "Banner (Purple)"
+		}, {
+			"id": 11,
+			"name": "Banner (Blue)"
+		}, {
+			"id": 12,
+			"name": "Banner (Brown)"
+		}, {
+			"id": 13,
+			"name": "Banner (Green)"
+		}, {
+			"id": 14,
+			"name": "Banner (Red)"
+		}, {
+			"id": 15,
+			"name": "Banner (White)"
+		} ]
+	}, {
+		"id": 427,
+		"name": "Wooden Door (Spruce)",
+		"match": [ "(spruce|pine)(wood(en)?)?door", "(wood(en)?)?door(spruce|pine)" ]
+	}, {
+		"id": 428,
+		"name": "Wooden Door (Birch)",
+		"match": [ "birch(wood(en)?)?door", "(wood(en)?)?doorbirch" ]
+	}, {
+		"id": 429,
+		"name": "Wooden Door (Jungle)",
+		"match": [ "jungle(wood(en)?)?door", "(wood(en)?)?doorjungle" ]
+	}, {
+		"id": 430,
+		"name": "Wooden Door (Acacia)",
+		"match": [ "aca(c|d)ia(wood(en)?)?door", "(wood(en)?)?dooraca(c|d)ia" ]
+	}, {
+		"id": 431,
+		"name": "Wooden Door (Dark Oak)",
+		"match": [ "darkoak(wood(en)?)?door", "(wood(en)?)?doordarkoak" ]
+	}, {
+		"id": 2267,
+		"name": "Music Disk (Wait)"
+	} ]
+}

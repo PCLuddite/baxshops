@@ -1,0 +1,1706 @@
+# Blocks
+air 0
+stone 1
+smoothstone 1
+granite 1 1
+polishedgranite 1 2
+diorite 1 3
+polisheddiorite 1 4
+andesite 1 5
+polishedandesite 1 6
+grass 2
+grassblock 2
+dirt 3
+dirtblock 3
+coarsedirt 3 1
+podzol 3 2
+cobblestone 4
+woodenplanks 5
+woodplanks 5
+planks 5
+oakplanks 5
+oakwoodplanks 5
+spruceplanks 5 1
+sprucewoodplanks 5 1
+pineplanks 5 1
+pinewoodplanks 5 1
+birchplanks 5 2
+birchwoodplanks 5 2
+jungleplanks 5 3
+junglewoodplanks 5 3
+acaciaplanks 5 4
+acaciawoodplanks 5 4
+darkoakplanks 5 5
+darkoakwoodplanks 5 5
+sapling 6
+saplings 6
+oaksapling 6
+oaksaplings 6
+sprucesapling 6 1
+sprucesaplings 6 1
+birchsapling 6 2
+birchsaplings 6 2
+junglesapling 6 3
+junglesaplings 6 3
+acaciasapling 6 4
+acaciasaplings 6 4
+darkoaksapling 6 5
+darkoaksaplings 6 5
+bedrock 7
+adminium 7
+water 8
+stillwater 9
+stationarywater 9
+lava 10
+stilllava 11
+stationarylava 11
+sand 12
+redsand 12 1
+gravel 13
+gore 14
+goldore 14
+oregold 14
+iore 15
+ironore 15
+oreiron 15
+core 16
+coalore 16
+orecoal 16
+wood 17
+log 17
+logs 17
+sprucewood 17 1
+sprucelog 17 1
+sprucelogs 17 1
+birchwood 17 2
+birchlog 17 2
+birchlogs 17 2
+junglewood 17 3
+junglelog 17 3
+junglelogs 17 3
+leaves 18
+oakleaves 18
+pinelaves 18 1
+spruceleaves 18 1
+birchleaves 18 2
+jungleleaves 18 3
+sponge 19
+glass 20
+lore 21
+llore 21
+lapislazuliore 21
+orelapislazuli 21
+lapisore 21
+orelapis 21
+lapisblock 22
+lapislazuliblock 22
+blockoflapis 22
+blockoflapislazuli 22
+dispenser 23
+sandstone 24
+heiroglyph 24 1
+chiseledsandstone 24 1
+smoothsandstone 24 2
+noteblock 25
+bed 26
+bedfoot 26 8
+poweredrail 27
+detectorrail 28
+stickypiston 29
+cobweb 30
+web 30
+tallgrass 31 1
+fern 31 2
+deadbush 32
+deadshrub 32
+piston 33
+pistonextension 34
+wool 35
+orangewool 35 1
+woolorange 35 1
+magentawool 35 2
+woolmagenta 35 2
+lightbluewool 35 3
+woollightblue 35 3
+yellowwool 35 4
+woolyellow 35 4
+limewool 35 5
+woollime 35 5
+pinkwool 35 6
+woolpink 35 6
+graywool 35 7
+woolgray 35 7
+lightgraywool 35 8
+woollightgray 35 8
+silverwool 35 8
+woolsilver 35 8
+cyanwool 35 9
+woolcyan 35 9
+purplewool 35 10
+woolpurple 35 10
+bluewool 35 11
+woolblue 35 11
+brownwool 35 12
+woolbrown 35 12
+woolgreen 35 13
+darkgreenwool 35 13
+wooldarkgreen 35 13
+redwool 35 14
+woolred 35 14
+blackwool 35 15
+woolblack 35 15
+pistonmoving 36
+blockmovedbypiston 36
+flower 37
+dandelion 37
+yellowflower 37
+rose 38
+poppy 38
+redflower 38
+blueorchid 38 1
+allium 38 2
+azurebluet 38 3
+redtullip 38 4
+orangetulip 38 5
+whitetulip 38 6
+pinktulip 38 7
+oxeyedaisy 38 8
+daisy 38 8
+brownmushroom 39
+redmushroom 40
+goldblock 41
+blockofgold 41
+ironblock 42
+blockofiron 42
+doubleslab 43
+doublestoneslab 43
+doublesandstoneslab 43 1
+doublewoodenslab 43 2
+doublewoodslab 43 2
+doublecobbleslab 43 3
+doublecobblestoneslab 43 3
+doublebrickslab 43 4
+doublestonebrickslab 43 5
+doublestonebricksslab 43 5
+slab 44
+stoneslab 44
+sandstoneslab 44 1
+woodenslab 44 2
+woodslab 44 2
+cobbleslab 44 3
+cobblestoneslab 44 3
+brickslab 44 4
+stonebrickslab 44 5
+stonebricksslab 44 5
+bricks 45
+brickblock 45
+tnt 46
+joy 46
+bookshelf 47
+bookshelves 47
+bookcase 47
+mossstone 48
+mosscobblestone 48
+mosstone 48
+obsidian 49
+torch 50
+fire 51
+spawner 52
+mobspawner 52
+monsterspawner 52
+woodenstairs 53
+woodstairs 53
+oakwoodstairs 53
+chest 54
+redstonewire 55
+diamondore 56
+orediamond 56
+diamondblock 57
+blockofdiamond 57
+craftingtable 58
+workbench 58
+wheatblock 59
+farmland 60
+furnace 61
+burningfurnace 62
+litfurnace 62
+sign 63
+signpost 63
+woodendoor 64
+wooddoor 64
+woodoor 64
+ladder 65
+rail 66
+cobblestairs 67
+cobblestonestairs 67
+wallsign 68
+lever 69
+stonepressureplate 70
+irondoor 71
+woodpressureplate 72
+redstoneore 73
+oreredstone 73
+glowingredstoneore 74
+oreredstoneglowing 74
+redstonetorchoff 75
+redstonetorch 76
+button 77
+stonebutton 77
+snow 78
+ice 79
+snowblock 80
+blockofsnow 80
+cactus 81
+clayblock 82
+blockofclay 82
+sugarcane 83
+jukebox 84
+fence 85
+oakfence 85
+pumpkin 86
+netherrack 87
+soulsand 88
+glowstone 89
+portal 90
+jackolantern 91
+cakeblock 92
+redstonerepeateroff 93
+redstonerepeateron 94
+stainedglass 95
+whitestainedglass 95
+stainedglasswhite 95
+orangestainedglass 95 1
+stainedglassorange 95 1
+magentastainedglass 95 2
+stainedglassmagenta 95 2
+lightbluestainedglass 95 3
+stainedglasslightblue 95 3
+yellowstainedglass 95 4
+stainedglassyellow 95 4
+limestainedglass 95 5
+stainedglasslime 95 5
+pinkstainedglass 95 6
+stainedglasspink 95 6
+graystainedglass 95 7
+stainedglassgray 95 7
+greystainedglass 95 7
+stainedglassgrey 95 7
+lightgraystainedglass 95 8
+stainedglasslightgray 95 8
+lightgreystainedglass 95 8
+stainedglasslightgrey 95 8
+cyanstainedglass 95 9
+stainedglasscyan 95 9
+purplestainedglass 95 10
+stainedglasspurple 95 10
+bluestainedglass 95 11
+stainedglassblue 95 11
+brownstainedglass 95 12
+stainedglassbrown 95 12
+greenstainedglass 95 13
+stainedglassgreen 95 13
+redstainedglass 95 14
+stainedglassred 95 14
+blackstainedglass 95 15
+stainedglassblack 95 15
+trapdoor 96
+silverfishstone 97
+silverfishcobble 97 1
+silverfishcobblestone 97 1
+silverfishstonebrick 97 2
+silverfishstonebricks 97 2
+stonebrick 98
+stonebricks 98
+mossystonebrick 98 1
+mossystonebricks 98 1
+crackedstonebrick 98 2
+crackedstonebricks 98 2
+circlestonebrick 98 3
+circlestonebricks 98 3
+brownmushroomblock 99
+hugebrownmushroom 99
+redmushroomblock 100
+hugeredmushroom 100
+ironbars 101
+glasspane 102
+melonblock 103
+pumpkinstem 104
+pumpkinvine 104
+melonstem 105
+melonvine 105
+vines 106
+fencegate 107
+gate 107
+brickstairs 108
+bricksstairs 108
+stonebrickstairs 109
+stonebricksstairs 109
+mycelium 110
+lilypad 111
+waterlily 111
+netherbrick 112
+netherbrickfence 113
+netherbrickstairs 114
+netherwart 115
+enchantmenttable 116
+enchantingtable 116
+brewingstand 117
+cauldron 118
+endportal 119
+endportalframe 120
+endstone 121
+dragonegg 122
+redstonelamp 123
+redstonelamplit 124
+litredstonelamp 124
+doublewoodslab 125
+doubleoakwoodslab 125
+doublesprucewoodslab 125 1
+doublebirchwoodslabb 125 2
+doublejunglewoodslab 125 3
+doubleacaciawoodslab 125 4
+doubledarkoakwoodslab 125 5
+woodslab 126
+oakwoodslab 126
+sprucewoodslab 126 1
+birchwoodslab 126 2
+junglewoodslab 126 3
+acaciawoodslab 126 4
+darkoakwoodslab 126 5
+coacoapod 127
+coacoaplant 127
+sandstonestairs 128
+stairssandstone 128
+sandstairs 128
+emeraldore 129
+enderchest 130
+tripwirehook 131
+tripwire 132
+emeraldblock 133
+blockofemerald 133
+sprucewoodstairs 134
+sprucestairs 134
+birchwoodstairs 135
+birchstairs 135
+junglewoodstairs 136
+junglestairs 136
+commandblock 137
+beacon 138
+cobblestonewall 139
+cobblewall 139
+flowerpot 140
+carrotblock 141
+potatoblock 142
+woodenbutton 143
+woodbutton 143
+headblock 144
+headblockskull 144
+skullblock 144
+headblockwither 144 1
+witherheadblock 144 1
+headblockzombie 144 2
+zombieheadblock 144 2
+headblocksteve 144 3
+steveheadblock 144 3
+headblockcreeper 144 4
+creeperheadblock 144 4
+anvil 145
+damagedanvil 145 1
+slightlydamagedanvil 145 1
+verydamagedanvil 145 2
+reallydamagedanvil 145 2
+trappedchest 146
+weightedpressureplatelight 147
+lightweightedpressureplate 147
+weightedpressureplategold 147
+goldweightedpressureplate 147
+weightedpressureplateheavy 148
+heavyweightedpressureplate 148
+weightedpressureplateiron 148
+ironweightedpressureplate 148
+redstonecomparatoroff 149
+redstonecomparatoron 150
+daylightsensor 151
+solarpanel 151
+daylightdetector 151
+redstoneblock 152
+blockofredstone 152
+netherquartzore 153
+quartzore 153
+quartzblock 155
+chiseledquartzblock 155 1
+pillarquartzblock 155 2
+stairsquartz 156
+quartzstairs 156
+railactivator 157
+activatorrail 157
+dropper 158
+#Stained clay
+stainedclay 159
+stainedhardenedclay 159
+whitestainedclay 159
+stainedclaywhite 159
+stainedhardenedclaywhite 159
+orangestainedclay 159 1
+magentastainedclay 159 2
+lightbluestainedclay 159 3
+yellowstainedclay 159 4
+limestainedclay 159 5
+pinkstainedclay 159 6
+graystainedclay 159 7
+lightgraystainedclay 159 8
+cyanstainedclay 159 9
+purplestainedclay 159 10
+bluestainedclay 159 11
+brownstainedclay 159 12
+greenstainedclay 159 13
+redstainedclay 159 14
+blackstainedclay 159 15
+whitestainedhardenedclay 159
+orangestainedhardenedclay 159 1
+magentastainedhardenedclay 159 2
+lightbluestainedhardenedclay 159 3
+yellowstainedhardenedclay 159 4
+limestainedhardenedclay 159 5
+pinkstainedhardenedclay 159 6
+graystainedhardenedclay 159 7
+greystainedhardenedclay 159 7
+lightgraystainedhardenedclay 159 8
+lightgreystainedhardenedclay 159 8
+cyanstainedhardenedclay 159 9
+purplestainedhardenedclay 159 10
+bluestainedhardenedclay 159 11
+brownstainedhardenedclay 159 12
+greenstainedhardenedclay 159 13
+redstainedhardenedclay 159 14
+blackstainedhardenedclay 159 15
+stainedclaywhite 95
+stainedclayorange 95 1
+stainedclaymagenta 95 2
+stainedclaylightblue 95 3
+stainedclayyellow 95 4
+stainedclaylime 95 5
+stainedclaypink 95 6
+stainedclaygray 95 7
+stainedclaygrey 95 7
+stainedclaylightgrey 95 8
+stainedclaylightgray 95 8
+stainedclaycyan 95 9
+stainedclaypurple 95 10
+stainedclayblue 95 11
+stainedclaybrown 95 12
+stainedclaygreen 95 13
+stainedclayred 95 14
+stainedclayblack 95 15
+hardenedstainedclaywhite 95
+hardenedstainedclayorange 95 1
+hardenedstainedclaymagenta 95 2
+hardenedstainedclaylightblue 95 3
+hardenedstainedclayyellow 95 4
+hardenedstainedclaylime 95 5
+hardenedstainedclaypink 95 6
+hardenedstainedclaygray 95 7
+hardenedstainedclaygrey 95 7
+hardenedstainedclaylightgrey 95 8
+hardenedstainedclaylightgray 95 8
+hardenedstainedclaycyan 95 9
+hardenedstainedclaypurple 95 10
+hardenedstainedclayblue 95 11
+hardenedstainedclaybrown 95 12
+hardenedstainedclaygreen 95 13
+hardenedstainedclayred 95 14
+hardenedstainedclayblack 95 15
+# Stained Glass Pane
+stainedglasspane 160
+stainedhardenedclay 160
+whitestainedglasspane 160
+stainedglasspanewhite 160
+stainedhardenedclaywhite 160
+orangestainedglasspane 160 1
+magentastainedglasspane 160 2
+lightbluestainedglasspane 160 3
+yellowstainedglasspane 160 4
+limestainedglasspane 160 5
+pinkstainedglasspane 160 6
+graystainedglasspane 160 7
+lightgraystainedglasspane 160 8
+cyanstainedglasspane 160 9
+purplestainedglasspane 160 10
+bluestainedglasspane 160 11
+brownstainedglasspane 160 12
+greenstainedglasspane 160 13
+redstainedglasspane 160 14
+blackstainedglasspane 160 15
+stainedglasspanewhite 160
+stainedglasspaneorange 160 1
+stainedglasspanemagenta 160 2
+stainedglasspanelightblue 160 3
+stainedglasspaneyellow 160 4
+stainedglasspanelime 160 5
+stainedglasspanepink 160 6
+stainedglasspanegray 160 7
+stainedglasspanegrey 160 7
+stainedglasspanelightgrey 160 8
+stainedglasspanelightgray 160 8
+stainedglasspanecyan 160 9
+stainedglasspanepurple 160 10
+stainedglasspaneblue 160 11
+stainedglasspanebrown 160 12
+stainedglasspanegreen 160 13
+stainedglasspanered 160 14
+stainedglasspaneblack 160 15
+leavesacacia 161
+acacialeaves 161
+leavesdarkoak 161 1
+darkoakleaves 161 1
+acaciawood 162
+acacialog 162
+darkoakwood 162 1
+darkoaklog 162 1
+stairsacaciawood 163
+acaciawoodstairs 163
+stairsacaciawooden 163
+acaciawoodenstairs 163
+stairsacacia 163
+acaciastairs 163
+stairsdarkoakwood 164
+darkoakwoodstairs 164
+stairsdarkoakwooden 164
+darkoakwoodenstairs 164
+stairsdarkoak 164
+darkoakstairs 164
+slimeblock 165
+slime 165
+barrier 166
+irontrapdoor 167
+trapdooriron 167
+prismarine 168
+prismarinebricks 168 1
+darkprismarine 168 20
+sealantern 169
+haybale 170
+hay 170
+bale 170
+carpet 171
+carpetwhite 171
+carpetorange 171 1
+carpetmagenta 171 2
+carpetlightblue 171 3
+carpetyellow 171 4
+carpetlime 171 5
+carpetpink 171 6
+carpetgray 171 7
+carpetgrey 171 7
+carpetlightgrey 171 8
+carpetlightgray 171 8
+carpetcyan 171 9
+carpetpurple 171 10
+carpetblue 171 11
+carpetbrown 171 12
+carpetgreen 171 13
+carpetred 171 14
+carpetblack 171 15
+whitecarpet 171
+orangecarpet 171 1
+magentacarpet 171 2
+lightbluecarpet 171 3
+yellowcarpet 171 4
+limecarpet 171 5
+pinkcarpet 171 6
+graycarpet 171 7
+lightgraycarpet 171 8
+cyancarpet 171 9
+purplecarpet 171 10
+bluecarpet 171 11
+browncarpet 171 12
+greencarpet 171 13
+redcarpet 171 14
+blackcarpet 171 15
+hardenedclay 172
+hardenedclayblock 172
+coalblock 173
+blockofcoal 173
+packedice 174
+sunflower 175
+lilac 175 1
+doubletallgrass 175 2
+largefern 175 3
+rosebush 175 4
+peony 175 5
+standingbanner 176
+standingbannerblock 176
+wallbanner 177
+wallbannerblock 177
+inverteddaylightsensor 178
+invertedsolarpanel 178
+nightsensor 178
+redsandstone 179
+chiseledredsandstone 179 1
+redsandstonechiseled 179 1
+smoothredsandstone 179 2
+redsandstonesmooth 179 2
+redsandstonestairs 180
+stairsredsandstone 180
+doubleredsandstoneslab 181
+redsandstoneslab 182
+sprucegate 183
+sprucefencegate 183
+birchegate 184
+birchfencegate 184
+junglegate 185
+junglefencegate 185
+darkoakgate 186
+darkoakfencegate 186
+acaciagate 187
+acaciafencegate 187
+sprucefence 188
+birchfence 189
+junglefence 190
+darkoakfence 191
+acaciafence 192
+sprucedoorblock 193
+sprucewooddoorblock 193
+birchdoorblock 194
+birchwooddoorblock 194
+jundledoorblock 195
+jundlewooddoorblock 195
+acaciadoorblock 196
+acaciawooddoorblock 196
+darkoakdoorblock 197
+darkoakwooddoorblock 197
+# Items
+ishovel 256
+ironshovel 256
+ispade 256
+ironspade 256
+ipickaxe 257
+ipick 257
+ironpick 257
+ironpickaxe 257
+iaxe 258
+ironaxe 258
+flintandsteel 259
+fire 259
+apple 260
+bow 261
+arrow 262
+coal 263
+charcoal 263 1
+diamond 264
+iingot 265
+ironingot 265
+ingot 265
+iron 265
+gingot 266
+goldingot 266
+gold 266
+isword 267
+ironsword 267
+wsword 268
+woodensword 268
+wshovel 269
+woodenshovel 269
+wspade 269
+woodenspade 269
+wpick 270
+woodenpick 270
+woodenpickaxe 270
+wpickaxe 270
+waxe 271
+woodenaxe 271
+ssword 272
+stonesword 272
+sshovel 273
+sspade 273
+stoneshovel 273
+stonespade 273
+spick 274
+spickaxe 274
+stonepick 274
+stonepickaxe 274
+saxe 275
+stoneaxe 275
+dsword 276
+diamondsword 276
+dspade 277
+dshovel 277
+diamondspade 277
+diamondshovel 277
+dpick 278
+dpickaxe 278
+diamondpick 278
+diamondpickaxe 278
+daxe 279
+diamondaxe 279
+stick 280
+bowl 281
+soup 282
+mushroomsoup 282
+mooshroomdelight 282
+gsword 283
+goldensword 283
+gshovel 284
+gspade 284
+goldenshovel 284
+goldenspade 284
+gpick 285
+goldenpick 285
+gpickaxe 285
+goldenpickaxe 285
+gaxe 286
+goldenaxe 286
+string 287
+feather 288
+gunpowder 289
+sulfur 289
+whoe 290
+woodenhoe 290
+shoe 291
+stonehoe 291
+ihoe 292
+ironhoe 292
+dhoe 293
+diamondhoe 293
+ghoe 294
+goldenhoe 294
+seeds 295
+wheat 296
+bread 297
+lcap 298
+lhat 298
+lhelmet 298
+leathercap 298
+leatherhat 298
+leatherhelmet 298
+lchest 299
+leatherchest 299
+lshirt 299
+leathershirt 299
+lbreastplate 299
+leatherbreastplate 299
+lpants 300
+leatherpants 300
+lleggings 300
+leatherleggings 300
+lfeet 301
+leatherfeet 301
+lboots 301
+leatherboots 301
+chainhelmet 302
+chainshirt 303
+chainpants 304
+chainboots 305
+ihelmet 306
+ironhelmet 306
+ihat 306
+ironhat 306
+ichest 307
+ironchest 307
+ishirt 307
+ironshirt 307
+ilegs 308
+ipants 308
+ironlegs 308
+ironpands 308
+iboots 309
+ironboots 309
+dhelmet 310
+diamondhelmet 310
+dhat 310
+diamondhat 310
+dchest 311
+dshirt 311
+diamondchest 311
+diamondshirt 311
+dlegs 312
+diamondlegs 312
+dpands 312
+diamondpants 312
+dboots 313
+diamondboots 313
+ghelmet 314
+goldenhelmet 314
+ghat 314
+goldenhat 314
+gchest 315
+goldenchest 315
+gshirt 315
+goldenshirt 315
+glegs 316
+goldlegs 316
+gboots 317
+gfeet 317
+goldenboots 317
+goldboots 317
+goldfeet 317
+goldenfeet 317
+flint 318
+rawporkchop 319
+rpork 319
+rawpork 319
+rporkchop 319
+porkchop 320
+painting 321
+goldapple 322
+goldenapple 322
+gapple 322
+sign 323
+wooddoor 324
+door 324
+bucket 325
+water 326
+waterbucket 326
+lava 327
+lavabucket 327
+minecart 328
+saddle 329
+idoor 330
+irondoor 330
+lockeddoor 330
+redstone 331
+snowball 332
+boat 333
+leather 334
+milk 335
+brick 336
+clay 337
+sugarcane 338
+paper 339
+book 340
+slimeball 341
+minecartwithchest 342
+mcwithchest 342
+chestcart 342
+minecartwithfurnace 343
+mcwithfurnace 343
+poweredcar 343
+egg 344
+compass 345
+fishingrod 346
+rod 346
+fishing 346
+clock 347
+glowstonedust 348
+glowdust 348
+gstonedust 348
+dust 348
+rawfish 349
+fish 350
+ink 351
+reddye 351 1
+rosered 351 1
+greendye 351 2
+cactusgreen 351 2
+browndye 351 3
+cocoabeans 351 3
+bluedye 351 4
+lapislazuli 351 4
+lapis 351 4
+purpledye 351 5
+cyandye 351 6
+lightgraydye 351 7
+graydye 351 8
+pinkdye 351 9
+limedye 351 10
+yellowdye 351 11
+dandelionyellow 351 11
+lightbluedye 351 12
+magentadye 351 13
+orangedye 351 14
+bonemeal 351 15
+bone 352
+sugar 353
+cake 354
+bed 355
+repeater 356
+cookie 357
+map 358
+shears 359
+melon 360
+pumpkinseeds 361
+melonseeds 362
+rawbeef 363
+beef 363
+steak 364
+rawchicken 365
+chicken 366
+rottenflesh 367
+enderpearl 368
+blazerod 369
+ghasttear 370
+gnugget 371
+goldnugget 371
+netherwart 372
+waterbottle 373
+wbottle 373
+awkwardpotion 373 16
+thickpotion 373 32
+mundanepotion 373 8192
+mundanepotion2 373 8224
+mundanepotionii 373 8224
+mundanepotionextended 373 8256
+mundanepotionex 373 8256
+mundanepotion2extended 373 8288
+mundanepotion2ex 373 8288
+mundanepotioniiextended 373 8288
+mundanepotioniiex 373 8288
+splashmundanepotion 373 16384
+splashmundanepotion2 373 16416
+splashmundanepotionii 373 16416
+splashmundanepotionextended 373 16448
+splashmundanepotionex 373 16448
+splashmundanepotion2extended 373 16480
+splashmundanepotion2ex 373 16480
+splashmundanepotioniiextended 373 16480
+splashmundanepotioniiex 373 16480
+smundanepotion 373 16384
+smundanepotion2 373 16416
+smundanepotionii 373 16416
+smundanepotionextended 373 16448
+smundanepotionex 373 16448
+smundanepotion2extended 373 16480
+smundanepotion2ex 373 16480
+smundanepotioniiextended 373 16480
+smundanepotioniiex 373 16480
+potionofregeneration 373 8193
+potionofregeneration2 373 8225
+potionofregenerationii 373 8225
+potionofregenerationextended 373 8257
+potionofregenerationex 373 8257
+potionofregeneration2extended 373 8289
+potionofregeneration2ex 373 8289
+potionofregenerationiiextended 373 8289
+potionofregenerationiiex 373 8289
+splashpotionofregeneration 373 16385
+splashpotionofregeneration2 373 16417
+splashpotionofregenerationii 373 16417
+splashpotionofregenerationextended 373 16449
+splashpotionofregenerationex 373 16449
+splashpotionofregeneration2extended 373 16481
+splashpotionofregeneration2ex 373 16481
+splashpotionofregenerationiiextended 373 16481
+splashpotionofregenerationiiex 373 16481
+spotionofregeneration 373 16385
+spotionofregeneration2 373 16417
+spotionofregenerationii 373 16417
+spotionofregenerationextended 373 16449
+spotionofregenerationex 373 16449
+spotionofregeneration2extended 373 16481
+spotionofregeneration2ex 373 16481
+spotionofregenerationiiextended 373 16481
+spotionofregenerationiiex 373 16481
+regeneration 373 8193
+regeneration2 373 8225
+regenerationii 373 8225
+regenerationextended 373 8257
+regenerationex 373 8257
+regeneration2extended 373 8289
+regeneration2ex 373 8289
+regenerationiiextended 373 8289
+regenerationiiex 373 8289
+splashregeneration 373 16385
+splashregeneration2 373 16417
+splashregenerationii 373 16417
+splashregenerationextended 373 16449
+splashregenerationex 373 16449
+splashregeneration2extended 373 16481
+splashregeneration2ex 373 16481
+splashregenerationiiextended 373 16481
+splashregenerationiiex 373 16481
+sregeneration 373 16385
+sregeneration2 373 16417
+sregenerationii 373 16417
+sregenerationextended 373 16449
+sregenerationex 373 16449
+sregeneration2extended 373 16481
+sregeneration2ex 373 16481
+sregenerationiiextended 373 16481
+sregenerationiiex 373 16481
+potionofswiftness 373 8194
+potionofswiftness2 373 8226
+potionofswiftnessii 373 8226
+potionofswiftnessextended 373 8258
+potionofswiftnessex 373 8258
+potionofswiftness2extended 373 8290
+potionofswiftness2ex 373 8290
+potionofswiftnessiiextended 373 8290
+potionofswiftnessiiex 373 8290
+splashpotionofswiftness 373 16386
+splashpotionofswiftness2 373 16418
+splashpotionofswiftnessii 373 16418
+splashpotionofswiftnessextended 373 16450
+splashpotionofswiftnessex 373 16450
+splashpotionofswiftness2extended 373 16482
+splashpotionofswiftness2ex 373 16482
+splashpotionofswiftnessiiextended 373 16482
+splashpotionofswiftnessiiex 373 16482
+spotionofswiftness 373 16386
+spotionofswiftness2 373 16418
+spotionofswiftnessii 373 16418
+spotionofswiftnessextended 373 16450
+spotionofswiftnessex 373 16450
+spotionofswiftness2extended 373 16482
+spotionofswiftness2ex 373 16482
+spotionofswiftnessiiextended 373 16482
+spotionofswiftnessiiex 373 16482
+swiftness 373 8194
+swiftness2 373 8226
+swiftnessii 373 8226
+swiftnessextended 373 8258
+swiftnessex 373 8258
+swiftness2extended 373 8290
+swiftness2ex 373 8290
+swiftnessiiextended 373 8290
+swiftnessiiex 373 8290
+splashswiftness 373 16386
+splashswiftness2 373 16418
+splashswiftnessii 373 16418
+splashswiftnessextended 373 16450
+splashswiftnessex 373 16450
+splashswiftness2extended 373 16482
+splashswiftness2ex 373 16482
+splashswiftnessiiextended 373 16482
+splashswiftnessiiex 373 16482
+sswiftness 373 16386
+sswiftness2 373 16418
+sswiftnessii 373 16418
+sswiftnessextended 373 16450
+sswiftnessex 373 16450
+sswiftness2extended 373 16482
+sswiftness2ex 373 16482
+sswiftnessiiextended 373 16482
+sswiftnessiiex 373 16482
+potionoffireresistance 373 8195
+potionoffireresistance2 373 8227
+potionoffireresistanceii 373 8227
+potionoffireresistanceextended 373 8259
+potionoffireresistanceex 373 8259
+potionoffireresistance2extended 373 8291
+potionoffireresistance2ex 373 8291
+potionoffireresistanceiiextended 373 8291
+potionoffireresistanceiiex 373 8291
+splashpotionoffireresistance 373 16387
+splashpotionoffireresistance2 373 16419
+splashpotionoffireresistanceii 373 16419
+splashpotionoffireresistanceextended 373 16451
+splashpotionoffireresistanceex 373 16451
+splashpotionoffireresistance2extended 373 16483
+splashpotionoffireresistance2ex 373 16483
+splashpotionoffireresistanceiiextended 373 16483
+splashpotionoffireresistanceiiex 373 16483
+spotionoffireresistance 373 16387
+spotionoffireresistance2 373 16419
+spotionoffireresistanceii 373 16419
+spotionoffireresistanceextended 373 16451
+spotionoffireresistanceex 373 16451
+spotionoffireresistance2extended 373 16483
+spotionoffireresistance2ex 373 16483
+spotionoffireresistanceiiextended 373 16483
+spotionoffireresistanceiiex 373 16483
+fireresistance 373 8195
+fireresistance2 373 8227
+fireresistanceii 373 8227
+fireresistanceextended 373 8259
+fireresistanceex 373 8259
+fireresistance2extended 373 8291
+fireresistance2ex 373 8291
+fireresistanceiiextended 373 8291
+fireresistanceiiex 373 8291
+splashfireresistance 373 16387
+splashfireresistance2 373 16419
+splashfireresistanceii 373 16419
+splashfireresistanceextended 373 16451
+splashfireresistanceex 373 16451
+splashfireresistance2extended 373 16483
+splashfireresistance2ex 373 16483
+splashfireresistanceiiextended 373 16483
+splashfireresistanceiiex 373 16483
+sfireresistance 373 16387
+sfireresistance2 373 16419
+sfireresistanceii 373 16419
+sfireresistanceextended 373 16451
+sfireresistanceex 373 16451
+sfireresistance2extended 373 16483
+sfireresistance2ex 373 16483
+sfireresistanceiiextended 373 16483
+sfireresistanceiiex 373 16483
+potionofpoison 373 8196
+potionofpoison2 373 8228
+potionofpoisonii 373 8228
+potionofpoisonextended 373 8260
+potionofpoisonex 373 8260
+potionofpoison2extended 373 8292
+potionofpoison2ex 373 8292
+potionofpoisoniiextended 373 8292
+potionofpoisoniiex 373 8292
+splashpotionofpoison 373 16388
+splashpotionofpoison2 373 16420
+splashpotionofpoisonii 373 16420
+splashpotionofpoisonextended 373 16452
+splashpotionofpoisonex 373 16452
+splashpotionofpoison2extended 373 16484
+splashpotionofpoison2ex 373 16484
+splashpotionofpoisoniiextended 373 16484
+splashpotionofpoisoniiex 373 16484
+spotionofpoison 373 16388
+spotionofpoison2 373 16420
+spotionofpoisonii 373 16420
+spotionofpoisonextended 373 16452
+spotionofpoisonex 373 16452
+spotionofpoison2extended 373 16484
+spotionofpoison2ex 373 16484
+spotionofpoisoniiextended 373 16484
+spotionofpoisoniiex 373 16484
+poison 373 8196
+poison2 373 8228
+poisonii 373 8228
+poisonextended 373 8260
+poisonex 373 8260
+poison2extended 373 8292
+poison2ex 373 8292
+poisoniiextended 373 8292
+poisoniiex 373 8292
+splashpoison 373 16388
+splashpoison2 373 16420
+splashpoisonii 373 16420
+splashpoisonextended 373 16452
+splashpoisonex 373 16452
+splashpoison2extended 373 16484
+splashpoison2ex 373 16484
+splashpoisoniiextended 373 16484
+splashpoisoniiex 373 16484
+spoison 373 16388
+spoison2 373 16420
+spoisonii 373 16420
+spoisonextended 373 16452
+spoisonex 373 16452
+spoison2extended 373 16484
+spoison2ex 373 16484
+spoisoniiextended 373 16484
+spoisoniiex 373 16484
+potionofinstanthealth 373 8197
+potionofinstanthealth2 373 8229
+potionofinstanthealthii 373 8229
+potionofinstanthealthextended 373 8261
+potionofinstanthealthex 373 8261
+potionofinstanthealth2extended 373 8293
+potionofinstanthealth2ex 373 8293
+potionofinstanthealthiiextended 373 8293
+potionofinstanthealthiiex 373 8293
+splashpotionofinstanthealth 373 16389
+splashpotionofinstanthealth2 373 16421
+splashpotionofinstanthealthii 373 16421
+splashpotionofinstanthealthextended 373 16453
+splashpotionofinstanthealthex 373 16453
+splashpotionofinstanthealth2extended 373 16485
+splashpotionofinstanthealth2ex 373 16485
+splashpotionofinstanthealthiiextended 373 16485
+splashpotionofinstanthealthiiex 373 16485
+spotionofinstanthealth 373 16389
+spotionofinstanthealth2 373 16421
+spotionofinstanthealthii 373 16421
+spotionofinstanthealthextended 373 16453
+spotionofinstanthealthex 373 16453
+spotionofinstanthealth2extended 373 16485
+spotionofinstanthealth2ex 373 16485
+spotionofinstanthealthiiextended 373 16485
+spotionofinstanthealthiiex 373 16485
+instanthealth 373 8197
+instanthealth2 373 8229
+instanthealthii 373 8229
+instanthealthextended 373 8261
+instanthealthex 373 8261
+instanthealth2extended 373 8293
+instanthealth2ex 373 8293
+instanthealthiiextended 373 8293
+instanthealthiiex 373 8293
+splashinstanthealth 373 16389
+splashinstanthealth2 373 16421
+splashinstanthealthii 373 16421
+splashinstanthealthextended 373 16453
+splashinstanthealthex 373 16453
+splashinstanthealth2extended 373 16485
+splashinstanthealth2ex 373 16485
+splashinstanthealthiiextended 373 16485
+splashinstanthealthiiex 373 16485
+sinstanthealth 373 16389
+sinstanthealth2 373 16421
+sinstanthealthii 373 16421
+sinstanthealthextended 373 16453
+sinstanthealthex 373 16453
+sinstanthealth2extended 373 16485
+sinstanthealth2ex 373 16485
+sinstanthealthiiextended 373 16485
+sinstanthealthiiex 373 16485
+potionofweakness 373 8200
+potionofweakness2 373 8232
+potionofweaknessii 373 8232
+potionofweaknessextended 373 8264
+potionofweaknessex 373 8264
+potionofweakness2extended 373 8296
+potionofweakness2ex 373 8296
+potionofweaknessiiextended 373 8296
+potionofweaknessiiex 373 8296
+splashpotionofweakness 373 16392
+splashpotionofweakness2 373 16424
+splashpotionofweaknessii 373 16424
+splashpotionofweaknessextended 373 16456
+splashpotionofweaknessex 373 16456
+splashpotionofweakness2extended 373 16488
+splashpotionofweakness2ex 373 16488
+splashpotionofweaknessiiextended 373 16488
+splashpotionofweaknessiiex 373 16488
+spotionofweakness 373 16392
+spotionofweakness2 373 16424
+spotionofweaknessii 373 16424
+spotionofweaknessextended 373 16456
+spotionofweaknessex 373 16456
+spotionofweakness2extended 373 16488
+spotionofweakness2ex 373 16488
+spotionofweaknessiiextended 373 16488
+spotionofweaknessiiex 373 16488
+weakness 373 8200
+weakness2 373 8232
+weaknessii 373 8232
+weaknessextended 373 8264
+weaknessex 373 8264
+weakness2extended 373 8296
+weakness2ex 373 8296
+weaknessiiextended 373 8296
+weaknessiiex 373 8296
+splashweakness 373 16392
+splashweakness2 373 16424
+splashweaknessii 373 16424
+splashweaknessextended 373 16456
+splashweaknessex 373 16456
+splashweakness2extended 373 16488
+splashweakness2ex 373 16488
+splashweaknessiiextended 373 16488
+splashweaknessiiex 373 16488
+sweakness 373 16392
+sweakness2 373 16424
+sweaknessii 373 16424
+sweaknessextended 373 16456
+sweaknessex 373 16456
+sweakness2extended 373 16488
+sweakness2ex 373 16488
+sweaknessiiextended 373 16488
+sweaknessiiex 373 16488
+potionofstrength 373 8201
+potionofstrength2 373 8233
+potionofstrengthii 373 8233
+potionofstrengthextended 373 8265
+potionofstrengthex 373 8265
+potionofstrength2extended 373 8297
+potionofstrength2ex 373 8297
+potionofstrengthiiextended 373 8297
+potionofstrengthiiex 373 8297
+splashpotionofstrength 373 16393
+splashpotionofstrength2 373 16425
+splashpotionofstrengthii 373 16425
+splashpotionofstrengthextended 373 16457
+splashpotionofstrengthex 373 16457
+splashpotionofstrength2extended 373 16489
+splashpotionofstrength2ex 373 16489
+splashpotionofstrengthiiextended 373 16489
+splashpotionofstrengthiiex 373 16489
+spotionofstrength 373 16393
+spotionofstrength2 373 16425
+spotionofstrengthii 373 16425
+spotionofstrengthextended 373 16457
+spotionofstrengthex 373 16457
+spotionofstrength2extended 373 16489
+spotionofstrength2ex 373 16489
+spotionofstrengthiiextended 373 16489
+spotionofstrengthiiex 373 16489
+strength 373 8201
+strength2 373 8233
+strengthii 373 8233
+strengthextended 373 8265
+strengthex 373 8265
+strength2extended 373 8297
+strength2ex 373 8297
+strengthiiextended 373 8297
+strengthiiex 373 8297
+splashstrength 373 16393
+splashstrength2 373 16425
+splashstrengthii 373 16425
+splashstrengthextended 373 16457
+splashstrengthex 373 16457
+splashstrength2extended 373 16489
+splashstrength2ex 373 16489
+splashstrengthiiextended 373 16489
+splashstrengthiiex 373 16489
+sstrength 373 16393
+sstrength2 373 16425
+sstrengthii 373 16425
+sstrengthextended 373 16457
+sstrengthex 373 16457
+sstrength2extended 373 16489
+sstrength2ex 373 16489
+sstrengthiiextended 373 16489
+sstrengthiiex 373 16489
+potionofslowness 373 8202
+potionofslowness2 373 8234
+potionofslownessii 373 8234
+potionofslownessextended 373 8266
+potionofslownessex 373 8266
+potionofslowness2extended 373 8298
+potionofslowness2ex 373 8298
+potionofslownessiiextended 373 8298
+potionofslownessiiex 373 8298
+splashpotionofslowness 373 16394
+splashpotionofslowness2 373 16426
+splashpotionofslownessii 373 16426
+splashpotionofslownessextended 373 16458
+splashpotionofslownessex 373 16458
+splashpotionofslowness2extended 373 16490
+splashpotionofslowness2ex 373 16490
+splashpotionofslownessiiextended 373 16490
+splashpotionofslownessiiex 373 16490
+spotionofslowness 373 16394
+spotionofslowness2 373 16426
+spotionofslownessii 373 16426
+spotionofslownessextended 373 16458
+spotionofslownessex 373 16458
+spotionofslowness2extended 373 16490
+spotionofslowness2ex 373 16490
+spotionofslownessiiextended 373 16490
+spotionofslownessiiex 373 16490
+slowness 373 8202
+slowness2 373 8234
+slownessii 373 8234
+slownessextended 373 8266
+slownessex 373 8266
+slowness2extended 373 8298
+slowness2ex 373 8298
+slownessiiextended 373 8298
+slownessiiex 373 8298
+splashslowness 373 16394
+splashslowness2 373 16426
+splashslownessii 373 16426
+splashslownessextended 373 16458
+splashslownessex 373 16458
+splashslowness2extended 373 16490
+splashslowness2ex 373 16490
+splashslownessiiextended 373 16490
+splashslownessiiex 373 16490
+sslowness 373 16394
+sslowness2 373 16426
+sslownessii 373 16426
+sslownessextended 373 16458
+sslownessex 373 16458
+sslowness2extended 373 16490
+sslowness2ex 373 16490
+sslownessiiextended 373 16490
+sslownessiiex 373 16490
+potionofharming 373 8204
+potionofharming2 373 8236
+potionofharmingii 373 8236
+potionofharmingextended 373 8268
+potionofharmingex 373 8268
+potionofharming2extended 373 8300
+potionofharming2ex 373 8300
+potionofharmingiiextended 373 8300
+potionofharmingiiex 373 8300
+splashpotionofharming 373 16396
+splashpotionofharming2 373 16428
+splashpotionofharmingii 373 16428
+splashpotionofharmingextended 373 16460
+splashpotionofharmingex 373 16460
+splashpotionofharming2extended 373 16492
+splashpotionofharming2ex 373 16492
+splashpotionofharmingiiextended 373 16492
+splashpotionofharmingiiex 373 16492
+spotionofharming 373 16396
+spotionofharming2 373 16428
+spotionofharmingii 373 16428
+spotionofharmingextended 373 16460
+spotionofharmingex 373 16460
+spotionofharming2extended 373 16492
+spotionofharming2ex 373 16492
+spotionofharmingiiextended 373 16492
+spotionofharmingiiex 373 16492
+harming 373 8204
+harming2 373 8236
+harmingii 373 8236
+harmingextended 373 8268
+harmingex 373 8268
+harming2extended 373 8300
+harming2ex 373 8300
+harmingiiextended 373 8300
+harmingiiex 373 8300
+splashharming 373 16396
+splashharming2 373 16428
+splashharmingii 373 16428
+splashharmingextended 373 16460
+splashharmingex 373 16460
+splashharming2extended 373 16492
+splashharming2ex 373 16492
+splashharmingiiextended 373 16492
+splashharmingiiex 373 16492
+sharming 373 16396
+sharming2 373 16428
+sharmingii 373 16428
+sharmingextended 373 16460
+sharmingex 373 16460
+sharming2extended 373 16492
+sharming2ex 373 16492
+sharmingiiextended 373 16492
+sharmingiiex 373 16492
+clearpotion 373 6
+splashclearpotion 373 16390
+sclearpotion 373 16390
+clearpotion 373 7
+splashclearpotion 373 16391
+sclearpotion 373 16391
+diffusepotion 373 11
+splashdiffusepotion 373 16395
+sdiffusepotion 373 16395
+artlesspotion 373 13
+splashartlesspotion 373 16397
+sartlesspotion 373 16397
+thinpotion 373 14
+splashthinpotion 373 16398
+sthinpotion 373 16398
+thinpotion 373 15
+splashthinpotion 373 16399
+sthinpotion 373 16399
+bunglingpotion 373 22
+splashbunglingpotion 373 16406
+sbunglingpotion 373 16406
+bunglingpotion 373 23
+splashbunglingpotion 373 16407
+sbunglingpotion 373 16407
+smoothpotion 373 27
+splashsmoothpotion 373 16411
+ssmoothpotion 373 16411
+suavepotion 373 29
+splashsuavepotion 373 16413
+ssuavepotion 373 16413
+debonairpotion 373 30
+splashdebonairpotion 373 16414
+sdebonairpotion 373 16414
+debonairpotion 373 31
+splashdebonairpotion 373 16415
+sdebonairpotion 373 16415
+charmingpotion 373 38
+splashcharmingpotion 373 16422
+scharmingpotion 373 16422
+charmingpotion 373 39
+splashcharmingpotion 373 16423
+scharmingpotion 373 16423
+refinedpotion 373 43
+splashrefinedpotion 373 16427
+srefinedpotion 373 16427
+cordialpotion 373 45
+splashcordialpotion 373 16429
+scordialpotion 373 16429
+sparklingpotion 373 46
+splashsparklingpotion 373 16430
+ssparklingpotion 373 16430
+sparklingpotion 373 47
+splashsparklingpotion 373 16431
+ssparklingpotion 373 16431
+potentpotion 373 48
+splashpotentpotion 373 16432
+spotentpotion 373 16432
+rankpotion 373 54
+splashrankpotion 373 16438
+srankpotion 373 16438
+rankpotion 373 55
+splashrankpotion 373 16439
+srankpotion 373 16439
+acridpotion 373 59
+splashacridpotion 373 16443
+sacridpotion 373 16443
+grosspotion 373 61
+splashgrosspotion 373 16445
+sgrosspotion 373 16445
+stinkypotion 373 62
+splashstinkypotion 373 16446
+sstinkypotion 373 16446
+stinkypotion 373 63
+splashstinkypotion 373 16447
+sstinkypotion 373 16447
+glassbottle 374
+spidereye 375
+fspidereye 376
+fermentedspidereye 376
+blazepowder 377
+magmacream 378
+brewingstand 379
+cauldron 380
+eyeofender 381
+glisteningmelon 382
+gmelon 382
+# Spawn eggs
+spawnegg 383
+creeperegg 383 50
+skeletonegg 383 51
+spideregg 383 52
+zombieegg 383 54
+slimeegg 383 55
+ghastegg 383 56
+pigmanegg 383 57
+endermanegg 383 58
+cavespideregg 383 59
+silverfishegg 383 60
+blazeegg 383 61
+magmacubeegg 383 62
+bategg 383 65
+witchegg 383 66
+endermiteegg 383 67
+guardianegg 383 68
+pigegg 383 90
+sheepegg 383 91
+cowegg 383 92
+chickenegg 383 93
+squidegg 383 94
+wolfegg 383 95
+mooshroomegg 383 96
+ocelotegg 383 98
+horseegg 383 100
+rabbitegg 383 101
+villageregg 383 120
+expbottle 384
+bottleoenchanting 384
+firecharge 385
+bookandquil 386
+writtenbook 387
+emerald 388
+itemframe 389
+flowerpot 390
+pot 390
+carrot 391
+potato 392
+bakedpotato 393
+poisonpotato 394
+poisonouspotato 394
+emptymap 395
+goldencarrot 396
+head 397
+witherhead 397 1
+zombiehead 397 2
+humanhead 397 3
+creeperhead 397 4
+carrotonstick 398
+carrotstick 398
+carrotonastick 398
+netherstar 399
+pumpkinpie 400
+fireworks 401
+fireworkrocket 401
+fireworkstar 402
+fireworksstar 402
+foreworkcharge 402
+foreworkscharge 402
+enchantedbook 403
+redstonecomparator 404
+comparator 404
+netherbrick 405
+netherquartz 406
+quartz 406
+minecartwithtnt 407
+minecarttnt 407
+tntminecart 407
+minecartwithhopper 408
+minecarthopper 408
+hopperminecart 408
+prismarineshard 409
+prismarinecrystal 410
+prismarinecrystals 410
+rawrabbit 411
+cookedrabbit 412
+rabbitstew 413
+rabbitfoot 414
+rabbitsfoot 414
+rabbithide 415
+rabbitshide 415
+armorstand 416
+ihorsearmor 417
+ironhorsearmor 417
+ghorsearmor 418
+goldhorsearmor 418
+goldenhorsearmor 418
+dhorsearmor 419
+diamondhorsearmor 419
+lead 420
+nametag 421
+minecartwithcommandblock 422
+minecartcommandblock 422
+commandblockminecart 422
+mutton 423
+rawmutton 423
+cookedmutton 424
+banner 425
+bannerblack 425
+bannerorange 425 1
+bannermagenta 425 2
+bannerlightblue 425 3
+banneryellow 425 4
+bannerlime 425 5
+bannerpink 425 6
+bannergray 425 7
+bannergrey 425 7
+bannerlightgrey 425 8
+bannerlightgray 425 8
+bannercyan 425 9
+bannerpurple 425 10
+bannerblue 425 11
+bannerbrown 425 12
+bannergreen 425 13
+bannerred 425 14
+bannerwhite 425 15
+blackbanner 425
+orangebanner 425 1
+magentabanner 425 2
+lightbluebanner 425 3
+yellowbanner 425 4
+limebanner 425 5
+pinkbanner 425 6
+graybanner 425 7
+greybanner 425 7
+lightgreybanner 425 8
+lightgraybanner 425 8
+cyanbanner 425 9
+purplebanner 425 10
+bluebanner 425 11
+brownbanner 425 12
+greenbanner 425 13
+redbanner 425 14
+whitebanner 425 15
+sprucedoor 427
+sprucewooddoor 427
+birchdoor 428
+birchwooddoor 428
+jundledoor 429
+jundlewooddoor 429
+acaciadoor 430
+acaciawooddoor 430
+darkoakdoor 431
+darkoakwooddoor 431
+13disc 2256
+record13 2256
+catdisc 2257
+recordcat 2257
+blocksdisc 2258
+recordblocks 2258
+chirpdisc 2259
+recordchirp 2259
+fardisc 2260
+recordfar 2260
+malldisc 2261
+recordmall 2261
+mellohidisc 2262
+recordmellohi 2262
+staldisc 2263
+recordstal 2263
+straddisc 2264
+recordstrad 2264
+warddisc 2265
+recordward 2265
+11disc 2266
+record11 2266
+waitdisc 2267
+recordwait 2267
