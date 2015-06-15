@@ -7,14 +7,11 @@ package tbax.baxshops.executer;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import tbax.baxshops.BaxShop;
 import tbax.baxshops.CommandHelp;
 import tbax.baxshops.Help;
 import tbax.baxshops.Main;
 import static tbax.baxshops.Main.sendError;
 import tbax.baxshops.Resources;
-import tbax.baxshops.BaxEntry;
-import tbax.baxshops.ShopSelection;
 import tbax.baxshops.serialization.StateFile;
 
 /**

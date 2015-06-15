@@ -2,7 +2,6 @@ package tbax.baxshops;
 
 import java.util.ArrayDeque;
 import java.util.HashMap;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Location;
@@ -164,10 +163,10 @@ public class Main extends JavaPlugin implements Listener {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event){
         Block block = event.getBlock();
-        if (state.getShop(block.getLocation()) != null) {
-            if (event.getPlayer() != null) {
-                sendError(event.getPlayer(), "You cannot remove this block because there is a shop above it!");
-            }
+        Location loc = block.getLocation();
+        loc.setY(loc.getY() + 1);
+        if (state.getShop(loc) != null) {
+            sendError(event.getPlayer(), "You cannot remove this block because there is a shop above it!");
             event.setCancelled(true); 
         }
     }
@@ -178,9 +177,6 @@ public class Main extends JavaPlugin implements Listener {
         if (b == null) {
             return;
         }
-
-        Location loc = b.getLocation();
-        loc.setY(loc.getY() + 1);
         
         BaxShop shop = state.getShop(b.getLocation());
         if (shop == null) {

@@ -35,7 +35,8 @@ public class FlagCmdExecuter extends CommandExecuter {
             return false;
         }
         if (args.length < 2) {
-            return false;
+            sendError(pl, "expected /shop " + args[0] + " <option>");
+            return true;
         }
         switch(args[1]) {
             case "selltoshop":
@@ -58,7 +59,12 @@ public class FlagCmdExecuter extends CommandExecuter {
                 return owner();
             case "list":
                 return list();
+            case "notify":
+            case "notifications":
+            case "notes":
+                return shopNotify();
             default:
+                sendError(pl, "invalid shop option '" + args[1] + "'");
                 return false;
         }
     }
@@ -79,6 +85,25 @@ public class FlagCmdExecuter extends CommandExecuter {
         }
         shop.sellToShop = parseBool(args[2]);
         pl.sendMessage("§ESell to Shop §Fis §a" + (shop.sellToShop ? "enabled" : "disabled"));
+        return true;
+    }
+    
+    public boolean shopNotify() {
+        if (selection == null) {
+            sendError(pl, Resources.NOT_FOUND_SELECTED);
+            return true;
+        }
+        BaxShop shop = selection.shop;
+        if (!pl.hasPermission("shops.admin") && !selection.isOwner) {
+            sendError(pl, Resources.NO_PERMISSION);
+            return true;
+        }
+        if (args.length < 3 || !isBool(args[2])) {
+            Main.sendError(sender, "Usage:\n/shop option notify [true|false]");
+            return true;
+        }
+        shop.notify = parseBool(args[2]);
+        pl.sendMessage("§ENotifications §F for this shop are §a" + (shop.sellToShop ? "enabled" : "disabled"));
         return true;
     }
     
