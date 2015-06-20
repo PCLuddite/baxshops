@@ -63,7 +63,7 @@ public class Main extends JavaPlugin implements Listener {
      */
     public static Economy econ;
     
-    public Logger log;
+    public static Logger log;
     
     public Main() {
     }
@@ -82,7 +82,9 @@ public class Main extends JavaPlugin implements Listener {
         
         state = new StateFile(this);
         state.load();
-
+        
+        saveDefaultConfig();
+        
         // run an initial save 5 minutes after starting, then a recurring save
         // every 30 minutes after the first save
         this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
@@ -104,10 +106,7 @@ public class Main extends JavaPlugin implements Listener {
         String cmd = command.getName();
         if (cmd.equalsIgnoreCase("buy") || cmd.equalsIgnoreCase("sell") ||
             cmd.equalsIgnoreCase("restock") || cmd.equalsIgnoreCase("restockall")) {
-            String[] newArgs = new String[args.length + 1];
-            newArgs[0] = command.getName();
-            System.arraycopy(args, 0, newArgs, 1, args.length);
-            args = newArgs;
+            args = insertFirst(args, command.getName());
             cmd = "shop";
         }
 
@@ -281,12 +280,15 @@ public class Main extends JavaPlugin implements Listener {
     
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDeath(PlayerDeathEvent event) {
-        Player pl = event.getEntity();
-        if (econ.has(pl.getName(), 100.00) && isStupidDeath(event.getDeathMessage())) {
-            double death_tax = econ.getBalance(pl.getName()) * 0.04;
-            econ.withdrawPlayer(pl.getName(), death_tax);
-            econ.depositPlayer("world", death_tax);
-            state.sendNotification(pl, new DeathNotification(pl.getName(), death_tax));
+        String name = getConfig().getString("DeathTax.GoesTo", null);
+        if (name != null) {
+            Player pl = event.getEntity();
+            if (econ.has(pl.getName(), 100.00) && isStupidDeath(event.getDeathMessage())) {
+                double death_tax = econ.getBalance(pl.getName()) * getConfig().getDouble("DeathTax.Percentage", 0.04);
+                econ.withdrawPlayer(pl.getName(), death_tax);
+                econ.depositPlayer(name, death_tax);
+                state.sendNotification(pl, new DeathNotification(pl.getName(), death_tax));
+            }
         }
     }
     
@@ -435,5 +437,56 @@ public class Main extends JavaPlugin implements Listener {
         catch(Exception ex) {
             return Resources.ERROR_INLINE;
         }
+    }
+    
+    public static void sendInfo(Player pl, String message) {
+        if (pl != null) {
+            pl.sendMessage(message);
+            logInfo(pl, message);
+        }
+    }
+    
+    private static void logInfo(Player pl, String message) { // obnoxious method to convert minecraft message colors to ansi colors
+        StringBuilder sb = new StringBuilder();
+        if (pl != null) {
+            sb.append((char)27).append("[0;35m");
+            sb.append("To ");
+            sb.append(pl.getName()).append(": ");
+            sb.append((char)27);
+            sb.append("[0m");
+        }
+        for(int index = 0; index < message.length(); ++index) {
+            char c = message.charAt(index);
+            if (c == '§' && ++index < message.length()) {
+                c = Character.toLowerCase(message.charAt(index));
+                sb.append((char)27);
+                sb.append("[0;");
+                switch(c) {
+                    case '0': sb.append("30"); break;
+                    case '1': sb.append("34"); break;
+                    case '2': sb.append("32"); break;
+                    case '3': sb.append("36"); break;
+                    case '4': sb.append("31"); break;
+                    case '5': sb.append("35"); break;
+                    case '6': sb.append("33"); break;
+                    case '7': sb.append("37"); break;
+                    case '8': sb.append("37"); break;
+                    case '9': sb.append("36"); break;
+                    case 'a': sb.append("32"); break;
+                    case 'b': sb.append("36"); break;
+                    case 'c': sb.append("31"); break;
+                    case 'd': sb.append("35"); break;
+                    case 'e': sb.append("33"); break;
+                    case 'f': sb.append("37"); break;
+                    default:
+                        sb.append("37"); break;
+                }
+                sb.append("m");
+            }
+            else {
+                sb.append(c);
+            }
+        }
+        log.info(sb.toString());
     }
 }

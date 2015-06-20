@@ -133,7 +133,7 @@ public class StateFile {
                     return name.endsWith(".json");
                 }
             });
-            int b = main.getConfig().getInt("Backups");
+            int b = main.getConfig().getInt("Backups", 15);
             if (b > 0 && backups.length >= b) {
                 File delete = null;
                 long oldest = Long.MAX_VALUE;

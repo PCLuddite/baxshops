@@ -230,8 +230,6 @@ public class ShopCmdExecuter extends CommandExecuter {
         return true;
     }
     
-    
-    
     private boolean checkInventory(Player pl, BaxShop shop) {
         if (shop.inventory == null || shop.inventory.isEmpty()) {
             return true;
@@ -325,7 +323,11 @@ public class ShopCmdExecuter extends CommandExecuter {
             newEntry.infinite = true;
         }
         selection.shop.addEntry(newEntry);
-
+        Main.sendInfo(pl, 
+                String.format("§fA new entry for §a%d %s§f was added to the shop.", 
+                        newEntry.getAmount(),
+                        ItemNames.getItemName(newEntry)
+                ));
         pl.setItemInHand(null);
         return true;
     }
@@ -384,8 +386,8 @@ public class ShopCmdExecuter extends CommandExecuter {
                     sendError(pl, Help.restock.toUsageString());
                     return true;
                 }
-                pl.sendMessage(String.format("Restocked with §b%d %s§f. The shop now has §a%d§f.", 
-                            stack.getAmount(), stack.getAmount() == 1 ? "item" : "items",
+                Main.sendInfo(pl, String.format("Restocked with §b%d %s§f. The shop now has §a%d§f.", 
+                            stack.getAmount(), ItemNames.getItemName(entry),
                             entry.getAmount()
                             ));
                 return true;
@@ -402,8 +404,8 @@ public class ShopCmdExecuter extends CommandExecuter {
             if (stack.getAmount() < amt) {
                 entry.add(stack.getAmount());
                 pl.setItemInHand(null);
-                pl.sendMessage(String.format("Could only restock with §c%d %s§f. You did not have enough to restock §c%d§f. The shop now has §a%d§f.",
-                        stack.getAmount(), stack.getAmount() == 1 ? "item" : "items",
+                Main.sendInfo(pl, String.format("Could only restock with §c%d %s§f. You did not have enough to restock §c%d§f. The shop now has §a%d§f.",
+                        stack.getAmount(), ItemNames.getItemName(entry),
                         amt,
                         entry.getAmount()));
                 return true;
@@ -415,8 +417,8 @@ public class ShopCmdExecuter extends CommandExecuter {
         
         entry.setAmount(entry.getAmount() + stack.getAmount());
         
-        pl.sendMessage(String.format("Restocked with §b%d %s§f in hand. The shop now has §a%d§f.", 
-                        stack.getAmount(), stack.getAmount() == 1 ? "item" : "items",
+        Main.sendInfo(pl, String.format("Restocked with §b%d %s§f in hand. The shop now has §a%d§f.", 
+                        stack.getAmount(), ItemNames.getItemName(entry),
                         entry.getAmount()
                         ));
         return true;
@@ -591,6 +593,8 @@ public class ShopCmdExecuter extends CommandExecuter {
         entry.retailPrice = retailAmount;
         entry.refundPrice = refundAmount;
         
+        Main.sendInfo(pl, String.format("§fThe price for §a%d %s§F was set.",
+                entry.getAmount(), ItemNames.getItemName(entry)));
         return true;
     }
     
@@ -942,12 +946,12 @@ public class ShopCmdExecuter extends CommandExecuter {
         
         entry.setAmount(entry.getAmount() - amt);
         
-        pl.sendMessage(String.format("§a%d %s§F %s added to your inventory.",
+        Main.sendInfo(pl, String.format("§a%d %s§F %s added to your inventory.",
                     amt, ItemNames.getItemName(entry), amt == 1 ? "was" : "were"));
         
         if (entry.getAmount() == 0) {
             shop.inventory.remove(entry);
-            pl.sendMessage("§fThe shop entry was removed.");
+            Main.sendInfo(pl, "§fThe shop entry was removed.");
         }
         
         return true;
@@ -983,11 +987,12 @@ public class ShopCmdExecuter extends CommandExecuter {
             return true;
         }
         String[] lines = sb.toString().split("\\|");
-        for (int i = 0; i < lines.length; ++i)
+        for (int i = 0; i < lines.length; ++i) {
             if (lines[i].length() > 15) {
                 sendError(pl, String.format("Line %d is too long. Lines can only be 15 characters in length.", i + 1));
                 return true;
             }
+        }
         if (lines.length < 3) {
             sign.setLine(0, "");
             sign.setLine(1, lines[0]);
