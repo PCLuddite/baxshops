@@ -1,3 +1,27 @@
+/* 
+ * The MIT License
+ *
+ * Copyright © 2015 Timothy Baxendale (pcluddite@hotmail.com) and 
+ * Copyright © 2012 Nathan Dinsmore and Sam Lazarus.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
 package tbax.baxshops;
 
 import java.util.ArrayDeque;
@@ -24,11 +48,11 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import tbax.baxshops.executer.CommandExecuter;
 import tbax.baxshops.executer.FlagCmdExecuter;
 import tbax.baxshops.executer.MainExecuter;
 import tbax.baxshops.executer.NotifyExecuter;
 import tbax.baxshops.executer.RefCmdExecuter;
+import tbax.baxshops.executer.ShopCmd;
 import tbax.baxshops.executer.ShopCmdExecuter;
 import tbax.baxshops.notification.DeathNotification;
 import tbax.baxshops.notification.Notification;
@@ -95,7 +119,7 @@ public class Main extends JavaPlugin implements Listener {
         }, 6000L, 36000L);
         log.info("BaxShops has loaded successfully!");
     }
-
+    
     @Override
     public void onDisable() {
         state.saveAll();
@@ -103,21 +127,21 @@ public class Main extends JavaPlugin implements Listener {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        String cmd = command.getName();
-        if (cmd.equalsIgnoreCase("buy") || cmd.equalsIgnoreCase("sell") ||
-            cmd.equalsIgnoreCase("restock") || cmd.equalsIgnoreCase("restockall")) {
-            args = insertFirst(args, command.getName());
-            cmd = "shop";
+        ShopCmd cmd = new ShopCmd(this, sender, command, args);
+        
+        if (cmd.getName().equalsIgnoreCase("buy") || cmd.getName().equalsIgnoreCase("sell") ||
+            cmd.getName().equalsIgnoreCase("restock") || cmd.getName().equalsIgnoreCase("restockall")) {
+            cmd.setArgs(insertFirst(args, command.getName()));
+            cmd.setName("shop");
         }
 
-        if (!cmd.equalsIgnoreCase("shop")) {
+        if (!cmd.getName().equalsIgnoreCase("shop")) {
             return false;
         }
         
-        CommandExecuter exec = new MainExecuter(sender, command, label, args);
-        String action = args.length == 0 ? "" : args[0];
+        String action = cmd.getArgs().length == 0 ? "" : cmd.getArgs()[0];
         
-        if (exec.execute(action, this)){
+        if (MainExecuter.execute(cmd)){
             return true;
         }     
         
@@ -143,20 +167,16 @@ public class Main extends JavaPlugin implements Listener {
         if (exec.execute(action, this)) {
             return true;
         } */
-        exec = new ShopCmdExecuter(sender, command, label, args, selection);
-        if (exec.execute(action, this)) {
+        if (ShopCmdExecuter.execute(cmd)) {
             return true;
         }
-        exec = new FlagCmdExecuter(sender, command, label, args, selection);
-        if (exec.execute(cmd, this)) {
+        if (FlagCmdExecuter.execute(cmd)) {
             return true;
         }
-        exec = new RefCmdExecuter(sender, command, label, args);
-        if (exec.execute(action, this)) {
+        if (RefCmdExecuter.execute(cmd)) {
             return true;
         }
-        exec = new NotifyExecuter(sender, command, label, args);
-        return exec.execute(action, this);
+        return NotifyExecuter.execute(cmd);
     }
     
     @EventHandler
@@ -340,8 +360,8 @@ public class Main extends JavaPlugin implements Listener {
      */
     public static boolean inventoryFitsItem(Player pl, ItemStack item) {
         int quantity = item.getAmount(),
-                damage = item.getDurability(),
-                max = item.getMaxStackSize();
+            damage   = item.getDurability(),
+            max      = item.getMaxStackSize();
         Material id = item.getType();
         Inventory inv = pl.getInventory();
         ItemStack[] contents = inv.getContents();
@@ -350,7 +370,7 @@ public class Main extends JavaPlugin implements Listener {
             max = inv.getMaxStackSize();
         }
         for (int i = 0; i < contents.length; ++i) {
-            if ((s = contents[i]) == null || s.getTypeId() == 0) {
+            if ((s = contents[i]) == null || s.getType() == Material.AIR) {
                 quantity -= max;
                 if (quantity <= 0) {
                     return true;
@@ -430,19 +450,12 @@ public class Main extends JavaPlugin implements Listener {
         return ret;
     }
     
-    public static String formatLoc(Location loc) {
-        try {
-            return "(" + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ() + ")";
-        }
-        catch(Exception ex) {
-            return Resources.ERROR_INLINE;
-        }
-    }
-    
-    public static void sendInfo(Player pl, String message) {
+    public void sendInfo(Player pl, String message) {
         if (pl != null) {
-            pl.sendMessage(message);
-            logInfo(pl, message);
+            if (getConfig().getBoolean("LogNotes", false)) {
+                pl.sendMessage(message);
+                logInfo(pl, message);
+            }
         }
     }
     

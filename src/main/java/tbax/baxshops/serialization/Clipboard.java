@@ -1,41 +1,43 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * The MIT License
+ *
+ * Copyright © 2015 Timothy Baxendale (pcluddite@hotmail.com) and 
+ * Copyright © 2012 Nathan Dinsmore and Sam Lazarus.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
-
-package tbax.baxshops.executer;
+package tbax.baxshops.serialization;
 
 import java.util.HashMap;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Main;
 
-public abstract class CommandExecuter {
-    
-    protected CommandSender sender;
-    protected Command command;
-    protected String label;
-    protected String[] args;
-    protected Player pl;
+/**
+ *
+ * @author Timothy Baxendale (pcluddite@hotmail.com)
+ */
+public class Clipboard {
     
     private static final HashMap<Player, HashMap<String, Integer>> clipboard = new HashMap<>();
     
-    public CommandExecuter(CommandSender sender, Command command, String label, String[] args) {
-        this.sender = sender;
-        this.command = command;
-        this.label = label;
-        this.args = args;
-        if (sender instanceof Player) {
-            pl = (Player)sender;
-        }
-    }
-    
-    public abstract boolean execute(String cmd, Main main);
-    
-    protected boolean parseBool(String boolString) {
+    public static boolean parseBoolean(String boolString) {
         if (boolString.equalsIgnoreCase("on")) {
             return true;
         }
@@ -54,7 +56,7 @@ public abstract class CommandExecuter {
         return Boolean.parseBoolean(boolString);
     }
     
-    protected boolean isBool(String testString) {
+    public static boolean isBoolean(String testString) {
         switch(testString.toLowerCase()) {
             case "true":
             case "false":
@@ -74,7 +76,7 @@ public abstract class CommandExecuter {
         }
     }
     
-    protected void clipboardPut(Player pl, String id, BaxShop shop) {
+    public static void put(Player pl, String id, BaxShop shop) {
         if (!clipboard.containsKey(pl)) {
             clipboard.put(pl, new HashMap<String, Integer>());
         }
@@ -84,7 +86,7 @@ public abstract class CommandExecuter {
         clipboard.get(pl).put(id, shop.uid);
     }
     
-    protected BaxShop clipboardGet(Player pl, String id) {
+    public static BaxShop get(Player pl, String id) {
         if (clipboard.containsKey(pl)) {
             if (id == null) {
                 id = "DEFAULT";

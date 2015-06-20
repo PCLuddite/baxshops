@@ -1,16 +1,32 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * The MIT License
+ *
+ * Copyright © 2015 Timothy Baxendale (pcluddite@hotmail.com) and 
+ * Copyright © 2012 Nathan Dinsmore and Sam Lazarus.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package tbax.baxshops.executer;
 
 import java.util.ArrayDeque;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import tbax.baxshops.Help;
-import tbax.baxshops.Main;
 import static tbax.baxshops.Main.sendError;
 import tbax.baxshops.Resources;
 import tbax.baxshops.notification.Claimable;
@@ -21,145 +37,140 @@ import tbax.baxshops.serialization.ItemNames;
 
 /**
  *
- * @author Timothy
+ * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public class NotifyExecuter extends CommandExecuter {
+public class NotifyExecuter {
 
-    public NotifyExecuter(CommandSender sender, Command command, String label, String[] args) {
-        super(sender, command, label, args);
-    }
-    
-    @Override
-    public boolean execute(String cmd, Main main) {
-        switch(cmd.toLowerCase()) {
+    public static boolean execute(ShopCmd cmd) {
+        switch(cmd.getName().toLowerCase()) {
             case "pending":
             case "p":
             case "notifications":
             case "n":
-                return notifications(main);
+                return notifications(cmd);
             case "accept":
             case "yes":
             case "a":
             case "claim":
             case "c":
-                return accept(main);
+                return accept(cmd);
             case "reject":
             case "no":
-                return reject(main);
+                return reject(cmd);
             case "skip":
             case "sk":
-                return skip(main);
+                return skip(cmd);
             case "lookup":
-                return lookup(main);
+                return lookup(cmd);
             case "lollipop":
             case "lol":
-                return lollipop(main);
+                return lollipop(cmd);
         }
         return false;
     }
     
-    public boolean notifications(Main main) {
-        if (args.length == 1) {
-            main.state.showNotification(pl);
+    public static boolean notifications(ShopCmd cmd) {
+        if (cmd.getArgs().length == 1) {
+            cmd.getState().showNotification(cmd.getPlayer());
         }
-        else if (args.length == 2 && args[1].equalsIgnoreCase("clear")) {
-            if (pl.hasPermission("shops.admin")) {
-                ArrayDeque<Notification> notes = main.state.getNotifications(pl);
+        else if (cmd.getArgs().length == 2 && cmd.getArgs()[1].equalsIgnoreCase("clear")) {
+            if (cmd.getPlayer().hasPermission("shops.admin")) {
+                ArrayDeque<Notification> notes = cmd.getState().getNotifications(cmd.getPlayer());
                 notes.clear();
-                pl.sendMessage("§fYour notifications have been cleared");
+                cmd.getPlayer().sendMessage("§fYour notifications have been cleared");
             }
             else {
-                sendError(pl, Resources.NO_PERMISSION);
+                sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
             }
         }
         return true;
     }
     
-    public boolean accept(Main main) {
-        ArrayDeque<Notification> notifications = main.state.getNotifications(pl);
+    public static boolean accept(ShopCmd cmd) {
+        ArrayDeque<Notification> notifications = cmd.getState().getNotifications(cmd.getPlayer());
         if (notifications.isEmpty()) {
-            sendError(pl, Resources.NOT_FOUND_NOTE);
+            sendError(cmd.getPlayer(), Resources.NOT_FOUND_NOTE);
             return true;
         }
         Notification n = notifications.getFirst();
         if (n instanceof Request) {
             Request r = (Request) n;
-            if (r.accept(pl)) {
+            if (r.accept(cmd.getPlayer())) {
                 notifications.removeFirst();
             }
         }
         else if (n instanceof Claimable) {
             Claimable c = (Claimable) n;
-            if (c.claim(pl)) {
+            if (c.claim(cmd.getPlayer())) {
                 notifications.removeFirst();
             }
         }
 
-        main.state.showNotification(pl);
+        cmd.getState().showNotification(cmd.getPlayer());
         return true;
     }
     
-    public boolean reject(Main main) {
-        ArrayDeque<Notification> notifications = main.state.getNotifications(pl);
+    public static boolean reject(ShopCmd cmd) {
+        ArrayDeque<Notification> notifications = cmd.getState().getNotifications(cmd.getPlayer());
         if (notifications.isEmpty()) {
-            sendError(pl, Resources.NOT_FOUND_NOTE);
+            sendError(cmd.getPlayer(), Resources.NOT_FOUND_NOTE);
             return true;
         }
         Notification n = notifications.getFirst();
         if (n instanceof Request) {
             Request r = (Request) n;
-            if (r.reject(pl)) {
+            if (r.reject(cmd.getPlayer())) {
                 notifications.removeFirst();
             }
         }
 
-        main.state.showNotification(pl);
+        cmd.getState().showNotification(cmd.getPlayer());
         return true;
     }
     
-    public boolean skip(Main main) {
-        ArrayDeque<Notification> notifications = main.state.getNotifications(pl);
+    public static boolean skip(ShopCmd cmd) {
+        ArrayDeque<Notification> notifications = cmd.getState().getNotifications(cmd.getPlayer());
         if (notifications.isEmpty()) {
-                sendError(pl, Resources.NOT_FOUND_NOTE);
+                sendError(cmd.getPlayer(), Resources.NOT_FOUND_NOTE);
                 return true;
         }
         notifications.add(notifications.removeFirst());
-        main.state.showNotification(pl);
+        cmd.getState().showNotification(cmd.getPlayer());
         return true;
     }
     
-    public boolean lookup(Main main) {
-        if (args.length < 2) {
-            sendError(pl, Help.lookup.toUsageString());
+    public static boolean lookup(ShopCmd cmd) {
+        if (cmd.getArgs().length < 2) {
+            sendError(cmd.getPlayer(), Help.lookup.toUsageString());
             return true;
         }
-        Long alias = ItemNames.getItemFromAlias(args[1]);
+        Long alias = ItemNames.getItemFromAlias(cmd.getArgs()[1]);
         if (alias == null) {
-            sendError(pl, Resources.NOT_FOUND_ALIAS);
+            sendError(cmd.getPlayer(), Resources.NOT_FOUND_ALIAS);
             return true;
         }
         int id = (int) (alias >> 16);
         int damage = (int) (alias & 0xFFFF);
-        sender.sendMessage(String.format("%s is an alias for %d:%d", args[1], id, damage));
+        cmd.getSender().sendMessage(String.format("%s is an alias for %d:%d", cmd.getArgs()[1], id, damage));
         return true;
     }
     
-    public boolean lollipop(Main main) {
+    public static boolean lollipop(ShopCmd cmd) {
         double tastiness = LollipopNotification.DEFAULT_TASTINESS;
-        if (args.length > 1) {
-            if (args.length > 2) {
+        if (cmd.getArgs().length > 1) {
+            if (cmd.getArgs().length > 2) {
                 try {
-                    tastiness = Double.parseDouble(args[2]);
+                    tastiness = Double.parseDouble(cmd.getArgs()[2]);
                 } catch (NumberFormatException e) {
-                    sendError(pl, Resources.INVALID_TASTINESS);
+                    sendError(cmd.getPlayer(), Resources.INVALID_TASTINESS);
                     return true;
                 }
             }
-            main.state.sendNotification(args[1], new LollipopNotification(pl.getName(), tastiness));
+            cmd.getState().sendNotification(cmd.getArgs()[1], new LollipopNotification(cmd.getPlayer().getName(), tastiness));
             return true;
         }
-        for (Player p : main.getServer().getOnlinePlayers()) {
-            main.state.sendNotification(p, new LollipopNotification(pl.getName(), tastiness));
+        for (Player p : cmd.getMain().getServer().getOnlinePlayers()) {
+            cmd.getState().sendNotification(p, new LollipopNotification(cmd.getPlayer().getName(), tastiness));
         }
         return true;
     }

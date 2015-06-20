@@ -6,12 +6,15 @@
 #     \___/|_|    |_| |___\___/|_| \_|____/     #
 #################################################
 
-# Whether or not to instate a death tax. Stupid deaths will be taxed by percentage
-# and deposited into an account. If this structure is removed, no tax will be instated.
-#DeathTax:
-#     GoesTo:     world
-#     Percentage: 0.04
-
 # Number of backups to keep. Set this to -1 to never delete old backups
 # Please delete all your backups if you chose to modify this after creating many backups
 Backups: 15
+
+# Show all notifications in log
+LogNotes: false
+
+# Whether or not to instate a death tax. Stupid deaths will be taxed by percentage
+# and deposited into an account. Uncomment this structure to enable it.
+# DeathTax:
+#      GoesTo:     world
+#      Percentage: 0.04

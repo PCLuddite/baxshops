@@ -1,7 +1,26 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* 
+ * The MIT License
+ *
+ * Copyright © 2015 Timothy Baxendale (pcluddite@hotmail.com) and 
+ * Copyright © 2012 Nathan Dinsmore and Sam Lazarus.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
  */
 package tbax.baxshops.executer;
 
@@ -9,77 +28,72 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.CommandHelp;
 import tbax.baxshops.Main;
 import static tbax.baxshops.Main.sendError;
 import tbax.baxshops.Resources;
 import tbax.baxshops.ShopSelection;
+import tbax.baxshops.serialization.Clipboard;
 
 /**
  *
- * @author Timothy
+ * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public class RefCmdExecuter extends CommandExecuter {
+public class RefCmdExecuter {
     
-    public RefCmdExecuter(CommandSender sender, Command command, String label, String[] args) {
-        super(sender, command, label, args);
-    }
-    
-    public boolean execute(String cmd, Main main) {
-        if (cmd.equalsIgnoreCase("loc") || cmd.equalsIgnoreCase("location")) {
-            if (args.length > 1) {
-                switch(args[1].toLowerCase()) {
+    public static boolean execute(ShopCmd cmd) {
+        if (cmd.getName().equalsIgnoreCase("loc") || cmd.getName().equalsIgnoreCase("location")) {
+            if (cmd.getArgs().length > 1) {
+                switch(cmd.getArgs()[1].toLowerCase()) {
                     case "create":
                     case "mk":
                     case "paste":
-                        return create(main);
+                        return create(cmd);
                     case "list":
-                        return list(main);
+                        return list(cmd);
                     case "save":
                     case "copy":
-                        return copy(main);
+                        return copy(cmd);
                 }
             }
             else {
-                return list(main);
+                return list(cmd);
             }
         }
         else {
-            String[] original = args;
-            args = Main.insertFirst(args, "location");
-            switch(cmd.toLowerCase()) {
+            String[] original = cmd.getArgs();
+            cmd.setArgs(Main.insertFirst(cmd.getArgs(), "location"));
+            switch(cmd.getName().toLowerCase()) {
                 case "paste":
-                    return create(main);
+                    return create(cmd);
                 case "list":
-                    return list(main);
+                    return list(cmd);
                 case "copy":
-                    return copy(main);
+                    return copy(cmd);
                 case "unsafe":
-                    return unsafe(main);
+                    return unsafe(cmd);
             }
-            args = original; // I don't know. Just in case that's important. It probably isn't.
+            cmd.setArgs(original); // I don't know. Just in case that's important. It probably isn't.
         }
         return false;
     }
     
-    public boolean unsafe(Main main) {
-        if (args.length < 3) {
+    public static boolean unsafe(ShopCmd cmd) {
+        if (cmd.getArgs().length < 3) {
             return true;
         }
-        ShopSelection selection = main.selectedShops.get(pl);
+        ShopSelection selection = cmd.getMain().selectedShops.get(cmd.getPlayer());
         if (selection == null) {
-            sendError(pl, Resources.NOT_FOUND_SELECTED);
+            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
             return true;
         }
-        if (!pl.hasPermission("shops.admin") && !selection.isOwner) {
-            sendError(pl, Resources.NO_PERMISSION);
+        if (!cmd.getPlayer().hasPermission("shops.admin") && !selection.isOwner) {
+            sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
             return true;
         }
         
-        switch(args[3]) {
+        switch(cmd.getArgs()[3]) {
             case "clean":
                 
                 break;
@@ -88,37 +102,46 @@ public class RefCmdExecuter extends CommandExecuter {
         return true;
     }
     
-    public boolean list(Main main) {
-        ShopSelection selection = main.selectedShops.get(pl);
+    public static boolean list(ShopCmd cmd) {
+        ShopSelection selection = cmd.getMain().selectedShops.get(cmd.getPlayer());
         if (selection == null) {
-            sendError(pl, Resources.NOT_FOUND_SELECTED);
+            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
         }
         else {
-            pl.sendMessage(CommandHelp.header("Shop Locations"));
+            cmd.getPlayer().sendMessage(CommandHelp.header("Shop Locations"));
             if (!selection.shop.getLocations().isEmpty()) {
                 
-                pl.sendMessage(
+                cmd.getPlayer().sendMessage(
                         String.format("§7 %-3s %-16s %-18s", "#", "§fLocation", "§fSign Text")
                 );
                 
                 for(int index = 1; index <= selection.shop.getLocations().size(); index++) {
-                    pl.sendMessage(
+                    cmd.getPlayer().sendMessage(
                         String.format("§F %-3s §E%-16s §D%-18s %s",
                                 index + ".", 
-                                Main.formatLoc(selection.shop.getLocations().get(index - 1)),
+                                formatLoc(selection.shop.getLocations().get(index - 1)),
                                 getSignText(selection.shop.getLocations().get(index - 1)),
                                (selection.location.equals(selection.shop.getLocations().get(index - 1)) ? " §D(current)" : ""))
                     );
                 }
             }
             else {
-                pl.sendMessage("§AThis shop has no other locations.");
+                cmd.getPlayer().sendMessage("§AThis shop has no other locations.");
             }
         }
         return true;
     }
     
-    private String getSignText(Location loc) {
+    private static String formatLoc(Location loc) {
+        try {
+            return "(" + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ() + ")";
+        }
+        catch(Exception ex) {
+            return Resources.ERROR_INLINE;
+        }
+    }
+    
+    private static String getSignText(Location loc) {
         try {
             Sign sign = (Sign)loc.getBlock().getState();
             StringBuilder ret = new StringBuilder();
@@ -142,38 +165,38 @@ public class RefCmdExecuter extends CommandExecuter {
         }
     }
     
-    public boolean copy(Main main) {
-        ShopSelection selection = main.selectedShops.get(pl);
+    public static boolean copy(ShopCmd cmd) {
+        ShopSelection selection = cmd.getMain().selectedShops.get(cmd.getPlayer());
         if (selection == null) {
-            sendError(pl, Resources.NOT_FOUND_SELECTED);
+            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
         }
         else {
-            if (!pl.hasPermission("shops.admin") && !selection.isOwner) {
-                sendError(pl, Resources.NO_PERMISSION);
+            if (!cmd.getPlayer().hasPermission("shops.admin") && !selection.isOwner) {
+                sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
                 return true;
             }
             String id = "DEFAULT";
-            if (args.length > 2) {
-                id = args[2];
+            if (cmd.getArgs().length > 2) {
+                id = cmd.getArgs()[2];
             }
-            clipboardPut(pl, id, selection.shop);
+            Clipboard.put(cmd.getPlayer(), id, selection.shop);
             if (id == null) {
-                pl.sendMessage(String.format("§1%s shop has been added to your clipboard.", 
+                cmd.getPlayer().sendMessage(String.format("§1%s shop has been added to your clipboard.", 
                         selection.isOwner ? "Your§f" : selection.shop.owner + "§f's"));
             }
             else {
-                pl.sendMessage(String.format("§1%s shop has been added to your clipboard as '§a%s§F'.", 
+                cmd.getPlayer().sendMessage(String.format("§1%s shop has been added to your clipboard as '§a%s§F'.", 
                         selection.isOwner ? "Your§f" : selection.shop.owner + "§f's", id));
             }
         }
         return true;
     }
     
-    public boolean create(Main main) {
-        String id = args.length > 2 ? args[2] : null;
-        BaxShop shopSource = clipboardGet(pl, id);
+    public static boolean create(ShopCmd cmd) {
+        String id = cmd.getArgs().length > 2 ? cmd.getArgs()[2] : null;
+        BaxShop shopSource = Clipboard.get(cmd.getPlayer(), id);
         if (shopSource == null) {
-            sendError(pl, String.format("No data was found on the clipboard with id '%s'!\nSelect a shop and use:\n/shop location save [id]", id == null ? "DEFAULT" : id));
+            sendError(cmd.getPlayer(), String.format("No data was found on the clipboard with id '%s'!\nSelect a shop and use:\n/shop location save [id]", id == null ? "DEFAULT" : id));
             return true;
         }
         
@@ -183,8 +206,8 @@ public class RefCmdExecuter extends CommandExecuter {
         Block sourceLoc = shopSource.getLocations().get(0).getBlock();
         Block block;
         if (!(sourceLoc.getType().equals(Material.SIGN) || sourceLoc.getType().equals(Material.SIGN_POST))) {
-            main.log.warning(String.format(Resources.NOT_FOUND_SIGN, shopSource.owner));
-            block = ShopCmdExecuter.buildShopSign(pl,
+            cmd.getMain().log.warning(String.format(Resources.NOT_FOUND_SIGN, shopSource.owner));
+            block = ShopCmdExecuter.buildShopSign(cmd,
                 new String[] {
                   "Location for",
                   (owner.length() < 13 ? owner : owner.substring(0, 12) + '…') + "'s",
@@ -194,7 +217,7 @@ public class RefCmdExecuter extends CommandExecuter {
         }
         else {
             Sign mainSign = (Sign)sourceLoc.getState();
-            block = ShopCmdExecuter.buildShopSign(pl,
+            block = ShopCmdExecuter.buildShopSign(cmd,
                 new String[] {
                   mainSign.getLine(0),
                   mainSign.getLine(1),
@@ -205,13 +228,13 @@ public class RefCmdExecuter extends CommandExecuter {
         if (block == null) {
             return true; // it didn't work. go back.
         }
-        if (main.state.addLocation(pl, block.getLocation(), shopSource)) {
+        if (cmd.getMain().state.addLocation(cmd.getPlayer(), block.getLocation(), shopSource)) {
             shopSource.addLocation(block.getLocation());
         }
         else {
             return true; // that didn't work. go back.
         }
-        pl.sendMessage(String.format("§fA new location for §1%s§f's shop has been opened.", shopSource.owner));
+        cmd.getPlayer().sendMessage(String.format("§fA new location for §1%s§f's shop has been opened.", shopSource.owner));
         return true;
     }
 }
