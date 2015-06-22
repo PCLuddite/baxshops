@@ -86,7 +86,7 @@ public class SaleNotificationAuto implements Claimable {
 
     public static String getMessage(String buyer, BaxShop shop, BaxEntry entry, String seller) {
         if (buyer == null || !buyer.equals(shop.owner)) {
-            return String.format("§1%s §fsold §1%s §e%d %s§f for §a$%.2f§f",
+            return String.format("§5%s §fsold %s §e%d %s§f for §a$%.2f§f",
                         seller, shop.owner, entry.getAmount(), ItemNames.getItemName(entry),
                         entry.refundPrice * entry.getAmount());
         }

@@ -494,7 +494,7 @@ public class StateFile {
     private int getUniqueId() {
         int current = 1;
         while(shops.containsKey(current)) {
-            current++;
+            ++current;
         }
         return current;
     }

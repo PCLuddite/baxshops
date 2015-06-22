@@ -66,7 +66,7 @@ public class SaleNotification implements Notification {
     @Override
     public String getMessage(Player player) {
         return player == null || !player.getName().equals(seller) ?
-                String.format("§1%s accepted %s's request to sell §e%d %s§f for §a$%.2f§f",
+                String.format("§5%s §faccepted %s's request to sell §e%d %s§f for §a$%.2f§f",
                                 shop.owner, seller, entry.getAmount(), ItemNames.getItemName(entry),
                                 entry.refundPrice * entry.getAmount()) :
                 String.format("§1%s §faccepted your request to sell §e%d %s§f for §a$%.2f§f",

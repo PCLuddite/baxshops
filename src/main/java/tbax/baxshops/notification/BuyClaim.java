@@ -82,12 +82,12 @@ public class BuyClaim implements Claimable {
     
     public String getMessage(Player player) {
         if (player == null || !player.getName().equals(buyer)) {
-            return String.format("%s accepted %s's request to buy %d %s for $%.2f",
+            return String.format("§5%s §faccepted %s's request to buy §e%d %s§f for $%.2f",
                                 shop.owner, buyer, entry.getAmount(), ItemNames.getItemName(entry),
                                 entry.retailPrice * entry.getAmount());
         }
         else {
-            return String.format("%s accepted your request to buy §e%d %s§F for §a$%.2f",
+            return String.format("§1%s §faccepted your request to buy §e%d %s§F for §a$%.2f",
                                 shop.owner, entry.getAmount(), ItemNames.getItemName(entry),
                                 entry.retailPrice * entry.getAmount());
         }

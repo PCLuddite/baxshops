@@ -82,10 +82,10 @@ public class SellRequest implements Request, TimedNotification {
     @Override
     public String getMessage(Player player) {
         return player == null || !player.getName().equals(shop.owner) ?
-                String.format("%s wants to sell %s §e%d %s§f for §a$%.2f§f",
+                String.format("§5%s §fwants to sell %s §e%d %s§f for §a$%.2f§f",
                                 seller, shop.owner, entry.getAmount(), ItemNames.getItemName(entry),
                                 entry.refundPrice * entry.getAmount()) :
-                String.format("%s wants to sell you §e%d %s§f for §a$%.2f§f",
+                String.format("§1%s §fwants to sell you §e%d %s§f for §a$%.2f§f",
                                 seller, entry.getAmount(), ItemNames.getItemName(entry),
                                 entry.refundPrice * entry.getAmount());
     }
@@ -143,7 +143,7 @@ public class SellRequest implements Request, TimedNotification {
                 SaleNotificationAuto.getMessage(shop.owner, shop, entry, seller)
             );
             Main.instance.state.sendNotification(shop.owner, buyerNote, false);
-            Main.instance.log.info(SaleNotificationAuto.getMessage(null, shop, entry, seller));
+            Main.log.info(Main.toAnsiColor(SaleNotificationAuto.getMessage(null, shop, entry, seller)));
         }
         else {
             buyerNote = new SaleNotificationAuto(shop, entry, seller);

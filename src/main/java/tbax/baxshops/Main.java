@@ -476,6 +476,7 @@ public class Main extends JavaPlugin implements Listener {
     
     public static String toAnsiColor(String message) { // obnoxious method to convert minecraft message colors to ansi colors
         StringBuilder sb = new StringBuilder();
+        boolean has_ansi = false;
         for(int index = 0; index < message.length(); ++index) {
             char c = message.charAt(index);
             if (c == '§' && ++index < message.length()) {
@@ -503,10 +504,17 @@ public class Main extends JavaPlugin implements Listener {
                         sb.append("37"); break;
                 }
                 sb.append("m");
+                if (!has_ansi) {
+                    has_ansi = true;
+                }
             }
             else {
                 sb.append(c);
             }
+        }
+        if (has_ansi) {
+            sb.append((char)27);
+            sb.append("[0m"); // reset the color
         }
         return sb.toString();
     }

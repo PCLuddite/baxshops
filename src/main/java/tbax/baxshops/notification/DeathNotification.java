@@ -42,7 +42,7 @@ public class DeathNotification implements Notification {
     @Override
     public String getMessage(Player player) {
         if (player == null || !player.getName().equals(person)) {
-            return String.format("§1%s§f was fined §a$%.2f§f for dying.", person, tax);
+            return String.format("§5%s§f was fined §a$%.2f§f for dying.", person, tax);
         }
         else {
             return String.format("§fYou were fined §a$%.2f§f for dying.", tax);

@@ -67,7 +67,7 @@ public class SaleRejection implements Claimable {
     @Override
     public String getMessage(Player player) {
         return player == null || !player.getName().equals(seller) ?
-                String.format("§1%s §frejected §1%s§f's request to sell §e%d %s§f for §a$%.2f§f",
+                String.format("§5%s §frejected %s§f's request to sell §e%d %s§f for §a$%.2f§f",
                                 shop.owner, seller, entry.getAmount(), ItemNames.getItemName(entry),
                                 entry.refundPrice * entry.getAmount()) :
                 String.format("§1%s §frejected your request to sell §e%d %s§f for §a$%.2f§f",
