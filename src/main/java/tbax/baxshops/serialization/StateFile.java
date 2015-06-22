@@ -469,7 +469,7 @@ public class StateFile {
      * @param n the notification
      */
     public void sendNotification(String player, Notification n) {
-        sendNotification(player, n, true);
+        sendNotification(player, n, main.getConfig().getBoolean("LogNotes"));
     }
 
     /**
@@ -482,7 +482,7 @@ public class StateFile {
     public void sendNotification(String player, Notification n, boolean log_it) {
         ArrayDeque<Notification> ns = getNotifications(player);
         if (log_it) {
-            log.info(n.getMessage(null));
+            log.info(Main.toAnsiColor(n.getMessage(null)));
         }
         ns.add(n);
         Player pl = main.getServer().getPlayer(player);

@@ -82,10 +82,10 @@ public class SellRequest implements Request, TimedNotification {
     @Override
     public String getMessage(Player player) {
         return player == null || !player.getName().equals(shop.owner) ?
-                String.format("%s wants to sell %s %d %s for $%.2f",
+                String.format("%s wants to sell %s §e%d %s§f for §a$%.2f§f",
                                 seller, shop.owner, entry.getAmount(), ItemNames.getItemName(entry),
                                 entry.refundPrice * entry.getAmount()) :
-                String.format("%s wants to sell you §e%d %s§F for §a$%.2f§F",
+                String.format("%s wants to sell you §e%d %s§f for §a$%.2f§f",
                                 seller, entry.getAmount(), ItemNames.getItemName(entry),
                                 entry.refundPrice * entry.getAmount());
     }

@@ -80,10 +80,10 @@ public class BuyRequest implements Request, TimedNotification {
     @Override
     public String getMessage(Player player) {
         return player == null || !player.getName().equals(shop.owner) ?
-                String.format("%s wants to buy from %s %d %s for $%.2f",
+                String.format("§1%s wants to buy from §1%s §e%d %s§f for §a$%.2f§f",
                                 buyer, shop.owner, purchased.getAmount(), ItemNames.getItemName(purchased),
                                 purchased.refundPrice * purchased.getAmount()) :
-                String.format("§1%s §fwants to buy §e%d %s§F from you for §a$%.2f§F",
+                String.format("§1%s §fwants to buy §e%d %s§f from you for §a$%.2f§f",
                                 buyer, purchased.getAmount(), ItemNames.getItemName(purchased),
                                 purchased.refundPrice * purchased.getAmount());
     }

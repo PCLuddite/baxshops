@@ -24,12 +24,11 @@
  */
 package tbax.baxshops.notification;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
 import org.bukkit.entity.Player;
 
 /**

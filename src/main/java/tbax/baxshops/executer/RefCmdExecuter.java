@@ -43,7 +43,7 @@ import tbax.baxshops.serialization.Clipboard;
 public class RefCmdExecuter {
     
     public static boolean execute(ShopCmd cmd) {
-        if (cmd.getName().equalsIgnoreCase("loc") || cmd.getName().equalsIgnoreCase("location")) {
+        if (cmd.getArgs()[0].equalsIgnoreCase("loc") ||cmd.getArgs()[0].equalsIgnoreCase("location")) {
             if (cmd.getArgs().length > 1) {
                 switch(cmd.getArgs()[1].toLowerCase()) {
                     case "create":
@@ -64,42 +64,17 @@ public class RefCmdExecuter {
         else {
             String[] original = cmd.getArgs();
             cmd.setArgs(Main.insertFirst(cmd.getArgs(), "location"));
-            switch(cmd.getName().toLowerCase()) {
+            switch (cmd.getArgs()[0]) {
                 case "paste":
                     return create(cmd);
                 case "list":
                     return list(cmd);
                 case "copy":
                     return copy(cmd);
-                case "unsafe":
-                    return unsafe(cmd);
             }
-            cmd.setArgs(original); // I don't know. Just in case that's important. It probably isn't.
+            cmd.setArgs(original);
         }
         return false;
-    }
-    
-    public static boolean unsafe(ShopCmd cmd) {
-        if (cmd.getArgs().length < 3) {
-            return true;
-        }
-        ShopSelection selection = cmd.getMain().selectedShops.get(cmd.getPlayer());
-        if (selection == null) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
-            return true;
-        }
-        if (!cmd.getPlayer().hasPermission("shops.admin") && !selection.isOwner) {
-            sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
-            return true;
-        }
-        
-        switch(cmd.getArgs()[3]) {
-            case "clean":
-                
-                break;
-        }
-        
-        return true;
     }
     
     public static boolean list(ShopCmd cmd) {

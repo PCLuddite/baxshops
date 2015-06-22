@@ -65,7 +65,7 @@ public class BuyRejection implements Notification {
     @Override
     public String getMessage(Player player) {
         return player == null || !player.getName().equals(seller) ?
-                String.format("%s rejected %s's request to sell %d %s for $%.2f",
+                String.format("%s rejected %s's request to sell §e%d %s§F for §a$%.2f",
                                 shop.owner, seller, entry.getAmount(), ItemNames.getItemName(entry),
                                 entry.refundPrice * entry.getAmount()) :
                 String.format("%s rejected your request to sell §e%d %s§F for §a$%.2f§F",

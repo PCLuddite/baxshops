@@ -50,7 +50,8 @@ public class ShopCmd {
         this.main = main;
         this.sender = sender;
         this.command = command;
-        this.args = args;
+        this.args = new String[args.length];
+        System.arraycopy(args, 0, this.args, 0, args.length);
         this.name = command.getName();
         if (sender instanceof Player) {
             pl = (Player)sender;
@@ -105,4 +106,13 @@ public class ShopCmd {
         return name;
     }
     
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(name);
+        for (String s : args) {
+            sb.append(" ");
+            sb.append(s);
+        }
+        return sb.toString();
+    }
 }

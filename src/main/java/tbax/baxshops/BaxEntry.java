@@ -160,27 +160,27 @@ public class BaxEntry {
                 enchName.append(ench.getValue()); // and its value
                 enchName.append(", "); // separated by commas
             }
-            name = enchName.substring(0, enchName.length() - 2) + ")§F"; // Remove the last comma, but in a closing parenthesis
+            name = enchName.substring(0, enchName.length() - 2) + ")"; // Remove the last comma, but in a closing parenthesis
         }
         
         if (ItemNames.damageableIds.contains(stack.getTypeId()) && stack.getDurability() > 0) {
-            name += " §E(Damage: " +  stack.getDurability() + ")§F";
+            name += " §e(Damage: " +  stack.getDurability() + ")";
         }
         
         if (refundPrice < 0) {
             if(infinite) {
-                return String.format("§7%d. §F%s §2($%.2f)", index, name, retailPrice);
+                return String.format("§7%d. §f%s §2($%.2f)", index, name, retailPrice);
             }
             else {
                 return String.format(
-                    stack.getAmount() == 0 ? "§C§M%d. (%d) %s ($%.2f)" : "§f%d. §7(%d) §F%s §2($%.2f)",
+                    stack.getAmount() == 0 ? "§C§M%d. (%d) %s §2($%.2f)" : "§f%d. §7(%d) §f%s §2($%.2f)",
                     index, stack.getAmount(), name, retailPrice);
             }
         }
         else {
             if (infinite) {
                 return String.format(
-                       "§7%d. §F%s §2($%.2f) §9($%.2f)",
+                       "§7%d. §f%s §2($%.2f) §9($%.2f)",
                        index, name, retailPrice, refundPrice);
             }
             else {

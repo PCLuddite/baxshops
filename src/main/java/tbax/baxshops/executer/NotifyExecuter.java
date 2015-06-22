@@ -42,7 +42,7 @@ import tbax.baxshops.serialization.ItemNames;
 public class NotifyExecuter {
 
     public static boolean execute(ShopCmd cmd) {
-        switch(cmd.getName().toLowerCase()) {
+        switch (cmd.getArgs()[0]) {
             case "pending":
             case "p":
             case "notifications":

@@ -53,7 +53,7 @@ import tbax.baxshops.serialization.ItemNames;
 public class ShopCmdExecuter {
     
     public static boolean execute(ShopCmd cmd) {
-        switch(cmd.getName().toLowerCase()) {
+        switch(cmd.getArgs()[0].toLowerCase()) {
             case "create":
             case "mk":
                 return create(cmd);
@@ -68,6 +68,7 @@ public class ShopCmdExecuter {
             case "r":
                 return restock(cmd);
             case "set":
+            case "setprice":
                 return set(cmd);
             case "buy":
             case "b":
@@ -601,12 +602,19 @@ public class ShopCmdExecuter {
         entry.retailPrice = retailAmount;
         entry.refundPrice = refundAmount;
         
-        cmd.getMain().sendInfo(cmd.getPlayer(), String.format("§fThe price for §a%d %s§F was set.",
-                entry.getAmount(), ItemNames.getItemName(entry)));
+        if (cmd.getShop().infinite) {
+            cmd.getMain().sendInfo(cmd.getPlayer(), String.format("§fThe price for §a%s§f was set.",
+                    ItemNames.getItemName(entry)));
+        }
+        else {
+            cmd.getMain().sendInfo(cmd.getPlayer(), String.format("§fThe price for §a%d %s§F was set.",
+                    entry.getAmount(), ItemNames.getItemName(entry)));
+        }
         return true;
     }
     
     public static boolean buy(ShopCmd cmd) {
+        cmd.getLogger().info(cmd.toString());
         if (cmd.getSelection() == null) {
             sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
             return true;

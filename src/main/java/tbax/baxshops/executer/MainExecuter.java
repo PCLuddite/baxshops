@@ -36,7 +36,7 @@ import tbax.baxshops.Resources;
 public class MainExecuter {
 
     public static boolean execute(ShopCmd cmd) {
-        switch (cmd.getName().toLowerCase()) {
+        switch (cmd.getArgs()[0]) {
             case "save":
                 return save(cmd);
             case "backup":

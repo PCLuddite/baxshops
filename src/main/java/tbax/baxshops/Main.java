@@ -131,11 +131,10 @@ public class Main extends JavaPlugin implements Listener {
         
         if (cmd.getName().equalsIgnoreCase("buy") || cmd.getName().equalsIgnoreCase("sell") ||
             cmd.getName().equalsIgnoreCase("restock") || cmd.getName().equalsIgnoreCase("restockall")) {
-            cmd.setArgs(insertFirst(args, command.getName()));
+            cmd.setArgs(insertFirst(cmd.getArgs(), cmd.getName()));
             cmd.setName("shop");
         }
-
-        if (!cmd.getName().equalsIgnoreCase("shop")) {
+        else if (!cmd.getName().equalsIgnoreCase("shop")) {
             return false;
         }
         
@@ -146,7 +145,7 @@ public class Main extends JavaPlugin implements Listener {
         }     
         
         // Sender is not a player
-        if (!(sender instanceof Player)) {
+        if (cmd.getPlayer() == null) {
             if (action.equalsIgnoreCase("removeallnotifications")) {
                 state.pending.clear();
             }
@@ -156,10 +155,8 @@ public class Main extends JavaPlugin implements Listener {
             return true;
         }
 
-        Player pl = (Player) sender;
-        ShopSelection selection = selectedShops.get(pl);
-        if (args.length == 0) {
-            Help.showHelp(pl, selection);
+        if (cmd.getArgs().length == 0) {
+            Help.showHelp(cmd.getPlayer(), cmd.getSelection());
             return true;
         }
         /*
@@ -290,8 +287,8 @@ public class Main extends JavaPlugin implements Listener {
             Location shopLoc = s.location;
             Location pLoc = event.getTo();
             if (shopLoc.getWorld() != pl.getWorld() || shopLoc.distanceSquared(pLoc) > Resources.SHOP_RANGE) {
-                pl.sendMessage(s.isOwner ? "§F[Left §1your§F shop]"
-                        : String.format("§F[Left §1%s§F's shop]", s.shop.owner));
+                pl.sendMessage(s.isOwner ? "§f[Left §1your§f shop]"
+                        : String.format("§f[Left §1%s§F's shop]", s.shop.owner));
                 selectedShops.remove(event.getPlayer());
                 clearTempOpts(pl);
             }
@@ -439,6 +436,11 @@ public class Main extends JavaPlugin implements Listener {
         }
     }
     
+    /**
+     * Gets around the imprecision of the double type
+     * @param value the value to round
+     * @return the rounded value
+     */
     public static double roundTwoPlaces(double value) {
         return Math.round(value*100.0d)/100.0d;
     }
@@ -454,20 +456,26 @@ public class Main extends JavaPlugin implements Listener {
         if (pl != null) {
             if (getConfig().getBoolean("LogNotes", false)) {
                 pl.sendMessage(message);
-                logInfo(pl, message);
+                logPlayerMessage(pl, message);
             }
         }
     }
     
-    private static void logInfo(Player pl, String message) { // obnoxious method to convert minecraft message colors to ansi colors
+    public static void logPlayerMessage(Player pl, String message) { 
         StringBuilder sb = new StringBuilder();
         if (pl != null) {
             sb.append((char)27).append("[0;35m");
-            sb.append("To ");
-            sb.append(pl.getName()).append(": ");
+            sb.append("[");
+            sb.append(pl.getName()).append("] ");
             sb.append((char)27);
             sb.append("[0m");
         }
+        sb.append(toAnsiColor(message));
+        log.info(sb.toString());
+    }
+    
+    public static String toAnsiColor(String message) { // obnoxious method to convert minecraft message colors to ansi colors
+        StringBuilder sb = new StringBuilder();
         for(int index = 0; index < message.length(); ++index) {
             char c = message.charAt(index);
             if (c == '§' && ++index < message.length()) {
@@ -500,6 +508,6 @@ public class Main extends JavaPlugin implements Listener {
                 sb.append(c);
             }
         }
-        log.info(sb.toString());
+        return sb.toString();
     }
 }
