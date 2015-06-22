@@ -614,7 +614,6 @@ public class ShopCmdExecuter {
     }
     
     public static boolean buy(ShopCmd cmd) {
-        cmd.getLogger().info(cmd.toString());
         if (cmd.getSelection() == null) {
             sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
             return true;
