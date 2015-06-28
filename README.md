@@ -5,11 +5,11 @@ BaxShops is a shop plugin for Bukkit, based on SwornShop, updated for Bukkit 1.8
 
 BaxShops adds more features such as:
 * /buy, /sell, /restock are now commands
-* Multiple shop locations - allows the shop to be accessed in multiple parts of a world
-* Sell to shop - now you can sell thigs directly to the shop's inventory
-* Auto accept sale requests
-* Buy requests - make buyers ask permission to buy
-* Remove all inventory in a shop (instead of just 2/3 of what you put in)
+* Shops can have more than one location, allowing them to be accessed in multiple areas of a world
+* Items can now be sold directly to the shop's inventory
+* Sale requests can be accepted automatically
+* Enabling buy requests for a shop allows you to choose who you're selling to
+* All items can be removed by the owner of a shop instead of just 2/3 of them
 * Shops are saved in human-readable JSON format
 
 ---
