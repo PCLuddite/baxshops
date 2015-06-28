@@ -194,7 +194,7 @@ public class ShopCmdExecuter {
             sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
             return true;
         }
-        if (!cmd.getPlayer().hasPermission("shops.admin") && !cmd.getSelection().isOwner) {
+        if (!cmd.getSelection().isOwner && !cmd.getPlayer().hasPermission("shops.admin")) {
             sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
             return true;
         }
@@ -239,7 +239,7 @@ public class ShopCmdExecuter {
         return true;
     }
     
-    private static boolean checkInventory(ShopCmd cmd) {
+    private static boolean hasInventory(ShopCmd cmd) {
         if (cmd.getShop().inventory == null || cmd.getShop().inventory.isEmpty()) {
             return true;
         }
@@ -256,14 +256,14 @@ public class ShopCmdExecuter {
             return true;
         }
         
-        if (!cmd.getPlayer().hasPermission("shops.admin") && !cmd.getSelection().isOwner) {
+        if (!cmd.getSelection().isOwner && !cmd.getPlayer().hasPermission("shops.admin")) {
             sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
             return true;
         }
         
         if (cmd.getArgs().length == 3) {
             if (cmd.getArgs()[2].equalsIgnoreCase("all")) {
-                if (checkInventory(cmd)) {
+                if (hasInventory(cmd)) {
                     cmd.getMain().state.removeShop(cmd.getPlayer(), cmd.getShop());
                 }
             }
@@ -273,7 +273,7 @@ public class ShopCmdExecuter {
         }
         else {
             if (cmd.getShop().getLocations().size() == 1) {
-                if (checkInventory(cmd)) {
+                if (hasInventory(cmd)) {
                     cmd.getMain().state.removeShop(cmd.getPlayer(), cmd.getShop());
                     cmd.getMain().removeSelection(cmd.getPlayer());
                 }
@@ -977,7 +977,7 @@ public class ShopCmdExecuter {
             sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
             return true;
         }
-        if (!cmd.getPlayer().hasPermission("shops.admin") && !cmd.getSelection().isOwner) {
+        if (!cmd.getSelection().isOwner && !cmd.getPlayer().hasPermission("shops.admin")) {
                 sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
                 return true;
         }
@@ -1029,7 +1029,7 @@ public class ShopCmdExecuter {
             return true;
         }
         
-        if (!cmd.getPlayer().hasPermission("shops.admin") && !cmd.getSelection().isOwner) {
+        if (!cmd.getSelection().isOwner && !cmd.getPlayer().hasPermission("shops.admin")) {
             sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
             return true;
         }

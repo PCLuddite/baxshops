@@ -64,7 +64,7 @@ public class RefCmdExecuter {
         else {
             String[] original = cmd.getArgs();
             cmd.setArgs(Main.insertFirst(cmd.getArgs(), "location"));
-            switch (cmd.getArgs()[0]) {
+            switch (cmd.getArgs()[1]) {
                 case "paste":
                     return create(cmd);
                 case "list":
@@ -83,6 +83,10 @@ public class RefCmdExecuter {
             sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
         }
         else {
+            if (!cmd.getSelection().isOwner && !cmd.getPlayer().hasPermission("shops.admin")) {
+                sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
+                return true;
+            }
             cmd.getPlayer().sendMessage(CommandHelp.header("Shop Locations"));
             if (!selection.shop.getLocations().isEmpty()) {
                 
@@ -108,12 +112,7 @@ public class RefCmdExecuter {
     }
     
     private static String formatLoc(Location loc) {
-        try {
-            return "(" + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ() + ")";
-        }
-        catch(Exception ex) {
-            return Resources.ERROR_INLINE;
-        }
+        return String.format("(%d,%d,%d)", loc.getBlock(), loc.getBlockY(), loc.getBlockZ());
     }
     
     private static String getSignText(Location loc) {
@@ -146,7 +145,7 @@ public class RefCmdExecuter {
             sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
         }
         else {
-            if (!cmd.getPlayer().hasPermission("shops.admin") && !selection.isOwner) {
+            if (!selection.isOwner && !cmd.getPlayer().hasPermission("shops.admin")) {
                 sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
                 return true;
             }

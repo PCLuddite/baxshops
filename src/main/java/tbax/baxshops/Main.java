@@ -156,8 +156,8 @@ public class Main extends JavaPlugin implements Listener {
         }
 
         if (cmd.getArgs().length == 0) {
-            Help.showHelp(cmd.getPlayer(), cmd.getSelection());
-            return true;
+            //Help.showHelp(cmd.getPlayer(), cmd.getSelection());
+            return false;
         }
         /*
         exec = new BlacklistExecuter(sender, command, label, args);
