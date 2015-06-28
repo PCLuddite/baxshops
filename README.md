@@ -9,7 +9,7 @@ BaxShops adds more features such as:
 * Items can now be sold directly to the shop's inventory
 * Sale requests can be accepted automatically
 * Enabling buy requests for a shop allows you to choose who you're selling to
-* All items can be removed by the owner of a shop instead of just 2/3 of them
+* All items can be removed by the owner of a shop instead of only 2/3
 * Shops are saved in human-readable JSON format
 
 ---
