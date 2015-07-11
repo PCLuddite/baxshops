@@ -1,7 +1,7 @@
 /* 
  * The MIT License
  *
- * Copyright © 2015 Timothy Baxendale (pcluddite@hotmail.com) and 
+ * Copyright © 2013-2015 Timothy Baxendale (pcluddite@hotmail.com) and 
  * Copyright © 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -30,6 +30,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -53,7 +54,7 @@ import tbax.baxshops.serialization.ItemNames;
 public class ShopCmdExecuter {
     
     public static boolean execute(ShopCmd cmd) {
-        switch(cmd.getArgs()[0].toLowerCase()) {
+        switch(cmd.getAction()) {
             case "create":
             case "mk":
                 return create(cmd);
@@ -79,6 +80,9 @@ public class ShopCmdExecuter {
             case "remove":
             case "rm":
                 return remove(cmd);
+            case "take":
+            case "t":
+                return take(cmd);
             case "sign":
                 return sign(cmd);
             case "setindex":
@@ -239,13 +243,13 @@ public class ShopCmdExecuter {
         return true;
     }
     
-    private static boolean hasInventory(ShopCmd cmd) {
-        if (cmd.getShop().inventory == null || cmd.getShop().inventory.isEmpty()) {
+    private static boolean hasInventory(CommandSender sender, BaxShop shop) {
+        if (shop.inventory == null || shop.inventory.isEmpty()) {
             return true;
         }
         else {
-            sendError(cmd.getPlayer(), "There is still inventory at this shop!");
-            sendError(cmd.getPlayer(), "Remove all inventory before deleting it.");
+            sendError(sender, "There is still inventory at this shop!");
+            sendError(sender, "Remove all inventory before deleting it.");
             return false;
         }
     }
@@ -263,8 +267,8 @@ public class ShopCmdExecuter {
         
         if (cmd.getArgs().length == 3) {
             if (cmd.getArgs()[2].equalsIgnoreCase("all")) {
-                if (hasInventory(cmd)) {
-                    cmd.getMain().state.removeShop(cmd.getPlayer(), cmd.getShop());
+                if (hasInventory(cmd.getSender(), cmd.getShop())) {
+                    cmd.getState().removeShop(cmd.getPlayer(), cmd.getShop());
                 }
             }
             else {
@@ -273,13 +277,13 @@ public class ShopCmdExecuter {
         }
         else {
             if (cmd.getShop().getLocations().size() == 1) {
-                if (hasInventory(cmd)) {
-                    cmd.getMain().state.removeShop(cmd.getPlayer(), cmd.getShop());
+                if (hasInventory(cmd.getSender(), cmd.getShop())) {
+                    cmd.getState().removeShop(cmd.getPlayer(), cmd.getShop());
                     cmd.getMain().removeSelection(cmd.getPlayer());
                 }
             }
             else {
-                cmd.getMain().state.removeLocation(cmd.getPlayer(), cmd.getSelection().location);
+                cmd.getState().removeLocation(cmd.getPlayer(), cmd.getSelection().location);
             }
         }
         return true;
@@ -902,8 +906,66 @@ public class ShopCmdExecuter {
             sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
             return true;
         }
-        if (cmd.getArgs().length < 2) {
+        if (cmd.getArgs().length != 2) {
             sendError(cmd.getPlayer(), Help.remove.toUsageString());
+            return true;
+        }
+
+        BaxShop shop = cmd.getShop();
+        BaxEntry entry;
+        try {
+            int index = Integer.parseInt(cmd.getArgs()[1]);
+            entry = shop.getEntryAt(index - 1);
+        }
+        catch (NumberFormatException e) {
+            Long item = ItemNames.getItemFromAlias(cmd.getArgs()[1]);
+            if (item == null) {
+                sendError(cmd.getPlayer(), Resources.NOT_FOUND_ALIAS);
+                return true;
+            }
+            int id = (int) (item >> 16);
+            int damage = (short) (item & 0xFFFF);
+            entry = shop.findEntry(Material.getMaterial(id), damage);
+        } 
+        catch (IndexOutOfBoundsException e) {
+            entry = null;
+        }
+        if (entry == null) {
+            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SHOPITEM);
+            return true;
+        }
+        
+        ItemStack stack = entry.toItemStack();
+        
+        if (Main.inventoryFitsItem(cmd.getPlayer(), stack)) {
+            cmd.getPlayer().getInventory().addItem(stack);
+        }
+        else {
+            sendError(cmd.getPlayer(), Resources.NO_ROOM);
+            return true;
+        }
+        
+        cmd.getMain().sendInfo(cmd.getPlayer(), String.format("§a%d %s§F %s added to your inventory.",
+                    entry.getAmount(), ItemNames.getItemName(entry), entry.getAmount() == 1 ? "was" : "were"));
+
+        shop.inventory.remove(entry);
+        cmd.getMain().sendInfo(cmd.getPlayer(), "§fThe shop entry was removed.");
+        
+        
+        return true;
+    }
+    
+    public static boolean take(ShopCmd cmd) {
+        if (cmd.getSelection() == null) {
+            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+            return true;
+        }
+        if (!cmd.getSelection().isOwner && !cmd.getPlayer().hasPermission("shops.admin")) {
+            sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
+            return true;
+        }
+        if (cmd.getArgs().length < 2) {
+            sendError(cmd.getPlayer(), Help.take.toUsageString());
             return true;
         }
 
@@ -963,11 +1025,6 @@ public class ShopCmdExecuter {
         
         cmd.getMain().sendInfo(cmd.getPlayer(), String.format("§a%d %s§F %s added to your inventory.",
                     amt, ItemNames.getItemName(entry), amt == 1 ? "was" : "were"));
-        
-        if (entry.getAmount() == 0) {
-            shop.inventory.remove(entry);
-            cmd.getMain().sendInfo(cmd.getPlayer(), "§fThe shop entry was removed.");
-        }
         
         return true;
     }

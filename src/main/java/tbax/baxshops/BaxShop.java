@@ -1,7 +1,7 @@
 /* 
  * The MIT License
  *
- * Copyright © 2015 Timothy Baxendale (pcluddite@hotmail.com) and 
+ * Copyright © 2013-2015 Timothy Baxendale (pcluddite@hotmail.com) and 
  * Copyright © 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -211,18 +211,7 @@ public class BaxShop {
      * @return whether the shop contains the item
      */
     public boolean containsItem(ItemStack stack) {
-        for (BaxEntry e : inventory) {
-            if (e.getType() == stack.getType()
-                    && e.getDurability() == stack.getDurability()) {
-                for (Map.Entry<Enchantment, Integer> entry : stack.getEnchantments().entrySet()) {
-                    Integer level = e.getEnchantments().get(entry.getKey());
-                    if (!Objects.equals(level, entry.getValue())) {
-                        return false;
-                    }
-                }
-            }
-        }
-        return false;
+        return findEntry(stack) != null;
     }
 
     /**
@@ -234,8 +223,7 @@ public class BaxShop {
      */
     public boolean containsItem(Material id, int damage) {
         for (BaxEntry e : inventory) {
-            if (e.getType() == id
-                    && e.getDurability() == damage) {
+            if (e.getType() == id && e.getDurability() == damage) {
                 return true;
             }
         }
@@ -250,8 +238,7 @@ public class BaxShop {
      */
     public BaxEntry findEntry(ItemStack stack) {
         for (BaxEntry e : inventory) {
-            if (e.getType() == stack.getType()
-                    && e.getDurability() == stack.getDurability()) {
+            if (e.getType() == stack.getType() && e.getDurability() == stack.getDurability()) {
                 for (Map.Entry<Enchantment, Integer> entry : stack.getEnchantments().entrySet()) {
                     Integer level = e.getEnchantments().get(entry.getKey());
                     if (!Objects.equals(level, entry.getValue())) {

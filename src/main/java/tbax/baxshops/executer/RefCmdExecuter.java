@@ -1,7 +1,7 @@
 /* 
  * The MIT License
  *
- * Copyright © 2015 Timothy Baxendale (pcluddite@hotmail.com) and 
+ * Copyright © 2013-2015 Timothy Baxendale (pcluddite@hotmail.com) and 
  * Copyright © 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -43,36 +43,13 @@ import tbax.baxshops.serialization.Clipboard;
 public class RefCmdExecuter {
     
     public static boolean execute(ShopCmd cmd) {
-        if (cmd.getArgs()[0].equalsIgnoreCase("loc") ||cmd.getArgs()[0].equalsIgnoreCase("location")) {
-            if (cmd.getArgs().length > 1) {
-                switch(cmd.getArgs()[1].toLowerCase()) {
-                    case "create":
-                    case "mk":
-                    case "paste":
-                        return create(cmd);
-                    case "list":
-                        return list(cmd);
-                    case "save":
-                    case "copy":
-                        return copy(cmd);
-                }
-            }
-            else {
+        switch (cmd.getAction()) {
+            case "paste":
+                return create(cmd);
+            case "list":
                 return list(cmd);
-            }
-        }
-        else {
-            String[] original = cmd.getArgs();
-            cmd.setArgs(Main.insertFirst(cmd.getArgs(), "location"));
-            switch (cmd.getArgs()[1]) {
-                case "paste":
-                    return create(cmd);
-                case "list":
-                    return list(cmd);
-                case "copy":
-                    return copy(cmd);
-            }
-            cmd.setArgs(original);
+            case "copy":
+                return copy(cmd);
         }
         return false;
     }
@@ -150,8 +127,8 @@ public class RefCmdExecuter {
                 return true;
             }
             String id = "DEFAULT";
-            if (cmd.getArgs().length > 2) {
-                id = cmd.getArgs()[2];
+            if (cmd.getArgs().length > 1) {
+                id = cmd.getArgs()[1];
             }
             Clipboard.put(cmd.getPlayer(), id, selection.shop);
             if (id == null) {
@@ -167,7 +144,7 @@ public class RefCmdExecuter {
     }
     
     public static boolean create(ShopCmd cmd) {
-        String id = cmd.getArgs().length > 2 ? cmd.getArgs()[2] : null;
+        String id = cmd.getArgs().length > 1 ? cmd.getArgs()[1] : null;
         BaxShop shopSource = Clipboard.get(cmd.getPlayer(), id);
         if (shopSource == null) {
             sendError(cmd.getPlayer(), String.format("No data was found on the clipboard with id '%s'!\nSelect a shop and use:\n/shop location save [id]", id == null ? "DEFAULT" : id));

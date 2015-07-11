@@ -1,7 +1,7 @@
 /* 
  * The MIT License
  *
- * Copyright © 2015 Timothy Baxendale (pcluddite@hotmail.com) and 
+ * Copyright © 2013-2015 Timothy Baxendale (pcluddite@hotmail.com) and 
  * Copyright © 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -38,11 +38,12 @@ import tbax.baxshops.serialization.StateFile;
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
 public class ShopCmd {
-    private CommandSender sender;
-    private Command command;
+    private final CommandSender sender;
+    private final Command command;
+    private final Main main;
     private Player pl;
-    private Main main;
     private String name;
+    private String action;
     
     private String[] args;
     
@@ -106,6 +107,18 @@ public class ShopCmd {
         return name;
     }
     
+    /**
+     * Gets the first argument (if present) in lower case
+     * @return 
+     */
+    public String getAction() {
+        if (action == null) { // lazy initialization
+            action = args.length > 0 ? args[0].toLowerCase() : "";
+        }
+        return action;
+    }
+    
+    @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(name);

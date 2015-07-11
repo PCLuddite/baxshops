@@ -1,7 +1,7 @@
 /* 
  * The MIT License
  *
- * Copyright © 2015 Timothy Baxendale (pcluddite@hotmail.com) and 
+ * Copyright © 2013-2015 Timothy Baxendale (pcluddite@hotmail.com) and 
  * Copyright © 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -99,7 +99,7 @@ public class StateFile {
     
     public StateFile(Main main) {
         this.main = main;
-        this.log = main.log;
+        this.log = Main.log;
     }
     
     public BaxShop getShop(int uid) {
@@ -134,7 +134,7 @@ public class StateFile {
     }
     
     /**
-     * Attempts to back up the shops.dat savefile.
+     * Attempts to back up the shops.json save file.
      * @return a boolean indicating success
      */
     public boolean backup() {
@@ -201,7 +201,7 @@ public class StateFile {
     }
 
     /**
-     * Loads all shops from the shops.dat savefile.
+     * Loads all shops from the shops.json savefile.
      *
      * @return the saved State
      */

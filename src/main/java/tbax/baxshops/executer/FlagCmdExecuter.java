@@ -1,7 +1,7 @@
 /* 
  * The MIT License
  *
- * Copyright © 2015 Timothy Baxendale (pcluddite@hotmail.com) and 
+ * Copyright © 2013-2015 Timothy Baxendale (pcluddite@hotmail.com) and 
  * Copyright © 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -24,7 +24,9 @@
  */
 package tbax.baxshops.executer;
 
+import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
+import tbax.baxshops.Help;
 import tbax.baxshops.Main;
 import static tbax.baxshops.Main.sendError;
 import tbax.baxshops.Resources;
@@ -40,14 +42,14 @@ public class FlagCmdExecuter {
         if (cmd.getArgs().length < 1) {
             return false;
         }
-        if (!(cmd.getArgs()[0].equalsIgnoreCase("flag") || cmd.getArgs()[0].equalsIgnoreCase("opt") || cmd.getArgs()[0].equalsIgnoreCase("option"))) {
+        if (!(cmd.getAction().equals("flag") || cmd.getAction().equals("opt") || cmd.getAction().equals("option"))) {
             return false;
         }
         if (cmd.getArgs().length < 2) {
-            sendError(cmd.getPlayer(), "expected /shop " + cmd.getArgs()[0] + " <option>");
+            cmd.getPlayer().sendMessage(Help.flag.toUsageString());
             return true;
         }
-        switch(cmd.getArgs()[1]) {
+        switch(cmd.getArgs()[1].toLowerCase()) {
             case "selltoshop":
             case "sell_to_shop":
                 return sellToShop(cmd);
@@ -131,6 +133,11 @@ public class FlagCmdExecuter {
             return true;
         }
         shop.infinite = Clipboard.parseBoolean(cmd.getArgs()[2]);
+        for(BaxEntry e : shop.inventory) {
+            if (e.infinite = shop.infinite) { // this is on purpose. It's not an error.
+                e.setAmount(1);
+            }
+        }
         cmd.getPlayer().sendMessage("§EInfinite items §Ffor this shop are §a" + (shop.infinite ? "enabled" : "disabled"));
         return true;
     }

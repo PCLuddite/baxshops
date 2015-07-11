@@ -1,7 +1,7 @@
 /* 
  * The MIT License
  *
- * Copyright © 2015 Timothy Baxendale (pcluddite@hotmail.com) and 
+ * Copyright © 2013-2015 Timothy Baxendale (pcluddite@hotmail.com) and 
  * Copyright © 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -127,6 +127,7 @@ public class Main extends JavaPlugin implements Listener {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+                
         ShopCmd cmd = new ShopCmd(this, sender, command, args);
         
         if (cmd.getName().equalsIgnoreCase("buy") || cmd.getName().equalsIgnoreCase("sell") ||
@@ -134,30 +135,25 @@ public class Main extends JavaPlugin implements Listener {
             cmd.setArgs(insertFirst(cmd.getArgs(), cmd.getName()));
             cmd.setName("shop");
         }
-        else if (!cmd.getName().equalsIgnoreCase("shop")) {
-            return false;
-        }
         
-        String action = cmd.getArgs().length == 0 ? "" : cmd.getArgs()[0];
+        if (cmd.getArgs().length == 0) {
+           Help.showHelp(sender);
+           return true;
+        }
         
         if (MainExecuter.execute(cmd)){
             return true;
         }     
         
         // Sender is not a player
-        if (cmd.getPlayer() == null) {
-            if (action.equalsIgnoreCase("removeallnotifications")) {
+        if (cmd.getPlayer() == null && cmd.getArgs().length > 0) {
+            if (cmd.getArgs()[0].equalsIgnoreCase("removeallnotifications")) {
                 state.pending.clear();
             }
             else {
                 sendError(sender, "/shop commands can only be used by a player");
             }
             return true;
-        }
-
-        if (cmd.getArgs().length == 0) {
-            //Help.showHelp(cmd.getPlayer(), cmd.getSelection());
-            return false;
         }
         /*
         exec = new BlacklistExecuter(sender, command, label, args);

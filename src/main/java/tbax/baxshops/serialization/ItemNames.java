@@ -1,7 +1,7 @@
 /* 
  * The MIT License
  *
- * Copyright © 2015 Timothy Baxendale (pcluddite@hotmail.com) and 
+ * Copyright © 2013-2015 Timothy Baxendale (pcluddite@hotmail.com) and 
  * Copyright © 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -72,44 +72,71 @@ public class ItemNames {
     /**
      * Gets the name of an item.
      *
-     * @param item an item stack
-     * @return the item's name
-     */
-    public static String getItemName(ItemStack item) {
-        return getItemName(item.getTypeId(), item.getDurability());
-    }
-
-    /**
-     * Gets the name of an item.
-     *
      * @param entry the shop entry
      * @return the item's name
      */
     public static String getItemName(BaxEntry entry) {
-        return getItemName(entry.getType().getId(), entry.getDurability());
+        return getItemName(entry.getItemStack());
     }
 
     /**
      * Gets the name of an item.
      *
-     * @param id the item's id
-     * @param damage the item's damage value (durability)
+     * @param item an item stack
      * @return the item's name
      */
-    public static String getItemName(int id, int damage) {
-        String name = itemNames.get((long) id << 16 | damage);
+    public static String getItemName(ItemStack item) {
+        String name = itemNames.get((long) item.getTypeId() << 16 | item.getDurability());
         if (name == null) {
-            name = itemNames.get((long) id << 16);
+            name = itemNames.get((long) item.getTypeId() << 16);
             if (name == null) {
-                return String.format("%d:%d", id, damage);
+                name = getFriendlyName(item.getData().toString());
+                int last = name.lastIndexOf("Item");
+                if (last > -1) {
+                    name = name.substring(0, last - 1);
+                }
+                itemNames.put((long)item.getTypeId() << 16 | item.getDurability(), name); // save it for later
             }
         }
         return name;
     }
     
+    private static String getFriendlyName(String s) {
+        if (s == null || s.isEmpty()) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        boolean upper = true;
+        for(int index = 0; index < s.length(); ++index) {
+            char c = s.charAt(index);
+            switch(c) {
+                case '_': // make this char a space
+                    upper = true;
+                    sb.append(' ');
+                    break;
+                case '(': // end of name
+                    return sb.toString();
+                case ' ':
+                    upper = true;
+                default:
+                    if (upper) {
+                        sb.append(Character.toUpperCase(c));
+                        upper = false;
+                    }
+                    else {
+                        sb.append(Character.toLowerCase(c));
+                    }
+                    break;
+            }
+        }
+        return sb.toString();
+    }
+    
+    
     
     /**
      * Loads the damageable items list from the damageable.txt resource.
+     * @param main
      */
     public static void loadDamageable(Main main) {
         InputStream stream = main.getResource("damageable.txt");
@@ -143,6 +170,7 @@ public class ItemNames {
     
     /**
      * Loads the item names map from the items.txt resource.
+     * @param main
     */
     public static void loadItemNames(Main main) {
         InputStream stream = main.getResource("items.txt");

@@ -1,7 +1,7 @@
 /* 
  * The MIT License
  *
- * Copyright © 2015 Timothy Baxendale (pcluddite@hotmail.com) and 
+ * Copyright © 2013-2015 Timothy Baxendale (pcluddite@hotmail.com) and 
  * Copyright © 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -80,8 +80,8 @@ public class Help {
                     ), new String[]{
                         "§BWarning:§F Once you add an item to a shop, you cannot remove it."
                     }));
-    public static final CommandHelp remove = new CommandHelp("shop remove", "rm", "<item>", "remove an item and get 2/3 back",
-            CommandHelp.arg("item", "the name or entry number of the item"));
+    public static final CommandHelp remove = new CommandHelp("shop remove", "rm", "<item>", "removes an item",
+            CommandHelp.arg("item", "the name or entry number of the item to remove"));
     public static final CommandHelp restock = new CommandHelp("shop restock", "r", null, "restock this shop with your held item");
     public static final CommandHelp restockall = new CommandHelp("shop restockall", null, null,
             "restocks using all items of the same type");
@@ -101,10 +101,18 @@ public class Help {
             CommandHelp.args("name", "the name of the flag to set",
                     "setting", "the option to set the flag",
                     "list", "lists all flags applied to the shop"));
-
-    public static final CommandHelp ref = new CommandHelp("shop ref", null, "<action> [args]", "Manage a shop reference.",
-            CommandHelp.args("action", "the management action (create, copy, delete, etc.)",
-                    "args", "any aditional arguments"));
+    
+    public static final CommandHelp copy = new CommandHelp("shop copy", null, "[id]", "Copies the shop to clipboard",
+            CommandHelp.args("id", "the id to use when pasting"));
+    
+    public static final CommandHelp paste = new CommandHelp("shop paste", null, "[id]", "Pastes a shop from the clipboard",
+            CommandHelp.args("id", "the id to used to copy the shop"));
+    
+    public static final CommandHelp take = new CommandHelp("shop take", null, "<name> [amount]", "Takes an item from the shop",
+            CommandHelp.args("name", "the name of the item",
+                             "amount", "the amount to take. Default is 1."));
+    
+    public static final CommandHelp list = new CommandHelp("shop list", null, "", "List all shop locations");
 
     /**
      * The general index of commands
@@ -118,7 +126,9 @@ public class Help {
         claim.toIndexString(),
         skip.toIndexString(),
         flag.toIndexString(),
-        ref.toIndexString()
+        copy.toIndexString(),
+        paste.toIndexString(),
+        list.toIndexString()
     };
     /**
      * An index of commands only usable when a shop is selected
@@ -260,9 +270,12 @@ public class Help {
         commands.put("opt", flag);
         commands.put("option", flag);
 
-        commands.put("location", ref);
-        commands.put("loc", ref);
-        commands.put("ref", ref);
+        commands.put("copy", copy);
+        commands.put("paste", paste);
+        commands.put("list", list);
+        
+        commands.put("take", take);
+        commands.put("t", take);
     }
 
     /**
