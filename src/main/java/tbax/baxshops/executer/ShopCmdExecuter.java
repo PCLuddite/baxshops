@@ -567,14 +567,10 @@ public class ShopCmdExecuter {
             entry = shop.getEntryAt(index - 1);
         }
         catch (NumberFormatException e) {
-            Long item = ItemNames.getItemFromAlias(cmd.getArgs()[1]);
-            if (item == null) {
-                sendError(cmd.getPlayer(), Resources.NOT_FOUND_ALIAS);
+            entry = ItemNames.getItemFromAlias(cmd.getArgs()[1], shop, cmd.getSender());
+            if (entry == null) {
                 return true;
             }
-            int id = (int) (item >> 16);
-            int damage = (short) (item & 0xFFFF);
-            entry = shop.findEntry(Material.getMaterial(id), damage);
         }
         catch (IndexOutOfBoundsException e) {
             entry = null;
@@ -649,14 +645,10 @@ public class ShopCmdExecuter {
             entry = shop.getEntryAt(index - 1);
         } 
         catch (NumberFormatException e) {
-            Long item = ItemNames.getItemFromAlias(cmd.getArgs()[1]);
-            if (item == null) {
-                sendError(cmd.getPlayer(), Resources.NOT_FOUND_ALIAS);
+            entry = ItemNames.getItemFromAlias(cmd.getArgs()[1], shop, cmd.getSender());
+            if (entry == null) {
                 return true;
             }
-            int id = (int) (item >> 16);
-            short damage = (short) (item & 0xFFFF);
-            entry = shop.findEntry(Material.getMaterial(id), damage);
         } 
         catch (IndexOutOfBoundsException e) {
             entry = null;
@@ -918,14 +910,10 @@ public class ShopCmdExecuter {
             entry = shop.getEntryAt(index - 1);
         }
         catch (NumberFormatException e) {
-            Long item = ItemNames.getItemFromAlias(cmd.getArgs()[1]);
-            if (item == null) {
-                sendError(cmd.getPlayer(), Resources.NOT_FOUND_ALIAS);
+            entry = ItemNames.getItemFromAlias(cmd.getArgs()[1], shop, cmd.getSender());
+            if (entry == null) {
                 return true;
             }
-            int id = (int) (item >> 16);
-            int damage = (short) (item & 0xFFFF);
-            entry = shop.findEntry(Material.getMaterial(id), damage);
         } 
         catch (IndexOutOfBoundsException e) {
             entry = null;
@@ -935,22 +923,22 @@ public class ShopCmdExecuter {
             return true;
         }
         
-        ItemStack stack = entry.toItemStack();
-        
-        if (Main.inventoryFitsItem(cmd.getPlayer(), stack)) {
-            cmd.getPlayer().getInventory().addItem(stack);
-        }
-        else {
-            sendError(cmd.getPlayer(), Resources.NO_ROOM);
-            return true;
-        }
-        
-        cmd.getMain().sendInfo(cmd.getPlayer(), String.format("§a%d %s§F %s added to your inventory.",
-                    entry.getAmount(), ItemNames.getItemName(entry), entry.getAmount() == 1 ? "was" : "were"));
+        if (entry.getAmount() > 0) {
+            ItemStack stack = entry.toItemStack();
 
+            if (Main.inventoryFitsItem(cmd.getPlayer(), stack)) {
+                cmd.getPlayer().getInventory().addItem(stack);
+            }
+            else {
+                sendError(cmd.getPlayer(), Resources.NO_ROOM);
+                return true;
+            }
+
+            cmd.getMain().sendInfo(cmd.getPlayer(), String.format("§a%d %s§F %s added to your inventory.",
+                        entry.getAmount(), ItemNames.getItemName(entry), entry.getAmount() == 1 ? "was" : "were"));
+        }
         shop.inventory.remove(entry);
         cmd.getMain().sendInfo(cmd.getPlayer(), "§fThe shop entry was removed.");
-        
         
         return true;
     }
@@ -976,14 +964,10 @@ public class ShopCmdExecuter {
             entry = shop.getEntryAt(index - 1);
         }
         catch (NumberFormatException e) {
-            Long item = ItemNames.getItemFromAlias(cmd.getArgs()[1]);
-            if (item == null) {
-                sendError(cmd.getPlayer(), Resources.NOT_FOUND_ALIAS);
+            entry = ItemNames.getItemFromAlias(cmd.getArgs()[1], shop, cmd.getSender());
+            if (entry == null) {
                 return true;
             }
-            int id = (int) (item >> 16);
-            int damage = (short) (item & 0xFFFF);
-            entry = shop.findEntry(Material.getMaterial(id), damage);
         } 
         catch (IndexOutOfBoundsException e) {
             entry = null;
@@ -993,7 +977,7 @@ public class ShopCmdExecuter {
             return true;
         }
         
-        int amt = entry.getAmount();
+        int amt = 1;
         if (cmd.getArgs().length > 2) {
             try {
                 amt = getAmount(cmd.getArgs()[2], entry);
@@ -1099,14 +1083,11 @@ public class ShopCmdExecuter {
                 oldIndex = Integer.parseInt(cmd.getArgs()[1]);
             }
             catch(NumberFormatException e) {
-                Long item = ItemNames.getItemFromAlias(cmd.getArgs()[1]);
-                if (item == null) {
-                    sendError(cmd.getPlayer(), Resources.NOT_FOUND_ALIAS);
+                BaxEntry entry = ItemNames.getItemFromAlias(cmd.getArgs()[1], cmd.getShop(), cmd.getSender());
+                if (entry == null) {
                     return true;
                 }
-                int id = (int) (item >> 16);
-                short damage = (short) (item & 0xFFFF);
-                oldIndex = cmd.getShop().getIndexOfEntry(Material.getMaterial(id), damage) + 1;
+                oldIndex = cmd.getShop().getIndexOfEntry(entry) + 1;
             } 
             catch (IndexOutOfBoundsException e) {
                 oldIndex = -1;

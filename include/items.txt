@@ -10,7 +10,6 @@
 3 Dirt
 | 1 Coarse Dirt
 | 2 Podzol
-4 Cobblestone
 5 Wooden Planks (Oak)
 | 1 Wooden Planks (Spruce)
 | 2 Wooden Planks (Birch)
@@ -23,17 +22,8 @@
 | 3 Sapling (Jungle)
 | 4 Sapling (Acacia)
 | 5 Sapling (Dark Oak)
-7 Bedrock
-8 Water
-9 Water (Still)
-10 Lava
-11 Lava (Still)
 12 Sand
 | 1 Red Sand
-13 Gravel
-14 Gold Ore
-15 Iron Ore
-16 Coal Ore
 17 Wood (Oak)
 | 1 Wood (Spruce)
 | 2 Wood (Birch)
@@ -46,19 +36,9 @@
 | 3 Leaves (Jungle)
 19 Sponge
 | 1 Wet Sponge
-20 Glass
-21 Lapis Lazuli Ore
-22 Block of Lapis Lazuli
-23 Dispenser
 24 Sandstone
 | 1 Sandstone (Chiseled)
 | 2 Sandstone (Smooth)
-25 Note Block
-26 Bed
-27 Powered Rail
-28 Detector Rail
-29 Sticky Piston
-30 Cobweb
 31 Tall Grass (Dead Shrub)
 | 1 Tall Grass
 | 2 Tall Grass (Fern)
@@ -91,15 +71,6 @@
 | 5 Slab (Stone Bricks)
 | 6 Slab (Nether Brick)
 | 7 Slab (Quartz)
-64 Wooden Door (Block)
-65 Ladder
-66 Rail
-67 Cobblestone Stairs
-68 Wall Sign
-69 Lever
-70 Stone Pressure Plate
-71 Iron Door
-72 Wooden Pressure Plate
 91 Jack-O-Lantern
 95 Stained Glass (White)
 | 1 Stained Glass (Orange)
@@ -127,6 +98,8 @@
 | 1 Stone Bricks (Mossy)
 | 2 Stone Bricks (Cracked)
 | 3 Stone Bricks (Chiseled)
+107 Fence Gate
+115 Nether Wart
 125 Doable Slab (Oak Wood)
 | 1 Double Slab (Spruce Wood)
 | 2 Double Slab (Birch Wood)
@@ -140,7 +113,6 @@
 | 4 Slab (Acacia Wood)
 | 5 Slab (Dark Oak Wood)
 127 Coacoa Pod
-128 Sandstone Stairs
 145 Anvil
 | 1 Anvil (Sligtly Damaged)
 | 2 Anvil (Very Damaged)
@@ -150,9 +122,6 @@
 155 Quartz Block
 | 1 Chiseled Quartz Block
 | 2 Pillar Quartz Block
-156 Quartz Stairs
-157 Rail (Activator)
-158 Dropper
 159 Stained Clay (White)
 | 1 Stained Clay (Orange)
 | 2 Stained Clay (Magenta)
@@ -187,8 +156,6 @@
 | F Stained Glass Pane (Black)
 162 Wood (Acacia)
 | 1 Wood (Dark Oak)
-163 Wooden Stairs (Acacia)
-164 Wooden Stairs (Dark Oak)
 168 Prismarine
 | 1 Prismarine Bricks
 | 2 Dark Prismarine
@@ -214,18 +181,19 @@
 | 3 Large Fern
 | 4 Rose Bush
 | 5 Peony
+183 Fence Gate (Spruce)
+184 Fence Gate (Birch)
+185 Fence Gate (Jungle)
+186 Fence Gate (Dark Oak)
+187 Fence Gate (Acacia)
+256 Iron Shovel
 263 Coal
 | 1 Charcoal
-324 Wooden Door
-330 Iron Door
-349 Raw Fish
-| 1 Raw Salmon
-| 2 Clownfish
-| 3 Pufferfish
-350 Cooked Fish
-| 1 Cooked Salmon
-| 2 Cooked Clownfish
-| 3 Cooked Pufferfish
+269 Wooden Shovel
+273 Stone Shovel
+277 Diamond Shovel
+284 Golden Shovel
+289 Gunpowder
 351 Ink Sac
 | 1 Rose Red
 | 2 Cactus Green
@@ -512,9 +480,6 @@
 417 Iron Horse Armor
 418 Gold Horse Armor
 419 Diamond Horse Armor
-420 Lead
-421 Name Tag
-422 Minecart (Command Block)
 2256 Music Disk (C418 - 13)
 2257 Music Disk (C418 - cat)
 2258 Music Disk (C418 - blocks)
@@ -533,7 +498,7 @@
 179 Red Sandstone
 | 1 Red Sandstone (Chiseled)
 | 2 Red Sandstone (Smooth)
-180 Stairs (Red Sandstone)
+180 Red Sandstone Stairs
 181 Red Sandstone Slab (Double)
 182 Red Sandstone Slab
 183 Fence Gate (Spruce)

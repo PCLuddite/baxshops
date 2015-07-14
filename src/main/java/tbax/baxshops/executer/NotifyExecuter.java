@@ -60,8 +60,8 @@ public class NotifyExecuter {
             case "skip":
             case "sk":
                 return skip(cmd);
-            case "lookup":
-                return lookup(cmd);
+            /*case "lookup":
+                return lookup(cmd);*/
             case "lollipop":
             case "lol":
                 return lollipop(cmd);
@@ -139,7 +139,7 @@ public class NotifyExecuter {
         return true;
     }
     
-    public static boolean lookup(ShopCmd cmd) {
+    /*public static boolean lookup(ShopCmd cmd) {
         if (cmd.getArgs().length < 2) {
             sendError(cmd.getPlayer(), Help.lookup.toUsageString());
             return true;
@@ -153,7 +153,7 @@ public class NotifyExecuter {
         int damage = (int) (alias & 0xFFFF);
         cmd.getSender().sendMessage(String.format("%s is an alias for %d:%d", cmd.getArgs()[1], id, damage));
         return true;
-    }
+    }*/
     
     public static boolean lollipop(ShopCmd cmd) {
         double tastiness = LollipopNotification.DEFAULT_TASTINESS;

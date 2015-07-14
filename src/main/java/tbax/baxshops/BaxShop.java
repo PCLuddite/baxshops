@@ -121,9 +121,9 @@ public class BaxShop {
         );
     }
     
-    public int getIndexOfEntry(Material material, int damage) {
+    public int getIndexOfEntry(BaxEntry entry) {
         for(int index = 0; index < inventory.size(); index++) {
-            if (inventory.get(index).getType() == material && inventory.get(index).getDurability() == damage) {
+            if (inventory.get(index).equals(entry)) {
                 return index;
             }
         }
