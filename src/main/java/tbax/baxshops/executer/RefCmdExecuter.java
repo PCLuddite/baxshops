@@ -30,7 +30,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.CommandHelp;
-import tbax.baxshops.Main;
 import static tbax.baxshops.Main.sendError;
 import tbax.baxshops.Resources;
 import tbax.baxshops.ShopSelection;

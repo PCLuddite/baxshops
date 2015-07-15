@@ -24,7 +24,6 @@
  */
 package tbax.baxshops.notification;
 
-import tbax.shops.notification.*;
 import org.bukkit.entity.Player;
 
 /**

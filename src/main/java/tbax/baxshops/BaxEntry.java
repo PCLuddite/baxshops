@@ -27,7 +27,6 @@ package tbax.baxshops;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.util.Map;
-import java.util.Objects;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -45,16 +44,7 @@ public class BaxEntry {
     
     public BaxEntry() {
     }
-    
-    public BaxEntry(tbax.shops.ShopEntry old) {
-        stack = old.toItemStack();
-        if (stack.getAmount() < 0) {
-            infinite = true;
-        }
-        refundPrice = old.refundPrice;
-        retailPrice = old.retailPrice;
-    }
-    
+        
     public BaxEntry(JsonObject o) {
         stack = new ItemStack(o.get("id").getAsInt(), 0, o.get("damage").getAsShort());
         int num = o.get("quantity").getAsInt();

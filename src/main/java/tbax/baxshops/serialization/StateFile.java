@@ -38,7 +38,6 @@ import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInputStream;
 import java.io.OutputStream;
 import java.util.ArrayDeque;
 import java.util.Date;
@@ -67,7 +66,6 @@ import tbax.baxshops.notification.SaleNotification;
 import tbax.baxshops.notification.SaleNotificationAuto;
 import tbax.baxshops.notification.SaleRejection;
 import tbax.baxshops.notification.SellRequest;
-import tbax.shops.serialization.State2;
 
 /**
  *
@@ -75,8 +73,6 @@ import tbax.shops.serialization.State2;
  */
 public class StateFile {
 
-    public static final String DATBAK_FILE_PATH = "backups/%d.dat";
-    public static final String DAT_FILE_PATH = "shops.dat";
     public static final String JSON_FILE_PATH = "shops.json";
     public static final String JSONBAK_FILE_PATH = "backups/%d.json";
     
@@ -119,14 +115,8 @@ public class StateFile {
         //ItemNames.loadAliases(main);
         ItemNames.loadDamageable(main);
         
-        if (!loadState()) {
-            State2 state = reloadAll();
-            if (state != null) {
-                log.info("Attempting to convert from old format...");
-                StateConverter converter = new StateConverter(main, this);
-                converter.Convert(state);
-            }
-        }
+        loadState();
+        
         if (shops == null) {
             shops = new HashMap<>();
             log.warning("BaxShops could not load saved data. This is expected upon installation. If this is not BaxShop's first run, try restarting with one of the backups.");
@@ -200,36 +190,6 @@ public class StateFile {
         return false;
     }
 
-    /**
-     * Loads all shops from the shops.json savefile.
-     *
-     * @return the saved State
-     */
-    public State2 reloadAll() {
-        File stateLocation = new File(main.getDataFolder(), "shops.dat");
-        if (stateLocation.exists()) {
-            try {
-                FileInputStream fs = new FileInputStream(stateLocation);
-                ObjectInputStream stream = new ObjectInputStream(fs);
-                Object obj = stream.readObject();
-                if (obj instanceof State2) {
-                    return (State2) obj;
-                }
-                else {
-                    return null;
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-        shops = null;
-        return null;
-    }
-    
     /*
     * Loads all shops from shop.json file
     */

@@ -34,7 +34,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import tbax.shops.serialization.BlockLocation;
 
 /**
  *
@@ -56,25 +55,6 @@ public class BaxShop {
     public BaxShop() {
     }
     
-    public BaxShop(int uid, tbax.shops.BaxShop shop) {
-        this.uid          = uid;
-        this.owner        = shop.owner;
-        this.infinite     = shop.isInfinite;
-        this.sellRequests = (boolean)shop.getOption("sell_request");
-        this.buyRequests  = (boolean)shop.getOption("buy_request");
-        this.sellToShop   = (boolean)shop.getOption("sell_to_shop");
-        for(tbax.shops.ShopEntry oldEntry : shop.inventory) {
-            inventory.add(new BaxEntry(oldEntry));
-        }
-        locations.add(shop.location);
-        if (shop.getOption("ref_list") instanceof ArrayList) {
-            @SuppressWarnings("unchecked")
-            ArrayList<BlockLocation> refLocs = (ArrayList<BlockLocation>)shop.getOption("ref_list");
-            for(BlockLocation oldref : refLocs) {
-                locations.add(oldref.toLocation());
-            }
-        }
-    }
     
     public BaxShop(int uid, JsonObject o) {
         this.uid         = uid;
