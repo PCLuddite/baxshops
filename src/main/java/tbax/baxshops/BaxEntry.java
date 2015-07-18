@@ -28,6 +28,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.util.Map;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import tbax.baxshops.serialization.ItemNames;
@@ -93,8 +94,9 @@ public class BaxEntry {
         return stack.getEnchantments();
     }
     
-    public void setItem(ItemStack item) {
+    public boolean setItem(ItemStack item, CommandSender sender) {
         stack = item.clone();
+        return true;
     }
     
     public void setAmount(int amt) {

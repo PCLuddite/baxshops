@@ -329,7 +329,9 @@ public class ShopCmdExecuter {
                 return true;
         }
         BaxEntry newEntry = new BaxEntry();
-        newEntry.setItem(stack);
+        if (!newEntry.setItem(stack, cmd.getSender())) {
+            return true; // adding to the store failed
+        }
         newEntry.retailPrice = retailAmount;
         newEntry.refundPrice = refundAmount;
         if (cmd.getShop().infinite) {
@@ -699,7 +701,7 @@ public class ShopCmdExecuter {
         }
         
         BaxEntry purchased = new BaxEntry();
-        purchased.setItem(entry.toItemStack());
+        purchased.setItem(entry.toItemStack(), cmd.getSender()); // this won't fail, so no need to check for it 7/18/15
         purchased.retailPrice = entry.retailPrice;
         purchased.refundPrice = entry.refundPrice;
         purchased.setAmount(amount);
@@ -850,7 +852,9 @@ public class ShopCmdExecuter {
         String name = ItemNames.getItemName(itemsToSell);
         
         BaxEntry req = new BaxEntry();
-        req.setItem(itemsToSell);
+        if (!req.setItem(itemsToSell, cmd.getSender())) {
+            return -1.0;
+        }
         req.refundPrice = entry.refundPrice;
         
         SellRequest request = new SellRequest(shop, req, cmd.getPlayer().getName());
@@ -867,7 +871,8 @@ public class ShopCmdExecuter {
             }
         }
         else {
-            if (request.autoAccept()) {
+            int error = request.autoAccept(cmd.getPlayer());
+            if (error == 1) {
                 cmd.getPlayer().sendMessage(String.format(
                       "§FYou have sold §e%d %s§F for §a$%.2f§F to §1%s§F.",
                       itemsToSell.getAmount(), name, price, shop.owner));
@@ -876,7 +881,7 @@ public class ShopCmdExecuter {
                 }
                 return price;
             }
-            else {
+            else if (error == 0) {
                 cmd.getMain().state.sendNotification(shop.owner, request);
                 Main.sendError(cmd.getPlayer(), 
                     String.format("The owner could not purchase %d %s. A request has been sent to the owner to accept your offer at a later time.",
@@ -953,29 +958,32 @@ public class ShopCmdExecuter {
             sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
             return true;
         }
-        if (cmd.getArgs().length < 2) {
-            sendError(cmd.getPlayer(), Help.take.toUsageString());
-            return true;
-        }
-
         BaxShop shop = cmd.getShop();
         BaxEntry entry;
-        try {
-            int index = Integer.parseInt(cmd.getArgs()[1]);
-            entry = shop.getEntryAt(index - 1);
-        }
-        catch (NumberFormatException e) {
-            entry = ItemNames.getItemFromAlias(cmd.getArgs()[1], shop, cmd.getSender());
-            if (entry == null) {
+        if (cmd.getArgs().length < 2) {
+            if (shop.inventory.size() == 1) {
+                entry = shop.getEntryAt(1);
+            }
+            else {
+                sendError(cmd.getPlayer(), Help.take.toUsageString());
                 return true;
             }
-        } 
-        catch (IndexOutOfBoundsException e) {
-            entry = null;
         }
-        if (entry == null) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SHOPITEM);
-            return true;
+        else {
+            try {
+                int index = Integer.parseInt(cmd.getArgs()[1]);
+                entry = shop.getEntryAt(index - 1);
+            }
+            catch (NumberFormatException e) {
+                entry = ItemNames.getItemFromAlias(cmd.getArgs()[1], shop, cmd.getSender());
+                if (entry == null) {
+                    return true;
+                }
+            } 
+            catch (IndexOutOfBoundsException e) {
+                sendError(cmd.getPlayer(), Resources.NOT_FOUND_SHOPITEM);
+                return true;
+            }
         }
         
         int amt = 1;

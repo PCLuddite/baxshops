@@ -29,6 +29,7 @@ import com.google.gson.JsonObject;
 import java.util.Calendar;
 import java.util.Date;
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import tbax.baxshops.BaxEntry;
@@ -108,7 +109,9 @@ public class SellRequest implements Request, TimedNotification {
         econ.depositPlayer(seller, price);
 
         if (shop.sellToShop) {
-            sellToShop(item);
+            if (!sellToShop(item, player)) {
+                return false;
+            }
         }
         else if (!Main.giveToPlayer(player, item)) {
             sendError(player, Resources.NO_ROOM);
@@ -124,13 +127,18 @@ public class SellRequest implements Request, TimedNotification {
         return true;
     }
     
-    public boolean autoAccept() {
+    /**
+     * Auto-accepts the sale
+     * @param sender
+     * @return 1 if success, 0 if insufficient funds, -1 if invalid item
+     */
+    public int autoAccept(CommandSender sender) {
         double price = Main.roundTwoPlaces(entry.getAmount() * entry.refundPrice);
         
         Economy econ = Main.econ;
         
         if (!econ.has(shop.owner, price)) {
-            return false;
+            return 0;
         }
         
         econ.withdrawPlayer(shop.owner, price);
@@ -138,7 +146,9 @@ public class SellRequest implements Request, TimedNotification {
         
         Notification buyerNote;
         if (shop.sellToShop) {
-            sellToShop(entry.toItemStack());
+            if (!sellToShop(entry.toItemStack(), sender)) {
+                return -1;
+            }
             buyerNote = new GeneralNotification(
                 SaleNotificationAuto.getMessage(shop.owner, shop, entry, seller)
             );
@@ -149,15 +159,17 @@ public class SellRequest implements Request, TimedNotification {
             buyerNote = new SaleNotificationAuto(shop, entry, seller);
             Main.instance.state.sendNotification(shop.owner, buyerNote);
         }
-        return true;
+        return 1;
     }
     
-    private void sellToShop(ItemStack item) {
+    private boolean sellToShop(ItemStack item, CommandSender sender) {
         BaxEntry shopEntry = shop.findEntry(item.getType(), item.getDurability());
         if (shopEntry == null) {
             shopEntry = new BaxEntry();
-            shopEntry.setItem(item);
-            shop.addEntry(shopEntry);
+            if (shopEntry.setItem(item, sender)) {
+                shop.addEntry(shopEntry);
+                return false;
+            }
         }
         if (shop.infinite) {
             shopEntry.infinite = true;
@@ -165,6 +177,7 @@ public class SellRequest implements Request, TimedNotification {
         else {
             shopEntry.add(item.getAmount());
         }
+        return true;
     }
     
     @Override
