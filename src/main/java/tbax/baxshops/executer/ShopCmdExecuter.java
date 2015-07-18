@@ -618,6 +618,9 @@ public class ShopCmdExecuter {
             sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
             return true;
         }
+        if (cmd.getSelection().isOwner) {
+            return take(cmd); // if they're the owner, use the take command
+        }
         if (!cmd.getPlayer().hasPermission("shops.buy")) {
             sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
             return true;
@@ -750,12 +753,10 @@ public class ShopCmdExecuter {
             sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
             return true;
         }
-        if (!cmd.getPlayer().hasPermission("shops.sell")) {
-            sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
-            return true;
+        if (cmd.getSelection().isOwner) {
+            return restock(cmd); // act like restock if this is your shop
         }
-        if (cmd.getSelection().isOwner && !cmd.getPlayer().hasPermission("shops.self")) {
-            sendError(cmd.getPlayer(), "You cannot sell items to yourself.");
+        if (!cmd.getPlayer().hasPermission("shops.sell")) {
             sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
             return true;
         }

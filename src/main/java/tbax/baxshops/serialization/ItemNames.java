@@ -102,7 +102,7 @@ public class ItemNames {
                 for(BaxEntry entry : entries) {
                     error.append(getItemName(entry)).append("\n");
                 }
-                error.append("BaxShops isn't sure what you mean.");
+                error.append("BaxShops isn't sure what you want.");
                 Main.sendError(sender, error.toString());
                 return null;
             }

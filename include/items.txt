@@ -194,6 +194,15 @@
 277 Diamond Shovel
 284 Golden Shovel
 289 Gunpowder
+347 Clock
+349 Raw Fish
+| 1 Raw Salmon
+| 2 Clownfish
+| 3 Pufferfish
+350 Cooked Fish
+| 1 Cooked Salmon
+| 2 Cooked Clownfish
+| 3 Cooked Pufferfish
 351 Ink Sac
 | 1 Rose Red
 | 2 Cactus Green
