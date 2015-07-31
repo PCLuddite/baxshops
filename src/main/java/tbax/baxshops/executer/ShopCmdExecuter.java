@@ -962,7 +962,7 @@ public class ShopCmdExecuter {
         BaxEntry entry;
         if (cmd.getArgs().length < 2) {
             if (shop.inventory.size() == 1) {
-                entry = shop.getEntryAt(1);
+                entry = shop.getEntryAt(0);
             }
             else {
                 sendError(cmd.getPlayer(), Help.take.toUsageString());
