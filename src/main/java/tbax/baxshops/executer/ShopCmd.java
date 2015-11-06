@@ -120,8 +120,7 @@ public class ShopCmd {
     
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(name);
+        StringBuilder sb = new StringBuilder(name);
         for (String s : args) {
             sb.append(" ");
             sb.append(s);

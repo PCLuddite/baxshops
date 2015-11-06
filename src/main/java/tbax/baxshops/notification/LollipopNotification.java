@@ -77,7 +77,7 @@ public class LollipopNotification implements Notification {
     public static final String TYPE_ID = "lolly";
 
     @Override
-    public JsonElement toJson() {
+    public JsonElement toJson(double version) {
         JsonObject o = new JsonObject();
         o.addProperty("type", TYPE_ID);
         o.addProperty("sender", sender);
@@ -88,7 +88,7 @@ public class LollipopNotification implements Notification {
     public LollipopNotification() {
     }
     
-    public static LollipopNotification fromJson(JsonObject o) {
+    public static LollipopNotification fromJson(double version, JsonObject o) {
         LollipopNotification lolly = new LollipopNotification();
         lolly.sender = o.get("sender").getAsString();
         lolly.tastiness = o.get("tastiness").getAsInt();

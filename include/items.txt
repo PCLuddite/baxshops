@@ -71,6 +71,7 @@
 | 5 Slab (Stone Bricks)
 | 6 Slab (Nether Brick)
 | 7 Slab (Quartz)
+58 Crafting Table
 91 Jack-O-Lantern
 95 Stained Glass (White)
 | 1 Stained Glass (Orange)

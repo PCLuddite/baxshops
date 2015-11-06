@@ -45,5 +45,5 @@ public interface Notification {
      * @return the notification message
      */
     public String getMessage(Player player);
-    public JsonElement toJson();
+    public JsonElement toJson(double version);
 }

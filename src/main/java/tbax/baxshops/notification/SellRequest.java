@@ -196,25 +196,25 @@ public class SellRequest implements Request, TimedNotification {
     public static final String TYPE_ID = "SellRequest";
     
     @Override
-    public JsonElement toJson() {
+    public JsonElement toJson(double version) {
         JsonObject o = new JsonObject();
         o.addProperty("type", TYPE_ID);
         o.addProperty("seller", seller);
         o.addProperty("shop", shop.uid);
         o.addProperty("expires", expirationDate);
-        o.add("entry", entry.toJson());
+        o.add("entry", entry.toJson(version));
         return o;
     }
     
     public SellRequest() {
     }
     
-    public static SellRequest fromJson(JsonObject o) {
+    public static SellRequest fromJson(double version, JsonObject o) {
         SellRequest request = new SellRequest();
         request.seller = o.get("seller").getAsString();
         request.shop = Main.instance.state.getShop(o.get("shop").getAsInt());
         request.expirationDate = o.get("expires").getAsLong();
-        request.entry = new BaxEntry(o.get("entry").getAsJsonObject());
+        request.entry = new BaxEntry(version, o.get("entry").getAsJsonObject());
         return request;
     }
 }

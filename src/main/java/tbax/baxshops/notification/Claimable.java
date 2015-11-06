@@ -40,5 +40,5 @@ public interface Claimable extends Notification {
      * @return true if the notification could be claimed, false otherwise
      */
     public boolean claim(Player player);
-    public JsonElement toJson();
+    public JsonElement toJson(double version);
 }

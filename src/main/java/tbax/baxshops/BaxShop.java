@@ -54,11 +54,10 @@ public class BaxShop {
     
     public BaxShop() {
     }
-    
-    
-    public BaxShop(int uid, JsonObject o) {
-        this.uid         = uid;
-        this.owner       = o.get("owner").getAsString();
+        
+    public BaxShop(double version, int uid, JsonObject o) {
+        this.uid = uid;
+        this.owner = o.get("owner").getAsString();
         if (o.has("infinite")) {
             this.infinite = o.get("infinite").getAsBoolean();
         }
@@ -75,7 +74,7 @@ public class BaxShop {
             this.notify = o.get("notify").getAsBoolean();
         }
         loadLocations(o.get("locations").getAsJsonArray());
-        loadEntries(o.get("entries").getAsJsonArray());
+        loadEntries(version, o.get("entries").getAsJsonArray());
     }
     
     private void loadLocations(JsonArray a) {
@@ -85,9 +84,9 @@ public class BaxShop {
         }
     }
     
-    private void loadEntries(JsonArray a) {
+    private void loadEntries(double version, JsonArray a) {
         for(int i = 0; i < a.size(); ++i) {
-            BaxEntry entry = new BaxEntry(a.get(i).getAsJsonObject());
+            BaxEntry entry = new BaxEntry(version, a.get(i).getAsJsonObject());
             inventory.add(entry);
         }
     }
@@ -268,7 +267,7 @@ public class BaxShop {
         return o;
     }
     
-    public JsonElement toJson() {
+    public JsonElement toJson(double version) {
         JsonObject o = new JsonObject();
         o.addProperty("owner", owner);
         // default false
@@ -287,7 +286,7 @@ public class BaxShop {
         
         JsonArray aItems = new JsonArray();
         for(BaxEntry e : inventory) {
-            aItems.add(e.toJson());
+            aItems.add(e.toJson(version));
         }
         o.add("entries", aItems);
         

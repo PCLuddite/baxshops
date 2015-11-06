@@ -76,23 +76,23 @@ public class BuyRejection implements Notification {
     public static final String TYPE_ID = "BuyReject";
     
     @Override
-    public JsonElement toJson() {
+    public JsonElement toJson(double version) {
         JsonObject o = new JsonObject();
         o.addProperty("type", TYPE_ID);
         o.addProperty("seller", seller);
         o.addProperty("shop", shop.uid);
-        o.add("entry", entry.toJson());
+        o.add("entry", entry.toJson(version));
         return o;
     }
     
     public BuyRejection() {
     }
     
-    public static BuyRejection fromJson(JsonObject o) {
+    public static BuyRejection fromJson(double version, JsonObject o) {
         BuyRejection claim = new BuyRejection();
         claim.seller = o.get("seller").getAsString();
         claim.shop = Main.instance.state.getShop(o.get("shop").getAsInt());
-        claim.entry = new BaxEntry(o.get("entry").getAsJsonObject());
+        claim.entry = new BaxEntry(version, o.get("entry").getAsJsonObject());
         return claim;
     }
 }

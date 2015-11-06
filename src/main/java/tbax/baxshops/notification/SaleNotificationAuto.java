@@ -100,23 +100,23 @@ public class SaleNotificationAuto implements Claimable {
     public static final String TYPE_ID = "SaleNoteAuto";
     
     @Override
-    public JsonElement toJson() {
+    public JsonElement toJson(double version) {
         JsonObject o = new JsonObject();
         o.addProperty("type", TYPE_ID);
         o.addProperty("seller", seller);
         o.addProperty("shop", shop.uid);
-        o.add("entry", entry.toJson());
+        o.add("entry", entry.toJson(version));
         return o;
     }
     
     public SaleNotificationAuto() {
     }
     
-    public static SaleNotificationAuto fromJson(JsonObject o) {
+    public static SaleNotificationAuto fromJson(double version, JsonObject o) {
         SaleNotificationAuto note = new SaleNotificationAuto();
         note.seller = o.get("seller").getAsString();
         note.shop = Main.instance.state.getShop(o.get("shop").getAsInt());
-        note.entry = new BaxEntry(o.get("entry").getAsJsonObject());
+        note.entry = new BaxEntry(version, o.get("entry").getAsJsonObject());
         return note;
     }
 }

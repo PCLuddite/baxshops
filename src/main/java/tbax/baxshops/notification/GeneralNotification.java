@@ -47,7 +47,7 @@ public class GeneralNotification implements Notification {
     public static final String TYPE_ID = "general";
     
     @Override
-    public JsonElement toJson() {
+    public JsonElement toJson(double version) {
         JsonObject o = new JsonObject();
         o.addProperty("type", TYPE_ID);
         o.addProperty("msg", message);
@@ -57,7 +57,7 @@ public class GeneralNotification implements Notification {
     public GeneralNotification() {
     }
     
-    public static GeneralNotification fromJson(JsonObject o) {
+    public static GeneralNotification fromJson(double version, JsonObject o) {
         GeneralNotification general = new GeneralNotification();
         general.message = o.get("msg").getAsString();
         return general;

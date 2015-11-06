@@ -80,23 +80,23 @@ public class BuyNotification implements Notification {
     public static final String TYPE_ID = "BuyNote";
     
     @Override
-    public JsonElement toJson() {
+    public JsonElement toJson(double version) {
         JsonObject o = new JsonObject();
         o.addProperty("type", TYPE_ID);
         o.addProperty("buyer", buyer);
         o.addProperty("shop", shop.uid);
-        o.add("entry", entry.toJson());
+        o.add("entry", entry.toJson(version));
         return o;
     }
     
     public BuyNotification() {
     }
     
-    public static BuyNotification fromJson(JsonObject o) {
+    public static BuyNotification fromJson(double version, JsonObject o) {
         BuyNotification note = new BuyNotification();
         note.buyer = o.get("buyer").getAsString();
         note.shop = Main.instance.state.getShop(o.get("shop").getAsInt());
-        note.entry = new BaxEntry(o.get("entry").getAsJsonObject());
+        note.entry = new BaxEntry(version, o.get("entry").getAsJsonObject());
         return note;
     }
 }

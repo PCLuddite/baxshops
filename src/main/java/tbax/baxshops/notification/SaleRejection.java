@@ -91,23 +91,23 @@ public class SaleRejection implements Claimable {
     public static final String TYPE_ID = "SaleReject";
     
     @Override
-    public JsonElement toJson() {
+    public JsonElement toJson(double version) {
         JsonObject o = new JsonObject();
         o.addProperty("type", "SaleReject");
         o.addProperty("seller", seller);
         o.addProperty("shop", shop.uid);
-        o.add("entry", entry.toJson());
+        o.add("entry", entry.toJson(version));
         return o;
     }
     
     public SaleRejection() {
     }
     
-    public static SaleRejection fromJson(JsonObject o) {
+    public static SaleRejection fromJson(double version, JsonObject o) {
         SaleRejection claim = new SaleRejection();
         claim.seller = o.get("seller").getAsString();
         claim.shop = Main.instance.state.getShop(o.get("shop").getAsInt());
-        claim.entry = new BaxEntry(o.get("entry").getAsJsonObject());
+        claim.entry = new BaxEntry(version, o.get("entry").getAsJsonObject());
         return claim;
     }
 }

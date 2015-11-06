@@ -76,6 +76,8 @@ public class StateFile {
     public static final String JSON_FILE_PATH = "shops.json";
     public static final String JSONBAK_FILE_PATH = "backups/%d.json";
     
+    public static final double STATE_VERSION = 2.0; // state file format version
+    
     /**
      * A map of locations to their shop ids, accessed by their location in the world
      */
@@ -204,8 +206,12 @@ public class StateFile {
                 JsonElement e = p.parse(jr);
                 if (e.isJsonObject()) {
                     JsonObject full = e.getAsJsonObject();
-                    LoadShops(full.get("shops").getAsJsonObject());
-                    LoadNotes(full.get("notes").getAsJsonObject());
+                    double version = 0.0;
+                    if (full.has("version")) {
+                        version = full.get("version").getAsDouble();
+                    }
+                    loadShops(version, full.get("shops").getAsJsonObject());
+                    loadNotes(version, full.get("notes").getAsJsonObject());
                 }
                 else {
                     shops = null;
@@ -219,11 +225,11 @@ public class StateFile {
         return true;
     }
     
-    private void LoadShops(JsonObject shopObject) {
+    private void loadShops(double version, JsonObject shopObject) {
         for(Map.Entry<String, JsonElement> entry : shopObject.entrySet()) {
             try {
                 int uid = Integer.parseInt(entry.getKey());
-                BaxShop shop = new BaxShop(uid, entry.getValue().getAsJsonObject());
+                BaxShop shop = new BaxShop(version, uid, entry.getValue().getAsJsonObject());
                 shops.put(shop.uid, shop);
                 for(Location loc : shop.getLocations()) {
                     locations.put(loc, shop.uid);
@@ -235,13 +241,13 @@ public class StateFile {
         }
     }
     
-    private void LoadNotes(JsonObject noteObject) {
+    private void loadNotes(double version, JsonObject noteObject) {
         for(Map.Entry<String, JsonElement> entry : noteObject.entrySet()) {
             ArrayDeque<Notification> notes = new ArrayDeque<>();
             if (entry.getValue().isJsonArray()) {
                 for(JsonElement e : entry.getValue().getAsJsonArray()) {
                     if (e.isJsonObject()) {
-                        Notification n = LoadNote(e.getAsJsonObject());
+                        Notification n = loadNote(version, e.getAsJsonObject());
                         if (n != null) {
                             notes.add(n);
                         }
@@ -255,30 +261,30 @@ public class StateFile {
         }
     }
     
-    private Notification LoadNote(JsonObject o) {
+    private Notification loadNote(double version, JsonObject o) {
         switch(o.get("type").getAsString()) {
             case BuyClaim.TYPE_ID:
-                return BuyClaim.fromJson(o);
+                return BuyClaim.fromJson(version, o);
             case BuyNotification.TYPE_ID:
-                return BuyNotification.fromJson(o);
+                return BuyNotification.fromJson(version, o);
             case BuyRejection.TYPE_ID:
-                return BuyRejection.fromJson(o);
+                return BuyRejection.fromJson(version, o);
             case BuyRequest.TYPE_ID:
-                return BuyRequest.fromJson(o);
+                return BuyRequest.fromJson(version, o);
             case DeathNotification.TYPE_ID:
-                return DeathNotification.fromJson(o);
+                return DeathNotification.fromJson(version, o);
             case GeneralNotification.TYPE_ID:
-                return GeneralNotification.fromJson(o);
+                return GeneralNotification.fromJson(version, o);
             case LollipopNotification.TYPE_ID:
-                return LollipopNotification.fromJson(o);
+                return LollipopNotification.fromJson(version, o);
             case SaleNotification.TYPE_ID:
-                return SaleNotification.fromJson(o);
+                return SaleNotification.fromJson(version, o);
             case SaleNotificationAuto.TYPE_ID:
-                return SaleNotificationAuto.fromJson(o);
+                return SaleNotificationAuto.fromJson(version, o);
             case SaleRejection.TYPE_ID:
-                return SaleRejection.fromJson(o);
+                return SaleRejection.fromJson(version, o);
             case SellRequest.TYPE_ID:
-                return SellRequest.fromJson(o);
+                return SellRequest.fromJson(version, o);
             default:
                 log.warning("Unknown message type '" + o.get("type").getAsString() + "'. Skipped.");
                 break;
@@ -468,11 +474,12 @@ public class StateFile {
         }
 
         JsonObject state = new JsonObject();
+        state.addProperty("version", STATE_VERSION);
         
         JsonObject jShops = new JsonObject();
         for (Map.Entry<Integer, BaxShop> entry : shops.entrySet()) {
             BaxShop shop = entry.getValue();
-            jShops.add(shop.uid + "", shop.toJson());
+            jShops.add(shop.uid + "", shop.toJson(STATE_VERSION));
         }
         state.add("shops", jShops);
         
@@ -480,7 +487,7 @@ public class StateFile {
         for(Map.Entry<String, ArrayDeque<Notification>> entry : pending.entrySet()) {
             JsonArray notes = new JsonArray();
             for(Notification n : entry.getValue()) {
-                notes.add(n.toJson());
+                notes.add(n.toJson(STATE_VERSION));
             }
             jPending.add(entry.getKey(), notes);
         }

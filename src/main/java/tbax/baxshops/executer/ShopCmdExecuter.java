@@ -990,15 +990,16 @@ public class ShopCmdExecuter {
         if (cmd.getArgs().length > 2) {
             try {
                 amt = getAmount(cmd.getArgs()[2], entry);
-                if (!shop.infinite && amt > entry.getAmount()) {
-                    sendError(cmd.getPlayer(), Resources.NO_SUPPLIES);
-                    return true;
-                }
             }
             catch (NumberFormatException e) {
                 sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "amount"));
                 return true;
             }
+        }
+        
+        if (!shop.infinite && amt > entry.getAmount()) {
+            sendError(cmd.getPlayer(), Resources.NO_SUPPLIES);
+            return true;
         }
         
         ItemStack stack = entry.toItemStack();

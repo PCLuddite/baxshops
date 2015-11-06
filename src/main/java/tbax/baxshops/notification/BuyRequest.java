@@ -131,25 +131,25 @@ public class BuyRequest implements Request, TimedNotification {
     public static final String TYPE_ID = "BuyRequest";
     
     @Override
-    public JsonElement toJson() {
+    public JsonElement toJson(double version) {
         JsonObject o = new JsonObject();
         o.addProperty("type", TYPE_ID);
         o.addProperty("buyer", buyer);
         o.addProperty("shop", shop.uid);
         o.addProperty("expires", expirationDate);
-        o.add("entry", purchased.toJson());
+        o.add("entry", purchased.toJson(version));
         return o;
     }
     
     public BuyRequest() {
     }
     
-    public static BuyRequest fromJson(JsonObject o) {
+    public static BuyRequest fromJson(double version, JsonObject o) {
         BuyRequest request = new BuyRequest();
         request.buyer = o.get("buyer").getAsString();
         request.shop = Main.instance.state.getShop(o.get("shop").getAsInt());
         request.expirationDate = o.get("expires").getAsLong();
-        request.purchased = new BaxEntry(o.get("entry").getAsJsonObject());
+        request.purchased = new BaxEntry(version, o.get("entry").getAsJsonObject());
         return request;
     }
 }

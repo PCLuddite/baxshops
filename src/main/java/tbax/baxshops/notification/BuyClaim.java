@@ -96,23 +96,23 @@ public class BuyClaim implements Claimable {
     public static final String TYPE_ID = "BuyClaim";
     
     @Override
-    public JsonElement toJson() {
+    public JsonElement toJson(double version) {
         JsonObject o = new JsonObject();
         o.addProperty("type", TYPE_ID);
         o.addProperty("buyer", buyer);
         o.addProperty("shop", shop.uid);
-        o.add("entry", entry.toJson());
+        o.add("entry", entry.toJson(version));
         return o;
     }
     
     public BuyClaim() {
     }
     
-    public static BuyClaim fromJson(JsonObject o) {
+    public static BuyClaim fromJson(double version, JsonObject o) {
         BuyClaim claim = new BuyClaim();
         claim.buyer = o.get("buyer").getAsString();
         claim.shop = Main.instance.state.getShop(o.get("shop").getAsInt());
-        claim.entry = new BaxEntry(o.get("entry").getAsJsonObject());
+        claim.entry = new BaxEntry(version, o.get("entry").getAsJsonObject());
         return claim;
     }
 }

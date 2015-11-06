@@ -52,7 +52,7 @@ public class DeathNotification implements Notification {
     public static final String TYPE_ID = "DeathNote";
     
     @Override
-    public JsonElement toJson() {
+    public JsonElement toJson(double version) {
         JsonObject o = new JsonObject();
         o.addProperty("type", TYPE_ID);
         o.addProperty("person", person);
@@ -63,7 +63,7 @@ public class DeathNotification implements Notification {
     public DeathNotification() {
     }
     
-    public static DeathNotification fromJson(JsonObject o) {
+    public static DeathNotification fromJson(double version, JsonObject o) {
         DeathNotification death = new DeathNotification();
         death.tax = o.get("tax").getAsDouble();
         death.person = o.get("person").getAsString();

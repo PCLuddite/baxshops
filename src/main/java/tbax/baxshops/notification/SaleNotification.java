@@ -77,23 +77,23 @@ public class SaleNotification implements Notification {
     public static final String TYPE_ID = "SaleNote";
 
     @Override
-    public JsonElement toJson() {
+    public JsonElement toJson(double version) {
         JsonObject o = new JsonObject();
         o.addProperty("type", TYPE_ID);
         o.addProperty("seller", seller);
         o.addProperty("shop", shop.uid);
-        o.add("entry", entry.toJson());
+        o.add("entry", entry.toJson(version));
         return o;
     }
     
     public SaleNotification() {
     }
     
-    public static SaleNotification fromJson(JsonObject o) {
+    public static SaleNotification fromJson(double version, JsonObject o) {
         SaleNotification note = new SaleNotification();
         note.seller = o.get("seller").getAsString();
         note.shop = Main.instance.state.getShop(o.get("shop").getAsInt());
-        note.entry = new BaxEntry(o.get("entry").getAsJsonObject());
+        note.entry = new BaxEntry(version, o.get("entry").getAsJsonObject());
         return note;
     }
 }
