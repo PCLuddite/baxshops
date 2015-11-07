@@ -32,6 +32,8 @@ import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Main;
 import tbax.baxshops.Resources;
+import tbax.baxshops.serialization.BaxEntryDeserializer;
+import tbax.baxshops.serialization.BaxEntrySerializer;
 import tbax.baxshops.serialization.ItemNames;
 
 /**
@@ -96,7 +98,7 @@ public class SaleRejection implements Claimable {
         o.addProperty("type", "SaleReject");
         o.addProperty("seller", seller);
         o.addProperty("shop", shop.uid);
-        o.add("entry", entry.toJson(version));
+        o.add("entry", BaxEntrySerializer.serialize(version, entry));
         return o;
     }
     
@@ -107,7 +109,7 @@ public class SaleRejection implements Claimable {
         SaleRejection claim = new SaleRejection();
         claim.seller = o.get("seller").getAsString();
         claim.shop = Main.instance.state.getShop(o.get("shop").getAsInt());
-        claim.entry = new BaxEntry(version, o.get("entry").getAsJsonObject());
+        claim.entry = BaxEntryDeserializer.deserialize(version, o.get("entry").getAsJsonObject());
         return claim;
     }
 }

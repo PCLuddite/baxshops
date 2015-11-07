@@ -24,48 +24,18 @@
  */
 package tbax.baxshops.serialization;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import tbax.baxshops.*;
+import tbax.baxshops.notification.*;
+import java.io.*;
+import java.util.*;
+import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayDeque;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
-import tbax.baxshops.BaxShop;
-import tbax.baxshops.Main;
-import static tbax.baxshops.Main.sendError;
-import tbax.baxshops.Resources;
-import tbax.baxshops.notification.BuyClaim;
-import tbax.baxshops.notification.BuyNotification;
-import tbax.baxshops.notification.BuyRejection;
-import tbax.baxshops.notification.BuyRequest;
-import tbax.baxshops.notification.Claimable;
-import tbax.baxshops.notification.DeathNotification;
-import tbax.baxshops.notification.GeneralNotification;
-import tbax.baxshops.notification.LollipopNotification;
-import tbax.baxshops.notification.Notification;
-import tbax.baxshops.notification.Request;
-import tbax.baxshops.notification.SaleNotification;
-import tbax.baxshops.notification.SaleNotificationAuto;
-import tbax.baxshops.notification.SaleRejection;
-import tbax.baxshops.notification.SellRequest;
 
 /**
  *
@@ -76,7 +46,7 @@ public class StateFile {
     public static final String JSON_FILE_PATH = "shops.json";
     public static final String JSONBAK_FILE_PATH = "backups/%d.json";
     
-    public static final double STATE_VERSION = 2.0; // state file format version
+    public static final double STATE_VERSION = 2.1; // state file format version
     
     /**
      * A map of locations to their shop ids, accessed by their location in the world
@@ -209,6 +179,13 @@ public class StateFile {
                     double version = 0.0;
                     if (full.has("version")) {
                         version = full.get("version").getAsDouble();
+                        log.info("State file is of version " + version);
+                    }
+                    else {
+                        log.info("State file has no version.");
+                    }
+                    if (version != STATE_VERSION) {
+                        log.info("This will be converted to version " + STATE_VERSION + " when saved.");
                     }
                     loadShops(version, full.get("shops").getAsJsonObject());
                     loadNotes(version, full.get("notes").getAsJsonObject());
@@ -229,7 +206,7 @@ public class StateFile {
         for(Map.Entry<String, JsonElement> entry : shopObject.entrySet()) {
             try {
                 int uid = Integer.parseInt(entry.getKey());
-                BaxShop shop = new BaxShop(version, uid, entry.getValue().getAsJsonObject());
+                BaxShop shop = BaxShopDeserializer.deserialize(version, uid, entry.getValue().getAsJsonObject());
                 shops.put(shop.uid, shop);
                 for(Location loc : shop.getLocations()) {
                     locations.put(loc, shop.uid);
@@ -311,7 +288,7 @@ public class StateFile {
             locations.put(loc, shop.uid);
         }
         else if (otherUid != shop.uid) {
-            sendError(pl, "You can't create a new shop here! Another shop already exists on this block!");
+            Main.sendError(pl, "You can't create a new shop here! Another shop already exists on this block!");
             return false;
         }
         return true;
@@ -479,7 +456,7 @@ public class StateFile {
         JsonObject jShops = new JsonObject();
         for (Map.Entry<Integer, BaxShop> entry : shops.entrySet()) {
             BaxShop shop = entry.getValue();
-            jShops.add(shop.uid + "", shop.toJson(STATE_VERSION));
+            jShops.add(shop.uid + "", BaxShopSerializer.serialize(STATE_VERSION, shop));
         }
         state.add("shops", jShops);
         

@@ -34,6 +34,8 @@ import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Main;
 import tbax.baxshops.Resources;
+import tbax.baxshops.serialization.BaxEntryDeserializer;
+import tbax.baxshops.serialization.BaxEntrySerializer;
 import tbax.baxshops.serialization.ItemNames;
 
 /**
@@ -137,7 +139,7 @@ public class BuyRequest implements Request, TimedNotification {
         o.addProperty("buyer", buyer);
         o.addProperty("shop", shop.uid);
         o.addProperty("expires", expirationDate);
-        o.add("entry", purchased.toJson(version));
+        o.add("entry", BaxEntrySerializer.serialize(version, purchased));
         return o;
     }
     
@@ -149,7 +151,7 @@ public class BuyRequest implements Request, TimedNotification {
         request.buyer = o.get("buyer").getAsString();
         request.shop = Main.instance.state.getShop(o.get("shop").getAsInt());
         request.expirationDate = o.get("expires").getAsLong();
-        request.purchased = new BaxEntry(version, o.get("entry").getAsJsonObject());
+        request.purchased = BaxEntryDeserializer.deserialize(version, o.get("entry").getAsJsonObject());
         return request;
     }
 }

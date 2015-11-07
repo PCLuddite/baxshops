@@ -30,6 +30,8 @@ import org.bukkit.entity.Player;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Main;
+import tbax.baxshops.serialization.BaxEntryDeserializer;
+import tbax.baxshops.serialization.BaxEntrySerializer;
 import tbax.baxshops.serialization.ItemNames;
 
 /**
@@ -85,7 +87,7 @@ public class BuyNotification implements Notification {
         o.addProperty("type", TYPE_ID);
         o.addProperty("buyer", buyer);
         o.addProperty("shop", shop.uid);
-        o.add("entry", entry.toJson(version));
+        o.add("entry", BaxEntrySerializer.serialize(version, entry));
         return o;
     }
     
@@ -96,7 +98,7 @@ public class BuyNotification implements Notification {
         BuyNotification note = new BuyNotification();
         note.buyer = o.get("buyer").getAsString();
         note.shop = Main.instance.state.getShop(o.get("shop").getAsInt());
-        note.entry = new BaxEntry(version, o.get("entry").getAsJsonObject());
+        note.entry = BaxEntryDeserializer.deserialize(version, o.get("entry").getAsJsonObject());
         return note;
     }
 }

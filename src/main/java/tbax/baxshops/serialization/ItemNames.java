@@ -24,20 +24,12 @@
  */
 package tbax.baxshops.serialization;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.io.*;
+import java.util.*;
+import tbax.baxshops.*;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
-import tbax.baxshops.BaxEntry;
-import tbax.baxshops.BaxShop;
-import tbax.baxshops.Main;
 
 /**
  *

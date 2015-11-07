@@ -24,9 +24,6 @@
  */
 package tbax.baxshops;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;
@@ -50,54 +47,9 @@ public class BaxShop {
     public boolean notify = true;
     public boolean buyRequests = false;
     public boolean sellRequests = true;
-    private ArrayList<Location> locations = new ArrayList<>();
+    public ArrayList<Location> locations = new ArrayList<>();
     
     public BaxShop() {
-    }
-        
-    public BaxShop(double version, int uid, JsonObject o) {
-        this.uid = uid;
-        this.owner = o.get("owner").getAsString();
-        if (o.has("infinite")) {
-            this.infinite = o.get("infinite").getAsBoolean();
-        }
-        if (o.has("sellToShop")) {
-            this.sellToShop = o.get("sellToShop").getAsBoolean();
-        }
-        if (o.has("buyRequests")) {
-            this.buyRequests = o.get("buyRequests").getAsBoolean();
-        }
-        if (o.has("sellRequests")) {
-            this.sellRequests = o.get("sellRequests").getAsBoolean();
-        }
-        if (o.has("notify")) {
-            this.notify = o.get("notify").getAsBoolean();
-        }
-        loadLocations(o.get("locations").getAsJsonArray());
-        loadEntries(version, o.get("entries").getAsJsonArray());
-    }
-    
-    private void loadLocations(JsonArray a) {
-        for(int i = 0; i < a.size(); ++i) {
-            Location loc = getLocFromJson(a.get(i).getAsJsonObject());
-            locations.add(loc);
-        }
-    }
-    
-    private void loadEntries(double version, JsonArray a) {
-        for(int i = 0; i < a.size(); ++i) {
-            BaxEntry entry = new BaxEntry(version, a.get(i).getAsJsonObject());
-            inventory.add(entry);
-        }
-    }
-    
-    private static Location getLocFromJson(JsonObject o) {
-        return new Location(
-                Main.instance.getServer().getWorld(o.get("world").getAsString()),
-                o.get("x").getAsInt(),
-                o.get("y").getAsInt(),
-                o.get("z").getAsInt()
-        );
     }
     
     public int getIndexOfEntry(BaxEntry entry) {
@@ -244,52 +196,5 @@ public class BaxShop {
             }
         }
         return null;
-    }
-
-    private static void addIfTrue(JsonObject o, String key, boolean value) {
-	if (value) {
-            o.addProperty(key, value);
-	}
-    }
-    
-    private static void addIfFalse(JsonObject o, String key, boolean value) {
-	if (!value) {
-            o.addProperty(key, value);
-	}
-    }
-
-    private static JsonElement toJson(Location loc) {
-        JsonObject o = new JsonObject();
-        o.addProperty("world", loc.getWorld().getName());
-        o.addProperty("x", loc.getBlockX());
-        o.addProperty("y", loc.getBlockY());
-        o.addProperty("z", loc.getBlockZ());
-        return o;
-    }
-    
-    public JsonElement toJson(double version) {
-        JsonObject o = new JsonObject();
-        o.addProperty("owner", owner);
-        // default false
-        addIfTrue(o, "infinite", infinite);
-        addIfTrue(o, "sellToShop", sellToShop);
-        addIfTrue(o, "buyRequests", buyRequests);
-        // default true
-        addIfFalse(o, "sellRequests", sellRequests);
-        addIfFalse(o, "notify", notify);
-        
-        JsonArray aLocs = new JsonArray();
-        for(Location loc : locations) {
-            aLocs.add(toJson(loc));
-        }
-        o.add("locations", aLocs);
-        
-        JsonArray aItems = new JsonArray();
-        for(BaxEntry e : inventory) {
-            aItems.add(e.toJson(version));
-        }
-        o.add("entries", aItems);
-        
-        return o;
     }
 }

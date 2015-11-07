@@ -30,6 +30,8 @@ import org.bukkit.entity.Player;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Main;
+import tbax.baxshops.serialization.BaxEntryDeserializer;
+import tbax.baxshops.serialization.BaxEntrySerializer;
 import tbax.baxshops.serialization.ItemNames;
 
 /**
@@ -105,7 +107,7 @@ public class SaleNotificationAuto implements Claimable {
         o.addProperty("type", TYPE_ID);
         o.addProperty("seller", seller);
         o.addProperty("shop", shop.uid);
-        o.add("entry", entry.toJson(version));
+        o.add("entry", BaxEntrySerializer.serialize(version, entry));
         return o;
     }
     
@@ -116,7 +118,7 @@ public class SaleNotificationAuto implements Claimable {
         SaleNotificationAuto note = new SaleNotificationAuto();
         note.seller = o.get("seller").getAsString();
         note.shop = Main.instance.state.getShop(o.get("shop").getAsInt());
-        note.entry = new BaxEntry(version, o.get("entry").getAsJsonObject());
+        note.entry = BaxEntryDeserializer.deserialize(version, o.get("entry").getAsJsonObject());
         return note;
     }
 }

@@ -24,8 +24,6 @@
  */
 package tbax.baxshops;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import java.util.Map;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -38,7 +36,7 @@ import tbax.baxshops.serialization.ItemNames;
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
 public class BaxEntry {
-    private ItemStack stack;
+    public ItemStack stack;
     public double retailPrice = -1;
     public double refundPrice = -1;
     public boolean infinite = false;
@@ -46,15 +44,6 @@ public class BaxEntry {
     public BaxEntry() {
     }
         
-    public BaxEntry(double version, JsonObject o) {
-        if (version == 2.0) {
-            fromJsonVer2_0(o);
-        }
-        else if (version == 0.0) {
-            fromJsonVer0(o);
-        }
-    }
-    
     public Material getType() {
         return stack.getType();
     }
@@ -102,111 +91,6 @@ public class BaxEntry {
     
     public int getDurability() {
         return stack.getDurability();
-    }
-    
-    private JsonElement toJsonVer0() {
-        JsonObject o = new JsonObject();
-        o.addProperty("id", stack.getTypeId());
-        o.addProperty("quantity", 
-            infinite ? -1 : stack.getAmount()
-        );
-        o.addProperty("damage", stack.getDurability());
-        o.addProperty("retail", Main.roundTwoPlaces(retailPrice));
-        o.addProperty("refund", Main.roundTwoPlaces(refundPrice));
-        if (!stack.getEnchantments().isEmpty()) {
-            o.add("enchantments", toJsonVer0(stack.getEnchantments()));
-        }
-        return o;
-    }
-    
-    @SuppressWarnings("deprecation")
-    private static JsonElement toJsonVer0(Map<Enchantment,Integer> enchs) {
-        JsonObject o = new JsonObject();
-        for (Map.Entry<Enchantment, Integer> entry : enchs.entrySet()) {
-            o.addProperty(entry.getKey().getId() + "", entry.getValue());
-        }
-        return o;
-    }
-    
-    private JsonElement toJsonVer2_0() {
-        JsonObject o = new JsonObject();
-        o.addProperty("id", stack.getType().name());
-        o.addProperty("quantity", 
-            infinite ? -1 : stack.getAmount()
-        );
-        o.addProperty("damage", stack.getDurability());
-        o.addProperty("retail", Main.roundTwoPlaces(retailPrice));
-        o.addProperty("refund", Main.roundTwoPlaces(refundPrice));
-        if (!stack.getEnchantments().isEmpty()) {
-            o.add("enchantments", toJsonVer2_0(stack.getEnchantments()));
-        }
-        return o;
-    }
-    
-    private static JsonElement toJsonVer2_0(Map<Enchantment,Integer> enchs) {
-        JsonObject o = new JsonObject();
-        for (Map.Entry<Enchantment, Integer> entry : enchs.entrySet()) {
-            o.addProperty(entry.getKey().getName(), entry.getValue());
-        }
-        return o;
-    }
-    
-    public JsonElement toJson(double version) {
-        if (version == 2.0) {
-            return toJsonVer2_0();
-        }
-        else if (version == 0.0) {
-            return toJsonVer0();
-        }
-        return null;
-    }
-    
-    private void fromJsonVer0(JsonObject o) {
-        stack = new ItemStack(o.get("id").getAsInt(), 0, o.get("damage").getAsShort());
-        int num = o.get("quantity").getAsInt();
-        if (num < 0) {
-            infinite = true;
-        }
-        else {
-            stack.setAmount(num);
-        }
-        retailPrice = o.get("retail").getAsDouble();
-        refundPrice = o.get("refund").getAsDouble();
-        if (o.has("enchantments")) {
-            fromJsonVer0(stack, o.get("enchantments").getAsJsonObject());
-        }
-    }
-    
-    private static void fromJsonVer0(ItemStack stack, JsonObject oEnch) {
-        for(Map.Entry<String, JsonElement> entry : oEnch.entrySet()) {;
-            stack.addEnchantment(
-                    Enchantment.getById(Integer.parseInt(entry.getKey())),
-                    entry.getValue().getAsInt());
-        }
-    }
-    
-    private void fromJsonVer2_0(JsonObject o) {
-        stack = new ItemStack(Material.getMaterial(o.get("id").getAsString()), 0, o.get("damage").getAsShort());
-        int num = o.get("quantity").getAsInt();
-        if (num < 0) {
-            infinite = true;
-        }
-        else {
-            stack.setAmount(num);
-        }
-        retailPrice = o.get("retail").getAsDouble();
-        refundPrice = o.get("refund").getAsDouble();
-        if (o.has("enchantments")) {
-            fromJsonVer2_0(stack, o.get("enchantments").getAsJsonObject());
-        }
-    }
-    
-    private static void fromJsonVer2_0(ItemStack stack, JsonObject oEnch) {
-        for(Map.Entry<String, JsonElement> entry : oEnch.entrySet()) {;
-            stack.addEnchantment(
-                    Enchantment.getByName(entry.getKey()),
-                    entry.getValue().getAsInt());
-        }
     }
     
     public String toString(int index) {
