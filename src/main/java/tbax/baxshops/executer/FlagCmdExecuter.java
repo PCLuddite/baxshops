@@ -39,17 +39,17 @@ import tbax.baxshops.serialization.Clipboard;
 public class FlagCmdExecuter {
     
     public static boolean execute(ShopCmd cmd) {
-        if (cmd.getArgs().length < 1) {
+        if (cmd.getNumArgs() < 1) {
             return false;
         }
         if (!(cmd.getAction().equals("flag") || cmd.getAction().equals("opt") || cmd.getAction().equals("option"))) {
             return false;
         }
-        if (cmd.getArgs().length < 2) {
+        if (cmd.getNumArgs() < 2) {
             cmd.getPlayer().sendMessage(Help.flag.toUsageString());
             return true;
         }
-        switch(cmd.getArgs()[1].toLowerCase()) {
+        switch(cmd.getArg(1).toLowerCase()) {
             case "selltoshop":
             case "sell_to_shop":
                 return sellToShop(cmd);
@@ -75,7 +75,7 @@ public class FlagCmdExecuter {
             case "notes":
                 return shopNotify(cmd);
             default:
-                sendError(cmd.getPlayer(), "invalid shop option '" + cmd.getArgs()[1] + "'");
+                sendError(cmd.getPlayer(), "invalid shop option '" + cmd.getArg(1) + "'");
                 return false;
         }
     }
@@ -90,11 +90,11 @@ public class FlagCmdExecuter {
             sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
             return true;
         }
-        if (cmd.getArgs().length < 3 || !Clipboard.parseBoolean(cmd.getArgs()[2])) {
+        if (cmd.getNumArgs() < 3 || !Clipboard.parseBoolean(cmd.getArg(2))) {
             Main.sendError(cmd.getSender(), "Usage:\n/shop option sell_to_shop [true|false]");
             return true;
         }
-        shop.sellToShop = Clipboard.parseBoolean(cmd.getArgs()[2]);
+        shop.sellToShop = Clipboard.parseBoolean(cmd.getArg(2));
         cmd.getPlayer().sendMessage("§ESell to Shop §Fis §a" + (shop.sellToShop ? "enabled" : "disabled"));
         return true;
     }
@@ -109,11 +109,11 @@ public class FlagCmdExecuter {
             sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
             return true;
         }
-        if (cmd.getArgs().length < 3 || !Clipboard.isBoolean(cmd.getArgs()[2])) {
+        if (cmd.getNumArgs() < 3 || !Clipboard.isBoolean(cmd.getArg(2))) {
             Main.sendError(cmd.getSender(), "Usage:\n/shop option notify [true|false]");
             return true;
         }
-        shop.notify = Clipboard.parseBoolean(cmd.getArgs()[2]);
+        shop.notify = Clipboard.parseBoolean(cmd.getArg(2));
         cmd.getPlayer().sendMessage("§ENotifications §F for this shop are §a" + (shop.sellToShop ? "enabled" : "disabled"));
         return true;
     }
@@ -128,11 +128,11 @@ public class FlagCmdExecuter {
             sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
             return true;
         }
-        if (cmd.getArgs().length < 3 || !Clipboard.isBoolean(cmd.getArgs()[2])) {
+        if (cmd.getNumArgs() < 3 || !Clipboard.isBoolean(cmd.getArg(2))) {
             Main.sendError(cmd.getSender(), "Usage:\n/shop option infinite [true|false]");
             return true;
         }
-        shop.infinite = Clipboard.parseBoolean(cmd.getArgs()[2]);
+        shop.infinite = Clipboard.parseBoolean(cmd.getArg(2));
         for(BaxEntry e : shop.inventory) {
             if (e.infinite = shop.infinite) { // this is on purpose. It's not an error.
                 e.setAmount(1);
@@ -152,11 +152,11 @@ public class FlagCmdExecuter {
             sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
             return true;
         }
-        if (cmd.getArgs().length != 3) {
+        if (cmd.getNumArgs() != 3) {
             Main.sendError(cmd.getSender(), "Usage:\n/shop option SELL_REQUESTS [true|false]");
             return true;
         }
-        shop.sellRequests = Clipboard.parseBoolean(cmd.getArgs()[2]);
+        shop.sellRequests = Clipboard.parseBoolean(cmd.getArg(2));
         cmd.getPlayer().sendMessage("§ESell requests §Ffor this shop are §a" + (shop.sellRequests ? "enabled" : "disabled"));
         return true;
     }
@@ -171,11 +171,11 @@ public class FlagCmdExecuter {
             sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
             return true;
         }
-        if (cmd.getArgs().length < 3 || !Clipboard.isBoolean(cmd.getArgs()[2])) {
+        if (cmd.getNumArgs() < 3 || !Clipboard.isBoolean(cmd.getArg(2))) {
             Main.sendError(cmd.getSender(), "Usage:\n/shop option BUY_REQUESTS [true|false]");
             return true;
         }
-        shop.buyRequests = Clipboard.parseBoolean(cmd.getArgs()[2]);
+        shop.buyRequests = Clipboard.parseBoolean(cmd.getArg(2));
         cmd.getPlayer().sendMessage("§EBuy requests §Ffor this shop are §a" + (shop.buyRequests ? "enabled" : "disabled"));
         return true;
     }
@@ -190,11 +190,11 @@ public class FlagCmdExecuter {
             sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
             return true;
         }
-        if (cmd.getArgs().length != 3) {
+        if (cmd.getNumArgs() != 3) {
             Main.sendError(cmd.getSender(), "Usage:\n/shop option owner [owner name]");
             return true;
         }
-        shop.owner = cmd.getArgs()[2];
+        shop.owner = cmd.getArg(2);
         cmd.getPlayer().sendMessage("§E" + shop.owner + "§F is now the owner!" + 
                 (cmd.getSelection().isOwner ? "\n§aYou will still be able to edit this shop until you leave or reselect it." : ""));
         return true;

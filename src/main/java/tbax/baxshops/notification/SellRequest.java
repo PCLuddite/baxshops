@@ -168,10 +168,7 @@ public class SellRequest implements Request, TimedNotification {
         BaxEntry shopEntry = shop.findEntry(item.getType(), item.getDurability());
         if (shopEntry == null) {
             shopEntry = new BaxEntry();
-            if (shopEntry.setItem(item, sender)) {
-                shop.addEntry(shopEntry);
-                return false;
-            }
+            shopEntry.setItem(item);
         }
         if (shop.infinite) {
             shopEntry.infinite = true;

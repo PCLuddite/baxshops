@@ -26,7 +26,6 @@ package tbax.baxshops;
 
 import java.util.Map;
 import org.bukkit.Material;
-import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import tbax.baxshops.serialization.ItemNames;
@@ -52,8 +51,41 @@ public class BaxEntry {
         stack.setAmount(stack.getAmount() + amt);
     }
     
+    public void add(String amt) {
+        add(convertToInteger(amt));
+    }
+    
     public void subtract(int amt) {
         stack.setAmount(stack.getAmount() - amt);
+    }
+    
+    public void subtract(String amt) {
+        subtract(convertToInteger(amt));
+    }
+    
+    /**
+     * Converts a string amount keyword ("all","most") or number to an int
+     * @param amount
+     * @return 
+     */
+    public int convertToInteger(String amount) {
+        if (amount.equalsIgnoreCase("all")) {
+            if (infinite) {
+                return 64;
+            }
+            else {
+                return getAmount();
+            }
+        }
+        else if (amount.equalsIgnoreCase("most")) {
+            if (infinite) {
+                return 64;
+            }
+            else {
+                return getAmount() - 1;
+            }
+        }
+        return Integer.parseInt(amount);
     }
     
     /**
@@ -76,9 +108,8 @@ public class BaxEntry {
         return stack.getEnchantments();
     }
     
-    public boolean setItem(ItemStack item, CommandSender sender) {
+    public void setItem(ItemStack item) {
         stack = item.clone();
-        return true;
     }
     
     public void setAmount(int amt) {
@@ -91,6 +122,15 @@ public class BaxEntry {
     
     public int getDurability() {
         return stack.getDurability();
+    }
+    
+    public BaxEntry clone() {
+        BaxEntry cloned = new BaxEntry();
+        cloned.infinite = infinite;
+        cloned.refundPrice = refundPrice;
+        cloned.retailPrice = retailPrice;
+        cloned.stack = stack.clone();
+        return cloned;
     }
     
     public String toString(int index) {

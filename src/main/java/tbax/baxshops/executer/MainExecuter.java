@@ -71,8 +71,8 @@ public class MainExecuter {
     }
 
     public static boolean help(ShopCmd cmd) {
-        if (cmd.getArgs().length > 1) {
-            String helpCmd = cmd.getArgs()[1];
+        if (cmd.getNumArgs() > 1) {
+            String helpCmd = cmd.getArg(1);
             CommandHelp h = Help.getHelpFor(helpCmd);
             if (h == null) {
                 sendError(cmd.getSender(), String.format(Resources.INVALID_SHOP_ACTION, helpCmd));

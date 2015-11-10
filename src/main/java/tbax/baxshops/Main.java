@@ -132,11 +132,11 @@ public class Main extends JavaPlugin implements Listener {
         
         if (cmd.getName().equalsIgnoreCase("buy") || cmd.getName().equalsIgnoreCase("sell") ||
             cmd.getName().equalsIgnoreCase("restock") || cmd.getName().equalsIgnoreCase("restockall")) {
-            cmd.setArgs(insertFirst(cmd.getArgs(), cmd.getName()));
+            cmd.insertAction(cmd.getName());
             cmd.setName("shop");
         }
         
-        if (cmd.getArgs().length == 0) {
+        if (cmd.getNumArgs() == 0) {
            Help.showHelp(sender);
            return true;
         }
@@ -146,8 +146,8 @@ public class Main extends JavaPlugin implements Listener {
         }     
         
         // Sender is not a player
-        if (cmd.getPlayer() == null && cmd.getArgs().length > 0) {
-            if (cmd.getArgs()[0].equalsIgnoreCase("removeallnotifications")) {
+        if (cmd.getPlayer() == null && cmd.getNumArgs() > 0) {
+            if (cmd.getArg(0).equalsIgnoreCase("removeallnotifications")) {
                 state.pending.clear();
             }
             else {
@@ -439,13 +439,6 @@ public class Main extends JavaPlugin implements Listener {
      */
     public static double roundTwoPlaces(double value) {
         return Math.round(value*100.0d)/100.0d;
-    }
-    
-    public static String[] insertFirst(String[] array, String item) {
-        String[] ret = new String[array.length + 1];
-        System.arraycopy(array, 0, ret, 1, array.length);
-        ret[0] = item;
-        return ret;
     }
     
     public void sendInfo(Player pl, String message) {

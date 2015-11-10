@@ -30,6 +30,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.CommandHelp;
+import tbax.baxshops.Main;
 import static tbax.baxshops.Main.sendError;
 import tbax.baxshops.Resources;
 import tbax.baxshops.ShopSelection;
@@ -126,8 +127,8 @@ public class RefCmdExecuter {
                 return true;
             }
             String id = "DEFAULT";
-            if (cmd.getArgs().length > 1) {
-                id = cmd.getArgs()[1];
+            if (cmd.getNumArgs() > 1) {
+                id = cmd.getArg(1);
             }
             Clipboard.put(cmd.getPlayer(), id, selection.shop);
             if (id == null) {
@@ -143,20 +144,19 @@ public class RefCmdExecuter {
     }
     
     public static boolean create(ShopCmd cmd) {
-        String id = cmd.getArgs().length > 1 ? cmd.getArgs()[1] : null;
+        String id = cmd.getNumArgs() > 1 ? cmd.getArg(1) : null;
         BaxShop shopSource = Clipboard.get(cmd.getPlayer(), id);
         if (shopSource == null) {
             sendError(cmd.getPlayer(), String.format("No data was found on the clipboard with id '%s'!\nSelect a shop and use:\n/shop location save [id]", id == null ? "DEFAULT" : id));
             return true;
         }
         
-
         String owner = shopSource.owner;
         
         Block sourceLoc = shopSource.getLocations().get(0).getBlock();
         Block block;
         if (!(sourceLoc.getType().equals(Material.SIGN) || sourceLoc.getType().equals(Material.SIGN_POST))) {
-            cmd.getMain().log.warning(String.format(Resources.NOT_FOUND_SIGN, shopSource.owner));
+            Main.log.warning(String.format(Resources.NOT_FOUND_SIGN, shopSource.owner));
             block = ShopCmdExecuter.buildShopSign(cmd,
                 new String[] {
                   "Location for",

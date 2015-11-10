@@ -83,12 +83,22 @@ public class ShopCmd {
         return main.selectedShops.get(pl);
     }
     
-    public String[] getArgs() {
-        return args;
+    public boolean ensureArgs(int num) {
+        if (args.length < num) {
+            Main.sendError(sender, String.format("The command /shop %s expects %d arguments.", getAction(), num));
+            return false;
+        }
+        else {
+            return true;
+        }
     }
     
-    public void setArgs(String[] args) {
-        this.args = args;
+    public int getNumArgs() {
+        return args.length;
+    }
+    
+    public String getArg(int index) {
+        return args[index];
     }
     
     public Logger getLogger() {
@@ -116,6 +126,29 @@ public class ShopCmd {
             action = args.length > 0 ? args[0].toLowerCase() : "";
         }
         return action;
+    }
+    
+    /**
+     * Inserts a new first argument in the argument list
+     * @param action the new first argument
+     */
+    public void insertAction(String action) {
+        String[] newArgs = new String[args.length + 1];
+        System.arraycopy(args, 0, newArgs, 1, args.length);
+        newArgs[0] = action;
+        args = newArgs;
+    }
+    
+    
+    /**
+     * Appends an argument to the end of the argument list
+     * @param arg 
+     */
+    public void appendArg(String arg) {
+        String[] newArgs = new String[args.length + 1];
+        System.arraycopy(args, 0, newArgs, 0, args.length);
+        newArgs[args.length] = arg;
+        args = newArgs;
     }
     
     @Override

@@ -30,7 +30,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -39,8 +38,6 @@ import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Help;
 import tbax.baxshops.Main;
-import static tbax.baxshops.Main.econ;
-import static tbax.baxshops.Main.sendError;
 import tbax.baxshops.Resources;
 import tbax.baxshops.notification.BuyNotification;
 import tbax.baxshops.notification.BuyRequest;
@@ -100,13 +97,13 @@ public class ShopCmdExecuter {
     public static boolean create(ShopCmd cmd) {
         boolean admin = cmd.getSender().hasPermission("shops.admin");
         if (admin) {
-            if (cmd.getArgs().length < 2) {
-                sendError(cmd.getPlayer(), Help.create.toUsageString());
+            if (cmd.getNumArgs() < 2) {
+                Main.sendError(cmd.getPlayer(), Help.create.toUsageString());
                 return true;
             }
         }
         
-        String owner = admin ? cmd.getArgs()[1] : cmd.getPlayer().getName();
+        String owner = admin ? cmd.getArg(1) : cmd.getPlayer().getName();
         
         BaxShop shop = new BaxShop();
         shop.addLocation(cmd.getPlayer().getLocation().getWorld().getBlockAt(cmd.getPlayer().getLocation()).getLocation());
@@ -121,7 +118,7 @@ public class ShopCmdExecuter {
             return true; // Couldn't build the sign. Retreat!
         }
         
-        shop.infinite = admin && cmd.getArgs().length > 2 && (cmd.getArgs()[2].equalsIgnoreCase("yes") || cmd.getArgs()[2].equalsIgnoreCase("true"));
+        shop.infinite = admin && cmd.getNumArgs() > 2 && (cmd.getArg(2).equalsIgnoreCase("yes") || cmd.getArg(2).equalsIgnoreCase("true"));
         shop.sellRequests = !shop.infinite;
         shop.buyRequests = false;
         
@@ -137,17 +134,23 @@ public class ShopCmdExecuter {
         return true;
     }
     
+    /**
+     * Builds a sign 
+     * @param cmd shop command info
+     * @param signLines sign next
+     * @return On success, returns the block that contains the sign. Returns null on failure.
+     */
     public static Block buildShopSign(ShopCmd cmd, String[] signLines) {
         //Use up a sign if the user is not an admin
         if (!cmd.getPlayer().hasPermission("shops.admin") && !cmd.getPlayer().hasPermission("shops.owner")) {
-            sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
+            Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
             return null;
         }
         
         if (!cmd.getPlayer().hasPermission("shops.admin")) {
             PlayerInventory inv = cmd.getPlayer().getInventory();
             if (!(inv.contains(Material.SIGN))) {
-                sendError(cmd.getPlayer(), "You need a sign to set up a shop.");
+                Main.sendError(cmd.getPlayer(), "You need a sign to set up a shop.");
                 return null;
             }
             inv.remove(new ItemStack(Material.SIGN, 1));
@@ -161,7 +164,7 @@ public class ShopCmdExecuter {
         Block blockUnder = locUnder.getWorld().getBlockAt(locUnder);
         if (blockUnder.getType() == Material.AIR ||
             blockUnder.getType() == Material.TNT){
-                sendError(cmd.getPlayer(), "You cannot cmd.getPlayer()ace a shop on this block.");
+                Main.sendError(cmd.getPlayer(), "You cannot cmd.getPlayer()ace a shop on this block.");
                 return null;
         }
         
@@ -176,7 +179,7 @@ public class ShopCmdExecuter {
         if (!b.getType().equals(Material.SIGN)) {
             b.setType(Material.SIGN_POST);
             if (!b.getType().equals(Material.SIGN) && !b.getType().equals(Material.SIGN_POST)) {
-                sendError(cmd.getPlayer(), "Unable to cmd.getPlayer()ace sign! Block type is " + b.getType() + ".");  
+                Main.sendError(cmd.getPlayer(), "Unable to cmd.getPlayer()ace sign! Block type is " + b.getType() + ".");  
                 if (!cmd.getPlayer().hasPermission("shops.admin")) {
                     cmd.getPlayer().getInventory().addItem(new ItemStack(Material.SIGN)); // give the sign back
                 }
@@ -195,95 +198,89 @@ public class ShopCmdExecuter {
     
     public static boolean setangle(ShopCmd cmd) {
         if (cmd.getSelection() == null) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
             return true;
         }
         if (!cmd.getSelection().isOwner && !cmd.getPlayer().hasPermission("shops.admin")) {
-            sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
+            Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
             return true;
         }
-        if (cmd.getArgs().length < 2) {
-            sendError(cmd.getPlayer(), "You must specify a direction to face!");
+        if (cmd.getNumArgs() < 2) {
+            Main.sendError(cmd.getPlayer(), "You must specify a direction to face!");
             return true;
         }
         if (cmd.getSelection().location == null) {
-            sendError(cmd.getPlayer(), "Could not find location");
+            Main.sendError(cmd.getPlayer(), "Could not find location");
         }
         else {
             Block b = cmd.getSelection().location.getBlock();
             if (b == null) {
-                sendError(cmd.getPlayer(), "Could not find block");
+                Main.sendError(cmd.getPlayer(), "Could not find block");
             }
             else {
                 byte angle;
                 try {
-                    angle = (byte)((Integer.parseInt(cmd.getArgs()[1]) % 4) << 2);
+                    angle = (byte)((Integer.parseInt(cmd.getArg(1)) % 4) << 2);
                 }
                 catch(NumberFormatException e) {
-                    switch(cmd.getArgs()[1].toLowerCase()) {
+                    switch(cmd.getArg(1).toLowerCase()) {
                         case "south": angle = 0; break;
                         case "west": angle = 1; break;
                         case "north": angle = 2; break;
                         case "east": angle = 3; break;
                         default:
-                            sendError(cmd.getPlayer(), "The direction you entered wasn't valid! Use one of the four cardinal directions.");
+                            Main.sendError(cmd.getPlayer(), "The direction you entered wasn't valid! Use one of the four cardinal directions.");
                             return true;
                     }
                     angle = (byte)(angle << 2);
                 }
                 try {
                     b.setData(angle, false);
-                    cmd.getPlayer().sendMessage("§fSign rotated to face §e" + cmd.getArgs()[1].toLowerCase() + "§f");
+                    cmd.getPlayer().sendMessage("§fSign rotated to face §e" + cmd.getArg(1).toLowerCase() + "§f");
                 }
                 catch(Exception e) {
-                    sendError(cmd.getPlayer(), "Some weird error occoured, and long story short, the sign may not have been rotated.");
+                    Main.sendError(cmd.getPlayer(), "Some weird error occoured, and long story short, the sign may not have been rotated.");
                 }
             }
         }
         return true;
     }
     
-    private static boolean hasInventory(CommandSender sender, BaxShop shop) {
-        if (shop.inventory == null || shop.inventory.isEmpty()) {
-            return true;
-        }
-        else {
-            sendError(sender, "There is still inventory at this shop!");
-            sendError(sender, "Remove all inventory before deleting it.");
-            return false;
-        }
-    }
-    
     public static boolean delete(ShopCmd cmd) {
         if (cmd.getSelection() == null) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
             return true;
         }
         
         if (!cmd.getSelection().isOwner && !cmd.getPlayer().hasPermission("shops.admin")) {
-            sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
+            Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
             return true;
         }
         
-        if (cmd.getArgs().length == 3) {
-            if (cmd.getArgs()[2].equalsIgnoreCase("all")) {
-                if (hasInventory(cmd.getSender(), cmd.getShop())) {
-                    cmd.getState().removeShop(cmd.getPlayer(), cmd.getShop());
-                }
+        boolean deleteAll = false;
+        
+        if (cmd.getNumArgs() >= 3) {
+            if (cmd.getArg(2).equalsIgnoreCase("all")) {
+                deleteAll = true;
             }
             else {
-                sendError(cmd.getPlayer(), "invalid argument '" + cmd.getArgs()[2] + "'");
+                Main.sendError(cmd.getSender(), "Urecognized argument to /shop delete. Expected 'all' or no third argument");
+                return true;
             }
         }
+        
+        if (cmd.getShop().getLocations().size() == 1 || deleteAll) {
+            cmd.getState().removeShop(cmd.getPlayer(), cmd.getShop());
+            cmd.getMain().removeSelection(cmd.getPlayer());
+        }
         else {
-            if (cmd.getShop().getLocations().size() == 1) {
-                if (hasInventory(cmd.getSender(), cmd.getShop())) {
-                    cmd.getState().removeShop(cmd.getPlayer(), cmd.getShop());
-                    cmd.getMain().removeSelection(cmd.getPlayer());
-                }
+            if (cmd.getShop().getInventorySize() > 0) {
+                Main.sendError(cmd.getSender(), "There is still inventory at this shop!");
+                Main.sendError(cmd.getSender(), "Remove all inventory before deleting it.");
             }
             else {
                 cmd.getState().removeLocation(cmd.getPlayer(), cmd.getSelection().location);
+                cmd.getMain().removeSelection(cmd.getPlayer());
             }
         }
         return true;
@@ -291,47 +288,45 @@ public class ShopCmdExecuter {
     
     public static boolean add(ShopCmd cmd) {
         if (cmd.getSelection() == null) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
             return true;
         }
-        if (cmd.getArgs().length < 2) {
-                sendError(cmd.getPlayer(), Help.add.toUsageString());
+        if (cmd.getNumArgs() < 2) {
+                Main.sendError(cmd.getPlayer(), Help.add.toUsageString());
                 return true;
         }
         if (!cmd.getSelection().isOwner && !cmd.getPlayer().hasPermission("shops.admin")) {
-                sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
+                Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
                 return true;
         }
 
         double retailAmount, refundAmount;
         try {
-                retailAmount = Math.round(100d * Double.parseDouble(cmd.getArgs()[1])) / 100d;
+                retailAmount = Math.round(100d * Double.parseDouble(cmd.getArg(1))) / 100d;
         } catch (NumberFormatException e) {
-                sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "buy price"));
-                sendError(cmd.getPlayer(), Help.add.toUsageString());
+                Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "buy price"));
+                Main.sendError(cmd.getPlayer(), Help.add.toUsageString());
                 return true;
         }
         try {
-                refundAmount = cmd.getArgs().length > 2 ? Math.round(100d * Double.parseDouble(cmd.getArgs()[2])) / 100d : -1;
+                refundAmount = cmd.getNumArgs() > 2 ? Math.round(100d * Double.parseDouble(cmd.getArg(2))) / 100d : -1;
         } catch (NumberFormatException e) {
-                sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "sell price"));
-                sendError(cmd.getPlayer(), Help.add.toUsageString());
+                Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "sell price"));
+                Main.sendError(cmd.getPlayer(), Help.add.toUsageString());
                 return true;
         }
         ItemStack stack = cmd.getPlayer().getItemInHand();
         if (stack == null || stack.getType() == Material.AIR) {
-                sendError(cmd.getPlayer(), "You must be holding the item you wisth to add to this shop");
+                Main.sendError(cmd.getPlayer(), "You must be holding the item you wisth to add to this shop");
                 return true;
         }
         if (cmd.getShop().containsItem(stack)) {
-                sendError(cmd.getPlayer(), "That item has already been added to this shop");
-                sendError(cmd.getPlayer(), "Use /shop restock to restock");
+                Main.sendError(cmd.getPlayer(), "That item has already been added to this shop");
+                Main.sendError(cmd.getPlayer(), "Use /shop restock to restock");
                 return true;
         }
         BaxEntry newEntry = new BaxEntry();
-        if (!newEntry.setItem(stack, cmd.getSender())) {
-            return true; // adding to the store failed
-        }
+        newEntry.setItem(stack);
         newEntry.retailPrice = retailAmount;
         newEntry.refundPrice = refundAmount;
         if (cmd.getShop().infinite) {
@@ -349,47 +344,47 @@ public class ShopCmdExecuter {
     
     public static boolean restock(ShopCmd cmd) {
         if (cmd.getSelection() == null) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
             return true;
         }
         if (!cmd.getSelection().isOwner && !cmd.getPlayer().hasPermission("shops.admin") && cmd.getShop().infinite) {
-            sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
+            Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
             return true;
         }
         if (cmd.getShop().infinite) {
-            sendError(cmd.getPlayer(), "This shop does not need to be restocked.");
+            Main.sendError(cmd.getPlayer(), "This shop does not need to be restocked.");
             return true;
         }
         
-        if (cmd.getArgs().length > 1 && cmd.getArgs()[1].equalsIgnoreCase("any")) {
+        if (cmd.getNumArgs() > 1 && cmd.getArg(1).equalsIgnoreCase("any")) {
             restockAny(cmd.getPlayer(), cmd.getShop());
             return true;
         }
         
         ItemStack stack = cmd.getPlayer().getItemInHand().clone();
         if (stack == null || stack.getType() == Material.AIR) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_HELDITEM);
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_HELDITEM);
             return true;
         }
         
         BaxEntry entry = cmd.getShop().findEntry(stack);
         if (entry == null) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SHOPITEM);
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SHOPITEM);
             return true;
         }
         
-        if (cmd.getArgs().length > 1) {
+        if (cmd.getNumArgs() > 1) {
             int amt;
             try {
-                amt = Integer.parseInt(cmd.getArgs()[1]);
+                amt = Integer.parseInt(cmd.getArg(1));
             }
             catch(NumberFormatException ex) {
-                if (cmd.getArgs()[1].equalsIgnoreCase("all")) {
+                if (cmd.getArg(1).equalsIgnoreCase("all")) {
                     stack.setAmount(clearItems(cmd.getPlayer().getInventory(), entry));
                     entry.add(stack.getAmount());
                     cmd.getPlayer().setItemInHand(null);
                 }
-                else if (cmd.getArgs()[1].equalsIgnoreCase("most")) {
+                else if (cmd.getArg(1).equalsIgnoreCase("most")) {
                     stack.setAmount(clearItems(cmd.getPlayer().getInventory(), entry) - 1);
                     entry.add(stack.getAmount());
                     ItemStack inHand = stack.clone();
@@ -397,8 +392,8 @@ public class ShopCmdExecuter {
                     cmd.getPlayer().setItemInHand(inHand);
                 }
                 else {
-                    sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "restock amount"));
-                    sendError(cmd.getPlayer(), Help.restock.toUsageString());
+                    Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "restock amount"));
+                    Main.sendError(cmd.getPlayer(), Help.restock.toUsageString());
                     return true;
                 }
                 cmd.getMain().sendInfo(cmd.getPlayer(), String.format("Restocked with §b%d %s§f. The shop now has §a%d§f.", 
@@ -456,34 +451,10 @@ public class ShopCmdExecuter {
             }
         }
         else {
-            sendError(player, "You did not have any items that could be restocked at this shop.");
+            Main.sendError(player, "You did not have any items that could be restocked at this shop.");
         }
     }
-    
-    private static int getAmount(String input, BaxEntry entry) {
-        return getAmount(input, entry.getItemStack(), entry.infinite);
-    }
-    
-    private static int getAmount(String input, ItemStack entry, boolean infinite) {
-        if (input.equalsIgnoreCase("all")) {
-            if (infinite) {
-                return 64;
-            }
-            else {
-                return entry.getAmount();
-            }
-        }
-        else if (input.equalsIgnoreCase("most")) {
-            if (infinite) {
-                return 64;
-            }
-            else {
-                return entry.getAmount() - 1;
-            }
-        }
-        return Integer.parseInt(input);
-    }
-    
+        
     private static int clearItems(Inventory inv, BaxEntry entry, int count) {
         int i = 0;
         int addSize = 0;
@@ -550,26 +521,26 @@ public class ShopCmdExecuter {
     
     public static boolean set(ShopCmd cmd) {
         if (cmd.getSelection() == null) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
             return true;
         }
         if (!cmd.getSelection().isOwner && !cmd.getPlayer().hasPermission("shops.admin")) {
-            sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
+            Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
             return true;
         }
         
-        if (cmd.getArgs().length < 3) {
-            sendError(cmd.getPlayer(), Help.set.toUsageString());
+        if (cmd.getNumArgs() < 3) {
+            Main.sendError(cmd.getPlayer(), Help.set.toUsageString());
             return true;
         }
         BaxShop shop = cmd.getShop();
         BaxEntry entry;
         try {
-            int index = Integer.parseInt(cmd.getArgs()[1]);
+            int index = Integer.parseInt(cmd.getArg(1));
             entry = shop.getEntryAt(index - 1);
         }
         catch (NumberFormatException e) {
-            entry = ItemNames.getItemFromAlias(cmd.getArgs()[1], shop, cmd.getSender());
+            entry = ItemNames.getItemFromAlias(cmd.getArg(1), shop, cmd.getSender());
             if (entry == null) {
                 return true;
             }
@@ -579,25 +550,25 @@ public class ShopCmdExecuter {
         }
 
         if (entry == null) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SHOPITEM);
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SHOPITEM);
             return true;
         }
 
         double retailAmount, refundAmount;
         try {
-            retailAmount = Math.round(100d * Double.parseDouble(cmd.getArgs()[2])) / 100d;
+            retailAmount = Math.round(100d * Double.parseDouble(cmd.getArg(2))) / 100d;
         } 
         catch (NumberFormatException e) {
-            sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL,  "buy price"));
-            sendError(cmd.getPlayer(), Help.set.toUsageString());
+            Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL,  "buy price"));
+            Main.sendError(cmd.getPlayer(), Help.set.toUsageString());
             return true;
         }
         try {
-            refundAmount = cmd.getArgs().length > 3 ? Math.round(100d * Double.parseDouble(cmd.getArgs()[3])) / 100d : -1;
+            refundAmount = cmd.getNumArgs() > 3 ? Math.round(100d * Double.parseDouble(cmd.getArg(3))) / 100d : -1;
         } 
         catch (NumberFormatException e) {
-            sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL,  "sell price"));
-            sendError(cmd.getPlayer(), Help.set.toUsageString());
+            Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL,  "sell price"));
+            Main.sendError(cmd.getPlayer(), Help.set.toUsageString());
             return true;
         }
 
@@ -617,40 +588,38 @@ public class ShopCmdExecuter {
     
     public static boolean buy(ShopCmd cmd) {
         if (cmd.getSelection() == null) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
             return true;
         }
         if (cmd.getSelection().isOwner) {
             return take(cmd); // if they're the owner, use the take command
         }
         if (!cmd.getPlayer().hasPermission("shops.buy")) {
-            sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
+            Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
             return true;
         }
-        if (cmd.getArgs().length < 1) {
-            sendError(cmd.getPlayer(), Help.buy.toUsageString());
+        if (cmd.getNumArgs() < 1) {
+            Main.sendError(cmd.getPlayer(), Help.buy.toUsageString());
             return true;
         }
-        if (cmd.getArgs().length == 1) {
+        if (cmd.getNumArgs() == 1) {
             if (cmd.getShop().inventory.size() > 1) { // Allow no arguments if there's only one item  
-                sendError(cmd.getPlayer(), Help.buy.toUsageString());
+                Main.sendError(cmd.getPlayer(), Help.buy.toUsageString());
                 return true;
             }
             else {
-                cmd.setArgs(new String[] {
-                  cmd.getArgs()[0], "1" 
-                });
+                cmd.appendArg("1");
             }
         }
 
         BaxShop shop = cmd.getShop();
         BaxEntry entry;
         try {
-            int index = Integer.parseInt(cmd.getArgs()[1]);
+            int index = Integer.parseInt(cmd.getArg(1));
             entry = shop.getEntryAt(index - 1);
         } 
         catch (NumberFormatException e) {
-            entry = ItemNames.getItemFromAlias(cmd.getArgs()[1], shop, cmd.getSender());
+            entry = ItemNames.getItemFromAlias(cmd.getArg(1), shop, cmd.getSender());
             if (entry == null) {
                 return true;
             }
@@ -659,51 +628,48 @@ public class ShopCmdExecuter {
             entry = null;
         }
         if (entry == null) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SHOPITEM);
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SHOPITEM);
             return true;
         }
         
         int amount;
-        if (cmd.getArgs().length < 3) {
+        if (cmd.getNumArgs() < 3) {
             amount = 1;
         } 
         else {
             try {
-                amount = getAmount(cmd.getArgs()[2], entry.getItemStack(), entry.infinite);
+                amount = entry.convertToInteger(cmd.getArg(2));
             }
             catch (NumberFormatException e) {
-                sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "buy amount"));
-                sendError(cmd.getPlayer(), Help.buy.toUsageString());
+                Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "buy amount"));
+                Main.sendError(cmd.getPlayer(), Help.buy.toUsageString());
                 return true;
             }
         }
         if (amount == 0) {
-            sendError(cmd.getPlayer(), "Congrats. You bought nothing.");
+            Main.sendError(cmd.getPlayer(), "Congrats. You bought nothing.");
             return true;
         }
         if (amount < 0) {
-            sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "buy amount"));
-            sendError(cmd.getPlayer(), Help.buy.toUsageString());
+            Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "buy amount"));
+            Main.sendError(cmd.getPlayer(), Help.buy.toUsageString());
             return true;
         }
         
         if (entry.getAmount() < amount && !shop.infinite) {
-            sendError(cmd.getPlayer(), Resources.NO_SUPPLIES);
+            Main.sendError(cmd.getPlayer(), Resources.NO_SUPPLIES);
             return true;
         }
         
         String itemName = ItemNames.getItemName(entry);
         double price = Main.roundTwoPlaces(amount * entry.retailPrice);
         
-        if (!econ.has(cmd.getPlayer().getName(), price)) {
-            sendError(cmd.getPlayer(), Resources.NO_MONEY);
+        if (!Main.econ.has(cmd.getPlayer().getName(), price)) {
+            Main.sendError(cmd.getPlayer(), Resources.NO_MONEY);
             return true;
         }
         
-        BaxEntry purchased = new BaxEntry();
-        purchased.setItem(entry.toItemStack(), cmd.getSender()); // this won't fail, so no need to check for it 7/18/15
-        purchased.retailPrice = entry.retailPrice;
-        purchased.refundPrice = entry.refundPrice;
+        BaxEntry purchased = entry.clone();
         purchased.setAmount(amount);
         
         if (shop.buyRequests) {
@@ -724,7 +690,7 @@ public class ShopCmdExecuter {
         if (overflow.size() > 0) {
             refunded = overflow.get(0).getAmount();
             if (overflow.size() == amount) {
-                sendError(cmd.getPlayer(), Resources.NO_ROOM);
+                Main.sendError(cmd.getPlayer(), Resources.NO_ROOM);
                 return true;
             }
             price = Main.roundTwoPlaces((amount - refunded) * entry.retailPrice);
@@ -735,12 +701,12 @@ public class ShopCmdExecuter {
             cmd.getSender().sendMessage(String.format("You bought §e%d %s§F for §a$%.2f§F.",
                 amount, itemName, price));
         }
-        econ.withdrawPlayer(cmd.getPlayer().getName(), price);
+        Main.econ.withdrawPlayer(cmd.getPlayer().getName(), price);
         if (!shop.infinite) {
             entry.setAmount(entry.getAmount() - (amount - refunded));
         }
 
-        econ.depositPlayer(shop.owner, price);
+        Main.econ.depositPlayer(shop.owner, price);
         
         purchased.setAmount(amount - refunded);
         
@@ -752,21 +718,21 @@ public class ShopCmdExecuter {
     
     public static boolean sell(ShopCmd cmd) {
         if (cmd.getSelection() == null) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
             return true;
         }
         if (cmd.getSelection().isOwner) {
             return restock(cmd); // act like restock if this is your shop
         }
         if (!cmd.getPlayer().hasPermission("shops.sell")) {
-            sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
+            Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
             return true;
         }
         
-        if (cmd.getArgs().length > 1 && cmd.getArgs()[1].equalsIgnoreCase("any")) {
+        if (cmd.getNumArgs() > 1 && cmd.getArg(1).equalsIgnoreCase("any")) {
             ArrayList<ItemStack> toSell = clearItems(cmd.getPlayer().getInventory(), cmd.getShop().inventory);
             if (toSell.isEmpty()) {
-                sendError(cmd.getPlayer(), "You did not have any items that could be sold at this shop.");
+                Main.sendError(cmd.getPlayer(), "You did not have any items that could be sold at this shop.");
             }
             else {
                 double total = 0.0;
@@ -789,21 +755,21 @@ public class ShopCmdExecuter {
 
         ItemStack itemsToSell = cmd.getPlayer().getItemInHand().clone();
         if (itemsToSell == null || itemsToSell.getType().equals(Material.AIR)) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_HELDITEM);
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_HELDITEM);
             return true;
         }
 
         BaxShop shop = cmd.getShop();
         BaxEntry entry = shop.findEntry(itemsToSell.getType(), itemsToSell.getDurability());
         if (entry == null || entry.refundPrice < 0) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SHOPITEM);
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SHOPITEM);
             return true;
         }
         
-        if (cmd.getArgs().length > 1) {
+        if (cmd.getNumArgs() > 1) {
             int actualAmt;
             try {
-                int desiredAmt = Integer.parseInt(cmd.getArgs()[1]);
+                int desiredAmt = Integer.parseInt(cmd.getArg(1));
                 actualAmt = clearItems(cmd.getPlayer().getInventory(), entry, desiredAmt);
                 if (actualAmt < desiredAmt) {
                 cmd.getPlayer().sendMessage(String.format(
@@ -813,48 +779,50 @@ public class ShopCmdExecuter {
                 }
             } 
             catch (NumberFormatException e) {
-                if (cmd.getArgs()[1].equalsIgnoreCase("all")) {
+                if (cmd.getArg(1).equalsIgnoreCase("all")) {
                     actualAmt = clearItems(cmd.getPlayer().getInventory(), entry);
                 }
-                else if (cmd.getArgs()[1].equalsIgnoreCase("most")) {
+                else if (cmd.getArg(1).equalsIgnoreCase("most")) {
                     actualAmt = clearItems(cmd.getPlayer().getInventory(), entry) - 1;
                     ItemStack inHand = entry.toItemStack();
                     inHand.setAmount(1);
                     cmd.getPlayer().setItemInHand(inHand);
                     itemsToSell.setAmount(actualAmt);
-                    sell(cmd, itemsToSell);
+                    sell(cmd, itemsToSell,true);
                     return true;
                 }
                 else {
-                    sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "amount"));
+                    Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "amount"));
                     return true;
                 }
             }
             itemsToSell.setAmount(actualAmt);
         }
-        sell(cmd, itemsToSell);
+        sell(cmd, itemsToSell,true);
         cmd.getPlayer().setItemInHand(null);
         return true;
     }
-    
-    private static double sell(ShopCmd cmd, ItemStack itemsToSell) {
-        return sell(cmd, itemsToSell, true);
-    }
-    
+        
+    /**
+     * Sells an ItemStack
+     * @param cmd shop command info
+     * @param itemsToSell the item stack
+     * @param showExtra true assumes this completes the transaction, false if more actions are pending
+     * @return On success, the sale total is returned, otherwise -1.0 on failure
+     */
     private static double sell(ShopCmd cmd, ItemStack itemsToSell, boolean showExtra) {
         BaxShop shop = cmd.getShop();
         BaxEntry entry = shop.findEntry(itemsToSell.getType(), itemsToSell.getDurability());
         if (entry == null || entry.refundPrice < 0) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SHOPITEM);
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SHOPITEM);
             return -1.0;
         }
         
         String name = ItemNames.getItemName(itemsToSell);
         
         BaxEntry req = new BaxEntry();
-        if (!req.setItem(itemsToSell, cmd.getSender())) {
-            return -1.0;
-        }
+        req.setItem(itemsToSell);
+
         req.refundPrice = entry.refundPrice;
         
         SellRequest request = new SellRequest(shop, req, cmd.getPlayer().getName());
@@ -897,26 +865,26 @@ public class ShopCmdExecuter {
     
     public static boolean remove(ShopCmd cmd) {
         if (cmd.getSelection() == null) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
             return true;
         }
         if (!cmd.getSelection().isOwner && !cmd.getPlayer().hasPermission("shops.admin")) {
-            sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
+            Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
             return true;
         }
-        if (cmd.getArgs().length != 2) {
-            sendError(cmd.getPlayer(), Help.remove.toUsageString());
+        if (cmd.getNumArgs() != 2) {
+            Main.sendError(cmd.getPlayer(), Help.remove.toUsageString());
             return true;
         }
 
         BaxShop shop = cmd.getShop();
         BaxEntry entry;
         try {
-            int index = Integer.parseInt(cmd.getArgs()[1]);
+            int index = Integer.parseInt(cmd.getArg(1));
             entry = shop.getEntryAt(index - 1);
         }
         catch (NumberFormatException e) {
-            entry = ItemNames.getItemFromAlias(cmd.getArgs()[1], shop, cmd.getSender());
+            entry = ItemNames.getItemFromAlias(cmd.getArg(1), shop, cmd.getSender());
             if (entry == null) {
                 return true;
             }
@@ -925,7 +893,7 @@ public class ShopCmdExecuter {
             entry = null;
         }
         if (entry == null) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SHOPITEM);
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SHOPITEM);
             return true;
         }
         
@@ -936,7 +904,7 @@ public class ShopCmdExecuter {
                 cmd.getPlayer().getInventory().addItem(stack);
             }
             else {
-                sendError(cmd.getPlayer(), Resources.NO_ROOM);
+                Main.sendError(cmd.getPlayer(), Resources.NO_ROOM);
                 return true;
             }
 
@@ -951,54 +919,54 @@ public class ShopCmdExecuter {
     
     public static boolean take(ShopCmd cmd) {
         if (cmd.getSelection() == null) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
             return true;
         }
         if (!cmd.getSelection().isOwner && !cmd.getPlayer().hasPermission("shops.admin")) {
-            sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
+            Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
             return true;
         }
         BaxShop shop = cmd.getShop();
         BaxEntry entry;
-        if (cmd.getArgs().length < 2) {
+        if (cmd.getNumArgs() < 2) {
             if (shop.inventory.size() == 1) {
                 entry = shop.getEntryAt(0);
             }
             else {
-                sendError(cmd.getPlayer(), Help.take.toUsageString());
+                Main.sendError(cmd.getPlayer(), Help.take.toUsageString());
                 return true;
             }
         }
         else {
             try {
-                int index = Integer.parseInt(cmd.getArgs()[1]);
+                int index = Integer.parseInt(cmd.getArg(1));
                 entry = shop.getEntryAt(index - 1);
             }
             catch (NumberFormatException e) {
-                entry = ItemNames.getItemFromAlias(cmd.getArgs()[1], shop, cmd.getSender());
+                entry = ItemNames.getItemFromAlias(cmd.getArg(1), shop, cmd.getSender());
                 if (entry == null) {
                     return true;
                 }
             } 
             catch (IndexOutOfBoundsException e) {
-                sendError(cmd.getPlayer(), Resources.NOT_FOUND_SHOPITEM);
+                Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SHOPITEM);
                 return true;
             }
         }
         
         int amt = 1;
-        if (cmd.getArgs().length > 2) {
+        if (cmd.getNumArgs() > 2) {
             try {
-                amt = getAmount(cmd.getArgs()[2], entry);
+                amt = entry.convertToInteger(cmd.getArg(2));
             }
             catch (NumberFormatException e) {
-                sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "amount"));
+                Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "amount"));
                 return true;
             }
         }
         
         if (!shop.infinite && amt > entry.getAmount()) {
-            sendError(cmd.getPlayer(), Resources.NO_SUPPLIES);
+            Main.sendError(cmd.getPlayer(), Resources.NO_SUPPLIES);
             return true;
         }
         
@@ -1010,7 +978,7 @@ public class ShopCmdExecuter {
                 cmd.getPlayer().getInventory().addItem(stack);
             }
             else {
-                sendError(cmd.getPlayer(), Resources.NO_ROOM);
+                Main.sendError(cmd.getPlayer(), Resources.NO_ROOM);
                 return true;
             }
         }
@@ -1025,11 +993,11 @@ public class ShopCmdExecuter {
     
     public static boolean sign(ShopCmd cmd) {
         if (cmd.getSelection() == null) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
             return true;
         }
         if (!cmd.getSelection().isOwner && !cmd.getPlayer().hasPermission("shops.admin")) {
-                sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
+                Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
                 return true;
         }
         Block b = cmd.getSelection().location.getBlock();
@@ -1040,8 +1008,8 @@ public class ShopCmdExecuter {
 
         Sign sign = (Sign) b.getState();
         StringBuilder sb = new StringBuilder();
-        for (int i = 1; i < cmd.getArgs().length; ++i) {
-            sb.append(cmd.getArgs()[i]);
+        for (int i = 1; i < cmd.getNumArgs(); ++i) {
+            sb.append(cmd.getArg(i));
             sb.append(" ");
         }
         int len = sb.length();
@@ -1049,13 +1017,13 @@ public class ShopCmdExecuter {
             sb.deleteCharAt(sb.length() - 1);
         }
         if (len > 60) {
-            sendError(cmd.getPlayer(), "That text will not fit on the sign.");
+            Main.sendError(cmd.getPlayer(), "That text will not fit on the sign.");
             return true;
         }
         String[] lines = sb.toString().split("\\|");
         for (int i = 0; i < lines.length; ++i) {
             if (lines[i].length() > 15) {
-                sendError(cmd.getPlayer(), String.format("Line %d is too long. Lines can only be 15 characters in length.", i + 1));
+                Main.sendError(cmd.getPlayer(), String.format("Line %d is too long. Lines can only be 15 characters in length.", i + 1));
                 return true;
             }
         }
@@ -1076,24 +1044,24 @@ public class ShopCmdExecuter {
     
     public static boolean setindex(ShopCmd cmd) {
         if (cmd.getSelection() == null) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
             return true;
         }
         
         if (!cmd.getSelection().isOwner && !cmd.getPlayer().hasPermission("shops.admin")) {
-            sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
+            Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
             return true;
         }
-        if (cmd.getArgs().length < 3) {
-            sendError(cmd.getSender(), "Usage:\n/shop setindex [current index] [new index]");
+        if (cmd.getNumArgs() < 3) {
+            Main.sendError(cmd.getSender(), "Usage:\n/shop setindex [current index] [new index]");
         }
         else {
             int oldIndex;
             try {
-                oldIndex = Integer.parseInt(cmd.getArgs()[1]);
+                oldIndex = Integer.parseInt(cmd.getArg(1));
             }
             catch(NumberFormatException e) {
-                BaxEntry entry = ItemNames.getItemFromAlias(cmd.getArgs()[1], cmd.getShop(), cmd.getSender());
+                BaxEntry entry = ItemNames.getItemFromAlias(cmd.getArg(1), cmd.getShop(), cmd.getSender());
                 if (entry == null) {
                     return true;
                 }
@@ -1103,27 +1071,27 @@ public class ShopCmdExecuter {
                 oldIndex = -1;
             }
             if (oldIndex < 1 || oldIndex > cmd.getShop().inventory.size()) {
-                sendError(cmd.getPlayer(), Resources.NOT_FOUND_SHOPITEM);
+                Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SHOPITEM);
                 return true;
             }
             int newIndex;
             try {
-                newIndex = Integer.parseInt(cmd.getArgs()[2]);
+                newIndex = Integer.parseInt(cmd.getArg(2));
             }
             catch(NumberFormatException e) {
-                sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "new index"));
+                Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "new index"));
                 return true;
             }
             if (newIndex > cmd.getShop().inventory.size()) {
-                sendError(cmd.getPlayer(), "You must choose a new index that is less than the number of items in the shop!");
+                Main.sendError(cmd.getPlayer(), "You must choose a new index that is less than the number of items in the shop!");
                 return true;
             }
             if (newIndex < 1) {
-                sendError(cmd.getPlayer(), "The new index must be greater than 0.");
+                Main.sendError(cmd.getPlayer(), "The new index must be greater than 0.");
                 return true;
             }
             if (newIndex == oldIndex) {
-                sendError(cmd.getPlayer(), "The index has not been changed.");
+                Main.sendError(cmd.getPlayer(), "The index has not been changed.");
                 return true;
             }
             BaxEntry entry = cmd.getShop().inventory.remove(oldIndex - 1);

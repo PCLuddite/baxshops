@@ -40,7 +40,7 @@ import tbax.baxshops.notification.Request;
 public class NotifyExecuter {
 
     public static boolean execute(ShopCmd cmd) {
-        switch (cmd.getArgs()[0]) {
+        switch (cmd.getAction()) {
             case "pending":
             case "p":
             case "notifications":
@@ -68,10 +68,10 @@ public class NotifyExecuter {
     }
     
     public static boolean notifications(ShopCmd cmd) {
-        if (cmd.getArgs().length == 1) {
+        if (cmd.getNumArgs() == 1) {
             cmd.getState().showNotification(cmd.getPlayer());
         }
-        else if (cmd.getArgs().length == 2 && cmd.getArgs()[1].equalsIgnoreCase("clear")) {
+        else if (cmd.getNumArgs() == 2 && cmd.getArg(1).equalsIgnoreCase("clear")) {
             if (cmd.getPlayer().hasPermission("shops.admin")) {
                 ArrayDeque<Notification> notes = cmd.getState().getNotifications(cmd.getPlayer());
                 notes.clear();
@@ -138,7 +138,7 @@ public class NotifyExecuter {
     }
     
     /*public static boolean lookup(ShopCmd cmd) {
-        if (cmd.getArgs().length < 2) {
+        if (cmd.getNumArgs() < 2) {
             sendError(cmd.getPlayer(), Help.lookup.toUsageString());
             return true;
         }
@@ -155,16 +155,16 @@ public class NotifyExecuter {
     
     public static boolean lollipop(ShopCmd cmd) {
         double tastiness = LollipopNotification.DEFAULT_TASTINESS;
-        if (cmd.getArgs().length > 1) {
-            if (cmd.getArgs().length > 2) {
+        if (cmd.getNumArgs() > 1) {
+            if (cmd.getNumArgs() > 2) {
                 try {
-                    tastiness = Double.parseDouble(cmd.getArgs()[2]);
+                    tastiness = Double.parseDouble(cmd.getArg(2));
                 } catch (NumberFormatException e) {
                     sendError(cmd.getPlayer(), Resources.INVALID_TASTINESS);
                     return true;
                 }
             }
-            cmd.getState().sendNotification(cmd.getArgs()[1], new LollipopNotification(cmd.getPlayer().getName(), tastiness));
+            cmd.getState().sendNotification(cmd.getArg(1), new LollipopNotification(cmd.getPlayer().getName(), tastiness));
             return true;
         }
         for (Player p : cmd.getMain().getServer().getOnlinePlayers()) {
