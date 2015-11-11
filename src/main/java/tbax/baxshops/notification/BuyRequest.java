@@ -43,7 +43,7 @@ import tbax.baxshops.serialization.ItemNames;
  * to buy an item.
  * BuyRequests expire after five days.
  */
-public class BuyRequest implements Request, TimedNotification {
+public final class BuyRequest implements Request, TimedNotification {
     private static final long serialVersionUID = 1L;
     /**
      * An entry for the purchased item

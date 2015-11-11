@@ -31,7 +31,7 @@ import org.bukkit.command.CommandSender;
  * A ShopSelection represents a user's selected shop.
  * Shops are selected by right- or left-clicking on them in-game.
  */
-public class ShopSelection {
+public final class ShopSelection {
     public ShopSelection() { }
 
     /**

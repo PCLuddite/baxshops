@@ -30,14 +30,13 @@ import java.util.Objects;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 /**
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public class BaxShop {
+public final class BaxShop {
     public static final int ITEMS_PER_PAGE = 7;
     
     public int uid = -1;

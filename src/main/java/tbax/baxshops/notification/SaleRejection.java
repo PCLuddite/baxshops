@@ -39,7 +39,7 @@ import tbax.baxshops.serialization.ItemNames;
 /**
  * A SaleRejection notifies a seller that his/her offer was rejected.
  */
-public class SaleRejection implements Claimable {
+public final class SaleRejection implements Claimable {
     private static final long serialVersionUID = 1L;
     /**
      * An entry for the offered item

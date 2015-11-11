@@ -32,7 +32,7 @@ import org.bukkit.entity.Player;
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public class GeneralNotification implements Notification {
+public final class GeneralNotification implements Notification {
     
     public String message;
     

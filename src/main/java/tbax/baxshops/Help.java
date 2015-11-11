@@ -31,7 +31,7 @@ import org.bukkit.command.CommandSender;
  * Help stores all help-related information, such as help for each command and
  * context-sensitive index topics.
  */
-public class Help {
+public final class Help {
 
     public static final CommandHelp help = new CommandHelp("shop help", "h", "[action]", "show help with shops",
             CommandHelp.arg("action", "get help on a /shop action, e.g. /shop h create"));

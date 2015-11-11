@@ -48,7 +48,7 @@ import tbax.baxshops.serialization.ItemNames;
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public class ShopCmdExecuter {
+public final class ShopCmdExecuter {
     
     public static boolean execute(ShopCmd cmd) {
         switch(cmd.getAction()) {
@@ -425,7 +425,7 @@ public class ShopCmdExecuter {
             cmd.getPlayer().setItemInHand(null);
         }
         
-        entry.setAmount(entry.getAmount() + stack.getAmount());
+        entry.add(stack.getAmount());
         
         cmd.getMain().sendInfo(cmd.getPlayer(), String.format("Restocked with §b%d %s§f in hand. The shop now has §a%d§f.", 
                         stack.getAmount(), ItemNames.getItemName(entry),
@@ -443,7 +443,7 @@ public class ShopCmdExecuter {
                 }
                 BaxEntry entry = shop.findEntry(itemStack);
                 if (entry != null) {
-                    entry.setAmount(entry.getAmount() + itemStack.getAmount());
+                    entry.add(itemStack.getAmount());
                     player.sendMessage(String.format("§fRestocked §b%d %s§f.", 
                             itemStack.getAmount(), ItemNames.getItemName(entry)
                             ));
@@ -674,7 +674,7 @@ public class ShopCmdExecuter {
         
         if (shop.buyRequests) {
             if (!shop.infinite) {
-                entry.setAmount(entry.getAmount() - amount);
+                entry.subtract(amount);
             }
             
             BuyRequest request = new BuyRequest(shop, purchased, cmd.getPlayer().getName());
@@ -703,12 +703,12 @@ public class ShopCmdExecuter {
         }
         Main.econ.withdrawPlayer(cmd.getPlayer().getName(), price);
         if (!shop.infinite) {
-            entry.setAmount(entry.getAmount() - (amount - refunded));
+            entry.subtract(amount - refunded);
         }
 
         Main.econ.depositPlayer(shop.owner, price);
         
-        purchased.setAmount(amount - refunded);
+        purchased.subtract(refunded);
         
         cmd.getSender().sendMessage(String.format(Resources.CURRENT_BALANCE, Main.econ.format(Main.econ.getBalance(cmd.getSender().getName()))));
         cmd.getMain().state.sendNotification(shop.owner, new BuyNotification(shop, purchased, cmd.getPlayer().getName()));        
@@ -983,7 +983,7 @@ public class ShopCmdExecuter {
             }
         }
         
-        entry.setAmount(entry.getAmount() - amt);
+        entry.subtract(amt);
         
         cmd.getMain().sendInfo(cmd.getPlayer(), String.format("§a%d %s§F %s added to your inventory.",
                     amt, ItemNames.getItemName(entry), amt == 1 ? "was" : "were"));

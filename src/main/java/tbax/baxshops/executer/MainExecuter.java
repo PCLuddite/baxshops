@@ -33,7 +33,7 @@ import tbax.baxshops.Resources;
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public class MainExecuter {
+public final class MainExecuter {
 
     public static boolean execute(ShopCmd cmd) {
         switch (cmd.getAction()) {

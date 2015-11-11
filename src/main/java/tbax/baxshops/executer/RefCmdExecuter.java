@@ -40,7 +40,7 @@ import tbax.baxshops.serialization.Clipboard;
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public class RefCmdExecuter {
+public final class RefCmdExecuter {
     
     public static boolean execute(ShopCmd cmd) {
         switch (cmd.getAction()) {

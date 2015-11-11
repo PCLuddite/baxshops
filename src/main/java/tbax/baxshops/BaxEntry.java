@@ -28,27 +28,38 @@ import java.util.Map;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import tbax.baxshops.serialization.ItemNames;
 
 /**
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public class BaxEntry {
-    public ItemStack stack;
+public final class BaxEntry {
+    private ItemStack stack;
     public double retailPrice = -1;
     public double refundPrice = -1;
     public boolean infinite = false;
+    public int quantity = 0;
     
     public BaxEntry() {
+    }
+    
+    public BaxEntry(ItemStack item) {
+        setItem(item);
     }
         
     public Material getType() {
         return stack.getType();
     }
     
+    @Deprecated
+    public int getTypeId() {
+        return stack.getTypeId();
+    }
+    
     public void add(int amt) {
-        stack.setAmount(stack.getAmount() + amt);
+        quantity += amt;
     }
     
     public void add(String amt) {
@@ -56,13 +67,27 @@ public class BaxEntry {
     }
     
     public void subtract(int amt) {
-        stack.setAmount(stack.getAmount() - amt);
+        quantity -= amt;
     }
     
     public void subtract(String amt) {
         subtract(convertToInteger(amt));
     }
     
+    public void setItem(ItemStack item) {
+        quantity = item.getAmount();
+        stack = item.clone();
+        stack.setAmount(1);
+    }
+    
+    public void setItem(Material type) {
+        stack = new ItemStack(type, 1);
+    }
+    
+    public void setItem(Material type, short damage) {
+        stack = new ItemStack(type, 1, damage);
+    }
+        
     /**
      * Converts a string amount keyword ("all","most") or number to an int
      * @param amount
@@ -108,27 +133,32 @@ public class BaxEntry {
         return stack.getEnchantments();
     }
     
-    public void setItem(ItemStack item) {
-        stack = item.clone();
+    public boolean hasItemMeta() {
+        return stack.hasItemMeta();
     }
     
+    public ItemMeta getItemMeta() {
+        return stack.getItemMeta();
+    }
+        
     public void setAmount(int amt) {
-        stack.setAmount(amt);
+        quantity = amt;
     }
     
     public int getAmount() {
-        return stack.getAmount();
+        return quantity;
     }
     
     public int getDurability() {
         return stack.getDurability();
     }
     
-    public BaxEntry clone() {
+    public BaxEntry clone() { // decided not to declare throwing CloneNotSupported. Java exceptions are a nightmare. 11/10/15
         BaxEntry cloned = new BaxEntry();
         cloned.infinite = infinite;
         cloned.refundPrice = refundPrice;
         cloned.retailPrice = retailPrice;
+        cloned.quantity = quantity;
         cloned.stack = stack.clone();
         return cloned;
     }
@@ -156,8 +186,8 @@ public class BaxEntry {
             }
             else {
                 return String.format(
-                    stack.getAmount() == 0 ? "§C§M%d. (%d) %s §2($%.2f)" : "§f%d. §7(%d) §f%s §2($%.2f)",
-                    index, stack.getAmount(), name, retailPrice);
+                    getAmount() == 0 ? "§C§M%d. (%d) %s §2($%.2f)" : "§f%d. §7(%d) §f%s §2($%.2f)",
+                    index, getAmount(), name, retailPrice);
             }
         }
         else {
@@ -167,10 +197,10 @@ public class BaxEntry {
                        index, name, retailPrice, refundPrice);
             }
             else {
-                return String.format(stack.getAmount() == 0 ?
+                return String.format(getAmount() == 0 ?
                        "§C§M%d. (%d) %s ($%.2f) ($%.2f)" :
                        "§F%d. §7(%d) §F%s §2($%.2f) §9($%.2f)",
-                       index, stack.getAmount(), name, retailPrice, refundPrice);
+                       index, getAmount(), name, retailPrice, refundPrice);
             }
         }
     }

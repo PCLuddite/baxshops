@@ -37,7 +37,7 @@ import tbax.baxshops.notification.Request;
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public class NotifyExecuter {
+public final class NotifyExecuter {
 
     public static boolean execute(ShopCmd cmd) {
         switch (cmd.getAction()) {

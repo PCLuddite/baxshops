@@ -37,7 +37,7 @@ import tbax.baxshops.serialization.StateFile;
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public class ShopCmd {
+public final class ShopCmd {
     private final CommandSender sender;
     private final Command command;
     private final Main main;

@@ -38,7 +38,7 @@ import tbax.baxshops.serialization.ItemNames;
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public class BuyRejection implements Notification {
+public final class BuyRejection implements Notification {
     /**
      * An entry for the offered item
      */

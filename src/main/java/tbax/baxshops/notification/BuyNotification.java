@@ -38,7 +38,7 @@ import tbax.baxshops.serialization.ItemNames;
  * A BuyNotification notifies a shop owner that someone bought an item
  * from him/her.
  */
-public class BuyNotification implements Notification {
+public final class BuyNotification implements Notification {
     private static final long serialVersionUID = 1L;
     /**
      * An entry for the offered item

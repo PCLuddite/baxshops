@@ -39,7 +39,7 @@ import tbax.baxshops.serialization.ItemNames;
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public class BuyClaim implements Claimable {
+public final class BuyClaim implements Claimable {
     /**
      * An entry for the purchased item
      */

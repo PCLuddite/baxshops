@@ -40,7 +40,7 @@ import tbax.baxshops.BaxEntry;
  *
  * @author tbaxendale
  */
-public class BaxEntryDeserializer
+public final class BaxEntryDeserializer
 {       
     public static BaxEntry deserialize(double version, JsonObject item) {
         if (version == 2.1) {
@@ -57,23 +57,24 @@ public class BaxEntryDeserializer
     
     private static BaxEntry fromJsonVer2_1(JsonObject o) {
         BaxEntry entry = new BaxEntry();
-        entry.stack = new ItemStack(Material.getMaterial(o.get("id").getAsString()), 0, o.get("damage").getAsShort());
+        ItemStack stack = new ItemStack(Material.getMaterial(o.get("id").getAsString()), 1, o.get("damage").getAsShort());
+        if (o.has("enchantments")) {
+            for(Map.Entry<String, JsonElement> e : o.getAsJsonObject("enchantments").entrySet()) {;
+                stack.addEnchantment(Enchantment.getByName(e.getKey()), e.getValue().getAsInt());
+            }
+        }
+        if (o.has("meta")) {
+            metaFromJsonVer2_1(stack.getItemMeta(), o.getAsJsonObject("meta"));
+        }
+        entry.setItem(stack);
+        entry.retailPrice = o.get("retail").getAsDouble();
+        entry.refundPrice = o.get("refund").getAsDouble();
         int num = o.get("quantity").getAsInt();
         if (num < 0) {
             entry.infinite = true;
         }
         else {
-            entry.stack.setAmount(num);
-        }
-        entry.retailPrice = o.get("retail").getAsDouble();
-        entry.refundPrice = o.get("refund").getAsDouble();
-        if (o.has("enchantments")) {
-            for(Map.Entry<String, JsonElement> e : o.getAsJsonObject("enchantments").entrySet()) {;
-                entry.stack.addEnchantment(Enchantment.getByName(e.getKey()), e.getValue().getAsInt());
-            }
-        }
-        if (o.has("meta")) {
-            metaFromJsonVer2_1(entry.stack.getItemMeta(), o.getAsJsonObject("meta"));
+            entry.setAmount(num);
         }
         return entry;
     }
@@ -109,42 +110,44 @@ public class BaxEntryDeserializer
     
     private static BaxEntry fromJsonVer2_0(JsonObject o) {
         BaxEntry entry = new BaxEntry();
-        entry.stack = new ItemStack(Material.getMaterial(o.get("id").getAsString()), 0, o.get("damage").getAsShort());
+        ItemStack stack = new ItemStack(Material.getMaterial(o.get("id").getAsString()), 1, o.get("damage").getAsShort());
+        if (o.has("enchantments")) {
+            for(Map.Entry<String, JsonElement> e : o.getAsJsonObject("enchantments").entrySet()) {;
+                stack.addEnchantment(Enchantment.getByName(e.getKey()), e.getValue().getAsInt());
+            }
+        }
+        entry.setItem(stack);
+        entry.retailPrice = o.get("retail").getAsDouble();
+        entry.refundPrice = o.get("refund").getAsDouble();
         int num = o.get("quantity").getAsInt();
         if (num < 0) {
             entry.infinite = true;
         }
         else {
-            entry.stack.setAmount(num);
-        }
-        entry.retailPrice = o.get("retail").getAsDouble();
-        entry.refundPrice = o.get("refund").getAsDouble();
-        if (o.has("enchantments")) {
-            for(Map.Entry<String, JsonElement> e : o.getAsJsonObject("enchantments").entrySet()) {;
-                entry.stack.addEnchantment(Enchantment.getByName(e.getKey()), e.getValue().getAsInt());
-            }
+            entry.setAmount(num);
         }
         return entry;
     }
     
     private static BaxEntry fromJsonVer0(JsonObject o) {
         BaxEntry entry = new BaxEntry();
-        entry.stack = new ItemStack(o.get("id").getAsInt(), 0, o.get("damage").getAsShort());
+        ItemStack stack = new ItemStack(o.get("id").getAsInt(), 0, o.get("damage").getAsShort());
+        if (o.has("enchantments")) {
+            for(Map.Entry<String, JsonElement> e : o.getAsJsonObject("enchantments").entrySet()) {;
+                stack.addEnchantment(
+                    Enchantment.getById(Integer.parseInt(e.getKey())),
+                    e.getValue().getAsInt());
+            }
+        }
+        entry.setItem(stack);
+        entry.retailPrice = o.get("retail").getAsDouble();
+        entry.refundPrice = o.get("refund").getAsDouble();
         int num = o.get("quantity").getAsInt();
         if (num < 0) {
             entry.infinite = true;
         }
         else {
-            entry.stack.setAmount(num);
-        }
-        entry.retailPrice = o.get("retail").getAsDouble();
-        entry.refundPrice = o.get("refund").getAsDouble();
-        if (o.has("enchantments")) {
-            for(Map.Entry<String, JsonElement> e : o.getAsJsonObject("enchantments").entrySet()) {;
-                entry.stack.addEnchantment(
-                    Enchantment.getById(Integer.parseInt(e.getKey())),
-                    e.getValue().getAsInt());
-            }
+            entry.setAmount(num);
         }
         return entry;
     }

@@ -28,7 +28,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.bukkit.entity.Player;
 
-public class DeathNotification implements Notification {
+public final class DeathNotification implements Notification {
     private static final long serialVersionUID = 1L;
     
     public double tax;

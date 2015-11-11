@@ -35,7 +35,7 @@ import org.bukkit.inventory.ItemStack;
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public class ItemNames {
+public final class ItemNames {
     
     /**
      * A lookup table for aliases. Aliases are stored as

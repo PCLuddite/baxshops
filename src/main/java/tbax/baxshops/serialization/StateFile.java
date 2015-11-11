@@ -30,7 +30,6 @@ import java.io.*;
 import java.util.*;
 import com.google.gson.*;
 import com.google.gson.stream.JsonReader;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -41,7 +40,7 @@ import org.bukkit.entity.Player;
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public class StateFile {
+public final class StateFile {
 
     public static final String JSON_FILE_PATH = "shops.json";
     public static final String JSONBAK_FILE_PATH = "backups/%d.json";
@@ -453,10 +452,18 @@ public class StateFile {
         JsonObject state = new JsonObject();
         state.addProperty("version", STATE_VERSION);
         
+        int errors = 0;
+        
         JsonObject jShops = new JsonObject();
         for (Map.Entry<Integer, BaxShop> entry : shops.entrySet()) {
-            BaxShop shop = entry.getValue();
-            jShops.add(shop.uid + "", BaxShopSerializer.serialize(STATE_VERSION, shop));
+            try {
+                BaxShop shop = entry.getValue();
+                jShops.add(shop.uid + "", BaxShopSerializer.serialize(STATE_VERSION, shop));
+            }
+            catch(Exception e) { // A mortal sin, yes, but if an exception is thrown for one, the whole thing won't be saved.
+                log.warning("A shop could not be saved due to the following error: " + e.getClass().getName());
+                ++errors;
+            }
         }
         state.add("shops", jShops);
         
@@ -464,12 +471,22 @@ public class StateFile {
         for(Map.Entry<String, ArrayDeque<Notification>> entry : pending.entrySet()) {
             JsonArray notes = new JsonArray();
             for(Notification n : entry.getValue()) {
-                notes.add(n.toJson(STATE_VERSION));
+                try {
+                    notes.add(n.toJson(STATE_VERSION));
+                }
+                catch (Exception e) {
+                    log.warning("A notification could not be saved due to the following error: " + e.getClass().getName());
+                    ++errors;
+                }
             }
             jPending.add(entry.getKey(), notes);
         }
         state.add("notes", jPending);
-
+        
+        if (errors > 0) {
+            log.warning(String.format("BaxShops encountered %d error(s) when converting the shops and notifications to JSON. You may wish to load a backup next time.", errors));
+        }
+        
         try {
             File dir = main.getDataFolder();
             if (!dir.exists()) {

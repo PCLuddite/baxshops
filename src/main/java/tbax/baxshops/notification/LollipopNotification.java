@@ -35,7 +35,7 @@ import org.bukkit.entity.Player;
  * A LollipopNotification notifies a player that someone sent him/her a
  * lollipop.
  */
-public class LollipopNotification implements Notification {
+public final class LollipopNotification implements Notification {
     private static final long serialVersionUID = 1L;
 
     public static final double DEFAULT_TASTINESS = 40;

@@ -38,7 +38,7 @@ import tbax.baxshops.serialization.ItemNames;
  * A SaleNotification notifies a player that his/her sale of an
  * item was successful.
  */
-public class SaleNotificationAuto implements Claimable {
+public final class SaleNotificationAuto implements Claimable {
     private static final long serialVersionUID = 1L;
     /**
      * An entry for the offered item

@@ -35,7 +35,7 @@ import tbax.baxshops.Main;
  *
  * @author tbaxendale
  */
-public class BaxShopDeserializer
+public final class BaxShopDeserializer
 {
     public static BaxShop deserialize(double version, int uid, JsonObject o) {
         BaxShop shop = new BaxShop();

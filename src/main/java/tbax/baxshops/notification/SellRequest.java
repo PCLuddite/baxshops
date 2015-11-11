@@ -46,7 +46,7 @@ import tbax.baxshops.serialization.ItemNames;
  * to sell him/her an item.
  * SellRequests expire after five days.
  */
-public class SellRequest implements Request, TimedNotification {
+public final class SellRequest implements Request, TimedNotification {
     private static final long serialVersionUID = 1L;
     /**
      * An entry for the offered item

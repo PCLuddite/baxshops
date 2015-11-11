@@ -39,7 +39,7 @@ import tbax.baxshops.Main;
  *
  * @author tbaxendale
  */
-public class BaxEntrySerializer
+public final class BaxEntrySerializer
 {
     public static JsonElement serialize(double version, BaxEntry entry) {
         if (version == 2.1) {
@@ -56,16 +56,16 @@ public class BaxEntrySerializer
     
     private static JsonElement toJsonVer0(BaxEntry entry) {
         JsonObject o = new JsonObject();
-        o.addProperty("id", entry.stack.getTypeId());
+        o.addProperty("id", entry.getTypeId());
         o.addProperty("quantity", 
-            entry.infinite ? -1 : entry.stack.getAmount()
+            entry.infinite ? -1 : entry.getAmount()
         );
-        o.addProperty("damage", entry.stack.getDurability());
+        o.addProperty("damage", entry.getDurability());
         o.addProperty("retail", Main.roundTwoPlaces(entry.retailPrice));
         o.addProperty("refund", Main.roundTwoPlaces(entry.refundPrice));
-        if (!entry.stack.getEnchantments().isEmpty()) {
+        if (!entry.getEnchantments().isEmpty()) {
             JsonObject enchs = new JsonObject();
-            for (Map.Entry<Enchantment, Integer> e : entry.stack.getEnchantments().entrySet()) {
+            for (Map.Entry<Enchantment, Integer> e : entry.getEnchantments().entrySet()) {
                 enchs.addProperty(e.getKey().getId() + "", e.getValue());
             }
             o.add("enchantments", enchs);
@@ -75,16 +75,16 @@ public class BaxEntrySerializer
     
     private static JsonElement toJsonVer2_0(BaxEntry entry) {
         JsonObject o = new JsonObject();
-        o.addProperty("id", entry.stack.getType().name());
+        o.addProperty("id", entry.getType().name());
         o.addProperty("quantity", 
-            entry.infinite ? -1 : entry.stack.getAmount()
+            entry.infinite ? -1 : entry.getAmount()
         );
-        o.addProperty("damage", entry.stack.getDurability());
+        o.addProperty("damage", entry.getDurability());
         o.addProperty("retail", Main.roundTwoPlaces(entry.retailPrice));
         o.addProperty("refund", Main.roundTwoPlaces(entry.refundPrice));
-        if (!entry.stack.getEnchantments().isEmpty()) {
+        if (!entry.getEnchantments().isEmpty()) {
             JsonObject enchs = new JsonObject();
-            for (Map.Entry<Enchantment, Integer> e : entry.stack.getEnchantments().entrySet()) {
+            for (Map.Entry<Enchantment, Integer> e : entry.getEnchantments().entrySet()) {
                 enchs.addProperty(e.getKey().getName(), e.getValue());
             }
             o.add("enchantments", enchs);
@@ -94,24 +94,24 @@ public class BaxEntrySerializer
     
     private static JsonElement toJsonVer2_1(BaxEntry entry) {
         JsonObject o = new JsonObject();
-        o.addProperty("id", entry.stack.getType().name());
+        o.addProperty("id", entry.getType().name());
         o.addProperty("quantity", 
-            entry.infinite ? -1 : entry.stack.getAmount()
+            entry.infinite ? -1 : entry.getAmount()
         );
-        o.addProperty("damage", entry.stack.getDurability());
+        o.addProperty("damage", entry.getDurability());
         o.addProperty("retail", Main.roundTwoPlaces(entry.retailPrice));
         o.addProperty("refund", Main.roundTwoPlaces(entry.refundPrice));
         
-        if (!entry.stack.getEnchantments().isEmpty()) {
+        if (!entry.getEnchantments().isEmpty()) {
             JsonObject enchs = new JsonObject();
-            for (Map.Entry<Enchantment, Integer> e : entry.stack.getEnchantments().entrySet()) {
+            for (Map.Entry<Enchantment, Integer> e : entry.getEnchantments().entrySet()) {
                 enchs.addProperty(e.getKey().getName(), e.getValue());
             }
             o.add("enchantments", enchs);
         }
         
-        if (entry.stack.hasItemMeta()) {
-            o.add("meta", metaToJsonVer2_1(entry.stack.getItemMeta()));
+        if (entry.hasItemMeta()) {
+            o.add("meta", metaToJsonVer2_1(entry.getItemMeta()));
         }
         return o;
     }

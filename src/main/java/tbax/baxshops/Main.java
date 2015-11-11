@@ -58,7 +58,7 @@ import tbax.baxshops.notification.DeathNotification;
 import tbax.baxshops.notification.Notification;
 import tbax.baxshops.serialization.StateFile;
 
-public class Main extends JavaPlugin implements Listener {
+public final class Main extends JavaPlugin implements Listener {
     
     /**
      * A single instance of Main for external access

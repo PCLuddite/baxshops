@@ -36,7 +36,7 @@ import tbax.baxshops.serialization.Clipboard;
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public class FlagCmdExecuter {
+public final class FlagCmdExecuter {
     
     public static boolean execute(ShopCmd cmd) {
         if (cmd.getNumArgs() < 1) {

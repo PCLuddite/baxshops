@@ -33,7 +33,7 @@ import tbax.baxshops.Main;
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public class Clipboard {
+public final class Clipboard {
     
     private static final HashMap<Player, HashMap<String, Integer>> clipboard = new HashMap<>();
     
