@@ -114,15 +114,18 @@ public final class BaxEntry {
     }
     
     /**
-     * clones this entry's item stack
+     * clones this entry's item stack and sets its amount to this entry's quantity
+     * If the entry quantity is equal to zero, the material type may be AIR
      * @return 
      */
     public ItemStack toItemStack() {
-        return stack.clone();
+        ItemStack newstack = stack.clone();
+        newstack.setAmount(quantity);
+        return newstack;
     }
     
     /**
-     * gets a reference to the item stack that this entry points to
+     * gets a reference to the item stack that this entry points to, which is not guaranteed to have the proper quantity
      * @return 
      */
     public ItemStack getItemStack() {
