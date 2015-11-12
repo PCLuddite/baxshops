@@ -43,6 +43,22 @@
 | 1 Tall Grass
 | 2 Tall Grass (Fern)
 32 Dead Bush
+35 White Wool
+| 1 Orange Wool
+| 2 Magenta Wool
+| 3 Light Blue Wool
+| 4 Yellow Wool
+| 5 Lime Wool
+| 6 Pink Wool
+| 7 Gray Wool
+| 8 Light Gray Wool
+| 9 Cyan Wool
+| A Purple Wool
+| B Blue Wool
+| C Brown Wool
+| D Green Wool
+| E Red Wool
+| F Black Wool
 37 Dandelion
 38 Poppy
 | 1 Blue Orchid
