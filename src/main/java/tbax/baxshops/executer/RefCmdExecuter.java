@@ -157,7 +157,7 @@ public final class RefCmdExecuter {
         Block block;
         if (!(sourceLoc.getType().equals(Material.SIGN) || sourceLoc.getType().equals(Material.SIGN_POST))) {
             Main.log.warning(String.format(Resources.NOT_FOUND_SIGN, shopSource.owner));
-            block = ShopCmdExecuter.buildShopSign(cmd,
+            block = ShopExecuter.buildShopSign(cmd,
                 new String[] {
                   "Location for",
                   (owner.length() < 13 ? owner : owner.substring(0, 12) + '…') + "'s",
@@ -167,7 +167,7 @@ public final class RefCmdExecuter {
         }
         else {
             Sign mainSign = (Sign)sourceLoc.getState();
-            block = ShopCmdExecuter.buildShopSign(cmd,
+            block = ShopExecuter.buildShopSign(cmd,
                 new String[] {
                   mainSign.getLine(0),
                   mainSign.getLine(1),

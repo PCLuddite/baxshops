@@ -53,7 +53,7 @@ import tbax.baxshops.executer.MainExecuter;
 import tbax.baxshops.executer.NotifyExecuter;
 import tbax.baxshops.executer.RefCmdExecuter;
 import tbax.baxshops.executer.ShopCmd;
-import tbax.baxshops.executer.ShopCmdExecuter;
+import tbax.baxshops.executer.ShopExecuter;
 import tbax.baxshops.notification.DeathNotification;
 import tbax.baxshops.notification.Notification;
 import tbax.baxshops.serialization.StateFile;
@@ -160,7 +160,7 @@ public final class Main extends JavaPlugin implements Listener {
         if (exec.execute(action, this)) {
             return true;
         } */
-        if (ShopCmdExecuter.execute(cmd)) {
+        if (ShopExecuter.execute(cmd)) {
             return true;
         }
         if (FlagCmdExecuter.execute(cmd)) {

@@ -48,7 +48,7 @@ import tbax.baxshops.serialization.ItemNames;
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public final class ShopCmdExecuter {
+public final class ShopExecuter {
     
     public static boolean execute(ShopCmd cmd) {
         switch(cmd.getAction()) {
@@ -270,18 +270,18 @@ public final class ShopCmdExecuter {
         }
         
         if (cmd.getShop().getLocations().size() == 1 || deleteAll) {
-            cmd.getState().removeShop(cmd.getPlayer(), cmd.getShop());
-            cmd.getMain().removeSelection(cmd.getPlayer());
-        }
-        else {
-            if (cmd.getShop().getInventorySize() > 0) {
+            if (cmd.getShop().getInventorySize() > 0 && !cmd.getShop().infinite) {
                 Main.sendError(cmd.getSender(), "There is still inventory at this shop!");
-                Main.sendError(cmd.getSender(), "Remove all inventory before deleting it.");
+                Main.sendError(cmd.getSender(), "Please remove all inventory before deleting it.");
             }
             else {
-                cmd.getState().removeLocation(cmd.getPlayer(), cmd.getSelection().location);
+                cmd.getState().removeShop(cmd.getPlayer(), cmd.getShop());
                 cmd.getMain().removeSelection(cmd.getPlayer());
             }
+        }
+        else {
+            cmd.getState().removeLocation(cmd.getPlayer(), cmd.getSelection().location);
+            cmd.getMain().removeSelection(cmd.getPlayer());
         }
         return true;
     }
