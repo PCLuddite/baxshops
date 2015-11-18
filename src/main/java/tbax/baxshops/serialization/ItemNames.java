@@ -29,6 +29,9 @@ import java.util.*;
 import tbax.baxshops.*;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -274,19 +277,28 @@ public final class ItemNames {
                 }
                 itemNames.put((long) id << 16 | damage, name.substring(1));
                 line = br.readLine();
-                if (line != null && line.charAt(0) == '|') {
+                if (line != null && (line.charAt(0) == '|' || line.charAt(0) == '+')) {
                     do {
                         if (line.length() == 0 || line.charAt(0) == '#') {
                             continue;
                         }
                         current = new Scanner(line);
-                        if (!current.next().equals("|")) {
+                        String next = current.next();
+                        if (next.equals("|")) {
+                            if (!current.hasNextInt(16)) {
+                                break;
+                            }
+                            damage = current.nextInt(16);
+                        }
+                        else if (next.equals("+")) {
+                            if (!current.hasNextInt()) {
+                                break;
+                            }
+                            damage = current.nextInt();
+                        }
+                        else {
                             break;
                         }
-                        if (!current.hasNextInt(16)) {
-                            break;
-                        }
-                        damage = current.nextInt(16);
                         name = "";
                         while (current.hasNext()) {
                             name += ' ' + current.next();
@@ -299,40 +311,5 @@ public final class ItemNames {
         } catch (IOException e) {
             main.log.warning("Failed to load item names: " + e.toString());
         }
-    }
-	
-    /**
-     * Loads the alias map from the aliases.txt resource.
-     * @param main
-     */
-    public static void loadAliases(Main main) {
-        /*InputStream stream = main.getResource("aliases.txt");
-        if (stream == null) {
-            return;
-        }
-        int i = 1;
-        String name = "";
-        try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(stream));
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (line.length() == 0 || line.charAt(0) == '#') {
-                    continue;
-                }
-                Scanner current = new Scanner(line);
-                name = current.next();
-                int id = current.nextInt();
-                int damage = current.hasNext() ? current.nextInt() : 0;
-                aliases.put(name, (long) id << 16 | damage);
-                i++;
-            }
-            stream.close();
-        } catch (IOException e) {
-            main.log.warning("Failed to load aliases: " + e.toString());
-        } catch (NoSuchElementException e) {
-            main.log.info("loadAliases broke at line: " + i);
-            main.log.info("No such element found: " + name);
-            e.printStackTrace();
-        }*/
     }
 }

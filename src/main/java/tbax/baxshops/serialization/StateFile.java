@@ -83,7 +83,6 @@ public final class StateFile {
     
     public void load() {
         ItemNames.loadItemNames(main);
-        //ItemNames.loadAliases(main);
         ItemNames.loadDamageable(main);
         
         loadState();

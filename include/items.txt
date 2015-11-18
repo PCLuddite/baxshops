@@ -237,239 +237,88 @@
 | E Orange Dye
 | F Bone Meal
 373 Water Bottle
-|   10 Awkward Potion
-|   20 Thick Potion
-|   30 Mundane Potion (extended)
-|   2000 Mundane Potion
-|   2020 Mundane Potion II
-|   2040 Mundane Potion (Ex)
-|   2060 Mundane Potion II (Ex)
-|   4000 Splash Mundane Potion
-|   4020 Splash Mundane Potion II
-|   4040 Splash Mundane Potion (Ex)
-|   4060 Splash Mundane Potion II (Ex)
-|   2001 Potion of Regeneration
-|   2021 Potion of Regeneration II
-|   2041 Potion of Regeneration (Ex)
-|   2061 Potion of Regeneration II (Ex)
-|   4001 Splash Potion of Regeneration
-|   4021 Splash Potion of Regeneration II
-|   4041 Splash Potion of Regeneration (Ex)
-|   4061 Splash Potion of Regeneration II (Ex)
-|   2002 Potion of Swiftness
-|   2022 Potion of Swiftness II
-|   2042 Potion of Swiftness (Ex)
-|   2062 Potion of Swiftness II (Ex)
-|   4002 Splash Potion of Swiftness
-|   4022 Splash Potion of Swiftness II
-|   4042 Splash Potion of Swiftness (Ex)
-|   4062 Splash Potion of Swiftness II (Ex)
-|   2003 Potion of Fire Resistance
-|   2023 Potion of Fire Resistance II
-|   2043 Potion of Fire Resistance (Ex)
-|   2063 Potion of Fire Resistance II (Ex)
-|   4003 Splash Potion of Fire Resistance
-|   4023 Splash Potion of Fire Resistance II
-|   4043 Splash Potion of Fire Resistance (Ex)
-|   4063 Splash Potion of Fire Resistance II (Ex)
-|   2004 Potion of Poison
-|   2024 Potion of Poison II
-|   2044 Potion of Poison (Ex)
-|   2064 Potion of Poison II (Ex)
-|   4004 Splash Potion of Poison
-|   4024 Splash Potion of Poison II
-|   4044 Splash Potion of Poison (Ex)
-|   4064 Splash Potion of Poison II (Ex)
-|   2005 Potion of Instant Health
-|   2025 Potion of Instant Health II
-|   2045 Potion of Instant Health (Ex)
-|   2065 Potion of Instant Health II (Ex)
-|   4005 Splash Potion of Instant Health
-|   4025 Splash Potion of Instant Health II
-|   4045 Splash Potion of Instant Health (Ex)
-|   4065 Splash Potion of Instant Health II (Ex)
-|   2008 Potion of Weakness
-|   2028 Potion of Weakness II
-|   2048 Potion of Weakness (Ex)
-|   2068 Potion of Weakness II (Ex)
-|   4008 Splash Potion of Weakness
-|   4028 Splash Potion of Weakness II
-|   4048 Splash Potion of Weakness (Ex)
-|   4068 Splash Potion of Weakness II (Ex)
-|   2009 Potion of Strength
-|   2029 Potion of Strength II
-|   2049 Potion of Strength (Ex)
-|   2069 Potion of Strength II (Ex)
-|   4009 Splash Potion of Strength
-|   4029 Splash Potion of Strength II
-|   4049 Splash Potion of Strength (Ex)
-|   4069 Splash Potion of Strength II (Ex)
-|   200a Potion of Slowness
-|   202a Potion of Slowness II
-|   204a Potion of Slowness (Ex)
-|   206a Potion of Slowness II (Ex)
-|   400a Splash Potion of Slowness
-|   402a Splash Potion of Slowness II
-|   404a Splash Potion of Slowness (Ex)
-|   406a Splash Potion of Slowness II (Ex)
-|   200c Potion of Harming
-|   202c Potion of Harming II
-|   204c Potion of Harming (Ex)
-|   206c Potion of Harming II (Ex)
-|   400c Splash Potion of Harming
-|   402c Splash Potion of Harming II
-|   404c Splash Potion of Harming (Ex)
-|   406c Splash Potion of Harming II (Ex)
-|   6 Clear Potion
-|   46 Clear Potion
-|   2006 Clear Potion
-|   4006 Splash Clear Potion
-|   4046 Splash Clear Potion
-|   6006 Splash Clear Potion
-|   7 Clear Potion
-|   47 Clear Potion
-|   2007 Clear Potion
-|   4007 Splash Clear Potion
-|   4047 Splash Clear Potion
-|   6007 Splash Clear Potion
-|   b Diffuse Potion
-|   4b Diffuse Potion
-|   200b Diffuse Potion
-|   400b Splash Diffuse Potion
-|   404b Splash Diffuse Potion
-|   600b Splash Diffuse Potion
-|   d Artless Potion
-|   4d Artless Potion
-|   200d Artless Potion
-|   400d Splash Artless Potion
-|   404d Splash Artless Potion
-|   600d Splash Artless Potion
-|   e Thin Potion
-|   4e Thin Potion
-|   200e Thin Potion
-|   400e Splash Thin Potion
-|   404e Splash Thin Potion
-|   600e Splash Thin Potion
-|   f Thin Potion
-|   4f Thin Potion
-|   200f Thin Potion
-|   400f Splash Thin Potion
-|   404f Splash Thin Potion
-|   600f Splash Thin Potion
-|   16 Bungling Potion
-|   56 Bungling Potion
-|   2016 Bungling Potion
-|   4016 Splash Bungling Potion
-|   4056 Splash Bungling Potion
-|   6016 Splash Bungling Potion
-|   17 Bungling Potion
-|   57 Bungling Potion
-|   2017 Bungling Potion
-|   4017 Splash Bungling Potion
-|   4057 Splash Bungling Potion
-|   6017 Splash Bungling Potion
-|   1b Smooth Potion
-|   5b Smooth Potion
-|   201b Smooth Potion
-|   401b Splash Smooth Potion
-|   405b Splash Smooth Potion
-|   601b Splash Smooth Potion
-|   1d Suave Potion
-|   5d Suave Potion
-|   201d Suave Potion
-|   401d Splash Suave Potion
-|   405d Splash Suave Potion
-|   601d Splash Suave Potion
-|   1e Debonair Potion
-|   5e Debonair Potion
-|   201e Debonair Potion
-|   401e Splash Debonair Potion
-|   405e Splash Debonair Potion
-|   601e Splash Debonair Potion
-|   1f Debonair Potion
-|   5f Debonair Potion
-|   201f Debonair Potion
-|   401f Splash Debonair Potion
-|   405f Splash Debonair Potion
-|   601f Splash Debonair Potion
-|   26 Charming Potion
-|   66 Charming Potion
-|   2026 Charming Potion
-|   4026 Splash Charming Potion
-|   4066 Splash Charming Potion
-|   6026 Splash Charming Potion
-|   27 Charming Potion
-|   67 Charming Potion
-|   2027 Charming Potion
-|   4027 Splash Charming Potion
-|   4067 Splash Charming Potion
-|   6027 Splash Charming Potion
-|   2b Refined Potion
-|   6b Refined Potion
-|   202b Refined Potion
-|   402b Splash Refined Potion
-|   406b Splash Refined Potion
-|   602b Splash Refined Potion
-|   2d Cordial Potion
-|   6d Cordial Potion
-|   202d Cordial Potion
-|   402d Splash Cordial Potion
-|   406d Splash Cordial Potion
-|   602d Splash Cordial Potion
-|   2e Sparkling Potion
-|   6e Sparkling Potion
-|   202e Sparkling Potion
-|   402e Splash Sparkling Potion
-|   406e Splash Sparkling Potion
-|   602e Splash Sparkling Potion
-|   2f Sparkling Potion
-|   6f Sparkling Potion
-|   202f Sparkling Potion
-|   402f Splash Sparkling Potion
-|   406f Splash Sparkling Potion
-|   602f Splash Sparkling Potion
-|   30 Potent Potion
-|   70 Potent Potion
-|   2030 Potent Potion
-|   4030 Splash Potent Potion
-|   4070 Splash Potent Potion
-|   6030 Splash Potent Potion
-|   36 Rank Potion
-|   76 Rank Potion
-|   2036 Rank Potion
-|   4036 Splash Rank Potion
-|   4076 Splash Rank Potion
-|   6036 Splash Rank Potion
-|   37 Rank Potion
-|   77 Rank Potion
-|   2037 Rank Potion
-|   4037 Splash Rank Potion
-|   4077 Splash Rank Potion
-|   6037 Splash Rank Potion
-|   3b Acrid Potion
-|   7b Acrid Potion
-|   203b Acrid Potion
-|   403b Splash Acrid Potion
-|   407b Splash Acrid Potion
-|   603b Splash Acrid Potion
-|   3d Gross Potion
-|   7d Gross Potion
-|   203d Gross Potion
-|   403d Splash Gross Potion
-|   407d Splash Gross Potion
-|   603d Splash Gross Potion
-|   3e Stinky Potion
-|   7e Stinky Potion
-|   203e Stinky Potion
-|   403e Splash Stinky Potion
-|   407e Splash Stinky Potion
-|   603e Splash Stinky Potion
-|   3f Stinky Potion
-|   7f Stinky Potion
-|   203f Stinky Potion
-|   403f Splash Stinky Potion
-|   407f Splash Stinky Potion
-|   603f Splash Stinky Potion
++ 16 Awkward Potion
++ 32 Thick Potion
++ 64 Mundane Potion (Extended)
++ 8192 Mundane Potion
++ 8193 Potion of Regeneration
++ 8225 Potion of Regeneration II
++ 8257 Potion of Regeneration (Extended)
++ 16385 Splash Potion of Regeneration
++ 16417 Splash Potion of Regeneration II
++ 16449 Splash Potion of Regeneration (Extended)
++ 8194 Potion of Swiftness
++ 8226 Potion of Swiftness II
++ 8258 Potion of Swiftness (Extended)
++ 16386 Splash Potion of Swiftness
++ 16418 Splash Potion of Swiftness II
++ 16450 Splash Potion of Swiftness (Extended)
++ 8195 Potion of Fire Resistance
++ 8227 (r) Potion of Fire Resistance II
++ 8259 Potion of Fire Resistance (Extended)
++ 16387 Splash Potion of Fire Resistance
++ 16419 (r) Splash Potion of Fire Resistance II
++ 16451 Splash Potion of Fire Resistance (Extended)
++ 8196 Potion of Poison
++ 8228 Potion of Poison II
++ 8260 Potion of Poison (Extended)
++ 16388 Splash Potion of Poison
++ 16420 Splash Potion of Poison II
++ 16452 Splash Potion of Poison (Extended)
++ 8197 Potion of Instant Health
++ 8229 Potion of Instant Health II
++ 8261 (r) Potion of Instant Health (Extended)
++ 16389 Splash Potion of Instant Health
++ 16421 Splash Potion of Instant Health II
++ 16453 (r) Splash Potion of Instant Health (Extended)
++ 8198 Potion of Night Vision
++ 8230 (r) Potion of Night Vision II
++ 8262 Potion of Night Vision (Extended)
++ 16390 Splash Potion of Night Vision
++ 16422 (r) Splash Potion of Night Vision II
++ 16454 Splash Potion of Night Vision (Extended)
++ 8200 Potion of Weakness
++ 8232 (r) Potion of Weakness II
++ 8264 Potion of Weakness (Extended)
++ 16392 Splash Potion of Weakness
++ 16424 (r) Splash Potion of Weakness II
++ 16456   Splash Potion of Weakness (Extended)
++ 8201 Potion of Strength
++ 8233 Potion of Strength II
++ 8265 Potion of Strength (Extended)
++ 16393 Splash Potion of Strength
++ 16425 Splash Potion of Strength II
++ 16457 Splash Potion of Strength (Extended)
++ 8202 Potion of Slowness
++ 8234 (r) Potion of Slowness II
++ 8266 Potion of Slowness (Extended)
++ 16394 Splash Potion of Slowness
++ 16426 (r) Splash Potion of Slowness II
++ 16458 Splash Potion of Slowness (Extended)
++ 8203 Potion of Leaping
++ 8235 Potion of Leaping II
++ 8267 Potion of Leaping (Extended)
++ 16395 Splash Potion of Leaping
++ 16427 Splash Potion of Leaping II
++ 16459 Splash Potion of Leaping (Extended)
++ 8204 Potion of Harming
++ 8236 Potion of Harming II
++ 8268 (r) Potion of Harming (Extended)
++ 16396 Splash Potion of Harming
++ 16428 Splash Potion of Harming II
++ 16460 (r) Splash Potion of Harming (Extended)
++ 8205 Potion of Water Breathing
++ 8237 (r) Potion of Water Breathing II
++ 8269 Potion of Water Breathing (Extended)
++ 16397 Splash Potion of Water Breathing
++ 16429 (r) Splash Potion of Water Breathing II
++ 16461 Splash Potion of Water Breathing (Extended)
++ 8206 Potion of Invisibility
++ 8238 (r) Potion of Invisibility II
++ 8270 Potion of Invisibility (Extended)
++ 16398 Splash Potion of Invisibility
++ 16430 (r) Splash Potion of Invisibility II
++ 16462 Splash Potion of Invisibility (Extended)
 383 Spawn Egg
 | 32 Spawn Egg (Creeper)
 | 33 Spawn Egg (Skeleton)
