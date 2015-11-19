@@ -27,6 +27,7 @@ package tbax.baxshops.notification;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.bukkit.entity.Player;
+import tbax.baxshops.Format;
 
 public final class DeathNotification implements Notification {
     private static final long serialVersionUID = 1L;
@@ -42,10 +43,10 @@ public final class DeathNotification implements Notification {
     @Override
     public String getMessage(Player player) {
         if (player == null || !player.getName().equals(person)) {
-            return String.format("§5%s§f was fined §a$%.2f§f for dying.", person, tax);
+            return String.format("%s was fined %s for dying.", Format.username(person), Format.money(tax));
         }
         else {
-            return String.format("§fYou were fined §a$%.2f§f for dying.", tax);
+            return String.format("You were fined %s for dying.", Format.money(tax));
         }
     }
 

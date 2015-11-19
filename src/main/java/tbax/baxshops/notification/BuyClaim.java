@@ -26,9 +26,11 @@ package tbax.baxshops.notification;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
+import tbax.baxshops.Format;
 import tbax.baxshops.Main;
 import tbax.baxshops.Resources;
 import tbax.baxshops.serialization.BaxEntryDeserializer;
@@ -69,10 +71,10 @@ public final class BuyClaim implements Claimable {
     public boolean claim(Player player) {
         if (Main.giveToPlayer(player, entry.toItemStack())) {
             if (entry.getAmount() == 1) {
-                player.sendMessage("§fThe item have been added to your inventory.");
+                player.sendMessage("The item have been added to your inventory.");
             }
             else {
-                player.sendMessage("§fThe items has been added to your inventory.");
+                player.sendMessage("The items has been added to your inventory.");
             }
             return true;
         }
@@ -84,14 +86,19 @@ public final class BuyClaim implements Claimable {
     
     public String getMessage(Player player) {
         if (player == null || !player.getName().equals(buyer)) {
-            return String.format("§5%s §faccepted %s's request to buy §e%d %s§f for $%.2f",
-                                shop.owner, buyer, entry.getAmount(), ItemNames.getItemName(entry),
-                                entry.retailPrice * entry.getAmount());
+            return String.format("%s accepted %s's request to buy %s for %s.",
+                        Format.username(shop.owner), 
+                        Format.username2(buyer),
+                        Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
+                        Format.money(entry.retailPrice * entry.getAmount())
+                    );
         }
         else {
-            return String.format("§1%s §faccepted your request to buy §e%d %s§F for §a$%.2f",
-                                shop.owner, entry.getAmount(), ItemNames.getItemName(entry),
-                                entry.retailPrice * entry.getAmount());
+            return String.format("%s accepted your request to buy %s for %s.",
+                    Format.username(shop.owner),
+                    Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
+                    Format.money(entry.retailPrice * entry.getAmount())
+            );
         }
     }
 

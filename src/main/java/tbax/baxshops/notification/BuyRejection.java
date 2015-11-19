@@ -26,9 +26,11 @@ package tbax.baxshops.notification;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
+import tbax.baxshops.Format;
 import tbax.baxshops.Main;
 import tbax.baxshops.serialization.BaxEntryDeserializer;
 import tbax.baxshops.serialization.BaxEntrySerializer;
@@ -66,13 +68,21 @@ public final class BuyRejection implements Notification {
 
     @Override
     public String getMessage(Player player) {
-        return player == null || !player.getName().equals(seller) ?
-                String.format("§c%s §frejected %s's request to sell §e%d %s§F for §a$%.2f",
-                                shop.owner, seller, entry.getAmount(), ItemNames.getItemName(entry),
-                                entry.refundPrice * entry.getAmount()) :
-                String.format("§1%s §frejected your request to sell §e%d %s§F for §a$%.2f§F",
-                                shop.owner, entry.getAmount(), ItemNames.getItemName(entry),
-                                entry.refundPrice * entry.getAmount());
+        if (player == null || !player.getName().equals(seller)) {
+            return String.format("%s " + ChatColor.RED + "rejected" + ChatColor.RESET + " %s's request to sell %s for %s.",
+                        Format.username(shop.owner),
+                        Format.username2(seller),
+                        Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
+                        Format.money(entry.refundPrice * entry.getAmount())
+                    );
+        }
+        else {
+            return String.format("%s " + ChatColor.RED + "rejected" + ChatColor.RESET + " your request to sell %s for %s.",
+                        Format.username(shop.owner),
+                        Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
+                        Format.money(entry.refundPrice * entry.getAmount())
+                    );
+        }
     }
 
     public static final String TYPE_ID = "BuyReject";

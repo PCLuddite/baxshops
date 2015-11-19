@@ -28,6 +28,7 @@ import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.logging.Logger;
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -48,12 +49,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import tbax.baxshops.executer.FlagCmdExecuter;
-import tbax.baxshops.executer.MainExecuter;
-import tbax.baxshops.executer.NotifyExecuter;
-import tbax.baxshops.executer.RefCmdExecuter;
-import tbax.baxshops.executer.ShopCmd;
-import tbax.baxshops.executer.ShopExecuter;
+import tbax.baxshops.executer.*;
 import tbax.baxshops.notification.DeathNotification;
 import tbax.baxshops.notification.Notification;
 import tbax.baxshops.serialization.StateFile;
@@ -236,11 +232,18 @@ public final class Main extends JavaPlugin implements Listener {
             selection.isOwner = isOwner;
             selection.shop = shop;
             selection.page = 0;
-            pl.sendMessage(new String[]{
-                isOwner ? "§FWelcome to §1your§F shop."
-                : String.format("§FWelcome to §1%s§F's shop.", shop.owner),
-                "§7For help with shops, type /shop help."
-            });
+            StringBuilder intro = new StringBuilder(ChatColor.WHITE.toString());
+            intro.append("Welcome to ");
+            if (isOwner) {
+                intro.append(Format.username("your"));
+            }
+            else {
+                intro.append(Format.username(shop.owner)).append("'s");
+            }
+            intro.append(" shop\n");
+            intro.append(ChatColor.GRAY.toString());
+            intro.append("For help with shops, type /shop help.");
+            pl.sendMessage(intro.toString());
         }
 
         selection.showListing(pl);
@@ -271,7 +274,7 @@ public final class Main extends JavaPlugin implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         ArrayDeque<Notification> p = state.getNotifications(event.getPlayer());
         if (!p.isEmpty()) {
-            event.getPlayer().sendMessage("§FYou have new notifications. Use §a/shop notifications§F to view them");
+            event.getPlayer().sendMessage(ChatColor.WHITE + "You have new notifications. Use " + Format.command("/shop notifications") + ChatColor.WHITE + " to view them");
         }
     }
 
@@ -283,8 +286,12 @@ public final class Main extends JavaPlugin implements Listener {
             Location shopLoc = s.location;
             Location pLoc = event.getTo();
             if (shopLoc.getWorld() != pl.getWorld() || shopLoc.distanceSquared(pLoc) > Resources.SHOP_RANGE) {
-                pl.sendMessage(s.isOwner ? "§f[Left §1your§f shop]"
-                        : String.format("§f[Left §1%s§F's shop]", s.shop.owner));
+                if (s.isOwner) {
+                    pl.sendMessage("[Left " + Format.username("your") + " shop]");
+                }
+                else {
+                    pl.sendMessage("[Left " + Format.username(s.shop.owner) + "'s shop]");
+                }
                 selectedShops.remove(event.getPlayer());
                 clearTempOpts(pl);
             }
@@ -306,7 +313,7 @@ public final class Main extends JavaPlugin implements Listener {
     }
     
     private static boolean isStupidDeath(String death) {
-        return death.contains("fell") ||
+        return (death.contains("fell") && !death.contains("world")) ||
                death.endsWith("drowned") ||
                death.endsWith("lava") ||
                death.contains("pricked") ||
@@ -338,9 +345,10 @@ public final class Main extends JavaPlugin implements Listener {
      * @param sender the player
      * @param message the error message
      */
-    public static void sendError(CommandSender sender, String message) {
+    public static void sendError(CommandSender sender, String message)
+    {
         if (sender != null) {
-            sender.sendMessage("§C" + message);
+            sender.sendMessage(ChatColor.DARK_RED + message);
         }
     }
     
@@ -351,7 +359,8 @@ public final class Main extends JavaPlugin implements Listener {
      * @param item the item
      * @return whether the item will fit
      */
-    public static boolean inventoryFitsItem(Player pl, ItemStack item) {
+    public static boolean inventoryFitsItem(Player pl, ItemStack item)
+    {
         int quantity = item.getAmount(),
             damage   = item.getDurability(),
             max      = item.getMaxStackSize();
@@ -380,7 +389,8 @@ public final class Main extends JavaPlugin implements Listener {
         return false;
     }
     
-    public static boolean giveToPlayer(Player player, ItemStack item) {
+    public static boolean giveToPlayer(Player player, ItemStack item)
+    {
         if (inventoryFitsItem(player, item)){
             player.getInventory().addItem(item);
             return true;
@@ -390,14 +400,16 @@ public final class Main extends JavaPlugin implements Listener {
         }
     }
     
-    public void clearTempOpts(Player pl) {
+    public void clearTempOpts(Player pl)
+    {
         HashMap<String, Object> opts = tempSettings.get(pl);
         if (opts != null) {
             opts.clear();
         }
     }
     
-    public Object getTempOpt(Player pl, String option) {
+    public Object getTempOpt(Player pl, String option)
+    {
         HashMap<String, Object> opts = tempSettings.get(pl);
         if (opts == null) {
             return null;
@@ -407,7 +419,8 @@ public final class Main extends JavaPlugin implements Listener {
         }
     }
     
-    public void setTempOpt(Player pl, String option, Object obj) {
+    public void setTempOpt(Player pl, String option, Object obj)
+    {
         HashMap<String, Object> opts = tempSettings.get(pl);
         if (opts == null) {
             opts = new HashMap<>();
@@ -416,7 +429,8 @@ public final class Main extends JavaPlugin implements Listener {
         opts.put(option, obj);
     }
     
-    public boolean getTempOptBool(Player pl, String option) {
+    public boolean getTempOptBool(Player pl, String option)
+    {
         if (getTempOpt(pl, option) == null) {
             return false;
         }
@@ -425,7 +439,8 @@ public final class Main extends JavaPlugin implements Listener {
         }
     }
     
-    public void removeSelection(Player pl) {
+    public void removeSelection(Player pl)
+    {
         if (selectedShops.get(pl) != null) {
             selectedShops.remove(pl);
             clearTempOpts(pl);
@@ -437,11 +452,13 @@ public final class Main extends JavaPlugin implements Listener {
      * @param value the value to round
      * @return the rounded value
      */
-    public static double roundTwoPlaces(double value) {
+    public static double roundTwoPlaces(double value)
+    {
         return Math.round(value*100.0d)/100.0d;
     }
     
-    public void sendInfo(Player pl, String message) {
+    public void sendInfo(Player pl, String message)
+    {
         if (pl != null) {
             if (getConfig().getBoolean("LogNotes", false)) {
                 pl.sendMessage(message);
@@ -450,7 +467,8 @@ public final class Main extends JavaPlugin implements Listener {
         }
     }
     
-    public static void logPlayerMessage(Player pl, String message) { 
+    public static void logPlayerMessage(Player pl, String message)
+    { 
         StringBuilder sb = new StringBuilder();
         if (pl != null) {
             sb.append((char)27).append("[0;35m");
@@ -463,7 +481,8 @@ public final class Main extends JavaPlugin implements Listener {
         log.info(sb.toString());
     }
     
-    public static String toAnsiColor(String message) { // obnoxious method to convert minecraft message colors to ansi colors
+    public static String toAnsiColor(String message) // obnoxious method to convert minecraft message colors to ansi colors
+    {
         StringBuilder sb = new StringBuilder();
         boolean has_ansi = false;
         for(int index = 0; index < message.length(); ++index) {

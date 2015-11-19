@@ -75,14 +75,14 @@ public final class RefCmdExecuter {
                     cmd.getPlayer().sendMessage(
                         String.format("%-3s %-16s %-18s %s",
                             ChatColor.WHITE.toString() + (index + 1) + ".", 
-                            ChatColor.GOLD + formatLoc(selection.shop.getLocations().get(index)),
+                            ChatColor.YELLOW + formatLoc(selection.shop.getLocations().get(index)),
                             ChatColor.LIGHT_PURPLE + getSignText(selection.shop.getLocations().get(index)),
                             (selection.location.equals(selection.shop.getLocations().get(index)) ? ChatColor.LIGHT_PURPLE + " (current)" : ""))
                     );
                 }
             }
             else {
-                cmd.getPlayer().sendMessage("§AThis shop has no other locations.");
+                cmd.getPlayer().sendMessage(ChatColor.YELLOW + "This shop has no other locations.");
             }
         }
         return true;
@@ -137,7 +137,7 @@ public final class RefCmdExecuter {
             }
             else {
                 cmd.getPlayer().sendMessage(String.format("§1%s shop has been added to your clipboard as '§a%s§F'.", 
-                    selection.isOwner ? "Your§f" : selection.shop.owner + "§f's", id));
+                    selection.isOwner ? "Your" + ChatColor.WHITE : selection.shop.owner + ChatColor.WHITE + "'s", id));
             }
         }
         return true;
@@ -147,7 +147,7 @@ public final class RefCmdExecuter {
         String id = cmd.getNumArgs() > 1 ? cmd.getArg(1) : null;
         BaxShop shopSource = Clipboard.get(cmd.getPlayer(), id);
         if (shopSource == null) {
-            sendError(cmd.getPlayer(), String.format("No data was found on the clipboard with id '%s'!\nSelect a shop and use:\n/shop location save [id]", id == null ? "DEFAULT" : id));
+            sendError(cmd.getPlayer(), String.format("No data was found on the clipboard with id '%s'.\nSelect a shop and use:\n/shop location save [id]", id == null ? "DEFAULT" : id));
             return true;
         }
         
@@ -184,7 +184,7 @@ public final class RefCmdExecuter {
         else {
             return true; // that didn't work. go back.
         }
-        cmd.getPlayer().sendMessage(String.format("§fA new location for §1%s§f's shop has been opened.", shopSource.owner));
+        cmd.getPlayer().sendMessage(String.format(ChatColor.WHITE + "A new location for " + ChatColor.BLUE + "%s" + ChatColor.WHITE + "'s shop has been opened.", shopSource.owner));
         return true;
     }
 }

@@ -27,6 +27,7 @@ package tbax.baxshops;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.bukkit.ChatColor;
 
 /**
  * CommandHelp provides an interface for specifying and printing help for a Bukkit command. It also contains general help-printing utilities.
@@ -101,19 +102,25 @@ public final class CommandHelp {
         if (indexString != null) 
             return indexString;
         StringBuilder b = new StringBuilder().
-            append("§B/").
+            append(ChatColor.AQUA).
+            append("/").
             append(command).
-            append("§3");
+            append(ChatColor.DARK_AQUA);
         if (alias != null) {
-            b.append("(§B").
+            b.append("(").
+                    append(ChatColor.AQUA).
                     append(alias).
-                    append("§3)");
+                    append(ChatColor.DARK_AQUA).
+                    append(")");
         }
         if (args != null) {
             b.append(' ');
             b.append(args);
         }
-        b.append(" §7-§F ").
+        b.append(" ").
+                append(ChatColor.GRAY).
+                append("- ").
+                append(ChatColor.WHITE).
                 append(description);
         return indexString = b.toString();
     }
@@ -144,20 +151,22 @@ public final class CommandHelp {
     public String[] toHelpString() {
         if (helpString != null) 
             return helpString;
-        ArrayList<String> h = new ArrayList<String>();
+        ArrayList<String> h = new ArrayList<>();
         h.add(header("Help: /" + command));
-        h.add("§F" + description);
+        h.add(ChatColor.WHITE + description);
         StringBuilder b = new StringBuilder().
-            append("§BUsage: §F").
+            append(ChatColor.AQUA).
+            append("Usage: ").
+            append(ChatColor.WHITE).
             append('/').
             append(command);
         if (args != null) {
             b.append(' ').
-                append(args);
+              append(args);
         }
         h.add(b.toString());
         if (alias != null)
-            h.add("§BAliases: §F" + alias);
+            h.add(ChatColor.AQUA + "Aliases: " + ChatColor.WHITE + alias);
         if (help != null) {
             h.add("");
             h.addAll(help);
@@ -171,7 +180,12 @@ public final class CommandHelp {
      * @return the chat header
      */
     public static String header(String title) {
-        return "§7------------§F " + title + " §7------------";
+        return (new StringBuilder(ChatColor.GRAY.toString()).
+                append("------------ ").
+                append(ChatColor.WHITE).
+                append(title).
+                append(ChatColor.GRAY).
+                append(" ------------")).toString();
     }
 
     /**
@@ -181,7 +195,12 @@ public final class CommandHelp {
      * @return the string
      */
     public static String arg(String name, String description) {
-        return "§B" + name + " §7-§F " + description;
+        return (new StringBuilder(ChatColor.AQUA.toString())).
+                append(name).
+                append(ChatColor.GRAY).
+                append(" - ").
+                append(ChatColor.WHITE).
+                append(description).toString();
     }
 
     /**

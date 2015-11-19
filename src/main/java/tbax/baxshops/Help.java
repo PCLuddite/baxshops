@@ -25,6 +25,7 @@
 package tbax.baxshops;
 
 import java.util.HashMap;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 /**
@@ -134,7 +135,7 @@ public final class Help {
      * An index of commands only usable when a shop is selected
      */
     public static final String[] indexSelected = {
-        "§ELeft- and right-click to browse this shop's items"
+        ChatColor.YELLOW + "Left- and right-click to browse this shop's items"
     };
     /**
      * An index of commands only usable by an admin (a player with the
@@ -209,7 +210,7 @@ public final class Help {
         }
     }
 
-    private static final HashMap<String, CommandHelp> commands = new HashMap<String, CommandHelp>();
+    private static final HashMap<String, CommandHelp> commands = new HashMap<>();
 
     /**
      * Gets help for a specific action.

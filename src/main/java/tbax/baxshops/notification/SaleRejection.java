@@ -30,6 +30,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
+import tbax.baxshops.Format;
 import tbax.baxshops.Main;
 import tbax.baxshops.Resources;
 import tbax.baxshops.serialization.BaxEntryDeserializer;
@@ -68,13 +69,21 @@ public final class SaleRejection implements Claimable {
 
     @Override
     public String getMessage(Player player) {
-        return player == null || !player.getName().equals(seller) ?
-                String.format("§5%s §frejected %s§f's request to sell §e%d %s§f for §a$%.2f§f",
-                                shop.owner, seller, entry.getAmount(), ItemNames.getItemName(entry),
-                                entry.refundPrice * entry.getAmount()) :
-                String.format("§1%s §frejected your request to sell §e%d %s§f for §a$%.2f§f",
-                                shop.owner, entry.getAmount(), ItemNames.getItemName(entry),
-                                entry.refundPrice * entry.getAmount());
+        if (player == null || !player.getName().equals(seller)) {
+            return String.format("%s rejected %s's request to sell %s for %s.",
+                Format.username(shop.owner),
+                Format.username2(seller),
+                Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
+                Format.money(entry.refundPrice * entry.getAmount())
+            );
+        }
+        else {
+            return String.format("%s rejected your request to sell %s for %s.",
+                Format.username(shop.owner),
+                Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
+                Format.money(entry.refundPrice * entry.getAmount())
+            );
+        }
     }
 
     @Override

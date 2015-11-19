@@ -34,6 +34,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
+import tbax.baxshops.Format;
 import tbax.baxshops.Main;
 import static tbax.baxshops.Main.sendError;
 import tbax.baxshops.Resources;
@@ -84,13 +85,21 @@ public final class SellRequest implements Request, TimedNotification {
 
     @Override
     public String getMessage(Player player) {
-        return player == null || !player.getName().equals(shop.owner) ?
-                String.format("§5%s §fwants to sell %s §e%d %s§f for §a$%.2f§f",
-                                seller, shop.owner, entry.getAmount(), ItemNames.getItemName(entry),
-                                entry.refundPrice * entry.getAmount()) :
-                String.format("§1%s §fwants to sell you §e%d %s§f for §a$%.2f§f",
-                                seller, entry.getAmount(), ItemNames.getItemName(entry),
-                                entry.refundPrice * entry.getAmount());
+        if (player == null || !player.getName().equals(shop.owner)) {
+            return String.format("%s wants to sell %s to %s for %s.",
+                Format.username(seller), 
+                Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
+                Format.username2(shop.owner),
+                Format.money(entry.refundPrice * entry.getAmount())
+            );
+        }
+        else {
+            return String.format("%s wants to sell you %s for %s.",
+                Format.username(seller), 
+                Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
+                Format.money(entry.refundPrice * entry.getAmount())
+            );
+        }
     }
     
     @Override
@@ -123,8 +132,8 @@ public final class SellRequest implements Request, TimedNotification {
         SaleNotification n = new SaleNotification(shop, entry, seller);
         Main.instance.state.sendNotification(seller, n);
         
-        player.sendMessage("§aOffer accepted");
-        player.sendMessage(String.format(Resources.CURRENT_BALANCE, Main.econ.format(Main.econ.getBalance(player.getName()))));
+        player.sendMessage("Offer accepted");
+        player.sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.econ.getBalance(player.getName()))));
         
         return true;
     }

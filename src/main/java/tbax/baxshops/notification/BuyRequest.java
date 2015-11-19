@@ -32,6 +32,7 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.entity.Player;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
+import tbax.baxshops.Format;
 import tbax.baxshops.Main;
 import tbax.baxshops.Resources;
 import tbax.baxshops.serialization.BaxEntryDeserializer;
@@ -81,13 +82,21 @@ public final class BuyRequest implements Request, TimedNotification {
 	
     @Override
     public String getMessage(Player player) {
-        return player == null || !player.getName().equals(shop.owner) ?
-                String.format("§5%s §fwants to buy from %s §e%d %s§f for §a$%.2f§f",
-                                buyer, shop.owner, purchased.getAmount(), ItemNames.getItemName(purchased),
-                                purchased.refundPrice * purchased.getAmount()) :
-                String.format("§1%s §fwants to buy §e%d %s§f from you for §a$%.2f§f",
-                                buyer, purchased.getAmount(), ItemNames.getItemName(purchased),
-                                purchased.refundPrice * purchased.getAmount());
+        if (player == null || !player.getName().equals(shop.owner)) {
+            return String.format("%s wants to buy %s from %s for %s.",
+                        Format.username(buyer),
+                        Format.itemname(purchased.getAmount(), ItemNames.getItemName(purchased)),
+                        Format.username2(shop.owner),
+                        Format.money(purchased.refundPrice * purchased.getAmount())
+                    );
+        }
+        else {
+            return String.format("%s wants to buy %s from you for %s.",
+                        Format.username(buyer),
+                        Format.itemname(purchased.getAmount(), ItemNames.getItemName(purchased)),
+                        Format.money(purchased.refundPrice * purchased.getAmount())
+                    );
+        }
     }
 	
     @Override
@@ -102,8 +111,8 @@ public final class BuyRequest implements Request, TimedNotification {
         BuyClaim n = new BuyClaim(shop, purchased, buyer);
         Main.instance.state.sendNotification(buyer, n);
         
-        acceptingPlayer.sendMessage("§aOffer accepted");
-        acceptingPlayer.sendMessage(String.format(Resources.CURRENT_BALANCE, Main.econ.format(Main.econ.getBalance(acceptingPlayer.getName()))));
+        acceptingPlayer.sendMessage("Offer accepted");
+        acceptingPlayer.sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.econ.getBalance(acceptingPlayer.getName()))));
         return true;
     }
 	
@@ -121,7 +130,7 @@ public final class BuyRequest implements Request, TimedNotification {
 
         BuyRejection n = new BuyRejection(shop, purchased, buyer);
         Main.instance.state.sendNotification(buyer, n);
-        player.sendMessage("§cOffer rejected");
+        player.sendMessage("Offer rejected");
         return true;
     }
 

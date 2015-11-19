@@ -25,6 +25,7 @@
 package tbax.baxshops.executer;
 
 import tbax.baxshops.CommandHelp;
+import tbax.baxshops.Format;
 import tbax.baxshops.Help;
 import static tbax.baxshops.Main.sendError;
 import tbax.baxshops.Resources;
@@ -51,7 +52,7 @@ public final class MainExecuter {
     public static boolean save(ShopCmd cmd) {
         if (cmd.getSender().hasPermission("shops.admin")) {
             cmd.getState().saveAll();
-            cmd.getSender().sendMessage("§bShops successfully saved");
+            cmd.getSender().sendMessage("Shops successfully saved");
         } 
         else {
             sendError(cmd.getSender(), Resources.NO_PERMISSION);
@@ -62,7 +63,7 @@ public final class MainExecuter {
     public static boolean backup(ShopCmd cmd) {
         if (cmd.getSender().hasPermission("shops.admin")) {
             cmd.getState().backup();
-            cmd.getSender().sendMessage("§bShops successfully backed up state.dat");
+            cmd.getSender().sendMessage("Shops successfully backed up state.json");
         } 
         else {
             sendError(cmd.getSender(), Resources.NO_PERMISSION);
@@ -81,8 +82,8 @@ public final class MainExecuter {
             cmd.getSender().sendMessage(h.toHelpString());
         } 
         else {
-            cmd.getSender().sendMessage("§bUse this to lookup information on specific commands.");
-            cmd.getSender().sendMessage("§eTo lookup a command, use:\n/shop help <command>");
+            cmd.getSender().sendMessage("Use this to lookup information on specific commands.");
+            cmd.getSender().sendMessage("To lookup a command, use:\n" + Format.command("/shop help <command>"));
         }
         return true;
     }

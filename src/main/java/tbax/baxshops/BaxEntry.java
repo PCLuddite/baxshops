@@ -25,6 +25,7 @@
 package tbax.baxshops;
 
 import java.util.Map;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -167,43 +168,54 @@ public final class BaxEntry {
     }
     
     public String toString(int index) {
-        String name = ItemNames.getItemName(this);
+        StringBuilder name = new StringBuilder(ItemNames.getItemName(this));
         
         if (!stack.getEnchantments().isEmpty()) {
-            StringBuilder enchName = new StringBuilder(name + " §D("); // Enchanted items are in purple
+            StringBuilder enchName = new StringBuilder(" ("); // Enchanted items are in purple
             for(Map.Entry<Enchantment, Integer> ench : stack.getEnchantments().entrySet()) {
                 enchName.append(ench.getKey().getName().substring(0,3)); // List each enchantment
                 enchName.append(ench.getValue()); // and its value
                 enchName.append(", "); // separated by commas
             }
-            name = enchName.substring(0, enchName.length() - 2) + ")"; // Remove the last comma, but in a closing parenthesis
+            if (infinite || getAmount() > 0) {
+                name.append(Format.enchantments(enchName.substring(0, enchName.length() - 2) + ")")); // Remove the last comma, put in a closing parenthesis
+            }
+            else {
+                name.append(enchName.substring(0, enchName.length() - 2)).append(")");
+            }
         }
         
         if (ItemNames.damageableIds.contains(stack.getTypeId()) && stack.getDurability() > 0) {
-            name += " §e(Damage: " +  stack.getDurability() + ")";
+            if (infinite || getAmount() > 0) {
+                name.append(ChatColor.YELLOW);
+            }
+            name.append(" (Damage: ").append(stack.getDurability()).append(")");
         }
         
-        if (refundPrice < 0) {
-            if(infinite) {
-                return String.format("§7%d. §f%s §2($%.2f)", index, name, retailPrice);
+        if (infinite) {
+            if (refundPrice < 0) {
+                return String.format("%s. %s %s", Format.bullet(index), Format.listname(name.toString()), Format.retailprice(retailPrice));
             }
             else {
-                return String.format(
-                    getAmount() == 0 ? "§C§M%d. (%d) %s §2($%.2f)" : "§f%d. §7(%d) §f%s §2($%.2f)",
-                    index, getAmount(), name, retailPrice);
+                return String.format("%s. %s %s %s", Format.bullet(index), Format.listname(name.toString()), Format.retailprice(retailPrice), Format.refundprice(refundPrice));
             }
         }
         else {
-            if (infinite) {
-                return String.format(
-                       "§7%d. §f%s §2($%.2f) §9($%.2f)",
-                       index, name, retailPrice, refundPrice);
+            if (getAmount() <= 0) {
+                if (refundPrice < 0) {
+                    return String.format(ChatColor.RED.toString() + ChatColor.STRIKETHROUGH + "%d. (0) %s (%s)", index, name, Main.econ.format(retailPrice));
+                }
+                else {
+                    return String.format(ChatColor.RED.toString() + ChatColor.STRIKETHROUGH + "%d. (0) %s (%s) (%s)", index, name, Main.econ.format(retailPrice), Main.econ.format(refundPrice));
+                }
             }
             else {
-                return String.format(getAmount() == 0 ?
-                       "§C§M%d. (%d) %s ($%.2f) ($%.2f)" :
-                       "§F%d. §7(%d) §F%s §2($%.2f) §9($%.2f)",
-                       index, getAmount(), name, retailPrice, refundPrice);
+                if (refundPrice < 0) {
+                    return String.format("%d. " + ChatColor.GRAY + "(%d) %s %s", index, getAmount(), Format.listname(name.toString()), Format.retailprice(retailPrice));
+                }
+                else {
+                    return String.format("%d. " + ChatColor.GRAY + "(%d) %s %s %s", index, getAmount(), Format.listname(name.toString()), Format.retailprice(retailPrice), Format.refundprice(refundPrice));
+                }
             }
         }
     }

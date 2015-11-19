@@ -24,6 +24,8 @@
  */
 package tbax.baxshops;
 
+import org.bukkit.ChatColor;
+
 /**
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
@@ -47,7 +49,6 @@ public final class Resources {
     // Errors
     public static final String NO_ROOM = "You have no room in your inventory!";
     public static final String NO_PERMISSION = "You do not have permission to use this command!";
-    public static final String CURRENT_BALANCE = "§FYour current balance is §2%s";
     public static final String NOT_FOUND_SHOPITEM = "That item has not been added to this shop.\nUse /shop add to add a new item";
     public static final String INVALID_DECIMAL = "The number entered for the %s is invalid.";
     public static final String NO_MONEY = "You do not have enough money to complete this action.";
@@ -55,7 +56,8 @@ public final class Resources {
     public static final String NOT_FOUND_HELDITEM = "You need to be holding an item to perform this action.";
     public static final String INVALID_SHOP_ACTION = "'/shop %s' is not a valid action";
     // Info
-    public static final String SOME_ROOM = "Only §C%d %s§F fit in your inventory. You were charged §2$%.2f§F.";
+    public static final String CURRENT_BALANCE = "Your current balance is %s.";
+    public static final String SOME_ROOM = "Only " + ChatColor.RED + "%d %s" + ChatColor.RESET + " fit in your inventory. You were charged %s.";
     public static final String NO_SUPPLIES = "There is not enough of this item in the shop.";
     public static final String ERROR_GENERIC = "Could not complete action because of the following error:\n%s";
     public static final String NOT_FOUND_ALIAS = "The item alias could not be found!";

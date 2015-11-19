@@ -296,7 +296,7 @@ public final class StateFile {
         for(Location loc : shop.getLocations()) {
             removeLocation(pl, loc);
         }
-        pl.sendMessage(String.format("§1%s§F's shop has been deleted.", shop.owner));
+        pl.sendMessage(String.format("%s's shop has been deleted.", Format.username(shop.owner)));
         return true;
     }
     
@@ -365,13 +365,13 @@ public final class StateFile {
         ArrayDeque<Notification> notifications = getNotifications(pl);
         if (notifications.isEmpty()) {
             if (showCount) {
-                pl.sendMessage("§FYou have no notifications.");
+                pl.sendMessage("You have no notifications.");
             }
             return;
         }
         if (showCount) {
             int size = notifications.size();
-            pl.sendMessage(size == 1 ? "§FYou have §31§F notification." : String.format("§FYou have §3%d§F notifications.", size));
+            pl.sendMessage(String.format("You have %s %s.", Format.number(size), size == 1 ? "notification" : "notifications"));
         }
 
         Notification n = notifications.getFirst();
@@ -383,10 +383,10 @@ public final class StateFile {
             }
         }
         if (n instanceof Request) {
-            pl.sendMessage("§FUse §e/shop accept§F or §e/shop reject§f to manage this request.");
+            pl.sendMessage("Use " + Format.command("/shop accept") + " or " + Format.command("/shop reject") + " to manage this request.");
         } 
         else if (n instanceof Claimable) {
-            pl.sendMessage("§FUse §e/shop claim§F to claim and remove this notification.");
+            pl.sendMessage("Use " + Format.command("/shop claim") + " to claim and remove this notification.");
         } 
         else {
             notifications.removeFirst();

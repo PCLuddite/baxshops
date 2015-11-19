@@ -26,6 +26,7 @@ package tbax.baxshops.executer;
 
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
+import tbax.baxshops.Format;
 import tbax.baxshops.Help;
 import tbax.baxshops.Main;
 import static tbax.baxshops.Main.sendError;
@@ -95,7 +96,7 @@ public final class FlagCmdExecuter {
             return true;
         }
         shop.sellToShop = Clipboard.parseBoolean(cmd.getArg(2));
-        cmd.getPlayer().sendMessage("§ESell to Shop §Fis §a" + (shop.sellToShop ? "enabled" : "disabled"));
+        cmd.getPlayer().sendMessage(Format.flag("Sell to Shop") + " is " + Format.keyword(shop.sellToShop ? "enabled" : "disabled"));
         return true;
     }
     
@@ -114,7 +115,7 @@ public final class FlagCmdExecuter {
             return true;
         }
         shop.notify = Clipboard.parseBoolean(cmd.getArg(2));
-        cmd.getPlayer().sendMessage("§ENotifications §F for this shop are §a" + (shop.sellToShop ? "enabled" : "disabled"));
+        cmd.getPlayer().sendMessage(Format.flag("Notifications ") + " for this shop are " + Format.keyword(shop.sellToShop ? "enabled" : "disabled"));
         return true;
     }
     
@@ -138,7 +139,7 @@ public final class FlagCmdExecuter {
                 e.setAmount(1);
             }
         }
-        cmd.getPlayer().sendMessage("§EInfinite items §Ffor this shop are §a" + (shop.infinite ? "enabled" : "disabled"));
+        cmd.getPlayer().sendMessage(Format.flag("Infinite items") + " for this shop are " + Format.keyword(shop.infinite ? "enabled" : "disabled"));
         return true;
     }
     
@@ -157,7 +158,7 @@ public final class FlagCmdExecuter {
             return true;
         }
         shop.sellRequests = Clipboard.parseBoolean(cmd.getArg(2));
-        cmd.getPlayer().sendMessage("§ESell requests §Ffor this shop are §a" + (shop.sellRequests ? "enabled" : "disabled"));
+        cmd.getPlayer().sendMessage(Format.flag("Sell requests") + " for this shop are " + Format.keyword(shop.sellRequests ? "enabled" : "disabled"));
         return true;
     }
     
@@ -176,7 +177,7 @@ public final class FlagCmdExecuter {
             return true;
         }
         shop.buyRequests = Clipboard.parseBoolean(cmd.getArg(2));
-        cmd.getPlayer().sendMessage("§EBuy requests §Ffor this shop are §a" + (shop.buyRequests ? "enabled" : "disabled"));
+        cmd.getPlayer().sendMessage(Format.flag("Buy requests") + " for this shop are " + Format.keyword(shop.buyRequests ? "enabled" : "disabled"));
         return true;
     }
     
@@ -195,8 +196,8 @@ public final class FlagCmdExecuter {
             return true;
         }
         shop.owner = cmd.getArg(2);
-        cmd.getPlayer().sendMessage("§E" + shop.owner + "§F is now the owner!" + 
-                (cmd.getSelection().isOwner ? "\n§aYou will still be able to edit this shop until you leave or reselect it." : ""));
+        cmd.getPlayer().sendMessage(Format.username(shop.owner) + " is now the owner!" + 
+                (cmd.getSelection().isOwner ? "\nYou will still be able to edit this shop until you leave or reselect it." : ""));
         return true;
     }
     
@@ -210,12 +211,12 @@ public final class FlagCmdExecuter {
             sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
             return true;
         }
-        cmd.getPlayer().sendMessage("\n§FFlags currently apcmd.getPlayer()ied to this shop:");
-        cmd.getPlayer().sendMessage(String.format("§E%1$s§F: §a%2$s", "INFINITE", shop.infinite ? "On" : "Off"));
-        cmd.getPlayer().sendMessage(String.format("§E%1$s§F: §a%2$s", "NOTIFY", shop.notify ? "On" : "Off"));
-        cmd.getPlayer().sendMessage(String.format("§E%1$s§F: §a%2$s", "SELL_TO_SHOP", shop.sellToShop ? "On" : "Off"));
-        cmd.getPlayer().sendMessage(String.format("§E%1$s§F: §a%2$s", "SELL_REQUESTS", shop.sellRequests ? "On" : "Off"));
-        cmd.getPlayer().sendMessage(String.format("§E%1$s§F: §a%2$s", "BUY_REQUESTS", shop.buyRequests ? "On" : "Off"));
+        cmd.getPlayer().sendMessage("\nFlags currently aplied to this shop:");
+        cmd.getPlayer().sendMessage(String.format("%s: %s", Format.flag("INFINITE"), Format.keyword(shop.infinite ? "On" : "Off")));
+        cmd.getPlayer().sendMessage(String.format("%s: %s", Format.flag("NOTIFY"), Format.keyword(shop.notify ? "On" : "Off")));
+        cmd.getPlayer().sendMessage(String.format("%s: %s", Format.flag("SELL_TO_SHOP"), Format.keyword(shop.sellToShop ? "On" : "Off")));
+        cmd.getPlayer().sendMessage(String.format("%s: %s", Format.flag("SELL_REQUESTS"), Format.keyword(shop.sellRequests ? "On" : "Off")));
+        cmd.getPlayer().sendMessage(String.format("%s: %s", Format.flag("BUY_REQUESTS"), Format.keyword(shop.buyRequests ? "On" : "Off")));
         return true;
     }
 }

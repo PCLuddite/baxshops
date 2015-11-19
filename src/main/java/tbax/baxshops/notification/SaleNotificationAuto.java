@@ -29,6 +29,7 @@ import com.google.gson.JsonObject;
 import org.bukkit.entity.Player;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
+import tbax.baxshops.Format;
 import tbax.baxshops.Main;
 import tbax.baxshops.serialization.BaxEntryDeserializer;
 import tbax.baxshops.serialization.BaxEntrySerializer;
@@ -68,10 +69,10 @@ public final class SaleNotificationAuto implements Claimable {
     public boolean claim(Player player) {
         if (Main.giveToPlayer(player, entry.toItemStack())) {
             if (entry.getAmount() == 1) {
-                player.sendMessage("§fThe item have been added to your inventory.");
+                player.sendMessage("The item have been added to your inventory.");
             }
             else {
-                player.sendMessage("§fThe items has been added to your inventory.");
+                player.sendMessage("The items has been added to your inventory.");
             }
             return true;
         }
@@ -88,14 +89,19 @@ public final class SaleNotificationAuto implements Claimable {
 
     public static String getMessage(String buyer, BaxShop shop, BaxEntry entry, String seller) {
         if (buyer == null || !buyer.equals(shop.owner)) {
-            return String.format("§5%s §fsold %s §e%d %s§f for §a$%.2f§f",
-                        seller, shop.owner, entry.getAmount(), ItemNames.getItemName(entry),
-                        entry.refundPrice * entry.getAmount());
+            return String.format("%s sold %s to %s for %s.",
+                        Format.username(seller),
+                        Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
+                        Format.username2(shop.owner),
+                        Format.money(entry.refundPrice * entry.getAmount())
+                    );
         }
         else {
-            return String.format("§1%s §fsold you §e%d %s§f for §a$%.2f§f",
-                        seller, entry.getAmount(), ItemNames.getItemName(entry),
-                        entry.refundPrice * entry.getAmount());
+            return String.format("%s sold you %s for %s.",
+                        Format.username(seller),
+                        Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
+                        Format.money(entry.refundPrice * entry.getAmount())
+                    );
         }
     }
     

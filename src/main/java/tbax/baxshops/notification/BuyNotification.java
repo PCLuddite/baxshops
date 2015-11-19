@@ -29,6 +29,7 @@ import com.google.gson.JsonObject;
 import org.bukkit.entity.Player;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
+import tbax.baxshops.Format;
 import tbax.baxshops.Main;
 import tbax.baxshops.serialization.BaxEntryDeserializer;
 import tbax.baxshops.serialization.BaxEntrySerializer;
@@ -68,14 +69,19 @@ public final class BuyNotification implements Notification {
     @Override
     public String getMessage(Player player) {
         if (player == null || !player.getName().equals(shop.owner)) {
-            return String.format("§5%s §fbought §e%d %s§f from %s for §a$%.2f",
-                        buyer, entry.getAmount(), ItemNames.getItemName(entry),
-                        shop.owner, entry.retailPrice * entry.getAmount());
+            return String.format("%s bought %s from %s for %s.",
+                        Format.username(buyer),
+                        Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
+                        Format.username2(shop.owner),
+                        Format.money(entry.retailPrice * entry.getAmount())
+                    );
         }
         else {
-            return String.format("§1%s §fbought §e%d %s§f from you for §a$%.2f§f",
-                            buyer, entry.getAmount(), ItemNames.getItemName(entry),
-                            entry.retailPrice * entry.getAmount());
+            return String.format("%s bought %s from you for %s.",
+                        Format.username(buyer),
+                        Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
+                        Format.money(entry.retailPrice * entry.getAmount())
+                    );
         }
     }
 

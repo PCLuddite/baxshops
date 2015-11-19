@@ -75,7 +75,7 @@ public final class NotifyExecuter {
             if (cmd.getPlayer().hasPermission("shops.admin")) {
                 ArrayDeque<Notification> notes = cmd.getState().getNotifications(cmd.getPlayer());
                 notes.clear();
-                cmd.getPlayer().sendMessage("§fYour notifications have been cleared");
+                cmd.getPlayer().sendMessage("Your notifications have been cleared");
             }
             else {
                 sendError(cmd.getPlayer(), Resources.NO_PERMISSION);

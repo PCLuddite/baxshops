@@ -26,6 +26,7 @@ package tbax.baxshops.executer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -36,6 +37,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
+import tbax.baxshops.Format;
 import tbax.baxshops.Help;
 import tbax.baxshops.Main;
 import tbax.baxshops.Resources;
@@ -128,9 +130,9 @@ public final class ShopExecuter {
             }
             return true;
         }
-        cmd.getPlayer().sendMessage("§1" + shop.owner + "§F's shop has been created.");
-        cmd.getPlayer().sendMessage("§EBuy requests §Ffor this shop are §A" + (shop.buyRequests ? "ON" : "OFF"));
-        cmd.getPlayer().sendMessage("§ESell requests §Ffor this shop are §A" + (shop.sellRequests ? "ON" : "OFF"));
+        cmd.getPlayer().sendMessage(Format.username(shop.owner) + "'s shop has been created.");
+        cmd.getPlayer().sendMessage(Format.flag("Buy requests") + " for this shop are " + Format.keyword(shop.buyRequests ? "on" : "off"));
+        cmd.getPlayer().sendMessage(Format.flag("Sell requests") + " for this shop are " + Format.keyword(shop.sellRequests ? "on" : "off"));
         return true;
     }
     
@@ -164,7 +166,7 @@ public final class ShopExecuter {
         Block blockUnder = locUnder.getWorld().getBlockAt(locUnder);
         if (blockUnder.getType() == Material.AIR ||
             blockUnder.getType() == Material.TNT){
-                Main.sendError(cmd.getPlayer(), "You cannot cmd.getPlayer()ace a shop on this block.");
+                Main.sendError(cmd.getPlayer(), "You cannot place a shop on this block.");
                 return null;
         }
         
@@ -179,7 +181,7 @@ public final class ShopExecuter {
         if (!b.getType().equals(Material.SIGN)) {
             b.setType(Material.SIGN_POST);
             if (!b.getType().equals(Material.SIGN) && !b.getType().equals(Material.SIGN_POST)) {
-                Main.sendError(cmd.getPlayer(), "Unable to cmd.getPlayer()ace sign! Block type is " + b.getType() + ".");  
+                Main.sendError(cmd.getPlayer(), "Unable to place sign! Block type is " + b.getType() + ".");  
                 if (!cmd.getPlayer().hasPermission("shops.admin")) {
                     cmd.getPlayer().getInventory().addItem(new ItemStack(Material.SIGN)); // give the sign back
                 }
@@ -236,7 +238,7 @@ public final class ShopExecuter {
                 }
                 try {
                     b.setData(angle, false);
-                    cmd.getPlayer().sendMessage("§fSign rotated to face §e" + cmd.getArg(1).toLowerCase() + "§f");
+                    cmd.getPlayer().sendMessage("Sign rotated to face " + Format.keyword(cmd.getArg(1).toLowerCase()));
                 }
                 catch(Exception e) {
                     Main.sendError(cmd.getPlayer(), "Some weird error occoured, and long story short, the sign may not have been rotated.");
@@ -334,9 +336,8 @@ public final class ShopExecuter {
         }
         cmd.getShop().addEntry(newEntry);
         cmd.getMain().sendInfo(cmd.getPlayer(), 
-                String.format("§fA new entry for §a%d %s§f was added to the shop.", 
-                        newEntry.getAmount(),
-                        ItemNames.getItemName(newEntry)
+                String.format("A new entry for %s was added to the shop.", 
+                    Format.itemname(newEntry.getAmount(), ItemNames.getItemName(newEntry))
                 ));
         cmd.getPlayer().setItemInHand(null);
         return true;
@@ -396,9 +397,9 @@ public final class ShopExecuter {
                     Main.sendError(cmd.getPlayer(), Help.restock.toUsageString());
                     return true;
                 }
-                cmd.getMain().sendInfo(cmd.getPlayer(), String.format("Restocked with §b%d %s§f. The shop now has §a%d§f.", 
-                            stack.getAmount(), ItemNames.getItemName(entry),
-                            entry.getAmount()
+                cmd.getMain().sendInfo(cmd.getPlayer(), String.format("Restocked with %s. The shop now has %s.", 
+                            Format.itemname(stack.getAmount(), ItemNames.getItemName(entry)),
+                            Format.number(entry.getAmount())
                             ));
                 return true;
             }
@@ -414,10 +415,10 @@ public final class ShopExecuter {
             if (stack.getAmount() < amt) {
                 entry.add(stack.getAmount());
                 cmd.getPlayer().setItemInHand(null);
-                cmd.getMain().sendInfo(cmd.getPlayer(), String.format("Could only restock with §c%d %s§f. You did not have enough to restock §c%d§f. The shop now has §a%d§f.",
-                        stack.getAmount(), ItemNames.getItemName(entry),
-                        amt,
-                        entry.getAmount()));
+                cmd.getMain().sendInfo(cmd.getPlayer(), String.format("Could only restock with " + ChatColor.RED + "%d %s" + ChatColor.RESET + ". The shop now has %s.",
+                    stack.getAmount(), ItemNames.getItemName(entry),
+                    Format.number(entry.getAmount()))
+                );
                 return true;
             }
         }
@@ -427,10 +428,12 @@ public final class ShopExecuter {
         
         entry.add(stack.getAmount());
         
-        cmd.getMain().sendInfo(cmd.getPlayer(), String.format("Restocked with §b%d %s§f in hand. The shop now has §a%d§f.", 
-                        stack.getAmount(), ItemNames.getItemName(entry),
-                        entry.getAmount()
-                        ));
+        cmd.getMain().sendInfo(cmd.getPlayer(), 
+            String.format("Restocked with %s in hand. The shop now has %s.", 
+                Format.itemname(stack.getAmount(), ItemNames.getItemName(entry)),
+                Format.number(entry.getAmount())
+            )
+        );
         return true;
     }
     
@@ -444,14 +447,14 @@ public final class ShopExecuter {
                 BaxEntry entry = shop.findEntry(itemStack);
                 if (entry != null) {
                     entry.add(itemStack.getAmount());
-                    player.sendMessage(String.format("§fRestocked §b%d %s§f.", 
-                            itemStack.getAmount(), ItemNames.getItemName(entry)
-                            ));
+                    player.sendMessage(String.format("Restocked %s.", 
+                        Format.itemname(itemStack.getAmount(), ItemNames.getItemName(entry))
+                    ));
                 }
             }
         }
         else {
-            Main.sendError(player, "You did not have any items that could be restocked at this shop.");
+            player.sendMessage("You did not have any items that could be restocked at this shop.");
         }
     }
         
@@ -576,12 +579,18 @@ public final class ShopExecuter {
         entry.refundPrice = refundAmount;
         
         if (cmd.getShop().infinite) {
-            cmd.getMain().sendInfo(cmd.getPlayer(), String.format("§fThe price for §a%s§f was set.",
-                    ItemNames.getItemName(entry)));
+            cmd.getMain().sendInfo(cmd.getPlayer(),
+                String.format("The price for %s was set.",
+                    Format.itemname(ItemNames.getItemName(entry))
+                )
+            );
         }
         else {
-            cmd.getMain().sendInfo(cmd.getPlayer(), String.format("§fThe price for §a%d %s§F was set.",
-                    entry.getAmount(), ItemNames.getItemName(entry)));
+            cmd.getMain().sendInfo(cmd.getPlayer(),
+                String.format("The price for %s was set.",
+                    Format.itemname(entry.getAmount(), ItemNames.getItemName(entry))
+                )
+            );
         }
         return true;
     }
@@ -679,9 +688,17 @@ public final class ShopExecuter {
             
             BuyRequest request = new BuyRequest(shop, purchased, cmd.getPlayer().getName());
             cmd.getMain().state.sendNotification(shop.owner, request);
-            cmd.getPlayer().sendMessage(String.format("§FYour request to buy §e%d %s§F for §a$%.2f§F has been sent.",
-                           purchased.getAmount(), itemName, price));
-            cmd.getPlayer().sendMessage(String.format("§FThis request will expire in %d days.", Resources.EXPIRE_TIME_DAYS));
+            cmd.getPlayer().sendMessage(
+                String.format("Your request to buy %s for %s has been sent.",
+                    Format.itemname(purchased.getAmount(), itemName),
+                    Format.money(price)
+                )
+            );
+            cmd.getPlayer().sendMessage(
+                String.format("This request will expire in %s days.",
+                    Format.number(Resources.EXPIRE_TIME_DAYS)
+                )
+            );
             return true;
         }
         
@@ -694,12 +711,21 @@ public final class ShopExecuter {
                 return true;
             }
             price = Main.roundTwoPlaces((amount - refunded) * entry.retailPrice);
-            cmd.getSender().sendMessage(String.format(Resources.SOME_ROOM,
-                amount - refunded, itemName, price));
+            cmd.getSender().sendMessage(
+                String.format(Resources.SOME_ROOM,
+                    amount - refunded, 
+                    itemName,
+                    Format.money(price)
+                )
+            );
         } 
         else {
-            cmd.getSender().sendMessage(String.format("You bought §e%d %s§F for §a$%.2f§F.",
-                amount, itemName, price));
+            cmd.getSender().sendMessage(
+                String.format("You bought %s for %s.",
+                    Format.itemname(amount, itemName),
+                    Format.money(price)
+                )
+            );
         }
         Main.econ.withdrawPlayer(cmd.getPlayer().getName(), price);
         if (!shop.infinite) {
@@ -710,7 +736,7 @@ public final class ShopExecuter {
         
         purchased.subtract(refunded);
         
-        cmd.getSender().sendMessage(String.format(Resources.CURRENT_BALANCE, Main.econ.format(Main.econ.getBalance(cmd.getSender().getName()))));
+        cmd.getSender().sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.econ.getBalance(cmd.getSender().getName()))));
         cmd.getMain().state.sendNotification(shop.owner, new BuyNotification(shop, purchased, cmd.getPlayer().getName()));        
         
         return true;
@@ -746,9 +772,9 @@ public final class ShopExecuter {
                     }
                 }
                 if (total > 0.0) {
-                    cmd.getPlayer().sendMessage(String.format("§fYou earned §a$%.2f§f", total));
+                    cmd.getPlayer().sendMessage(String.format("You earned %s.", Format.money(total)));
                 }
-                cmd.getPlayer().sendMessage(String.format(Resources.CURRENT_BALANCE, Main.econ.format(Main.econ.getBalance(cmd.getPlayer().getName()))));
+                cmd.getPlayer().sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.econ.getBalance(cmd.getPlayer().getName()))));
             }
             return true;
         }
@@ -772,10 +798,13 @@ public final class ShopExecuter {
                 int desiredAmt = Integer.parseInt(cmd.getArg(1));
                 actualAmt = clearItems(cmd.getPlayer().getInventory(), entry, desiredAmt);
                 if (actualAmt < desiredAmt) {
-                cmd.getPlayer().sendMessage(String.format(
-                        "You did not have enough to sell §c%d %s§f, so only §a%d§f will be sold.",
-                        desiredAmt, desiredAmt == 1 ? "item" : "items",
-                        actualAmt));
+                    cmd.getPlayer().sendMessage(
+                        String.format("You did not have enough to sell " + ChatColor.RED + "%d %s" + ChatColor.RESET + ", so only %s will be sold.",
+                            desiredAmt,
+                            desiredAmt == 1 ? "item" : "items",
+                            Format.number(actualAmt)
+                        )
+                    );
                 }
             } 
             catch (NumberFormatException e) {
@@ -831,21 +860,28 @@ public final class ShopExecuter {
         
         if (shop.sellRequests) {
             cmd.getMain().state.sendNotification(shop.owner, request);
-            cmd.getPlayer().sendMessage(String.format(
-                "§FYour request to sell §e%d %s§F for §a$%.2f§F has been sent.",
-                itemsToSell.getAmount(), name, price));
+            cmd.getPlayer().sendMessage(
+                String.format("Your request to sell %s for %s has been sent.",
+                    Format.itemname(itemsToSell.getAmount(), name),
+                    Format.money(price)
+                )
+            );
             if (showExtra) {
-                cmd.getPlayer().sendMessage(String.format("§FThis request will expire in %d days.", Resources.EXPIRE_TIME_DAYS));
+                cmd.getPlayer().sendMessage(String.format("This request will expire in %s days.", Format.number(Resources.EXPIRE_TIME_DAYS)));
             }
         }
         else {
             int error = request.autoAccept(cmd.getPlayer());
             if (error == 1) {
                 cmd.getPlayer().sendMessage(String.format(
-                      "§FYou have sold §e%d %s§F for §a$%.2f§F to §1%s§F.",
-                      itemsToSell.getAmount(), name, price, shop.owner));
+                      "You have sold %s for %s to %s.",
+                      Format.itemname(itemsToSell.getAmount(), name),
+                      Format.money(price),
+                      Format.username(shop.owner)
+                    )
+                );
                 if (showExtra) {
-                    cmd.getPlayer().sendMessage(String.format(Resources.CURRENT_BALANCE, Main.econ.format(Main.econ.getBalance(cmd.getPlayer().getName()))));
+                    cmd.getPlayer().sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.econ.getBalance(cmd.getPlayer().getName()))));
                 }
                 return price;
             }
@@ -908,11 +944,15 @@ public final class ShopExecuter {
                 return true;
             }
 
-            cmd.getMain().sendInfo(cmd.getPlayer(), String.format("§a%d %s§F %s added to your inventory.",
-                        entry.getAmount(), ItemNames.getItemName(entry), entry.getAmount() == 1 ? "was" : "were"));
+            cmd.getMain().sendInfo(cmd.getPlayer(),
+                String.format("%s %s added to your inventory.",
+                    Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
+                    entry.getAmount() == 1 ? "was" : "were"
+                )
+            );
         }
         shop.inventory.remove(entry);
-        cmd.getMain().sendInfo(cmd.getPlayer(), "§fThe shop entry was removed.");
+        cmd.getMain().sendInfo(cmd.getPlayer(), "The shop entry was removed.");
         
         return true;
     }
@@ -985,8 +1025,12 @@ public final class ShopExecuter {
         
         entry.subtract(amt);
         
-        cmd.getMain().sendInfo(cmd.getPlayer(), String.format("§a%d %s§F %s added to your inventory.",
-                    amt, ItemNames.getItemName(entry), amt == 1 ? "was" : "were"));
+        cmd.getMain().sendInfo(cmd.getPlayer(), 
+            String.format("%s %s added to your inventory.",
+                Format.itemname(amt, ItemNames.getItemName(entry)),
+                amt == 1 ? "was" : "were"
+            )
+        );
         
         return true;
     }
@@ -1101,7 +1145,7 @@ public final class ShopExecuter {
             else {
                 cmd.getShop().inventory.add(newIndex - 1, entry);
             }
-            cmd.getPlayer().sendMessage("§fThe index for this item was successfully changed.");
+            cmd.getPlayer().sendMessage("The index for this item was successfully changed.");
         }
         return true;
     }
