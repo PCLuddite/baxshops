@@ -58,10 +58,13 @@ public final class BaxShop {
                 return index;
             }
         }
-        return -1;
+        return -1; // not found
     }
     
     public ArrayList<Location> getLocations() {
+        if (locations == null) {
+            locations = new ArrayList<>();
+        }
         return locations;
     }
     

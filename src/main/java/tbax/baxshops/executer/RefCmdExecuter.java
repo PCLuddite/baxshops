@@ -24,6 +24,7 @@
  */
 package tbax.baxshops.executer;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -66,18 +67,17 @@ public final class RefCmdExecuter {
             }
             cmd.getPlayer().sendMessage(CommandHelp.header("Shop Locations"));
             if (!selection.shop.getLocations().isEmpty()) {
-                
                 cmd.getPlayer().sendMessage(
-                        String.format("§7 %-3s %-16s %-18s", "#", "§fLocation", "§fSign Text")
+                    String.format(" %-3s %-16s %-18s", ChatColor.GRAY + "#", ChatColor.WHITE + "Location", ChatColor.WHITE + "Sign Text")
                 );
                 
-                for(int index = 1; index <= selection.shop.getLocations().size(); index++) {
+                for(int index = 0; index < selection.shop.getLocations().size(); ++index) {
                     cmd.getPlayer().sendMessage(
-                        String.format("§F %-3s §E%-16s §D%-18s %s",
-                                index + ".", 
-                                formatLoc(selection.shop.getLocations().get(index - 1)),
-                                getSignText(selection.shop.getLocations().get(index - 1)),
-                               (selection.location.equals(selection.shop.getLocations().get(index - 1)) ? " §D(current)" : ""))
+                        String.format("%-3s %-16s %-18s %s",
+                            ChatColor.WHITE.toString() + (index + 1) + ".", 
+                            ChatColor.GOLD + formatLoc(selection.shop.getLocations().get(index)),
+                            ChatColor.LIGHT_PURPLE + getSignText(selection.shop.getLocations().get(index)),
+                            (selection.location.equals(selection.shop.getLocations().get(index)) ? ChatColor.LIGHT_PURPLE + " (current)" : ""))
                     );
                 }
             }
@@ -89,7 +89,7 @@ public final class RefCmdExecuter {
     }
     
     private static String formatLoc(Location loc) {
-        return String.format("(%d,%d,%d)", loc.getBlock(), loc.getBlockY(), loc.getBlockZ());
+        return String.format("(%d,%d,%d)", loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
     }
     
     private static String getSignText(Location loc) {
@@ -105,14 +105,14 @@ public final class RefCmdExecuter {
                 }
             }
             if (ret.length() == 0) {
-                return "§C<NO TEXT>";
+                return ChatColor.RED + "<NO TEXT>";
             }
             else {
-                return ret.length() > 15 ? "§A" + ret.toString().substring(0,14) : "§A" + ret;
+                return ChatColor.GREEN.toString() + (ret.length() > 15 ? ret.toString().substring(0,14) : ret);
             }
         }
         catch(Exception ex){
-            return "§C" + Resources.ERROR_INLINE;
+            return ChatColor.RED + Resources.ERROR_INLINE;
         }
     }
     
@@ -132,12 +132,12 @@ public final class RefCmdExecuter {
             }
             Clipboard.put(cmd.getPlayer(), id, selection.shop);
             if (id == null) {
-                cmd.getPlayer().sendMessage(String.format("§1%s shop has been added to your clipboard.", 
-                        selection.isOwner ? "Your§f" : selection.shop.owner + "§f's"));
+                cmd.getPlayer().sendMessage(String.format(ChatColor.BLUE + "%s shop has been added to your clipboard.", 
+                    selection.isOwner ? "Your" + ChatColor.WHITE : selection.shop.owner + ChatColor.WHITE + "'s"));
             }
             else {
                 cmd.getPlayer().sendMessage(String.format("§1%s shop has been added to your clipboard as '§a%s§F'.", 
-                        selection.isOwner ? "Your§f" : selection.shop.owner + "§f's", id));
+                    selection.isOwner ? "Your§f" : selection.shop.owner + "§f's", id));
             }
         }
         return true;
