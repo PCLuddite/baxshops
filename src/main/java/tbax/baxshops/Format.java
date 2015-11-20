@@ -39,7 +39,7 @@ public class Format
 {   
     public static String money(String in)
     {
-        return fin(ChatColor.GREEN + in);
+        return reset(ChatColor.GREEN + in);
     }
     
     public static String money(double d)
@@ -49,7 +49,7 @@ public class Format
     
     public static String money2(String in)
     {
-        return fin(ChatColor.DARK_GREEN + in);
+        return reset(ChatColor.DARK_GREEN + in);
     }
     
     public static String money2(double d)
@@ -59,7 +59,7 @@ public class Format
     
     public static String number(String n)
     {
-        return fin(ChatColor.AQUA + n);
+        return reset(ChatColor.AQUA + n);
     }
     
     public static String number(int n)
@@ -69,12 +69,12 @@ public class Format
     
     public static String error(String err)
     {
-        return fin(ChatColor.RED + err);
+        return reset(ChatColor.RED + err);
     }
     
     public static String location(String loc)
     {
-        return fin(ChatColor.YELLOW + loc);
+        return reset(ChatColor.GOLD + loc);
     }
     
     public static String location(Location loc)
@@ -89,27 +89,27 @@ public class Format
     
     public static String itemname(String name)
     {
-        return fin(ChatColor.YELLOW + name);
+        return reset(ChatColor.GREEN + name);
     }
     
     public static String username(String name)
     {
-        return fin(ChatColor.DARK_BLUE + name);
+        return reset(ChatColor.DARK_BLUE + name);
     }
     
     public static String username2(String name)
     {
-        return fin(ChatColor.LIGHT_PURPLE + name);
+        return reset(ChatColor.LIGHT_PURPLE + name);
     }
     
     public static String command(String cmd)
     {
-        return fin(ChatColor.AQUA + cmd);
+        return reset(ChatColor.AQUA + cmd);
     }
     
     public static String retailprice(String price)
     {
-        return fin(ChatColor.DARK_GREEN + price);
+        return reset(ChatColor.DARK_GREEN + price);
     }
     
     public static String retailprice(double price)
@@ -119,7 +119,7 @@ public class Format
     
     public static String refundprice(String price)
     {
-        return fin(ChatColor.BLUE + price);
+        return reset(ChatColor.BLUE + price);
     }
     
     public static String refundprice(double price)
@@ -129,12 +129,12 @@ public class Format
     
     public static String enchantments(String ench)
     {
-        return fin(ChatColor.DARK_PURPLE + ench);
+        return reset(ChatColor.DARK_PURPLE + ench);
     }
     
     public static String bullet(String b)
     {
-        return fin(ChatColor.GRAY + b);
+        return reset(ChatColor.GRAY + b);
     }
     
     public static String bullet(int b)
@@ -144,21 +144,21 @@ public class Format
     
     public static String listname(String name)
     {
-        return fin(ChatColor.WHITE + name);
+        return reset(ChatColor.WHITE + name);
     }
     
     public static String flag(String flag)
     {
-        return fin(ChatColor.YELLOW + flag);
+        return reset(ChatColor.YELLOW + flag);
     }
     
     public static String keyword(String word)
     {
-        return fin(ChatColor.GREEN + word);
+        return reset(ChatColor.GREEN + word);
     }
     
-    private static String fin(String form)
+    private static String reset(String format)
     {
-        return form + ChatColor.RESET;
+        return format + ChatColor.RESET;
     }
 }
