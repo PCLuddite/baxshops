@@ -25,7 +25,6 @@
 package tbax.baxshops.executer;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -702,18 +701,16 @@ public final class ShopExecuter {
             return true;
         }
         
-        HashMap<Integer, ItemStack> overflow = cmd.getPlayer().getInventory().addItem(purchased.toItemStack());
-        int refunded = 0;
-        if (overflow.size() > 0) {
-            refunded = overflow.get(0).getAmount();
-            if (overflow.size() == amount) {
+        int overflow = Main.giveItem(cmd.getPlayer(), purchased.toItemStack());
+        if (overflow > 0) {
+            if (overflow == amount) {
                 Main.sendError(cmd.getPlayer(), Resources.NO_ROOM);
                 return true;
             }
-            price = Main.roundTwoPlaces((amount - refunded) * entry.retailPrice);
+            price = Main.roundTwoPlaces((amount - overflow) * entry.retailPrice);
             cmd.getSender().sendMessage(
-                String.format(Resources.SOME_ROOM,
-                    amount - refunded, 
+                String.format(Resources.SOME_ROOM + " " + Resources.CHARGED_MSG,
+                    amount - overflow, 
                     itemName,
                     Format.money(price)
                 )
@@ -729,12 +726,12 @@ public final class ShopExecuter {
         }
         Main.econ.withdrawPlayer(cmd.getPlayer().getName(), price);
         if (!shop.infinite) {
-            entry.subtract(amount - refunded);
+            entry.subtract(amount - overflow);
         }
 
         Main.econ.depositPlayer(shop.owner, price);
         
-        purchased.subtract(refunded);
+        purchased.subtract(overflow);
         
         cmd.getSender().sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.econ.getBalance(cmd.getSender().getName()))));
         cmd.getMain().state.sendNotification(shop.owner, new BuyNotification(shop, purchased, cmd.getPlayer().getName()));        
@@ -1014,11 +1011,14 @@ public final class ShopExecuter {
         stack.setAmount(amt);
         
         if (amt > 0) {
-            if (Main.inventoryFitsItem(cmd.getPlayer(), stack)) {
-                cmd.getPlayer().getInventory().addItem(stack);
-            }
-            else {
-                Main.sendError(cmd.getPlayer(), Resources.NO_ROOM);
+            int overflow = Main.giveItem(cmd.getPlayer(), stack);
+            if (overflow > 0) {
+                cmd.getPlayer().sendMessage(
+                    String.format(Resources.SOME_ROOM,
+                        amt - overflow,
+                        ItemNames.getItemName(stack)
+                    )
+                );
                 return true;
             }
         }

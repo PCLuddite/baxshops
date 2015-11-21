@@ -389,10 +389,51 @@ public final class Main extends JavaPlugin implements Listener {
         return false;
     }
     
-    public static boolean giveToPlayer(Player player, ItemStack item)
+    /**
+     * Gives as much of an item as possible to a player
+     *
+     * @param pl the player receiving the item
+     * @param item the item to give
+     * @return the number of items that could not be added
+     */
+    public static int giveItem(Player pl, ItemStack item)
+    {
+        int left = item.getAmount(), // how many items are left to add
+            max      = item.getMaxStackSize();
+        Inventory inv = pl.getInventory();
+        if (max == -1) {
+            max = inv.getMaxStackSize();
+        }
+        for (int i = 0; i < inv.getSize(); ++i) {
+            ItemStack curr = inv.getItem(i);
+            if (curr == null || curr.getType() == Material.AIR) {
+                left -= max;
+                if (left > 0) {
+                    pl.getInventory().addItem(new ItemStack(item.getType(), max, item.getDurability()));
+                }
+                else {
+                    pl.getInventory().addItem(new ItemStack(item.getType(), left + max, item.getDurability()));
+                    return 0; // everything could fit
+                }
+            }
+            else if (curr.getType() == item.getType() && curr.getDurability() == item.getDurability()) {
+                left -= max - curr.getAmount();
+                if (left > 0) {
+                    curr.setAmount(max);
+                }
+                else {
+                    curr.setAmount(left + (max - curr.getAmount()));
+                    return 0; // everything could fit
+                }
+            }
+        }
+        return left;
+    }
+    
+    public static boolean tryGiveItem(Player player, ItemStack item)
     {
         if (inventoryFitsItem(player, item)){
-            player.getInventory().addItem(item);
+            giveItem(player, item);
             return true;
         }
         else {

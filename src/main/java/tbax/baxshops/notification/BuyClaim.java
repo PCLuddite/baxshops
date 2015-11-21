@@ -69,7 +69,7 @@ public final class BuyClaim implements Claimable {
     
     @Override
     public boolean claim(Player player) {
-        if (Main.giveToPlayer(player, entry.toItemStack())) {
+        if (Main.tryGiveItem(player, entry.toItemStack())) {
             if (entry.getAmount() == 1) {
                 player.sendMessage("The item have been added to your inventory.");
             }

@@ -124,7 +124,7 @@ public final class SellRequest implements Request, TimedNotification {
                 return false;
             }
         }
-        else if (!Main.giveToPlayer(player, item)) {
+        else if (!Main.tryGiveItem(player, item)) {
             sendError(player, Resources.NO_ROOM);
             return false;
         }

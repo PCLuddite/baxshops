@@ -55,11 +55,12 @@ public final class Resources {
     public static final String ERROR_INLINE = "<ERROR>";
     public static final String NOT_FOUND_HELDITEM = "You need to be holding an item to perform this action.";
     public static final String INVALID_SHOP_ACTION = "'/shop %s' is not a valid action";
+    public static final String ERROR_GENERIC = "Could not complete action because of the following error:\n%s";
     // Info
     public static final String CURRENT_BALANCE = "Your current balance is %s.";
-    public static final String SOME_ROOM = "Only " + ChatColor.RED + "%d %s" + ChatColor.RESET + " fit in your inventory. You were charged %s.";
+    public static final String SOME_ROOM = "Only " + ChatColor.RED + "%d %s" + ChatColor.RESET + " fit in your inventory.";
+    public static final String CHARGED_MSG = "You were charged %s.";
     public static final String NO_SUPPLIES = "There is not enough of this item in the shop.";
-    public static final String ERROR_GENERIC = "Could not complete action because of the following error:\n%s";
     public static final String NOT_FOUND_ALIAS = "The item alias could not be found!";
     public static final String NOT_FOUND_SIGN = "%s's shop is missing its sign!";
     public static final String INVALID_TASTINESS = "Invalid tastiness";
