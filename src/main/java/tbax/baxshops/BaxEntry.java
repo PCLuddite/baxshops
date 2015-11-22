@@ -185,7 +185,7 @@ public final class BaxEntry {
             }
         }
         
-        if (ItemNames.damageableIds.contains(stack.getTypeId()) && stack.getDurability() > 0) {
+        if (ItemNames.isDamageable(stack.getType()) && stack.getDurability() > 0) {
             if (infinite || getAmount() > 0) {
                 name.append(ChatColor.YELLOW);
             }

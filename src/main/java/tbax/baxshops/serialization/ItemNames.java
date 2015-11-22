@@ -29,9 +29,6 @@ import java.util.*;
 import tbax.baxshops.*;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -44,16 +41,16 @@ public final class ItemNames {
      * A lookup table for aliases. Aliases are stored as
      * <code>alias =&gt; (ID &lt;&lt; 16) | (damageValue)</code>
      */
-    public static HashMap<Long, String[]> aliases = new HashMap<>();
+    private static final HashMap<Long, String[]> aliases = new HashMap<>();
     /**
      * A lookup table for item names. Item names are stored as
      * <code>(ID &lt;&lt; 16) | (damageValue) =&gt; itemName</code>
      */
-    public static HashMap<Long, String> itemNames = new HashMap<>();
+    private static final HashMap<Long, String> itemNames = new HashMap<>();
     /**
      * An array of items that can be damaged
      */
-    public static ArrayList<Integer> damageableIds = new ArrayList<>();
+    private static final ArrayList<Material> damageableIds = new ArrayList<>();
         
     /**
      * Attempts to find an item which matches the given item name (alias)
@@ -213,7 +210,14 @@ public final class ItemNames {
         return sb.toString();
     }
     
-    
+    /**
+     * Determines if a material can be damaged
+     * @param item
+     * @return 
+     */
+    public static boolean isDamageable(Material item) {
+        return damageableIds.contains(item);
+    }
     
     /**
      * Loads the damageable items list from the damageable.txt resource.
@@ -234,7 +238,7 @@ public final class ItemNames {
                     continue;
                 }
                 try {
-                    damageableIds.add(Integer.parseInt(line));
+                    damageableIds.add(Material.getMaterial(line));
                 }
                 catch(NumberFormatException ex) {
                 }

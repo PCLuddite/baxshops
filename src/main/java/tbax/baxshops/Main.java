@@ -168,7 +168,7 @@ public final class Main extends JavaPlugin implements Listener {
         return NotifyExecuter.execute(cmd);
     }
     
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onBlockBreak(BlockBreakEvent event){
         Block block = event.getBlock();
         Location loc = block.getLocation();
@@ -179,7 +179,7 @@ public final class Main extends JavaPlugin implements Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerInteract(PlayerInteractEvent event) {
         Block b = event.getClickedBlock();
         if (b == null) {
@@ -293,7 +293,6 @@ public final class Main extends JavaPlugin implements Listener {
                     pl.sendMessage("[Left " + Format.username(s.shop.owner) + "'s shop]");
                 }
                 selectedShops.remove(event.getPlayer());
-                clearTempOpts(pl);
             }
         }
     }
@@ -430,6 +429,12 @@ public final class Main extends JavaPlugin implements Listener {
         return left;
     }
     
+    /**
+     * Checks if an ItemStack can be given to a player, then gives it
+     * @param player
+     * @param item
+     * @return true if ItemStack was given, false otherwise
+     */
     public static boolean tryGiveItem(Player player, ItemStack item)
     {
         if (inventoryFitsItem(player, item)){
@@ -441,55 +446,15 @@ public final class Main extends JavaPlugin implements Listener {
         }
     }
     
-    public void clearTempOpts(Player pl)
-    {
-        HashMap<String, Object> opts = tempSettings.get(pl);
-        if (opts != null) {
-            opts.clear();
-        }
-    }
-    
-    public Object getTempOpt(Player pl, String option)
-    {
-        HashMap<String, Object> opts = tempSettings.get(pl);
-        if (opts == null) {
-            return null;
-        }
-        else {
-            return opts.get(option);
-        }
-    }
-    
-    public void setTempOpt(Player pl, String option, Object obj)
-    {
-        HashMap<String, Object> opts = tempSettings.get(pl);
-        if (opts == null) {
-            opts = new HashMap<>();
-            tempSettings.put(pl, opts);
-        }
-        opts.put(option, obj);
-    }
-    
-    public boolean getTempOptBool(Player pl, String option)
-    {
-        if (getTempOpt(pl, option) == null) {
-            return false;
-        }
-        else {
-            return (boolean)getTempOpt(pl, option);
-        }
-    }
-    
     public void removeSelection(Player pl)
     {
         if (selectedShops.get(pl) != null) {
             selectedShops.remove(pl);
-            clearTempOpts(pl);
         }
     }
     
     /**
-     * Gets around the imprecision of the double type
+     * Tries to get around the imprecision of the double type
      * @param value the value to round
      * @return the rounded value
      */
