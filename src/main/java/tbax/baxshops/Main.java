@@ -416,12 +416,13 @@ public final class Main extends JavaPlugin implements Listener {
                 }
             }
             else if (curr.getType() == item.getType() && curr.getDurability() == item.getDurability()) {
-                left -= max - curr.getAmount();
+                int canfit = max - curr.getAmount();
+                left -= canfit;
                 if (left > 0) {
-                    curr.setAmount(max);
+                    pl.getInventory().addItem(new ItemStack(item.getType(), max, item.getDurability()));
                 }
                 else {
-                    curr.setAmount(left + (max - curr.getAmount()));
+                    pl.getInventory().addItem(new ItemStack(item.getType(), left + canfit, item.getDurability()));
                     return 0; // everything could fit
                 }
             }
