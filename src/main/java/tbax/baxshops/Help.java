@@ -75,12 +75,10 @@ public final class Help {
             ));
 
     public static final CommandHelp add = new CommandHelp("shop add", "+,ad", "<$buy> [$sell=no]", "add held item to this shop",
-            concat(CommandHelp.args(
+            CommandHelp.args(
                             "buy-price", "the price of a single item in the stack",
                             "sell-price", "the selling price of a single item in the stack (by default the item cannot be sold)"
-                    ), new String[]{
-                        "§BWarning:§F Once you add an item to a shop, you cannot remove it."
-                    }));
+                    ));
     public static final CommandHelp remove = new CommandHelp("shop remove", "rm", "<item>", "removes an item",
             CommandHelp.arg("item", "the name or entry number of the item to remove"));
     public static final CommandHelp restock = new CommandHelp("shop restock", "r", null, "restock this shop with your held item");
@@ -114,6 +112,9 @@ public final class Help {
                              "amount", "the amount to take. Default is 1."));
     
     public static final CommandHelp list = new CommandHelp("shop list", null, "", "List all shop locations");
+    
+    public static final CommandHelp teleport = new CommandHelp("shop teleport", null, "<location>", "Pastes a shop from the clipboard",
+            CommandHelp.args("location", "the location index (given by /shop list) to teleport to"));
 
     /**
      * The general index of commands
@@ -277,24 +278,8 @@ public final class Help {
         
         commands.put("take", take);
         commands.put("t", take);
-    }
-
-    /**
-     * Concatenate two String arrays
-     *
-     * @param a the first String array
-     * @param b the second String array
-     * @return a String array with the elements of a followed by the elements of
-     * b
-     */
-    private static final String[] concat(String[] a, String[] b) {
-        String[] result = new String[a.length + b.length];
-        for (int i = 0; i < a.length; ++i) {
-            result[i] = a[i];
-        }
-        for (int i = 0; i < b.length; ++i) {
-            result[i + a.length] = b[i];
-        }
-        return result;
+        
+        commands.put("tp", teleport);
+        commands.put("teleport", teleport);
     }
 }

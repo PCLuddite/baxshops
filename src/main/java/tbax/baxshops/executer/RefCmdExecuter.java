@@ -29,21 +29,17 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
-import tbax.baxshops.BaxShop;
-import tbax.baxshops.CommandHelp;
-import tbax.baxshops.Main;
-import static tbax.baxshops.Main.sendError;
-import tbax.baxshops.Resources;
-import tbax.baxshops.ShopSelection;
+import tbax.baxshops.*;
 import tbax.baxshops.serialization.Clipboard;
 
 /**
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public final class RefCmdExecuter {
-    
-    public static boolean execute(ShopCmd cmd) {
+public final class RefCmdExecuter
+{    
+    public static boolean execute(ShopCmd cmd)
+    {
         switch (cmd.getAction()) {
             case "paste":
                 return create(cmd);
@@ -51,18 +47,22 @@ public final class RefCmdExecuter {
                 return list(cmd);
             case "copy":
                 return copy(cmd);
+            case "tp":
+            case "teleport":
+                return teleport(cmd);
         }
         return false;
     }
     
-    public static boolean list(ShopCmd cmd) {
+    public static boolean list(ShopCmd cmd)
+    {
         ShopSelection selection = cmd.getMain().selectedShops.get(cmd.getPlayer());
         if (selection == null) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
         }
         else {
             if (!cmd.getSelection().isOwner && !cmd.getPlayer().hasPermission("shops.admin")) {
-                sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
+                Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
                 return true;
             }
             cmd.getPlayer().sendMessage(CommandHelp.header("Shop Locations"));
@@ -75,7 +75,7 @@ public final class RefCmdExecuter {
                     cmd.getPlayer().sendMessage(
                         String.format("%-3s %-16s %-18s %s",
                             ChatColor.WHITE.toString() + (index + 1) + ".", 
-                            ChatColor.YELLOW + formatLoc(selection.shop.getLocations().get(index)),
+                            Format.location(selection.shop.getLocations().get(index)),
                             ChatColor.LIGHT_PURPLE + getSignText(selection.shop.getLocations().get(index)),
                             (selection.location.equals(selection.shop.getLocations().get(index)) ? ChatColor.LIGHT_PURPLE + " (current)" : ""))
                     );
@@ -88,11 +88,48 @@ public final class RefCmdExecuter {
         return true;
     }
     
-    private static String formatLoc(Location loc) {
-        return String.format("(%d,%d,%d)", loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+    public static boolean teleport(ShopCmd cmd)
+    {
+        if (!cmd.getPlayer().hasPermission("shops.admin")) {
+            Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
+            return true;
+        }
+        ShopSelection selection = cmd.getMain().selectedShops.get(cmd.getPlayer());
+        if (selection == null) {
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+            return true;
+        }
+        if (!cmd.ensureArgs(1)) {
+            return true;
+        }
+        int loc;
+        try {
+            loc = Integer.parseInt(cmd.getArg(1));
+        }
+        catch(NumberFormatException e) {
+            Main.sendError(cmd.getPlayer(), "Expected a location number. For a list of locations, use /shop list.");
+            return true;
+        }
+        if (loc < 1 || loc > selection.shop.getLocations().size()) {
+            Main.sendError(cmd.getPlayer(), "That shop location does not exist.");
+            return true;
+        }
+        
+        Location old = selection.location;
+        selection.location = selection.shop.getLocations().get(loc - 1);
+        if (cmd.getPlayer().teleport(selection.location)) {
+            cmd.getPlayer().sendMessage("Teleported you to " + Format.location(selection.location));
+        }
+        else {
+            selection.location = old;
+            Main.sendError(cmd.getPlayer(), "Unable to teleport you to that location.");
+        }
+        
+        return true;
     }
     
-    private static String getSignText(Location loc) {
+    private static String getSignText(Location loc)
+    {
         try {
             Sign sign = (Sign)loc.getBlock().getState();
             StringBuilder ret = new StringBuilder();
@@ -116,14 +153,15 @@ public final class RefCmdExecuter {
         }
     }
     
-    public static boolean copy(ShopCmd cmd) {
+    public static boolean copy(ShopCmd cmd)
+    {
         ShopSelection selection = cmd.getMain().selectedShops.get(cmd.getPlayer());
         if (selection == null) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
         }
         else {
             if (!selection.isOwner && !cmd.getPlayer().hasPermission("shops.admin")) {
-                sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
+                Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
                 return true;
             }
             String id = "DEFAULT";
@@ -143,11 +181,12 @@ public final class RefCmdExecuter {
         return true;
     }
     
-    public static boolean create(ShopCmd cmd) {
+    public static boolean create(ShopCmd cmd)
+    {
         String id = cmd.getNumArgs() > 1 ? cmd.getArg(1) : null;
         BaxShop shopSource = Clipboard.get(cmd.getPlayer(), id);
         if (shopSource == null) {
-            sendError(cmd.getPlayer(), String.format("No data was found on the clipboard with id '%s'.\nSelect a shop and use:\n/shop location save [id]", id == null ? "DEFAULT" : id));
+            Main.sendError(cmd.getPlayer(), String.format("No data was found on the clipboard with id '%s'.\nSelect a shop and use:\n/shop location save [id]", id == null ? "DEFAULT" : id));
             return true;
         }
         
