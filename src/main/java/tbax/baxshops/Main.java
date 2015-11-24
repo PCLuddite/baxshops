@@ -408,10 +408,10 @@ public final class Main extends JavaPlugin implements Listener {
             if (curr == null || curr.getType() == Material.AIR) {
                 left -= max;
                 if (left > 0) {
-                    pl.getInventory().addItem(new ItemStack(item.getType(), max, item.getDurability()));
+                    pl.getInventory().addItem(cloneAmnt(item, max));
                 }
                 else {
-                    pl.getInventory().addItem(new ItemStack(item.getType(), left + max, item.getDurability()));
+                    pl.getInventory().addItem(cloneAmnt(item, left + max));
                     return 0; // everything could fit
                 }
             }
@@ -419,15 +419,28 @@ public final class Main extends JavaPlugin implements Listener {
                 int canfit = max - curr.getAmount();
                 left -= canfit;
                 if (left > 0) {
-                    pl.getInventory().addItem(new ItemStack(item.getType(), max, item.getDurability()));
+                    pl.getInventory().addItem(cloneAmnt(item, max));
                 }
                 else {
-                    pl.getInventory().addItem(new ItemStack(item.getType(), left + canfit, item.getDurability()));
+                    pl.getInventory().addItem(cloneAmnt(item, left + canfit));
                     return 0; // everything could fit
                 }
             }
         }
         return left;
+    }
+    
+    /**
+     * Clones an ItemStack and sets the amount
+     * @param item
+     * @param amt
+     * @return a cloned ItemStack
+     */
+    public static ItemStack cloneAmnt(ItemStack item, int amt)
+    {
+        ItemStack cloned = item.clone();
+        cloned.setAmount(amt);
+        return cloned;
     }
     
     /**
