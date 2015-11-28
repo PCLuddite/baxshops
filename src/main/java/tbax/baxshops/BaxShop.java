@@ -25,10 +25,12 @@
 package tbax.baxshops;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
@@ -36,7 +38,7 @@ import org.bukkit.inventory.ItemStack;
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public final class BaxShop {
+public final class BaxShop implements ConfigurationSerializable {
     public static final int ITEMS_PER_PAGE = 7;
     
     public int uid = -1;
@@ -199,5 +201,34 @@ public final class BaxShop {
             }
         }
         return null;
+    }
+
+    @Override
+    public Map<String, Object> serialize()
+    {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("owner", owner);
+        map.put("infinite", infinite);
+        map.put("notify", notify);
+        map.put("sellToShop", sellToShop);
+        map.put("buyRequests", buyRequests);
+        map.put("sellRequests", sellRequests);
+        map.put("inventory", inventory);
+        map.put("locations", locations);
+        return map;
+    }
+    
+    public static BaxShop deserialize(Map<String, Object> args)
+    {
+        BaxShop shop = new BaxShop();
+        shop.buyRequests = (boolean)args.get("buyRequests");
+        shop.infinite = (boolean)args.get("infinite");
+        shop.inventory = (ArrayList)args.get("inventory");
+        shop.locations = (ArrayList)args.get("locations");
+        shop.notify = (boolean)args.get("notify");
+        shop.owner = (String)args.get("owner");
+        shop.sellRequests = (boolean)args.get("sellRequests");
+        shop.sellToShop = (boolean)args.get("sellToShop");
+        return shop;
     }
 }

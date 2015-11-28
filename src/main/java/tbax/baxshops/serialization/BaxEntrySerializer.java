@@ -29,6 +29,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import java.util.Map;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -37,7 +40,7 @@ import tbax.baxshops.Main;
 
 /**
  *
- * @author tbaxendale
+* @author Timothy Baxendale (pcluddite@hotmail.com)
  */
 public final class BaxEntrySerializer
 {

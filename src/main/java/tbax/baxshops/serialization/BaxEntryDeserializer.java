@@ -38,7 +38,7 @@ import tbax.baxshops.BaxEntry;
 
 /**
  *
- * @author tbaxendale
+* @author Timothy Baxendale (pcluddite@hotmail.com)
  */
 public final class BaxEntryDeserializer
 {       

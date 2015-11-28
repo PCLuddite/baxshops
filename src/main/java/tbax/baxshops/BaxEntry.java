@@ -24,11 +24,14 @@
  */
 package tbax.baxshops;
 
+import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import tbax.baxshops.serialization.ItemNames;
 
@@ -36,7 +39,7 @@ import tbax.baxshops.serialization.ItemNames;
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public final class BaxEntry {
+public final class BaxEntry implements ConfigurationSerializable {
     private ItemStack stack;
     public double retailPrice = -1;
     public double refundPrice = -1;
@@ -167,12 +170,26 @@ public final class BaxEntry {
         return cloned;
     }
     
+    private static Map<Enchantment, Integer> getEnchants(ItemStack item)
+    {
+        if (!item.getEnchantments().isEmpty()) {
+            return item.getEnchantments();
+        }
+        else if (item.hasItemMeta() && item.getItemMeta().hasEnchants()) {
+            return item.getItemMeta().getEnchants();
+        }
+        else if (item.getType() == Material.ENCHANTED_BOOK && !((EnchantmentStorageMeta)item.getItemMeta()).getStoredEnchants().isEmpty()) {
+            return ((EnchantmentStorageMeta)item.getItemMeta()).getStoredEnchants();
+        }
+        return null;
+    }
+    
     public String toString(int index) {
         StringBuilder name = new StringBuilder(ItemNames.getItemName(this));
         
-        if (!stack.getEnchantments().isEmpty()) {
+        if (getEnchants(stack) != null) {
             StringBuilder enchName = new StringBuilder(" ("); // Enchanted items are in purple
-            for(Map.Entry<Enchantment, Integer> ench : stack.getEnchantments().entrySet()) {
+            for(Map.Entry<Enchantment, Integer> ench : getEnchants(stack).entrySet()) {
                 enchName.append(ench.getKey().getName().substring(0,3)); // List each enchantment
                 enchName.append(ench.getValue()); // and its value
                 enchName.append(", "); // separated by commas
@@ -218,5 +235,26 @@ public final class BaxEntry {
                 }
             }
         }
+    }
+
+    @Override
+    public Map<String, Object> serialize()
+    {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("quantity", quantity);
+        map.put("retailPrice", retailPrice);
+        map.put("refundPrice", refundPrice);
+        map.put("stack", stack.serialize());
+        return map;
+    }
+    
+    public static BaxEntry deserialize(Map<String, Object> args)
+    {
+        BaxEntry entry = new BaxEntry();
+        entry.quantity = (int)args.get("quantity");
+        entry.retailPrice = (double)args.get("retailPrice");
+        entry.refundPrice = (double)args.get("refundPrice");
+        entry.stack = ItemStack.deserialize((Map)args.get("stack"));
+        return entry;
     }
 }
