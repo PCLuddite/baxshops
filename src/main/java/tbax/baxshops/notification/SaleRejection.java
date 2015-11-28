@@ -26,6 +26,9 @@ package tbax.baxshops.notification;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import java.util.HashMap;
+import java.util.Map;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import tbax.baxshops.BaxEntry;
@@ -40,7 +43,8 @@ import tbax.baxshops.serialization.ItemNames;
 /**
  * A SaleRejection notifies a seller that his/her offer was rejected.
  */
-public final class SaleRejection implements Claimable {
+public final class SaleRejection implements ConfigurationSerializable, Claimable
+{
     private static final long serialVersionUID = 1L;
     /**
      * An entry for the offered item
@@ -61,14 +65,23 @@ public final class SaleRejection implements Claimable {
      * @param entry an entry for the item (note: not the one in the shop)
      * @param seller the seller of the item
      */
-    public SaleRejection(BaxShop shop, BaxEntry entry, String seller) {
+    public SaleRejection(BaxShop shop, BaxEntry entry, String seller)
+    {
         this.shop = shop;
         this.entry = entry;
         this.seller = seller;
     }
+    
+    public SaleRejection(Map<String, Object> args)
+    {
+        this.seller = (String)args.get("seller");
+        this.entry = (BaxEntry)args.get("entry");
+        this.shop = Main.instance.state.getShop((int)args.get("shop"));
+    }
 
     @Override
-    public String getMessage(Player player) {
+    public String getMessage(Player player)
+    {
         if (player == null || !player.getName().equals(seller)) {
             return String.format("%s rejected %s's request to sell %s for %s.",
                 Format.username(shop.owner),
@@ -87,7 +100,8 @@ public final class SaleRejection implements Claimable {
     }
 
     @Override
-    public boolean claim(Player player) {
+    public boolean claim(Player player)
+    {
         ItemStack item = entry.toItemStack();
         if (Main.inventoryFitsItem(player, item)){
             player.getInventory().addItem(item);
@@ -102,7 +116,8 @@ public final class SaleRejection implements Claimable {
     public static final String TYPE_ID = "SaleReject";
     
     @Override
-    public JsonElement toJson(double version) {
+    public JsonElement toJson(double version)
+    {
         JsonObject o = new JsonObject();
         o.addProperty("type", "SaleReject");
         o.addProperty("seller", seller);
@@ -111,14 +126,35 @@ public final class SaleRejection implements Claimable {
         return o;
     }
     
-    public SaleRejection() {
+    public SaleRejection()
+    {
     }
     
-    public static SaleRejection fromJson(double version, JsonObject o) {
+    public static SaleRejection fromJson(double version, JsonObject o)
+    {
         SaleRejection claim = new SaleRejection();
         claim.seller = o.get("seller").getAsString();
         claim.shop = Main.instance.state.getShop(o.get("shop").getAsInt());
         claim.entry = BaxEntryDeserializer.deserialize(version, o.get("entry").getAsJsonObject());
         return claim;
+    }
+    
+    public Map<String, Object> serialize()
+    {
+        Map<String, Object> args = new HashMap<>();
+        args.put("seller", seller);
+        args.put("shop", shop.uid);
+        args.put("entry", entry);
+        return args;
+    }
+    
+    public static SaleRejection deserialize(Map<String, Object> args)
+    {
+        return new SaleRejection(args);
+    }
+    
+    public static SaleRejection valueOf(Map<String, Object> args)
+    {
+        return deserialize(args);
     }
 }

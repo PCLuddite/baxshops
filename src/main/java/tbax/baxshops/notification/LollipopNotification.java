@@ -26,16 +26,19 @@ package tbax.baxshops.notification;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 
 /**
  * A LollipopNotification notifies a player that someone sent him/her a
  * lollipop.
  */
-public final class LollipopNotification implements Notification {
+public final class LollipopNotification implements ConfigurationSerializable, Notification
+{
     private static final long serialVersionUID = 1L;
 
     public static final double DEFAULT_TASTINESS = 40;
@@ -57,14 +60,22 @@ public final class LollipopNotification implements Notification {
 
     public String sender;
     public double tastiness;
+    
+    public LollipopNotification(Map<String, Object> args)
+    {
+        this.sender = (String)args.get("sender");
+        this.tastiness = (double)args.get("tastiness");
+    }
 
-    public LollipopNotification(String sender, double tastiness) {
+    public LollipopNotification(String sender, double tastiness)
+    {
         this.sender = sender;
         this.tastiness = tastiness < 0 ? 0 : tastiness > 100 ? 100 : tastiness;
     }
 
     @Override
-    public String getMessage(Player player) {
+    public String getMessage(Player player)
+    {
         String adjective = null;
         for (Entry<Double, String> entry : adjectives.entrySet()) {
                 if (tastiness >= entry.getKey()) {
@@ -77,7 +88,8 @@ public final class LollipopNotification implements Notification {
     public static final String TYPE_ID = "lolly";
 
     @Override
-    public JsonElement toJson(double version) {
+    public JsonElement toJson(double version)
+    {
         JsonObject o = new JsonObject();
         o.addProperty("type", TYPE_ID);
         o.addProperty("sender", sender);
@@ -85,13 +97,33 @@ public final class LollipopNotification implements Notification {
         return o;
     }
 
-    public LollipopNotification() {
+    public LollipopNotification()
+    {
     }
     
-    public static LollipopNotification fromJson(double version, JsonObject o) {
+    public static LollipopNotification fromJson(double version, JsonObject o)
+    {
         LollipopNotification lolly = new LollipopNotification();
         lolly.sender = o.get("sender").getAsString();
         lolly.tastiness = o.get("tastiness").getAsInt();
         return lolly;
+    }
+    
+    public Map<String, Object> serialize()
+    {
+        Map<String, Object> args = new HashMap<>();
+        args.put("sender", sender);
+        args.put("tastiness", tastiness);
+        return args;
+    }
+    
+    public static LollipopNotification deserialize(Map<String, Object> args)
+    {
+        return new LollipopNotification(args);
+    }
+    
+    public static LollipopNotification valueOf(Map<String, Object> args)
+    {
+        return deserialize(args);
     }
 }

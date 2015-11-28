@@ -28,7 +28,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
@@ -44,7 +47,7 @@ import tbax.baxshops.serialization.ItemNames;
  * to buy an item.
  * BuyRequests expire after five days.
  */
-public final class BuyRequest implements Request, TimedNotification {
+public final class BuyRequest implements ConfigurationSerializable, Request, TimedNotification {
     private static final long serialVersionUID = 1L;
     /**
      * An entry for the purchased item
@@ -62,6 +65,18 @@ public final class BuyRequest implements Request, TimedNotification {
      * The seller of the item
      */
     public String buyer;
+    
+    public BuyRequest()
+    {
+    }
+    
+    public BuyRequest(Map<String, Object> args)
+    {
+        buyer = (String)args.get("buyer");
+        shop = Main.instance.state.getShop((int)args.get("shop"));
+        purchased = (BaxEntry)args.get("entry");
+        expirationDate = (long)args.get("expires");
+    }
 
     /**
      * Constructs a new notification.
@@ -69,7 +84,8 @@ public final class BuyRequest implements Request, TimedNotification {
      * @param entry an entry for the item (note: not the one in the shop)
      * @param buyer the buyer of the item
      */
-    public BuyRequest(BaxShop shop, BaxEntry entry, String buyer) {
+    public BuyRequest(BaxShop shop, BaxEntry entry, String buyer)
+    {
         this.shop = shop;
         this.purchased = entry;
         this.buyer = buyer;
@@ -81,7 +97,8 @@ public final class BuyRequest implements Request, TimedNotification {
     }
 	
     @Override
-    public String getMessage(Player player) {
+    public String getMessage(Player player)
+    {
         if (player == null || !player.getName().equals(shop.owner)) {
             return String.format("%s wants to buy %s from %s for %s.",
                         Format.username(buyer),
@@ -100,7 +117,8 @@ public final class BuyRequest implements Request, TimedNotification {
     }
 	
     @Override
-    public boolean accept(Player acceptingPlayer) {            
+    public boolean accept(Player acceptingPlayer)
+    {            
         double price = Main.roundTwoPlaces(purchased.getAmount() * purchased.refundPrice);
 
         Economy econ = Main.econ;
@@ -117,7 +135,8 @@ public final class BuyRequest implements Request, TimedNotification {
     }
 	
     @Override
-    public boolean reject(Player player) {
+    public boolean reject(Player player)
+    {
         if (!shop.infinite) {
             BaxEntry shopEntry = shop.findEntry(purchased.getType(), purchased.getDurability());
             if (shopEntry == null) {
@@ -135,14 +154,16 @@ public final class BuyRequest implements Request, TimedNotification {
     }
 
     @Override
-    public long expirationDate() {
+    public long expirationDate()
+    {
         return expirationDate;
     }
     
     public static final String TYPE_ID = "BuyRequest";
     
     @Override
-    public JsonElement toJson(double version) {
+    public JsonElement toJson(double version)
+    {
         JsonObject o = new JsonObject();
         o.addProperty("type", TYPE_ID);
         o.addProperty("buyer", buyer);
@@ -152,15 +173,33 @@ public final class BuyRequest implements Request, TimedNotification {
         return o;
     }
     
-    public BuyRequest() {
-    }
-    
-    public static BuyRequest fromJson(double version, JsonObject o) {
+    public static BuyRequest fromJson(double version, JsonObject o)
+    {
         BuyRequest request = new BuyRequest();
         request.buyer = o.get("buyer").getAsString();
         request.shop = Main.instance.state.getShop(o.get("shop").getAsInt());
         request.expirationDate = o.get("expires").getAsLong();
         request.purchased = BaxEntryDeserializer.deserialize(version, o.get("entry").getAsJsonObject());
         return request;
+    }
+    
+    public Map<String, Object> serialize()
+    {
+        Map<String, Object> args = new HashMap<>();
+        args.put("buyer", buyer);
+        args.put("shop", shop.uid);
+        args.put("entry", purchased);
+        args.put("expires", expirationDate);
+        return args;
+    }
+    
+    public static BuyRequest deserialize(Map<String, Object> args)
+    {
+        return new BuyRequest(args);
+    }
+    
+    public static BuyRequest valueOf(Map<String, Object> args)
+    {
+        return deserialize(args);
     }
 }

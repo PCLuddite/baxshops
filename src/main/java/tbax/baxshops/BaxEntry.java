@@ -39,56 +39,76 @@ import tbax.baxshops.serialization.ItemNames;
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public final class BaxEntry implements ConfigurationSerializable {
+public final class BaxEntry implements ConfigurationSerializable
+{
     private ItemStack stack;
     public double retailPrice = -1;
     public double refundPrice = -1;
     public boolean infinite = false;
     public int quantity = 0;
     
-    public BaxEntry() {
+    public BaxEntry()
+    {
     }
     
-    public BaxEntry(ItemStack item) {
+    public BaxEntry(Map<String, Object> args)
+    {
+        quantity = (int)args.get("quantity");
+        retailPrice = (double)args.get("retailPrice");
+        refundPrice = (double)args.get("refundPrice");
+        stack = ItemStack.deserialize((Map)args.get("stack"));
+    }
+    
+    public BaxEntry(ItemStack item)
+    {
         setItem(item);
     }
         
-    public Material getType() {
+    public Material getType()
+    {
         return stack.getType();
     }
     
     @Deprecated
-    public int getTypeId() {
+    public int getTypeId()
+    {
         return stack.getTypeId();
     }
     
-    public void add(int amt) {
+    public void add(int amt)
+    {
         quantity += amt;
     }
     
-    public void add(String amt) {
+    public void add(String amt)
+    {
         add(convertToInteger(amt));
     }
     
-    public void subtract(int amt) {
+    public void subtract(int amt)
+    {
         quantity -= amt;
     }
     
-    public void subtract(String amt) {
+    public void subtract(String amt)
+    {
         subtract(convertToInteger(amt));
     }
     
-    public void setItem(ItemStack item) {
+    public void setItem(ItemStack item)
+    {
         quantity = item.getAmount();
         stack = item.clone();
         stack.setAmount(1);
     }
     
-    public void setItem(Material type) {
+    public void setItem(Material type)
+    {
         stack = new ItemStack(type, 1);
     }
     
-    public void setItem(Material type, short damage) {
+    public void setItem(Material type, short damage)
+    {
         stack = new ItemStack(type, 1, damage);
     }
         
@@ -97,7 +117,8 @@ public final class BaxEntry implements ConfigurationSerializable {
      * @param amount
      * @return 
      */
-    public int convertToInteger(String amount) {
+    public int convertToInteger(String amount)
+    {
         if (amount.equalsIgnoreCase("all")) {
             if (infinite) {
                 return 64;
@@ -122,7 +143,8 @@ public final class BaxEntry implements ConfigurationSerializable {
      * If the entry quantity is equal to zero, the material type may be AIR
      * @return 
      */
-    public ItemStack toItemStack() {
+    public ItemStack toItemStack()
+    {
         ItemStack newstack = stack.clone();
         newstack.setAmount(quantity);
         return newstack;
@@ -132,35 +154,43 @@ public final class BaxEntry implements ConfigurationSerializable {
      * gets a reference to the item stack that this entry points to, which is not guaranteed to have the proper quantity
      * @return 
      */
-    public ItemStack getItemStack() {
+    public ItemStack getItemStack()
+    {
         return stack;
     }
     
-    public Map<Enchantment, Integer> getEnchantments() {
+    public Map<Enchantment, Integer> getEnchantments()
+    {
         return stack.getEnchantments();
     }
     
-    public boolean hasItemMeta() {
+    public boolean hasItemMeta()
+    {
         return stack.hasItemMeta();
     }
     
-    public ItemMeta getItemMeta() {
+    public ItemMeta getItemMeta()
+    {
         return stack.getItemMeta();
     }
         
-    public void setAmount(int amt) {
+    public void setAmount(int amt)
+    {
         quantity = amt;
     }
     
-    public int getAmount() {
+    public int getAmount()
+    {
         return quantity;
     }
     
-    public int getDurability() {
+    public int getDurability()
+    {
         return stack.getDurability();
     }
     
-    public BaxEntry clone() { // decided not to declare throwing CloneNotSupported. Java exceptions are a nightmare. 11/10/15
+    public BaxEntry clone() // decided not to declare throwing CloneNotSupported. Java exceptions are a nightmare. 11/10/15
+    {
         BaxEntry cloned = new BaxEntry();
         cloned.infinite = infinite;
         cloned.refundPrice = refundPrice;
@@ -184,7 +214,8 @@ public final class BaxEntry implements ConfigurationSerializable {
         return null;
     }
     
-    public String toString(int index) {
+    public String toString(int index)
+    {
         StringBuilder name = new StringBuilder(ItemNames.getItemName(this));
         
         if (getEnchants(stack) != null) {
@@ -250,11 +281,11 @@ public final class BaxEntry implements ConfigurationSerializable {
     
     public static BaxEntry deserialize(Map<String, Object> args)
     {
-        BaxEntry entry = new BaxEntry();
-        entry.quantity = (int)args.get("quantity");
-        entry.retailPrice = (double)args.get("retailPrice");
-        entry.refundPrice = (double)args.get("refundPrice");
-        entry.stack = ItemStack.deserialize((Map)args.get("stack"));
-        return entry;
+        return new BaxEntry(args);
+    }
+    
+    public static BaxEntry valueOf(Map<String, Object> args)
+    {
+        return deserialize(args);
     }
 }

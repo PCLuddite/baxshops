@@ -26,40 +26,71 @@ package tbax.baxshops.notification;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import java.util.HashMap;
+import java.util.Map;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 
 /**
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public final class GeneralNotification implements Notification {
+public final class GeneralNotification implements ConfigurationSerializable, Notification
+{
     
     public String message;
     
-    public GeneralNotification(String msg) {
+    public GeneralNotification(String msg)
+    {
         message = msg;
     }
     
-    public String getMessage(Player player) {
+    public GeneralNotification(Map<String, Object> args)
+    {
+        this.message = (String)args.get("msg");
+    }
+    
+    public String getMessage(Player player)
+    {
         return message;
     }
 
     public static final String TYPE_ID = "general";
     
     @Override
-    public JsonElement toJson(double version) {
+    public JsonElement toJson(double version) 
+    {
         JsonObject o = new JsonObject();
         o.addProperty("type", TYPE_ID);
         o.addProperty("msg", message);
         return o;
     }
     
-    public GeneralNotification() {
+    public GeneralNotification() 
+    {
     }
     
-    public static GeneralNotification fromJson(double version, JsonObject o) {
+    public static GeneralNotification fromJson(double version, JsonObject o)
+    {
         GeneralNotification general = new GeneralNotification();
         general.message = o.get("msg").getAsString();
         return general;
+    }
+    
+    public Map<String, Object> serialize()
+    {
+        Map<String, Object> args = new HashMap<>();
+        args.put("msg", message);
+        return args;
+    }
+    
+    public static GeneralNotification deserialize(Map<String, Object> args)
+    {
+        return new GeneralNotification(args);
+    }
+    
+    public static GeneralNotification valueOf(Map<String, Object> args)
+    {
+        return deserialize(args);
     }
 }

@@ -38,7 +38,8 @@ import org.bukkit.inventory.ItemStack;
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public final class BaxShop implements ConfigurationSerializable {
+public final class BaxShop implements ConfigurationSerializable
+{
     public static final int ITEMS_PER_PAGE = 7;
     
     public int uid = -1;
@@ -51,10 +52,40 @@ public final class BaxShop implements ConfigurationSerializable {
     public boolean sellRequests = true;
     public ArrayList<Location> locations = new ArrayList<>();
     
-    public BaxShop() {
+    public BaxShop()
+    {
     }
     
-    public int getIndexOfEntry(BaxEntry entry) {
+    public BaxShop(Map<String, Object> args)
+    {
+        uid = (int)args.get("id");
+        if (args.containsKey("buyRequests")) {
+            buyRequests = (boolean)args.get("buyRequests");
+        }
+        if (args.containsKey("infinite")) {
+            infinite = (boolean)args.get("infinite");
+        }
+        if (args.containsKey("notify")) {
+            notify = (boolean)args.get("notify");
+        }
+        if (args.containsKey("sellRequests")) {
+            sellRequests = (boolean)args.get("sellRequests");
+        }
+        if (args.containsKey("sellToShop")) {
+            sellToShop = (boolean)args.get("sellToShop");
+        }
+        owner = (String)args.get("owner");
+        inventory = (ArrayList)args.get("inventory");
+        locations = (ArrayList)args.get("locations");
+        if (infinite) {
+            for(BaxEntry entry : inventory) {
+                entry.infinite = infinite;
+            }
+        }
+    }
+    
+    public int getIndexOfEntry(BaxEntry entry)
+    {
         for(int index = 0; index < inventory.size(); index++) {
             if (inventory.get(index).equals(entry)) {
                 return index;
@@ -63,21 +94,24 @@ public final class BaxShop implements ConfigurationSerializable {
         return -1; // not found
     }
     
-    public ArrayList<Location> getLocations() {
+    public ArrayList<Location> getLocations()
+    {
         if (locations == null) {
             locations = new ArrayList<>();
         }
         return locations;
     }
     
-    private static boolean compareLoc(Location a, Location b) {
+    private static boolean compareLoc(Location a, Location b)
+    {
         return a.getBlockX() == b.getBlockX() &&
                a.getBlockY() == b.getBlockY() &&
                a.getBlockZ() == b.getBlockZ() &&
                a.getWorld() == b.getWorld();
     }
     
-    public boolean hasLocation(Location loc) {
+    public boolean hasLocation(Location loc)
+    {
         for(Location l : locations) {
             if (compareLoc(l, loc)) {
                 return true;
@@ -86,7 +120,8 @@ public final class BaxShop implements ConfigurationSerializable {
         return false;
     }
     
-    public boolean removeLocation(Location loc) {
+    public boolean removeLocation(Location loc)
+    {
         for(int i = 0; i < locations.size(); ++i) {
             if (compareLoc(locations.get(i), loc)) {
                 locations.remove(i);
@@ -96,7 +131,8 @@ public final class BaxShop implements ConfigurationSerializable {
         return false;
     }
     
-    public void addLocation(Location loc) {
+    public void addLocation(Location loc)
+    {
         locations.add(loc);
     }
     
@@ -109,7 +145,8 @@ public final class BaxShop implements ConfigurationSerializable {
      *
      * @return the number of pages
      */
-    public int getPages() {
+    public int getPages()
+    {
         return ceil((double) inventory.size() / ITEMS_PER_PAGE);
     }
 
@@ -118,7 +155,8 @@ public final class BaxShop implements ConfigurationSerializable {
      *
      * @return the number of items
      */
-    public int getInventorySize() {
+    public int getInventorySize()
+    {
         return inventory.size();
     }
 
@@ -128,7 +166,8 @@ public final class BaxShop implements ConfigurationSerializable {
      * @param index
      * @return the shop entry
      */
-    public BaxEntry getEntryAt(int index) {
+    public BaxEntry getEntryAt(int index)
+    {
         return inventory.get(index);
     }
 
@@ -136,7 +175,8 @@ public final class BaxShop implements ConfigurationSerializable {
      * Add an item to this shop's inventory.
      * @param entry
      */
-    public void addEntry(BaxEntry entry) {
+    public void addEntry(BaxEntry entry)
+    {
         inventory.add(entry);
     }
 
@@ -146,7 +186,8 @@ public final class BaxShop implements ConfigurationSerializable {
      * @param stack the item to check for
      * @return whether the shop contains the item
      */
-    public boolean containsItem(ItemStack stack) {
+    public boolean containsItem(ItemStack stack)
+    {
         return findEntry(stack) != null;
     }
 
@@ -157,7 +198,8 @@ public final class BaxShop implements ConfigurationSerializable {
      * @param damage the item's damage value (durability)
      * @return whether the shop contains the item
      */
-    public boolean containsItem(Material id, int damage) {
+    public boolean containsItem(Material id, int damage)
+    {
         for (BaxEntry e : inventory) {
             if (e.getType() == id && e.getDurability() == damage) {
                 return true;
@@ -172,7 +214,8 @@ public final class BaxShop implements ConfigurationSerializable {
      * @param stack the item to find
      * @return the item's entry, or null
      */
-    public BaxEntry findEntry(ItemStack stack) {
+    public BaxEntry findEntry(ItemStack stack)
+    {
         for (BaxEntry e : inventory) {
             if (e.getType() == stack.getType() && e.getDurability() == stack.getDurability()) {
                 for (Map.Entry<Enchantment, Integer> entry : stack.getEnchantments().entrySet()) {
@@ -194,7 +237,8 @@ public final class BaxShop implements ConfigurationSerializable {
      * @param damage the item's damage value (durability)
      * @return the item's entry, or null
      */
-    public BaxEntry findEntry(Material material, int damage) {
+    public BaxEntry findEntry(Material material, int damage)
+    {
         for (BaxEntry e : inventory) {
             if (e.getType() == material && e.getDurability() == damage) {
                 return e;
@@ -207,12 +251,23 @@ public final class BaxShop implements ConfigurationSerializable {
     public Map<String, Object> serialize()
     {
         HashMap<String, Object> map = new HashMap<>();
+        map.put("id", uid);
         map.put("owner", owner);
-        map.put("infinite", infinite);
-        map.put("notify", notify);
-        map.put("sellToShop", sellToShop);
-        map.put("buyRequests", buyRequests);
-        map.put("sellRequests", sellRequests);
+        if (infinite) {
+            map.put("infinite", infinite);
+        }
+        if (!notify) {
+            map.put("notify", notify);
+        }
+        if (sellToShop) {
+            map.put("sellToShop", sellToShop);   
+        }
+        if (buyRequests) {
+            map.put("buyRequests", buyRequests);
+        }
+        if (!sellRequests) {
+            map.put("sellRequests", sellRequests);
+        }
         map.put("inventory", inventory);
         map.put("locations", locations);
         return map;
@@ -220,15 +275,11 @@ public final class BaxShop implements ConfigurationSerializable {
     
     public static BaxShop deserialize(Map<String, Object> args)
     {
-        BaxShop shop = new BaxShop();
-        shop.buyRequests = (boolean)args.get("buyRequests");
-        shop.infinite = (boolean)args.get("infinite");
-        shop.inventory = (ArrayList)args.get("inventory");
-        shop.locations = (ArrayList)args.get("locations");
-        shop.notify = (boolean)args.get("notify");
-        shop.owner = (String)args.get("owner");
-        shop.sellRequests = (boolean)args.get("sellRequests");
-        shop.sellToShop = (boolean)args.get("sellToShop");
-        return shop;
+        return new BaxShop(args);
+    }
+    
+    public static BaxShop valueOf(Map<String, Object> args)
+    {
+        return deserialize(args);
     }
 }

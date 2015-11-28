@@ -26,7 +26,9 @@ package tbax.baxshops.notification;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import org.bukkit.ChatColor;
+import java.util.HashMap;
+import java.util.Map;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
@@ -41,7 +43,8 @@ import tbax.baxshops.serialization.ItemNames;
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public final class BuyClaim implements Claimable {
+public final class BuyClaim implements ConfigurationSerializable, Claimable 
+{
     /**
      * An entry for the purchased item
      */
@@ -61,14 +64,27 @@ public final class BuyClaim implements Claimable {
      * @param entry an entry for the item (note: not the one in the shop)
      * @param buyer the buyer of the item
      */
-    public BuyClaim(BaxShop shop, BaxEntry entry, String buyer) {
+    public BuyClaim(BaxShop shop, BaxEntry entry, String buyer) 
+    {
         this.shop = shop;
         this.entry = entry;
         this.buyer = buyer;
     }
     
+    public BuyClaim() 
+    {
+    }
+    
+    public BuyClaim(Map<String, Object> args)
+    {
+        this.buyer = (String)args.get("buyer");
+        this.entry = (BaxEntry)args.get("entry");
+        this.shop = Main.instance.state.getShop((int)args.get("shop"));
+    }
+    
     @Override
-    public boolean claim(Player player) {
+    public boolean claim(Player player)
+    {
         if (Main.tryGiveItem(player, entry.toItemStack())) {
             if (entry.getAmount() == 1) {
                 player.sendMessage("The item have been added to your inventory.");
@@ -84,7 +100,8 @@ public final class BuyClaim implements Claimable {
         }
     }
     
-    public String getMessage(Player player) {
+    public String getMessage(Player player)
+    {
         if (player == null || !player.getName().equals(buyer)) {
             return String.format("%s accepted %s's request to buy %s for %s.",
                         Format.username(shop.owner), 
@@ -105,7 +122,8 @@ public final class BuyClaim implements Claimable {
     public static final String TYPE_ID = "BuyClaim";
     
     @Override
-    public JsonElement toJson(double version) {
+    public JsonElement toJson(double version)
+    {
         JsonObject o = new JsonObject();
         o.addProperty("type", TYPE_ID);
         o.addProperty("buyer", buyer);
@@ -114,14 +132,32 @@ public final class BuyClaim implements Claimable {
         return o;
     }
     
-    public BuyClaim() {
-    }
-    
-    public static BuyClaim fromJson(double version, JsonObject o) {
+    public static BuyClaim fromJson(double version, JsonObject o)
+    {
         BuyClaim claim = new BuyClaim();
         claim.buyer = o.get("buyer").getAsString();
         claim.shop = Main.instance.state.getShop(o.get("shop").getAsInt());
         claim.entry = BaxEntryDeserializer.deserialize(version, o);
         return claim;
+    }
+
+    @Override
+    public Map<String, Object> serialize()
+    {
+        Map<String, Object> args = new HashMap<>();
+        args.put("buyer", buyer);
+        args.put("shop", shop.uid);
+        args.put("entry", entry);
+        return args;
+    }
+    
+    public static BuyClaim deserialize(Map<String, Object> args)
+    {
+        return new BuyClaim(args);
+    }
+    
+    public static BuyClaim valueOf(Map<String, Object> args)
+    {
+        return deserialize(args);
     }
 }

@@ -26,22 +26,34 @@ package tbax.baxshops.notification;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import java.util.HashMap;
+import java.util.Map;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import tbax.baxshops.Format;
 
-public final class DeathNotification implements Notification {
+public final class DeathNotification implements ConfigurationSerializable, Notification
+{
     private static final long serialVersionUID = 1L;
     
     public double tax;
     public String person;
     
-    public DeathNotification(String person, double tax) {
+    public DeathNotification(String person, double tax)
+    {
         this.person = person;
         this.tax = tax;
     }
+
+    public DeathNotification(Map<String, Object> args)
+    {
+        this.person = (String)args.get("person");
+        this.tax = (double)args.get("tax");
+    }
     
     @Override
-    public String getMessage(Player player) {
+    public String getMessage(Player player)
+    {
         if (player == null || !player.getName().equals(person)) {
             return String.format("%s was fined %s for dying.", Format.username(person), Format.money(tax));
         }
@@ -53,7 +65,8 @@ public final class DeathNotification implements Notification {
     public static final String TYPE_ID = "DeathNote";
     
     @Override
-    public JsonElement toJson(double version) {
+    public JsonElement toJson(double version)
+    {
         JsonObject o = new JsonObject();
         o.addProperty("type", TYPE_ID);
         o.addProperty("person", person);
@@ -61,14 +74,33 @@ public final class DeathNotification implements Notification {
         return o;
     }
     
-    public DeathNotification() {
+    public DeathNotification()
+    {
     }
     
-    public static DeathNotification fromJson(double version, JsonObject o) {
+    public static DeathNotification fromJson(double version, JsonObject o)
+    {
         DeathNotification death = new DeathNotification();
         death.tax = o.get("tax").getAsDouble();
         death.person = o.get("person").getAsString();
         return death;
     }
-
+    
+    public Map<String, Object> serialize()
+    {
+        Map<String, Object> args = new HashMap<>();
+        args.put("person", person);
+        args.put("tax", tax);
+        return args;
+    }
+    
+    public static DeathNotification deserialize(Map<String, Object> args)
+    {
+        return new DeathNotification(args);
+    }
+    
+    public static DeathNotification valueOf(Map<String, Object> args)
+    {
+        return deserialize(args);
+    }
 }

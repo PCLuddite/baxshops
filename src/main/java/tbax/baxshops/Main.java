@@ -34,6 +34,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -50,8 +51,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import tbax.baxshops.executer.*;
-import tbax.baxshops.notification.DeathNotification;
-import tbax.baxshops.notification.Notification;
+import tbax.baxshops.notification.*;
 import tbax.baxshops.serialization.StateFile;
 
 public final class Main extends JavaPlugin implements Listener {
@@ -100,6 +100,8 @@ public final class Main extends JavaPlugin implements Listener {
             return;
         }
         
+        loadConfigurationSerializable();
+        
         state = new StateFile(this);
         state.load();
         
@@ -116,13 +118,32 @@ public final class Main extends JavaPlugin implements Listener {
         log.info("BaxShops has loaded successfully!");
     }
     
+    public void loadConfigurationSerializable()
+    {
+        ConfigurationSerialization.registerClass(BaxEntry.class);
+        ConfigurationSerialization.registerClass(BaxShop.class);
+        ConfigurationSerialization.registerClass(BuyClaim.class);
+        ConfigurationSerialization.registerClass(BuyNotification.class);
+        ConfigurationSerialization.registerClass(BuyRejection.class);
+        ConfigurationSerialization.registerClass(BuyRequest.class);
+        ConfigurationSerialization.registerClass(DeathNotification.class);
+        ConfigurationSerialization.registerClass(GeneralNotification.class);
+        ConfigurationSerialization.registerClass(LollipopNotification.class);
+        ConfigurationSerialization.registerClass(SaleNotification.class);
+        ConfigurationSerialization.registerClass(SaleNotificationAuto.class);
+        ConfigurationSerialization.registerClass(SaleRejection.class);
+        ConfigurationSerialization.registerClass(SellRequest.class);
+    }
+    
     @Override
-    public void onDisable() {
+    public void onDisable()
+    {
         state.saveAll();
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
+    {
                 
         ShopCmd cmd = new ShopCmd(this, sender, command, args);
         

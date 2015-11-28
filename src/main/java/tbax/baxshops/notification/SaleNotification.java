@@ -26,6 +26,9 @@ package tbax.baxshops.notification;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import java.util.HashMap;
+import java.util.Map;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
@@ -39,7 +42,8 @@ import tbax.baxshops.serialization.ItemNames;
  * A SaleNotification notifies a player that his/her sale of an
  * item was successful.
  */
-public final class SaleNotification implements Notification {
+public final class SaleNotification implements ConfigurationSerializable, Notification 
+{
     private static final long serialVersionUID = 1L;
     /**
      * An entry for the offered item
@@ -54,20 +58,29 @@ public final class SaleNotification implements Notification {
      */
     public String seller;
 
+    public SaleNotification(Map<String, Object> args)
+    {
+        this.seller = (String)args.get("seller");
+        this.entry = (BaxEntry)args.get("entry");
+        this.shop = Main.instance.state.getShop((int)args.get("shop"));
+    }
+    
     /**
      * Constructs a new notification.
      * @param shop the shop to which the seller was selling
      * @param entry an entry for the item (note: not the one in the shop)
      * @param seller the seller of the item
      */
-    public SaleNotification(BaxShop shop, BaxEntry entry, String seller) {
+    public SaleNotification(BaxShop shop, BaxEntry entry, String seller) 
+    {
         this.shop = shop;
         this.entry = entry;
         this.seller = seller;
     }
 
     @Override
-    public String getMessage(Player player) {
+    public String getMessage(Player player) 
+    {
         if (player == null || !player.getName().equals(seller)) {
             return String.format("%s accepted %s's request to sell %s for %s.",
                         Format.username(shop.owner), 
@@ -88,7 +101,8 @@ public final class SaleNotification implements Notification {
     public static final String TYPE_ID = "SaleNote";
 
     @Override
-    public JsonElement toJson(double version) {
+    public JsonElement toJson(double version) 
+    {
         JsonObject o = new JsonObject();
         o.addProperty("type", TYPE_ID);
         o.addProperty("seller", seller);
@@ -97,14 +111,35 @@ public final class SaleNotification implements Notification {
         return o;
     }
     
-    public SaleNotification() {
+    public SaleNotification() 
+    {
     }
     
-    public static SaleNotification fromJson(double version, JsonObject o) {
+    public static SaleNotification fromJson(double version, JsonObject o) 
+    {
         SaleNotification note = new SaleNotification();
         note.seller = o.get("seller").getAsString();
         note.shop = Main.instance.state.getShop(o.get("shop").getAsInt());
         note.entry = BaxEntryDeserializer.deserialize(version, o.get("entry").getAsJsonObject());
         return note;
+    }
+    
+    public Map<String, Object> serialize()
+    {
+        Map<String, Object> args = new HashMap<>();
+        args.put("seller", seller);
+        args.put("shop", shop.uid);
+        args.put("entry", entry);
+        return args;
+    }
+    
+    public static SaleNotification deserialize(Map<String, Object> args)
+    {
+        return new SaleNotification(args);
+    }
+    
+    public static SaleNotification valueOf(Map<String, Object> args)
+    {
+        return deserialize(args);
     }
 }

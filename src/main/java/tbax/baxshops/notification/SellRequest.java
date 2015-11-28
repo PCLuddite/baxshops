@@ -28,8 +28,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import tbax.baxshops.BaxEntry;
@@ -47,7 +50,8 @@ import tbax.baxshops.serialization.ItemNames;
  * to sell him/her an item.
  * SellRequests expire after five days.
  */
-public final class SellRequest implements Request, TimedNotification {
+public final class SellRequest implements ConfigurationSerializable, Request, TimedNotification
+{
     private static final long serialVersionUID = 1L;
     /**
      * An entry for the offered item
@@ -66,13 +70,26 @@ public final class SellRequest implements Request, TimedNotification {
      */
     public String seller;
     
+    public SellRequest()
+    {
+    }
+    
+    public SellRequest(Map<String, Object> args)
+    {
+        seller = (String)args.get("seller");
+        shop = Main.instance.state.getShop((int)args.get("shop"));
+        entry = (BaxEntry)args.get("entry");
+        expirationDate = (long)args.get("expires");
+    }
+    
     /**
      * Constructs a new notification.
      * @param shop the shop to which the seller was selling
      * @param entry an entry for the item (note: not the one in the shop)
      * @param seller the seller of the item
      */
-    public SellRequest(BaxShop shop, BaxEntry entry, String seller) {
+    public SellRequest(BaxShop shop, BaxEntry entry, String seller) 
+    {
         this.shop = shop;
         this.entry = entry;
         this.seller = seller;
@@ -84,7 +101,8 @@ public final class SellRequest implements Request, TimedNotification {
     }
 
     @Override
-    public String getMessage(Player player) {
+    public String getMessage(Player player)
+    {
         if (player == null || !player.getName().equals(shop.owner)) {
             return String.format("%s wants to sell %s to %s for %s.",
                 Format.username(seller), 
@@ -103,8 +121,8 @@ public final class SellRequest implements Request, TimedNotification {
     }
     
     @Override
-    public boolean accept(Player player) {
-        
+    public boolean accept(Player player)
+    {
         double price = Main.roundTwoPlaces(entry.getAmount() * entry.refundPrice);
 
         ItemStack item = entry.toItemStack();
@@ -143,7 +161,8 @@ public final class SellRequest implements Request, TimedNotification {
      * @param sender
      * @return 1 if success, 0 if insufficient funds, -1 if invalid item
      */
-    public int autoAccept(CommandSender sender) {
+    public int autoAccept(CommandSender sender)
+    {
         double price = Main.roundTwoPlaces(entry.getAmount() * entry.refundPrice);
         
         Economy econ = Main.econ;
@@ -173,7 +192,8 @@ public final class SellRequest implements Request, TimedNotification {
         return 1;
     }
     
-    private boolean sellToShop(ItemStack item, CommandSender sender) {
+    private boolean sellToShop(ItemStack item, CommandSender sender)
+    {
         BaxEntry shopEntry = shop.findEntry(item.getType(), item.getDurability());
         if (shopEntry == null) {
             shopEntry = new BaxEntry();
@@ -189,7 +209,8 @@ public final class SellRequest implements Request, TimedNotification {
     }
     
     @Override
-    public boolean reject(Player player) {
+    public boolean reject(Player player)
+    {
         SaleRejection n = new SaleRejection(shop, entry, seller);
         Main.instance.state.sendNotification(seller, n);
         player.sendMessage("§cOffer rejected");
@@ -197,14 +218,16 @@ public final class SellRequest implements Request, TimedNotification {
     }
 
     @Override
-    public long expirationDate() {
+    public long expirationDate()
+    {
         return expirationDate;
     }
 
     public static final String TYPE_ID = "SellRequest";
     
     @Override
-    public JsonElement toJson(double version) {
+    public JsonElement toJson(double version)
+    {
         JsonObject o = new JsonObject();
         o.addProperty("type", TYPE_ID);
         o.addProperty("seller", seller);
@@ -214,15 +237,33 @@ public final class SellRequest implements Request, TimedNotification {
         return o;
     }
     
-    public SellRequest() {
-    }
-    
-    public static SellRequest fromJson(double version, JsonObject o) {
+    public static SellRequest fromJson(double version, JsonObject o)
+    {
         SellRequest request = new SellRequest();
         request.seller = o.get("seller").getAsString();
         request.shop = Main.instance.state.getShop(o.get("shop").getAsInt());
         request.expirationDate = o.get("expires").getAsLong();
         request.entry = BaxEntryDeserializer.deserialize(version, o.get("entry").getAsJsonObject());
         return request;
+    }
+    
+    public Map<String, Object> serialize()
+    {
+        Map<String, Object> args = new HashMap<>();
+        args.put("seller", seller);
+        args.put("shop", shop.uid);
+        args.put("entry", entry);
+        args.put("expires", expirationDate);
+        return args;
+    }
+    
+    public static SellRequest deserialize(Map<String, Object> args)
+    {
+        return new SellRequest(args);
+    }
+    
+    public static SellRequest valueOf(Map<String, Object> args)
+    {
+        return deserialize(args);
     }
 }

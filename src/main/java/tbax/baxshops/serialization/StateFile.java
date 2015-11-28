@@ -34,6 +34,9 @@ import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 /**
@@ -44,8 +47,10 @@ public final class StateFile {
 
     public static final String JSON_FILE_PATH = "shops.json";
     public static final String JSONBAK_FILE_PATH = "backups/%d.json";
+    public static final String YAML_FILE_PATH = "shops.yml";
+    public static final String YAMLBAK_FILE_PATH = "backups/%d.yml";
     
-    public static final double STATE_VERSION = 2.1; // state file format version
+    public static final double STATE_VERSION = 3.0; // state file format version
     
     /**
      * A map of locations to their shop ids, accessed by their location in the world
@@ -64,16 +69,19 @@ public final class StateFile {
     private final Logger log;
     private final Main main;
     
-    public StateFile(Main main) {
+    public StateFile(Main main)
+    {
         this.main = main;
         this.log = Main.log;
     }
     
-    public BaxShop getShop(int uid) {
+    public BaxShop getShop(int uid)
+    {
         return shops.get(uid);
     }
     
-    public BaxShop getShop(Location loc) {
+    public BaxShop getShop(Location loc)
+    {
         Integer uid = locations.get(loc);
         if (uid == null) {
             return null;
@@ -81,7 +89,8 @@ public final class StateFile {
         return shops.get(uid);
     }
     
-    public void load() {
+    public void load()
+    {
         ItemNames.loadItemNames(main);
         ItemNames.loadDamageable(main);
         
@@ -97,7 +106,8 @@ public final class StateFile {
      * Attempts to back up the shops.json save file.
      * @return a boolean indicating success
      */
-    public boolean backup() {
+    public boolean backup()
+    {
         File stateLocation = new File(main.getDataFolder(), JSON_FILE_PATH);
         if (stateLocation.exists()) {
             long timestamp = new Date().getTime();
@@ -109,7 +119,7 @@ public final class StateFile {
             File[] backups = backupFolder.listFiles(new FilenameFilter() {
                 @Override
                 public boolean accept(File f, String name) {
-                    return name.endsWith(".json");
+                    return name.endsWith(".yml");
                 }
             });
             int b = main.getConfig().getInt("Backups", 15);
@@ -134,7 +144,7 @@ public final class StateFile {
             }
 
             try {
-                File backup = new File(main.getDataFolder(), String.format(JSONBAK_FILE_PATH, timestamp));
+                File backup = new File(main.getDataFolder(), String.format(YAMLBAK_FILE_PATH, timestamp));
                 OutputStream out;
                 try (InputStream in = new FileInputStream(stateLocation)) {
                     out = new FileOutputStream(backup);
@@ -156,14 +166,15 @@ public final class StateFile {
             }
             return true;
         }
-        log.warning("Aborting backup: shops.dat not found");
+        log.warning("Aborting backup: shops.yml not found");
         return false;
     }
 
     /*
     * Loads all shops from shop.json file
     */
-    public boolean loadState() {
+    public boolean loadStateJson()
+    {
         File stateLocation = new File(main.getDataFolder(), JSON_FILE_PATH);
         if (!stateLocation.exists()) {
             return false;
@@ -200,7 +211,8 @@ public final class StateFile {
         return true;
     }
     
-    private void loadShops(double version, JsonObject shopObject) {
+    private void loadShops(double version, JsonObject shopObject)
+    {
         for(Map.Entry<String, JsonElement> entry : shopObject.entrySet()) {
             try {
                 int uid = Integer.parseInt(entry.getKey());
@@ -216,7 +228,8 @@ public final class StateFile {
         }
     }
     
-    private void loadNotes(double version, JsonObject noteObject) {
+    private void loadNotes(double version, JsonObject noteObject)
+    {
         for(Map.Entry<String, JsonElement> entry : noteObject.entrySet()) {
             ArrayDeque<Notification> notes = new ArrayDeque<>();
             if (entry.getValue().isJsonArray()) {
@@ -236,7 +249,8 @@ public final class StateFile {
         }
     }
     
-    private Notification loadNote(double version, JsonObject o) {
+    private Notification loadNote(double version, JsonObject o)
+    {
         switch(o.get("type").getAsString()) {
             case BuyClaim.TYPE_ID:
                 return BuyClaim.fromJson(version, o);
@@ -267,7 +281,43 @@ public final class StateFile {
         return null;
     }
     
-    public boolean addShop(Player pl, BaxShop shop) {
+    /*
+     * Loads all shops from shop.yml file
+     */
+    public boolean loadState()
+    {
+        File stateLocation = new File(main.getDataFolder(), YAML_FILE_PATH);
+        if (!stateLocation.exists()) {
+            log.info("YAML file did not exist. Trying to load JSON...");
+            boolean ret = loadStateJson();
+            if (ret) {
+                File jsonFile = new File(main.getDataFolder(), JSON_FILE_PATH);
+                jsonFile.delete();
+            }
+            else {
+                log.info("JSON did not exist. Assuming new configuration.");
+            }
+            return ret;
+        }
+        FileConfiguration state = YamlConfiguration.loadConfiguration(stateLocation);
+        ArrayList<BaxShop> shoplist = (ArrayList)state.getList("shops");
+        for(BaxShop shop : shoplist) {
+            addShop(null, shop);
+        }
+        ConfigurationSection yNotes = state.getConfigurationSection("notes");
+        for(Map.Entry<String, Object> player : yNotes.getValues(false).entrySet()) {
+            ArrayDeque<Notification> playerNotes = new ArrayDeque<>();
+            List yPlayerNotes = (List)player.getValue();
+            for(Object yNote : yPlayerNotes) {
+                playerNotes.add((Notification)yNote);
+            }
+            pending.put(player.getKey(), playerNotes);
+        }
+        return true;
+    }
+    
+    public boolean addShop(Player pl, BaxShop shop)
+    {
         if (shop.uid < 0) {
             shop.uid = getUniqueId();
         }
@@ -280,7 +330,8 @@ public final class StateFile {
         return true;
     }
     
-    public boolean addLocation(Player pl, Location loc, BaxShop shop) {
+    public boolean addLocation(Player pl, Location loc, BaxShop shop)
+    {
         Integer otherUid = locations.get(loc);
         if (otherUid == null) {
             locations.put(loc, shop.uid);
@@ -292,7 +343,8 @@ public final class StateFile {
         return true;
     }
     
-    public boolean removeShop(Player pl, BaxShop shop) {
+    public boolean removeShop(Player pl, BaxShop shop)
+    {
         for(Location loc : shop.getLocations()) {
             removeLocation(pl, loc);
         }
@@ -300,7 +352,8 @@ public final class StateFile {
         return true;
     }
     
-    public boolean removeLocation(Player pl, Location loc) {
+    public boolean removeLocation(Player pl, Location loc)
+    {
         Integer uid = locations.get(loc);
         if (uid != null) {
             BaxShop shop = shops.get(uid);
@@ -326,7 +379,8 @@ public final class StateFile {
      * @param pl the player
      * @return the player's notifications
      */
-    public ArrayDeque<Notification> getNotifications(Player pl) {
+    public ArrayDeque<Notification> getNotifications(Player pl)
+    {
         return getNotifications(pl.getName());
     }
 	
@@ -336,7 +390,8 @@ public final class StateFile {
      * @param player the player
      * @return the player's notifications
      */
-    public ArrayDeque<Notification> getNotifications(String player) {
+    public ArrayDeque<Notification> getNotifications(String player)
+    {
         ArrayDeque<Notification> n = pending.get(player);
         if (n == null) {
             n = new ArrayDeque<>();
@@ -351,7 +406,8 @@ public final class StateFile {
      *
      * @param pl the player
      */
-    public void showNotification(Player pl) {
+    public void showNotification(Player pl)
+    {
         showNotification(pl, true);
     }
 
@@ -361,7 +417,8 @@ public final class StateFile {
      * @param pl the player
      * @param showCount whether the notification count should be shown as well
      */
-    public void showNotification(Player pl, boolean showCount) {
+    public void showNotification(Player pl, boolean showCount)
+    {
         ArrayDeque<Notification> notifications = getNotifications(pl);
         if (notifications.isEmpty()) {
             if (showCount) {
@@ -399,7 +456,8 @@ public final class StateFile {
      * @param pl the player
      * @param n the notification
      */
-    public void sendNotification(Player pl, Notification n) {
+    public void sendNotification(Player pl, Notification n)
+    {
         sendNotification(pl.getName(), n);
     }
     
@@ -409,7 +467,8 @@ public final class StateFile {
      * @param player the player
      * @param n the notification
      */
-    public void sendNotification(String player, Notification n) {
+    public void sendNotification(String player, Notification n)
+    {
         sendNotification(player, n, main.getConfig().getBoolean("LogNotes"));
     }
 
@@ -420,7 +479,8 @@ public final class StateFile {
      * @param n the notification
      * @param log_it should show it in the log
      */
-    public void sendNotification(String player, Notification n, boolean log_it) {
+    public void sendNotification(String player, Notification n, boolean log_it)
+    {
         ArrayDeque<Notification> ns = getNotifications(player);
         if (log_it) {
             log.info(Main.toAnsiColor(n.getMessage(null)));
@@ -432,7 +492,8 @@ public final class StateFile {
         }
     }
     
-    private int getUniqueId() {
+    private int getUniqueId()
+    {
         int current = 1;
         while(shops.containsKey(current)) {
             ++current;
@@ -441,9 +502,10 @@ public final class StateFile {
     }
 	
     /**
-     * Saves all shops
+     * Saves all shops as json
      */
-    public void saveAll() {
+    public void saveAllJson()
+    {
         if (!backup()) {
             log.warning("Failed to back up BaxShops");
         }
@@ -498,6 +560,38 @@ public final class StateFile {
         } catch (FileNotFoundException e) {
             log.warning("Save failed");
             e.printStackTrace();
+        } catch (IOException e) {
+            log.warning("Save failed");
+            e.printStackTrace();
+        }
+    }
+    
+    /**
+     * Saves all shops
+     */
+    public void saveAll()
+    {
+        if (!backup()) {
+            log.warning("Failed to back up BaxShops");
+        }
+
+        FileConfiguration state = new YamlConfiguration();
+        state.set("version", STATE_VERSION);
+        
+        state.set("shops", new ArrayList(shops.values()));
+        
+        HashMap<String, List<String>> yNotes = new HashMap<>();
+        for(Map.Entry<String, ArrayDeque<Notification>> player : pending.entrySet()) {
+            yNotes.put(player.getKey(), new ArrayList(player.getValue()));
+        }
+        state.createSection("notes", yNotes);
+        
+        try {
+            File dir = main.getDataFolder();
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
+            state.save(new File(dir, "shops.yml"));
         } catch (IOException e) {
             log.warning("Save failed");
             e.printStackTrace();
