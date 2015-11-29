@@ -256,10 +256,10 @@
 + 16418 Splash Potion of Swiftness II
 + 16450 Splash Potion of Swiftness (Extended)
 + 8195 Potion of Fire Resistance
-+ 8227 (r) Potion of Fire Resistance II
++ 8227 Potion of Fire Resistance II
 + 8259 Potion of Fire Resistance (Extended)
 + 16387 Splash Potion of Fire Resistance
-+ 16419 (r) Splash Potion of Fire Resistance II
++ 16419 Splash Potion of Fire Resistance II
 + 16451 Splash Potion of Fire Resistance (Extended)
 + 8196 Potion of Poison
 + 8228 Potion of Poison II
@@ -269,22 +269,22 @@
 + 16452 Splash Potion of Poison (Extended)
 + 8197 Potion of Instant Health
 + 8229 Potion of Instant Health II
-+ 8261 (r) Potion of Instant Health (Extended)
++ 8261 Potion of Instant Health (Extended)
 + 16389 Splash Potion of Instant Health
 + 16421 Splash Potion of Instant Health II
-+ 16453 (r) Splash Potion of Instant Health (Extended)
++ 16453 Splash Potion of Instant Health (Extended)
 + 8198 Potion of Night Vision
-+ 8230 (r) Potion of Night Vision II
++ 8230 Potion of Night Vision II
 + 8262 Potion of Night Vision (Extended)
 + 16390 Splash Potion of Night Vision
-+ 16422 (r) Splash Potion of Night Vision II
++ 16422 Splash Potion of Night Vision II
 + 16454 Splash Potion of Night Vision (Extended)
 + 8200 Potion of Weakness
-+ 8232 (r) Potion of Weakness II
++ 8232 Potion of Weakness II
 + 8264 Potion of Weakness (Extended)
 + 16392 Splash Potion of Weakness
-+ 16424 (r) Splash Potion of Weakness II
-+ 16456   Splash Potion of Weakness (Extended)
++ 16424 Splash Potion of Weakness II
++ 16456 Splash Potion of Weakness (Extended)
 + 8201 Potion of Strength
 + 8233 Potion of Strength II
 + 8265 Potion of Strength (Extended)
@@ -292,10 +292,10 @@
 + 16425 Splash Potion of Strength II
 + 16457 Splash Potion of Strength (Extended)
 + 8202 Potion of Slowness
-+ 8234 (r) Potion of Slowness II
++ 8234 Potion of Slowness II
 + 8266 Potion of Slowness (Extended)
 + 16394 Splash Potion of Slowness
-+ 16426 (r) Splash Potion of Slowness II
++ 16426 Splash Potion of Slowness II
 + 16458 Splash Potion of Slowness (Extended)
 + 8203 Potion of Leaping
 + 8235 Potion of Leaping II
@@ -305,21 +305,21 @@
 + 16459 Splash Potion of Leaping (Extended)
 + 8204 Potion of Harming
 + 8236 Potion of Harming II
-+ 8268 (r) Potion of Harming (Extended)
++ 8268 Potion of Harming (Extended)
 + 16396 Splash Potion of Harming
 + 16428 Splash Potion of Harming II
-+ 16460 (r) Splash Potion of Harming (Extended)
++ 16460 Splash Potion of Harming (Extended)
 + 8205 Potion of Water Breathing
-+ 8237 (r) Potion of Water Breathing II
++ 8237 Potion of Water Breathing II
 + 8269 Potion of Water Breathing (Extended)
 + 16397 Splash Potion of Water Breathing
-+ 16429 (r) Splash Potion of Water Breathing II
++ 16429 Splash Potion of Water Breathing II
 + 16461 Splash Potion of Water Breathing (Extended)
 + 8206 Potion of Invisibility
-+ 8238 (r) Potion of Invisibility II
++ 8238 Potion of Invisibility II
 + 8270 Potion of Invisibility (Extended)
 + 16398 Splash Potion of Invisibility
-+ 16430 (r) Splash Potion of Invisibility II
++ 16430 Splash Potion of Invisibility II
 + 16462 Splash Potion of Invisibility (Extended)
 383 Spawn Egg
 | 32 Spawn Egg (Creeper)
