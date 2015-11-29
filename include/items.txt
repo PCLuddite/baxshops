@@ -115,6 +115,7 @@
 | 1 Stone Bricks (Mossy)
 | 2 Stone Bricks (Cracked)
 | 3 Stone Bricks (Chiseled)
+103 Melon
 107 Fence Gate
 125 Doable Slab (Oak Wood)
 | 1 Double Slab (Spruce Wood)
@@ -235,6 +236,7 @@
 | D Magenta Dye
 | E Orange Dye
 | F Bone Meal
+360 Melon Slice
 372 Nether Wart
 373 Water Bottle
 + 16 Awkward Potion
