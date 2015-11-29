@@ -54,9 +54,9 @@ public final class BuyRejection implements ConfigurationSerializable, Notificati
      */
     public BaxShop shop;
     /**
-     * The seller of the item
+     * The buyer of the item
      */
-    public String seller;
+    public String buyer;
     
     public BuyRejection()
     {
@@ -64,7 +64,12 @@ public final class BuyRejection implements ConfigurationSerializable, Notificati
     
     public BuyRejection(Map<String, Object> args)
     {
-        this.seller = (String)args.get("seller");
+        if (args.containsKey("seller")) {
+            this.buyer = (String)args.get("seller");
+        }
+        else {
+            this.buyer = (String)args.get("buyer");
+        }
         this.entry = (BaxEntry)args.get("entry");
         this.shop = Main.instance.state.getShop((int)args.get("shop"));
     }
@@ -79,22 +84,22 @@ public final class BuyRejection implements ConfigurationSerializable, Notificati
     {
         this.shop = shop;
         this.entry = entry;
-        this.seller = seller;
+        this.buyer = seller;
     }
 
     @Override
     public String getMessage(Player player)
     {
-        if (player == null || !player.getName().equals(seller)) {
-            return String.format("%s " + ChatColor.RED + "rejected" + ChatColor.RESET + " %s's request to sell %s for %s.",
+        if (player == null || !player.getName().equals(buyer)) {
+            return String.format("%s " + ChatColor.RED + "rejected" + ChatColor.RESET + " %s's request to buy %s for %s.",
                         Format.username(shop.owner),
-                        Format.username2(seller),
+                        Format.username2(buyer),
                         Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
                         Format.money(entry.refundPrice * entry.getAmount())
                     );
         }
         else {
-            return String.format("%s " + ChatColor.RED + "rejected" + ChatColor.RESET + " your request to sell %s for %s.",
+            return String.format("%s " + ChatColor.RED + "rejected" + ChatColor.RESET + " your request to buy %s for %s.",
                         Format.username(shop.owner),
                         Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
                         Format.money(entry.refundPrice * entry.getAmount())
@@ -115,7 +120,7 @@ public final class BuyRejection implements ConfigurationSerializable, Notificati
     {
         JsonObject o = new JsonObject();
         o.addProperty("type", TYPE_ID);
-        o.addProperty("seller", seller);
+        o.addProperty("seller", buyer);
         o.addProperty("shop", shop.id);
         o.add("entry", BaxEntrySerializer.serialize(version, entry));
         return o;
@@ -124,7 +129,7 @@ public final class BuyRejection implements ConfigurationSerializable, Notificati
     public static BuyRejection fromJson(double version, JsonObject o) 
     {
         BuyRejection claim = new BuyRejection();
-        claim.seller = o.get("seller").getAsString();
+        claim.buyer = o.get("seller").getAsString();
         claim.shop = Main.instance.state.getShop(o.get("shop").getAsInt());
         claim.entry = BaxEntryDeserializer.deserialize(version, o.get("entry").getAsJsonObject());
         return claim;
@@ -133,7 +138,7 @@ public final class BuyRejection implements ConfigurationSerializable, Notificati
     public Map<String, Object> serialize()
     {
         Map<String, Object> args = new HashMap<>();
-        args.put("seller", seller);
+        args.put("seller", buyer);
         args.put("shop", shop.id);
         args.put("entry", entry);
         return args;
