@@ -33,9 +33,9 @@ import tbax.baxshops.Main;
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public final class Clipboard {
-    
-    private static final HashMap<Player, HashMap<String, Integer>> clipboard = new HashMap<>();
+public final class Clipboard
+{    
+    private static final HashMap<Player, HashMap<String, Long>> clipboard = new HashMap<>();
     
     public static boolean parseBoolean(String boolString) {
         if (boolString.equalsIgnoreCase("on")) {
@@ -78,12 +78,12 @@ public final class Clipboard {
     
     public static void put(Player pl, String id, BaxShop shop) {
         if (!clipboard.containsKey(pl)) {
-            clipboard.put(pl, new HashMap<String, Integer>());
+            clipboard.put(pl, new HashMap<String, Long>());
         }
         if (id == null) {
             id = "DEFAULT";
         }
-        clipboard.get(pl).put(id, shop.uid);
+        clipboard.get(pl).put(id, shop.id);
     }
     
     public static BaxShop get(Player pl, String id) {
@@ -91,7 +91,7 @@ public final class Clipboard {
             if (id == null) {
                 id = "DEFAULT";
             }
-            Integer uid = clipboard.get(pl).get(id);
+            Long uid = clipboard.get(pl).get(id);
             if (uid != null) {
                 return Main.instance.state.getShop(uid);
             }

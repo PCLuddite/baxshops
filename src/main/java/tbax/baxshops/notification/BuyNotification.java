@@ -116,7 +116,7 @@ public final class BuyNotification implements ConfigurationSerializable, Notific
         JsonObject o = new JsonObject();
         o.addProperty("type", TYPE_ID);
         o.addProperty("buyer", buyer);
-        o.addProperty("shop", shop.uid);
+        o.addProperty("shop", shop.id);
         o.add("entry", BaxEntrySerializer.serialize(version, entry));
         return o;
     }
@@ -134,7 +134,7 @@ public final class BuyNotification implements ConfigurationSerializable, Notific
     {
         Map<String, Object> args = new HashMap<>();
         args.put("buyer", buyer);
-        args.put("shop", shop.uid);
+        args.put("shop", shop.id);
         args.put("entry", entry);
         return args;
     }

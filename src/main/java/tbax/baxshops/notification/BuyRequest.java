@@ -167,7 +167,7 @@ public final class BuyRequest implements ConfigurationSerializable, Request, Tim
         JsonObject o = new JsonObject();
         o.addProperty("type", TYPE_ID);
         o.addProperty("buyer", buyer);
-        o.addProperty("shop", shop.uid);
+        o.addProperty("shop", shop.id);
         o.addProperty("expires", expirationDate);
         o.add("entry", BaxEntrySerializer.serialize(version, purchased));
         return o;
@@ -193,7 +193,7 @@ public final class BuyRequest implements ConfigurationSerializable, Request, Tim
     {
         Map<String, Object> args = new HashMap<>();
         args.put("buyer", buyer);
-        args.put("shop", shop.uid);
+        args.put("shop", shop.id);
         args.put("entry", purchased);
         args.put("expires", expirationDate);
         return args;

@@ -55,16 +55,21 @@ public final class StateFile {
     /**
      * A map of locations to their shop ids, accessed by their location in the world
      */
-    public HashMap<Location, Integer> locations = new HashMap<>();
+    public HashMap<Location, Long> locations = new HashMap<>();
     
     /**
      * A map of ids map to their shops
      */
-    public HashMap<Integer, BaxShop> shops = new HashMap<>();
+    public HashMap<Long, BaxShop> shops = new HashMap<>();
     /**
      * A map containing each player's notifications
      */
     public HashMap<String, ArrayDeque<Notification>> pending = new HashMap<>();
+    
+    /**
+     * The next available shop id
+     */
+    public long nextId = 0;
     
     private final Logger log;
     private final Main main;
@@ -75,14 +80,14 @@ public final class StateFile {
         this.log = Main.log;
     }
     
-    public BaxShop getShop(int uid)
+    public BaxShop getShop(long uid)
     {
         return shops.get(uid);
     }
     
     public BaxShop getShop(Location loc)
     {
-        Integer uid = locations.get(loc);
+        Long uid = locations.get(loc);
         if (uid == null) {
             return null;
         }
@@ -217,9 +222,9 @@ public final class StateFile {
             try {
                 int uid = Integer.parseInt(entry.getKey());
                 BaxShop shop = BaxShopDeserializer.deserialize(version, uid, entry.getValue().getAsJsonObject());
-                shops.put(shop.uid, shop);
+                shops.put(shop.id, shop);
                 for(Location loc : shop.getLocations()) {
-                    locations.put(loc, shop.uid);
+                    locations.put(loc, shop.id);
                 }
             }
             catch(NumberFormatException e) {
@@ -299,11 +304,26 @@ public final class StateFile {
             }
             return ret;
         }
+        
         FileConfiguration state = YamlConfiguration.loadConfiguration(stateLocation);
+        
         ArrayList<BaxShop> shoplist = (ArrayList)state.getList("shops");
         for(BaxShop shop : shoplist) {
             addShop(null, shop);
         }
+        
+        if (state.isLong("nextid")) {
+            nextId = state.getLong("nextid");
+        }
+        else {
+            nextId = -1;
+            for(Long id : shops.keySet()) {
+                if (id >= nextId) {
+                    nextId = id + 1;
+                }
+            }
+        }
+        
         ConfigurationSection yNotes = state.getConfigurationSection("notes");
         for(Map.Entry<String, Object> player : yNotes.getValues(false).entrySet()) {
             ArrayDeque<Notification> playerNotes = new ArrayDeque<>();
@@ -318,25 +338,25 @@ public final class StateFile {
     
     public boolean addShop(Player pl, BaxShop shop)
     {
-        if (shop.uid < 0) {
-            shop.uid = getUniqueId();
+        if (shop.id < 0) {
+            shop.id = getUniqueId();
         }
         for(Location loc : shop.getLocations()) {
             if (!addLocation(pl, loc, shop)) {
                 return false;
             }
         }
-        shops.put(shop.uid, shop);
+        shops.put(shop.id, shop);
         return true;
     }
     
     public boolean addLocation(Player pl, Location loc, BaxShop shop)
     {
-        Integer otherUid = locations.get(loc);
+        Long otherUid = locations.get(loc);
         if (otherUid == null) {
-            locations.put(loc, shop.uid);
+            locations.put(loc, shop.id);
         }
-        else if (otherUid != shop.uid) {
+        else if (otherUid != shop.id) {
             Main.sendError(pl, "You can't create a new shop here! Another shop already exists on this block!");
             return false;
         }
@@ -354,7 +374,7 @@ public final class StateFile {
     
     public boolean removeLocation(Player pl, Location loc)
     {
-        Integer uid = locations.get(loc);
+        Long uid = locations.get(loc);
         if (uid != null) {
             BaxShop shop = shops.get(uid);
             Block b = loc.getBlock();
@@ -367,7 +387,7 @@ public final class StateFile {
             shop.removeLocation(loc);
             locations.remove(loc);
             if (shop.getLocations().isEmpty()) {
-               shops.remove(shop.uid); 
+               shops.remove(shop.id); 
             }
         }
         return true;
@@ -492,13 +512,9 @@ public final class StateFile {
         }
     }
     
-    private int getUniqueId()
+    private long getUniqueId()
     {
-        int current = 1;
-        while(shops.containsKey(current)) {
-            ++current;
-        }
-        return current;
+        return nextId++;
     }
 	
     /**
@@ -516,10 +532,10 @@ public final class StateFile {
         int errors = 0;
         
         JsonObject jShops = new JsonObject();
-        for (Map.Entry<Integer, BaxShop> entry : shops.entrySet()) {
+        for (Map.Entry<Long, BaxShop> entry : shops.entrySet()) {
             try {
                 BaxShop shop = entry.getValue();
-                jShops.add(shop.uid + "", BaxShopSerializer.serialize(STATE_VERSION, shop));
+                jShops.add(shop.id + "", BaxShopSerializer.serialize(STATE_VERSION, shop));
             }
             catch(Exception e) { // A mortal sin, yes, but if an exception is thrown for one, the whole thing won't be saved.
                 log.warning("A shop could not be saved due to the following error: " + e.getClass().getName());
@@ -577,7 +593,7 @@ public final class StateFile {
 
         FileConfiguration state = new YamlConfiguration();
         state.set("version", STATE_VERSION);
-        
+        state.set("nextid", nextId);
         state.set("shops", new ArrayList(shops.values()));
         int invalid = 0;
         HashMap<String, List<String>> yNotes = new HashMap<>();
@@ -588,7 +604,7 @@ public final class StateFile {
                     ylist.add(note);
                 }
                 else {
-                    invalid++;
+                    ++invalid;
                 }
             }
             yNotes.put(player.getKey(), ylist);

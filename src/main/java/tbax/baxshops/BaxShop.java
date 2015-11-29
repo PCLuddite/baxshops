@@ -39,7 +39,7 @@ public final class BaxShop implements ConfigurationSerializable
 {
     public static final int ITEMS_PER_PAGE = 7;
     
-    public int uid = -1;
+    public long id = -1;
     public String owner;
     public ArrayList<Location> locations = new ArrayList<>();
     public ArrayList<BaxEntry> inventory = new ArrayList<>();
@@ -56,7 +56,12 @@ public final class BaxShop implements ConfigurationSerializable
     
     public BaxShop(Map<String, Object> args)
     {
-        uid = (int)args.get("id");
+        if (args.get("id") instanceof Integer) {
+            id = (int)args.get("id");
+        }
+        else {
+            id = (long)args.get("id");
+        }
         if (args.containsKey("buyRequests")) {
             buyRequests = (boolean)args.get("buyRequests");
         }
@@ -209,7 +214,7 @@ public final class BaxShop implements ConfigurationSerializable
     public Map<String, Object> serialize()
     {
         HashMap<String, Object> map = new HashMap<>();
-        map.put("id", uid);
+        map.put("id", id);
         map.put("owner", owner);
         if (infinite) {
             map.put("infinite", infinite);

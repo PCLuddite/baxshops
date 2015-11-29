@@ -116,7 +116,7 @@ public final class BuyRejection implements ConfigurationSerializable, Notificati
         JsonObject o = new JsonObject();
         o.addProperty("type", TYPE_ID);
         o.addProperty("seller", seller);
-        o.addProperty("shop", shop.uid);
+        o.addProperty("shop", shop.id);
         o.add("entry", BaxEntrySerializer.serialize(version, entry));
         return o;
     }
@@ -134,7 +134,7 @@ public final class BuyRejection implements ConfigurationSerializable, Notificati
     {
         Map<String, Object> args = new HashMap<>();
         args.put("seller", seller);
-        args.put("shop", shop.uid);
+        args.put("shop", shop.id);
         args.put("entry", entry);
         return args;
     }

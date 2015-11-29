@@ -39,7 +39,7 @@ public final class BaxShopDeserializer
 {
     public static BaxShop deserialize(double version, int uid, JsonObject o) {
         BaxShop shop = new BaxShop();
-        shop.uid = uid;
+        shop.id = uid;
         shop.owner = o.get("owner").getAsString();
         if (o.has("infinite")) {
             shop.infinite = o.get("infinite").getAsBoolean();

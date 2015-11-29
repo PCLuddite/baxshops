@@ -237,7 +237,7 @@ public final class SellRequest implements ConfigurationSerializable, Request, Ti
         JsonObject o = new JsonObject();
         o.addProperty("type", TYPE_ID);
         o.addProperty("seller", seller);
-        o.addProperty("shop", shop.uid);
+        o.addProperty("shop", shop.id);
         o.addProperty("expires", expirationDate);
         o.add("entry", BaxEntrySerializer.serialize(version, entry));
         return o;
@@ -257,7 +257,7 @@ public final class SellRequest implements ConfigurationSerializable, Request, Ti
     {
         Map<String, Object> args = new HashMap<>();
         args.put("seller", seller);
-        args.put("shop", shop.uid);
+        args.put("shop", shop.id);
         args.put("entry", entry);
         args.put("expires", expirationDate);
         return args;
