@@ -108,7 +108,7 @@ public final class StateFile {
      */
     public boolean backup()
     {
-        File stateLocation = new File(main.getDataFolder(), YAMLBAK_FILE_PATH);
+        File stateLocation = new File(main.getDataFolder(), YAML_FILE_PATH);
         if (stateLocation.exists()) {
             long timestamp = new Date().getTime();
             File backupFolder = new File(main.getDataFolder(), "backups");
@@ -553,7 +553,7 @@ public final class StateFile {
             if (!dir.exists()) {
                 dir.mkdirs();
             }
-            File f = new File(dir, "shops.json");
+            File f = new File(dir, JSON_FILE_PATH);
             try (FileWriter fw = new FileWriter(f)) {
                 fw.write(state.toString());
             }
@@ -605,7 +605,7 @@ public final class StateFile {
             if (!dir.exists()) {
                 dir.mkdirs();
             }
-            state.save(new File(dir, "shops.yml"));
+            state.save(new File(dir, YAML_FILE_PATH));
         } catch (IOException e) {
             log.warning("Save failed");
             e.printStackTrace();
