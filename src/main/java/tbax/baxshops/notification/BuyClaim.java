@@ -142,6 +142,12 @@ public final class BuyClaim implements ConfigurationSerializable, Claimable
     }
 
     @Override
+    public boolean checkIntegrity()
+    {
+        return shop != null;
+    }
+    
+    @Override
     public Map<String, Object> serialize()
     {
         Map<String, Object> args = new HashMap<>();

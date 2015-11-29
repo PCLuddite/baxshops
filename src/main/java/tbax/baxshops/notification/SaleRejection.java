@@ -113,6 +113,12 @@ public final class SaleRejection implements ConfigurationSerializable, Claimable
         }
     }
 
+    @Override
+    public boolean checkIntegrity()
+    {
+        return shop != null;
+    }
+
     public static final String TYPE_ID = "SaleReject";
     
     @Override

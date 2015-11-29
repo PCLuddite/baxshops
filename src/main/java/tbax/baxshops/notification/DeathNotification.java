@@ -77,6 +77,12 @@ public final class DeathNotification implements ConfigurationSerializable, Notif
     public DeathNotification()
     {
     }
+
+    @Override
+    public boolean checkIntegrity()
+    {
+        return true;
+    }
     
     public static DeathNotification fromJson(double version, JsonObject o)
     {

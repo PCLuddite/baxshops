@@ -102,6 +102,12 @@ public final class BuyNotification implements ConfigurationSerializable, Notific
         }
     }
 
+    @Override
+    public boolean checkIntegrity()
+    {
+        return shop != null;
+    }
+
     public static final String TYPE_ID = "BuyNote";
     
     @Override

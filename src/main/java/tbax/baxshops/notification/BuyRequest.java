@@ -172,6 +172,12 @@ public final class BuyRequest implements ConfigurationSerializable, Request, Tim
         o.add("entry", BaxEntrySerializer.serialize(version, purchased));
         return o;
     }
+
+    @Override
+    public boolean checkIntegrity()
+    {
+        return shop != null;
+    }
     
     public static BuyRequest fromJson(double version, JsonObject o)
     {

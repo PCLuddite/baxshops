@@ -118,6 +118,12 @@ public final class SaleNotificationAuto implements ConfigurationSerializable, Cl
                     );
         }
     }
+
+    @Override
+    public boolean checkIntegrity()
+    {
+        return shop != null;
+    }
     
     public static final String TYPE_ID = "SaleNoteAuto";
     

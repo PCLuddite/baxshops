@@ -579,11 +579,25 @@ public final class StateFile {
         state.set("version", STATE_VERSION);
         
         state.set("shops", new ArrayList(shops.values()));
-        
+        int invalid = 0;
         HashMap<String, List<String>> yNotes = new HashMap<>();
         for(Map.Entry<String, ArrayDeque<Notification>> player : pending.entrySet()) {
-            yNotes.put(player.getKey(), new ArrayList(player.getValue()));
+            ArrayList ylist = new ArrayList();
+            for(Notification note : player.getValue()) {
+                if (note.checkIntegrity()) {
+                    ylist.add(note);
+                }
+                else {
+                    invalid++;
+                }
+            }
+            yNotes.put(player.getKey(), ylist);
         }
+        
+        if (invalid > 0) {
+            log.warning(invalid + " notification(s) were invalid and could not be saved.");
+        }
+        
         state.createSection("notes", yNotes);
         
         try {

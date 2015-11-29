@@ -84,6 +84,12 @@ public final class LollipopNotification implements ConfigurationSerializable, No
         }
         return sender + " sent you " + adjective + " lollipop";
     }
+
+    @Override
+    public boolean checkIntegrity()
+    {
+        return true;
+    }
         
     public static final String TYPE_ID = "lolly";
 

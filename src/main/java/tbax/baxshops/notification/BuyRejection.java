@@ -102,6 +102,12 @@ public final class BuyRejection implements ConfigurationSerializable, Notificati
         }
     }
 
+    @Override
+    public boolean checkIntegrity()
+    {
+        return shop != null;
+    }
+
     public static final String TYPE_ID = "BuyReject";
     
     @Override

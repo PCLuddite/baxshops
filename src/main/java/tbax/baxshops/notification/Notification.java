@@ -46,4 +46,5 @@ public interface Notification {
      */
     public String getMessage(Player player);
     public JsonElement toJson(double version);
+    public boolean checkIntegrity();
 }

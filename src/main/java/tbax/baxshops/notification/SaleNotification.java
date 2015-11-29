@@ -98,6 +98,12 @@ public final class SaleNotification implements ConfigurationSerializable, Notifi
         }
     }
 
+    @Override
+    public boolean checkIntegrity()
+    {
+        return shop != null;
+    }
+
     public static final String TYPE_ID = "SaleNote";
 
     @Override

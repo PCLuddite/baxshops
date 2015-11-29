@@ -223,6 +223,12 @@ public final class SellRequest implements ConfigurationSerializable, Request, Ti
         return expirationDate;
     }
 
+    @Override
+    public boolean checkIntegrity()
+    {
+        return shop != null;
+    }
+
     public static final String TYPE_ID = "SellRequest";
     
     @Override

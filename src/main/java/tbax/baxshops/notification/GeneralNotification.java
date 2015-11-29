@@ -55,6 +55,12 @@ public final class GeneralNotification implements ConfigurationSerializable, Not
         return message;
     }
 
+    @Override
+    public boolean checkIntegrity()
+    {
+        return true;
+    }
+
     public static final String TYPE_ID = "general";
     
     @Override
