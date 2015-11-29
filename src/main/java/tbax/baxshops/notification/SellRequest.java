@@ -179,14 +179,11 @@ public final class SellRequest implements ConfigurationSerializable, Request, Ti
             if (!sellToShop(entry.toItemStack(), sender)) {
                 return -1;
             }
-            buyerNote = new GeneralNotification(
-                SaleNotificationAuto.getMessage(shop.owner, shop, entry, seller)
-            );
-            Main.instance.state.sendNotification(shop.owner, buyerNote, false);
-            Main.log.info(Main.toAnsiColor(SaleNotificationAuto.getMessage(null, shop, entry, seller)));
+            buyerNote = new SaleNotificationAuto(shop, entry, seller);
+            Main.instance.state.sendNotification(shop.owner, buyerNote);
         }
         else {
-            buyerNote = new SaleNotificationAuto(shop, entry, seller);
+            buyerNote = new SaleNotificationAutoClaim(shop, entry, seller);
             Main.instance.state.sendNotification(shop.owner, buyerNote);
         }
         return 1;

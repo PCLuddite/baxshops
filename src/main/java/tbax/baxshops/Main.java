@@ -131,6 +131,7 @@ public final class Main extends JavaPlugin implements Listener {
         ConfigurationSerialization.registerClass(LollipopNotification.class);
         ConfigurationSerialization.registerClass(SaleNotification.class);
         ConfigurationSerialization.registerClass(SaleNotificationAuto.class);
+        ConfigurationSerialization.registerClass(SaleNotificationAutoClaim.class);
         ConfigurationSerialization.registerClass(SaleRejection.class);
         ConfigurationSerialization.registerClass(SellRequest.class);
     }
