@@ -698,44 +698,43 @@ public final class ShopExecuter {
                     Format.number(Resources.EXPIRE_TIME_DAYS)
                 )
             );
-            return true;
         }
-        
-        int overflow = Main.giveItem(cmd.getPlayer(), purchased.toItemStack());
-        if (overflow > 0) {
-            if (overflow == amount) {
-                Main.sendError(cmd.getPlayer(), Resources.NO_ROOM);
-                return true;
-            }
-            price = Main.roundTwoPlaces((amount - overflow) * entry.retailPrice);
-            cmd.getSender().sendMessage(
-                String.format(Resources.SOME_ROOM + " " + Resources.CHARGED_MSG,
-                    amount - overflow, 
-                    itemName,
-                    Format.money(price)
-                )
-            );
-        } 
         else {
-            cmd.getSender().sendMessage(
-                String.format("You bought %s for %s.",
-                    Format.itemname(amount, itemName),
-                    Format.money(price)
-                )
-            );
-        }
-        Main.econ.withdrawPlayer(cmd.getPlayer().getName(), price);
-        if (!shop.infinite) {
-            entry.subtract(amount - overflow);
-        }
+            int overflow = Main.giveItem(cmd.getPlayer(), purchased.toItemStack());
+            if (overflow > 0) {
+                if (overflow == amount) {
+                    Main.sendError(cmd.getPlayer(), Resources.NO_ROOM);
+                    return true;
+                }
+                price = Main.roundTwoPlaces((amount - overflow) * entry.retailPrice);
+                cmd.getSender().sendMessage(
+                    String.format(Resources.SOME_ROOM + " " + Resources.CHARGED_MSG,
+                        amount - overflow, 
+                        itemName,
+                        Format.money(price)
+                    )
+                );
+            } 
+            else {
+                cmd.getSender().sendMessage(
+                    String.format("You bought %s for %s.",
+                        Format.itemname(amount, itemName),
+                        Format.money(price)
+                    )
+                );
+            }
+            Main.econ.withdrawPlayer(cmd.getPlayer().getName(), price);
+            if (!shop.infinite) {
+                entry.subtract(amount - overflow);
+            }
 
-        Main.econ.depositPlayer(shop.owner, price);
-        
-        purchased.subtract(overflow);
-        
-        cmd.getSender().sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.econ.getBalance(cmd.getSender().getName()))));
-        cmd.getMain().state.sendNotification(shop.owner, new BuyNotification(shop, purchased, cmd.getPlayer().getName()));        
-        
+            Main.econ.depositPlayer(shop.owner, price);
+
+            purchased.subtract(overflow);
+
+            cmd.getSender().sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.econ.getBalance(cmd.getSender().getName()))));
+            cmd.getMain().state.sendNotification(shop.owner, new BuyNotification(shop, purchased, cmd.getPlayer().getName()));        
+        }
         return true;
     }
     

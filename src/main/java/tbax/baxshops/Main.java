@@ -25,6 +25,7 @@
 package tbax.baxshops;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Logger;
 import net.milkbowl.vault.economy.Economy;
@@ -436,37 +437,36 @@ public final class Main extends JavaPlugin implements Listener {
      */
     public static int giveItem(Player pl, ItemStack item)
     {
-        int left = item.getAmount(), // how many items are left to add
-            max      = item.getMaxStackSize();
-        Inventory inv = pl.getInventory();
+        int amnt = item.getAmount(),
+            max = item.getMaxStackSize();
         if (max == -1) {
-            max = inv.getMaxStackSize();
+            max = pl.getInventory().getMaxStackSize();
         }
-        for (int i = 0; i < inv.getSize(); ++i) {
-            ItemStack curr = inv.getItem(i);
-            if (curr == null || curr.getType() == Material.AIR) {
-                left -= max;
-                if (left > 0) {
-                    pl.getInventory().addItem(cloneAmnt(item, max));
+        HashMap<Integer, ItemStack> overflow = new HashMap<>();
+        if (amnt > max) {
+            do {
+                amnt -= max;
+                if (amnt > 0) {
+                    overflow = pl.getInventory().addItem(cloneAmnt(item, max));
+                    if (!overflow.isEmpty()) {
+                        return overflow.get(0).getAmount() + amnt;
+                    }
                 }
                 else {
-                    pl.getInventory().addItem(cloneAmnt(item, left + max));
-                    return 0; // everything could fit
+                    overflow = pl.getInventory().addItem(cloneAmnt(item, amnt + max));
                 }
             }
-            else if (isItemEqual(curr, item)) {
-                int canfit = max - curr.getAmount();
-                left -= canfit;
-                if (left > 0) {
-                    pl.getInventory().addItem(cloneAmnt(item, max));
-                }
-                else {
-                    pl.getInventory().addItem(cloneAmnt(item, left + canfit));
-                    return 0; // everything could fit
-                }
-            }
+            while(amnt > 0);
         }
-        return left;
+        else {
+            overflow = pl.getInventory().addItem(item);
+        }
+        if (overflow.isEmpty()) {
+            return 0;
+        }
+        else {
+            return overflow.get(0).getAmount();
+        }
     }
     
     /**
