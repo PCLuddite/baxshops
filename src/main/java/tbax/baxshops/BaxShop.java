@@ -27,11 +27,8 @@ package tbax.baxshops;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -43,14 +40,15 @@ public final class BaxShop implements ConfigurationSerializable
     public static final int ITEMS_PER_PAGE = 7;
     
     public int uid = -1;
-    public ArrayList<BaxEntry> inventory = new ArrayList<>();
     public String owner;
+    public ArrayList<Location> locations = new ArrayList<>();
+    public ArrayList<BaxEntry> inventory = new ArrayList<>();
+    // shop flags
     public boolean infinite = false;
     public boolean sellToShop = false;
     public boolean notify = true;
     public boolean buyRequests = false;
     public boolean sellRequests = true;
-    public ArrayList<Location> locations = new ArrayList<>();
     
     public BaxShop()
     {
@@ -192,23 +190,6 @@ public final class BaxShop implements ConfigurationSerializable
     }
 
     /**
-     * Checks if this shop's inventory contains an item.
-     *
-     * @param id the item's ID
-     * @param damage the item's damage value (durability)
-     * @return whether the shop contains the item
-     */
-    public boolean containsItem(Material id, int damage)
-    {
-        for (BaxEntry e : inventory) {
-            if (e.getType() == id && e.getDurability() == damage) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
      * Find an entry for an item in this shop's inventory.
      *
      * @param stack the item to find
@@ -217,30 +198,7 @@ public final class BaxShop implements ConfigurationSerializable
     public BaxEntry findEntry(ItemStack stack)
     {
         for (BaxEntry e : inventory) {
-            if (e.getType() == stack.getType() && e.getDurability() == stack.getDurability()) {
-                for (Map.Entry<Enchantment, Integer> entry : stack.getEnchantments().entrySet()) {
-                    Integer level = e.getEnchantments().get(entry.getKey());
-                    if (!Objects.equals(level, entry.getValue())) {
-                        return null;
-                    }
-                }
-                return e;
-            }
-        }
-        return null;
-    }
-
-    /**
-     * Find an entry for an item in this shop's inventory.
-     *
-     * @param material the item's ID
-     * @param damage the item's damage value (durability)
-     * @return the item's entry, or null
-     */
-    public BaxEntry findEntry(Material material, int damage)
-    {
-        for (BaxEntry e : inventory) {
-            if (e.getType() == material && e.getDurability() == damage) {
+            if (e.isItemEqual(stack)) {
                 return e;
             }
         }

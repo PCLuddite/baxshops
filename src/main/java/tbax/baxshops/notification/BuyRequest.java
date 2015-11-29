@@ -138,7 +138,7 @@ public final class BuyRequest implements ConfigurationSerializable, Request, Tim
     public boolean reject(Player player)
     {
         if (!shop.infinite) {
-            BaxEntry shopEntry = shop.findEntry(purchased.getType(), purchased.getDurability());
+            BaxEntry shopEntry = shop.findEntry(purchased.getItemStack());
             if (shopEntry == null) {
                 shop.addEntry(purchased);
             }

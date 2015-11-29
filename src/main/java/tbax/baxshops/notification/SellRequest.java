@@ -194,7 +194,7 @@ public final class SellRequest implements ConfigurationSerializable, Request, Ti
     
     private boolean sellToShop(ItemStack item, CommandSender sender)
     {
-        BaxEntry shopEntry = shop.findEntry(item.getType(), item.getDurability());
+        BaxEntry shopEntry = shop.findEntry(item);
         if (shopEntry == null) {
             shopEntry = new BaxEntry();
             shopEntry.setItem(item);

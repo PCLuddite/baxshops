@@ -783,7 +783,7 @@ public final class ShopExecuter {
         }
 
         BaxShop shop = cmd.getShop();
-        BaxEntry entry = shop.findEntry(itemsToSell.getType(), itemsToSell.getDurability());
+        BaxEntry entry = shop.findEntry(itemsToSell);
         if (entry == null || entry.refundPrice < 0) {
             Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SHOPITEM);
             return true;
@@ -838,7 +838,7 @@ public final class ShopExecuter {
      */
     private static double sell(ShopCmd cmd, ItemStack itemsToSell, boolean showExtra) {
         BaxShop shop = cmd.getShop();
-        BaxEntry entry = shop.findEntry(itemsToSell.getType(), itemsToSell.getDurability());
+        BaxEntry entry = shop.findEntry(itemsToSell);
         if (entry == null || entry.refundPrice < 0) {
             Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SHOPITEM);
             return -1.0;

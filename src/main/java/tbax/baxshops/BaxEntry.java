@@ -97,6 +97,7 @@ public final class BaxEntry implements ConfigurationSerializable
     
     public void setItem(ItemStack item)
     {
+        assert item != null;
         quantity = item.getAmount();
         stack = item.clone();
         stack.setAmount(1);
@@ -189,6 +190,22 @@ public final class BaxEntry implements ConfigurationSerializable
         return stack.getDurability();
     }
     
+    /**
+     * Tests if the item material is equal, not taking into account the quantity
+     * @param item
+     * @return 
+     */
+    public boolean isItemEqual(ItemStack item)
+    {
+        assert item != null;
+        if (item.getAmount() > 0) {
+            stack.setAmount(item.getAmount());
+        }
+        boolean is_equal = stack.equals(item);
+        stack.setAmount(1);
+        return is_equal;
+    }
+    
     public BaxEntry clone() // decided not to declare throwing CloneNotSupported. Java exceptions are a nightmare. 11/10/15
     {
         BaxEntry cloned = new BaxEntry();
@@ -205,11 +222,13 @@ public final class BaxEntry implements ConfigurationSerializable
         if (!item.getEnchantments().isEmpty()) {
             return item.getEnchantments();
         }
-        else if (item.hasItemMeta() && item.getItemMeta().hasEnchants()) {
-            return item.getItemMeta().getEnchants();
-        }
-        else if (item.getType() == Material.ENCHANTED_BOOK && !((EnchantmentStorageMeta)item.getItemMeta()).getStoredEnchants().isEmpty()) {
-            return ((EnchantmentStorageMeta)item.getItemMeta()).getStoredEnchants();
+        else if (item.hasItemMeta()) {
+            if (item.getItemMeta().hasEnchants()) {
+                return item.getItemMeta().getEnchants();
+            }
+            else if (item.getItemMeta() instanceof EnchantmentStorageMeta) {
+                return ((EnchantmentStorageMeta)item.getItemMeta()).getStoredEnchants();
+            }
         }
         return null;
     }

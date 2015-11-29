@@ -103,12 +103,12 @@ public final class StateFile {
     }
     
     /**
-     * Attempts to back up the shops.json save file.
+     * Attempts to back up the shops.yml save file.
      * @return a boolean indicating success
      */
     public boolean backup()
     {
-        File stateLocation = new File(main.getDataFolder(), JSON_FILE_PATH);
+        File stateLocation = new File(main.getDataFolder(), YAMLBAK_FILE_PATH);
         if (stateLocation.exists()) {
             long timestamp = new Date().getTime();
             File backupFolder = new File(main.getDataFolder(), "backups");

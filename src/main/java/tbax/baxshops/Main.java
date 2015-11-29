@@ -373,6 +373,25 @@ public final class Main extends JavaPlugin implements Listener {
     }
     
     /**
+     * Tests if two items are equal, ignoring quantities
+     * @param stack1
+     * @param stack2
+     * @return 
+     */
+    public static boolean isItemEqual(ItemStack stack1, ItemStack stack2)
+    {
+        if (stack1 == null || stack2 == null) {
+            return stack1 == stack2;
+        }
+        // cloning may be ineficient, but I don't want to modify the original objects
+        ItemStack cloned1 = stack1.clone(),
+                  cloned2 = stack2.clone();
+        cloned1.setAmount(1);
+        cloned2.setAmount(1);
+        return cloned1.equals(cloned2);
+    }
+    
+    /**
      * Checks whether an item stack will fit in a player's inventory.
      *
      * @param pl the player
@@ -382,25 +401,23 @@ public final class Main extends JavaPlugin implements Listener {
     public static boolean inventoryFitsItem(Player pl, ItemStack item)
     {
         int quantity = item.getAmount(),
-            damage   = item.getDurability(),
             max      = item.getMaxStackSize();
-        Material id = item.getType();
         Inventory inv = pl.getInventory();
         ItemStack[] contents = inv.getContents();
-        ItemStack s;
+        ItemStack curr;
         if (max == -1) {
             max = inv.getMaxStackSize();
         }
         for (int i = 0; i < contents.length; ++i) {
-            if ((s = contents[i]) == null || s.getType() == Material.AIR) {
+            if ((curr = contents[i]) == null || curr.getType() == Material.AIR) {
                 quantity -= max;
                 if (quantity <= 0) {
                     return true;
                 }
                 continue;
             }
-            if (s.getType() == id && s.getDurability() == damage) {
-                quantity -= max - s.getAmount();
+            if (isItemEqual(curr, contents[i])) {
+                quantity -= max - curr.getAmount();
                 if (quantity <= 0) {
                     return true;
                 }
@@ -436,7 +453,7 @@ public final class Main extends JavaPlugin implements Listener {
                     return 0; // everything could fit
                 }
             }
-            else if (curr.getType() == item.getType() && curr.getDurability() == item.getDurability()) {
+            else if (isItemEqual(curr, item)) {
                 int canfit = max - curr.getAmount();
                 left -= canfit;
                 if (left > 0) {
