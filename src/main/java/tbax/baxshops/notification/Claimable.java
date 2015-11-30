@@ -24,7 +24,6 @@
  */
 package tbax.baxshops.notification;
 
-import com.google.gson.JsonElement;
 import org.bukkit.entity.Player;
 
 /**
@@ -40,5 +39,4 @@ public interface Claimable extends Notification {
      * @return true if the notification could be claimed, false otherwise
      */
     public boolean claim(Player player);
-    public JsonElement toJson(double version);
 }

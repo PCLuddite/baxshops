@@ -24,8 +24,6 @@
  */
 package tbax.baxshops.notification;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -35,8 +33,6 @@ import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
 import tbax.baxshops.Main;
 import tbax.baxshops.Resources;
-import tbax.baxshops.serialization.BaxEntryDeserializer;
-import tbax.baxshops.serialization.BaxEntrySerializer;
 import tbax.baxshops.serialization.ItemNames;
 
 /**
@@ -50,9 +46,9 @@ public final class BuyClaim implements ConfigurationSerializable, Claimable
      */
     public BaxEntry entry;
     /**
-     * The shop to which the item is being sold
+     *  The user who sold the item
      */
-    public BaxShop shop;
+    public String seller;
     /**
      * The seller of the item
      */
@@ -60,13 +56,13 @@ public final class BuyClaim implements ConfigurationSerializable, Claimable
     
     /**
      * Constructs a new notification.
-     * @param shop the shop to which the seller was selling
+     * @param seller the username of the seller
      * @param entry an entry for the item (note: not the one in the shop)
      * @param buyer the buyer of the item
      */
-    public BuyClaim(BaxShop shop, BaxEntry entry, String buyer) 
+    public BuyClaim(String seller, BaxEntry entry, String buyer) 
     {
-        this.shop = shop;
+        this.seller = seller;
         this.entry = entry;
         this.buyer = buyer;
     }
@@ -79,7 +75,18 @@ public final class BuyClaim implements ConfigurationSerializable, Claimable
     {
         this.buyer = (String)args.get("buyer");
         this.entry = (BaxEntry)args.get("entry");
-        this.shop = Main.instance.state.getShop((int)args.get("shop"));
+        if (args.containsKey("shop")) {
+            BaxShop shop = Main.instance.state.getShop((int)args.get("shop"));
+            if (shop == null) {
+                seller = Resources.ERROR_INLINE;
+            }
+            else {
+                seller = shop.owner;
+            }
+        }
+        else {
+            seller = (String)args.get("seller");
+        }
     }
     
     @Override
@@ -104,7 +111,7 @@ public final class BuyClaim implements ConfigurationSerializable, Claimable
     {
         if (player == null || !player.getName().equals(buyer)) {
             return String.format("%s accepted %s's request to buy %s for %s.",
-                        Format.username(shop.owner), 
+                        Format.username(seller), 
                         Format.username2(buyer),
                         Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
                         Format.money(entry.retailPrice * entry.getAmount())
@@ -112,7 +119,7 @@ public final class BuyClaim implements ConfigurationSerializable, Claimable
         }
         else {
             return String.format("%s accepted your request to buy %s for %s.",
-                    Format.username(shop.owner),
+                    Format.username(seller),
                     Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
                     Format.money(entry.retailPrice * entry.getAmount())
             );
@@ -122,37 +129,11 @@ public final class BuyClaim implements ConfigurationSerializable, Claimable
     public static final String TYPE_ID = "BuyClaim";
     
     @Override
-    public JsonElement toJson(double version)
-    {
-        JsonObject o = new JsonObject();
-        o.addProperty("type", TYPE_ID);
-        o.addProperty("buyer", buyer);
-        o.addProperty("shop", shop.id);
-        o.add("entry", BaxEntrySerializer.serialize(version, entry));
-        return o;
-    }
-    
-    public static BuyClaim fromJson(double version, JsonObject o)
-    {
-        BuyClaim claim = new BuyClaim();
-        claim.buyer = o.get("buyer").getAsString();
-        claim.shop = Main.instance.state.getShop(o.get("shop").getAsInt());
-        claim.entry = BaxEntryDeserializer.deserialize(version, o);
-        return claim;
-    }
-
-    @Override
-    public boolean checkIntegrity()
-    {
-        return shop != null;
-    }
-    
-    @Override
     public Map<String, Object> serialize()
     {
         Map<String, Object> args = new HashMap<>();
         args.put("buyer", buyer);
-        args.put("shop", shop.id);
+        args.put("seller", seller);
         args.put("entry", entry);
         return args;
     }
@@ -165,5 +146,11 @@ public final class BuyClaim implements ConfigurationSerializable, Claimable
     public static BuyClaim valueOf(Map<String, Object> args)
     {
         return deserialize(args);
+    }
+
+    @Override
+    public boolean checkIntegrity()
+    {
+        return true;
     }
 }

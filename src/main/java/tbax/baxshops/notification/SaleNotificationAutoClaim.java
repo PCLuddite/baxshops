@@ -24,12 +24,10 @@
  */
 package tbax.baxshops.notification;
 
-import com.google.gson.JsonElement;
 import java.util.Map;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import tbax.baxshops.BaxEntry;
-import tbax.baxshops.BaxShop;
 import tbax.baxshops.Main;
 
 /**
@@ -45,31 +43,19 @@ public class SaleNotificationAutoClaim extends SaleNotificationAuto implements C
 
     /**
      * Constructs a new notification.
-     * @param shop the shop to which the seller was selling
+     * @param buyer the buyer of the item
      * @param entry an entry for the item (note: not the one in the shop)
      * @param seller the seller of the item
      */
-    public SaleNotificationAutoClaim(BaxShop shop, BaxEntry entry, String seller) 
+    public SaleNotificationAutoClaim(String buyer, String seller, BaxEntry entry) 
     {
-        super(shop, entry, seller);
+        super(buyer, seller, entry);
     }
     
     @Override
     public Map<String, Object> serialize()
     {
         return super.serialize();
-    }
-
-    @Override
-    public JsonElement toJson(double version)
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public boolean checkIntegrity()
-    {
-        return super.checkIntegrity();
     }
 
     @Override

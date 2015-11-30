@@ -174,117 +174,6 @@ public final class StateFile {
         log.warning("Aborting backup: shops.yml not found");
         return false;
     }
-
-    /*
-    * Loads all shops from shop.json file
-    */
-    public boolean loadStateJson()
-    {
-        File stateLocation = new File(main.getDataFolder(), JSON_FILE_PATH);
-        if (!stateLocation.exists()) {
-            return false;
-        }
-        try {
-            try (JsonReader jr = new JsonReader(new FileReader(stateLocation))) {
-                JsonParser p = new JsonParser();
-                JsonElement e = p.parse(jr);
-                if (e.isJsonObject()) {
-                    JsonObject full = e.getAsJsonObject();
-                    double version = 0.0;
-                    if (full.has("version")) {
-                        version = full.get("version").getAsDouble();
-                        log.info("State file is of version " + version);
-                    }
-                    else {
-                        log.info("State file has no version.");
-                    }
-                    if (version != STATE_VERSION) {
-                        log.info("This will be converted to version " + STATE_VERSION + " when saved.");
-                    }
-                    loadShops(version, full.get("shops").getAsJsonObject());
-                    loadNotes(version, full.get("notes").getAsJsonObject());
-                }
-                else {
-                    shops = null;
-                }
-            }
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            shops = null;
-        }
-        return true;
-    }
-    
-    private void loadShops(double version, JsonObject shopObject)
-    {
-        for(Map.Entry<String, JsonElement> entry : shopObject.entrySet()) {
-            try {
-                int uid = Integer.parseInt(entry.getKey());
-                BaxShop shop = BaxShopDeserializer.deserialize(version, uid, entry.getValue().getAsJsonObject());
-                shops.put(shop.id, shop);
-                for(Location loc : shop.getLocations()) {
-                    locations.put(loc, shop.id);
-                }
-            }
-            catch(NumberFormatException e) {
-                log.warning("Invalid shop id '" + entry.getKey() + "'! Shop has been skipped. If you believe this is an error, try loading a backup.");
-            }
-        }
-    }
-    
-    private void loadNotes(double version, JsonObject noteObject)
-    {
-        for(Map.Entry<String, JsonElement> entry : noteObject.entrySet()) {
-            ArrayDeque<Notification> notes = new ArrayDeque<>();
-            if (entry.getValue().isJsonArray()) {
-                for(JsonElement e : entry.getValue().getAsJsonArray()) {
-                    if (e.isJsonObject()) {
-                        Notification n = loadNote(version, e.getAsJsonObject());
-                        if (n != null) {
-                            notes.add(n);
-                        }
-                    }
-                    else {
-                        log.warning("Invalid notification type. Skipping.");
-                    }
-                }
-            }
-            pending.put(entry.getKey(), notes);
-        }
-    }
-    
-    private Notification loadNote(double version, JsonObject o)
-    {
-        switch(o.get("type").getAsString()) {
-            case BuyClaim.TYPE_ID:
-                return BuyClaim.fromJson(version, o);
-            case BuyNotification.TYPE_ID:
-                return BuyNotification.fromJson(version, o);
-            case BuyRejection.TYPE_ID:
-                return BuyRejection.fromJson(version, o);
-            case BuyRequest.TYPE_ID:
-                return BuyRequest.fromJson(version, o);
-            case DeathNotification.TYPE_ID:
-                return DeathNotification.fromJson(version, o);
-            case GeneralNotification.TYPE_ID:
-                return GeneralNotification.fromJson(version, o);
-            case LollipopNotification.TYPE_ID:
-                return LollipopNotification.fromJson(version, o);
-            case SaleNotification.TYPE_ID:
-                return SaleNotification.fromJson(version, o);
-            case SaleNotificationAuto.TYPE_ID:
-                return SaleNotificationAuto.fromJson(version, o);
-            case SaleRejection.TYPE_ID:
-                return SaleRejection.fromJson(version, o);
-            case SellRequest.TYPE_ID:
-                return SellRequest.fromJson(version, o);
-            default:
-                log.warning("Unknown message type '" + o.get("type").getAsString() + "'. Skipped.");
-                break;
-        }
-        return null;
-    }
     
     /*
      * Loads all shops from shop.yml file
@@ -293,16 +182,8 @@ public final class StateFile {
     {
         File stateLocation = new File(main.getDataFolder(), YAML_FILE_PATH);
         if (!stateLocation.exists()) {
-            log.info("YAML file did not exist. Trying to load JSON...");
-            boolean ret = loadStateJson();
-            if (ret) {
-                File jsonFile = new File(main.getDataFolder(), JSON_FILE_PATH);
-                jsonFile.delete();
-            }
-            else {
-                log.info("JSON did not exist. Assuming new configuration.");
-            }
-            return ret;
+            log.info("YAML file did not exist");
+            return false;
         }
         
         FileConfiguration state = YamlConfiguration.loadConfiguration(stateLocation);
@@ -365,10 +246,11 @@ public final class StateFile {
     
     public boolean removeShop(Player pl, BaxShop shop)
     {
+        String owner = shop.owner;
         for(Location loc : shop.getLocations()) {
             removeLocation(pl, loc);
         }
-        pl.sendMessage(String.format("%s's shop has been deleted.", Format.username(shop.owner)));
+        pl.sendMessage(String.format("%s's shop has been deleted.", Format.username(owner)));
         return true;
     }
     
@@ -515,71 +397,6 @@ public final class StateFile {
     private long getUniqueId()
     {
         return nextId++;
-    }
-	
-    /**
-     * Saves all shops as json
-     */
-    public void saveAllJson()
-    {
-        if (!backup()) {
-            log.warning("Failed to back up BaxShops");
-        }
-
-        JsonObject state = new JsonObject();
-        state.addProperty("version", STATE_VERSION);
-        
-        int errors = 0;
-        
-        JsonObject jShops = new JsonObject();
-        for (Map.Entry<Long, BaxShop> entry : shops.entrySet()) {
-            try {
-                BaxShop shop = entry.getValue();
-                jShops.add(shop.id + "", BaxShopSerializer.serialize(STATE_VERSION, shop));
-            }
-            catch(Exception e) { // A mortal sin, yes, but if an exception is thrown for one, the whole thing won't be saved.
-                log.warning("A shop could not be saved due to the following error: " + e.getClass().getName());
-                ++errors;
-            }
-        }
-        state.add("shops", jShops);
-        
-        JsonObject jPending = new JsonObject();
-        for(Map.Entry<String, ArrayDeque<Notification>> entry : pending.entrySet()) {
-            JsonArray notes = new JsonArray();
-            for(Notification n : entry.getValue()) {
-                try {
-                    notes.add(n.toJson(STATE_VERSION));
-                }
-                catch (Exception e) {
-                    log.warning("A notification could not be saved due to the following error: " + e.getClass().getName());
-                    ++errors;
-                }
-            }
-            jPending.add(entry.getKey(), notes);
-        }
-        state.add("notes", jPending);
-        
-        if (errors > 0) {
-            log.warning(String.format("BaxShops encountered %d error(s) when converting the shops and notifications to JSON. You may wish to load a backup next time.", errors));
-        }
-        
-        try {
-            File dir = main.getDataFolder();
-            if (!dir.exists()) {
-                dir.mkdirs();
-            }
-            File f = new File(dir, JSON_FILE_PATH);
-            try (FileWriter fw = new FileWriter(f)) {
-                fw.write(state.toString());
-            }
-        } catch (FileNotFoundException e) {
-            log.warning("Save failed");
-            e.printStackTrace();
-        } catch (IOException e) {
-            log.warning("Save failed");
-            e.printStackTrace();
-        }
     }
     
     /**

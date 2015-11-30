@@ -28,58 +28,74 @@ import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
+import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
+import tbax.baxshops.Main;
+import tbax.baxshops.Resources;
+import tbax.baxshops.serialization.ItemNames;
 
-public final class DeathNotification implements ConfigurationSerializable, Notification
+/**
+ *
+ * @author Timothy Baxendale (pcluddite@hotmail.com)
+ */
+public class DeletedShopClaim implements ConfigurationSerializable, Claimable
 {
-    private static final long serialVersionUID = 1L;
+    public BaxEntry entry;
+    public String owner;
     
-    public double tax;
-    public String person;
-    
-    public DeathNotification(String person, double tax)
+    public DeletedShopClaim(Map<String, Object> args)
     {
-        this.person = person;
-        this.tax = tax;
+        entry = (BaxEntry)args.get("entry");
+        owner = (String)args.get("owner");
+    }
+    
+    public DeletedShopClaim(String owner, BaxEntry entry)
+    {
+        this.owner = owner;
+        this.entry = entry;
     }
 
-    public DeathNotification(Map<String, Object> args)
+    @Override
+    public boolean claim(Player player)
     {
-        this.person = (String)args.get("person");
-        this.tax = (double)args.get("tax");
+        if (Main.tryGiveItem(player, entry.toItemStack())) {
+            if (entry.getAmount() == 1) {
+                player.sendMessage("The item have been added to your inventory.");
+            }
+            else {
+                player.sendMessage("The items has been added to your inventory.");
+            }
+            return true;
+        }
+        else {
+            Main.sendError(player, Resources.NO_ROOM);
+            return false;
+        }
     }
-    
+
     @Override
     public String getMessage(Player player)
     {
-        if (player == null || !player.getName().equals(person)) {
-            return String.format("%s was fined %s for dying.", Format.username(person), Format.money(tax));
-        }
-        else {
-            return String.format("You were fined %s for dying.", Format.money(tax));
-        }
+        return String.format("The shop that had this entry no longer exists. You have %s outstanding.", Format.itemname(entry.quantity, ItemNames.getItemName(entry)));
     }
-    
-    public DeathNotification()
-    {
-    }
-    
+
+    @Override
     public Map<String, Object> serialize()
     {
-        Map<String, Object> args = new HashMap<>();
-        args.put("person", person);
-        args.put("tax", tax);
+        HashMap<String, Object> args = new HashMap<>();
+        args.put("entry", entry);
+        args.put("owner", owner);
         return args;
     }
     
-    public static DeathNotification deserialize(Map<String, Object> args)
+    public static DeletedShopClaim deserialize(Map<String, Object> args)
     {
-        return new DeathNotification(args);
+        return new DeletedShopClaim(args);
     }
     
-    public static DeathNotification valueOf(Map<String, Object> args)
+    public static DeletedShopClaim valueOf(Map<String, Object> args)
     {
-        return deserialize(args);
+        return new DeletedShopClaim(args);
     }
 
     @Override
@@ -87,4 +103,5 @@ public final class DeathNotification implements ConfigurationSerializable, Notif
     {
         return true;
     }
+    
 }

@@ -110,7 +110,7 @@ public final class BaxShop implements ConfigurationSerializable
         return a.getBlockX() == b.getBlockX() &&
                a.getBlockY() == b.getBlockY() &&
                a.getBlockZ() == b.getBlockZ() &&
-               a.getWorld() == b.getWorld();
+               a.getWorld().equals(b.getWorld());
     }
     
     public boolean hasLocation(Location loc)

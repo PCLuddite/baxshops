@@ -24,8 +24,6 @@
  */
 package tbax.baxshops.notification;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -38,8 +36,6 @@ import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
 import tbax.baxshops.Main;
 import tbax.baxshops.Resources;
-import tbax.baxshops.serialization.BaxEntryDeserializer;
-import tbax.baxshops.serialization.BaxEntrySerializer;
 import tbax.baxshops.serialization.ItemNames;
 
 /**
@@ -47,22 +43,27 @@ import tbax.baxshops.serialization.ItemNames;
  * to buy an item.
  * BuyRequests expire after five days.
  */
-public final class BuyRequest implements ConfigurationSerializable, Request, TimedNotification {
+public final class BuyRequest implements ConfigurationSerializable, Request, TimedNotification
+{
     private static final long serialVersionUID = 1L;
     /**
      * An entry for the purchased item
      */
     public BaxEntry purchased;
     /**
-     * The shop to which the item is being sold
+     * The shop id at which the item is being purchased
      */
-    public BaxShop shop;
+    public long shopid;
     /**
      * The date at which the request expires
      */
     public long expirationDate;
     /**
-     * The seller of the item
+     *  The user who sold the item
+     */
+    public String seller;
+    /**
+     * The buyer of the item
      */
     public String buyer;
     
@@ -73,22 +74,27 @@ public final class BuyRequest implements ConfigurationSerializable, Request, Tim
     public BuyRequest(Map<String, Object> args)
     {
         buyer = (String)args.get("buyer");
-        shop = Main.instance.state.getShop((int)args.get("shop"));
+        shopid = (int)args.get("shop");
         purchased = (BaxEntry)args.get("entry");
+        if (args.containsKey("seller")) {
+            seller = (String)args.get("seller");
+        }
         expirationDate = (long)args.get("expires");
     }
 
     /**
      * Constructs a new notification.
-     * @param shop the shop to which the seller was selling
+     * @param shop the shop id at which the item was being sold
+     * @param seller the seller of the item
      * @param entry an entry for the item (note: not the one in the shop)
      * @param buyer the buyer of the item
      */
-    public BuyRequest(BaxShop shop, BaxEntry entry, String buyer)
+    public BuyRequest(long shop, String buyer, String seller, BaxEntry entry)
     {
-        this.shop = shop;
+        this.shopid = shop;
         this.purchased = entry;
         this.buyer = buyer;
+        this.seller = seller;
 
         Calendar c = Calendar.getInstance();
         c.setTime(new Date());
@@ -99,19 +105,19 @@ public final class BuyRequest implements ConfigurationSerializable, Request, Tim
     @Override
     public String getMessage(Player player)
     {
-        if (player == null || !player.getName().equals(shop.owner)) {
+        if (player == null || !player.getName().equals(seller)) {
             return String.format("%s wants to buy %s from %s for %s.",
                         Format.username(buyer),
                         Format.itemname(purchased.getAmount(), ItemNames.getItemName(purchased)),
-                        Format.username2(shop.owner),
-                        Format.money(purchased.refundPrice * purchased.getAmount())
+                        Format.username2(seller),
+                        Format.money(purchased.retailPrice * purchased.getAmount())
                     );
         }
         else {
             return String.format("%s wants to buy %s from you for %s.",
                         Format.username(buyer),
                         Format.itemname(purchased.getAmount(), ItemNames.getItemName(purchased)),
-                        Format.money(purchased.refundPrice * purchased.getAmount())
+                        Format.money(purchased.retailPrice * purchased.getAmount())
                     );
         }
     }
@@ -124,9 +130,9 @@ public final class BuyRequest implements ConfigurationSerializable, Request, Tim
         Economy econ = Main.econ;
         
         econ.withdrawPlayer(buyer, price);
-        econ.depositPlayer(shop.owner, price);
+        econ.depositPlayer(seller, price);
         
-        BuyClaim n = new BuyClaim(shop, purchased, buyer);
+        BuyClaim n = new BuyClaim(seller, purchased, buyer);
         Main.instance.state.sendNotification(buyer, n);
         
         acceptingPlayer.sendMessage("Offer accepted");
@@ -137,7 +143,13 @@ public final class BuyRequest implements ConfigurationSerializable, Request, Tim
     @Override
     public boolean reject(Player player)
     {
-        if (!shop.infinite) {
+        BaxShop shop = Main.instance.state.getShop(shopid);
+        if (shop == null) {
+            DeletedShopClaim shopDeleted = new DeletedShopClaim(buyer, purchased);
+            Main.instance.state.sendNotification(player, shopDeleted);
+            return true;
+        }
+        else if (!shop.infinite) {
             BaxEntry shopEntry = shop.findEntry(purchased.getItemStack());
             if (shopEntry == null) {
                 shop.addEntry(purchased);
@@ -147,7 +159,7 @@ public final class BuyRequest implements ConfigurationSerializable, Request, Tim
             }
         }
 
-        BuyRejection n = new BuyRejection(shop, purchased, buyer);
+        BuyRejection n = new BuyRejection(seller, buyer, purchased);
         Main.instance.state.sendNotification(buyer, n);
         player.sendMessage("Offer rejected");
         return true;
@@ -159,41 +171,12 @@ public final class BuyRequest implements ConfigurationSerializable, Request, Tim
         return expirationDate;
     }
     
-    public static final String TYPE_ID = "BuyRequest";
-    
-    @Override
-    public JsonElement toJson(double version)
-    {
-        JsonObject o = new JsonObject();
-        o.addProperty("type", TYPE_ID);
-        o.addProperty("buyer", buyer);
-        o.addProperty("shop", shop.id);
-        o.addProperty("expires", expirationDate);
-        o.add("entry", BaxEntrySerializer.serialize(version, purchased));
-        return o;
-    }
-
-    @Override
-    public boolean checkIntegrity()
-    {
-        return shop != null;
-    }
-    
-    public static BuyRequest fromJson(double version, JsonObject o)
-    {
-        BuyRequest request = new BuyRequest();
-        request.buyer = o.get("buyer").getAsString();
-        request.shop = Main.instance.state.getShop(o.get("shop").getAsInt());
-        request.expirationDate = o.get("expires").getAsLong();
-        request.purchased = BaxEntryDeserializer.deserialize(version, o.get("entry").getAsJsonObject());
-        return request;
-    }
-    
     public Map<String, Object> serialize()
     {
         Map<String, Object> args = new HashMap<>();
         args.put("buyer", buyer);
-        args.put("shop", shop.id);
+        args.put("seller", seller);
+        args.put("shop", shopid);
         args.put("entry", purchased);
         args.put("expires", expirationDate);
         return args;
@@ -207,5 +190,11 @@ public final class BuyRequest implements ConfigurationSerializable, Request, Tim
     public static BuyRequest valueOf(Map<String, Object> args)
     {
         return deserialize(args);
+    }
+
+    @Override
+    public boolean checkIntegrity()
+    {
+        return true;
     }
 }

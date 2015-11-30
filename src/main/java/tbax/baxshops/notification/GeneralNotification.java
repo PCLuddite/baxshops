@@ -24,8 +24,6 @@
  */
 package tbax.baxshops.notification;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -54,34 +52,6 @@ public final class GeneralNotification implements ConfigurationSerializable, Not
     {
         return message;
     }
-
-    @Override
-    public boolean checkIntegrity()
-    {
-        return true;
-    }
-
-    public static final String TYPE_ID = "general";
-    
-    @Override
-    public JsonElement toJson(double version) 
-    {
-        JsonObject o = new JsonObject();
-        o.addProperty("type", TYPE_ID);
-        o.addProperty("msg", message);
-        return o;
-    }
-    
-    public GeneralNotification() 
-    {
-    }
-    
-    public static GeneralNotification fromJson(double version, JsonObject o)
-    {
-        GeneralNotification general = new GeneralNotification();
-        general.message = o.get("msg").getAsString();
-        return general;
-    }
     
     public Map<String, Object> serialize()
     {
@@ -98,5 +68,11 @@ public final class GeneralNotification implements ConfigurationSerializable, Not
     public static GeneralNotification valueOf(Map<String, Object> args)
     {
         return deserialize(args);
+    }
+
+    @Override
+    public boolean checkIntegrity()
+    {
+        return true;
     }
 }

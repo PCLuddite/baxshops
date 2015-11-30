@@ -24,8 +24,6 @@
  */
 package tbax.baxshops.notification;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.ChatColor;
@@ -35,8 +33,7 @@ import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
 import tbax.baxshops.Main;
-import tbax.baxshops.serialization.BaxEntryDeserializer;
-import tbax.baxshops.serialization.BaxEntrySerializer;
+import tbax.baxshops.Resources;
 import tbax.baxshops.serialization.ItemNames;
 
 /**
@@ -50,9 +47,9 @@ public final class BuyRejection implements ConfigurationSerializable, Notificati
      */
     public BaxEntry entry;
     /**
-     * The shop to which the item is being sold
+     *  The user who sold the item
      */
-    public BaxShop shop;
+    public String seller;
     /**
      * The buyer of the item
      */
@@ -64,35 +61,42 @@ public final class BuyRejection implements ConfigurationSerializable, Notificati
     
     public BuyRejection(Map<String, Object> args)
     {
-        if (args.containsKey("seller")) {
-            this.buyer = (String)args.get("seller");
+        if (args.containsKey("buyer")) {
+            this.buyer = (String)args.get("buyer");
+            this.seller = (String)args.get("seller");
         }
         else {
-            this.buyer = (String)args.get("buyer");
+            this.buyer = (String)args.get("seller");
+            BaxShop shop = Main.instance.state.getShop((int)args.get("shop"));
+            if (shop == null) {
+                seller = Resources.ERROR_INLINE;
+            }
+            else {
+                seller = shop.owner;
+            }
         }
         this.entry = (BaxEntry)args.get("entry");
-        this.shop = Main.instance.state.getShop((int)args.get("shop"));
     }
 
     /**
      * Constructs a new notification.
-     * @param shop the shop to which the seller was selling
+     * @param seller the username of the seller
      * @param entry an entry for the item (note: not the one in the shop)
-     * @param seller the seller of the item
+     * @param buyer the buyer of the item
      */
-    public BuyRejection(BaxShop shop, BaxEntry entry, String seller)
+    public BuyRejection(String seller, String buyer, BaxEntry entry)
     {
-        this.shop = shop;
         this.entry = entry;
-        this.buyer = seller;
+        this.seller = seller;
+        this.buyer = buyer;
     }
 
     @Override
     public String getMessage(Player player)
     {
-        if (player == null || !player.getName().equals(buyer)) {
+        if (player == null || !player.getName().equals(seller)) {
             return String.format("%s " + ChatColor.RED + "rejected" + ChatColor.RESET + " %s's request to buy %s for %s.",
-                        Format.username(shop.owner),
+                        Format.username(seller),
                         Format.username2(buyer),
                         Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
                         Format.money(entry.refundPrice * entry.getAmount())
@@ -100,46 +104,18 @@ public final class BuyRejection implements ConfigurationSerializable, Notificati
         }
         else {
             return String.format("%s " + ChatColor.RED + "rejected" + ChatColor.RESET + " your request to buy %s for %s.",
-                        Format.username(shop.owner),
+                        Format.username(seller),
                         Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
                         Format.money(entry.refundPrice * entry.getAmount())
                     );
         }
     }
-
-    @Override
-    public boolean checkIntegrity()
-    {
-        return shop != null;
-    }
-
-    public static final String TYPE_ID = "BuyReject";
-    
-    @Override
-    public JsonElement toJson(double version)
-    {
-        JsonObject o = new JsonObject();
-        o.addProperty("type", TYPE_ID);
-        o.addProperty("seller", buyer);
-        o.addProperty("shop", shop.id);
-        o.add("entry", BaxEntrySerializer.serialize(version, entry));
-        return o;
-    }
-    
-    public static BuyRejection fromJson(double version, JsonObject o) 
-    {
-        BuyRejection claim = new BuyRejection();
-        claim.buyer = o.get("seller").getAsString();
-        claim.shop = Main.instance.state.getShop(o.get("shop").getAsInt());
-        claim.entry = BaxEntryDeserializer.deserialize(version, o.get("entry").getAsJsonObject());
-        return claim;
-    }
     
     public Map<String, Object> serialize()
     {
         Map<String, Object> args = new HashMap<>();
-        args.put("seller", buyer);
-        args.put("shop", shop.id);
+        args.put("buyer", buyer);
+        args.put("seller", seller);
         args.put("entry", entry);
         return args;
     }
@@ -152,5 +128,11 @@ public final class BuyRejection implements ConfigurationSerializable, Notificati
     public static BuyRejection valueOf(Map<String, Object> args)
     {
         return deserialize(args);
+    }
+
+    @Override
+    public boolean checkIntegrity()
+    {
+        return true;
     }
 }

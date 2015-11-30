@@ -685,7 +685,7 @@ public final class ShopExecuter {
                 entry.subtract(amount);
             }
             
-            BuyRequest request = new BuyRequest(shop, purchased, cmd.getPlayer().getName());
+            BuyRequest request = new BuyRequest(shop.id, cmd.getPlayer().getName(), shop.owner, purchased);
             cmd.getMain().state.sendNotification(shop.owner, request);
             cmd.getPlayer().sendMessage(
                 String.format("Your request to buy %s for %s has been sent.",
@@ -733,7 +733,7 @@ public final class ShopExecuter {
             purchased.subtract(overflow);
 
             cmd.getSender().sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.econ.getBalance(cmd.getSender().getName()))));
-            cmd.getMain().state.sendNotification(shop.owner, new BuyNotification(shop, purchased, cmd.getPlayer().getName()));        
+            cmd.getMain().state.sendNotification(shop.owner, new BuyNotification(cmd.getPlayer().getName(), shop.owner, purchased));        
         }
         return true;
     }
@@ -850,7 +850,7 @@ public final class ShopExecuter {
 
         req.refundPrice = entry.refundPrice;
         
-        SellRequest request = new SellRequest(shop, req, cmd.getPlayer().getName());
+        SellRequest request = new SellRequest(shop.id, shop.owner, cmd.getPlayer().getName(), req);
         
         double price = Main.roundTwoPlaces((double)itemsToSell.getAmount() * entry.refundPrice);
         

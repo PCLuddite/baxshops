@@ -24,8 +24,6 @@
  */
 package tbax.baxshops.notification;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -36,8 +34,6 @@ import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
 import tbax.baxshops.Main;
 import tbax.baxshops.Resources;
-import tbax.baxshops.serialization.BaxEntryDeserializer;
-import tbax.baxshops.serialization.BaxEntrySerializer;
 import tbax.baxshops.serialization.ItemNames;
 
 /**
@@ -51,23 +47,23 @@ public final class SaleRejection implements ConfigurationSerializable, Claimable
      */
     public BaxEntry entry;
     /**
-     * The shop to which the item is being sold
-     */
-    public BaxShop shop;
-    /**
      * The seller of the item
      */
     public String seller;
+    /**
+     * The buyer of the item
+     */
+    public String buyer;
 
     /**
      * Constructs a new notification.
-     * @param shop the shop to which the seller was selling
+     * @param buyer the buyer of the item
      * @param entry an entry for the item (note: not the one in the shop)
      * @param seller the seller of the item
      */
-    public SaleRejection(BaxShop shop, BaxEntry entry, String seller)
+    public SaleRejection(String buyer, String seller, BaxEntry entry)
     {
-        this.shop = shop;
+        this.buyer = buyer;
         this.entry = entry;
         this.seller = seller;
     }
@@ -76,7 +72,18 @@ public final class SaleRejection implements ConfigurationSerializable, Claimable
     {
         this.seller = (String)args.get("seller");
         this.entry = (BaxEntry)args.get("entry");
-        this.shop = Main.instance.state.getShop((int)args.get("shop"));
+        if (args.containsKey("shop")) {
+            BaxShop shop = Main.instance.state.getShop((int)args.get("shop"));
+            if (shop == null) {
+                buyer = Resources.ERROR_INLINE;
+            }
+            else {
+                buyer = shop.owner;
+            }
+        }
+        else {
+            this.buyer = (String)args.get("buyer");
+        }
     }
 
     @Override
@@ -84,7 +91,7 @@ public final class SaleRejection implements ConfigurationSerializable, Claimable
     {
         if (player == null || !player.getName().equals(seller)) {
             return String.format("%s rejected %s's request to sell %s for %s.",
-                Format.username(shop.owner),
+                Format.username(buyer),
                 Format.username2(seller),
                 Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
                 Format.money(entry.refundPrice * entry.getAmount())
@@ -92,7 +99,7 @@ public final class SaleRejection implements ConfigurationSerializable, Claimable
         }
         else {
             return String.format("%s rejected your request to sell %s for %s.",
-                Format.username(shop.owner),
+                Format.username(buyer),
                 Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
                 Format.money(entry.refundPrice * entry.getAmount())
             );
@@ -112,44 +119,12 @@ public final class SaleRejection implements ConfigurationSerializable, Claimable
             return false;
         }
     }
-
-    @Override
-    public boolean checkIntegrity()
-    {
-        return shop != null;
-    }
-
-    public static final String TYPE_ID = "SaleReject";
-    
-    @Override
-    public JsonElement toJson(double version)
-    {
-        JsonObject o = new JsonObject();
-        o.addProperty("type", "SaleReject");
-        o.addProperty("seller", seller);
-        o.addProperty("shop", shop.id);
-        o.add("entry", BaxEntrySerializer.serialize(version, entry));
-        return o;
-    }
-    
-    public SaleRejection()
-    {
-    }
-    
-    public static SaleRejection fromJson(double version, JsonObject o)
-    {
-        SaleRejection claim = new SaleRejection();
-        claim.seller = o.get("seller").getAsString();
-        claim.shop = Main.instance.state.getShop(o.get("shop").getAsInt());
-        claim.entry = BaxEntryDeserializer.deserialize(version, o.get("entry").getAsJsonObject());
-        return claim;
-    }
     
     public Map<String, Object> serialize()
     {
         Map<String, Object> args = new HashMap<>();
         args.put("seller", seller);
-        args.put("shop", shop.id);
+        args.put("buyer", buyer);
         args.put("entry", entry);
         return args;
     }
@@ -162,5 +137,11 @@ public final class SaleRejection implements ConfigurationSerializable, Claimable
     public static SaleRejection valueOf(Map<String, Object> args)
     {
         return deserialize(args);
+    }
+
+    @Override
+    public boolean checkIntegrity()
+    {
+        return true;
     }
 }

@@ -24,7 +24,6 @@
  */
 package tbax.baxshops.notification;
 
-import com.google.gson.JsonElement;
 import org.bukkit.entity.Player;
 
 /**
@@ -45,6 +44,5 @@ public interface Notification {
      * @return the notification message
      */
     public String getMessage(Player player);
-    public JsonElement toJson(double version);
     public boolean checkIntegrity();
 }

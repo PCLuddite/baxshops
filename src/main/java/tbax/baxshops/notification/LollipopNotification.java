@@ -24,8 +24,6 @@
  */
 package tbax.baxshops.notification;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -84,36 +82,6 @@ public final class LollipopNotification implements ConfigurationSerializable, No
         }
         return sender + " sent you " + adjective + " lollipop";
     }
-
-    @Override
-    public boolean checkIntegrity()
-    {
-        return true;
-    }
-        
-    public static final String TYPE_ID = "lolly";
-
-    @Override
-    public JsonElement toJson(double version)
-    {
-        JsonObject o = new JsonObject();
-        o.addProperty("type", TYPE_ID);
-        o.addProperty("sender", sender);
-        o.addProperty("tastiness", tastiness);
-        return o;
-    }
-
-    public LollipopNotification()
-    {
-    }
-    
-    public static LollipopNotification fromJson(double version, JsonObject o)
-    {
-        LollipopNotification lolly = new LollipopNotification();
-        lolly.sender = o.get("sender").getAsString();
-        lolly.tastiness = o.get("tastiness").getAsInt();
-        return lolly;
-    }
     
     public Map<String, Object> serialize()
     {
@@ -131,5 +99,11 @@ public final class LollipopNotification implements ConfigurationSerializable, No
     public static LollipopNotification valueOf(Map<String, Object> args)
     {
         return deserialize(args);
+    }
+
+    @Override
+    public boolean checkIntegrity()
+    {
+        return true;
     }
 }

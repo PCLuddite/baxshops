@@ -25,7 +25,6 @@
 package tbax.baxshops;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Logger;
 import net.milkbowl.vault.economy.Economy;
@@ -127,6 +126,7 @@ public final class Main extends JavaPlugin implements Listener {
         ConfigurationSerialization.registerClass(BuyNotification.class);
         ConfigurationSerialization.registerClass(BuyRejection.class);
         ConfigurationSerialization.registerClass(BuyRequest.class);
+        ConfigurationSerialization.registerClass(DeletedShopClaim.class);
         ConfigurationSerialization.registerClass(DeathNotification.class);
         ConfigurationSerialization.registerClass(GeneralNotification.class);
         ConfigurationSerialization.registerClass(LollipopNotification.class);

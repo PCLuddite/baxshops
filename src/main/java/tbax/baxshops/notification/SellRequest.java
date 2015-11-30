@@ -24,8 +24,6 @@
  */
 package tbax.baxshops.notification;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -41,8 +39,6 @@ import tbax.baxshops.Format;
 import tbax.baxshops.Main;
 import static tbax.baxshops.Main.sendError;
 import tbax.baxshops.Resources;
-import tbax.baxshops.serialization.BaxEntryDeserializer;
-import tbax.baxshops.serialization.BaxEntrySerializer;
 import tbax.baxshops.serialization.ItemNames;
 
 /**
@@ -60,7 +56,7 @@ public final class SellRequest implements ConfigurationSerializable, Request, Ti
     /**
      * The shop to which the item is being sold
      */
-    public BaxShop shop;
+    public long shopid;
     /**
      * The date at which the request expires
      */
@@ -69,6 +65,10 @@ public final class SellRequest implements ConfigurationSerializable, Request, Ti
      * The seller of the item
      */
     public String seller;
+    /**
+     * The buyer of the item
+     */
+    public String buyer;
     
     public SellRequest()
     {
@@ -77,21 +77,26 @@ public final class SellRequest implements ConfigurationSerializable, Request, Ti
     public SellRequest(Map<String, Object> args)
     {
         seller = (String)args.get("seller");
-        shop = Main.instance.state.getShop((int)args.get("shop"));
+        shopid = (int)args.get("shop");
+        if (args.containsKey("buyer")) {
+            buyer = (String)args.get("buyer");
+        }
         entry = (BaxEntry)args.get("entry");
         expirationDate = (long)args.get("expires");
     }
     
     /**
      * Constructs a new notification.
-     * @param shop the shop to which the seller was selling
+     * @param shopid the shop to which the seller was selling
+     * @param buyer
      * @param entry an entry for the item (note: not the one in the shop)
      * @param seller the seller of the item
      */
-    public SellRequest(BaxShop shop, BaxEntry entry, String seller) 
+    public SellRequest(long shopid, String buyer, String seller, BaxEntry entry) 
     {
-        this.shop = shop;
+        this.shopid = shopid;
         this.entry = entry;
+        this.buyer = buyer;
         this.seller = seller;
 
         Calendar c = Calendar.getInstance();
@@ -103,11 +108,11 @@ public final class SellRequest implements ConfigurationSerializable, Request, Ti
     @Override
     public String getMessage(Player player)
     {
-        if (player == null || !player.getName().equals(shop.owner)) {
+        if (player == null || !player.getName().equals(buyer)) {
             return String.format("%s wants to sell %s to %s for %s.",
                 Format.username(seller), 
                 Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
-                Format.username2(shop.owner),
+                Format.username2(buyer),
                 Format.money(entry.refundPrice * entry.getAmount())
             );
         }
@@ -129,16 +134,22 @@ public final class SellRequest implements ConfigurationSerializable, Request, Ti
         
         Economy econ = Main.econ;
 
-        if (!econ.has(shop.owner, price)) {
+        if (!econ.has(buyer, price)) {
             Main.sendError(player, Resources.NO_MONEY);
             return false;
         }
         
-        econ.withdrawPlayer(shop.owner, price);
+        econ.withdrawPlayer(buyer, price);
         econ.depositPlayer(seller, price);
 
-        if (shop.sellToShop) {
-            if (!sellToShop(item, player)) {
+        BaxShop shop = Main.instance.state.getShop(shopid);
+        if (shop == null) {
+            DeletedShopClaim shopDeleted = new DeletedShopClaim(buyer, entry);
+            Main.instance.state.sendNotification(player, shopDeleted);
+            return true;
+        }
+        else if (shop.sellToShop) {
+            if (!sellToShop(shop, item, player)) {
                 return false;
             }
         }
@@ -147,7 +158,7 @@ public final class SellRequest implements ConfigurationSerializable, Request, Ti
             return false;
         }
 
-        SaleNotification n = new SaleNotification(shop, entry, seller);
+        SaleNotification n = new SaleNotification(shop.owner, seller, entry);
         Main.instance.state.sendNotification(seller, n);
         
         player.sendMessage("Offer accepted");
@@ -167,29 +178,39 @@ public final class SellRequest implements ConfigurationSerializable, Request, Ti
         
         Economy econ = Main.econ;
         
-        if (!econ.has(shop.owner, price)) {
+        if (!econ.has(buyer, price)) {
             return 0;
         }
         
-        econ.withdrawPlayer(shop.owner, price);
+        econ.withdrawPlayer(buyer, price);
         econ.depositPlayer(seller, price);
         
         Notification buyerNote;
-        if (shop.sellToShop) {
-            if (!sellToShop(entry.toItemStack(), sender)) {
+        
+        BaxShop shop = Main.instance.state.getShop(shopid);
+        if (shop == null) {
+            DeletedShopClaim shopDeleted = new DeletedShopClaim(buyer, entry);
+            Main.instance.state.sendNotification(buyer, shopDeleted);
+            return 1;
+        }
+        else if (shop.sellToShop) {
+            if (!sellToShop(shop, entry.toItemStack(), sender)) {
                 return -1;
             }
-            buyerNote = new SaleNotificationAuto(shop, entry, seller);
-            Main.instance.state.sendNotification(shop.owner, buyerNote);
+            buyerNote = new GeneralNotification(
+                SaleNotificationAuto.getMessage(shop.owner, buyer, seller, entry)
+            );
+            Main.instance.state.sendNotification(shop.owner, buyerNote, false);
+            Main.log.info(Main.toAnsiColor(SaleNotificationAuto.getMessage(null, buyer, seller, entry)));
         }
         else {
-            buyerNote = new SaleNotificationAutoClaim(shop, entry, seller);
+            buyerNote = new SaleNotificationAuto(buyer, seller, entry);
             Main.instance.state.sendNotification(shop.owner, buyerNote);
         }
         return 1;
     }
     
-    private boolean sellToShop(ItemStack item, CommandSender sender)
+    private boolean sellToShop(BaxShop shop, ItemStack item, CommandSender sender)
     {
         BaxEntry shopEntry = shop.findEntry(item);
         if (shopEntry == null) {
@@ -208,7 +229,7 @@ public final class SellRequest implements ConfigurationSerializable, Request, Ti
     @Override
     public boolean reject(Player player)
     {
-        SaleRejection n = new SaleRejection(shop, entry, seller);
+        SaleRejection n = new SaleRejection(buyer, seller, entry);
         Main.instance.state.sendNotification(seller, n);
         player.sendMessage("§cOffer rejected");
         return true;
@@ -219,42 +240,13 @@ public final class SellRequest implements ConfigurationSerializable, Request, Ti
     {
         return expirationDate;
     }
-
-    @Override
-    public boolean checkIntegrity()
-    {
-        return shop != null;
-    }
-
-    public static final String TYPE_ID = "SellRequest";
-    
-    @Override
-    public JsonElement toJson(double version)
-    {
-        JsonObject o = new JsonObject();
-        o.addProperty("type", TYPE_ID);
-        o.addProperty("seller", seller);
-        o.addProperty("shop", shop.id);
-        o.addProperty("expires", expirationDate);
-        o.add("entry", BaxEntrySerializer.serialize(version, entry));
-        return o;
-    }
-    
-    public static SellRequest fromJson(double version, JsonObject o)
-    {
-        SellRequest request = new SellRequest();
-        request.seller = o.get("seller").getAsString();
-        request.shop = Main.instance.state.getShop(o.get("shop").getAsInt());
-        request.expirationDate = o.get("expires").getAsLong();
-        request.entry = BaxEntryDeserializer.deserialize(version, o.get("entry").getAsJsonObject());
-        return request;
-    }
     
     public Map<String, Object> serialize()
     {
         Map<String, Object> args = new HashMap<>();
         args.put("seller", seller);
-        args.put("shop", shop.id);
+        args.put("buyer", buyer);
+        args.put("shop", shopid);
         args.put("entry", entry);
         args.put("expires", expirationDate);
         return args;
@@ -268,5 +260,11 @@ public final class SellRequest implements ConfigurationSerializable, Request, Ti
     public static SellRequest valueOf(Map<String, Object> args)
     {
         return deserialize(args);
+    }
+
+    @Override
+    public boolean checkIntegrity()
+    {
+        return true;
     }
 }
