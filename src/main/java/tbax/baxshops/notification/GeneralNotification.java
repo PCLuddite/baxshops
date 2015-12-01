@@ -35,7 +35,6 @@ import org.bukkit.entity.Player;
  */
 public final class GeneralNotification implements ConfigurationSerializable, Notification
 {
-    
     public String message;
     
     public GeneralNotification(String msg)
@@ -48,11 +47,13 @@ public final class GeneralNotification implements ConfigurationSerializable, Not
         this.message = (String)args.get("msg");
     }
     
+    @Override
     public String getMessage(Player player)
     {
         return message;
     }
     
+    @Override
     public Map<String, Object> serialize()
     {
         Map<String, Object> args = new HashMap<>();

@@ -124,6 +124,7 @@ public class SaleNotificationAuto implements ConfigurationSerializable, Claimabl
         }
     }
     
+    @Override
     public Map<String, Object> serialize()
     {
         Map<String, Object> args = new HashMap<>();

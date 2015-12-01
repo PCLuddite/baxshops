@@ -32,7 +32,8 @@ import org.bukkit.entity.Player;
  * When a Claimable notification is sent, the notification is
  * automatically claimed if the user is online.
  */
-public interface Claimable extends Notification {
+public interface Claimable extends Notification
+{
     /**
      * Attempts to claim this notification.
      * @param player the player who is claiming the notification

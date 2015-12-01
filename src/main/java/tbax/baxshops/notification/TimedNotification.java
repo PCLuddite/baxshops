@@ -31,10 +31,11 @@ import java.util.Date;
  * after which it expires.
  * TimedNotifications are automatically rejected when they expire.
  */
-public interface TimedNotification {
-	/**
-	 * Returns the time at which this request expires.
-	 * @return the time as returned by {@link Date#getTime()}
-	 */
-	public long expirationDate();
+public interface TimedNotification
+{
+    /**
+     * Returns the time at which this request expires.
+     * @return the time as returned by {@link Date#getTime()}
+     */
+    public long expirationDate();
 }

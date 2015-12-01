@@ -37,8 +37,6 @@ import org.bukkit.entity.Player;
  */
 public final class LollipopNotification implements ConfigurationSerializable, Notification
 {
-    private static final long serialVersionUID = 1L;
-
     public static final double DEFAULT_TASTINESS = 40;
     public static final Map<Double, String> adjectives = new LinkedHashMap<>();
     static {

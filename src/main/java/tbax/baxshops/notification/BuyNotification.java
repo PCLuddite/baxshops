@@ -41,7 +41,6 @@ import tbax.baxshops.serialization.ItemNames;
  */
 public final class BuyNotification implements ConfigurationSerializable, Notification
 {
-    private static final long serialVersionUID = 1L;
     /**
      * An entry for the offered item
      */
@@ -54,10 +53,6 @@ public final class BuyNotification implements ConfigurationSerializable, Notific
      * The seller of the item
      */
     public String buyer;
-    
-    public BuyNotification()
-    {
-    }
 
     public BuyNotification(Map<String, Object> args)
     {
@@ -110,6 +105,7 @@ public final class BuyNotification implements ConfigurationSerializable, Notific
         }
     }
     
+    @Override
     public Map<String, Object> serialize()
     {
         Map<String, Object> args = new HashMap<>();

@@ -48,7 +48,6 @@ import tbax.baxshops.serialization.ItemNames;
  */
 public final class SellRequest implements ConfigurationSerializable, Request, TimedNotification
 {
-    private static final long serialVersionUID = 1L;
     /**
      * An entry for the offered item
      */
@@ -69,10 +68,6 @@ public final class SellRequest implements ConfigurationSerializable, Request, Ti
      * The buyer of the item
      */
     public String buyer;
-    
-    public SellRequest()
-    {
-    }
     
     public SellRequest(Map<String, Object> args)
     {

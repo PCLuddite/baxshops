@@ -67,10 +67,6 @@ public final class BuyClaim implements ConfigurationSerializable, Claimable
         this.buyer = buyer;
     }
     
-    public BuyClaim() 
-    {
-    }
-    
     public BuyClaim(Map<String, Object> args)
     {
         this.buyer = (String)args.get("buyer");
@@ -125,8 +121,6 @@ public final class BuyClaim implements ConfigurationSerializable, Claimable
             );
         }
     }
-
-    public static final String TYPE_ID = "BuyClaim";
     
     @Override
     public Map<String, Object> serialize()

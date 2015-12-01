@@ -45,7 +45,6 @@ import tbax.baxshops.serialization.ItemNames;
  */
 public final class BuyRequest implements ConfigurationSerializable, Request, TimedNotification
 {
-    private static final long serialVersionUID = 1L;
     /**
      * An entry for the purchased item
      */
@@ -66,10 +65,6 @@ public final class BuyRequest implements ConfigurationSerializable, Request, Tim
      * The buyer of the item
      */
     public String buyer;
-    
-    public BuyRequest()
-    {
-    }
     
     public BuyRequest(Map<String, Object> args)
     {
@@ -171,6 +166,7 @@ public final class BuyRequest implements ConfigurationSerializable, Request, Tim
         return expirationDate;
     }
     
+    @Override
     public Map<String, Object> serialize()
     {
         Map<String, Object> args = new HashMap<>();

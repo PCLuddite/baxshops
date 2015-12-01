@@ -29,7 +29,8 @@ import org.bukkit.entity.Player;
 /**
  * A Request represents a /accept- or /reject-able {@link Notification}.
  */
-public interface Request extends Notification {
+public interface Request extends Notification
+{
     /**
      * Attempts to accept this notification.
      * @param player the player who is accepting the notification

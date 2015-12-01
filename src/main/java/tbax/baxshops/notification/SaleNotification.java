@@ -41,7 +41,6 @@ import tbax.baxshops.serialization.ItemNames;
  */
 public final class SaleNotification implements ConfigurationSerializable, Notification 
 {
-    private static final long serialVersionUID = 1L;
     /**
      * An entry for the offered item
      */

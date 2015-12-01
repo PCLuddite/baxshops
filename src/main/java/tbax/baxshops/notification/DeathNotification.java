@@ -31,9 +31,7 @@ import org.bukkit.entity.Player;
 import tbax.baxshops.Format;
 
 public final class DeathNotification implements ConfigurationSerializable, Notification
-{
-    private static final long serialVersionUID = 1L;
-    
+{    
     public double tax;
     public String person;
     
@@ -60,10 +58,7 @@ public final class DeathNotification implements ConfigurationSerializable, Notif
         }
     }
     
-    public DeathNotification()
-    {
-    }
-    
+    @Override
     public Map<String, Object> serialize()
     {
         Map<String, Object> args = new HashMap<>();

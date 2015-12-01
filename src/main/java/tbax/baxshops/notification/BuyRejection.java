@@ -55,10 +55,6 @@ public final class BuyRejection implements ConfigurationSerializable, Notificati
      */
     public String buyer;
     
-    public BuyRejection()
-    {
-    }
-    
     public BuyRejection(Map<String, Object> args)
     {
         if (args.containsKey("buyer")) {
@@ -111,6 +107,7 @@ public final class BuyRejection implements ConfigurationSerializable, Notificati
         }
     }
     
+    @Override
     public Map<String, Object> serialize()
     {
         Map<String, Object> args = new HashMap<>();
