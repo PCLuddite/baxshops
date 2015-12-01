@@ -28,12 +28,11 @@ import tbax.baxshops.*;
 import tbax.baxshops.notification.*;
 import java.io.*;
 import java.util.*;
-import com.google.gson.*;
-import com.google.gson.stream.JsonReader;
 import java.util.logging.Logger;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -43,10 +42,8 @@ import org.bukkit.entity.Player;
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public final class StateFile {
-
-    public static final String JSON_FILE_PATH = "shops.json";
-    public static final String JSONBAK_FILE_PATH = "backups/%d.json";
+public final class StateFile
+{
     public static final String YAML_FILE_PATH = "shops.yml";
     public static final String YAMLBAK_FILE_PATH = "backups/%d.yml";
     
@@ -244,35 +241,37 @@ public final class StateFile {
         return true;
     }
     
-    public boolean removeShop(Player pl, BaxShop shop)
+    public void removeShop(CommandSender pl, BaxShop shop)
     {
-        String owner = shop.owner;
-        for(Location loc : shop.getLocations()) {
+        for(Location loc : (ArrayList<Location>)shop.getLocations().clone()) {
             removeLocation(pl, loc);
         }
-        pl.sendMessage(String.format("%s's shop has been deleted.", Format.username(owner)));
-        return true;
+        pl.sendMessage(String.format("%s's shop has been deleted.", Format.username(shop.owner)));
     }
     
-    public boolean removeLocation(Player pl, Location loc)
+    public void removeLocation(CommandSender pl, Location loc)
     {
         Long uid = locations.get(loc);
         if (uid != null) {
             BaxShop shop = shops.get(uid);
-            Block b = loc.getBlock();
-            Sign sign = (Sign) b.getState();
-            sign.setLine(0, Resources.SIGN_CLOSED[0]);
-            sign.setLine(1, Resources.SIGN_CLOSED[1]);
-            sign.setLine(2, (pl.getName().equals(shop.owner) ? "the owner" : "an admin") + ".");
-            sign.setLine(3, "");
-            sign.update();
+            try {
+                Block b = loc.getBlock();
+                Sign sign = (Sign) b.getState();
+                sign.setLine(0, Resources.SIGN_CLOSED[0]);
+                sign.setLine(1, Resources.SIGN_CLOSED[1]);
+                sign.setLine(2, (pl.getName().equals(shop.owner) ? "the owner" : "an admin") + ".");
+                sign.setLine(3, "");
+                sign.update();
+            }
+            catch(NullPointerException | ClassCastException e) {
+                Main.sendError(pl, "Unable to change the sign text at " + Format.location(loc));
+            }
             shop.removeLocation(loc);
             locations.remove(loc);
             if (shop.getLocations().isEmpty()) {
                shops.remove(shop.id); 
             }
         }
-        return true;
     }
     
     /**
