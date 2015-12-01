@@ -337,7 +337,7 @@ public final class ShopExecuter
                 String.format("A new entry for %s was added to the shop.", 
                     Format.itemname(newEntry.getAmount(), ItemNames.getItemName(newEntry))
                 ));
-        if (cmd.getShop().infinite) {
+        if (!cmd.getShop().infinite) {
             cmd.getPlayer().setItemInHand(null);
         }
         return true;
