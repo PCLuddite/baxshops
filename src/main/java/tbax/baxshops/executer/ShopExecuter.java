@@ -34,24 +34,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import tbax.baxshops.BaxEntry;
-import tbax.baxshops.BaxShop;
-import tbax.baxshops.Format;
-import tbax.baxshops.Help;
-import tbax.baxshops.Main;
-import tbax.baxshops.Resources;
-import tbax.baxshops.notification.BuyNotification;
-import tbax.baxshops.notification.BuyRequest;
-import tbax.baxshops.notification.SellRequest;
+import tbax.baxshops.*;
+import tbax.baxshops.notification.*;
 import tbax.baxshops.serialization.ItemNames;
 
 /**
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public final class ShopExecuter {
-    
-    public static boolean execute(ShopCmd cmd) {
+public final class ShopExecuter
+{    
+    public static boolean execute(ShopCmd cmd)
+    {
         switch(cmd.getAction()) {
             case "create":
             case "mk":
@@ -95,7 +89,8 @@ public final class ShopExecuter {
         return false;
     }
     
-    public static boolean create(ShopCmd cmd) {
+    public static boolean create(ShopCmd cmd)
+    {
         boolean admin = cmd.getSender().hasPermission("shops.admin");
         if (admin) {
             if (cmd.getNumArgs() < 2) {
@@ -141,7 +136,8 @@ public final class ShopExecuter {
      * @param signLines sign next
      * @return On success, returns the block that contains the sign. Returns null on failure.
      */
-    public static Block buildShopSign(ShopCmd cmd, String[] signLines) {
+    public static Block buildShopSign(ShopCmd cmd, String[] signLines)
+    {
         //Use up a sign if the user is not an admin
         if (!cmd.getPlayer().hasPermission("shops.admin") && !cmd.getPlayer().hasPermission("shops.owner")) {
             Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
@@ -197,7 +193,8 @@ public final class ShopExecuter {
         return b;
     }
     
-    public static boolean setangle(ShopCmd cmd) {
+    public static boolean setangle(ShopCmd cmd)
+    {
         if (cmd.getSelection() == null) {
             Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
             return true;
@@ -247,7 +244,8 @@ public final class ShopExecuter {
         return true;
     }
     
-    public static boolean delete(ShopCmd cmd) {
+    public static boolean delete(ShopCmd cmd)
+    {
         if (cmd.getSelection() == null) {
             Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
             return true;
@@ -287,7 +285,8 @@ public final class ShopExecuter {
         return true;
     }
     
-    public static boolean add(ShopCmd cmd) {
+    public static boolean add(ShopCmd cmd)
+    {
         if (cmd.getSelection() == null) {
             Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
             return true;
@@ -338,11 +337,14 @@ public final class ShopExecuter {
                 String.format("A new entry for %s was added to the shop.", 
                     Format.itemname(newEntry.getAmount(), ItemNames.getItemName(newEntry))
                 ));
-        cmd.getPlayer().setItemInHand(null);
+        if (cmd.getShop().infinite) {
+            cmd.getPlayer().setItemInHand(null);
+        }
         return true;
     }
     
-    public static boolean restock(ShopCmd cmd) {
+    public static boolean restock(ShopCmd cmd)
+    {
         if (cmd.getSelection() == null) {
             Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
             return true;
@@ -436,7 +438,8 @@ public final class ShopExecuter {
         return true;
     }
     
-    private static void restockAny(Player player, BaxShop shop) {
+    private static void restockAny(Player player, BaxShop shop)
+    {
         ArrayList<ItemStack> restocked = clearItems(player.getInventory(), shop.inventory);
         if (restocked.size() > 0) {
             for(ItemStack itemStack : restocked) {
@@ -457,7 +460,8 @@ public final class ShopExecuter {
         }
     }
         
-    private static int clearItems(Inventory inv, BaxEntry entry, int count) {
+    private static int clearItems(Inventory inv, BaxEntry entry, int count)
+    {
         int i = 0;
         int addSize = 0;
         while (i < inv.getSize()){
@@ -485,7 +489,8 @@ public final class ShopExecuter {
         return addSize;
     }
     
-    private static int clearItems(Inventory inv, BaxEntry entry) {
+    private static int clearItems(Inventory inv, BaxEntry entry)
+    {
         ArrayList<BaxEntry> entries = new ArrayList<>();
         entries.add(entry);
         ArrayList<ItemStack> list = clearItems(inv, entries);
@@ -497,7 +502,8 @@ public final class ShopExecuter {
         }
     }
     
-    private static ArrayList<ItemStack> clearItems(Inventory inv, ArrayList<BaxEntry> entries) {
+    private static ArrayList<ItemStack> clearItems(Inventory inv, ArrayList<BaxEntry> entries)
+    {
         ArrayList<ItemStack> itemList = new ArrayList<>();
         for(BaxEntry entry : entries) {
             int i = 0;
@@ -521,7 +527,8 @@ public final class ShopExecuter {
         return itemList;
     }
     
-    public static boolean set(ShopCmd cmd) {
+    public static boolean set(ShopCmd cmd)
+    {
         if (cmd.getSelection() == null) {
             Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
             return true;
@@ -594,7 +601,8 @@ public final class ShopExecuter {
         return true;
     }
     
-    public static boolean buy(ShopCmd cmd) {
+    public static boolean buy(ShopCmd cmd)
+    {
         if (cmd.getSelection() == null) {
             Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
             return true;
@@ -738,7 +746,8 @@ public final class ShopExecuter {
         return true;
     }
     
-    public static boolean sell(ShopCmd cmd) {
+    public static boolean sell(ShopCmd cmd)
+    {
         if (cmd.getSelection() == null) {
             Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
             return true;
@@ -835,7 +844,8 @@ public final class ShopExecuter {
      * @param showExtra true assumes this completes the transaction, false if more actions are pending
      * @return On success, the sale total is returned, otherwise -1.0 on failure
      */
-    private static double sell(ShopCmd cmd, ItemStack itemsToSell, boolean showExtra) {
+    private static double sell(ShopCmd cmd, ItemStack itemsToSell, boolean showExtra)
+    {
         BaxShop shop = cmd.getShop();
         BaxEntry entry = shop.findEntry(itemsToSell);
         if (entry == null || entry.refundPrice < 0) {
@@ -895,7 +905,8 @@ public final class ShopExecuter {
         return -1.0;
     }
     
-    public static boolean remove(ShopCmd cmd) {
+    public static boolean remove(ShopCmd cmd)
+    {
         if (cmd.getSelection() == null) {
             Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
             return true;
@@ -929,9 +940,8 @@ public final class ShopExecuter {
             return true;
         }
         
-        if (entry.getAmount() > 0) {
+        if (entry.getAmount() > 0 && !shop.infinite) {
             ItemStack stack = entry.toItemStack();
-
             if (Main.inventoryFitsItem(cmd.getPlayer(), stack)) {
                 cmd.getPlayer().getInventory().addItem(stack);
             }
@@ -953,7 +963,8 @@ public final class ShopExecuter {
         return true;
     }
     
-    public static boolean take(ShopCmd cmd) {
+    public static boolean take(ShopCmd cmd)
+    {
         if (cmd.getSelection() == null) {
             Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
             return true;
@@ -1034,7 +1045,8 @@ public final class ShopExecuter {
         return true;
     }
     
-    public static boolean sign(ShopCmd cmd) {
+    public static boolean sign(ShopCmd cmd)
+    {
         if (cmd.getSelection() == null) {
             Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
             return true;
@@ -1085,7 +1097,8 @@ public final class ShopExecuter {
         return true;
     }
     
-    public static boolean setindex(ShopCmd cmd) {
+    public static boolean setindex(ShopCmd cmd)
+    {
         if (cmd.getSelection() == null) {
             Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
             return true;
