@@ -26,7 +26,7 @@ package tbax.baxshops.executer;
 
 import java.util.ArrayDeque;
 import org.bukkit.entity.Player;
-import static tbax.baxshops.Main.sendError;
+import tbax.baxshops.Main;
 import tbax.baxshops.Resources;
 import tbax.baxshops.notification.Claimable;
 import tbax.baxshops.notification.LollipopNotification;
@@ -37,9 +37,10 @@ import tbax.baxshops.notification.Request;
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public final class NotifyExecuter {
-
-    public static boolean execute(ShopCmd cmd) {
+public final class NotifyExecuter
+{
+    public static boolean execute(ShopCmd cmd)
+    {
         switch (cmd.getAction()) {
             case "pending":
             case "p":
@@ -67,7 +68,8 @@ public final class NotifyExecuter {
         return false;
     }
     
-    public static boolean notifications(ShopCmd cmd) {
+    public static boolean notifications(ShopCmd cmd)
+    {
         if (cmd.getNumArgs() == 1) {
             cmd.getState().showNotification(cmd.getPlayer());
         }
@@ -78,16 +80,17 @@ public final class NotifyExecuter {
                 cmd.getPlayer().sendMessage("Your notifications have been cleared");
             }
             else {
-                sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
+                Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
             }
         }
         return true;
     }
     
-    public static boolean accept(ShopCmd cmd) {
+    public static boolean accept(ShopCmd cmd)
+    {
         ArrayDeque<Notification> notifications = cmd.getState().getNotifications(cmd.getPlayer());
         if (notifications.isEmpty()) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_NOTE);
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_NOTE);
             return true;
         }
         Notification n = notifications.getFirst();
@@ -108,10 +111,11 @@ public final class NotifyExecuter {
         return true;
     }
     
-    public static boolean reject(ShopCmd cmd) {
+    public static boolean reject(ShopCmd cmd)
+    {
         ArrayDeque<Notification> notifications = cmd.getState().getNotifications(cmd.getPlayer());
         if (notifications.isEmpty()) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_NOTE);
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_NOTE);
             return true;
         }
         Notification n = notifications.getFirst();
@@ -126,41 +130,28 @@ public final class NotifyExecuter {
         return true;
     }
     
-    public static boolean skip(ShopCmd cmd) {
+    public static boolean skip(ShopCmd cmd)
+    {
         ArrayDeque<Notification> notifications = cmd.getState().getNotifications(cmd.getPlayer());
         if (notifications.isEmpty()) {
-                sendError(cmd.getPlayer(), Resources.NOT_FOUND_NOTE);
-                return true;
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_NOTE);
+            return true;
         }
         notifications.add(notifications.removeFirst());
         cmd.getState().showNotification(cmd.getPlayer());
         return true;
     }
     
-    /*public static boolean lookup(ShopCmd cmd) {
-        if (cmd.getNumArgs() < 2) {
-            sendError(cmd.getPlayer(), Help.lookup.toUsageString());
-            return true;
-        }
-        Long alias = ItemNames.getItemFromAlias(cmd.getArgs()[1]);
-        if (alias == null) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_ALIAS);
-            return true;
-        }
-        int id = (int) (alias >> 16);
-        int damage = (int) (alias & 0xFFFF);
-        cmd.getSender().sendMessage(String.format("%s is an alias for %d:%d", cmd.getArgs()[1], id, damage));
-        return true;
-    }*/
-    
-    public static boolean lollipop(ShopCmd cmd) {
+    public static boolean lollipop(ShopCmd cmd)
+    {
         double tastiness = LollipopNotification.DEFAULT_TASTINESS;
         if (cmd.getNumArgs() > 1) {
             if (cmd.getNumArgs() > 2) {
                 try {
                     tastiness = Double.parseDouble(cmd.getArg(2));
-                } catch (NumberFormatException e) {
-                    sendError(cmd.getPlayer(), Resources.INVALID_TASTINESS);
+                }
+                catch (NumberFormatException e) {
+                    Main.sendError(cmd.getPlayer(), "Invalid tastiness");
                     return true;
                 }
             }

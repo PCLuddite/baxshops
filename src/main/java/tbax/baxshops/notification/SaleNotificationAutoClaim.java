@@ -28,17 +28,19 @@ import java.util.Map;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import tbax.baxshops.BaxEntry;
-import tbax.baxshops.Main;
 
 /**
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public class SaleNotificationAutoClaim extends SaleNotificationAuto implements ConfigurationSerializable, Claimable 
+public class SaleNotificationAutoClaim extends Claimable implements ConfigurationSerializable
 {
+    private SaleNotificationAuto note; // we're going to simulate multiple inheritance by holding this reference
+    
+    
     public SaleNotificationAutoClaim(Map<String, Object> args)
     {
-        super(args);
+        note = new SaleNotificationAuto(args);
     }
 
     /**
@@ -49,30 +51,20 @@ public class SaleNotificationAutoClaim extends SaleNotificationAuto implements C
      */
     public SaleNotificationAutoClaim(String buyer, String seller, BaxEntry entry) 
     {
-        super(buyer, seller, entry);
+        note = new SaleNotificationAuto(buyer, seller, entry);
+    }
+    
+    @Override
+    public boolean claim(Player player)
+    {
+        super.entry = note.entry;
+        return super.claim(player);
     }
     
     @Override
     public Map<String, Object> serialize()
     {
-        return super.serialize();
-    }
-
-    @Override
-    public boolean claim(Player player) 
-    {
-        if (Main.tryGiveItem(player, entry.toItemStack())) {
-            if (entry.getAmount() == 1) {
-                player.sendMessage("The item have been added to your inventory.");
-            }
-            else {
-                player.sendMessage("The items has been added to your inventory.");
-            }
-            return true;
-        }
-        else {
-            return false;
-        }
+        return note.serialize();
     }
     
     public static SaleNotificationAuto deserialize(Map<String, Object> args)
@@ -83,5 +75,17 @@ public class SaleNotificationAutoClaim extends SaleNotificationAuto implements C
     public static SaleNotificationAuto valueOf(Map<String, Object> args)
     {
         return deserialize(args);
+    }
+
+    @Override
+    public String getMessage(Player player)
+    {
+        return note.getMessage(player);
+    }
+
+    @Override
+    public boolean checkIntegrity()
+    {
+        return true;
     }
 }

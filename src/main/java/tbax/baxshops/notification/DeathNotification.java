@@ -26,11 +26,10 @@ package tbax.baxshops.notification;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import tbax.baxshops.Format;
 
-public final class DeathNotification implements ConfigurationSerializable, Notification
+public final class DeathNotification implements Notification
 {    
     public double tax;
     public String person;

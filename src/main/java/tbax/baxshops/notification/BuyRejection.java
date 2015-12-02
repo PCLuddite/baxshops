@@ -27,7 +27,6 @@ package tbax.baxshops.notification;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
@@ -40,7 +39,7 @@ import tbax.baxshops.serialization.ItemNames;
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public final class BuyRejection implements ConfigurationSerializable, Notification 
+public final class BuyRejection implements Notification 
 {
     /**
      * An entry for the offered item

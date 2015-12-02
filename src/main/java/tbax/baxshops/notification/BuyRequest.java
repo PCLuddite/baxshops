@@ -29,7 +29,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
@@ -43,7 +42,7 @@ import tbax.baxshops.serialization.ItemNames;
  * to buy an item.
  * BuyRequests expire after five days.
  */
-public final class BuyRequest implements ConfigurationSerializable, Request, TimedNotification
+public final class BuyRequest implements Request, TimedNotification
 {
     /**
      * An entry for the purchased item

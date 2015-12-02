@@ -30,17 +30,14 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
-import tbax.baxshops.Main;
-import tbax.baxshops.Resources;
 import tbax.baxshops.serialization.ItemNames;
 
 /**
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public class DeletedShopClaim implements ConfigurationSerializable, Claimable
+public class DeletedShopClaim extends Claimable implements ConfigurationSerializable
 {
-    public BaxEntry entry;
     public String owner;
     
     public DeletedShopClaim(Map<String, Object> args)
@@ -54,25 +51,7 @@ public class DeletedShopClaim implements ConfigurationSerializable, Claimable
         this.owner = owner;
         this.entry = entry;
     }
-
-    @Override
-    public boolean claim(Player player)
-    {
-        if (Main.tryGiveItem(player, entry.toItemStack())) {
-            if (entry.getAmount() == 1) {
-                player.sendMessage("The item have been added to your inventory.");
-            }
-            else {
-                player.sendMessage("The items has been added to your inventory.");
-            }
-            return true;
-        }
-        else {
-            Main.sendError(player, Resources.NO_ROOM);
-            return false;
-        }
-    }
-
+    
     @Override
     public String getMessage(Player player)
     {

@@ -26,7 +26,6 @@ package tbax.baxshops.notification;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
@@ -39,7 +38,7 @@ import tbax.baxshops.serialization.ItemNames;
  * A BuyNotification notifies a shop owner that someone bought an item
  * from him/her.
  */
-public final class BuyNotification implements ConfigurationSerializable, Notification
+public final class BuyNotification implements Notification
 {
     /**
      * An entry for the offered item

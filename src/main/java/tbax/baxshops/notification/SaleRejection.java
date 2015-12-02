@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
@@ -39,12 +38,8 @@ import tbax.baxshops.serialization.ItemNames;
 /**
  * A SaleRejection notifies a seller that his/her offer was rejected.
  */
-public final class SaleRejection implements ConfigurationSerializable, Claimable
+public final class SaleRejection extends Claimable implements ConfigurationSerializable
 {
-    /**
-     * An entry for the offered item
-     */
-    public BaxEntry entry;
     /**
      * The seller of the item
      */
@@ -106,19 +101,6 @@ public final class SaleRejection implements ConfigurationSerializable, Claimable
     }
 
     @Override
-    public boolean claim(Player player)
-    {
-        ItemStack item = entry.toItemStack();
-        if (Main.inventoryFitsItem(player, item)){
-            player.getInventory().addItem(item);
-            return true;
-        }
-        else {
-            Main.sendError(player, Resources.NO_ROOM);
-            return false;
-        }
-    }
-    
     public Map<String, Object> serialize()
     {
         Map<String, Object> args = new HashMap<>();

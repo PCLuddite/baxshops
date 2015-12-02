@@ -39,9 +39,8 @@ import tbax.baxshops.serialization.ItemNames;
  * A SaleNotification notifies a player that his/her sale of an
  * item was successful.
  */
-public class SaleNotificationAuto implements ConfigurationSerializable, Claimable 
+public class SaleNotificationAuto implements Notification, ConfigurationSerializable 
 {
-    private static final long serialVersionUID = 1L;
     /**
      * An entry for the offered item
      */
@@ -81,22 +80,6 @@ public class SaleNotificationAuto implements ConfigurationSerializable, Claimabl
         this.buyer = buyer;
         this.entry = entry;
         this.seller = seller;
-    }
-
-    public boolean claim(Player player) 
-    {
-        if (Main.tryGiveItem(player, entry.toItemStack())) {
-            if (entry.getAmount() == 1) {
-                player.sendMessage("The item have been added to your inventory.");
-            }
-            else {
-                player.sendMessage("The items has been added to your inventory.");
-            }
-            return true;
-        }
-        else {
-            return false;
-        }
     }
 
     @Override

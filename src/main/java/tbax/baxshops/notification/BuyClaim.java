@@ -26,7 +26,6 @@ package tbax.baxshops.notification;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
@@ -39,12 +38,8 @@ import tbax.baxshops.serialization.ItemNames;
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public final class BuyClaim implements ConfigurationSerializable, Claimable 
+public final class BuyClaim extends Claimable
 {
-    /**
-     * An entry for the purchased item
-     */
-    public BaxEntry entry;
     /**
      *  The user who sold the item
      */
@@ -84,25 +79,8 @@ public final class BuyClaim implements ConfigurationSerializable, Claimable
             seller = (String)args.get("seller");
         }
     }
-    
+
     @Override
-    public boolean claim(Player player)
-    {
-        if (Main.tryGiveItem(player, entry.toItemStack())) {
-            if (entry.getAmount() == 1) {
-                player.sendMessage("The item have been added to your inventory.");
-            }
-            else {
-                player.sendMessage("The items has been added to your inventory.");
-            }
-            return true;
-        }
-        else {
-            Main.sendError(player, Resources.NO_ROOM);
-            return false;
-        }
-    }
-    
     public String getMessage(Player player)
     {
         if (player == null || !player.getName().equals(buyer)) {
