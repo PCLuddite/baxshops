@@ -388,6 +388,7 @@
 190 Fence (Jungle)
 191 Fence (Dark Oak)
 192 Fence (Acacia)
+420 Lead
 425 Banner
 | 1 Banner (Orange)
 | 2 Banner (Magenta)
