@@ -111,6 +111,9 @@ public final class Help {
             CommandHelp.args("name", "the name of the item",
                              "amount", "the amount to take. Default is 1."));
     
+    public static final CommandHelp info = new CommandHelp("shop info", null, "<index>", "Gets extended information about an entry in a shop",
+            CommandHelp.args("index", "the name or shop index of the entry"));
+    
     public static final CommandHelp list = new CommandHelp("shop list", null, "", "List all shop locations");
     
     public static final CommandHelp teleport = new CommandHelp("shop teleport", null, "<location>", "Pastes a shop from the clipboard",
@@ -281,5 +284,7 @@ public final class Help {
         
         commands.put("tp", teleport);
         commands.put("teleport", teleport);
+        
+        commands.put("info", info);
     }
 }

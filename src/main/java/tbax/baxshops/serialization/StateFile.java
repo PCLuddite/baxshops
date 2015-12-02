@@ -384,7 +384,7 @@ public final class StateFile
     {
         ArrayDeque<Notification> ns = getNotifications(player);
         if (log_it) {
-            log.info(Main.toAnsiColor(n.getMessage(null)));
+            log.info(Format.toAnsiColor(n.getMessage(null)));
         }
         ns.add(n);
         Player pl = main.getServer().getPlayer(player);

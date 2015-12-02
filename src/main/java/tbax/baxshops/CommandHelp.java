@@ -185,7 +185,8 @@ public final class CommandHelp {
                 append(ChatColor.WHITE).
                 append(title).
                 append(ChatColor.GRAY).
-                append(" ------------")).toString();
+                append(" ------------").
+                append(ChatColor.RESET)).toString();
     }
 
     /**

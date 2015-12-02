@@ -168,7 +168,7 @@ public final class ItemNames {
         if (name == null) {
             name = itemNames.get(getItemId(item.getType()));
             if (name == null) {
-                name = getFriendlyName(item.getData().toString());
+                name = Format.toFriendlyName(item.getData().toString());
                 int last = name.lastIndexOf("Item");
                 if (last > -1) {
                     name = name.substring(0, last - 1);
@@ -177,37 +177,6 @@ public final class ItemNames {
             }
         }
         return name;
-    }
-    
-    private static String getFriendlyName(String s) {
-        if (s == null || s.isEmpty()) {
-            return "";
-        }
-        StringBuilder sb = new StringBuilder();
-        boolean upper = true;
-        for(int index = 0; index < s.length(); ++index) {
-            char c = s.charAt(index);
-            switch(c) {
-                case '_': // make this char a space
-                    upper = true;
-                    sb.append(' ');
-                    break;
-                case '(': // end of name
-                    return sb.toString();
-                case ' ':
-                    upper = true;
-                default:
-                    if (upper) {
-                        sb.append(Character.toUpperCase(c));
-                        upper = false;
-                    }
-                    else {
-                        sb.append(Character.toLowerCase(c));
-                    }
-                    break;
-            }
-        }
-        return sb.toString();
     }
     
     /**

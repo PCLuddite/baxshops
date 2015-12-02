@@ -85,6 +85,8 @@ public final class ShopExecuter
             case "setface":
             case "face":
                 return setangle(cmd);
+            case "info":
+                return info(cmd);
         }
         return false;
     }
@@ -1159,6 +1161,43 @@ public final class ShopExecuter
             }
             cmd.getPlayer().sendMessage("The index for this item was successfully changed.");
         }
+        return true;
+    }
+
+    private static boolean info(ShopCmd cmd)
+    {
+        if (cmd.getSelection() == null) {
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+            return true;
+        }
+        if (!cmd.getPlayer().hasPermission("shops.buy")) {
+            Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
+            return true;
+        }
+        if (cmd.getNumArgs() < 1) {
+            Main.sendError(cmd.getPlayer(), Help.info.toUsageString());
+            return true;
+        }
+        BaxShop shop = cmd.getShop();
+        BaxEntry entry;
+        try {
+            int index = Integer.parseInt(cmd.getArg(1));
+            entry = shop.getEntryAt(index - 1);
+        }
+        catch (NumberFormatException e) {
+            entry = ItemNames.getItemFromAlias(cmd.getArg(1), shop, cmd.getSender());
+            if (entry == null) {
+                return true;
+            }
+        } 
+        catch (IndexOutOfBoundsException e) {
+            entry = null;
+        }
+        if (entry == null) {
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SHOPITEM);
+            return true;
+        }
+        cmd.getPlayer().sendMessage(entry.toString());
         return true;
     }
 }

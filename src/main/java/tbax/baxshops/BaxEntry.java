@@ -233,6 +233,42 @@ public final class BaxEntry implements ConfigurationSerializable
         return null;
     }
     
+    @Override
+    public String toString()
+    {   
+        StringBuilder info = new StringBuilder();
+        info.append(CommandHelp.header("BaxEntry Information"));
+        info.append('\n');
+        info.append("Name: ").append(Format.itemname(ItemNames.getItemName(this))).append('\n');
+        if (stack.hasItemMeta() && stack.getItemMeta().hasDisplayName()) {
+            info.append("Display Name: ").append(ChatColor.YELLOW).append(stack.getItemMeta().getDisplayName()).append(ChatColor.RESET).append('\n');
+        }
+        if (getEnchants(stack) != null) {
+            String enchants;
+            Map<Enchantment, Integer> enchmap = getEnchants(stack);
+            if (enchmap.isEmpty()) {
+                enchants = "NONE";
+            }
+            else {
+                StringBuilder enchsb = new StringBuilder();
+                for(Map.Entry<Enchantment, Integer> enchant : enchmap.entrySet()) {
+                    enchsb.append(Format.toFriendlyName(enchant.getKey().getName()));
+                    enchsb.append(' ');
+                    enchsb.append(Format.toNumeral(enchant.getValue()));
+                    enchsb.append(", ");
+                }
+                enchants = enchsb.substring(0, enchsb.length() - 3);
+            }
+            info.append("Enchants: ").append(Format.enchantments(enchants)).append('\n');
+        }
+        info.append("Quantity: ").append(quantity == 0 ? ChatColor.DARK_RED + "OUT OF STOCK" + ChatColor.RESET : Format.number(quantity)).append('\n');
+        info.append("Buy Price: ").append(ChatColor.DARK_GREEN).append(Main.econ.format(retailPrice)).append(ChatColor.RESET).append('\n');
+        if (refundPrice >= 0) {
+            info.append("Sell Price: ").append(ChatColor.BLUE).append(Main.econ.format(refundPrice)).append(ChatColor.RESET).append('\n');
+        }
+        return info.toString();
+    }
+    
     public String toString(int index)
     {
         StringBuilder name = new StringBuilder(ItemNames.getItemName(this));

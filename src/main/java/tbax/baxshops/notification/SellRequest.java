@@ -196,7 +196,7 @@ public final class SellRequest implements ConfigurationSerializable, Request, Ti
                 SaleNotificationAuto.getMessage(shop.owner, buyer, seller, entry)
             );
             Main.instance.state.sendNotification(shop.owner, buyerNote, false);
-            Main.log.info(Main.toAnsiColor(SaleNotificationAuto.getMessage(null, buyer, seller, entry)));
+            Main.log.info(Format.toAnsiColor(SaleNotificationAuto.getMessage(null, buyer, seller, entry)));
         }
         else {
             buyerNote = new SaleNotificationAuto(buyer, seller, entry);

@@ -161,4 +161,105 @@ public class Format
     {
         return format + ChatColor.RESET;
     }
+    
+    /**
+     * Converts a number 1-5 to a Roman numeral
+     * @param n
+     * @return 
+     */
+    public static String toNumeral(int n)
+    {
+        assert n > 0 && n < 6;
+        switch(n) {
+            case 1:
+                return "I";
+            case 2:
+                return "II";
+            case 3:
+                return "III";
+            case 4:
+                return "IV";
+            case 5:
+                return "V";
+        }
+        return null;
+    }
+    
+    public static String toFriendlyName(String name)
+    {
+        if (name == null || name.isEmpty()) {
+            return "";
+        }
+        StringBuilder sb = new StringBuilder();
+        boolean upper = true;
+        for(int index = 0; index < name.length(); ++index) {
+            char c = name.charAt(index);
+            switch(c) {
+                case '_': // make this char a space
+                    upper = true;
+                    sb.append(' ');
+                    break;
+                case '(': // end of name
+                    return sb.toString();
+                case ' ':
+                    upper = true;
+                default:
+                    if (upper) {
+                        sb.append(Character.toUpperCase(c));
+                        upper = false;
+                    }
+                    else {
+                        sb.append(Character.toLowerCase(c));
+                    }
+                    break;
+            }
+        }
+        return sb.toString();
+    }
+    
+    public static String toAnsiColor(String message) // obnoxious method to convert minecraft message colors to ansi colors
+    {
+        StringBuilder sb = new StringBuilder();
+        boolean has_ansi = false;
+        for(int index = 0; index < message.length(); ++index) {
+            char c = message.charAt(index);
+            if (c == '§' && ++index < message.length()) {
+                c = Character.toLowerCase(message.charAt(index));
+                sb.append((char)27);
+                sb.append("[0;");
+                switch(c) {
+                    case '0': sb.append("30"); break;
+                    case '1': sb.append("34"); break;
+                    case '2': sb.append("32"); break;
+                    case '3': sb.append("36"); break;
+                    case '4': sb.append("31"); break;
+                    case '5': sb.append("35"); break;
+                    case '6': sb.append("33"); break;
+                    case '7': sb.append("37"); break;
+                    case '8': sb.append("37"); break;
+                    case '9': sb.append("36"); break;
+                    case 'a': sb.append("32"); break;
+                    case 'b': sb.append("36"); break;
+                    case 'c': sb.append("31"); break;
+                    case 'd': sb.append("35"); break;
+                    case 'e': sb.append("33"); break;
+                    case 'f': sb.append("37"); break;
+                    default:
+                        sb.append("37"); break;
+                }
+                sb.append("m");
+                if (!has_ansi) {
+                    has_ansi = true;
+                }
+            }
+            else {
+                sb.append(c);
+            }
+        }
+        if (has_ansi) {
+            sb.append((char)27);
+            sb.append("[0m"); // reset the color
+        }
+        return sb.toString();
+    }
 }
