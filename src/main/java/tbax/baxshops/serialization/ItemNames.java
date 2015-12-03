@@ -194,7 +194,11 @@ public final class ItemNames
     
     public static String getEnchantName(Enchantment enchant)
     {
-        return enchants.get(enchant);
+        String name = enchants.get(enchant);
+        if (name == null) {
+            name = Format.toFriendlyName(enchant.getName());
+        }
+        return name;
     }
     
     /**
