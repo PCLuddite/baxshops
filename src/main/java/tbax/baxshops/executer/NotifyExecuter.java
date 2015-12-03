@@ -71,11 +71,11 @@ public final class NotifyExecuter
     public static boolean notifications(ShopCmd cmd)
     {
         if (cmd.getNumArgs() == 1) {
-            cmd.getState().showNotification(cmd.getPlayer());
+            Main.getState().showNotification(cmd.getPlayer());
         }
         else if (cmd.getNumArgs() == 2 && cmd.getArg(1).equalsIgnoreCase("clear")) {
             if (cmd.getPlayer().hasPermission("shops.admin")) {
-                ArrayDeque<Notification> notes = cmd.getState().getNotifications(cmd.getPlayer());
+                ArrayDeque<Notification> notes = Main.getState().getNotifications(cmd.getPlayer());
                 notes.clear();
                 cmd.getPlayer().sendMessage("Your notifications have been cleared");
             }
@@ -88,7 +88,7 @@ public final class NotifyExecuter
     
     public static boolean accept(ShopCmd cmd)
     {
-        ArrayDeque<Notification> notifications = cmd.getState().getNotifications(cmd.getPlayer());
+        ArrayDeque<Notification> notifications = Main.getState().getNotifications(cmd.getPlayer());
         if (notifications.isEmpty()) {
             Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_NOTE);
             return true;
@@ -107,13 +107,13 @@ public final class NotifyExecuter
             }
         }
 
-        cmd.getState().showNotification(cmd.getPlayer());
+        Main.getState().showNotification(cmd.getPlayer());
         return true;
     }
     
     public static boolean reject(ShopCmd cmd)
     {
-        ArrayDeque<Notification> notifications = cmd.getState().getNotifications(cmd.getPlayer());
+        ArrayDeque<Notification> notifications = Main.getState().getNotifications(cmd.getPlayer());
         if (notifications.isEmpty()) {
             Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_NOTE);
             return true;
@@ -126,19 +126,19 @@ public final class NotifyExecuter
             }
         }
 
-        cmd.getState().showNotification(cmd.getPlayer());
+        Main.getState().showNotification(cmd.getPlayer());
         return true;
     }
     
     public static boolean skip(ShopCmd cmd)
     {
-        ArrayDeque<Notification> notifications = cmd.getState().getNotifications(cmd.getPlayer());
+        ArrayDeque<Notification> notifications = Main.getState().getNotifications(cmd.getPlayer());
         if (notifications.isEmpty()) {
             Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_NOTE);
             return true;
         }
         notifications.add(notifications.removeFirst());
-        cmd.getState().showNotification(cmd.getPlayer());
+        Main.getState().showNotification(cmd.getPlayer());
         return true;
     }
     
@@ -155,11 +155,11 @@ public final class NotifyExecuter
                     return true;
                 }
             }
-            cmd.getState().sendNotification(cmd.getArg(1), new LollipopNotification(cmd.getPlayer().getName(), tastiness));
+            Main.getState().sendNotification(cmd.getArg(1), new LollipopNotification(cmd.getPlayer().getName(), tastiness));
             return true;
         }
         for (Player p : cmd.getMain().getServer().getOnlinePlayers()) {
-            cmd.getState().sendNotification(p, new LollipopNotification(cmd.getPlayer().getName(), tastiness));
+            Main.getState().sendNotification(p, new LollipopNotification(cmd.getPlayer().getName(), tastiness));
         }
         return true;
     }

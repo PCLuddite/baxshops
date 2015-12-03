@@ -137,10 +137,10 @@ public final class SellRequest implements ConfigurationSerializable, Request, Ti
         econ.withdrawPlayer(buyer, price);
         econ.depositPlayer(seller, price);
 
-        BaxShop shop = Main.instance.state.getShop(shopid);
+        BaxShop shop = Main.getState().getShop(shopid);
         if (shop == null) {
             DeletedShopClaim shopDeleted = new DeletedShopClaim(buyer, entry);
-            Main.instance.state.sendNotification(player, shopDeleted);
+            Main.getState().sendNotification(player, shopDeleted);
             return true;
         }
         else if (shop.sellToShop) {
@@ -154,7 +154,7 @@ public final class SellRequest implements ConfigurationSerializable, Request, Ti
         }
 
         SaleNotification n = new SaleNotification(shop.owner, seller, entry);
-        Main.instance.state.sendNotification(seller, n);
+        Main.getState().sendNotification(seller, n);
         
         player.sendMessage("Offer accepted");
         player.sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.econ.getBalance(player.getName()))));
@@ -182,10 +182,10 @@ public final class SellRequest implements ConfigurationSerializable, Request, Ti
         
         Notification buyerNote;
         
-        BaxShop shop = Main.instance.state.getShop(shopid);
+        BaxShop shop = Main.getState().getShop(shopid);
         if (shop == null) {
             DeletedShopClaim shopDeleted = new DeletedShopClaim(buyer, entry);
-            Main.instance.state.sendNotification(buyer, shopDeleted);
+            Main.getState().sendNotification(buyer, shopDeleted);
             return 1;
         }
         else if (shop.sellToShop) {
@@ -193,11 +193,11 @@ public final class SellRequest implements ConfigurationSerializable, Request, Ti
                 return -1;
             }
             buyerNote = new SaleNotificationAuto(shop.owner, seller, entry);
-            Main.instance.state.sendNotification(shop.owner, buyerNote);
+            Main.getState().sendNotification(shop.owner, buyerNote);
         }
         else {
             buyerNote = new SaleNotificationAutoClaim(buyer, seller, entry);
-            Main.instance.state.sendNotification(shop.owner, buyerNote);
+            Main.getState().sendNotification(shop.owner, buyerNote);
         }
         return 1;
     }
@@ -222,7 +222,7 @@ public final class SellRequest implements ConfigurationSerializable, Request, Ti
     public boolean reject(Player player)
     {
         SaleRejection n = new SaleRejection(buyer, seller, entry);
-        Main.instance.state.sendNotification(seller, n);
+        Main.getState().sendNotification(seller, n);
         player.sendMessage("§cOffer rejected");
         return true;
     }

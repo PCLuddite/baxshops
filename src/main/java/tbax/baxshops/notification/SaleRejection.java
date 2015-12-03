@@ -67,7 +67,7 @@ public final class SaleRejection extends Claimable implements ConfigurationSeria
         this.seller = (String)args.get("seller");
         this.entry = (BaxEntry)args.get("entry");
         if (args.containsKey("shop")) {
-            BaxShop shop = Main.instance.state.getShop((int)args.get("shop"));
+            BaxShop shop = Main.getState().getShop((int)args.get("shop"));
             if (shop == null) {
                 buyer = Resources.ERROR_INLINE;
             }

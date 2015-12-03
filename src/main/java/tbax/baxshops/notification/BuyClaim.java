@@ -67,7 +67,7 @@ public final class BuyClaim extends Claimable
         this.buyer = (String)args.get("buyer");
         this.entry = (BaxEntry)args.get("entry");
         if (args.containsKey("shop")) {
-            BaxShop shop = Main.instance.state.getShop((int)args.get("shop"));
+            BaxShop shop = Main.getState().getShop((int)args.get("shop"));
             if (shop == null) {
                 seller = Resources.ERROR_INLINE;
             }

@@ -62,7 +62,7 @@ public final class BuyRejection implements Notification
         }
         else {
             this.buyer = (String)args.get("seller");
-            BaxShop shop = Main.instance.state.getShop((int)args.get("shop"));
+            BaxShop shop = Main.getState().getShop((int)args.get("shop"));
             if (shop == null) {
                 seller = Resources.ERROR_INLINE;
             }

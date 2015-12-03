@@ -217,7 +217,7 @@ public final class RefCmdExecuter
         if (block == null) {
             return true; // it didn't work. go back.
         }
-        if (cmd.getMain().state.addLocation(cmd.getPlayer(), block.getLocation(), shopSource)) {
+        if (Main.getState().addLocation(cmd.getPlayer(), block.getLocation(), shopSource)) {
             shopSource.addLocation(block.getLocation());
         }
         else {

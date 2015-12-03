@@ -68,7 +68,7 @@ public final class ShopCmd {
     }
     
     public StateFile getState() {
-        return main.state;
+        return Main.getState();
     }
     
     public Player getPlayer() {

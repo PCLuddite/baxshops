@@ -27,6 +27,7 @@ package tbax.baxshops.executer;
 import tbax.baxshops.CommandHelp;
 import tbax.baxshops.Format;
 import tbax.baxshops.Help;
+import tbax.baxshops.Main;
 import static tbax.baxshops.Main.sendError;
 import tbax.baxshops.Resources;
 
@@ -51,7 +52,7 @@ public final class MainExecuter {
 
     public static boolean save(ShopCmd cmd) {
         if (cmd.getSender().hasPermission("shops.admin")) {
-            cmd.getState().saveAll();
+            Main.getState().saveAll();
             cmd.getSender().sendMessage("Shops successfully saved");
         } 
         else {
@@ -62,7 +63,7 @@ public final class MainExecuter {
 
     public static boolean backup(ShopCmd cmd) {
         if (cmd.getSender().hasPermission("shops.admin")) {
-            cmd.getState().backup();
+            Main.getState().backup();
             cmd.getSender().sendMessage("Shops successfully backed up state.json");
         } 
         else {

@@ -127,7 +127,7 @@ public final class BuyRequest implements Request, TimedNotification
         econ.depositPlayer(seller, price);
         
         BuyClaim n = new BuyClaim(seller, purchased, buyer);
-        Main.instance.state.sendNotification(buyer, n);
+        Main.getState().sendNotification(buyer, n);
         
         acceptingPlayer.sendMessage("Offer accepted");
         acceptingPlayer.sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.econ.getBalance(acceptingPlayer.getName()))));
@@ -137,10 +137,10 @@ public final class BuyRequest implements Request, TimedNotification
     @Override
     public boolean reject(Player player)
     {
-        BaxShop shop = Main.instance.state.getShop(shopid);
+        BaxShop shop = Main.getState().getShop(shopid);
         if (shop == null) {
             DeletedShopClaim shopDeleted = new DeletedShopClaim(buyer, purchased);
-            Main.instance.state.sendNotification(player, shopDeleted);
+            Main.getState().sendNotification(player, shopDeleted);
             return true;
         }
         else if (!shop.infinite) {
@@ -154,7 +154,7 @@ public final class BuyRequest implements Request, TimedNotification
         }
 
         BuyRejection n = new BuyRejection(seller, buyer, purchased);
-        Main.instance.state.sendNotification(buyer, n);
+        Main.getState().sendNotification(buyer, n);
         player.sendMessage("Offer rejected");
         return true;
     }

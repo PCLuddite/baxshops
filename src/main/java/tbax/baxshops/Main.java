@@ -55,12 +55,7 @@ import tbax.baxshops.notification.*;
 import tbax.baxshops.serialization.StateFile;
 
 public final class Main extends JavaPlugin implements Listener
-{
-    /**
-     * A single instance of Main for external access
-     */
-    public static Main instance;
-    
+{    
     /**
      * A map containing each player's currently selected shop and other
      * selection data
@@ -70,7 +65,7 @@ public final class Main extends JavaPlugin implements Listener
     /**
      * The file and text resources for the plugin
      */
-    public StateFile state;
+    private static StateFile state;
     
     /**
      * The Vault economy
@@ -84,9 +79,9 @@ public final class Main extends JavaPlugin implements Listener
     }
 
     @Override
-    public void onEnable() {
+    public void onEnable()
+    {
         getServer().getPluginManager().registerEvents(this, this);
-        instance = this;
         log = this.getLogger();
         
         if (!enableVault()) {
@@ -340,6 +335,11 @@ public final class Main extends JavaPlugin implements Listener
                death.endsWith("lava") ||
                death.contains("pricked") ||
                death.contains("suffocated");
+    }
+    
+    public static StateFile getState()
+    {
+        return state;
     }
     
     /**

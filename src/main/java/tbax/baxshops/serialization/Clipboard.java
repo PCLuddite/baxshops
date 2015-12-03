@@ -93,7 +93,7 @@ public final class Clipboard
             }
             Long uid = clipboard.get(pl).get(id);
             if (uid != null) {
-                return Main.instance.state.getShop(uid);
+                return Main.getState().getShop(uid);
             }
         }
         return null;

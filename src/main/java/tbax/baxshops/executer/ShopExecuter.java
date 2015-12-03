@@ -120,7 +120,7 @@ public final class ShopExecuter
         shop.sellRequests = !shop.infinite;
         shop.buyRequests = false;
         
-        if (!cmd.getState().addShop(cmd.getPlayer(), shop)) {
+        if (!Main.getState().addShop(cmd.getPlayer(), shop)) {
             if (!admin) {
                 cmd.getPlayer().getInventory().addItem(new ItemStack(Material.SIGN)); // give the sign back
             }
@@ -276,12 +276,12 @@ public final class ShopExecuter
                 Main.sendError(cmd.getSender(), "Please remove all inventory before deleting it.");
             }
             else {
-                cmd.getState().removeShop(cmd.getPlayer(), cmd.getShop());
+                Main.getState().removeShop(cmd.getPlayer(), cmd.getShop());
                 cmd.getMain().removeSelection(cmd.getPlayer());
             }
         }
         else {
-            cmd.getState().removeLocation(cmd.getPlayer(), cmd.getSelection().location);
+            Main.getState().removeLocation(cmd.getPlayer(), cmd.getSelection().location);
             cmd.getMain().removeSelection(cmd.getPlayer());
         }
         return true;
@@ -696,7 +696,7 @@ public final class ShopExecuter
             }
             
             BuyRequest request = new BuyRequest(shop.id, cmd.getPlayer().getName(), shop.owner, purchased);
-            cmd.getMain().state.sendNotification(shop.owner, request);
+            Main.getState().sendNotification(shop.owner, request);
             cmd.getPlayer().sendMessage(
                 String.format("Your request to buy %s for %s has been sent.",
                     Format.itemname(purchased.getAmount(), itemName),
@@ -743,7 +743,7 @@ public final class ShopExecuter
             purchased.subtract(overflow);
 
             cmd.getSender().sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.econ.getBalance(cmd.getSender().getName()))));
-            cmd.getMain().state.sendNotification(shop.owner, new BuyNotification(cmd.getPlayer().getName(), shop.owner, purchased));        
+            Main.getState().sendNotification(shop.owner, new BuyNotification(cmd.getPlayer().getName(), shop.owner, purchased));        
         }
         return true;
     }
@@ -867,7 +867,7 @@ public final class ShopExecuter
         double price = Main.roundTwoPlaces((double)itemsToSell.getAmount() * entry.refundPrice);
         
         if (shop.sellRequests) {
-            cmd.getMain().state.sendNotification(shop.owner, request);
+            Main.getState().sendNotification(shop.owner, request);
             cmd.getPlayer().sendMessage(
                 String.format("Your request to sell %s for %s has been sent.",
                     Format.itemname(itemsToSell.getAmount(), name),
@@ -894,7 +894,7 @@ public final class ShopExecuter
                 return price;
             }
             else if (error == 0) {
-                cmd.getMain().state.sendNotification(shop.owner, request);
+                Main.getState().sendNotification(shop.owner, request);
                 Main.sendError(cmd.getPlayer(), 
                     String.format("The owner could not purchase %d %s. A request has been sent to the owner to accept your offer at a later time.",
                                   itemsToSell.getAmount(), name)
