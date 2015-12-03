@@ -87,14 +87,14 @@ public final class BuyClaim extends Claimable
             return String.format("%s accepted %s's request to buy %s for %s.",
                         Format.username(seller), 
                         Format.username2(buyer),
-                        Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
+                        Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
                         Format.money(entry.retailPrice * entry.getAmount())
                     );
         }
         else {
             return String.format("%s accepted your request to buy %s for %s.",
                     Format.username(seller),
-                    Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
+                    Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
                     Format.money(entry.retailPrice * entry.getAmount())
             );
         }

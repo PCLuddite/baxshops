@@ -93,14 +93,14 @@ public final class BuyRejection implements Notification
             return String.format("%s " + ChatColor.RED + "rejected" + ChatColor.RESET + " %s's request to buy %s for %s.",
                         Format.username(seller),
                         Format.username2(buyer),
-                        Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
+                        Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
                         Format.money(entry.refundPrice * entry.getAmount())
                     );
         }
         else {
             return String.format("%s " + ChatColor.RED + "rejected" + ChatColor.RESET + " your request to buy %s for %s.",
                         Format.username(seller),
-                        Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
+                        Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
                         Format.money(entry.refundPrice * entry.getAmount())
                     );
         }

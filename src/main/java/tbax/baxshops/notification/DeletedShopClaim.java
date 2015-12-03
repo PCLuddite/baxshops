@@ -55,7 +55,7 @@ public class DeletedShopClaim extends Claimable implements ConfigurationSerializ
     @Override
     public String getMessage(Player player)
     {
-        return String.format("The shop that had this entry no longer exists. You have %s outstanding.", Format.itemname(entry.quantity, ItemNames.getItemName(entry)));
+        return String.format("The shop that had this entry no longer exists. You have %s outstanding.", Format.itemname(entry.quantity, ItemNames.getName(entry)));
     }
 
     @Override

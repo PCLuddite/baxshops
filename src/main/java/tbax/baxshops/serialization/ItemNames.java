@@ -29,13 +29,15 @@ import java.util.*;
 import tbax.baxshops.*;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
 /**
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public final class ItemNames {
+public final class ItemNames
+{
     
     /**
      * A lookup table for aliases. Aliases are stored as
@@ -51,6 +53,10 @@ public final class ItemNames {
      * An array of items that can be damaged
      */
     private static final ArrayList<Material> damageableIds = new ArrayList<>();
+    /**
+     * A list of enchantment names
+     */
+    private static final HashMap<Enchantment, String> enchants = new HashMap<>();
         
     /**
      * Attempts to find an item which matches the given item name (alias)
@@ -60,7 +66,8 @@ public final class ItemNames {
      * @param sender the sender (to show errors)
      * @return a list of entries that match the alias
      */
-    public static BaxEntry getItemFromAlias(String input, BaxShop shop, CommandSender sender) {
+    public static BaxEntry getItemFromAlias(String input, BaxShop shop, CommandSender sender)
+    {
         String[] inputwords = getItemAlias(input);
         HashMap<Double,ArrayList<BaxEntry>> match_percentages = new HashMap<>();
         double highest = 0;
@@ -68,7 +75,7 @@ public final class ItemNames {
             Long id = getItemId(entry.getItemStack());
             String[] alias = aliases.get(id);
             if (alias == null) {
-                alias = getItemAlias(getItemName(entry.getItemStack()));
+                alias = getItemAlias(ItemNames.getName(entry.getItemStack()));
                 aliases.put(id, alias);
             }
             int matches = getNumMatches(alias, inputwords);
@@ -92,7 +99,7 @@ public final class ItemNames {
                 StringBuilder error = new StringBuilder();
                 error.append("The name '").append(input).append("' is ambiguous with the following items:\n");
                 for(BaxEntry entry : entries) {
-                    error.append(getItemName(entry)).append("\n");
+                    error.append(getName(entry)).append("\n");
                 }
                 error.append("BaxShops isn't sure what you want.");
                 Main.sendError(sender, error.toString());
@@ -105,7 +112,8 @@ public final class ItemNames {
         }
     }
     
-    private static String[] getItemAlias(String name) {
+    private static String[] getItemAlias(String name)
+    {
         StringBuilder alias = new StringBuilder();
         for(int index = 0; index < name.length(); ++index) {
             char c = name.charAt(index);
@@ -119,7 +127,8 @@ public final class ItemNames {
         return alias.toString().split("_");
     }
     
-    private static int getNumMatches(String[] first, String[] second) {
+    private static int getNumMatches(String[] first, String[] second)
+    {
         HashMap<String, Integer> map = new HashMap<>();
         for(String word : first) {
             Integer last = map.putIfAbsent(word, 1);
@@ -139,11 +148,13 @@ public final class ItemNames {
         return matches;
     }
     
-    private static Long getItemId(ItemStack item) {
+    private static Long getItemId(ItemStack item)
+    {
         return (long) item.getTypeId() << 16 | item.getDurability();
     }
     
-    private static Long getItemId(Material item) {
+    private static Long getItemId(Material item)
+    {
         return (long)item.getId() << 16;
     }
 
@@ -153,8 +164,9 @@ public final class ItemNames {
      * @param entry the shop entry
      * @return the item's name
      */
-    public static String getItemName(BaxEntry entry) {
-        return getItemName(entry.getItemStack());
+    public static String getName(BaxEntry entry)
+    {
+        return ItemNames.getName(entry.getItemStack());
     }
 
     /**
@@ -163,7 +175,8 @@ public final class ItemNames {
      * @param item an item stack
      * @return the item's name
      */
-    public static String getItemName(ItemStack item) {
+    public static String getName(ItemStack item)
+    {
         String name = itemNames.get(getItemId(item));
         if (name == null) {
             name = itemNames.get(getItemId(item.getType()));
@@ -179,12 +192,18 @@ public final class ItemNames {
         return name;
     }
     
+    public static String getEnchantName(Enchantment enchant)
+    {
+        return enchants.get(enchant);
+    }
+    
     /**
      * Determines if a material can be damaged
      * @param item
      * @return 
      */
-    public static boolean isDamageable(Material item) {
+    public static boolean isDamageable(Material item)
+    {
         return damageableIds.contains(item);
     }
     
@@ -192,7 +211,8 @@ public final class ItemNames {
      * Loads the damageable items list from the damageable.txt resource.
      * @param main
      */
-    public static void loadDamageable(Main main) {
+    public static void loadDamageable(Main main)
+    {
         InputStream stream = main.getResource("damageable.txt");
         if (stream == null) {
             return;
@@ -214,9 +234,11 @@ public final class ItemNames {
                 i++;
             }
             stream.close();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             main.log.warning("Failed to load damageable: " + e.toString());
-        } catch (NoSuchElementException e) {
+        }
+        catch (NoSuchElementException e) {
             main.log.info("loadAliases broke at line: " + i);
             e.printStackTrace();
         }
@@ -226,7 +248,8 @@ public final class ItemNames {
      * Loads the item names map from the items.txt resource.
      * @param main
     */
-    public static void loadItemNames(Main main) {
+    public static void loadItems(Main main)
+    {
         InputStream stream = main.getResource("items.txt");
         if (stream == null) {
             return;
@@ -281,8 +304,45 @@ public final class ItemNames {
                 }
             }
             stream.close();
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             main.log.warning("Failed to load item names: " + e.toString());
+        }
+    }
+    
+    /**
+     * Loads the enchantment names in enchants.txt
+     * @param main 
+     */
+    public static void loadEnchants(Main main)
+    {
+        InputStream stream = main.getResource("enchants.txt");
+        if (stream == null) {
+            return;
+        }
+        try {
+            BufferedReader br = new BufferedReader(new InputStreamReader(stream));
+            String line;
+            
+            while ((line = br.readLine()) != null) {
+                if (line.length() == 0 || line.charAt(0) == '#') {
+                    continue;
+                }
+                Scanner current = new Scanner(line);
+                int id = current.nextInt();
+                String name = "";
+                while (current.hasNext()) {
+                    name += ' ' + current.next();
+                }
+                if (name.length() == 0) {
+                    break;
+                }
+                enchants.put(Enchantment.getById(id), name);
+            }
+            stream.close();
+        }
+        catch (IOException e) {
+            main.log.warning("Failed to load enchants: " + e.toString());
         }
     }
 }

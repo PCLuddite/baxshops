@@ -87,14 +87,14 @@ public final class SaleRejection extends Claimable implements ConfigurationSeria
             return String.format("%s rejected %s's request to sell %s for %s.",
                 Format.username(buyer),
                 Format.username2(seller),
-                Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
+                Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
                 Format.money(entry.refundPrice * entry.getAmount())
             );
         }
         else {
             return String.format("%s rejected your request to sell %s for %s.",
                 Format.username(buyer),
-                Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
+                Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
                 Format.money(entry.refundPrice * entry.getAmount())
             );
         }

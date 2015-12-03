@@ -90,7 +90,7 @@ public final class BuyNotification implements Notification
         if (player == null || !player.getName().equals(seller)) {
             return String.format("%s bought %s from %s for %s.",
                         Format.username(buyer),
-                        Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
+                        Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
                         Format.username2(seller),
                         Format.money(entry.retailPrice * entry.getAmount())
                     );
@@ -98,7 +98,7 @@ public final class BuyNotification implements Notification
         else {
             return String.format("%s bought %s from you for %s.",
                         Format.username(buyer),
-                        Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
+                        Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
                         Format.money(entry.retailPrice * entry.getAmount())
                     );
         }

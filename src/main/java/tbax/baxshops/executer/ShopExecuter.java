@@ -337,7 +337,7 @@ public final class ShopExecuter
         cmd.getShop().addEntry(newEntry);
         cmd.getMain().sendInfo(cmd.getPlayer(), 
                 String.format("A new entry for %s was added to the shop.", 
-                    Format.itemname(newEntry.getAmount(), ItemNames.getItemName(newEntry))
+                    Format.itemname(newEntry.getAmount(), ItemNames.getName(newEntry))
                 ));
         if (!cmd.getShop().infinite) {
             cmd.getPlayer().setItemInHand(null);
@@ -401,7 +401,7 @@ public final class ShopExecuter
                     return true;
                 }
                 cmd.getMain().sendInfo(cmd.getPlayer(), String.format("Restocked with %s. The shop now has %s.", 
-                            Format.itemname(stack.getAmount(), ItemNames.getItemName(entry)),
+                            Format.itemname(stack.getAmount(), ItemNames.getName(entry)),
                             Format.number(entry.getAmount())
                             ));
                 return true;
@@ -419,7 +419,7 @@ public final class ShopExecuter
                 entry.add(stack.getAmount());
                 cmd.getPlayer().setItemInHand(null);
                 cmd.getMain().sendInfo(cmd.getPlayer(), String.format("Could only restock with " + ChatColor.RED + "%d %s" + ChatColor.RESET + ". The shop now has %s.",
-                    stack.getAmount(), ItemNames.getItemName(entry),
+                    stack.getAmount(), ItemNames.getName(entry),
                     Format.number(entry.getAmount()))
                 );
                 return true;
@@ -433,7 +433,7 @@ public final class ShopExecuter
         
         cmd.getMain().sendInfo(cmd.getPlayer(), 
             String.format("Restocked with %s in hand. The shop now has %s.", 
-                Format.itemname(stack.getAmount(), ItemNames.getItemName(entry)),
+                Format.itemname(stack.getAmount(), ItemNames.getName(entry)),
                 Format.number(entry.getAmount())
             )
         );
@@ -452,7 +452,7 @@ public final class ShopExecuter
                 if (entry != null) {
                     entry.add(itemStack.getAmount());
                     player.sendMessage(String.format("Restocked %s.", 
-                        Format.itemname(itemStack.getAmount(), ItemNames.getItemName(entry))
+                        Format.itemname(itemStack.getAmount(), ItemNames.getName(entry))
                     ));
                 }
             }
@@ -589,14 +589,14 @@ public final class ShopExecuter
         if (cmd.getShop().infinite) {
             cmd.getMain().sendInfo(cmd.getPlayer(),
                 String.format("The price for %s was set.",
-                    Format.itemname(ItemNames.getItemName(entry))
+                    Format.itemname(ItemNames.getName(entry))
                 )
             );
         }
         else {
             cmd.getMain().sendInfo(cmd.getPlayer(),
                 String.format("The price for %s was set.",
-                    Format.itemname(entry.getAmount(), ItemNames.getItemName(entry))
+                    Format.itemname(entry.getAmount(), ItemNames.getName(entry))
                 )
             );
         }
@@ -679,7 +679,7 @@ public final class ShopExecuter
             return true;
         }
         
-        String itemName = ItemNames.getItemName(entry);
+        String itemName = ItemNames.getName(entry);
         double price = Main.roundTwoPlaces(amount * entry.retailPrice);
         
         if (!Main.econ.has(cmd.getPlayer().getName(), price)) {
@@ -855,7 +855,7 @@ public final class ShopExecuter
             return -1.0;
         }
         
-        String name = ItemNames.getItemName(itemsToSell);
+        String name = ItemNames.getName(itemsToSell);
         
         BaxEntry req = new BaxEntry();
         req.setItem(itemsToSell);
@@ -954,7 +954,7 @@ public final class ShopExecuter
 
             cmd.getMain().sendInfo(cmd.getPlayer(),
                 String.format("%s %s added to your inventory.",
-                    Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
+                    Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
                     entry.getAmount() == 1 ? "was" : "were"
                 )
             );
@@ -1028,7 +1028,7 @@ public final class ShopExecuter
                 cmd.getPlayer().sendMessage(
                     String.format(Resources.SOME_ROOM,
                         amt - overflow,
-                        ItemNames.getItemName(stack)
+                        ItemNames.getName(stack)
                     )
                 );
                 return true;
@@ -1039,7 +1039,7 @@ public final class ShopExecuter
         
         cmd.getMain().sendInfo(cmd.getPlayer(), 
             String.format("%s %s added to your inventory.",
-                Format.itemname(amt, ItemNames.getItemName(entry)),
+                Format.itemname(amt, ItemNames.getName(entry)),
                 amt == 1 ? "was" : "were"
             )
         );

@@ -106,7 +106,7 @@ public final class SellRequest implements ConfigurationSerializable, Request, Ti
         if (player == null || !player.getName().equals(buyer)) {
             return String.format("%s wants to sell %s to %s for %s.",
                 Format.username(seller), 
-                Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
+                Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
                 Format.username2(buyer),
                 Format.money(entry.refundPrice * entry.getAmount())
             );
@@ -114,7 +114,7 @@ public final class SellRequest implements ConfigurationSerializable, Request, Ti
         else {
             return String.format("%s wants to sell you %s for %s.",
                 Format.username(seller), 
-                Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
+                Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
                 Format.money(entry.refundPrice * entry.getAmount())
             );
         }

@@ -93,7 +93,7 @@ public class SaleNotificationAuto implements Notification, ConfigurationSerializ
         if (player == null || !player.equals(buyer)) {
             return String.format("%s sold %s to %s for %s.",
                         Format.username(seller),
-                        Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
+                        Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
                         Format.username2(buyer),
                         Format.money(entry.refundPrice * entry.getAmount())
                     );
@@ -101,7 +101,7 @@ public class SaleNotificationAuto implements Notification, ConfigurationSerializ
         else {
             return String.format("%s sold you %s for %s.",
                         Format.username(seller),
-                        Format.itemname(entry.getAmount(), ItemNames.getItemName(entry)),
+                        Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
                         Format.money(entry.refundPrice * entry.getAmount())
                     );
         }

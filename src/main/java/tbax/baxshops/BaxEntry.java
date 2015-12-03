@@ -239,7 +239,7 @@ public final class BaxEntry implements ConfigurationSerializable
         StringBuilder info = new StringBuilder();
         info.append(CommandHelp.header("BaxEntry Information"));
         info.append('\n');
-        info.append("Name: ").append(Format.itemname(ItemNames.getItemName(this))).append('\n');
+        info.append("Name: ").append(Format.itemname(ItemNames.getName(this))).append('\n');
         if (stack.hasItemMeta() && stack.getItemMeta().hasDisplayName()) {
             info.append("Display Name: ").append(ChatColor.YELLOW).append(stack.getItemMeta().getDisplayName()).append(ChatColor.RESET).append('\n');
         }
@@ -252,12 +252,12 @@ public final class BaxEntry implements ConfigurationSerializable
             else {
                 StringBuilder enchsb = new StringBuilder();
                 for(Map.Entry<Enchantment, Integer> enchant : enchmap.entrySet()) {
-                    enchsb.append(Format.toFriendlyName(enchant.getKey().getName()));
+                    enchsb.append(ItemNames.getEnchantName(enchant.getKey()));
                     enchsb.append(' ');
                     enchsb.append(Format.toNumeral(enchant.getValue()));
                     enchsb.append(", ");
                 }
-                enchants = enchsb.substring(0, enchsb.length() - 3);
+                enchants = enchsb.substring(0, enchsb.length() - 2);
             }
             info.append("Enchants: ").append(Format.enchantments(enchants)).append('\n');
         }
@@ -271,7 +271,7 @@ public final class BaxEntry implements ConfigurationSerializable
     
     public String toString(int index)
     {
-        StringBuilder name = new StringBuilder(ItemNames.getItemName(this));
+        StringBuilder name = new StringBuilder(ItemNames.getName(this));
         
         if (getEnchants(stack) != null) {
             StringBuilder enchName = new StringBuilder(" ("); // Enchanted items are in purple

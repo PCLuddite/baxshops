@@ -102,7 +102,7 @@ public final class BuyRequest implements Request, TimedNotification
         if (player == null || !player.getName().equals(seller)) {
             return String.format("%s wants to buy %s from %s for %s.",
                         Format.username(buyer),
-                        Format.itemname(purchased.getAmount(), ItemNames.getItemName(purchased)),
+                        Format.itemname(purchased.getAmount(), ItemNames.getName(purchased)),
                         Format.username2(seller),
                         Format.money(purchased.retailPrice * purchased.getAmount())
                     );
@@ -110,7 +110,7 @@ public final class BuyRequest implements Request, TimedNotification
         else {
             return String.format("%s wants to buy %s from you for %s.",
                         Format.username(buyer),
-                        Format.itemname(purchased.getAmount(), ItemNames.getItemName(purchased)),
+                        Format.itemname(purchased.getAmount(), ItemNames.getName(purchased)),
                         Format.money(purchased.retailPrice * purchased.getAmount())
                     );
         }
