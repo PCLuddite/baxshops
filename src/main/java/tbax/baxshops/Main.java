@@ -117,7 +117,6 @@ public final class Main extends JavaPlugin implements Listener
         ConfigurationSerialization.registerClass(BuyRejection.class);
         ConfigurationSerialization.registerClass(BuyRequest.class);
         ConfigurationSerialization.registerClass(DeletedShopClaim.class);
-        ConfigurationSerialization.registerClass(DeathNotification.class);
         ConfigurationSerialization.registerClass(LollipopNotification.class);
         ConfigurationSerialization.registerClass(SaleNotification.class);
         ConfigurationSerialization.registerClass(SaleNotificationAuto.class);
@@ -323,7 +322,10 @@ public final class Main extends JavaPlugin implements Listener
                 double death_tax = econ.getBalance(pl.getName()) * getConfig().getDouble("DeathTax.Percentage", 0.04);
                 econ.withdrawPlayer(pl.getName(), death_tax);
                 econ.depositPlayer(name, death_tax);
-                state.sendNotification(pl, new DeathNotification(pl.getName(), death_tax));
+                pl.sendMessage(String.format("You were fined %s for dying.", Format.money(death_tax)));
+                if (getConfig().getBoolean("LogNotes", false)) {
+                    log.info(Format.toAnsiColor(String.format("%s was fined %s for dying.", Format.username(pl.getName()), Format.money(death_tax))));
+                }
             }
         }
     }
