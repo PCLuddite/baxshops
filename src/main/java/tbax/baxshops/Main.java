@@ -54,8 +54,8 @@ import tbax.baxshops.executer.*;
 import tbax.baxshops.notification.*;
 import tbax.baxshops.serialization.StateFile;
 
-public final class Main extends JavaPlugin implements Listener {
-    
+public final class Main extends JavaPlugin implements Listener
+{
     /**
      * A single instance of Main for external access
      */
@@ -66,13 +66,7 @@ public final class Main extends JavaPlugin implements Listener {
      * selection data
      */
     public HashMap<Player, ShopSelection> selectedShops = new HashMap<>();
-    /**
-     * A map containing each player's current options shop and other
-     * option data
-     */
-    public HashMap<Player, HashMap<String, Object>> tempSettings = new HashMap<>();
-    
-   
+
     /**
      * The file and text resources for the plugin
      */
@@ -85,7 +79,8 @@ public final class Main extends JavaPlugin implements Listener {
     
     public static Logger log;
     
-    public Main() {
+    public Main()
+    {
     }
 
     @Override
@@ -145,7 +140,6 @@ public final class Main extends JavaPlugin implements Listener {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
-                
         ShopCmd cmd = new ShopCmd(this, sender, command, args);
         
         if (cmd.getName().equalsIgnoreCase("buy") || cmd.getName().equalsIgnoreCase("sell") ||
@@ -191,7 +185,8 @@ public final class Main extends JavaPlugin implements Listener {
     }
     
     @EventHandler(priority = EventPriority.HIGH)
-    public void onBlockBreak(BlockBreakEvent event){
+    public void onBlockBreak(BlockBreakEvent event)
+    {
         Block block = event.getBlock();
         Location loc = block.getLocation();
         loc.setY(loc.getY() + 1);
@@ -202,7 +197,8 @@ public final class Main extends JavaPlugin implements Listener {
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onPlayerInteract(PlayerInteractEvent event) {
+    public void onPlayerInteract(PlayerInteractEvent event)
+    {
         Block b = event.getClickedBlock();
         if (b == null) {
             return;
@@ -244,7 +240,7 @@ public final class Main extends JavaPlugin implements Listener {
                 selection.page = 0;
             }
             else {
-                int delta = event.getAction() == Action.LEFT_CLICK_BLOCK ? -1 : 1;
+                int delta = event.getAction() == Action.LEFT_CLICK_BLOCK ? 1 : -1;
                 selection.page = (((selection.page + delta) % pages) + pages) % pages;
             }
             pl.sendMessage("");
@@ -277,7 +273,8 @@ public final class Main extends JavaPlugin implements Listener {
     }
 	
     @EventHandler(priority = EventPriority.HIGH)
-    public void onExplosion(EntityExplodeEvent event) {
+    public void onExplosion(EntityExplodeEvent event)
+    {
         for (Block b : event.blockList()) {
             Location loc = b.getLocation();
             if (state.getShop(loc) != null) {
@@ -293,7 +290,8 @@ public final class Main extends JavaPlugin implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onPlayerJoin(PlayerJoinEvent event) {
+    public void onPlayerJoin(PlayerJoinEvent event)
+    {
         ArrayDeque<Notification> p = state.getNotifications(event.getPlayer());
         if (!p.isEmpty()) {
             event.getPlayer().sendMessage(ChatColor.WHITE + "You have new notifications. Use " + Format.command("/shop notifications") + ChatColor.WHITE + " to view them");
@@ -301,7 +299,8 @@ public final class Main extends JavaPlugin implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerMove(PlayerMoveEvent event) {
+    public void onPlayerMove(PlayerMoveEvent event)
+    {
         Player pl = event.getPlayer();
         ShopSelection s = selectedShops.get(pl);
         if (s != null) {
@@ -320,7 +319,8 @@ public final class Main extends JavaPlugin implements Listener {
     }
     
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerDeath(PlayerDeathEvent event) {
+    public void onPlayerDeath(PlayerDeathEvent event)
+    {
         String name = getConfig().getString("DeathTax.GoesTo", null);
         if (name != null) {
             Player pl = event.getEntity();
@@ -333,7 +333,8 @@ public final class Main extends JavaPlugin implements Listener {
         }
     }
     
-    private static boolean isStupidDeath(String death) {
+    private static boolean isStupidDeath(String death)
+    {
         return (death.contains("fell") && !death.contains("world")) ||
                death.endsWith("drowned") ||
                death.endsWith("lava") ||
@@ -346,7 +347,8 @@ public final class Main extends JavaPlugin implements Listener {
      *
      * @return true on success, false otherwise
      */
-    private boolean enableVault() {
+    private boolean enableVault()
+    {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
             return false;
         }
