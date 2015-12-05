@@ -28,8 +28,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  *
@@ -209,7 +212,19 @@ public final class BaxShop implements ConfigurationSerializable
         }
         return null;
     }
-
+    
+    public ItemStack toItem()
+    {
+        ItemStack item = new ItemStack(Material.SIGN, 1);
+        ArrayList<String> lore = new ArrayList<>();
+        lore.add("ID: " + id);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(owner + "'s Shop");
+        meta.setLore(lore);
+        item.setItemMeta(meta);
+        return item;
+    }
+    
     @Override
     public Map<String, Object> serialize()
     {

@@ -41,6 +41,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -48,6 +49,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import tbax.baxshops.executer.*;
@@ -178,7 +182,7 @@ public final class Main extends JavaPlugin implements Listener
         return NotifyExecuter.execute(cmd);
     }
     
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockBreak(BlockBreakEvent event)
     {
         Block block = event.getBlock();
@@ -200,7 +204,16 @@ public final class Main extends JavaPlugin implements Listener
         
         BaxShop shop = state.getShop(b.getLocation());
         if (shop == null) {
-            return;
+            if (b.hasMetadata("shopid")) {
+                shop = state.getShop(b.getMetadata("shopid").get(0).asLong());
+                if (shop == null) {
+                    event.getPlayer().sendMessage("This shop has been closed.");
+                    return;
+                }
+            }
+            else {
+                return;
+            }
         }
         Player pl = event.getPlayer();
         
@@ -266,7 +279,7 @@ public final class Main extends JavaPlugin implements Listener
         }
     }
 	
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onExplosion(EntityExplodeEvent event)
     {
         for (Block b : event.blockList()) {
@@ -279,6 +292,26 @@ public final class Main extends JavaPlugin implements Listener
             if (state.getShop(loc) != null) {
                 event.setCancelled(true);
                 return;
+            }
+        }
+    }
+    
+    @EventHandler(priority = EventPriority.LOW)
+    public void onBlockPlace(BlockPlaceEvent event)
+    {
+        ItemStack item = event.getItemInHand();
+        if (item.getType() == Material.SIGN && item.hasItemMeta()) {
+            ItemMeta meta = item.getItemMeta();
+            if (meta.hasLore() && meta.getLore().get(0).startsWith("ID: ")) {
+                long id = Long.parseLong(meta.getLore().get(0).substring(4));
+                BaxShop shop = state.getShop(id);
+                if (shop == null) {
+                    sendWarning(event.getPlayer(), "This shop has been closed and can't be placed.");
+                    event.setCancelled(true);
+                }
+                else {
+                    state.addLocation(event.getPlayer(), event.getBlockPlaced().getLocation(), shop);
+                }
             }
         }
     }
@@ -374,6 +407,19 @@ public final class Main extends JavaPlugin implements Listener
     {
         if (sender != null) {
             sender.sendMessage(ChatColor.DARK_RED + message);
+        }
+    }
+    
+    /**
+     * Warns a player with a message
+     *
+     * @param sender the player
+     * @param message the error message
+     */
+    public static void sendWarning(CommandSender sender, String message)
+    {
+        if (sender != null) {
+            sender.sendMessage(ChatColor.GOLD + message);
         }
     }
     
