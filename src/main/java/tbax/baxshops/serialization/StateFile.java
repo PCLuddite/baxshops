@@ -74,7 +74,7 @@ public final class StateFile
     public StateFile(Main main)
     {
         this.main = main;
-        this.log = Main.log;
+        this.log = Main.getLog();
     }
     
     public BaxShop getShop(long uid)

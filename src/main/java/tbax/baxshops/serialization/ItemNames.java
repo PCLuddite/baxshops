@@ -240,10 +240,10 @@ public final class ItemNames
             stream.close();
         }
         catch (IOException e) {
-            main.log.warning("Failed to load damageable: " + e.toString());
+            Main.getLog().warning("Failed to load damageable: " + e.toString());
         }
         catch (NoSuchElementException e) {
-            main.log.info("loadAliases broke at line: " + i);
+            Main.getLog().info("loadAliases broke at line: " + i);
             e.printStackTrace();
         }
     }
@@ -310,7 +310,7 @@ public final class ItemNames
             stream.close();
         }
         catch (IOException e) {
-            main.log.warning("Failed to load item names: " + e.toString());
+            Main.getLog().warning("Failed to load item names: " + e.toString());
         }
     }
     
@@ -346,7 +346,7 @@ public final class ItemNames
             stream.close();
         }
         catch (IOException e) {
-            main.log.warning("Failed to load enchants: " + e.toString());
+            Main.getLog().warning("Failed to load enchants: " + e.toString());
         }
     }
 }

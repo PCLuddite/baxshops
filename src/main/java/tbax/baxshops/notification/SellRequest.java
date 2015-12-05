@@ -127,7 +127,7 @@ public final class SellRequest implements ConfigurationSerializable, Request, Ti
 
         ItemStack item = entry.toItemStack();
         
-        Economy econ = Main.econ;
+        Economy econ = Main.getEconomy();
 
         if (!econ.has(buyer, price)) {
             Main.sendError(player, Resources.NO_MONEY);
@@ -157,7 +157,7 @@ public final class SellRequest implements ConfigurationSerializable, Request, Ti
         Main.getState().sendNotification(seller, n);
         
         player.sendMessage("Offer accepted");
-        player.sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.econ.getBalance(player.getName()))));
+        player.sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.getEconomy().getBalance(player.getName()))));
         
         return true;
     }
@@ -171,7 +171,7 @@ public final class SellRequest implements ConfigurationSerializable, Request, Ti
     {
         double price = Main.roundTwoPlaces(entry.getAmount() * entry.refundPrice);
         
-        Economy econ = Main.econ;
+        Economy econ = Main.getEconomy();
         
         if (!econ.has(buyer, price)) {
             return 0;

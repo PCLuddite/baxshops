@@ -195,7 +195,7 @@ public final class RefCmdExecuter
         Block sourceLoc = shopSource.getLocations().get(0).getBlock();
         Block block;
         if (!(sourceLoc.getType().equals(Material.SIGN) || sourceLoc.getType().equals(Material.SIGN_POST))) {
-            Main.log.warning(String.format(Resources.NOT_FOUND_SIGN, shopSource.owner));
+            Main.getLog().warning(String.format(Resources.NOT_FOUND_SIGN, shopSource.owner));
             block = ShopExecuter.buildShopSign(cmd,
                 new String[] {
                   "Location for",

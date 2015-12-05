@@ -684,7 +684,7 @@ public final class ShopExecuter
         String itemName = ItemNames.getName(entry);
         double price = Main.roundTwoPlaces(amount * entry.retailPrice);
         
-        if (!Main.econ.has(cmd.getPlayer().getName(), price)) {
+        if (!Main.getEconomy().has(cmd.getPlayer().getName(), price)) {
             Main.sendError(cmd.getPlayer(), Resources.NO_MONEY);
             return true;
         }
@@ -735,16 +735,16 @@ public final class ShopExecuter
                     )
                 );
             }
-            Main.econ.withdrawPlayer(cmd.getPlayer().getName(), price);
+            Main.getEconomy().withdrawPlayer(cmd.getPlayer().getName(), price);
             if (!shop.infinite) {
                 entry.subtract(amount - overflow);
             }
 
-            Main.econ.depositPlayer(shop.owner, price);
+            Main.getEconomy().depositPlayer(shop.owner, price);
 
             purchased.subtract(overflow);
 
-            cmd.getSender().sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.econ.getBalance(cmd.getSender().getName()))));
+            cmd.getSender().sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.getEconomy().getBalance(cmd.getSender().getName()))));
             Main.getState().sendNotification(shop.owner, new BuyNotification(cmd.getPlayer().getName(), shop.owner, purchased));        
         }
         return true;
@@ -783,7 +783,7 @@ public final class ShopExecuter
                 if (total > 0.0) {
                     cmd.getPlayer().sendMessage(String.format("You earned %s.", Format.money(total)));
                 }
-                cmd.getPlayer().sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.econ.getBalance(cmd.getPlayer().getName()))));
+                cmd.getPlayer().sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.getEconomy().getBalance(cmd.getPlayer().getName()))));
             }
             return true;
         }
@@ -891,7 +891,7 @@ public final class ShopExecuter
                     )
                 );
                 if (showExtra) {
-                    cmd.getPlayer().sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.econ.getBalance(cmd.getPlayer().getName()))));
+                    cmd.getPlayer().sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.getEconomy().getBalance(cmd.getPlayer().getName()))));
                 }
                 return price;
             }

@@ -24,31 +24,17 @@
  */
 package tbax.baxshops;
 
-import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.logging.Logger;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import tbax.baxshops.executer.*;
@@ -71,9 +57,9 @@ public final class Main extends JavaPlugin
     /**
      * The Vault economy
      */
-    public static Economy econ;
+    private static Economy econ;
     
-    public static Logger log;
+    private static Logger log;
     
     public Main()
     {
@@ -182,6 +168,16 @@ public final class Main extends JavaPlugin
     public static StateFile getState()
     {
         return state;
+    }
+    
+    public static Logger getLog()
+    {
+        return log;
+    }
+    
+    public static Economy getEconomy()
+    {
+        return econ;
     }
     
     /**

@@ -121,7 +121,7 @@ public final class BuyRequest implements Request, TimedNotification
     {            
         double price = Main.roundTwoPlaces(purchased.getAmount() * purchased.refundPrice);
 
-        Economy econ = Main.econ;
+        Economy econ = Main.getEconomy();
         
         econ.withdrawPlayer(buyer, price);
         econ.depositPlayer(seller, price);
@@ -130,7 +130,7 @@ public final class BuyRequest implements Request, TimedNotification
         Main.getState().sendNotification(buyer, n);
         
         acceptingPlayer.sendMessage("Offer accepted");
-        acceptingPlayer.sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.econ.getBalance(acceptingPlayer.getName()))));
+        acceptingPlayer.sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.getEconomy().getBalance(acceptingPlayer.getName()))));
         return true;
     }
 	

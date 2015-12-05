@@ -43,10 +43,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import static tbax.baxshops.Main.econ;
-import static tbax.baxshops.Main.log;
-import static tbax.baxshops.Main.sendError;
-import static tbax.baxshops.Main.sendWarning;
 import tbax.baxshops.notification.Notification;
 
 /**
@@ -55,7 +51,7 @@ import tbax.baxshops.notification.Notification;
  */
 public class EventListener implements Listener
 {
-    private Main main;
+    private final Main main;
     
     public EventListener(Main main)
     {
@@ -65,11 +61,13 @@ public class EventListener implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockBreak(BlockBreakEvent event)
     {
-        Block block = event.getBlock();
-        Location loc = block.getLocation();
-        loc.setY(loc.getY() + 1);
-        if (Main.getState().getShop(loc) != null) {
-            sendError(event.getPlayer(), "You cannot remove this block because there is a shop above it!");
+        if (Main.getState().getShop(event.getBlock().getLocation()) != null) {
+            
+        }
+        Location above = event.getBlock().getLocation();
+        above.setY(above.getY() + 1);
+        if (Main.getState().getShop(above) != null) {
+            Main.sendError(event.getPlayer(), "You cannot remove this block because there is a shop above it!");
             event.setCancelled(true); 
         }
     }
@@ -152,11 +150,6 @@ public class EventListener implements Listener
         }
 
         selection.showListing(pl);
-
-        event.setCancelled(true);
-        if (event.getAction() == Action.LEFT_CLICK_BLOCK) {
-            b.getState().update();
-        }
     }
 	
     @EventHandler(priority = EventPriority.LOWEST)
@@ -186,7 +179,7 @@ public class EventListener implements Listener
                 long id = Long.parseLong(meta.getLore().get(0).substring(4));
                 BaxShop shop = Main.getState().getShop(id);
                 if (shop == null) {
-                    sendWarning(event.getPlayer(), "This shop has been closed and can't be placed.");
+                    Main.sendWarning(event.getPlayer(), "This shop has been closed and can't be placed.");
                     event.setCancelled(true);
                 }
                 else {
@@ -231,13 +224,13 @@ public class EventListener implements Listener
         String name = main.getConfig().getString("DeathTax.GoesTo", null);
         if (name != null) {
             Player pl = event.getEntity();
-            if (econ.has(pl.getName(), 100.00) && isStupidDeath(event.getDeathMessage())) {
-                double death_tax = econ.getBalance(pl.getName()) * main.getConfig().getDouble("DeathTax.Percentage", 0.04);
-                econ.withdrawPlayer(pl.getName(), death_tax);
-                econ.depositPlayer(name, death_tax);
+            if (Main.getEconomy().has(pl.getName(), 100.00) && isStupidDeath(event.getDeathMessage())) {
+                double death_tax = Main.getEconomy().getBalance(pl.getName()) * main.getConfig().getDouble("DeathTax.Percentage", 0.04);
+                Main.getEconomy().withdrawPlayer(pl.getName(), death_tax);
+                Main.getEconomy().depositPlayer(name, death_tax);
                 pl.sendMessage(String.format("You were fined %s for dying.", Format.money(death_tax)));
                 if (main.getConfig().getBoolean("LogNotes", false)) {
-                    log.info(Format.toAnsiColor(String.format("%s was fined %s for dying.", Format.username(pl.getName()), Format.money(death_tax))));
+                    Main.getLog().info(Format.toAnsiColor(String.format("%s was fined %s for dying.", Format.username(pl.getName()), Format.money(death_tax))));
                 }
             }
         }
