@@ -10,35 +10,35 @@
 3 Dirt
 | 1 Coarse Dirt
 | 2 Podzol
-5 Wooden Planks (Oak)
-| 1 Wooden Planks (Spruce)
-| 2 Wooden Planks (Birch)
-| 3 Wooden Planks (Jungle)
-| 4 Wooden Planks (Acacia)
-| 5 Wooden Planks (Dark Oak)
-6 Sapling (Oak)
-| 1 Sapling (Spruce)
-| 2 Sapling (Birch)
-| 3 Sapling (Jungle)
-| 4 Sapling (Acacia)
-| 5 Sapling (Dark Oak)
+5 Oak Wood Planks
+| 1 Spruce Wood Planks
+| 2 Birch Wood Planks
+| 3 Jungle Wood Planks
+| 4 Acacia Wood Planks
+| 5 Dark Oak Wood Planks
+6 Oak Sapling
+| 1 Spruce Sapling
+| 2 Birch Sapling
+| 3 Jungle Sapling
+| 4 Acacia Sapling
+| 5 Dark Oak Sapling
 12 Sand
 | 1 Red Sand
-17 Wood (Oak)
-| 1 Wood (Spruce)
-| 2 Wood (Birch)
-| 3 Wood (Jungle)
-| 4 Wood (Acacia)
-| 5 Wood (Dark Oak)
-18 Leaves (Oak)
-| 1 Leaves (Spruce)
-| 2 Leaves (Birch)
-| 3 Leaves (Jungle)
+17 Oak Wood
+| 1 Spruce Wood
+| 2 Birch Wood
+| 3 Jungle Wood
+| 4 Acacia Wood
+| 5 Dark Oak Wood
+18 Oak Leaves
+| 1 Spruce Leaves
+| 2 Birch Leaves
+| 3 Jungle Leaves
 19 Sponge
 | 1 Wet Sponge
 24 Sandstone
-| 1 Sandstone (Chiseled)
-| 2 Sandstone (Smooth)
+| 1 Chiseled Sandstone
+| 2 Smooth Sandstone
 31 Tall Grass (Dead Shrub)
 | 1 Tall Grass
 | 2 Tall Grass (Fern)
@@ -69,140 +69,126 @@
 | 6 White Tulip
 | 7 Pink Tulip
 | 8 Oxeye Daisy
-43 Double Slab (Stone)
-| 1 Double Slab (Sandstone)
-| 2 Double Slab (Wood)
-| 3 Double Slab (Cobblestone)
-| 4 Double Slab (Brick)
-| 5 Double Slab (Stone Bricks)
-| 6 Double Slab (Nether Brick)
-| 7 Double Slab (Quartz Block)
-| 8 Double Slab (Smooth Stone)
-| 9 Double Slab (Smooth Sandstone)
-44 Slab
-| 1 Slab (Sandstone)
-| 2 Slab (Wood)
-| 3 Slab (Cobblestone)
-| 4 Slab (Brick)
-| 5 Slab (Stone Bricks)
-| 6 Slab (Nether Brick)
-| 7 Slab (Quartz)
+44 Stone Slab
+| 1 Sandstone Slab
+| 2 Wooden Slab
+| 3 Cobblestone Slab
+| 4 Bricks Slab
+| 5 Stone Brick Slab
+| 6 Nether Brick Slab
+| 7 Quartz Slab
 58 Crafting Table
 91 Jack-O-Lantern
-95 Stained Glass (White)
-| 1 Stained Glass (Orange)
-| 2 Stained Glass (Magenta)
-| 3 Stained Glass (Light Blue)
-| 4 Stained Glass (Yellow)
-| 5 Stained Glass (Lime)
-| 6 Stained Glass (Pink)
-| 7 Stained Glass (Grey)
-| 8 Stained Glass (Light Grey)
-| 9 Stained Glass (Cyan)
-| A Stained Glass (Purple)
-| B Stained Glass (Blue)
-| C Stained Glass (Brown)
-| D Stained Glass (Green)
-| E Stained Glass (Red)
-| F Stained Glass (Black)
-97 Stone (Monster Egg)
-| 1 Cobblestone (Monster Egg)
-| 2 Stonebricks (Monster Egg)
-| 3 Mossy Stone Brick (Monster Egg)
-| 4 Cracked Stone (Monster Egg)
-| 5 Chiseled Stone (Monster Egg)
+95 White Stained Glass
+| 1 Orange Stained Glass
+| 2 Magenta Stained Glass
+| 3 Light Blue Stained Glass
+| 4 Yellow Stained Glass
+| 5 Lime Stained Glass
+| 6 Pink Stained Glass
+| 7 Gray Stained Glass
+| 8 Light Gray Stained Glass
+| 9 Cyan Stained Glass
+| A Purple Stained Glass
+| B Blue Stained Glass
+| C Brown Stained Glass
+| D Green Stained Glass
+| E Red Stained Glass
+| F Black Stained Glass
+96 Wooden Trapdoor
+97 Stone Monster Egg
+| 1 Cobblestone Monster Egg
+| 2 Stone Bricks Monster Egg
+| 3 Mossy Stone Brick Monster Egg
+| 4 Cracked Stone Monster Egg
+| 5 Chiseled Stone Monster Egg
 98 Stone Bricks
-| 1 Stone Bricks (Mossy)
-| 2 Stone Bricks (Cracked)
-| 3 Stone Bricks (Chiseled)
+| 1 Mossy Stone Bricks
+| 2 Cracked Stone Bricks
+| 3 Chiseled Stone Bricks
 103 Melon
 107 Fence Gate
-125 Doable Slab (Oak Wood)
-| 1 Double Slab (Spruce Wood)
-| 2 Double Slab (Birch Wood)
-| 3 Double Slab (Jungle Wood)
-| 4 Double Slab (Acacia Wood)
-| 5 Double Slab (Dark Oak Wood)
-126 Oak-Wood Slab
-| 1 Slab (Spruce Wood)
-| 2 Slab (Birch Wood)
-| 3 Slab (Jungle Wood)
-| 4 Slab (Acacia Wood)
-| 5 Slab (Dark Oak Wood)
+126 Oak Wood Slab
+| 1 Spruce Wood Slab
+| 2 Birch Wood Slab
+| 3 Jungle Wood Slab
+| 4 Acacia Wood Slab
+| 5 Dark Oak Wood Slab
 127 Coacoa Pod
 145 Anvil
-| 1 Anvil (Sligtly Damaged)
-| 2 Anvil (Very Damaged)
+| 1 Sligtly Damaged Anvil
+| 2 Very Damaged Anvil
 146 Trapped Chest
 147 Weighted Pressure Plate (Light)
 148 Weighted Pressure Plate (Heavy)
 155 Quartz Block
 | 1 Chiseled Quartz Block
 | 2 Pillar Quartz Block
-159 Stained Clay (White)
-| 1 Stained Clay (Orange)
-| 2 Stained Clay (Magenta)
-| 3 Stained Clay (Light Blue)
-| 4 Stained Clay (Yellow)
-| 5 Stained Clay (Lime)
-| 6 Stained Clay (Pink)
-| 7 Stained Clay (Grey)
-| 8 Stained Clay (Light Grey)
-| 9 Stained Clay (Cyan)
-| A Stained Clay (Purple)
-| B Stained Clay (Blue)
-| C Stained Clay (Brown)
-| D Stained Clay (Green)
-| E Stained Clay (Red)
-| F Stained Clay (Black)
-160 Stained Glass Pane (White)
-| 1 Stained Glass Pane (Orange)
-| 2 Stained Glass Pane (Magenta)
-| 3 Stained Glass Pane (Light Blue)
-| 4 Stained Glass Pane (Yellow)
-| 5 Stained Glass Pane (Lime)
-| 6 Stained Glass Pane (Pink)
-| 7 Stained Glass Pane (Grey)
-| 8 Stained Glass Pane (Light Grey)
-| 9 Stained Glass Pane (Cyan)
-| A Stained Glass Pane (Purple)
-| B Stained Glass Pane (Blue)
-| C Stained Glass Pane (Brown)
-| D Stained Glass Pane (Green)
-| E Stained Glass Pane (Red)
-| F Stained Glass Pane (Black)
-162 Wood (Acacia)
-| 1 Wood (Dark Oak)
+159 White Stained Clay
+| 1 Orange Stained Clay
+| 2 Magenta Stained Clay
+| 3 Light Blue Stained Clay
+| 4 Yellow Stained Clay
+| 5 Lime Stained Clay
+| 6 Pink Stained Clay
+| 7 Gray Stained Clay
+| 8 Light Gray Stained Clay
+| 9 Cyan Stained Clay
+| A Purple Stained Clay
+| B Blue Stained Clay
+| C Brown Stained Clay
+| D Green Stained Clay
+| E Red Stained Clay
+| F Black Stained Clay
+160 White Stained Glass Pane
+| 1 Orange Stained Glass Pane
+| 2 Magenta Stained Glass Pane
+| 3 Light Blue Stained Glass Pane
+| 4 Yellow Stained Glass Pane
+| 5 Lime Stained Glass Pane
+| 6 Pink Stained Glass Pane
+| 7 Gray Stained Glass Pane
+| 8 Light Gray Stained Glass Pane
+| 9 Cyan Stained Glass Pane
+| A Purple Stained Glass Pane
+| B Blue Stained Glass Pane
+| C Brown Stained Glass Pane
+| D Green Stained Glass Pane
+| E Red Stained Glass Pane
+| F Black Stained Glass Pane
+162 Acacia Wood
+| 1 Dark Oak Wood
+167 Iron Trapdoor
 168 Prismarine
 | 1 Prismarine Bricks
 | 2 Dark Prismarine
-171 Carpet (White)
-| 1 Carpet (Orange)
-| 2 Carpet (Magenta)
-| 3 Carpet (Light Blue)
-| 4 Carpet (Yellow)
-| 5 Carpet (Lime)
-| 6 Carpet (Pink)
-| 7 Carpet (Grey)
-| 8 Carpet (Light Grey)
-| 9 Carpet (Cyan)
-| A Carpet (Purple)
-| B Carpet (Blue)
-| C Carpet (Brown)
-| D Carpet (Green)
-| E Carpet (Red)
-| F Carpet (Black)
+171 White Carpet
+| 1 Orange Carpet
+| 2 Magenta Carpet
+| 3 Light Blue Carpet
+| 4 Yellow Carpet
+| 5 Lime Carpet
+| 6 Pink Carpet
+| 7 Gray Carpet
+| 8 Light Gray Carpet
+| 9 Cyan Carpet
+| A Purple Carpet
+| B Blue Carpet
+| C Brown Carpet
+| D Green Carpet
+| E Red Carpet
+| F Black Carpet
 175 Sunflower
 | 1 Lilac
 | 2 Double Tallgrass
 | 3 Large Fern
 | 4 Rose Bush
 | 5 Peony
-183 Fence Gate (Spruce)
-184 Fence Gate (Birch)
-185 Fence Gate (Jungle)
-186 Fence Gate (Dark Oak)
-187 Fence Gate (Acacia)
+183 Spruce Fence Gate
+184 Birch Fence Gate
+185 Jungle Fence Gate
+186 Dark Oak Fence Gate
+187 Acacia Fence Gate
 256 Iron Shovel
 263 Coal
 | 1 Charcoal
@@ -322,91 +308,92 @@
 + 16430 Splash Potion of Invisibility II
 + 16462 Splash Potion of Invisibility (Extended)
 383 Spawn Egg
-| 32 Spawn Egg (Creeper)
-| 33 Spawn Egg (Skeleton)
-| 34 Spawn Egg (Spider)
-| 36 Spawn Egg (Zombie)
-| 37 Spawn Egg (Slime)
-| 38 Spawn Egg (Ghast)
-| 39 Spawn Egg (Zombie Pigmen)
-| 3a Spawn Egg (Endermen)
-| 3b Spawn Egg (Cave Spider)
-| 3c Spawn Egg (Silverfish)
-| 3d Spawn Egg (Blaze)
-| 3e Spawn Egg (Magma Cube)
-| 41 Spawn Egg (Bat)
-| 42 Spawn Egg (Witch)
-| 43 Spawn Egg (Endermite)
-| 44 Spawn Egg (Guardian)
-| 5a Spawn Egg (Pig)
-| 5b Spawn Egg (Sheep)
-| 5c Spawn Egg (Cow)
-| 5d Spawn Egg (Chicken)
-| 5e Spawn Egg (Squid)
-| 5f Spawn Egg (Wolf)
-| 60 Spawn Egg (Mooshroom)
-| 62 Spawn Egg (Ocelot)
-| 64 Spawn Egg (Horse)
-| 65 Spawn Egg (Rabbit)
-| 78 Spawn Egg (Villager)
-397 Head (Skeleton)
-| 1 Head (Wither)
-| 2 Head (Zombie)
-| 3 Head (Steve)
-| 4 Head (Creeper)
+| 32 Spawn Creeper
+| 33 Spawn Skeleton
+| 34 Spawn Spider
+| 36 Spawn Zombie
+| 37 Spawn Slime
+| 38 Spawn Ghast
+| 39 Spawn Zombie Pigman
+| 3a Spawn Enderman
+| 3b Spawn Cave Spider
+| 3c Spawn Silverfish
+| 3d Spawn Blaze
+| 3e Spawn Magma Cube
+| 41 Spawn Bat
+| 42 Spawn Witch
+| 43 Spawn Endermite
+| 44 Spawn Guardian
+| 5a Spawn Pig
+| 5b Spawn Sheep
+| 5c Spawn Cow
+| 5d Spawn Chicken
+| 5e Spawn Squid
+| 5f Spawn Wolf
+| 60 Spawn Mooshroom
+| 62 Spawn Ocelot
+| 64 Spawn Horse
+| 65 Spawn Rabbit
+| 78 Spawn Villager
+397 Skeleton Skull
+| 1 Wither Skeleton Skull
+| 2 Zombie Head
+| 3 Head
+| 4 Creeper Head
 417 Iron Horse Armor
 418 Gold Horse Armor
 419 Diamond Horse Armor
-2256 Music Disk (C418 - 13)
-2257 Music Disk (C418 - cat)
-2258 Music Disk (C418 - blocks)
-2259 Music Disk (C418 - chirp)
-2260 Music Disk (C418 - far)
-2261 Music Disk (C418 - mall)
-2262 Music Disk (C418 - mellohi)
-2263 Music Disk (C418 - stal)
-2264 Music Disk (C418 - strad)
-2265 Music Disk (C418 - ward)
-2266 Music Disk (C418 - 11)
-2267 Wait Disk
-161 Leaves (Acacia)
-| 1 Leaves (Dark Oak)
-| 14 Dark Prismarine
+2256 Music Disc (C418 - 13)
+2257 Music Disc (C418 - cat)
+2258 Music Disc (C418 - blocks)
+2259 Music Disc (C418 - chirp)
+2260 Music Disc (C418 - far)
+2261 Music Disc (C418 - mall)
+2262 Music Disc (C418 - mellohi)
+2263 Music Disc (C418 - stal)
+2264 Music Disc (C418 - strad)
+2265 Music Disc (C418 - ward)
+2266 Music Disc (C418 - 11)
+2267 Wait Disc
+161 Acacia Leaves
+| 1 Dark Oak Leaves
+168 Prismarine
+| 1 Prismarine Bricks
+| 2 Dark Prismarine
 179 Red Sandstone
-| 1 Red Sandstone (Chiseled)
-| 2 Red Sandstone (Smooth)
+| 1 Chiseled Red Sandstone
+| 2 Smooth Red Sandstone
 180 Red Sandstone Stairs
-181 Red Sandstone Slab (Double)
 182 Red Sandstone Slab
-183 Fence Gate (Spruce)
-184 Fence Gate (Birch)
-185 Fence Gate (Jungle)
-186 Fence Gate (Dark Oak)
-187 Fence Gate (Acacia)
-188 Fence (Spruce)
-189 Fence (Birch)
-190 Fence (Jungle)
-191 Fence (Dark Oak)
-192 Fence (Acacia)
+183 Spruce Fence Gate
+184 Birch Fence Gate
+185 Jungle Fence Gate
+186 Dark Oak Fence Gate
+187 Acacia Fence Gate
+188 Spruce Fence
+189 Birch Fence
+190 Jungle Fence
+191 Dark Oak Fence
+192 Acacia Fence
 420 Lead
-425 Banner
-| 1 Banner (Orange)
-| 2 Banner (Magenta)
-| 3 Banner (Light Blue)
-| 4 Banner (Yellow)
-| 5 Banner (Lime)
-| 6 Banner (Pink)
-| 7 Banner (Grey)
-| 8 Banner (Light Grey)
-| 9 Banner (Cyan)
-| A Banner (Purple)
-| B Banner (Blue)
-| C Banner (Brown)
-| D Banner (Green)
-| E Banner (Red)
-| F Banner (White)
-427 Wooden Door (Spruce)
-428 Wooden Door (Birch)
-429 Wooden Door (Jungle)
-430 Wooden Door (Acacia)
-431 Wooden Door (Dark Oak)
+425 Black Banner
+| 1 Orange Banner
+| 2 Magenta Banner
+| 3 Light Blue Banner
+| 4 Yellow Banner
+| 5 Lime Banner
+| 6 Pink Banner
+| 7 Gray Banner
+| 8 Light Gray Banner
+| 9 Cyan Banner
+| A Purple Banner
+| B Blue Banner
+| C Brown Banner
+| D Green Banner
+| E Red Banner
+| F White Banner
+427 Spruce Door
+428 Birch Door
+429 Jungle Door
+430 Acacia Door
+431 Dark Oak Door 
