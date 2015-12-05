@@ -44,7 +44,7 @@ public class Format
     
     public static String money(double d)
     {
-        return money(Main.econ.format(d));
+        return money(Main.getEconomy().format(d));
     }
     
     public static String money2(String in)
@@ -54,7 +54,7 @@ public class Format
     
     public static String money2(double d)
     {
-        return money2(Main.econ.format(d));
+        return money2(Main.getEconomy().format(d));
     }
     
     public static String number(String n)
@@ -114,7 +114,7 @@ public class Format
     
     public static String retailprice(double price)
     {
-        return retailprice(String.format("(%s)", Main.econ.format(price)));
+        return retailprice(String.format("(%s)", Main.getEconomy().format(price)));
     }
     
     public static String refundprice(String price)
@@ -124,7 +124,7 @@ public class Format
     
     public static String refundprice(double price)
     {
-        return refundprice(String.format("(%s)", Main.econ.format(price)));
+        return refundprice(String.format("(%s)", Main.getEconomy().format(price)));
     }
     
     public static String enchantments(String ench)
