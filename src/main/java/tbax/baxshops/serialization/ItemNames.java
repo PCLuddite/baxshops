@@ -38,7 +38,6 @@ import org.bukkit.inventory.ItemStack;
  */
 public final class ItemNames
 {
-    
     /**
      * A lookup table for aliases. Aliases are stored as
      * <code>alias =&gt; (ID &lt;&lt; 16) | (damageValue)</code>
@@ -52,7 +51,7 @@ public final class ItemNames
     /**
      * An array of items that can be damaged
      */
-    private static final ArrayList<Material> damageableIds = new ArrayList<>();
+    private static final HashMap<Material, Short> damageable = new HashMap<>();
     /**
      * A list of enchantment names
      */
@@ -208,7 +207,18 @@ public final class ItemNames
      */
     public static boolean isDamageable(Material item)
     {
-        return damageableIds.contains(item);
+        return damageable.get(item) != null;
+    }
+    
+    /**
+     * Gets the maximum damage for an item. This assumes damageability
+     * has been confirmed with isDamageable()
+     * @param item
+     * @return 
+     */
+    public static short getMaxDamage(Material item)
+    {
+        return damageable.get(item);
     }
     
     /**
@@ -225,16 +235,14 @@ public final class ItemNames
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(stream));
             String line;
-
             while ((line = br.readLine()) != null) {
                 if (line.length() == 0 || line.charAt(0) == '#') {
                     continue;
                 }
-                try {
-                    damageableIds.add(Material.getMaterial(line));
-                }
-                catch(NumberFormatException ex) {
-                }
+                Scanner scanner = new Scanner(line);
+                Material material = Material.getMaterial(scanner.next());
+                short maxDamage = scanner.nextShort();
+                damageable.put(material, maxDamage);
                 i++;
             }
             stream.close();
@@ -243,7 +251,7 @@ public final class ItemNames
             Main.getLog().warning("Failed to load damageable: " + e.toString());
         }
         catch (NoSuchElementException e) {
-            Main.getLog().info("loadAliases broke at line: " + i);
+            Main.getLog().info("loadDamageable broke at line: " + i);
             e.printStackTrace();
         }
     }

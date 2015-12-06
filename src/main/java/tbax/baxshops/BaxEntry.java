@@ -185,9 +185,14 @@ public final class BaxEntry implements ConfigurationSerializable
         return quantity;
     }
     
-    public int getDurability()
+    public short getDurability()
     {
         return stack.getDurability();
+    }
+    
+    public short getDamagePercent()
+    {
+        return (short)Math.round((stack.getDurability() * 100.0f) / ItemNames.getMaxDamage(stack.getType()));
     }
     
     /**
@@ -240,8 +245,21 @@ public final class BaxEntry implements ConfigurationSerializable
         info.append(CommandHelp.header("BaxEntry Information"));
         info.append('\n');
         info.append("Name: ").append(Format.itemname(ItemNames.getName(this))).append('\n');
-        if (stack.hasItemMeta() && stack.getItemMeta().hasDisplayName()) {
-            info.append("Display Name: ").append(ChatColor.YELLOW).append(stack.getItemMeta().getDisplayName()).append(ChatColor.RESET).append('\n');
+        if (ItemNames.isDamageable(stack.getType())) {
+            info.append("Damage: ").append(ChatColor.YELLOW).append(getDamagePercent()).append('%').append(ChatColor.RESET).append('\n');
+        }
+        if (stack.hasItemMeta()) {
+            ItemMeta meta = stack.getItemMeta();
+            if (meta.hasDisplayName()) {
+                info.append("Display Name: ").append(ChatColor.YELLOW).append(stack.getItemMeta().getDisplayName()).append(ChatColor.RESET).append('\n');
+            }
+            if (meta.hasLore()) {
+                info.append("Description: ").append(ChatColor.BLUE);
+                for (String line : meta.getLore()) {
+                    info.append(line).append(' ');
+                }
+                info.append(ChatColor.RESET).append('\n');
+            }
         }
         if (getEnchants(stack) != null) {
             String enchants;
@@ -292,7 +310,7 @@ public final class BaxEntry implements ConfigurationSerializable
             if (infinite || getAmount() > 0) {
                 name.append(ChatColor.YELLOW);
             }
-            name.append(" (Damage: ").append(stack.getDurability()).append(")");
+            name.append(" (Damage: ").append(getDamagePercent()).append("%)");
         }
         
         if (infinite) {
