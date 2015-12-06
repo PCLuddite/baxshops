@@ -87,8 +87,6 @@ public final class ShopExecuter
                 return setangle(cmd);
             case "info":
                 return info(cmd);
-            case "getitem":
-                return getitem(cmd);
         }
         return false;
     }
@@ -1200,26 +1198,6 @@ public final class ShopExecuter
             return true;
         }
         cmd.getPlayer().sendMessage(entry.toString());
-        return true;
-    }
-    
-    public static boolean getitem(ShopCmd cmd)
-    {
-        if (cmd.getSelection() == null) {
-            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
-            return true;
-        }
-        
-        if (!cmd.getSelection().isOwner && !cmd.getPlayer().hasPermission("shops.admin")) {
-            Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
-            return true;
-        }
-        
-        int i = Main.giveItem(cmd.getPlayer(), cmd.getShop().toItem());
-        if (i > 0) {
-            cmd.getPlayer().sendMessage(Resources.NO_ROOM);
-        }
-        
         return true;
     }
 }

@@ -24,11 +24,16 @@
  */
 package tbax.baxshops;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Logger;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -355,6 +360,30 @@ public final class Main extends JavaPlugin
     {
         if (selectedShops.get(pl) != null) {
             selectedShops.remove(pl);
+        }
+    }
+
+    public static List<String> getSignText(Location loc)
+    {
+        try {
+            Sign sign = (Sign) loc.getBlock().getState();
+            String[] allLines = sign.getLines();
+            int emptylines = 0;
+            for(int i = allLines.length - 1; i >= 0; --i) {
+                if (allLines[i].isEmpty()) {
+                    ++emptylines;
+                }
+                else {
+                    break;
+                }
+            }
+            ArrayList<String> lines = new ArrayList<>();
+            for(int i = 0; i < allLines.length - emptylines; ++i) {
+                lines.add(allLines[i]);
+            }
+            return lines;
+        } catch (ClassCastException e) {
+            return new ArrayList<>();
         }
     }
     

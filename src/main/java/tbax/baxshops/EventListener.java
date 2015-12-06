@@ -29,6 +29,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -61,13 +62,24 @@ public class EventListener implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockBreak(BlockBreakEvent event)
     {
-        if (Main.getState().getShop(event.getBlock().getLocation()) != null) {
-            
+        BaxShop shop = Main.getState().getShop(event.getBlock().getLocation());
+        if (shop != null) {
+            if (shop.getLocations().size() == 1)  {
+                Main.sendWarning(event.getPlayer(), "This is the only location for this shop. It cannot be destroyed.");
+                event.setCancelled(true);
+            }
+            else {
+                event.setCancelled(true);
+                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), shop.toItem(Main.getSignText(event.getBlock().getLocation())));
+                Main.getState().removeLocation(null, event.getBlock().getLocation()); // we don't need to tell the player if there's an error 12/5/15
+                main.removeSelection(event.getPlayer());
+                event.getBlock().setType(Material.AIR);
+            }
         }
         Location above = event.getBlock().getLocation();
         above.setY(above.getY() + 1);
         if (Main.getState().getShop(above) != null) {
-            Main.sendError(event.getPlayer(), "You cannot remove this block because there is a shop above it!");
+            Main.sendWarning(event.getPlayer(), "You cannot break this block because there is a shop above it.");
             event.setCancelled(true); 
         }
     }
@@ -175,15 +187,20 @@ public class EventListener implements Listener
         ItemStack item = event.getItemInHand();
         if (item.getType() == Material.SIGN && item.hasItemMeta()) {
             ItemMeta meta = item.getItemMeta();
-            if (meta.hasLore() && meta.getLore().get(0).startsWith("ID: ")) {
-                long id = Long.parseLong(meta.getLore().get(0).substring(4));
+            if (meta.hasLore() && meta.getLore().get(meta.getLore().size() - 1).startsWith("ID: ")) {
+                long id = Long.parseLong(meta.getLore().get(meta.getLore().size() - 1).substring(4));
                 BaxShop shop = Main.getState().getShop(id);
                 if (shop == null) {
                     Main.sendWarning(event.getPlayer(), "This shop has been closed and can't be placed.");
                     event.setCancelled(true);
                 }
                 else {
+                    Sign sign = (Sign)event.getBlockPlaced().getState();
+                    for(int i = 0; i < meta.getLore().size() - 1; ++i) {
+                        sign.setLine(i, meta.getLore().get(i));
+                    }
                     Main.getState().addLocation(event.getPlayer(), event.getBlockPlaced().getLocation(), shop);
+                    shop.addLocation(event.getBlockPlaced().getLocation());
                 }
             }
         }

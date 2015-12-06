@@ -41,17 +41,37 @@ public final class RefCmdExecuter
     public static boolean execute(ShopCmd cmd)
     {
         switch (cmd.getAction()) {
-            case "paste":
-                return create(cmd);
+            /*case "paste":
+                return create(cmd);*/
             case "list":
                 return list(cmd);
             case "copy":
-                return copy(cmd);
+                return getitem(cmd);
             case "tp":
             case "teleport":
                 return teleport(cmd);
         }
         return false;
+    }
+    
+    public static boolean getitem(ShopCmd cmd)
+    {
+        if (cmd.getSelection() == null) {
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+            return true;
+        }
+        
+        if (!cmd.getSelection().isOwner && !cmd.getPlayer().hasPermission("shops.admin")) {
+            Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
+            return true;
+        }
+        
+        int i = Main.giveItem(cmd.getPlayer(), cmd.getShop().toItem(Main.getSignText(cmd.getSelection().location)));
+        if (i > 0) {
+            cmd.getPlayer().sendMessage(Resources.NO_ROOM);
+        }
+        
+        return true;
     }
     
     public static boolean list(ShopCmd cmd)

@@ -25,7 +25,9 @@
 package tbax.baxshops;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -213,10 +215,11 @@ public final class BaxShop implements ConfigurationSerializable
         return null;
     }
     
-    public ItemStack toItem()
+    public ItemStack toItem(List<String> sign)
     {
         ItemStack item = new ItemStack(Material.SIGN, 1);
         ArrayList<String> lore = new ArrayList<>();
+        lore.addAll(sign);
         lore.add("ID: " + id);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(owner + "'s Shop");
