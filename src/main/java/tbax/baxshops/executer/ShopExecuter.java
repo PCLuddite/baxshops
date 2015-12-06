@@ -305,28 +305,35 @@ public final class ShopExecuter
 
         double retailAmount, refundAmount;
         try {
-                retailAmount = Math.round(100d * Double.parseDouble(cmd.getArg(1))) / 100d;
-        } catch (NumberFormatException e) {
-                Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "buy price"));
-                Main.sendError(cmd.getPlayer(), Help.add.toUsageString());
-                return true;
+            retailAmount = Math.round(100d * Double.parseDouble(cmd.getArg(1))) / 100d;
+        } 
+        catch (NumberFormatException e) {
+            Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "buy price"));
+            Main.sendError(cmd.getPlayer(), Help.add.toUsageString());
+            return true;
         }
         try {
                 refundAmount = cmd.getNumArgs() > 2 ? Math.round(100d * Double.parseDouble(cmd.getArg(2))) / 100d : -1;
-        } catch (NumberFormatException e) {
-                Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "sell price"));
-                Main.sendError(cmd.getPlayer(), Help.add.toUsageString());
-                return true;
         }
+        catch (NumberFormatException e) {
+            Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "sell price"));
+            Main.sendError(cmd.getPlayer(), Help.add.toUsageString());
+            return true;
+        }
+        
         ItemStack stack = cmd.getPlayer().getItemInHand();
         if (stack == null || stack.getType() == Material.AIR) {
-                Main.sendError(cmd.getPlayer(), "You must be holding the item you wisth to add to this shop");
-                return true;
+            Main.sendError(cmd.getPlayer(), "You must be holding the item you wisth to add to this shop");
+            return true;
+        }
+        if (BaxShop.isShop(stack)) {
+            Main.sendError(cmd.getSender(), "You can't add a shop to a shop.");
+            return true;
         }
         if (cmd.getShop().containsItem(stack)) {
-                Main.sendError(cmd.getPlayer(), "That item has already been added to this shop");
-                Main.sendError(cmd.getPlayer(), "Use /shop restock to restock");
-                return true;
+            Main.sendError(cmd.getPlayer(), "That item has already been added to this shop");
+            Main.sendError(cmd.getPlayer(), "Use /shop restock to restock");
+            return true;
         }
         BaxEntry newEntry = new BaxEntry();
         newEntry.setItem(stack);
@@ -337,9 +344,10 @@ public final class ShopExecuter
         }
         cmd.getShop().addEntry(newEntry);
         cmd.getMain().sendInfo(cmd.getPlayer(), 
-                String.format("A new entry for %s was added to the shop.", 
-                    Format.itemname(newEntry.getAmount(), ItemNames.getName(newEntry))
-                ));
+            String.format("A new entry for %s was added to the shop.", 
+                Format.itemname(newEntry.getAmount(), ItemNames.getName(newEntry))
+            )
+        );
         if (!cmd.getShop().infinite) {
             cmd.getPlayer().setItemInHand(null);
         }
