@@ -377,6 +377,9 @@ public final class Main extends JavaPlugin
                     break;
                 }
             }
+            if (emptylines == allLines.length) {
+                return new ArrayList<>();
+            }
             int start = 0;
             while(allLines[start].isEmpty()) {
                 ++start;

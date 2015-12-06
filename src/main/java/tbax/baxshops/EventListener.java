@@ -37,6 +37,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -187,7 +188,7 @@ public class EventListener implements Listener
         }
     }
     
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockPlace(BlockPlaceEvent event)
     {
         ItemStack item = event.getItemInHand();
@@ -200,7 +201,38 @@ public class EventListener implements Listener
             else {
                 Main.getState().addLocation(event.getPlayer(), event.getBlockPlaced().getLocation(), shop);
                 shop.addLocation(event.getBlockPlaced().getLocation());
+                String[] lines = BaxShop.extractSignText(item);
+                if (lines.length > 0) {
+                    Sign sign = (Sign)event.getBlockPlaced().getState();
+                    if (lines.length < 3) {
+                        sign.setLine(0, "");
+                        sign.setLine(1, lines[0]);
+                        sign.setLine(2, lines.length > 1 ? lines[1] : "");
+                        sign.setLine(3, "");
+                    }
+                    else {
+                        sign.setLine(0, lines[0]);
+                        sign.setLine(1, lines.length > 1 ? lines[1] : "");
+                        sign.setLine(2, lines.length > 2 ? lines[2] : "");
+                        sign.setLine(3, lines.length > 3 ? lines[3] : "");
+                    }
+                    sign.update();
+                }
             }
+        }
+    }
+    
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onSignChange(SignChangeEvent event)
+    {
+        BaxShop shop = Main.getState().getShop(event.getBlock().getLocation());
+        if (shop != null) {
+            for(String line : event.getLines()) {
+                if (!line.isEmpty()) {
+                    return;
+                }
+            }
+            event.setCancelled(true);
         }
     }
 

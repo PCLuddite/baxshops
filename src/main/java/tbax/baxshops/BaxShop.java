@@ -231,6 +231,11 @@ public final class BaxShop implements ConfigurationSerializable
         return item;
     }
     
+    /**
+     * Determines whether an item is a shop
+     * @param item
+     * @return 
+     */
     public static boolean isShop(ItemStack item)
     {
         return item.getType() == Material.SIGN &&
@@ -241,7 +246,7 @@ public final class BaxShop implements ConfigurationSerializable
     
     /**
      * Converts an item to a BaxShop
-     * @note This should only be used after calling isShop()
+     * Note: This should only be used after calling isShop()
      * @param item
      * @return 
      */
@@ -249,6 +254,22 @@ public final class BaxShop implements ConfigurationSerializable
     {
         long uid = Long.parseLong(item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1).substring((ChatColor.GRAY + "ID: ").length()));
         return Main.getState().getShop(uid);
+    }
+    
+    /**
+     * Extracts the sign text from the lore of a shop item
+     * Note: This should only be used after calling isShop()
+     * @param item
+     * @return 
+     */
+    public static String[] extractSignText(ItemStack item)
+    {
+        List<String> lore = item.getItemMeta().getLore().subList(0, item.getItemMeta().getLore().size() - 1);
+        String[] lines = new String[lore.size()];
+        for(int i = 0; i < lines.length; ++i) {
+            lines[i] = ChatColor.stripColor(lore.get(i));
+        }
+        return lines;
     }
     
     @Override
