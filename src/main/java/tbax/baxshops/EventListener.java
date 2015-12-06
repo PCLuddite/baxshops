@@ -64,16 +64,22 @@ public class EventListener implements Listener
     {
         BaxShop shop = Main.getState().getShop(event.getBlock().getLocation());
         if (shop != null) {
-            if (shop.getLocations().size() == 1)  {
-                Main.sendWarning(event.getPlayer(), "This is the only location for this shop. It cannot be destroyed.");
-                event.setCancelled(true);
+            if (shop.owner.equals(event.getPlayer().getName()) || event.getPlayer().hasPermission("shops.admin")) {
+                if (shop.getLocations().size() == 1)  {
+                    Main.sendWarning(event.getPlayer(), "This is the only location for this shop. It cannot be destroyed.");
+                    event.setCancelled(true);
+                }
+                else {
+                    event.setCancelled(true);
+                    event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), shop.toItem(Main.getSignText(event.getBlock().getLocation())));
+                    Main.getState().removeLocation(null, event.getBlock().getLocation()); // we don't need to tell the player if there's an error 12/5/15
+                    main.removeSelection(event.getPlayer());
+                    event.getBlock().setType(Material.AIR);
+                }
             }
             else {
                 event.setCancelled(true);
-                event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), shop.toItem(Main.getSignText(event.getBlock().getLocation())));
-                Main.getState().removeLocation(null, event.getBlock().getLocation()); // we don't need to tell the player if there's an error 12/5/15
-                main.removeSelection(event.getPlayer());
-                event.getBlock().setType(Material.AIR);
+                Main.sendError(event.getPlayer(), "You don't have permission to remove this shop.");
             }
         }
         Location above = event.getBlock().getLocation();
@@ -185,23 +191,15 @@ public class EventListener implements Listener
     public void onBlockPlace(BlockPlaceEvent event)
     {
         ItemStack item = event.getItemInHand();
-        if (item.getType() == Material.SIGN && item.hasItemMeta()) {
-            ItemMeta meta = item.getItemMeta();
-            if (meta.hasLore() && meta.getLore().get(meta.getLore().size() - 1).startsWith("ID: ")) {
-                long id = Long.parseLong(meta.getLore().get(meta.getLore().size() - 1).substring(4));
-                BaxShop shop = Main.getState().getShop(id);
-                if (shop == null) {
-                    Main.sendWarning(event.getPlayer(), "This shop has been closed and can't be placed.");
-                    event.setCancelled(true);
-                }
-                else {
-                    Sign sign = (Sign)event.getBlockPlaced().getState();
-                    for(int i = 0; i < meta.getLore().size() - 1; ++i) {
-                        sign.setLine(i, meta.getLore().get(i));
-                    }
-                    Main.getState().addLocation(event.getPlayer(), event.getBlockPlaced().getLocation(), shop);
-                    shop.addLocation(event.getBlockPlaced().getLocation());
-                }
+        if (BaxShop.isShop(item)) {
+            BaxShop shop = BaxShop.fromItem(item);
+            if (shop == null) {
+                Main.sendWarning(event.getPlayer(), "This shop has been closed and can't be placed.");
+                event.setCancelled(true);
+            }
+            else {
+                Main.getState().addLocation(event.getPlayer(), event.getBlockPlaced().getLocation(), shop);
+                shop.addLocation(event.getBlockPlaced().getLocation());
             }
         }
     }

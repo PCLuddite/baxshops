@@ -149,11 +149,11 @@ public final class ShopExecuter
         if (!cmd.getPlayer().hasPermission("shops.admin")) {
             PlayerInventory inv = cmd.getPlayer().getInventory();
             ItemStack sign = new ItemStack(Material.SIGN, 1);
-            if (inv.containsAtLeast(sign, 1)) {
+            if (!inv.containsAtLeast(sign, 1)) {
                 Main.sendError(cmd.getPlayer(), "You need a sign to set up a shop.");
                 return null;
             }
-            inv.remove(sign);
+            inv.removeItem(sign);
         }
         
         Location loc = cmd.getPlayer().getLocation();

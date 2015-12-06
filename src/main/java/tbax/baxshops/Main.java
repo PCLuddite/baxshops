@@ -377,8 +377,12 @@ public final class Main extends JavaPlugin
                     break;
                 }
             }
+            int start = 0;
+            while(allLines[start].isEmpty()) {
+                ++start;
+            }
             ArrayList<String> lines = new ArrayList<>();
-            for(int i = 0; i < allLines.length - emptylines; ++i) {
+            for(int i = start; i < allLines.length - emptylines; ++i) {
                 lines.add(allLines[i]);
             }
             return lines;

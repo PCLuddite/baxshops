@@ -29,6 +29,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import tbax.baxshops.*;
 import tbax.baxshops.serialization.Clipboard;
 
@@ -66,9 +68,20 @@ public final class RefCmdExecuter
             return true;
         }
         
+        if (!cmd.getPlayer().hasPermission("shops.admin")) {
+            PlayerInventory inv = cmd.getPlayer().getInventory();
+            ItemStack sign = new ItemStack(Material.SIGN, 1);
+            if (!inv.containsAtLeast(sign, 1)) {
+                Main.sendError(cmd.getPlayer(), "You need a sign to copy a shop.");
+                return true;
+            }
+            inv.removeItem(sign);
+        }
+        
         int i = Main.giveItem(cmd.getPlayer(), cmd.getShop().toItem(Main.getSignText(cmd.getSelection().location)));
         if (i > 0) {
             cmd.getPlayer().sendMessage(Resources.NO_ROOM);
+            cmd.getPlayer().getInventory().addItem(new ItemStack(Material.SIGN, 1));
         }
         
         return true;

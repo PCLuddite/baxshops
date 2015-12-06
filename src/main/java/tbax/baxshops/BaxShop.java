@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -219,13 +220,35 @@ public final class BaxShop implements ConfigurationSerializable
     {
         ItemStack item = new ItemStack(Material.SIGN, 1);
         ArrayList<String> lore = new ArrayList<>();
-        lore.addAll(sign);
-        lore.add("ID: " + id);
+        for(String line : sign) {
+            lore.add(ChatColor.BLUE + line);
+        }
+        lore.add(ChatColor.GRAY + "ID: " + id);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(owner + "'s Shop");
+        meta.setDisplayName(ChatColor.WHITE + owner + "'s shop");
         meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
+    }
+    
+    public static boolean isShop(ItemStack item)
+    {
+        return item.getType() == Material.SIGN &&
+               item.hasItemMeta() &&
+               item.getItemMeta().hasLore() &&
+               item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1).startsWith(ChatColor.GRAY + "ID: ");
+    }
+    
+    /**
+     * Converts an item to a BaxShop
+     * @note This should only be used after calling isShop()
+     * @param item
+     * @return 
+     */
+    public static BaxShop fromItem(ItemStack item)
+    {
+        long uid = Long.parseLong(item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1).substring((ChatColor.GRAY + "ID: ").length()));
+        return Main.getState().getShop(uid);
     }
     
     @Override
