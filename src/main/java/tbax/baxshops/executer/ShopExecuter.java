@@ -951,12 +951,9 @@ public final class ShopExecuter
             return true;
         }
         
-        if (entry.getAmount() > 0 && !shop.infinite) {
+        if (!shop.infinite && entry.getAmount() > 0) {
             ItemStack stack = entry.toItemStack();
-            if (Main.inventoryFitsItem(cmd.getPlayer(), stack)) {
-                cmd.getPlayer().getInventory().addItem(stack);
-            }
-            else {
+            if (!Main.tryGiveItem(cmd.getPlayer(), stack)) {
                 Main.sendError(cmd.getPlayer(), Resources.NO_ROOM);
                 return true;
             }

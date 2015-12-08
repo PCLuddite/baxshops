@@ -214,7 +214,7 @@ public final class Main extends JavaPlugin
     public static void sendError(CommandSender sender, String message)
     {
         if (sender != null) {
-            sender.sendMessage(ChatColor.DARK_RED + message);
+            sender.sendMessage(ChatColor.RED + message);
         }
     }
     
@@ -263,19 +263,17 @@ public final class Main extends JavaPlugin
             max      = item.getMaxStackSize();
         Inventory inv = pl.getInventory();
         ItemStack[] contents = inv.getContents();
-        ItemStack curr;
         if (max == -1) {
             max = inv.getMaxStackSize();
         }
-        for (int i = 0; i < contents.length; ++i) {
-            if ((curr = contents[i]) == null || curr.getType() == Material.AIR) {
+        for (ItemStack curr : contents) {
+            if (curr == null || curr.getType() == Material.AIR) {
                 quantity -= max;
                 if (quantity <= 0) {
                     return true;
                 }
-                continue;
             }
-            if (isItemEqual(curr, contents[i])) {
+            else if (isItemEqual(curr, item)) {
                 quantity -= max - curr.getAmount();
                 if (quantity <= 0) {
                     return true;
