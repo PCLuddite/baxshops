@@ -201,6 +201,9 @@ public final class StateFile
                     nextId = id + 1;
                 }
             }
+            if (nextId < 0) {
+                nextId = 0;
+            }
         }
         
         ConfigurationSection yNotes = state.getConfigurationSection("notes");
