@@ -118,6 +118,9 @@ public final class Help {
     
     public static final CommandHelp teleport = new CommandHelp("shop teleport", null, "<location>", "Pastes a shop from the clipboard",
             CommandHelp.args("location", "the location index (given by /shop list) to teleport to"));
+    
+    public static final CommandHelp setangle = new CommandHelp("shop setface", null, "<direction>", "Rotates the sign to face another direction",
+            CommandHelp.args("direction", "\"North\", \"South\", \"East\", or \"West\""));
 
     /**
      * The general index of commands
@@ -244,6 +247,8 @@ public final class Help {
         commands.put("restockall", restockall);
         commands.put("set", set);
         commands.put("sign", sign);
+        commands.put("setface", setangle);
+        commands.put("setangle", setangle);
 
         commands.put("create", create);
         commands.put("delete", delete);
