@@ -37,17 +37,20 @@ import tbax.baxshops.serialization.StateFile;
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public final class ShopCmd {
+public final class ShopCmd
+{
     private final CommandSender sender;
     private final Command command;
     private final Main main;
     private Player pl;
     private String name;
     private String action;
+    private CmdRequisite requisite;
     
     private String[] args;
     
-    public ShopCmd(Main main, CommandSender sender, Command command, String[] args) {
+    public ShopCmd(Main main, CommandSender sender, Command command, String[] args)
+    {
         this.main = main;
         this.sender = sender;
         this.command = command;
@@ -59,61 +62,63 @@ public final class ShopCmd {
         }
     }
     
-    public CommandSender getSender() {
+    public CommandSender getSender()
+    {
         return sender;
     }
     
-    public Command getCommand() {
+    public Command getCommand()
+    {
         return command;
     }
     
-    public StateFile getState() {
+    public StateFile getState()
+    {
         return Main.getState();
     }
     
-    public Player getPlayer() {
+    public Player getPlayer()
+    {
         return pl;
     }
     
-    public Main getMain() {
+    public Main getMain()
+    {
         return main;
     }
     
-    public ShopSelection getSelection() {
+    public ShopSelection getSelection()
+    {
         return main.selectedShops.get(pl);
     }
     
-    public boolean ensureArgs(int num) {
-        if (args.length < num) {
-            Main.sendError(sender, String.format("The command /shop %s expects %d arguments.", getAction(), num));
-            return false;
-        }
-        else {
-            return true;
-        }
-    }
-    
-    public int getNumArgs() {
+    public int getNumArgs()
+    {
         return args.length;
     }
     
-    public String getArg(int index) {
+    public String getArg(int index)
+    {
         return args[index];
     }
     
-    public Logger getLogger() {
+    public Logger getLogger()
+    {
         return main.getLogger();
     }
     
-    public BaxShop getShop() {
+    public BaxShop getShop()
+    {
         return getSelection().shop;
     }
     
-    public void setName(String name) {
+    public void setName(String name)
+    {
         this.name = name;
     }
     
-    public String getName() {
+    public String getName()
+    {
         return name;
     }
     
@@ -121,7 +126,8 @@ public final class ShopCmd {
      * Gets the first argument (if present) in lower case
      * @return 
      */
-    public String getAction() {
+    public String getAction()
+    {
         if (action == null) { // lazy initialization
             action = args.length > 0 ? args[0].toLowerCase() : "";
         }
@@ -132,7 +138,8 @@ public final class ShopCmd {
      * Inserts a new first argument in the argument list
      * @param action the new first argument
      */
-    public void insertAction(String action) {
+    public void insertAction(String action)
+    {
         String[] newArgs = new String[args.length + 1];
         System.arraycopy(args, 0, newArgs, 1, args.length);
         newArgs[0] = action;
@@ -144,15 +151,25 @@ public final class ShopCmd {
      * Appends an argument to the end of the argument list
      * @param arg 
      */
-    public void appendArg(String arg) {
+    public void appendArg(String arg)
+    {
         String[] newArgs = new String[args.length + 1];
         System.arraycopy(args, 0, newArgs, 0, args.length);
         newArgs[args.length] = arg;
         args = newArgs;
     }
     
+    public CmdRequisite getRequirements()
+    {
+        if (requisite == null) {
+            requisite = new CmdRequisite(this);
+        }
+        return requisite;
+    }
+    
     @Override
-    public String toString() {
+    public String toString()
+    {
         StringBuilder sb = new StringBuilder(name);
         for (String s : args) {
             sb.append(" ");

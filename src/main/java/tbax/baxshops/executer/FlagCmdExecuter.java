@@ -29,17 +29,17 @@ import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
 import tbax.baxshops.Help;
 import tbax.baxshops.Main;
-import static tbax.baxshops.Main.sendError;
-import tbax.baxshops.Resources;
 import tbax.baxshops.serialization.Clipboard;
 
 /**
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public final class FlagCmdExecuter {
+public final class FlagCmdExecuter
+{
     
-    public static boolean execute(ShopCmd cmd) {
+    public static boolean execute(ShopCmd cmd)
+    {
         if (cmd.getNumArgs() < 1) {
             return false;
         }
@@ -76,23 +76,27 @@ public final class FlagCmdExecuter {
             case "notes":
                 return shopNotify(cmd);
             default:
-                sendError(cmd.getPlayer(), "invalid shop option '" + cmd.getArg(1) + "'");
+                Main.sendError(cmd.getPlayer(), "invalid shop option '" + cmd.getArg(1) + "'");
                 return false;
         }
     }
     
-    public static boolean sellToShop(ShopCmd cmd) {
-        if (cmd.getSelection() == null) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+    public static boolean sellToShop(ShopCmd cmd)
+    {
+        CmdRequisite requisite = cmd.getRequirements();
+        
+        requisite.hasSelection();
+        requisite.hasOwnership();
+        requisite.hasArgs(3, Help.flag);
+        
+        if (!requisite.isValid()) {
             return true;
         }
+        
         BaxShop shop = cmd.getShop();
-        if (!cmd.getPlayer().hasPermission("shops.admin") && !cmd.getSelection().isOwner) {
-            sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
-            return true;
-        }
-        if (cmd.getNumArgs() < 3 || !Clipboard.parseBoolean(cmd.getArg(2))) {
-            Main.sendError(cmd.getSender(), "Usage:\n/shop option sell_to_shop [true|false]");
+        
+        if (!Clipboard.isBoolean(cmd.getArg(2))) {
+            Main.sendError(cmd.getSender(), "Usage:\n/shop flag sell_to_shop [true|false]");
             return true;
         }
         shop.sellToShop = Clipboard.parseBoolean(cmd.getArg(2));
@@ -100,18 +104,22 @@ public final class FlagCmdExecuter {
         return true;
     }
     
-    public static boolean shopNotify(ShopCmd cmd) {
-        if (cmd.getSelection() == null) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+    public static boolean shopNotify(ShopCmd cmd)
+    {
+        CmdRequisite requisite = cmd.getRequirements();
+        
+        requisite.hasSelection();
+        requisite.hasOwnership();
+        requisite.hasArgs(3, Help.flag);
+        
+        if (!requisite.isValid()) {
             return true;
         }
+        
         BaxShop shop = cmd.getShop();
-        if (!cmd.getPlayer().hasPermission("shops.admin") && !cmd.getSelection().isOwner) {
-            sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
-            return true;
-        }
-        if (cmd.getNumArgs() < 3 || !Clipboard.isBoolean(cmd.getArg(2))) {
-            Main.sendError(cmd.getSender(), "Usage:\n/shop option notify [true|false]");
+        
+        if (!Clipboard.isBoolean(cmd.getArg(2))) {
+            Main.sendError(cmd.getSender(), "Usage:\n/shop flag notify [true|false]");
             return true;
         }
         shop.notify = Clipboard.parseBoolean(cmd.getArg(2));
@@ -119,18 +127,22 @@ public final class FlagCmdExecuter {
         return true;
     }
     
-    public static boolean infinite(ShopCmd cmd) {
-        if (cmd.getSelection() == null) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+    public static boolean infinite(ShopCmd cmd)
+    {
+        CmdRequisite requisite = cmd.getRequirements();
+        
+        requisite.hasSelection();
+        requisite.hasOwnership();
+        requisite.hasArgs(3, Help.flag);
+        
+        if (!requisite.isValid()) {
             return true;
         }
+        
         BaxShop shop = cmd.getShop();
-        if (!cmd.getPlayer().hasPermission("shops.admin") && !cmd.getSelection().isOwner) {
-            sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
-            return true;
-        }
-        if (cmd.getNumArgs() < 3 || !Clipboard.isBoolean(cmd.getArg(2))) {
-            Main.sendError(cmd.getSender(), "Usage:\n/shop option infinite [true|false]");
+        
+        if (!Clipboard.isBoolean(cmd.getArg(2))) {
+            Main.sendError(cmd.getSender(), "Usage:\n/shop flag infinite [true|false]");
             return true;
         }
         shop.infinite = Clipboard.parseBoolean(cmd.getArg(2));
@@ -143,18 +155,22 @@ public final class FlagCmdExecuter {
         return true;
     }
     
-    public static boolean sellRequests(ShopCmd cmd) {
-        if (cmd.getSelection() == null) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+    public static boolean sellRequests(ShopCmd cmd)
+    {
+        CmdRequisite requisite = cmd.getRequirements();
+        
+        requisite.hasSelection();
+        requisite.hasOwnership();
+        requisite.hasArgs(3, Help.flag);
+        
+        if (!requisite.isValid()) {
             return true;
         }
+        
         BaxShop shop = cmd.getShop();
-        if (!cmd.getPlayer().hasPermission("shops.admin") && !cmd.getSelection().isOwner) {
-            sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
-            return true;
-        }
-        if (cmd.getNumArgs() != 3) {
-            Main.sendError(cmd.getSender(), "Usage:\n/shop option SELL_REQUESTS [true|false]");
+        
+        if (!Clipboard.isBoolean(cmd.getArg(2))) {
+            Main.sendError(cmd.getSender(), "Usage:\n/shop flag SELL_REQUESTS [true|false]");
             return true;
         }
         shop.sellRequests = Clipboard.parseBoolean(cmd.getArg(2));
@@ -162,18 +178,22 @@ public final class FlagCmdExecuter {
         return true;
     }
     
-    public static boolean buyRequests(ShopCmd cmd) {
-        if (cmd.getSelection() == null) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+    public static boolean buyRequests(ShopCmd cmd)
+    {
+        CmdRequisite requisite = cmd.getRequirements();
+        
+        requisite.hasSelection();
+        requisite.hasOwnership();
+        requisite.hasArgs(3, Help.flag);
+        
+        if (!requisite.isValid()) {
             return true;
         }
+        
         BaxShop shop = cmd.getShop();
-        if (!cmd.getPlayer().hasPermission("shops.admin") && !cmd.getSelection().isOwner) {
-            sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
-            return true;
-        }
-        if (cmd.getNumArgs() < 3 || !Clipboard.isBoolean(cmd.getArg(2))) {
-            Main.sendError(cmd.getSender(), "Usage:\n/shop option BUY_REQUESTS [true|false]");
+        
+        if (!Clipboard.isBoolean(cmd.getArg(2))) {
+            Main.sendError(cmd.getSender(), "Usage:\n/shop flag BUY_REQUESTS [true|false]");
             return true;
         }
         shop.buyRequests = Clipboard.parseBoolean(cmd.getArg(2));
@@ -181,36 +201,39 @@ public final class FlagCmdExecuter {
         return true;
     }
     
-    public static boolean owner(ShopCmd cmd) {
-        if (cmd.getSelection() == null) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+    public static boolean owner(ShopCmd cmd)
+    {
+        CmdRequisite requisite = cmd.getRequirements();
+        
+        requisite.hasSelection();
+        requisite.hasOwnership();
+        requisite.hasArgs(3, Help.flag);
+        
+        if (!requisite.isValid()) {
             return true;
         }
+        
         BaxShop shop = cmd.getShop();
-        if (!cmd.getPlayer().hasPermission("shops.admin") && !cmd.getSelection().isOwner) {
-            sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
-            return true;
-        }
-        if (cmd.getNumArgs() != 3) {
-            Main.sendError(cmd.getSender(), "Usage:\n/shop option owner [owner name]");
-            return true;
-        }
+        
         shop.owner = cmd.getArg(2);
         cmd.getPlayer().sendMessage(Format.username(shop.owner) + " is now the owner!" + 
                 (cmd.getSelection().isOwner ? "\nYou will still be able to edit this shop until you leave or reselect it." : ""));
         return true;
     }
     
-    public static boolean list(ShopCmd cmd) {
-        if (cmd.getSelection() == null) {
-            sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+    public static boolean list(ShopCmd cmd)
+    {
+        CmdRequisite requisite = cmd.getRequirements();
+        
+        requisite.hasSelection();
+        requisite.hasOwnership();
+        
+        if (!requisite.isValid()) {
             return true;
         }
+        
         BaxShop shop = cmd.getShop();
-        if (!cmd.getPlayer().hasPermission("shops.admin") && !cmd.getSelection().isOwner) {
-            sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
-            return true;
-        }
+        
         cmd.getPlayer().sendMessage("\nFlags currently aplied to this shop:");
         cmd.getPlayer().sendMessage(String.format("%s: %s", Format.flag("INFINITE"), Format.keyword(shop.infinite ? "On" : "Off")));
         cmd.getPlayer().sendMessage(String.format("%s: %s", Format.flag("NOTIFY"), Format.keyword(shop.notify ? "On" : "Off")));

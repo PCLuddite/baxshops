@@ -58,13 +58,12 @@ public final class RefCmdExecuter
     
     public static boolean getitem(ShopCmd cmd)
     {
-        if (cmd.getSelection() == null) {
-            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
-            return true;
-        }
+        CmdRequisite requisite = cmd.getRequirements();
         
-        if (!cmd.getSelection().isOwner && !cmd.getPlayer().hasPermission("shops.admin")) {
-            Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
+        requisite.hasSelection();
+        requisite.hasOwnership();
+        
+        if (!requisite.isValid()) {
             return true;
         }
         
@@ -89,52 +88,53 @@ public final class RefCmdExecuter
     
     public static boolean list(ShopCmd cmd)
     {
+        CmdRequisite requisite = cmd.getRequirements();
+        
+        requisite.hasSelection();
+        requisite.hasOwnership();
+        
+        if (!requisite.isValid()) {
+            return true;
+        }
+        
         ShopSelection selection = cmd.getMain().selectedShops.get(cmd.getPlayer());
-        if (selection == null) {
-            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+        
+        cmd.getPlayer().sendMessage(CommandHelp.header("Shop Locations"));
+        if (!selection.shop.getLocations().isEmpty()) {
+            cmd.getPlayer().sendMessage(
+                String.format(" %-3s %-16s %-18s", ChatColor.GRAY + "#", ChatColor.WHITE + "Location", ChatColor.WHITE + "Sign Text")
+            );
+
+            for(int index = 0; index < selection.shop.getLocations().size(); ++index) {
+                cmd.getPlayer().sendMessage(
+                    String.format("%-3s %-16s %-18s %s",
+                        ChatColor.WHITE.toString() + (index + 1) + ".", 
+                        Format.location(selection.shop.getLocations().get(index)),
+                        ChatColor.LIGHT_PURPLE + getSignText(selection.shop.getLocations().get(index)),
+                        (selection.location.equals(selection.shop.getLocations().get(index)) ? ChatColor.LIGHT_PURPLE + " (current)" : ""))
+                );
+            }
         }
         else {
-            if (!cmd.getSelection().isOwner && !cmd.getPlayer().hasPermission("shops.admin")) {
-                Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
-                return true;
-            }
-            cmd.getPlayer().sendMessage(CommandHelp.header("Shop Locations"));
-            if (!selection.shop.getLocations().isEmpty()) {
-                cmd.getPlayer().sendMessage(
-                    String.format(" %-3s %-16s %-18s", ChatColor.GRAY + "#", ChatColor.WHITE + "Location", ChatColor.WHITE + "Sign Text")
-                );
-                
-                for(int index = 0; index < selection.shop.getLocations().size(); ++index) {
-                    cmd.getPlayer().sendMessage(
-                        String.format("%-3s %-16s %-18s %s",
-                            ChatColor.WHITE.toString() + (index + 1) + ".", 
-                            Format.location(selection.shop.getLocations().get(index)),
-                            ChatColor.LIGHT_PURPLE + getSignText(selection.shop.getLocations().get(index)),
-                            (selection.location.equals(selection.shop.getLocations().get(index)) ? ChatColor.LIGHT_PURPLE + " (current)" : ""))
-                    );
-                }
-            }
-            else {
-                cmd.getPlayer().sendMessage(ChatColor.YELLOW + "This shop has no other locations.");
-            }
+            cmd.getPlayer().sendMessage(ChatColor.YELLOW + "This shop has no other locations.");
         }
         return true;
     }
     
     public static boolean teleport(ShopCmd cmd)
     {
-        if (!cmd.getPlayer().hasPermission("shops.admin")) {
-            Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
+        CmdRequisite requisite = cmd.getRequirements();
+        
+        requisite.hasSelection();
+        requisite.hasPermissions("shops.admin");
+        requisite.hasArgs(2, Help.teleport);
+        
+        if (!requisite.isValid()) {
             return true;
         }
+        
         ShopSelection selection = cmd.getMain().selectedShops.get(cmd.getPlayer());
-        if (selection == null) {
-            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
-            return true;
-        }
-        if (!cmd.ensureArgs(1)) {
-            return true;
-        }
+        
         int loc;
         try {
             loc = Integer.parseInt(cmd.getArg(1));

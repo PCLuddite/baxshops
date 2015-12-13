@@ -93,6 +93,15 @@ public final class ShopExecuter
     
     public static boolean create(ShopCmd cmd)
     {
+        CmdRequisite requisite = cmd.getRequirements();
+        
+        requisite.hasSelection();
+        requisite.hasOwnership();
+        
+        if (!requisite.isValid()) {
+            return true;
+        }
+        
         boolean admin = cmd.getSender().hasPermission("shops.admin");
         if (admin) {
             if (cmd.getNumArgs() < 2) {
@@ -108,11 +117,11 @@ public final class ShopExecuter
         shop.owner = owner;
         
         if (buildShopSign(cmd, new String[] {
-            "",
-            (owner.length() < 13 ? owner : owner.substring(0, 12) + '…') + "'s",
-            "shop",
-            ""
-        }) == null) {
+                "",
+                (owner.length() < 13 ? owner : owner.substring(0, 12) + '…') + "'s",
+                "shop",
+                ""
+            }) == null) {
             return true; // Couldn't build the sign. Retreat!
         }
         
@@ -140,12 +149,15 @@ public final class ShopExecuter
      */
     public static Block buildShopSign(ShopCmd cmd, String[] signLines)
     {
-        //Use up a sign if the user is not an admin
-        if (!cmd.getPlayer().hasPermission("shops.admin") && !cmd.getPlayer().hasPermission("shops.owner")) {
-            Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
+        CmdRequisite requisite = cmd.getRequirements();
+        
+        requisite.hasPermissions("shops.owner", "shops.admin");
+        
+        if (!requisite.isValid()) {
             return null;
         }
         
+        //Use up a sign if the user is not an admin
         if (!cmd.getPlayer().hasPermission("shops.admin")) {
             PlayerInventory inv = cmd.getPlayer().getInventory();
             ItemStack sign = new ItemStack(Material.SIGN, 1);
@@ -198,64 +210,54 @@ public final class ShopExecuter
     
     public static boolean setangle(ShopCmd cmd)
     {
-        if (cmd.getSelection() == null) {
-            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+        CmdRequisite requisite = cmd.getRequirements();
+        
+        requisite.hasSelection();
+        requisite.hasOwnership();
+        requisite.hasArgs(2, Help.setangle);
+        if (!requisite.isValid()) {
             return true;
         }
-        if (!cmd.getSelection().isOwner && !cmd.getPlayer().hasPermission("shops.admin")) {
-            Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
-            return true;
+        
+        assert cmd.getSelection().location != null;
+        
+        Block b = cmd.getSelection().location.getBlock();
+        assert b != null;
+        
+        byte angle;
+        try {
+            angle = (byte)((Integer.parseInt(cmd.getArg(1)) % 4) << 2);
         }
-        if (cmd.getNumArgs() < 2) {
-            Main.sendError(cmd.getPlayer(), "You must specify a direction to face!");
-            return true;
-        }
-        if (cmd.getSelection().location == null) {
-            Main.sendError(cmd.getPlayer(), "Could not find location");
-        }
-        else {
-            Block b = cmd.getSelection().location.getBlock();
-            if (b == null) {
-                Main.sendError(cmd.getPlayer(), "Could not find block");
+        catch(NumberFormatException e) {
+            switch(cmd.getArg(1).toLowerCase()) {
+                case "south": angle = 0; break;
+                case "west": angle = 1; break;
+                case "north": angle = 2; break;
+                case "east": angle = 3; break;
+                default:
+                    Main.sendError(cmd.getPlayer(), "The direction you entered wasn't valid! Use one of the four cardinal directions.");
+                    return true;
             }
-            else {
-                byte angle;
-                try {
-                    angle = (byte)((Integer.parseInt(cmd.getArg(1)) % 4) << 2);
-                }
-                catch(NumberFormatException e) {
-                    switch(cmd.getArg(1).toLowerCase()) {
-                        case "south": angle = 0; break;
-                        case "west": angle = 1; break;
-                        case "north": angle = 2; break;
-                        case "east": angle = 3; break;
-                        default:
-                            Main.sendError(cmd.getPlayer(), "The direction you entered wasn't valid! Use one of the four cardinal directions.");
-                            return true;
-                    }
-                    angle = (byte)(angle << 2);
-                }
-                try {
-                    b.setData(angle, false);
-                    cmd.getPlayer().sendMessage("Sign rotated to face " + Format.keyword(cmd.getArg(1).toLowerCase()));
-                }
-                catch(Exception e) {
-                    Main.sendError(cmd.getPlayer(), "Some weird error occoured, and long story short, the sign may not have been rotated.");
-                }
-            }
+            angle = (byte)(angle << 2);
+        }
+        try {
+            b.setData(angle, false);
+            cmd.getPlayer().sendMessage("Sign rotated to face " + Format.keyword(cmd.getArg(1).toLowerCase()));
+        }
+        catch(Exception e) {
+            Main.sendError(cmd.getPlayer(), "Some weird error occoured, and long story short, the sign may not have been rotated.");
         }
         return true;
     }
     
     public static boolean delete(ShopCmd cmd)
     {
-        if (cmd.getSelection() == null) {
-            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
-            return true;
-        }
+        CmdRequisite requisite = cmd.getRequirements();
         
-        if (!cmd.getSelection().isOwner && !cmd.getPlayer().hasPermission("shops.admin")) {
-            Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
+        requisite.hasSelection();
+        requisite.hasOwnership();
+        
+        if (!requisite.isValid()) {
             return true;
         }
         
@@ -290,19 +292,16 @@ public final class ShopExecuter
     
     public static boolean add(ShopCmd cmd)
     {
-        if (cmd.getSelection() == null) {
-            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+        CmdRequisite requisite = cmd.getRequirements();
+        
+        requisite.hasSelection();
+        requisite.hasOwnership();
+        requisite.hasArgs(2, Help.add);
+        
+        if (!requisite.isValid()) {
             return true;
         }
-        if (cmd.getNumArgs() < 2) {
-                Main.sendError(cmd.getPlayer(), Help.add.toUsageString());
-                return true;
-        }
-        if (!cmd.getSelection().isOwner && !cmd.getPlayer().hasPermission("shops.admin")) {
-                Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
-                return true;
-        }
-
+        
         double retailAmount, refundAmount;
         try {
             retailAmount = Math.round(100d * Double.parseDouble(cmd.getArg(1))) / 100d;
@@ -313,7 +312,7 @@ public final class ShopExecuter
             return true;
         }
         try {
-                refundAmount = cmd.getNumArgs() > 2 ? Math.round(100d * Double.parseDouble(cmd.getArg(2))) / 100d : -1;
+            refundAmount = cmd.getNumArgs() > 2 ? Math.round(100d * Double.parseDouble(cmd.getArg(2))) / 100d : -1;
         }
         catch (NumberFormatException e) {
             Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "sell price"));
@@ -356,14 +355,13 @@ public final class ShopExecuter
     
     public static boolean restock(ShopCmd cmd)
     {
-        if (cmd.getSelection() == null) {
-            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+        CmdRequisite requisite = cmd.getRequirements();
+        requisite.hasSelection();
+        requisite.hasOwnership();
+        if (!requisite.isValid()) {
             return true;
         }
-        if (!cmd.getSelection().isOwner && !cmd.getPlayer().hasPermission("shops.admin") && cmd.getShop().infinite) {
-            Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
-            return true;
-        }
+        
         if (cmd.getShop().infinite) {
             Main.sendError(cmd.getPlayer(), "This shop does not need to be restocked.");
             return true;
@@ -540,19 +538,14 @@ public final class ShopExecuter
     
     public static boolean set(ShopCmd cmd)
     {
-        if (cmd.getSelection() == null) {
-            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
-            return true;
-        }
-        if (!cmd.getSelection().isOwner && !cmd.getPlayer().hasPermission("shops.admin")) {
-            Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
+        CmdRequisite requisite = cmd.getRequirements();
+        requisite.hasSelection();
+        requisite.hasOwnership();
+        requisite.hasArgs(3, Help.set);
+        if (!requisite.isValid()) {
             return true;
         }
         
-        if (cmd.getNumArgs() < 3) {
-            Main.sendError(cmd.getPlayer(), Help.set.toUsageString());
-            return true;
-        }
         BaxShop shop = cmd.getShop();
         BaxEntry entry;
         try {
@@ -614,21 +607,18 @@ public final class ShopExecuter
     
     public static boolean buy(ShopCmd cmd)
     {
-        if (cmd.getSelection() == null) {
-            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
-            return true;
-        }
-        if (cmd.getSelection().isOwner) {
+        CmdRequisite requisite = cmd.getRequirements();
+        
+        if (requisite.hasSelection() && cmd.getSelection().isOwner) {
             return take(cmd); // if they're the owner, use the take command
         }
-        if (!cmd.getPlayer().hasPermission("shops.buy")) {
-            Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
+        
+        requisite.hasPermissions("shops.buy");
+        
+        if (!requisite.isValid()) {
             return true;
         }
-        if (cmd.getNumArgs() < 1) {
-            Main.sendError(cmd.getPlayer(), Help.buy.toUsageString());
-            return true;
-        }
+        
         if (cmd.getNumArgs() == 1) {
             if (cmd.getShop().inventory.size() > 1) { // Allow no arguments if there's only one item  
                 Main.sendError(cmd.getPlayer(), Help.buy.toUsageString());
@@ -759,15 +749,15 @@ public final class ShopExecuter
     
     public static boolean sell(ShopCmd cmd)
     {
-        if (cmd.getSelection() == null) {
-            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
-            return true;
+        CmdRequisite requisite = cmd.getRequirements();
+        
+        if (requisite.hasSelection() && cmd.getSelection().isOwner) {
+            return restock(cmd); // if they're the owner, use the take command
         }
-        if (cmd.getSelection().isOwner) {
-            return restock(cmd); // act like restock if this is your shop
-        }
-        if (!cmd.getPlayer().hasPermission("shops.sell")) {
-            Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
+        
+        requisite.hasPermissions("shops.sell");
+        
+        if (!requisite.isValid()) {
             return true;
         }
         
@@ -918,16 +908,13 @@ public final class ShopExecuter
     
     public static boolean remove(ShopCmd cmd)
     {
-        if (cmd.getSelection() == null) {
-            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
-            return true;
-        }
-        if (!cmd.getSelection().isOwner && !cmd.getPlayer().hasPermission("shops.admin")) {
-            Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
-            return true;
-        }
-        if (cmd.getNumArgs() != 2) {
-            Main.sendError(cmd.getPlayer(), Help.remove.toUsageString());
+        CmdRequisite requisite = cmd.getRequirements();
+        
+        requisite.hasSelection();
+        requisite.hasOwnership();
+        requisite.hasExactArgs(2, Help.remove);
+        
+        if (!requisite.isValid()) {
             return true;
         }
 
@@ -973,14 +960,16 @@ public final class ShopExecuter
     
     public static boolean take(ShopCmd cmd)
     {
-        if (cmd.getSelection() == null) {
-            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+        CmdRequisite requisite = cmd.getRequirements();
+        
+        requisite.hasSelection();
+        requisite.hasOwnership();
+        requisite.hasArgs(1, Help.take);
+        
+        if (!requisite.isValid()) {
             return true;
         }
-        if (!cmd.getSelection().isOwner && !cmd.getPlayer().hasPermission("shops.admin")) {
-            Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
-            return true;
-        }
+        
         BaxShop shop = cmd.getShop();
         BaxEntry entry;
         if (cmd.getNumArgs() < 2) {
@@ -1055,14 +1044,15 @@ public final class ShopExecuter
     
     public static boolean sign(ShopCmd cmd)
     {
-        if (cmd.getSelection() == null) {
-            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+        CmdRequisite requisite = cmd.getRequirements();
+        
+        requisite.hasSelection();
+        requisite.hasOwnership();
+        
+        if (!requisite.isValid()) {
             return true;
         }
-        if (!cmd.getSelection().isOwner && !cmd.getPlayer().hasPermission("shops.admin")) {
-                Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
-                return true;
-        }
+        
         Block b = cmd.getSelection().location.getBlock();
         if (!b.getType().equals(Material.SIGN) && !b.getType().equals(Material.SIGN_POST)) {
             cmd.getLogger().warning(String.format(Resources.NOT_FOUND_SIGN, cmd.getShop().owner));
@@ -1107,83 +1097,78 @@ public final class ShopExecuter
     
     public static boolean setindex(ShopCmd cmd)
     {
-        if (cmd.getSelection() == null) {
-            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+        CmdRequisite requisite = cmd.getRequirements();
+        
+        requisite.hasSelection();
+        requisite.hasOwnership();
+        requisite.hasArgs(3, Help.setindex);
+        
+        if (!requisite.isValid()) {
             return true;
         }
         
-        if (!cmd.getSelection().isOwner && !cmd.getPlayer().hasPermission("shops.admin")) {
-            Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
+        int oldIndex;
+        try {
+            oldIndex = Integer.parseInt(cmd.getArg(1));
+        }
+        catch(NumberFormatException e) {
+            BaxEntry entry = ItemNames.getItemFromAlias(cmd.getArg(1), cmd.getShop(), cmd.getSender());
+            if (entry == null) {
+                return true;
+            }
+            oldIndex = cmd.getShop().getIndexOfEntry(entry) + 1;
+        } 
+        catch (IndexOutOfBoundsException e) {
+            oldIndex = -1;
+        }
+        if (oldIndex < 1 || oldIndex > cmd.getShop().inventory.size()) {
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SHOPITEM);
             return true;
         }
-        if (cmd.getNumArgs() < 3) {
-            Main.sendError(cmd.getSender(), "Usage:\n/shop setindex [current index] [new index]");
+        int newIndex;
+        try {
+            newIndex = Integer.parseInt(cmd.getArg(2));
+        }
+        catch(NumberFormatException e) {
+            Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "new index"));
+            return true;
+        }
+        if (newIndex > cmd.getShop().inventory.size()) {
+            Main.sendError(cmd.getPlayer(), "You must choose a new index that is less than the number of items in the shop!");
+            return true;
+        }
+        if (newIndex < 1) {
+            Main.sendError(cmd.getPlayer(), "The new index must be greater than 0.");
+            return true;
+        }
+        if (newIndex == oldIndex) {
+            Main.sendError(cmd.getPlayer(), "The index has not been changed.");
+            return true;
+        }
+        BaxEntry entry = cmd.getShop().inventory.remove(oldIndex - 1);
+        if (cmd.getShop().inventory.size() < newIndex) {
+            cmd.getShop().inventory.add(entry);
         }
         else {
-            int oldIndex;
-            try {
-                oldIndex = Integer.parseInt(cmd.getArg(1));
-            }
-            catch(NumberFormatException e) {
-                BaxEntry entry = ItemNames.getItemFromAlias(cmd.getArg(1), cmd.getShop(), cmd.getSender());
-                if (entry == null) {
-                    return true;
-                }
-                oldIndex = cmd.getShop().getIndexOfEntry(entry) + 1;
-            } 
-            catch (IndexOutOfBoundsException e) {
-                oldIndex = -1;
-            }
-            if (oldIndex < 1 || oldIndex > cmd.getShop().inventory.size()) {
-                Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SHOPITEM);
-                return true;
-            }
-            int newIndex;
-            try {
-                newIndex = Integer.parseInt(cmd.getArg(2));
-            }
-            catch(NumberFormatException e) {
-                Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "new index"));
-                return true;
-            }
-            if (newIndex > cmd.getShop().inventory.size()) {
-                Main.sendError(cmd.getPlayer(), "You must choose a new index that is less than the number of items in the shop!");
-                return true;
-            }
-            if (newIndex < 1) {
-                Main.sendError(cmd.getPlayer(), "The new index must be greater than 0.");
-                return true;
-            }
-            if (newIndex == oldIndex) {
-                Main.sendError(cmd.getPlayer(), "The index has not been changed.");
-                return true;
-            }
-            BaxEntry entry = cmd.getShop().inventory.remove(oldIndex - 1);
-            if (cmd.getShop().inventory.size() < newIndex) {
-                cmd.getShop().inventory.add(entry);
-            }
-            else {
-                cmd.getShop().inventory.add(newIndex - 1, entry);
-            }
-            cmd.getPlayer().sendMessage("The index for this item was successfully changed.");
+            cmd.getShop().inventory.add(newIndex - 1, entry);
         }
+        cmd.getPlayer().sendMessage("The index for this item was successfully changed.");
+        
         return true;
     }
 
     private static boolean info(ShopCmd cmd)
     {
-        if (cmd.getSelection() == null) {
-            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
+        CmdRequisite requisite = cmd.getRequirements();
+        
+        requisite.hasSelection();
+        requisite.hasPermissions("shops.buy");
+        requisite.hasArgs(2, Help.info);
+        
+        if (!requisite.isValid()) {
             return true;
         }
-        if (!cmd.getPlayer().hasPermission("shops.buy")) {
-            Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
-            return true;
-        }
-        if (cmd.getNumArgs() < 1) {
-            Main.sendError(cmd.getPlayer(), Help.info.toUsageString());
-            return true;
-        }
+        
         BaxShop shop = cmd.getShop();
         BaxEntry entry;
         try {
