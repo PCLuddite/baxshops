@@ -121,6 +121,10 @@ public final class Help {
     
     public static final CommandHelp setangle = new CommandHelp("shop setface", null, "<direction>", "Rotates the sign to face another direction",
             CommandHelp.args("direction", "\"North\", \"South\", \"East\", or \"West\""));
+    
+    public static final CommandHelp setindex = new CommandHelp("shop setindex", null, "<old index> <new index>", "Changes the order of entries in a shop",
+            CommandHelp.args("old index", "the original index for the entry",
+                             "new index", "the new index for the entry"));
 
     /**
      * The general index of commands
