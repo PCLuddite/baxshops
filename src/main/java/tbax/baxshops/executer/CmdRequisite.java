@@ -152,10 +152,10 @@ public final class CmdRequisite
     {
         if (!valid) return false;
         if (cmd.getSelection().isOwner || cmd.getSender().hasPermission("shops.admin")) {
-            Main.sendError(cmd.getSender(), Resources.NO_PERMISSION);
             return true;
         }
         else {
+            Main.sendError(cmd.getSender(), Resources.NO_PERMISSION);
             return valid = false;
         }
     }
