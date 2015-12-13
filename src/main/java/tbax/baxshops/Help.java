@@ -253,6 +253,7 @@ public final class Help {
         commands.put("sign", sign);
         commands.put("setface", setangle);
         commands.put("setangle", setangle);
+        commands.put("setindex", setindex);
 
         commands.put("create", create);
         commands.put("delete", delete);
