@@ -48,6 +48,3 @@ permissions:
     shops.sell:
         description: Allows you to sell to shops
         default: true
-    shops.self:
-        description: Allows you to manipulate your own shops as if they were others'
-        default: true
