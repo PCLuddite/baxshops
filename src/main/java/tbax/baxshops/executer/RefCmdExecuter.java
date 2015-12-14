@@ -43,8 +43,6 @@ public final class RefCmdExecuter
     public static boolean execute(ShopCmd cmd)
     {
         switch (cmd.getAction()) {
-            /*case "paste":
-                return create(cmd);*/
             case "list":
                 return list(cmd);
             case "copy":
@@ -181,79 +179,5 @@ public final class RefCmdExecuter
         catch(Exception ex){
             return ChatColor.RED + Resources.ERROR_INLINE;
         }
-    }
-    
-    public static boolean copy(ShopCmd cmd)
-    {
-        ShopSelection selection = cmd.getMain().selectedShops.get(cmd.getPlayer());
-        if (selection == null) {
-            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SELECTED);
-        }
-        else {
-            if (!selection.isOwner && !cmd.getPlayer().hasPermission("shops.admin")) {
-                Main.sendError(cmd.getPlayer(), Resources.NO_PERMISSION);
-                return true;
-            }
-            String id = "DEFAULT";
-            if (cmd.getNumArgs() > 1) {
-                id = cmd.getArg(1);
-            }
-            Clipboard.put(cmd.getPlayer(), id, selection.shop);
-            if (id == null) {
-                cmd.getPlayer().sendMessage(String.format(ChatColor.BLUE + "%s shop has been added to your clipboard.", 
-                    selection.isOwner ? "Your" + ChatColor.WHITE : selection.shop.owner + ChatColor.WHITE + "'s"));
-            }
-            else {
-                cmd.getPlayer().sendMessage(String.format("§1%s shop has been added to your clipboard as '§a%s§F'.", 
-                    selection.isOwner ? "Your" + ChatColor.WHITE : selection.shop.owner + ChatColor.WHITE + "'s", id));
-            }
-        }
-        return true;
-    }
-    
-    public static boolean create(ShopCmd cmd)
-    {
-        String id = cmd.getNumArgs() > 1 ? cmd.getArg(1) : null;
-        BaxShop shopSource = Clipboard.get(cmd.getPlayer(), id);
-        if (shopSource == null) {
-            Main.sendError(cmd.getPlayer(), String.format("No data was found on the clipboard with id '%s'.\nSelect a shop and use:\n/shop location save [id]", id == null ? "DEFAULT" : id));
-            return true;
-        }
-        
-        String owner = shopSource.owner;
-        
-        Block sourceLoc = shopSource.getLocations().get(0).getBlock();
-        Block block;
-        if (!(sourceLoc.getType().equals(Material.SIGN) || sourceLoc.getType().equals(Material.SIGN_POST))) {
-            Main.getLog().warning(String.format(Resources.NOT_FOUND_SIGN, shopSource.owner));
-            block = ShopExecuter.buildShopSign(cmd,
-                new String[] {
-                  "Location for",
-                  (owner.length() < 13 ? owner : owner.substring(0, 12) + '…') + "'s",
-                  "shop",
-                  ""
-            });
-        }
-        else {
-            Sign mainSign = (Sign)sourceLoc.getState();
-            block = ShopExecuter.buildShopSign(cmd,
-                new String[] {
-                  mainSign.getLine(0),
-                  mainSign.getLine(1),
-                  mainSign.getLine(2),
-                  mainSign.getLine(3)
-            });
-        }
-        if (block == null) {
-            return true; // it didn't work. go back.
-        }
-        if (Main.getState().addLocation(cmd.getPlayer(), block.getLocation(), shopSource)) {
-            shopSource.addLocation(block.getLocation());
-        }
-        else {
-            return true; // that didn't work. go back.
-        }
-        cmd.getPlayer().sendMessage(String.format(ChatColor.WHITE + "A new location for " + ChatColor.BLUE + "%s" + ChatColor.WHITE + "'s shop has been opened.", shopSource.owner));
-        return true;
     }
 }
