@@ -65,14 +65,12 @@ public final class CmdRequisite
         boolean hasPerms = false;
         for(String perm : permissions) {
             hasPerms = hasPerms || cmd.getSender().hasPermission(perm);
+            if (hasPerms) {
+                return true;
+            }
         }
-        if (hasPerms) {
-            return true;
-        }
-        else {
-            Main.sendError(cmd.getSender(), Resources.NO_PERMISSION);
-            return valid = false;
-        }
+        Main.sendError(cmd.getSender(), Resources.NO_PERMISSION);
+        return valid = false;
     }
     
     /**
