@@ -24,6 +24,7 @@
  */
 package tbax.baxshops.executer;
 
+import tbax.baxshops.help.Help;
 import java.util.ArrayList;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -104,7 +105,7 @@ public final class ShopExecuter
         boolean admin = cmd.getSender().hasPermission("shops.admin");
         if (admin) {
             if (cmd.getNumArgs() < 2) {
-                Main.sendError(cmd.getPlayer(), Help.create.toUsageString());
+                Main.sendError(cmd.getPlayer(), Help.CREATE.toUsageString());
                 return true;
             }
         }
@@ -211,7 +212,7 @@ public final class ShopExecuter
         
         requisite.hasSelection();
         requisite.hasOwnership();
-        requisite.hasArgs(2, Help.setangle);
+        requisite.hasArgs(2, Help.SETANGLE);
         
         if (!requisite.isValid()) return true;
         
@@ -290,7 +291,7 @@ public final class ShopExecuter
         
         requisite.hasSelection();
         requisite.hasOwnership();
-        requisite.hasArgs(2, Help.add);
+        requisite.hasArgs(2, Help.ADD);
         
         if (!requisite.isValid()) return true;
         
@@ -300,7 +301,7 @@ public final class ShopExecuter
         } 
         catch (NumberFormatException e) {
             Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "buy price"));
-            Main.sendError(cmd.getPlayer(), Help.add.toUsageString());
+            Main.sendError(cmd.getPlayer(), Help.ADD.toUsageString());
             return true;
         }
         try {
@@ -308,7 +309,7 @@ public final class ShopExecuter
         }
         catch (NumberFormatException e) {
             Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "sell price"));
-            Main.sendError(cmd.getPlayer(), Help.add.toUsageString());
+            Main.sendError(cmd.getPlayer(), Help.ADD.toUsageString());
             return true;
         }
         
@@ -396,7 +397,7 @@ public final class ShopExecuter
                 }
                 else {
                     Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "restock amount"));
-                    Main.sendError(cmd.getPlayer(), Help.restock.toUsageString());
+                    Main.sendError(cmd.getPlayer(), Help.RESTOCK.toUsageString());
                     return true;
                 }
                 cmd.getMain().sendInfo(cmd.getPlayer(), String.format("Restocked with %s. The shop now has %s.", 
@@ -534,7 +535,7 @@ public final class ShopExecuter
         
         requisite.hasSelection();
         requisite.hasOwnership();
-        requisite.hasArgs(3, Help.set);
+        requisite.hasArgs(3, Help.SET);
         
         if (!requisite.isValid()) return true;
         
@@ -565,7 +566,7 @@ public final class ShopExecuter
         } 
         catch (NumberFormatException e) {
             Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL,  "buy price"));
-            Main.sendError(cmd.getPlayer(), Help.set.toUsageString());
+            Main.sendError(cmd.getPlayer(), Help.SET.toUsageString());
             return true;
         }
         try {
@@ -573,7 +574,7 @@ public final class ShopExecuter
         } 
         catch (NumberFormatException e) {
             Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL,  "sell price"));
-            Main.sendError(cmd.getPlayer(), Help.set.toUsageString());
+            Main.sendError(cmd.getPlayer(), Help.SET.toUsageString());
             return true;
         }
 
@@ -613,7 +614,7 @@ public final class ShopExecuter
         
         if (cmd.getNumArgs() == 1) {
             if (cmd.getShop().inventory.size() > 1) { // Allow no arguments if there's only one item  
-                Main.sendError(cmd.getPlayer(), Help.buy.toUsageString());
+                Main.sendError(cmd.getPlayer(), Help.BUY.toUsageString());
                 return true;
             }
             else {
@@ -651,7 +652,7 @@ public final class ShopExecuter
             }
             catch (NumberFormatException e) {
                 Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "buy amount"));
-                Main.sendError(cmd.getPlayer(), Help.buy.toUsageString());
+                Main.sendError(cmd.getPlayer(), Help.BUY.toUsageString());
                 return true;
             }
         }
@@ -661,7 +662,7 @@ public final class ShopExecuter
         }
         if (amount < 0) {
             Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "buy amount"));
-            Main.sendError(cmd.getPlayer(), Help.buy.toUsageString());
+            Main.sendError(cmd.getPlayer(), Help.BUY.toUsageString());
             return true;
         }
         
@@ -902,7 +903,7 @@ public final class ShopExecuter
         
         requisite.hasSelection();
         requisite.hasOwnership();
-        requisite.hasExactArgs(2, Help.remove);
+        requisite.hasExactArgs(2, Help.REMOVE);
         
         if (!requisite.isValid()) return true;
 
@@ -952,7 +953,7 @@ public final class ShopExecuter
         
         requisite.hasSelection();
         requisite.hasOwnership();
-        requisite.hasArgs(1, Help.take);
+        requisite.hasArgs(1, Help.TAKE);
         
         if (!requisite.isValid()) return true;
         
@@ -963,7 +964,7 @@ public final class ShopExecuter
                 entry = shop.getEntryAt(0);
             }
             else {
-                Main.sendError(cmd.getPlayer(), Help.take.toUsageString());
+                Main.sendError(cmd.getPlayer(), Help.TAKE.toUsageString());
                 return true;
             }
         }
@@ -1087,7 +1088,7 @@ public final class ShopExecuter
         
         requisite.hasSelection();
         requisite.hasOwnership();
-        requisite.hasArgs(3, Help.setindex);
+        requisite.hasArgs(3, Help.SETINDEX);
         
         if (!requisite.isValid()) return true;
         
@@ -1147,7 +1148,7 @@ public final class ShopExecuter
         
         requisite.hasSelection();
         requisite.hasPermissions("shops.buy");
-        requisite.hasArgs(2, Help.info);
+        requisite.hasArgs(2, Help.INFO);
         
         if (!requisite.isValid()) return true;
         

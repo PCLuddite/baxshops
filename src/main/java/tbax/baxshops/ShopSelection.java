@@ -24,6 +24,7 @@
  */
 package tbax.baxshops;
 
+import tbax.baxshops.help.CommandHelp;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 

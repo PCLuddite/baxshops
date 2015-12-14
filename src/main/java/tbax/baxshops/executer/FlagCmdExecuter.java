@@ -27,7 +27,7 @@ package tbax.baxshops.executer;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
-import tbax.baxshops.Help;
+import tbax.baxshops.help.Help;
 import tbax.baxshops.Main;
 import tbax.baxshops.serialization.Clipboard;
 
@@ -42,12 +42,12 @@ public final class FlagCmdExecuter
     {
         CmdRequisite req = cmd.getRequirements();
         
-        req.hasArgs(2, Help.flag);
+        req.hasArgs(2, Help.FLAG);
         
         if (!req.isValid()) return true;
         
         if (!cmd.getAction().equals("flag")) {
-            Main.sendError(cmd.getSender(), Help.flag.toUsageString());
+            Main.sendError(cmd.getSender(), Help.FLAG.toUsageString());
             return true;
         }
         
@@ -88,7 +88,7 @@ public final class FlagCmdExecuter
         
         req.hasSelection();
         req.hasOwnership();
-        req.hasArgs(3, Help.flag);
+        req.hasArgs(3, Help.FLAG);
         
         if (!req.isValid()) {
             return true;
@@ -111,7 +111,7 @@ public final class FlagCmdExecuter
         
         req.hasSelection();
         req.hasOwnership();
-        req.hasArgs(3, Help.flag);
+        req.hasArgs(3, Help.FLAG);
         
         if (!req.isValid())
             return true;
@@ -133,7 +133,7 @@ public final class FlagCmdExecuter
         
         req.hasSelection();
         req.hasOwnership();
-        req.hasArgs(3, Help.flag);
+        req.hasArgs(3, Help.FLAG);
         
         if (!req.isValid())
             return true;
@@ -160,7 +160,7 @@ public final class FlagCmdExecuter
         
         req.hasSelection();
         req.hasOwnership();
-        req.hasArgs(3, Help.flag);
+        req.hasArgs(3, Help.FLAG);
         
         if (!req.isValid())
             return true;
@@ -182,7 +182,7 @@ public final class FlagCmdExecuter
         
         req.hasSelection();
         req.hasOwnership();
-        req.hasArgs(3, Help.flag);
+        req.hasArgs(3, Help.FLAG);
         
         if (!req.isValid())
             return true;
@@ -204,7 +204,7 @@ public final class FlagCmdExecuter
         
         req.hasSelection();
         req.hasOwnership();
-        req.hasArgs(3, Help.flag);
+        req.hasArgs(3, Help.FLAG);
         
         if (!req.isValid())
             return true;

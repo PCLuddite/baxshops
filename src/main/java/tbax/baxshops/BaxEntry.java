@@ -24,6 +24,7 @@
  */
 package tbax.baxshops;
 
+import tbax.baxshops.help.CommandHelp;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.ChatColor;

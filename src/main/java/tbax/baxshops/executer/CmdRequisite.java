@@ -24,7 +24,7 @@
  */
 package tbax.baxshops.executer;
 
-import tbax.baxshops.CommandHelp;
+import tbax.baxshops.help.CommandHelp;
 import tbax.baxshops.Main;
 import tbax.baxshops.Resources;
 

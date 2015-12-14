@@ -22,7 +22,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package tbax.baxshops;
+package tbax.baxshops.help;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,41 +32,8 @@ import org.bukkit.ChatColor;
 /**
  * CommandHelp provides an interface for specifying and printing help for a Bukkit command. It also contains general help-printing utilities.
  */
-public final class CommandHelp {
-    /**
-     * Creates a new CommandHelp for a single command with no arguments
-     * @param command the command's name
-     * @param description a short description of the command
-     * @param help additional help for this command
-     */
-    public CommandHelp(String command, String description, String[] help) {
-            this(command, null, null, description, help);
-    }
-    /**
-     * Creates a new CommandHelp for a single command
-     * @param command the command's name
-     * @param args the command's arguments
-     * @param description a short description of the command
-     * @param help additional help for this command
-     */
-    public CommandHelp(String command, String args, String description, String[] help) {
-            this(command, null, args, description, help);
-    }
-    /**
-     * Creates a new CommandHelp for a single command with an alias
-     * @param command the command's name
-     * @param alias an alias for the command
-     * @param args the command's arguments
-     * @param description a short description of the command
-     * @param help additional help for this command
-     */
-    public CommandHelp(String command, String alias, String args, String description, String... help) {
-        this.command = command;
-        this.args = args;
-        this.description = description;
-        this.help = Arrays.asList(help);
-        this.alias = alias;
-    }
+public final class CommandHelp
+{
     /**
      * The command's name
      */
@@ -92,6 +59,46 @@ public final class CommandHelp {
     // for memoizing to*String() functions
     private String indexString = null, usageString = null;
     private String[] helpString = null;
+    
+    /**
+     * Creates a new CommandHelp for a single command with no arguments
+     * @param command the command's name
+     * @param description a short description of the command
+     * @param help additional help for this command
+     */
+    public CommandHelp(String command, String description, String[] help)
+    {
+        this(command, null, null, description, help);
+    }
+    
+    /**
+     * Creates a new CommandHelp for a single command
+     * @param command the command's name
+     * @param args the command's arguments
+     * @param description a short description of the command
+     * @param help additional help for this command
+     */
+    public CommandHelp(String command, String args, String description, String[] help)
+    {
+        this(command, null, args, description, help);
+    }
+    
+    /**
+     * Creates a new CommandHelp for a single command with an alias
+     * @param command the command's name
+     * @param alias an alias for the command
+     * @param args the command's arguments
+     * @param description a short description of the command
+     * @param help additional help for this command
+     */
+    public CommandHelp(String command, String alias, String args, String description, String... help)
+    {
+        this.command = command;
+        this.args = args;
+        this.description = description;
+        this.help = Arrays.asList(help);
+        this.alias = alias;
+    }
 
     /**
      * Generates a single line string suitable for use in an index topic.

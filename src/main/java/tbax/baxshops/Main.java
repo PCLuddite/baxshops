@@ -24,6 +24,7 @@
  */
 package tbax.baxshops;
 
+import tbax.baxshops.help.Help;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;

@@ -24,6 +24,8 @@
  */
 package tbax.baxshops.executer;
 
+import tbax.baxshops.help.Help;
+import tbax.baxshops.help.CommandHelp;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -123,7 +125,7 @@ public final class RefCmdExecuter
         
         req.hasSelection();
         req.hasPermissions("shops.admin");
-        req.hasArgs(2, Help.teleport);
+        req.hasArgs(2, Help.TELEPORT);
         
         if (!req.isValid())
             return true;
