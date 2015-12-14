@@ -40,16 +40,14 @@ public final class FlagCmdExecuter
     
     public static boolean execute(ShopCmd cmd)
     {
+        if (!cmd.getAction().equals("flag"))
+            return false;
+        
         CmdRequisite req = cmd.getRequirements();
         
         req.hasArgs(2, Help.FLAG);
         
         if (!req.isValid()) return true;
-        
-        if (!cmd.getAction().equals("flag")) {
-            Main.sendError(cmd.getSender(), Help.FLAG.toUsageString());
-            return true;
-        }
         
         switch(cmd.getArg(1).toLowerCase()) {
             case "selltoshop":
