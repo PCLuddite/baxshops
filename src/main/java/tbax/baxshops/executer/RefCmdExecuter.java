@@ -58,14 +58,13 @@ public final class RefCmdExecuter
     
     public static boolean getitem(ShopCmd cmd)
     {
-        CmdRequisite requisite = cmd.getRequirements();
+        CmdRequisite req = cmd.getRequirements();
         
-        requisite.hasSelection();
-        requisite.hasOwnership();
+        req.hasSelection();
+        req.hasOwnership();
         
-        if (!requisite.isValid()) {
+        if (!req.isValid())
             return true;
-        }
         
         if (!cmd.getPlayer().hasPermission("shops.admin")) {
             PlayerInventory inv = cmd.getPlayer().getInventory();
@@ -88,14 +87,13 @@ public final class RefCmdExecuter
     
     public static boolean list(ShopCmd cmd)
     {
-        CmdRequisite requisite = cmd.getRequirements();
+        CmdRequisite req = cmd.getRequirements();
         
-        requisite.hasSelection();
-        requisite.hasOwnership();
+        req.hasSelection();
+        req.hasOwnership();
         
-        if (!requisite.isValid()) {
+        if (!req.isValid())
             return true;
-        }
         
         ShopSelection selection = cmd.getMain().selectedShops.get(cmd.getPlayer());
         
@@ -123,15 +121,14 @@ public final class RefCmdExecuter
     
     public static boolean teleport(ShopCmd cmd)
     {
-        CmdRequisite requisite = cmd.getRequirements();
+        CmdRequisite req = cmd.getRequirements();
         
-        requisite.hasSelection();
-        requisite.hasPermissions("shops.admin");
-        requisite.hasArgs(2, Help.teleport);
+        req.hasSelection();
+        req.hasPermissions("shops.admin");
+        req.hasArgs(2, Help.teleport);
         
-        if (!requisite.isValid()) {
+        if (!req.isValid())
             return true;
-        }
         
         ShopSelection selection = cmd.getMain().selectedShops.get(cmd.getPlayer());
         

@@ -152,9 +152,7 @@ public final class ShopExecuter
         
         requisite.hasPermissions("shops.owner", "shops.admin");
         
-        if (!requisite.isValid()) {
-            return null;
-        }
+        if (!requisite.isValid()) return null;
         
         //Use up a sign if the user is not an admin
         if (!cmd.getPlayer().hasPermission("shops.admin")) {
@@ -214,9 +212,8 @@ public final class ShopExecuter
         requisite.hasSelection();
         requisite.hasOwnership();
         requisite.hasArgs(2, Help.setangle);
-        if (!requisite.isValid()) {
-            return true;
-        }
+        
+        if (!requisite.isValid()) return true;
         
         assert cmd.getSelection().location != null;
         
@@ -256,9 +253,7 @@ public final class ShopExecuter
         requisite.hasSelection();
         requisite.hasOwnership();
         
-        if (!requisite.isValid()) {
-            return true;
-        }
+        if (!requisite.isValid()) return true;
         
         boolean deleteAll = false;
         
@@ -297,9 +292,7 @@ public final class ShopExecuter
         requisite.hasOwnership();
         requisite.hasArgs(2, Help.add);
         
-        if (!requisite.isValid()) {
-            return true;
-        }
+        if (!requisite.isValid()) return true;
         
         double retailAmount, refundAmount;
         try {
@@ -355,11 +348,11 @@ public final class ShopExecuter
     public static boolean restock(ShopCmd cmd)
     {
         CmdRequisite requisite = cmd.getRequirements();
+        
         requisite.hasSelection();
         requisite.hasOwnership();
-        if (!requisite.isValid()) {
-            return true;
-        }
+        
+        if (!requisite.isValid()) return true;
         
         if (cmd.getShop().infinite) {
             Main.sendError(cmd.getPlayer(), "This shop does not need to be restocked.");
@@ -538,12 +531,12 @@ public final class ShopExecuter
     public static boolean set(ShopCmd cmd)
     {
         CmdRequisite requisite = cmd.getRequirements();
+        
         requisite.hasSelection();
         requisite.hasOwnership();
         requisite.hasArgs(3, Help.set);
-        if (!requisite.isValid()) {
-            return true;
-        }
+        
+        if (!requisite.isValid()) return true;
         
         BaxShop shop = cmd.getShop();
         BaxEntry entry;
@@ -756,9 +749,7 @@ public final class ShopExecuter
         
         requisite.hasPermissions("shops.sell");
         
-        if (!requisite.isValid()) {
-            return true;
-        }
+        if (!requisite.isValid()) return true;
         
         if (cmd.getNumArgs() > 1 && cmd.getArg(1).equalsIgnoreCase("any")) {
             ArrayList<ItemStack> toSell = clearItems(cmd.getPlayer().getInventory(), cmd.getShop().inventory);
@@ -913,9 +904,7 @@ public final class ShopExecuter
         requisite.hasOwnership();
         requisite.hasExactArgs(2, Help.remove);
         
-        if (!requisite.isValid()) {
-            return true;
-        }
+        if (!requisite.isValid()) return true;
 
         BaxShop shop = cmd.getShop();
         BaxEntry entry;
@@ -965,9 +954,7 @@ public final class ShopExecuter
         requisite.hasOwnership();
         requisite.hasArgs(1, Help.take);
         
-        if (!requisite.isValid()) {
-            return true;
-        }
+        if (!requisite.isValid()) return true;
         
         BaxShop shop = cmd.getShop();
         BaxEntry entry;
@@ -1048,12 +1035,11 @@ public final class ShopExecuter
         requisite.hasSelection();
         requisite.hasOwnership();
         
-        if (!requisite.isValid()) {
-            return true;
-        }
+        if (!requisite.isValid()) return true;
         
         Block b = cmd.getSelection().location.getBlock();
         if (!b.getType().equals(Material.SIGN) && !b.getType().equals(Material.SIGN_POST)) {
+            Main.sendWarning(cmd.getSender(), "This shop is missing its sign.");
             cmd.getLogger().warning(String.format(Resources.NOT_FOUND_SIGN, cmd.getShop().owner));
             return true;
         }
@@ -1084,7 +1070,8 @@ public final class ShopExecuter
             sign.setLine(1, lines[0]);
             sign.setLine(2, lines.length > 1 ? lines[1] : "");
             sign.setLine(3, "");
-        } else {
+        }
+        else {
             sign.setLine(0, lines[0]);
             sign.setLine(1, lines.length > 1 ? lines[1] : "");
             sign.setLine(2, lines.length > 2 ? lines[2] : "");
@@ -1102,9 +1089,7 @@ public final class ShopExecuter
         requisite.hasOwnership();
         requisite.hasArgs(3, Help.setindex);
         
-        if (!requisite.isValid()) {
-            return true;
-        }
+        if (!requisite.isValid()) return true;
         
         int oldIndex;
         try {
@@ -1164,9 +1149,7 @@ public final class ShopExecuter
         requisite.hasPermissions("shops.buy");
         requisite.hasArgs(2, Help.info);
         
-        if (!requisite.isValid()) {
-            return true;
-        }
+        if (!requisite.isValid()) return true;
         
         BaxShop shop = cmd.getShop();
         BaxEntry entry;

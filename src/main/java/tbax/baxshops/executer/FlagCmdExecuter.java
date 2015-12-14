@@ -40,16 +40,17 @@ public final class FlagCmdExecuter
     
     public static boolean execute(ShopCmd cmd)
     {
-        if (cmd.getNumArgs() < 1) {
-            return false;
-        }
-        if (!(cmd.getAction().equals("flag") || cmd.getAction().equals("opt") || cmd.getAction().equals("option"))) {
-            return false;
-        }
-        if (cmd.getNumArgs() < 2) {
-            cmd.getPlayer().sendMessage(Help.flag.toUsageString());
+        CmdRequisite req = cmd.getRequirements();
+        
+        req.hasArgs(2, Help.flag);
+        
+        if (!req.isValid()) return true;
+        
+        if (!cmd.getAction().equals("flag")) {
+            Main.sendError(cmd.getSender(), Help.flag.toUsageString());
             return true;
         }
+        
         switch(cmd.getArg(1).toLowerCase()) {
             case "selltoshop":
             case "sell_to_shop":
@@ -76,20 +77,20 @@ public final class FlagCmdExecuter
             case "notes":
                 return shopNotify(cmd);
             default:
-                Main.sendError(cmd.getPlayer(), "invalid shop option '" + cmd.getArg(1) + "'");
+                Main.sendError(cmd.getPlayer(), "Invalid shop flag '" + cmd.getArg(1) + "'");
                 return false;
         }
     }
     
     public static boolean sellToShop(ShopCmd cmd)
     {
-        CmdRequisite requisite = cmd.getRequirements();
+        CmdRequisite req = cmd.getRequirements();
         
-        requisite.hasSelection();
-        requisite.hasOwnership();
-        requisite.hasArgs(3, Help.flag);
+        req.hasSelection();
+        req.hasOwnership();
+        req.hasArgs(3, Help.flag);
         
-        if (!requisite.isValid()) {
+        if (!req.isValid()) {
             return true;
         }
         
@@ -106,15 +107,14 @@ public final class FlagCmdExecuter
     
     public static boolean shopNotify(ShopCmd cmd)
     {
-        CmdRequisite requisite = cmd.getRequirements();
+        CmdRequisite req = cmd.getRequirements();
         
-        requisite.hasSelection();
-        requisite.hasOwnership();
-        requisite.hasArgs(3, Help.flag);
+        req.hasSelection();
+        req.hasOwnership();
+        req.hasArgs(3, Help.flag);
         
-        if (!requisite.isValid()) {
+        if (!req.isValid())
             return true;
-        }
         
         BaxShop shop = cmd.getShop();
         
@@ -129,16 +129,15 @@ public final class FlagCmdExecuter
     
     public static boolean infinite(ShopCmd cmd)
     {
-        CmdRequisite requisite = cmd.getRequirements();
+        CmdRequisite req = cmd.getRequirements();
         
-        requisite.hasSelection();
-        requisite.hasOwnership();
-        requisite.hasArgs(3, Help.flag);
+        req.hasSelection();
+        req.hasOwnership();
+        req.hasArgs(3, Help.flag);
         
-        if (!requisite.isValid()) {
+        if (!req.isValid())
             return true;
-        }
-        
+       
         BaxShop shop = cmd.getShop();
         
         if (!Clipboard.isBoolean(cmd.getArg(2))) {
@@ -157,15 +156,14 @@ public final class FlagCmdExecuter
     
     public static boolean sellRequests(ShopCmd cmd)
     {
-        CmdRequisite requisite = cmd.getRequirements();
+        CmdRequisite req = cmd.getRequirements();
         
-        requisite.hasSelection();
-        requisite.hasOwnership();
-        requisite.hasArgs(3, Help.flag);
+        req.hasSelection();
+        req.hasOwnership();
+        req.hasArgs(3, Help.flag);
         
-        if (!requisite.isValid()) {
+        if (!req.isValid())
             return true;
-        }
         
         BaxShop shop = cmd.getShop();
         
@@ -180,15 +178,14 @@ public final class FlagCmdExecuter
     
     public static boolean buyRequests(ShopCmd cmd)
     {
-        CmdRequisite requisite = cmd.getRequirements();
+        CmdRequisite req = cmd.getRequirements();
         
-        requisite.hasSelection();
-        requisite.hasOwnership();
-        requisite.hasArgs(3, Help.flag);
+        req.hasSelection();
+        req.hasOwnership();
+        req.hasArgs(3, Help.flag);
         
-        if (!requisite.isValid()) {
+        if (!req.isValid())
             return true;
-        }
         
         BaxShop shop = cmd.getShop();
         
@@ -203,15 +200,15 @@ public final class FlagCmdExecuter
     
     public static boolean owner(ShopCmd cmd)
     {
-        CmdRequisite requisite = cmd.getRequirements();
+        CmdRequisite req = cmd.getRequirements();
         
-        requisite.hasSelection();
-        requisite.hasOwnership();
-        requisite.hasArgs(3, Help.flag);
+        req.hasSelection();
+        req.hasOwnership();
+        req.hasArgs(3, Help.flag);
         
-        if (!requisite.isValid()) {
+        if (!req.isValid())
             return true;
-        }
+        
         
         BaxShop shop = cmd.getShop();
         
@@ -223,14 +220,13 @@ public final class FlagCmdExecuter
     
     public static boolean list(ShopCmd cmd)
     {
-        CmdRequisite requisite = cmd.getRequirements();
+        CmdRequisite req = cmd.getRequirements();
         
-        requisite.hasSelection();
-        requisite.hasOwnership();
+        req.hasSelection();
+        req.hasOwnership();
         
-        if (!requisite.isValid()) {
+        if (!req.isValid())
             return true;
-        }
         
         BaxShop shop = cmd.getShop();
         
