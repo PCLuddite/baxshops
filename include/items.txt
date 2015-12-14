@@ -197,6 +197,8 @@
 277 Diamond Shovel
 284 Golden Shovel
 289 Gunpowder
+319 Raw Porkchop
+320 Cooked Porkchop
 347 Clock
 349 Raw Fish
 | 1 Raw Salmon
@@ -223,6 +225,7 @@
 | E Orange Dye
 | F Bone Meal
 360 Melon Slice
+364 Steak
 372 Nether Wart
 373 Water Bottle
 + 16 Awkward Potion
