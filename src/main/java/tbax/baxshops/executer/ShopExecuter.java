@@ -95,8 +95,7 @@ public final class ShopExecuter
     {
         CmdRequisite requisite = cmd.getRequirements();
         
-        requisite.hasSelection();
-        requisite.hasOwnership();
+        requisite.hasPermissions("shops.owner", "shops.admin");
         
         if (!requisite.isValid()) {
             return true;
