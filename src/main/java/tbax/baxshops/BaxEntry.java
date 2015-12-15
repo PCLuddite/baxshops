@@ -295,7 +295,7 @@ public final class BaxEntry implements ConfigurationSerializable
         if (getEnchants(stack) != null) {
             StringBuilder enchName = new StringBuilder(" ("); // Enchanted items are in purple
             for(Map.Entry<Enchantment, Integer> ench : getEnchants(stack).entrySet()) {
-                enchName.append(ench.getKey().getName().substring(0,3)); // List each enchantment
+                enchName.append(ItemNames.getEnchantName(ench.getKey()).toUpperCase().substring(0,4)); // List each enchantment
                 enchName.append(ench.getValue()); // and its value
                 enchName.append(", "); // separated by commas
             }

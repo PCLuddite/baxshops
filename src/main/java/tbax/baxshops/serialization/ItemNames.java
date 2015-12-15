@@ -349,7 +349,7 @@ public final class ItemNames
                 if (name.length() == 0) {
                     break;
                 }
-                enchants.put(Enchantment.getById(id), name);
+                enchants.put(Enchantment.getById(id), name.substring(1));
             }
             stream.close();
         }
