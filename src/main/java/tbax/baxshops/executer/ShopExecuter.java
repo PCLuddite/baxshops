@@ -26,6 +26,7 @@ package tbax.baxshops.executer;
 
 import tbax.baxshops.help.Help;
 import java.util.ArrayList;
+import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -461,17 +462,20 @@ public final class ShopExecuter
             player.sendMessage("You did not have any items that could be restocked at this shop.");
         }
     }
-        
+    
+    /**
+     * Removes a set number of items from an inventory
+     * @param inv
+     * @param entry
+     * @param count
+     * @return 
+     */
     private static int clearItems(Inventory inv, BaxEntry entry, int count)
     {
         int i = 0;
         int addSize = 0;
-        while (i < inv.getSize()){
-            if(inv.getItem(i) != null &&
-                inv.getItem(i).getType() != Material.AIR &&
-                inv.getItem(i).getType() == entry.getType() &&
-                inv.getItem(i).getDurability() == entry.getDurability()) {
-
+        while (i < inv.getSize()) {
+            if(Main.isItemEqual(inv.getItem(i), entry.getItemStack())) {
                 ItemStack stack = inv.getItem(i);
                 addSize += stack.getAmount();
                 
@@ -491,6 +495,12 @@ public final class ShopExecuter
         return addSize;
     }
     
+    /**
+     * Removes from an inventory a single item
+     * @param inv
+     * @param entry
+     * @return The number of items that have been removed
+     */
     private static int clearItems(Inventory inv, BaxEntry entry)
     {
         ArrayList<BaxEntry> entries = new ArrayList<>();
@@ -504,17 +514,20 @@ public final class ShopExecuter
         }
     }
     
-    private static ArrayList<ItemStack> clearItems(Inventory inv, ArrayList<BaxEntry> entries)
+    /**
+     * Removes from an inventory all items in the the List<BaxEntry> 
+     * @param inv
+     * @param entries
+     * @return The items that have been removed. Each ItemStack is a different item type and may exceed the material's max stack.
+     */
+    private static ArrayList<ItemStack> clearItems(Inventory inv, List<BaxEntry> entries)
     {
         ArrayList<ItemStack> itemList = new ArrayList<>();
         for(BaxEntry entry : entries) {
             int i = 0;
             int addSize = 0;
             while (i < inv.getSize()){
-                if(inv.getItem(i) != null &&
-                    inv.getItem(i).getType() != Material.AIR &&
-                    inv.getItem(i).getType() == entry.getType() &&
-                    inv.getItem(i).getDurability() == entry.getDurability()) {
+                if(Main.isItemEqual(inv.getItem(i), entry.getItemStack())) {
                     addSize += inv.getItem(i).getAmount();
                     inv.clear(i);
                 }
@@ -657,7 +670,7 @@ public final class ShopExecuter
             }
         }
         if (amount == 0) {
-            Main.sendError(cmd.getPlayer(), "Congrats. You bought nothing.");
+            Main.sendWarning(cmd.getPlayer(), "You purchased nothing.");
             return true;
         }
         if (amount < 0) {
