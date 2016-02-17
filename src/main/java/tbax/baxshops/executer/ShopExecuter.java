@@ -1017,28 +1017,28 @@ public final class ShopExecuter
         ItemStack stack = entry.toItemStack();
         stack.setAmount(amt);
         
+        entry.subtract(amt);
+        
         if (amt > 0) {
             int overflow = Main.giveItem(cmd.getPlayer(), stack);
             if (overflow > 0) {
+                entry.add(overflow);
                 cmd.getPlayer().sendMessage(
                     String.format(Resources.SOME_ROOM,
                         amt - overflow,
                         ItemNames.getName(stack)
                     )
                 );
-                return true;
             }
         }
-        
-        entry.subtract(amt);
-        
-        cmd.getMain().sendInfo(cmd.getPlayer(), 
-            String.format("%s %s added to your inventory.",
-                Format.itemname(amt, ItemNames.getName(entry)),
-                amt == 1 ? "was" : "were"
-            )
-        );
-        
+        else {
+            cmd.getMain().sendInfo(cmd.getPlayer(), 
+                String.format("%s %s added to your inventory.",
+                    Format.itemname(amt, ItemNames.getName(entry)),
+                    amt == 1 ? "was" : "were"
+                )
+            );
+        }
         return true;
     }
     
