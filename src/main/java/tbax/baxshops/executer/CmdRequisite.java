@@ -149,12 +149,29 @@ public final class CmdRequisite
     public boolean hasOwnership()
     {
         if (!valid) return false;
-        if (cmd.getSelection().isOwner || cmd.getSender().hasPermission("shops.admin")) {
+        if (cmd.getSelection().isOwner || isAdmin()) {
             return true;
         }
         else {
             Main.sendError(cmd.getSender(), Resources.NO_PERMISSION);
             return valid = false;
         }
+    }
+    
+    public boolean hasAdminRights()
+    {
+        if (!valid) return false;
+        if (isAdmin()) {
+            return true;
+        }
+        else {
+            Main.sendError(cmd.getSender(), Resources.NO_PERMISSION);
+            return valid = false;
+        }
+    }
+    
+    public boolean isAdmin()
+    {
+        return cmd.getSender().hasPermission("shops.admin");
     }
 }

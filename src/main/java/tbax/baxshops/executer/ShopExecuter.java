@@ -97,13 +97,13 @@ public final class ShopExecuter
     {
         CmdRequisite requisite = cmd.getRequirements();
         
-        requisite.hasPermissions("shops.owner", "shops.admin");
+        requisite.hasOwnership();
         
         if (!requisite.isValid()) {
             return true;
         }
         
-        boolean admin = cmd.getSender().hasPermission("shops.admin");
+        boolean admin = requisite.isAdmin();
         if (admin) {
             if (cmd.getNumArgs() < 2) {
                 Main.sendError(cmd.getPlayer(), Help.CREATE.toUsageString());
@@ -152,7 +152,7 @@ public final class ShopExecuter
     {
         CmdRequisite requisite = cmd.getRequirements();
         
-        requisite.hasPermissions("shops.owner", "shops.admin");
+        requisite.hasOwnership();
         
         if (!requisite.isValid()) return null;
         
