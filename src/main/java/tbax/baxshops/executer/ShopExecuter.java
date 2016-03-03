@@ -87,6 +87,8 @@ public final class ShopExecuter
             case "setface":
             case "face":
                 return setangle(cmd);
+            case "setamnt":
+                return setamnt(cmd);
             case "info":
                 return info(cmd);
         }
@@ -245,6 +247,48 @@ public final class ShopExecuter
         catch(Exception e) {
             Main.sendError(cmd.getPlayer(), "Some weird error occoured, and long story short, the sign may not have been rotated.");
         }
+        return true;
+    }
+    
+    public static boolean setamnt(ShopCmd cmd)
+    {
+        CmdRequisite requisite = cmd.getRequirements();
+        
+        requisite.hasAdminRights();
+        requisite.hasArgs(3, Help.SETAMNT);
+        
+        if (!requisite.isValid()) return true;
+        
+        BaxShop shop = cmd.getShop();
+        BaxEntry entry;
+        try {
+            int index = Integer.parseInt(cmd.getArg(1));
+            entry = shop.getEntryAt(index - 1);
+        }
+        catch (NumberFormatException e) {
+            entry = ItemNames.getItemFromAlias(cmd.getArg(1), shop, cmd.getSender());
+        }
+        catch (IndexOutOfBoundsException e) {
+            entry = null;
+        }
+
+        if (entry == null) {
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SHOPITEM);
+            return true;
+        }
+        int amnt = -1;
+        try {
+            amnt = Integer.parseInt(cmd.getArg(2));
+        }
+        catch (NumberFormatException e) {
+            Main.sendError(cmd.getSender(), String.format(Resources.INVALID_DECIMAL, "amount"));
+            return true;
+        }
+        
+        entry.setAmount(amnt);
+        
+        cmd.getMain().sendInfo(cmd.getPlayer(), "The amount has been set.");
+        
         return true;
     }
     
@@ -560,9 +604,6 @@ public final class ShopExecuter
         }
         catch (NumberFormatException e) {
             entry = ItemNames.getItemFromAlias(cmd.getArg(1), shop, cmd.getSender());
-            if (entry == null) {
-                return true;
-            }
         }
         catch (IndexOutOfBoundsException e) {
             entry = null;

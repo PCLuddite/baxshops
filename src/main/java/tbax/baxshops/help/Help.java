@@ -118,6 +118,10 @@ public final class Help
     public static final CommandHelp SETANGLE = new CommandHelp("shop setface", "setangle", "<direction>", "Rotates the sign to face another direction",
             CommandHelp.args("direction", "\"North\", \"South\", \"East\", or \"West\""));
     
+    public static final CommandHelp SETAMNT = new CommandHelp("shop setamnt", null, "<name> <amount>", "Sets the amount of an item is in the shop",
+            CommandHelp.args("name", "the name or index of the item",
+                             "amount", "the amount to stock"));
+    
     public static final CommandHelp SETINDEX = new CommandHelp("shop setindex", null, "<old index> <new index>", "Changes the order of entries in a shop",
             CommandHelp.args("old index", "the original index for the entry",
                              "new index", "the new index for the entry"));
