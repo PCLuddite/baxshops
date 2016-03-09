@@ -26,7 +26,6 @@ package tbax.baxshops;
 
 import tbax.baxshops.help.Help;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
@@ -160,6 +159,9 @@ public final class Main extends JavaPlugin
             return true;
         } */
         if (ShopExecuter.execute(cmd)) {
+            return true;
+        }
+        if (ShopCreatorExecuter.execute(cmd)) {
             return true;
         }
         if (FlagCmdExecuter.execute(cmd)) {
