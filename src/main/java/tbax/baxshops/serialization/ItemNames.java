@@ -176,7 +176,9 @@ public final class ItemNames
      */
     public static String getName(ItemStack item)
     {
-        String name = itemNames.get(getItemId(item));
+        //net.minecraft.server.v1_9_R1.ItemStack stack = CraftItemStack.asNMSCopy(item);
+        return NMSUtils.getItemName(item);
+        /*String name = itemNames.get(getItemId(item));
         if (name == null) {
             name = itemNames.get(getItemId(item.getType()));
             if (name == null) {
@@ -188,7 +190,7 @@ public final class ItemNames
                 itemNames.put(getItemId(item), name); // save it for later
             }
         }
-        return name;
+        return name;*/
     }
     
     public static String getEnchantName(Enchantment enchant)
