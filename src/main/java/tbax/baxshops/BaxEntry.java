@@ -34,6 +34,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.Potion;
 import tbax.baxshops.serialization.ItemNames;
 
 /**
@@ -239,6 +241,20 @@ public final class BaxEntry implements ConfigurationSerializable
         return null;
     }
     
+    private static String getPotionInfo(ItemStack item)
+    {
+        if (item.getType() == Material.POTION) {
+            Potion p = Potion.fromItemStack(item);
+            if (p.hasExtendedDuration()) {
+                return Format.enchantments("(Extended)");
+            }
+            else if (p.getLevel() > 1) {
+                return Format.enchantments("II");
+            }
+        }
+        return "";
+    }
+    
     @Override
     public String toString()
     {   
@@ -305,6 +321,11 @@ public final class BaxEntry implements ConfigurationSerializable
             else {
                 name.append(enchName.substring(0, enchName.length() - 2)).append(")");
             }
+        }
+        
+        String potionInfo = getPotionInfo(stack);
+        if (!potionInfo.equals("")) {
+            name.append(" ").append(potionInfo);
         }
         
         if (ItemNames.isDamageable(stack.getType()) && stack.getDurability() > 0) {
