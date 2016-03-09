@@ -87,6 +87,11 @@ public final class ShopCmd
         return main;
     }
     
+    public boolean isAdmin()
+    {
+        return sender.hasPermission("shops.admin");
+    }
+    
     public ShopSelection getSelection()
     {
         return main.selectedShops.get(pl);

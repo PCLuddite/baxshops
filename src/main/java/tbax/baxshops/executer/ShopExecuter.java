@@ -105,7 +105,7 @@ public final class ShopExecuter
             return true;
         }
         
-        boolean admin = requisite.isAdmin();
+        boolean admin = cmd.isAdmin();
         if (admin) {
             if (cmd.getNumArgs() < 2) {
                 Main.sendError(cmd.getPlayer(), Help.CREATE.toUsageString());
