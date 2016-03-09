@@ -34,7 +34,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.Potion;
 import tbax.baxshops.serialization.ItemNames;
 
@@ -262,6 +261,7 @@ public final class BaxEntry implements ConfigurationSerializable
         info.append(CommandHelp.header("BaxEntry Information"));
         info.append('\n');
         info.append("Name: ").append(Format.itemname(ItemNames.getName(this))).append('\n');
+        info.append("Material: ").append(Format.command(stack.getType().toString())).append('\n');
         if (ItemNames.isDamageable(stack.getType())) {
             info.append("Damage: ").append(ChatColor.YELLOW).append(getDamagePercent()).append('%').append(ChatColor.RESET).append('\n');
         }
