@@ -176,21 +176,7 @@ public final class ItemNames
      */
     public static String getName(ItemStack item)
     {
-        //net.minecraft.server.v1_9_R1.ItemStack stack = CraftItemStack.asNMSCopy(item);
         return NMSUtils.getItemName(item);
-        /*String name = itemNames.get(getItemId(item));
-        if (name == null) {
-            name = itemNames.get(getItemId(item.getType()));
-            if (name == null) {
-                name = Format.toFriendlyName(item.getData().toString());
-                int last = name.lastIndexOf("Item");
-                if (last > -1) {
-                    name = name.substring(0, last - 1);
-                }
-                itemNames.put(getItemId(item), name); // save it for later
-            }
-        }
-        return name;*/
     }
     
     public static String getEnchantName(Enchantment enchant)
@@ -255,72 +241,6 @@ public final class ItemNames
         catch (NoSuchElementException e) {
             Main.getLog().info("loadDamageable broke at line: " + i);
             e.printStackTrace();
-        }
-    }
-    
-    /**
-     * Loads the item names map from the items.txt resource.
-     * @param main
-    */
-    public static void loadItems(Main main)
-    {
-        InputStream stream = main.getResource("items.txt");
-        if (stream == null) {
-            return;
-        }
-        try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(stream));
-            String line = br.readLine();
-            while (line != null) {
-                if (line.length() == 0 || line.charAt(0) == '#') {
-                    continue;
-                }
-                Scanner current = new Scanner(line);
-                int id = current.nextInt(),
-                        damage = 0;
-                String name = "";
-                while (current.hasNext()) {
-                    name += ' ' + current.next();
-                }
-                if (name.length() == 0) {
-                    break;
-                }
-                itemNames.put((long) id << 16 | damage, name.substring(1));
-                line = br.readLine();
-                if (line != null && (line.charAt(0) == '|' || line.charAt(0) == '+')) {
-                    do {
-                        if (line.length() == 0 || line.charAt(0) == '#') {
-                            continue;
-                        }
-                        current = new Scanner(line);
-                        String next = current.next();
-                        if (next.equals("|")) {
-                            if (!current.hasNextInt(16)) {
-                                break;
-                            }
-                            damage = current.nextInt(16);
-                        }
-                        else if (next.equals("+")) {
-                            if (!current.hasNextInt()) {
-                                break;
-                            }
-                            damage = current.nextInt();
-                        }
-                        else {
-                            break;
-                        }
-                        name = "";
-                        while (current.hasNext()) {
-                            name += ' ' + current.next();
-                        }
-                        itemNames.put((long) id << 16 | damage, name.substring(1));
-                    } while ((line = br.readLine()) != null);
-                }
-            }
-            stream.close();
-        }
-        catch (IOException e) {
-            Main.getLog().warning("Failed to load item names: " + e.toString());
         }
     }
     

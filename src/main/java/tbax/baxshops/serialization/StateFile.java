@@ -93,7 +93,6 @@ public final class StateFile
     
     public void load()
     {
-        ItemNames.loadItems(main);
         ItemNames.loadDamageable(main);
         ItemNames.loadEnchants(main);
         
