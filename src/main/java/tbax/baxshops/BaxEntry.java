@@ -34,7 +34,9 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionData;
 import tbax.baxshops.serialization.ItemNames;
 
 /**
@@ -243,11 +245,11 @@ public final class BaxEntry implements ConfigurationSerializable
     private static String getPotionInfo(ItemStack item)
     {
         if (item.getType() == Material.POTION) {
-            Potion p = Potion.fromItemStack(item);
-            if (p.hasExtendedDuration()) {
+            PotionData data = ((PotionMeta)item.getItemMeta()).getBasePotionData();
+            if (data.isExtended()) {
                 return Format.enchantments("(Extended)");
             }
-            else if (p.getLevel() > 1) {
+            else if (data.isUpgraded()) {
                 return Format.enchantments("II");
             }
         }
