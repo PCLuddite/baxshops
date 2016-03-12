@@ -26,6 +26,7 @@ package tbax.baxshops;
 
 import java.util.ArrayDeque;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -44,7 +45,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import tbax.baxshops.notification.Notification;
 
 /**
@@ -68,6 +68,9 @@ public class EventListener implements Listener
             if (shop.owner.equals(event.getPlayer().getName()) || event.getPlayer().hasPermission("shops.admin")) {
                 if (shop.getLocations().size() == 1)  {
                     Main.sendWarning(event.getPlayer(), "This is the only location for this shop. It cannot be destroyed.");
+                    event.setCancelled(true);
+                }
+                else if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
                     event.setCancelled(true);
                 }
                 else {
