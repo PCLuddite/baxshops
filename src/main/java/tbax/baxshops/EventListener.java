@@ -39,6 +39,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -66,11 +67,11 @@ public class EventListener implements Listener
         BaxShop shop = Main.getState().getShop(event.getBlock().getLocation());
         if (shop != null) {
             if (shop.owner.equals(event.getPlayer().getName()) || event.getPlayer().hasPermission("shops.admin")) {
-                if (shop.getLocations().size() == 1)  {
-                    Main.sendWarning(event.getPlayer(), "This is the only location for this shop. It cannot be destroyed.");
+                if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
                     event.setCancelled(true);
                 }
-                else if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
+                else if (shop.getLocations().size() == 1)  {
+                    Main.sendWarning(event.getPlayer(), "This is the only location for this shop. It cannot be destroyed.");
                     event.setCancelled(true);
                 }
                 else {
@@ -274,7 +275,7 @@ public class EventListener implements Listener
         String name = main.getConfig().getString("DeathTax.GoesTo", null);
         if (name != null) {
             Player pl = event.getEntity();
-            if (Main.getEconomy().has(pl.getName(), 100.00) && isStupidDeath(event.getDeathMessage())) {
+            if (Main.getEconomy().has(pl.getName(), 100.00) && isStupidDeath(pl.getLastDamageCause().getCause())) {
                 double death_tax = Main.getEconomy().getBalance(pl.getName()) * main.getConfig().getDouble("DeathTax.Percentage", 0.04);
                 Main.getEconomy().withdrawPlayer(pl.getName(), death_tax);
                 Main.getEconomy().depositPlayer(name, death_tax);
@@ -286,12 +287,10 @@ public class EventListener implements Listener
         }
     }
     
-    private static boolean isStupidDeath(String death)
+    private static boolean isStupidDeath(DamageCause death)
     {
-        return (death.contains("fell") && !death.contains("world")) ||
-               death.endsWith("drowned") ||
-               death.endsWith("lava") ||
-               death.contains("pricked") ||
-               death.contains("suffocated");
+        return death == DamageCause.FALL || death == DamageCause.DROWNING ||
+               death == DamageCause.LAVA || death == DamageCause.CONTACT ||
+               death == DamageCause.SUFFOCATION;
     }
 }
