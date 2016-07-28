@@ -645,7 +645,7 @@ public final class ShopExecuter
                 actualAmt = clearItems(cmd.getPlayer().getInventory(), entry, desiredAmt);
                 if (actualAmt < desiredAmt) {
                     cmd.getPlayer().sendMessage(
-                        String.format("You did not have enough to sell " + ChatColor.RED + "%d %s" + ChatColor.RESET + ", so only %s will be sold.",
+                        String.format("You did not have enough to sell " + ChatColor.RED + "%d %s" + ChatColor.RESET + ", so only %s were sold.",
                             desiredAmt,
                             desiredAmt == 1 ? "item" : "items",
                             Format.number(actualAmt)
@@ -673,8 +673,10 @@ public final class ShopExecuter
             }
             itemsToSell.setAmount(actualAmt);
         }
-        sell(cmd, itemsToSell,true);
-        cmd.getPlayer().setItemInHand(null);
+        else {
+            cmd.getPlayer().setItemInHand(null);
+        }
+        sell(cmd, itemsToSell, true);
         return true;
     }
         
