@@ -211,62 +211,64 @@ public final class ShopExecuter
             return true;
         }
         
+        if (cmd.getNumArgs() == 1) {
+            cmd.appendArg(String.valueOf(cmd.getPlayer().getItemInHand().getAmount())); // sell in hand if nothing specified
+        }
+        
         BaxEntry entry = cmd.getShop().findEntry(stack);
         if (entry == null) {
             Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SHOPITEM);
             return true;
         }
         
-        if (cmd.getNumArgs() > 1) {
-            int amt;
-            try {
-                amt = Integer.parseInt(cmd.getArg(1));
-            }
-            catch(NumberFormatException ex) {
-                if (cmd.getArg(1).equalsIgnoreCase("all")) {
-                    stack.setAmount(clearItems(cmd.getPlayer().getInventory(), entry));
-                    entry.add(stack.getAmount());
-                    cmd.getPlayer().setItemInHand(null);
-                }
-                else if (cmd.getArg(1).equalsIgnoreCase("most")) {
-                    stack.setAmount(clearItems(cmd.getPlayer().getInventory(), entry) - 1);
-                    entry.add(stack.getAmount());
-                    ItemStack inHand = stack.clone();
-                    inHand.setAmount(1);
-                    cmd.getPlayer().setItemInHand(inHand);
-                }
-                else {
-                    Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "restock amount"));
-                    Main.sendError(cmd.getPlayer(), Help.RESTOCK.toUsageString());
-                    return true;
-                }
-                cmd.getMain().sendInfo(cmd.getPlayer(), String.format("Restocked with %s. The shop now has %s.", 
-                            Format.itemname(stack.getAmount(), ItemNames.getName(entry)),
-                            Format.number(entry.getAmount())
-                            ));
-                return true;
-            }
-            
-            if (cmd.getPlayer().getItemInHand() != null && amt < cmd.getPlayer().getItemInHand().getAmount()) {
-                stack.setAmount(amt);
-                cmd.getPlayer().getItemInHand().setAmount(cmd.getPlayer().getItemInHand().getAmount() - amt); // Don't be hoggin all of it!
-            }
-            else {
-                stack.setAmount(clearItems(cmd.getPlayer().getInventory(), entry, amt)); // Ok, take it all
-            }
-            
-            if (stack.getAmount() < amt) {
-                entry.add(stack.getAmount());
+        int amt;
+        try {
+            amt = Integer.parseInt(cmd.getArg(1));
+            if (amt == cmd.getPlayer().getItemInHand().getAmount()) {
                 cmd.getPlayer().setItemInHand(null);
-                cmd.getMain().sendInfo(cmd.getPlayer(), String.format("Could only restock with " + ChatColor.RED + "%d %s" + ChatColor.RESET + ". The shop now has %s.",
-                    stack.getAmount(), ItemNames.getName(entry),
-                    Format.number(entry.getAmount()))
-                );
-                return true;
             }
         }
+        catch(NumberFormatException ex) {
+            if (cmd.getArg(1).equalsIgnoreCase("all")) {
+                stack.setAmount(clearItems(cmd.getPlayer().getInventory(), entry));
+                entry.add(stack.getAmount());
+                cmd.getPlayer().setItemInHand(null);
+            }
+            else if (cmd.getArg(1).equalsIgnoreCase("most")) {
+                stack.setAmount(clearItems(cmd.getPlayer().getInventory(), entry) - 1);
+                entry.add(stack.getAmount());
+                ItemStack inHand = stack.clone();
+                inHand.setAmount(1);
+                cmd.getPlayer().setItemInHand(inHand);
+            }
+            else {
+                Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "restock amount"));
+                Main.sendError(cmd.getPlayer(), Help.RESTOCK.toUsageString());
+                return true;
+            }
+            cmd.getMain().sendInfo(cmd.getPlayer(), String.format("Restocked with %s. The shop now has %s.", 
+                        Format.itemname(stack.getAmount(), ItemNames.getName(entry)),
+                        Format.number(entry.getAmount())
+                        ));
+            return true;
+        }
+
+        if (cmd.getPlayer().getItemInHand() != null && amt < cmd.getPlayer().getItemInHand().getAmount()) {
+            stack.setAmount(amt);
+            cmd.getPlayer().getItemInHand().setAmount(cmd.getPlayer().getItemInHand().getAmount() - amt); // Don't be hoggin all of it!
+        }
         else {
+            stack.setAmount(clearItems(cmd.getPlayer().getInventory(), entry, amt)); // Ok, take it all
+        }
+
+        if (stack.getAmount() < amt) {
+            entry.add(stack.getAmount());
             cmd.getPlayer().setItemInHand(null);
+            cmd.getMain().sendInfo(cmd.getPlayer(), String.format("Could only restock with " + ChatColor.RED + "%d %s" + ChatColor.RESET + ". The shop now has %s.",
+                stack.getAmount(), ItemNames.getName(entry),
+                Format.number(entry.getAmount()))
+            );
+            return true;
         }
         
         entry.add(stack.getAmount());
@@ -630,7 +632,11 @@ public final class ShopExecuter
             Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_HELDITEM);
             return true;
         }
-
+        
+        if (cmd.getNumArgs() == 1) {
+            cmd.appendArg(String.valueOf(cmd.getPlayer().getItemInHand().getAmount())); // sell in hand if nothing specified
+        }
+        
         BaxShop shop = cmd.getShop();
         BaxEntry entry = shop.findEntry(itemsToSell);
         if (entry == null || entry.refundPrice < 0) {
@@ -638,44 +644,43 @@ public final class ShopExecuter
             return true;
         }
         
-        if (cmd.getNumArgs() > 1) {
-            int actualAmt;
-            try {
-                int desiredAmt = Integer.parseInt(cmd.getArg(1));
-                actualAmt = clearItems(cmd.getPlayer().getInventory(), entry, desiredAmt);
-                if (actualAmt < desiredAmt) {
-                    cmd.getPlayer().sendMessage(
-                        String.format("You did not have enough to sell " + ChatColor.RED + "%d %s" + ChatColor.RESET + ", so only %s were sold.",
-                            desiredAmt,
-                            desiredAmt == 1 ? "item" : "items",
-                            Format.number(actualAmt)
-                        )
-                    );
-                }
-            } 
-            catch (NumberFormatException e) {
-                if (cmd.getArg(1).equalsIgnoreCase("all")) {
-                    actualAmt = clearItems(cmd.getPlayer().getInventory(), entry);
-                }
-                else if (cmd.getArg(1).equalsIgnoreCase("most")) {
-                    actualAmt = clearItems(cmd.getPlayer().getInventory(), entry) - 1;
-                    ItemStack inHand = entry.toItemStack();
-                    inHand.setAmount(1);
-                    cmd.getPlayer().setItemInHand(inHand);
-                    itemsToSell.setAmount(actualAmt);
-                    sell(cmd, itemsToSell,true);
-                    return true;
-                }
-                else {
-                    Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "amount"));
-                    return true;
-                }
+        int actualAmt;
+        try {
+            int desiredAmt = Integer.parseInt(cmd.getArg(1));
+            actualAmt = clearItems(cmd.getPlayer().getInventory(), entry, desiredAmt);
+            if (actualAmt < desiredAmt) {
+                cmd.getPlayer().sendMessage(
+                    String.format("You did not have enough to sell " + ChatColor.RED + "%d %s" + ChatColor.RESET + ", so only %s were sold.",
+                        desiredAmt,
+                        desiredAmt == 1 ? "item" : "items",
+                        Format.number(actualAmt)
+                    )
+                );
             }
-            itemsToSell.setAmount(actualAmt);
+            else if (actualAmt == cmd.getPlayer().getItemInHand().getAmount()) {
+                cmd.getPlayer().setItemInHand(null);
+            }
+        } 
+        catch (NumberFormatException e) {
+            if (cmd.getArg(1).equalsIgnoreCase("all")) {
+                actualAmt = clearItems(cmd.getPlayer().getInventory(), entry);
+            }
+            else if (cmd.getArg(1).equalsIgnoreCase("most")) {
+                actualAmt = clearItems(cmd.getPlayer().getInventory(), entry) - 1;
+                ItemStack inHand = entry.toItemStack();
+                inHand.setAmount(1);
+                cmd.getPlayer().setItemInHand(inHand);
+                itemsToSell.setAmount(actualAmt);
+                sell(cmd, itemsToSell,true);
+                return true;
+            }
+            else {
+                Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "amount"));
+                return true;
+            }
         }
-        else {
-            cmd.getPlayer().setItemInHand(null);
-        }
+        itemsToSell.setAmount(actualAmt);
+        
         sell(cmd, itemsToSell, true);
         return true;
     }
