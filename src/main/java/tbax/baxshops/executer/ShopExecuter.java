@@ -224,18 +224,14 @@ public final class ShopExecuter
         int amt;
         try {
             amt = Integer.parseInt(cmd.getArg(1));
-            if (amt == cmd.getPlayer().getItemInHand().getAmount()) {
-                cmd.getPlayer().setItemInHand(null);
-            }
         }
         catch(NumberFormatException ex) {
             if (cmd.getArg(1).equalsIgnoreCase("all")) {
-                stack.setAmount(clearItems(cmd.getPlayer().getInventory(), entry));
+                stack.setAmount(Main.clearItems(cmd.getPlayer(), entry));
                 entry.add(stack.getAmount());
-                cmd.getPlayer().setItemInHand(null);
             }
             else if (cmd.getArg(1).equalsIgnoreCase("most")) {
-                stack.setAmount(clearItems(cmd.getPlayer().getInventory(), entry) - 1);
+                stack.setAmount(Main.clearItems(cmd.getPlayer(), entry) - 1);
                 entry.add(stack.getAmount());
                 ItemStack inHand = stack.clone();
                 inHand.setAmount(1);
@@ -258,7 +254,7 @@ public final class ShopExecuter
             cmd.getPlayer().getItemInHand().setAmount(cmd.getPlayer().getItemInHand().getAmount() - amt); // Don't be hoggin all of it!
         }
         else {
-            stack.setAmount(clearItems(cmd.getPlayer().getInventory(), entry, amt)); // Ok, take it all
+            stack.setAmount(Main.clearItems(cmd.getPlayer(), entry, amt)); // Ok, take it all
         }
 
         if (stack.getAmount() < amt) {
@@ -279,12 +275,16 @@ public final class ShopExecuter
                 Format.number(entry.getAmount())
             )
         );
+        
+        if (amt >= cmd.getPlayer().getItemInHand().getAmount()) {
+            cmd.getPlayer().setItemInHand(null);
+        }
         return true;
     }
     
     private static void restockAny(Player player, BaxShop shop)
     {
-        ArrayList<ItemStack> restocked = clearItems(player.getInventory(), shop.inventory);
+        ArrayList<ItemStack> restocked = Main.clearItems(player, shop.inventory);
         if (restocked.size() > 0) {
             for(ItemStack itemStack : restocked) {
                 if (itemStack.getAmount() == 0) {
@@ -302,85 +302,6 @@ public final class ShopExecuter
         else {
             player.sendMessage("You did not have any items that could be restocked at this shop.");
         }
-    }
-    
-    /**
-     * Removes a set number of items from an inventory
-     * @param inv
-     * @param entry
-     * @param count
-     * @return 
-     */
-    private static int clearItems(Inventory inv, BaxEntry entry, int count)
-    {
-        int i = 0;
-        int addSize = 0;
-        while (i < inv.getSize()) {
-            if(Main.isItemEqual(inv.getItem(i), entry.getItemStack())) {
-                ItemStack stack = inv.getItem(i);
-                addSize += stack.getAmount();
-                
-                if (addSize >= count) {
-                    int leftover = addSize - count;
-                    if (leftover > 0) {
-                        stack.setAmount(leftover);
-                    }
-                    return count;
-                }
-                else {
-                    inv.clear(i);
-                }
-            }
-            i++;
-        }
-        return addSize;
-    }
-    
-    /**
-     * Removes from an inventory a single item
-     * @param inv
-     * @param entry
-     * @return The number of items that have been removed
-     */
-    private static int clearItems(Inventory inv, BaxEntry entry)
-    {
-        ArrayList<BaxEntry> entries = new ArrayList<>();
-        entries.add(entry);
-        ArrayList<ItemStack> list = clearItems(inv, entries);
-        if (list.isEmpty()) {
-            return 0;
-        }
-        else {
-            return list.get(0).getAmount();
-        }
-    }
-    
-    /**
-     * Removes from an inventory all items in the the List<BaxEntry> 
-     * @param inv
-     * @param entries
-     * @return The items that have been removed. Each ItemStack is a different item type and may exceed the material's max stack.
-     */
-    private static ArrayList<ItemStack> clearItems(Inventory inv, List<BaxEntry> entries)
-    {
-        ArrayList<ItemStack> itemList = new ArrayList<>();
-        for(BaxEntry entry : entries) {
-            int i = 0;
-            int addSize = 0;
-            while (i < inv.getSize()){
-                if(Main.isItemEqual(inv.getItem(i), entry.getItemStack())) {
-                    addSize += inv.getItem(i).getAmount();
-                    inv.clear(i);
-                }
-                i++;
-            }
-            if (addSize > 0) {
-                ItemStack stack = entry.toItemStack();
-                stack.setAmount(addSize);
-                itemList.add(stack);
-            }
-        }
-        return itemList;
     }
     
     public static boolean set(ShopCmd cmd)
@@ -604,7 +525,7 @@ public final class ShopExecuter
         if (!requisite.isValid()) return true;
         
         if (cmd.getNumArgs() > 1 && cmd.getArg(1).equalsIgnoreCase("any")) {
-            ArrayList<ItemStack> toSell = clearItems(cmd.getPlayer().getInventory(), cmd.getShop().inventory);
+            ArrayList<ItemStack> toSell = Main.clearItems(cmd.getPlayer(), cmd.getShop().inventory);
             if (toSell.isEmpty()) {
                 Main.sendError(cmd.getPlayer(), "You did not have any items that could be sold at this shop.");
             }
@@ -647,7 +568,7 @@ public final class ShopExecuter
         int actualAmt;
         try {
             int desiredAmt = Integer.parseInt(cmd.getArg(1));
-            actualAmt = clearItems(cmd.getPlayer().getInventory(), entry, desiredAmt);
+            actualAmt = Main.clearItems(cmd.getPlayer(), entry, desiredAmt);
             if (actualAmt < desiredAmt) {
                 cmd.getPlayer().sendMessage(
                     String.format("You did not have enough to sell " + ChatColor.RED + "%d %s" + ChatColor.RESET + ", so only %s were sold.",
@@ -657,16 +578,13 @@ public final class ShopExecuter
                     )
                 );
             }
-            else if (actualAmt == cmd.getPlayer().getItemInHand().getAmount()) {
-                cmd.getPlayer().setItemInHand(null);
-            }
         } 
         catch (NumberFormatException e) {
             if (cmd.getArg(1).equalsIgnoreCase("all")) {
-                actualAmt = clearItems(cmd.getPlayer().getInventory(), entry);
+                actualAmt = Main.clearItems(cmd.getPlayer(), entry);
             }
             else if (cmd.getArg(1).equalsIgnoreCase("most")) {
-                actualAmt = clearItems(cmd.getPlayer().getInventory(), entry) - 1;
+                actualAmt = Main.clearItems(cmd.getPlayer(), entry) - 1;
                 ItemStack inHand = entry.toItemStack();
                 inHand.setAmount(1);
                 cmd.getPlayer().setItemInHand(inHand);
@@ -680,7 +598,6 @@ public final class ShopExecuter
             }
         }
         itemsToSell.setAmount(actualAmt);
-        
         sell(cmd, itemsToSell, true);
         return true;
     }

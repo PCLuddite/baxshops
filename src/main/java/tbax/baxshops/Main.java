@@ -428,4 +428,116 @@ public final class Main extends JavaPlugin
         sb.append(Format.toAnsiColor(message));
         log.info(sb.toString());
     }
+    
+    /**
+     * Removes a set number of items from an inventory
+     * @param pl
+     * @param entry
+     * @param count
+     * @return 
+     */
+    public static int clearItems(Player pl, BaxEntry entry, int count)
+    {
+        Inventory inv = pl.getInventory();
+        int i = 0;
+        int addSize = 0;
+        
+        while (i < inv.getSize()) {
+        
+            if (pl.getItemInHand() != null) {
+                if (Main.isItemEqual(pl.getItemInHand(), entry.getItemStack())) {
+                    addSize += pl.getItemInHand().getAmount();
+                    if (addSize > count) {
+                        int leftover = addSize - count;
+                        if (leftover > 0) {
+                            pl.getItemInHand().setAmount(leftover);
+                        }
+                        return count;
+                    }
+                    else {
+                        pl.setItemInHand(null);
+                    }
+                }
+            }
+            
+            if(Main.isItemEqual(inv.getItem(i), entry.getItemStack())) {
+                ItemStack stack = inv.getItem(i);
+                addSize += stack.getAmount();
+                
+                if (addSize > count) {
+                    int leftover = addSize - count;
+                    if (leftover > 0) {
+                        stack.setAmount(leftover);
+                    }
+                    return count;
+                }
+                else {
+                    inv.clear(i);
+                }
+            }
+            i++;
+        }
+        return addSize;
+    }
+    
+    /**
+     * Removes from an inventory a single item
+     * @param pl
+     * @param entry
+     * @return The number of items that have been removed
+     */
+    public static int clearItems(Player pl, BaxEntry entry)
+    {
+        ArrayList<BaxEntry> entries = new ArrayList<>();
+        entries.add(entry);
+        ArrayList<ItemStack> list = clearItems(pl, entries);
+        if (list.isEmpty()) {
+            return 0;
+        }
+        else {
+            int num = 0;
+            for(ItemStack stack : list) {
+                num += stack.getAmount();
+            }
+            return num;
+        }
+    }
+    
+    /**
+     * Removes from an inventory all items in the the List&lt;BaxEntry&gt;
+     * @param pl
+     * @param entries
+     * @return The items that have been removed. Each ItemStack is a different item type and may exceed the material's max stack.
+     */
+    public static ArrayList<ItemStack> clearItems(Player pl, List<BaxEntry> entries)
+    {
+        ArrayList<ItemStack> removedItems = new ArrayList<>();
+        Inventory inv = pl.getInventory();
+        for(BaxEntry entry : entries) {
+        
+            int i = 0;
+            int addSize = 0;
+        
+            if (pl.getItemInHand() != null) {
+                if (Main.isItemEqual(pl.getItemInHand(), entry.getItemStack())) {
+                    addSize += pl.getItemInHand().getAmount();
+                    pl.setItemInHand(null);
+                }
+            }
+            
+            while (i < inv.getSize()){
+                if(Main.isItemEqual(inv.getItem(i), entry.getItemStack())) {
+                    addSize += inv.getItem(i).getAmount();
+                    inv.setItem(i, null);
+                }
+                i++;
+            }
+            if (addSize > 0) {
+                ItemStack stack = entry.toItemStack();
+                stack.setAmount(addSize);
+                removedItems.add(stack);
+            }
+        }
+        return removedItems;
+    }
 }
