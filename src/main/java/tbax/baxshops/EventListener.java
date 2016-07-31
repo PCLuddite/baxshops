@@ -291,6 +291,7 @@ public class EventListener implements Listener
     {
         return death == DamageCause.FALL || death == DamageCause.DROWNING ||
                death == DamageCause.LAVA || death == DamageCause.CONTACT ||
+               death == DamageCause.FIRE || death == DamageCause.FIRE_TICK ||
                death == DamageCause.SUFFOCATION;
     }
 }
