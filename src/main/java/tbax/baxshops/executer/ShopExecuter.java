@@ -1,7 +1,7 @@
 /* 
  * The MIT License
  *
- * Copyright © 2013-2015 Timothy Baxendale (pcluddite@hotmail.com) and 
+ * Copyright © 2013-2017 Timothy Baxendale (pcluddite@hotmail.com) and 
  * Copyright © 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -26,11 +26,9 @@ package tbax.baxshops.executer;
 
 import tbax.baxshops.help.Help;
 import java.util.ArrayList;
-import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import tbax.baxshops.*;
 import tbax.baxshops.notification.*;

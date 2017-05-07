@@ -1,7 +1,7 @@
 /* 
  * The MIT License
  *
- * Copyright © 2013-2015 Timothy Baxendale (pcluddite@hotmail.com) and 
+ * Copyright © 2013-2017 Timothy Baxendale (pcluddite@hotmail.com) and 
  * Copyright © 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -275,9 +275,9 @@ public class EventListener implements Listener
         String name = main.getConfig().getString("DeathTax.GoesTo", null);
         if (name != null) {
             Player pl = event.getEntity();
-            if (Main.getEconomy().has(pl.getName(), 100.00) && isStupidDeath(pl.getLastDamageCause().getCause())) {
-                double death_tax = Main.getEconomy().getBalance(pl.getName()) * main.getConfig().getDouble("DeathTax.Percentage", 0.04);
-                Main.getEconomy().withdrawPlayer(pl.getName(), death_tax);
+            if (Main.getEconomy().has(pl, 100.00) && isStupidDeath(pl.getLastDamageCause().getCause())) {
+                double death_tax = Main.getEconomy().getBalance(pl) * main.getConfig().getDouble("DeathTax.Percentage", 0.04);
+                Main.getEconomy().withdrawPlayer(pl, death_tax);
                 Main.getEconomy().depositPlayer(name, death_tax);
                 pl.sendMessage(String.format("You were fined %s for dying.", Format.money(death_tax)));
                 if (main.getConfig().getBoolean("LogNotes", false)) {

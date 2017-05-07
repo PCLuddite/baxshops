@@ -1,7 +1,7 @@
 /* 
  * The MIT License
  *
- * Copyright © 2013-2015 Timothy Baxendale (pcluddite@hotmail.com) and 
+ * Copyright © 2013-2017 Timothy Baxendale (pcluddite@hotmail.com) and 
  * Copyright © 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -153,15 +153,13 @@ public final class Main extends JavaPlugin
             }
             return true;
         }
-        /*
-        exec = new BlacklistExecuter(sender, command, label, args);
-        if (exec.execute(action, this)) {
-            return true;
-        } */
         if (ShopExecuter.execute(cmd)) {
             return true;
         }
         if (ShopCreatorExecuter.execute(cmd)) {
+            return true;
+        }
+        if (MoneyExecuter.execute(cmd)) {
             return true;
         }
         if (FlagCmdExecuter.execute(cmd)) {

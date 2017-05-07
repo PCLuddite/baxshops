@@ -1,7 +1,7 @@
 /* 
  * The MIT License
  *
- * Copyright © 2013-2015 Timothy Baxendale (pcluddite@hotmail.com) and 
+ * Copyright © 2013-2017 Timothy Baxendale (pcluddite@hotmail.com) and 
  * Copyright © 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -35,7 +35,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionData;
 import tbax.baxshops.serialization.ItemNames;
 

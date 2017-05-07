@@ -1,27 +1,30 @@
-0 Protection
-1 Fire Protection
-2 Feather Falling
-3 Blast Protection
-4 Projectile Protection
-5 Respiration
-6 Aqua Affinity
-7 Thorns
-8 Depth Strider
-9 Frost Walker
-16 Sharpness
-17 Smite
-18 Bane of Arthropods
-19 Knockback
-20 Fire Aspect
-21 Looting
-32 Efficiency
-33 Silk Touch
-34 Unbreaking
-35 Fortune
-48 Power
-49 Punch
-50 Flame
-51 Infinity
-61 Luck of the Sea
-62 Lure
-70 Mending
+PROTECTION_ENVIRONMENTAL Protection
+PROTECTION_FIRE Fire Protection
+PROTECTION_FALL Feather Falling
+PROTECTION_EXPLOSIONS Blast Protection
+PROTECTION_PROJECTILE Projectile Protection
+OXYGEN Respiration
+WATER_WORKER Aqua Affinity
+THORNS Thorns
+DEPTH_STRIDER Depth Strider
+FROST_WALKER Frost Walker
+DAMAGE_ALL Sharpness
+DAMAGE_UNDEAD Smite
+DAMAGE_ARTHROPODS Bane of Arthropods
+KNOCKBACK Knockback
+FIRE_ASPECT Fire Aspect
+LOOT_BONUS_MOBS Looting
+DIG_SPEED Efficiency
+SILK_TOUCH Silk Touch
+DURABILITY Unbreaking
+LOOT_BONUS_BLOCKS Fortune
+ARROW_DAMAGE Power
+ARROW_KNOCKBACK Punch
+ARROW_FIRE Flame
+ARROW_INFINITE Infinity
+LUCK Luck of the Sea
+LURE Lure
+MENDING Mending
+VANISHING_CURSE Vanishing Curse
+SWEEPING_EDGE Sweeping Edge
+BINDING_CURSE Binding Curse

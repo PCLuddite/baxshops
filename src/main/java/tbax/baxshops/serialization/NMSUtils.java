@@ -1,11 +1,11 @@
 package tbax.baxshops.serialization;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Horse;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -64,7 +64,7 @@ public class NMSUtils
         Method entity_getHandle = getMethod(entity.getClass(), "getHandle");
         try {
             nms_entity = entity_getHandle.invoke(entity);
-        } catch (Exception e) {
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             e.printStackTrace();
         }
         return nms_entity;
@@ -86,9 +86,7 @@ public class NMSUtils
             Field field = cl.getDeclaredField(field_name);
             field.setAccessible(true);
             return field;
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
+        } catch (SecurityException | NoSuchFieldException e) {
             e.printStackTrace();
         }
         return null;

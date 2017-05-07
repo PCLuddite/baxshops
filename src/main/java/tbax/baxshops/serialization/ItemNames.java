@@ -1,7 +1,7 @@
 /* 
  * The MIT License
  *
- * Copyright © 2013-2015 Timothy Baxendale (pcluddite@hotmail.com) and 
+ * Copyright © 2013-2017 Timothy Baxendale (pcluddite@hotmail.com) and 
  * Copyright © 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -263,7 +263,7 @@ public final class ItemNames
                     continue;
                 }
                 Scanner current = new Scanner(line);
-                int id = current.nextInt();
+                String id = current.next();
                 String name = "";
                 while (current.hasNext()) {
                     name += ' ' + current.next();
@@ -271,7 +271,7 @@ public final class ItemNames
                 if (name.length() == 0) {
                     break;
                 }
-                enchants.put(Enchantment.getById(id), name.substring(1));
+                enchants.put(Enchantment.getByName(id), name.substring(1));
             }
             stream.close();
         }
