@@ -145,13 +145,16 @@ public final class Main extends JavaPlugin
         
         // Sender is not a player
         if (cmd.getPlayer() == null && cmd.getNumArgs() > 0) {
-            if (cmd.getArg(0).equalsIgnoreCase("removeallnotifications")) {
-                state.pending.clear();
+            switch(cmd.getAction()){
+                case "takexp": case "givexp":
+                    break;
+                case "removeallnotifications":
+                    state.pending.clear();
+                    return true;
+                default:
+                    sendError(sender, "/shop commands can only be used by a player");
+                    return true;
             }
-            else {
-                sendError(sender, "/shop commands can only be used by a player");
-            }
-            return true;
         }
         if (ShopExecuter.execute(cmd)) {
             return true;
