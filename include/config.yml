@@ -13,6 +13,9 @@ Backups: 15
 # Show all notifications in log
 LogNotes: false
 
+# How much 1 XP level costs.
+XPConvert: 4.00
+
 # Whether or not to instate a death tax. Stupid deaths will be taxed by percentage
 # and deposited into an account. Uncomment this structure to enable it.
 # DeathTax:

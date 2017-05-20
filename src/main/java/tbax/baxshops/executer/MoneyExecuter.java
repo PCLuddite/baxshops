@@ -85,7 +85,7 @@ public final class MoneyExecuter
         }
         
         Player p;
-        double money = levels * 6d;
+        double money = levels * cmd.getMain().getConfig().getDouble("XPConvert", 4d);;
         p = (Player)sender;
         
         Main.getEconomy().withdrawPlayer(p, money);
@@ -133,7 +133,7 @@ public final class MoneyExecuter
         }
         
         Player p;
-        double money = levels * 6d;
+        double money = levels * cmd.getMain().getConfig().getDouble("XPConvert", 4d);
         p = (Player)sender;
         
         if (levels > p.getLevel()) {
