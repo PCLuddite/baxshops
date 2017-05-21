@@ -65,11 +65,10 @@ public class ShopCreatorExecuter
     {
         CmdRequisite requisite = cmd.getRequirements();
         
-        requisite.hasOwnership();
+        requisite.hasPermissions("shops.owner");
         
-        if (!requisite.isValid()) {
+        if (!requisite.isValid())
             return true;
-        }
         
         boolean admin = cmd.isAdmin();
         if (admin) {
@@ -158,7 +157,7 @@ public class ShopCreatorExecuter
     {
         CmdRequisite requisite = cmd.getRequirements();
         
-        requisite.hasOwnership();
+        requisite.hasPermissions("shops.owner");
         
         if (!requisite.isValid()) return null;
         

@@ -38,10 +38,12 @@ permissions:
         description: Allows you to create and remove shops
         default: op
         children:
-            shops.owner: false
+            shops.owner: true
     shops.owner:
         description: Allows you to create shops for yourself
         default: true
+        children:
+            shops.trader: true
     shops.buy:
         description: Allows you to buy from shops
         default: true
