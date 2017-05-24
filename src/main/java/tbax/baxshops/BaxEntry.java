@@ -198,6 +198,12 @@ public final class BaxEntry implements ConfigurationSerializable
         return (short)Math.round((stack.getDurability() * 100.0f) / ItemNames.getMaxDamage(stack.getType()));
     }
     
+    public void setDamagePercent(short pct)
+    {
+        float damage = (pct / 100f) * ItemNames.getMaxDamage(stack.getType());
+        stack.setDurability((short)damage);
+    }
+    
     /**
      * Tests if the item material is equal, not taking into account the quantity
      * @param item

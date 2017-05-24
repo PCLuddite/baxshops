@@ -71,10 +71,55 @@ public final class ShopExecuter
                 return setindex(cmd);
             case "setamnt":
                 return setamnt(cmd);
+            case "setdur":
+            case "setdurr":
+                return setdur(cmd);
             case "info":
                 return info(cmd);
         }
         return false;
+    }
+    
+    public static boolean setdur(ShopCmd cmd)
+    {
+        CmdRequisite requisite = cmd.getRequirements();
+        
+        requisite.hasAdminRights();
+        requisite.hasArgs(3);
+        
+        if (!requisite.isValid()) return true;
+        
+        BaxShop shop = cmd.getShop();
+        BaxEntry entry;
+        try {
+            int index = Integer.parseInt(cmd.getArg(1));
+            entry = shop.getEntryAt(index - 1);
+        }
+        catch (NumberFormatException e) {
+            entry = ItemNames.getItemFromAlias(cmd.getArg(1), shop, cmd.getSender());
+        }
+        catch (IndexOutOfBoundsException e) {
+            entry = null;
+        }
+
+        if (entry == null) {
+            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SHOPITEM);
+            return true;
+        }
+        short amnt = -1;
+        try {
+            amnt = Short.parseShort(cmd.getArg(2));
+        }
+        catch (NumberFormatException e) {
+            Main.sendError(cmd.getSender(), String.format(Resources.INVALID_DECIMAL, "damage"));
+            return true;
+        }
+        
+        entry.setDamagePercent(amnt);
+        
+        cmd.getMain().sendInfo(cmd.getPlayer(), "The damage has been set.");
+        
+        return true;
     }
     
     public static boolean setamnt(ShopCmd cmd)
