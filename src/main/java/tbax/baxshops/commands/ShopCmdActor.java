@@ -93,6 +93,11 @@ public final class ShopCmdActor
     {
         return sender.hasPermission("shops.admin");
     }
+
+    public boolean hasPermission(String perm)
+    {
+        return sender.hasPermission(perm);
+    }
     
     public ShopSelection getSelection()
     {
@@ -120,8 +125,7 @@ public final class ShopCmdActor
             return Integer.parseInt(args[index]);
         }
         catch(NumberFormatException e) {
-            sendError(errMsg);
-            throw new PrematureAbortException(e);
+            throw new PrematureAbortException(e, errMsg);
         }
     }
 
@@ -136,8 +140,7 @@ public final class ShopCmdActor
             return Double.parseDouble(args[index]);
         }
         catch (NumberFormatException e) {
-            sendError(errMsg);
-            throw new PrematureAbortException(e);
+            throw new PrematureAbortException(e, errMsg);
         }
     }
 
@@ -148,7 +151,9 @@ public final class ShopCmdActor
     
     public BaxShop getShop()
     {
-        return getSelection().shop;
+        if (getSelection() != null)
+            return getSelection().shop;
+        return null;
     }
     
     public void setName(String name)
@@ -198,9 +203,9 @@ public final class ShopCmdActor
         args = newArgs;
     }
 
-    public void sendError(String msg)
+    public void exitError(String msg) throws PrematureAbortException
     {
-        Main.sendError(sender, msg);
+        throw new PrematureAbortException(msg);
     }
 
     @Override

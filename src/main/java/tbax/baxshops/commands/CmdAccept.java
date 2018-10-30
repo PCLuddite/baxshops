@@ -36,13 +36,19 @@ public class CmdAccept extends BaxShopCommand
     }
 
     @Override
-    public boolean requiresSelection()
+    public boolean requiresSelection(ShopCmdActor actor)
     {
         return false;
     }
 
     @Override
-    public boolean requiresOwner()
+    public boolean requiresOwner(ShopCmdActor actor)
+    {
+        return false;
+    }
+
+    @Override
+    public boolean requiresPlayer(ShopCmdActor actor)
     {
         return false;
     }
@@ -52,7 +58,7 @@ public class CmdAccept extends BaxShopCommand
     {
         ArrayDeque<Notification> notifications = Main.getState().getNotifications(actor.getPlayer());
         if (notifications.isEmpty()) {
-            actor.sendError(Resources.NOT_FOUND_NOTE);
+            actor.exitError(Resources.NOT_FOUND_NOTE);
         }
         else {
             Notification n = notifications.getFirst();

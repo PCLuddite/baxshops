@@ -6,8 +6,6 @@ import tbax.baxshops.notification.Notification;
 
 import java.util.ArrayDeque;
 
-import static tbax.baxshops.Resources.NO_PERMISSION;
-
 public class CmdNotifications extends BaxShopCommand
 {
     @Override
@@ -45,15 +43,21 @@ public class CmdNotifications extends BaxShopCommand
     }
 
     @Override
-    public boolean requiresSelection()
+    public boolean requiresSelection(ShopCmdActor actor)
     {
         return false;
     }
 
     @Override
-    public boolean requiresOwner()
+    public boolean requiresOwner(ShopCmdActor actor)
     {
         return false;
+    }
+
+    @Override
+    public boolean requiresPlayer(ShopCmdActor actor)
+    {
+        return true;
     }
 
     @Override
@@ -69,7 +73,7 @@ public class CmdNotifications extends BaxShopCommand
                 actor.getPlayer().sendMessage("Your notifications have been cleared");
             }
             else {
-                actor.sendError(NO_PERMISSION);
+                actor.exitError(Resources.NO_PERMISSION);
             }
         }
     }

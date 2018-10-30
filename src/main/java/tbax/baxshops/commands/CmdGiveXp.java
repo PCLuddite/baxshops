@@ -35,19 +35,19 @@ public class CmdGiveXp extends BaxShopCommand
     }
 
     @Override
-    public boolean requiresSelection()
+    public boolean requiresSelection(ShopCmdActor actor)
     {
         return false;
     }
 
     @Override
-    public boolean requiresPlayer()
+    public boolean requiresPlayer(ShopCmdActor actor)
     {
         return false;
     }
 
     @Override
-    public boolean requiresOwner()
+    public boolean requiresOwner(ShopCmdActor actor)
     {
         return false;
     }
@@ -58,7 +58,7 @@ public class CmdGiveXp extends BaxShopCommand
         int levels = actor.getArgInt(1, String.format(Resources.INVALID_DECIMAL, "number of XP levels"));
 
         if (levels < 0) {
-            Main.sendError(actor.getSender(), String.format(Resources.INVALID_DECIMAL, "number of XP levels"));
+            actor.exitError(String.format(Resources.INVALID_DECIMAL, "number of XP levels"));
         }
         else {
             Player p = actor.getPlayer();

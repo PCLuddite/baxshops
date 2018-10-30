@@ -41,17 +41,23 @@ public class CmdLollipop extends BaxShopCommand
     }
 
     @Override
-    public boolean requiresSelection()
+    public boolean requiresSelection(ShopCmdActor actor)
     {
         return false;
     }
 
     @Override
-    public boolean requiresOwner()
+    public boolean requiresOwner(ShopCmdActor actor)
     {
         return false;
     }
 
+    @Override
+    public boolean requiresPlayer(ShopCmdActor actor)
+    {
+        return false;
+    }
+    
     @Override
     public void onCommand(ShopCmdActor actor) throws PrematureAbortException
     {
@@ -59,6 +65,6 @@ public class CmdLollipop extends BaxShopCommand
         if (actor.getNumArgs() == 3) {
             tastiness = actor.getArgDouble(2, "Invalid tastiness");
         }
-        Main.getState().sendNotification(actor.getArg(1), new LollipopNotification(actor.getPlayer().getName(), tastiness));
+        Main.getState().sendNotification(actor.getArg(1), new LollipopNotification(actor.getSender().getName(), tastiness));
     }
 }

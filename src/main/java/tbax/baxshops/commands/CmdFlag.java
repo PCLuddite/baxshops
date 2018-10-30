@@ -33,13 +33,19 @@ public class CmdFlag extends BaxShopCommand
     }
 
     @Override
-    public boolean requiresSelection()
+    public boolean requiresSelection(ShopCmdActor actor)
     {
         return true;
     }
 
     @Override
-    public boolean requiresOwner()
+    public boolean requiresOwner(ShopCmdActor actor)
+    {
+        return true;
+    }
+
+    @Override
+    public boolean requiresPlayer(ShopCmdActor actor)
     {
         return true;
     }
