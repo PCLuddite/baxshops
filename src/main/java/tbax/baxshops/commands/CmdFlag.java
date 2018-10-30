@@ -1,6 +1,6 @@
 package tbax.baxshops.commands;
 
-import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import tbax.baxshops.help.CommandHelp;
 
 public class CmdFlag extends BaxShopCommand
@@ -27,7 +27,7 @@ public class CmdFlag extends BaxShopCommand
     }
 
     @Override
-    public boolean argsValid(ShopCmdActor actor)
+    public boolean hasValidArgCount(ShopCmdActor actor)
     {
         return false;
     }
@@ -35,13 +35,13 @@ public class CmdFlag extends BaxShopCommand
     @Override
     public boolean requiresSelection()
     {
-        return false;
+        return true;
     }
 
     @Override
     public boolean requiresOwner()
     {
-        return false;
+        return true;
     }
 
     @Override

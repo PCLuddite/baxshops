@@ -35,7 +35,7 @@ public abstract class BaxShopCommand
     public abstract String getName();
     public abstract String getPermission();
     public abstract CommandHelp getHelp();
-    public abstract boolean argsValid(ShopCmdActor actor);
+    public abstract boolean hasValidArgCount(ShopCmdActor actor);
     public abstract boolean requiresSelection();
     public abstract boolean requiresOwner();
     public abstract void onCommand(ShopCmdActor actor) throws PrematureAbortException;
@@ -43,5 +43,9 @@ public abstract class BaxShopCommand
     public String[] getAliases()
     {
         return new String[]{getName()};
+    }
+    public boolean requiresPlayer()
+    {
+        return true;
     }
 }

@@ -53,13 +53,19 @@ public class CmdSave extends BaxShopCommand
     }
 
     @Override
-    public boolean argsValid(ShopCmdActor actor)
+    public boolean hasValidArgCount(ShopCmdActor actor)
     {
         return actor.getNumArgs() == 1;
     }
 
     @Override
     public boolean requiresSelection()
+    {
+        return false;
+    }
+
+    @Override
+    public boolean requiresPlayer()
     {
         return false;
     }

@@ -111,7 +111,7 @@ public final class ShopCmdActor
 
     public int getArgInt(int index) throws PrematureAbortException
     {
-        return getArgInt(index, String.format("Expecting argument %d to be number", index));
+        return getArgInt(index, String.format("Expecting argument %d to be a whole number", index));
     }
 
     public int getArgInt(int index, String errMsg) throws PrematureAbortException
@@ -120,6 +120,22 @@ public final class ShopCmdActor
             return Integer.parseInt(args[index]);
         }
         catch(NumberFormatException e) {
+            sendError(errMsg);
+            throw new PrematureAbortException(e);
+        }
+    }
+
+    public double getArgDouble(int index) throws PrematureAbortException
+    {
+        return getArgDouble(index, String.format("Expecting argument %d to be a number", index));
+    }
+
+    public double getArgDouble(int index, String errMsg) throws  PrematureAbortException
+    {
+        try {
+            return Double.parseDouble(args[index]);
+        }
+        catch (NumberFormatException e) {
             sendError(errMsg);
             throw new PrematureAbortException(e);
         }
