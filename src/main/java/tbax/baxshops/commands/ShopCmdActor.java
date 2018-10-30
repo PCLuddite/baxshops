@@ -178,17 +178,32 @@ public final class ShopCmdActor
      * Appends an argument to the end of the argument list
      * @param arg 
      */
-    public void appendArg(String arg)
+    public void appendArg(Object arg)
     {
         String[] newArgs = new String[args.length + 1];
         System.arraycopy(args, 0, newArgs, 0, args.length);
-        newArgs[args.length] = arg;
+        newArgs[args.length] = arg.toString();
         args = newArgs;
+    }
+
+    public void appendArgs(Object... newArgs)
+    {
+        String[] allArgs = new String[args.length + newArgs.length];
+        System.arraycopy(args, 0, allArgs, 0, args.length);
+        for(int x = 0; x < newArgs.length; ++x) {
+            allArgs[x + args.length] = newArgs[x].toString();
+        }
+        args = allArgs;
     }
 
     public void exitError(String formatStr, Object... args) throws PrematureAbortException
     {
         throw new PrematureAbortException(String.format(formatStr, args));
+    }
+
+    public void sendMessage(String format, Object... args)
+    {
+        getSender().sendMessage(String.format(format, args));
     }
 
     @Override

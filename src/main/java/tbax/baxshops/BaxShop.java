@@ -18,6 +18,8 @@ import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import tbax.baxshops.commands.PrematureAbortException;
+import tbax.baxshops.serialization.ItemNames;
 
 /**
  *
@@ -149,6 +151,19 @@ public final class BaxShop implements ConfigurationSerializable
     public int getInventorySize()
     {
         return inventory.size();
+    }
+
+    public BaxEntry getEntry(String arg) throws PrematureAbortException
+    {
+        try {
+            return getEntryAt(Integer.parseInt(arg) - 1);
+        }
+        catch (NumberFormatException e) {
+            return ItemNames.getItemFromAlias(arg, this);
+        }
+        catch (IndexOutOfBoundsException e) {
+            throw new PrematureAbortException(e, Resources.NOT_FOUND_SHOPITEM);
+        }
     }
 
     /**

@@ -15,6 +15,7 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import tbax.baxshops.commands.PrematureAbortException;
 
 /**
  *
@@ -51,6 +52,17 @@ public final class ItemNames
      */
     public static BaxEntry getItemFromAlias(String input, BaxShop shop, CommandSender sender)
     {
+        try {
+            return getItemFromAlias(input, shop);
+        }
+        catch (PrematureAbortException e) {
+            Main.sendError(sender, e.getMessage());
+        }
+        return  null;
+    }
+
+    public static BaxEntry getItemFromAlias(String input, BaxShop shop) throws PrematureAbortException
+    {
         String[] inputwords = getItemAlias(input);
         HashMap<Double,ArrayList<BaxEntry>> match_percentages = new HashMap<>();
         double highest = 0;
@@ -85,13 +97,11 @@ public final class ItemNames
                     error.append(getName(entry)).append("\n");
                 }
                 error.append("BaxShops isn't sure what you want.");
-                Main.sendError(sender, error.toString());
-                return null;
+                throw new PrematureAbortException(error.toString());
             }
         }
         else {
-            Main.sendError(sender, "No items could be found with that name.");
-            return null;
+            throw new PrematureAbortException("No items could be found with that name.");
         }
     }
     

@@ -8,6 +8,7 @@
 
 package tbax.baxshops;
 
+import tbax.baxshops.commands.PrematureAbortException;
 import tbax.baxshops.help.CommandHelp;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,19 +68,19 @@ public final class BaxEntry implements ConfigurationSerializable
         quantity += amt;
     }
     
-    public void add(String amt)
+    public void add(String amt) throws PrematureAbortException
     {
-        add(convertToInteger(amt));
+        add(argToAmnt(amt));
     }
     
-    public void subtract(int amt)
+    public void subtract(int amt) throws PrematureAbortException
     {
         quantity -= amt;
     }
     
-    public void subtract(String amt)
+    public void subtract(String amt) throws PrematureAbortException
     {
-        subtract(convertToInteger(amt));
+        subtract(argToAmnt(amt));
     }
     
     public void setItem(ItemStack item)
@@ -102,28 +103,33 @@ public final class BaxEntry implements ConfigurationSerializable
         
     /**
      * Converts a string amount keyword ("all","most") or number to an int
-     * @param amount
-     * @return 
+     * @param arg
+     * @return
      */
-    public int convertToInteger(String amount)
+    public int argToAmnt(String arg) throws PrematureAbortException
     {
-        if (amount.equalsIgnoreCase("all")) {
+        if ("all".equalsIgnoreCase(arg)) {
             if (infinite) {
-                return 64;
+                return getItemStack().getMaxStackSize();
             }
             else {
                 return getAmount();
             }
         }
-        else if (amount.equalsIgnoreCase("most")) {
+        else if ("most".equalsIgnoreCase(arg)) {
             if (infinite) {
-                return 64;
+                return getItemStack().getMaxStackSize() - 1;
             }
             else {
                 return getAmount() - 1;
             }
         }
-        return Integer.parseInt(amount);
+        try {
+            return Integer.parseInt(arg);
+        }
+        catch (NumberFormatException e) {
+            throw new PrematureAbortException(e, String.format(Resources.INVALID_DECIMAL, "amount"));
+        }
     }
     
     /**

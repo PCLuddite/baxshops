@@ -447,7 +447,7 @@ public final class ShopExecuter
         } 
         else {
             try {
-                amount = entry.convertToInteger(cmd.getArg(2));
+                amount = entry.argToAmnt(cmd.getArg(2));
             }
             catch (NumberFormatException e) {
                 Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "buy amount"));
@@ -788,7 +788,7 @@ public final class ShopExecuter
         int amt = 1;
         if (cmd.getNumArgs() > 2) {
             try {
-                amt = entry.convertToInteger(cmd.getArg(2));
+                amt = entry.argToAmnt(cmd.getArg(2));
             }
             catch (NumberFormatException e) {
                 Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "amount"));
