@@ -1,3 +1,10 @@
+/** +++====+++
+ *  
+ *  Copyright (c) Timothy Baxendale
+ *
+ *  +++====+++
+**/
+
 package tbax.baxshops.serialization;
 
 import java.lang.reflect.Field;

@@ -1,3 +1,10 @@
+/** +++====+++
+ *  
+ *  Copyright (c) Timothy Baxendale
+ *
+ *  +++====+++
+**/
+
 package tbax.baxshops.commands;
 
 import tbax.baxshops.Format;
