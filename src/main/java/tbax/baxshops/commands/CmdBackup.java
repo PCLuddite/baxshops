@@ -28,9 +28,9 @@ public class CmdBackup extends BaxShopCommand
     }
 
     @Override
-    public boolean argsValid(String[] args)
+    public boolean argsValid(ShopCmdActor actor)
     {
-        return args.length == 1;
+        return actor.getNumArgs() == 1;
     }
 
     @Override

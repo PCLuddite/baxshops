@@ -31,7 +31,17 @@ public class CmdGiveXp extends BaxShopCommand
     @Override
     public boolean argsValid(ShopCmdActor actor)
     {
-        return false;
+        if (actor.getNumArgs() == 2 && actor.isAdmin()) {
+            return true;
+        }
+        else if (actor.getNumArgs() != 1) {
+            return false;
+        }
+        else if (actor.getPlayer() != null) {
+            Main.sendError(actor.getSender(), "This command can only be used by a player");
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -47,42 +57,21 @@ public class CmdGiveXp extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(ShopCmdActor actor)
+    public void onCommand(ShopCmdActor actor) throws PrematureAbortException
     {
-        CommandSender sender;
-        if (cmd.getNumArgs() > 2 && cmd.isAdmin()) {
-            sender = Bukkit.getPlayer(cmd.getArg(2));
-        }
-        else{
-            sender = cmd.getSender();
-        }
-
-        if (!(sender instanceof Player)) {
-            Main.sendError(sender, "This command can only be used by a player");
-            return true;
-        }
-
-        int levels;
-        try {
-            levels = Integer.parseInt(cmd.getArg(1));
-        }
-        catch(NumberFormatException e) {
-            Main.sendError(sender, String.format(Resources.INVALID_DECIMAL, "number of XP levels"));
-            return true;
-        }
+        int levels = actor.getArgInt(1, String.format(Resources.INVALID_DECIMAL, "number of XP levels"));
 
         if (levels < 0) {
-            Main.sendError(sender, String.format(Resources.INVALID_DECIMAL, "number of XP levels"));
-            return true;
+            Main.sendError(actor.getSender(), String.format(Resources.INVALID_DECIMAL, "number of XP levels"));
         }
+        else {
+            Player p = actor.getPlayer();
+            double money = levels * actor.getMain().getConfig().getDouble("XPConvert", 4d);
 
-        Player p;
-        double money = levels * cmd.getMain().getConfig().getDouble("XPConvert", 4d);;
-        p = (Player)sender;
+            Main.getEconomy().withdrawPlayer(p, money);
+            p.setLevel(p.getLevel() + levels);
 
-        Main.getEconomy().withdrawPlayer(p, money);
-        p.setLevel(p.getLevel() + levels);
-
-        p.sendMessage(String.format("You have been charged %s for %s levels", Format.money(money), Format.enchantments(levels + " XP")));
+            p.sendMessage(String.format("You have been charged %s for %s levels", Format.money(money), Format.enchantments(levels + " XP")));
+        }
     }
 }

@@ -38,7 +38,7 @@ public abstract class BaxShopCommand
     public abstract boolean argsValid(ShopCmdActor actor);
     public abstract boolean requiresSelection();
     public abstract boolean requiresOwner();
-    public abstract void onCommand(ShopCmdActor actor);
+    public abstract void onCommand(ShopCmdActor actor) throws PrematureAbortException;
 
     public String[] getAliases()
     {

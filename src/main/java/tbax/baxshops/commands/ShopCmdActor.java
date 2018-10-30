@@ -108,7 +108,23 @@ public final class ShopCmdActor
     {
         return args[index];
     }
-    
+
+    public int getArgInt(int index) throws PrematureAbortException
+    {
+        return getArgInt(index, String.format("Expecting argument %d to be number", index));
+    }
+
+    public int getArgInt(int index, String errMsg) throws PrematureAbortException
+    {
+        try {
+            return Integer.parseInt(args[index]);
+        }
+        catch(NumberFormatException e) {
+            sendError(errMsg);
+            throw new PrematureAbortException(e);
+        }
+    }
+
     public Logger getLogger()
     {
         return main.getLogger();
@@ -164,6 +180,11 @@ public final class ShopCmdActor
         System.arraycopy(args, 0, newArgs, 0, args.length);
         newArgs[args.length] = arg;
         args = newArgs;
+    }
+
+    public void sendError(String msg)
+    {
+        Main.sendError(sender, msg);
     }
 
     @Override

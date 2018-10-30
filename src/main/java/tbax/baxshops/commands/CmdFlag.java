@@ -27,7 +27,7 @@ public class CmdFlag extends BaxShopCommand
     }
 
     @Override
-    public boolean argsValid(String[] args)
+    public boolean argsValid(ShopCmdActor actor)
     {
         return false;
     }

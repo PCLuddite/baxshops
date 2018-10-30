@@ -35,9 +35,9 @@ public class CmdHelp extends BaxShopCommand
     }
 
     @Override
-    public boolean argsValid(String[] args)
+    public boolean argsValid(ShopCmdActor actor)
     {
-        return args.length == 1 || args.length == 2;
+        return actor.getNumArgs() == 1 || actor.getNumArgs() == 2;
     }
 
     @Override
