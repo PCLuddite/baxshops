@@ -63,7 +63,7 @@ public class CmdReject extends BaxShopCommand
     {
         ArrayDeque<Notification> notifications = Main.getState().getNotifications(actor.getPlayer());
         if (notifications.isEmpty()) {
-            actor.sendError(Resources.NOT_FOUND_NOTE);
+            actor.exitError(Resources.NOT_FOUND_NOTE);
         }
         else {
             Notification n = notifications.getFirst();

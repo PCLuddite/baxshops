@@ -59,14 +59,14 @@ public class CmdTakeXp extends BaxShopCommand
         int levels = actor.getArgInt(1, String.format(Resources.INVALID_DECIMAL, "number of XP levels"));
 
         if (levels < 0) {
-            actor.sendError(String.format(Resources.INVALID_DECIMAL, "number of XP levels"));
+            actor.exitError(Resources.INVALID_DECIMAL, "number of XP levels");
         }
         else {
             Player p = actor.getPlayer();
             double money = levels * actor.getMain().getConfig().getDouble("XPConvert", 4d);
 
             if (levels > p.getLevel()) {
-                actor.sendError("You do not have enough experience for this exchange.");
+                actor.exitError("You do not have enough experience for this exchange.");
             } else {
                 Main.getEconomy().depositPlayer(p, money);
                 p.setLevel(p.getLevel() - levels);

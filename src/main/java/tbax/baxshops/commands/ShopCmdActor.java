@@ -203,9 +203,9 @@ public final class ShopCmdActor
         args = newArgs;
     }
 
-    public void exitError(String msg) throws PrematureAbortException
+    public void exitError(String formatStr, Object... args) throws PrematureAbortException
     {
-        throw new PrematureAbortException(msg);
+        throw new PrematureAbortException(String.format(formatStr, args));
     }
 
     @Override

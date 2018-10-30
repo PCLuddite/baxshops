@@ -40,12 +40,6 @@ public class CmdBackup extends BaxShopCommand
     }
 
     @Override
-    public boolean requiresPlayer(ShopCmdActor actor)
-    {
-        return false;
-    }
-
-    @Override
     public boolean requiresOwner(ShopCmdActor actor)
     {
         return false;

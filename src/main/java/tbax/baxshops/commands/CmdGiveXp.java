@@ -35,6 +35,14 @@ public class CmdGiveXp extends BaxShopCommand
     }
 
     @Override
+    public boolean hasPermission(ShopCmdActor actor)
+    {
+        if (actor.getNumArgs() == 3)
+            return actor.isAdmin();
+        return true;
+    }
+
+    @Override
     public boolean requiresSelection(ShopCmdActor actor)
     {
         return false;

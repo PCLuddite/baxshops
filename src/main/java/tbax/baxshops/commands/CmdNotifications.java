@@ -1,6 +1,7 @@
 package tbax.baxshops.commands;
 
 import tbax.baxshops.Main;
+import tbax.baxshops.Resources;
 import tbax.baxshops.help.CommandHelp;
 import tbax.baxshops.notification.Notification;
 
@@ -57,6 +58,13 @@ public class CmdNotifications extends BaxShopCommand
     @Override
     public boolean requiresPlayer(ShopCmdActor actor)
     {
+        return !(actor.getNumArgs() == 2 && actor.getArg(1).equalsIgnoreCase("clear"));
+    }
+
+    @Override
+    public boolean hasPermission(ShopCmdActor actor) {
+        if (actor.getNumArgs() == 2 && actor.getArg(1).equalsIgnoreCase("clear"))
+            return actor.isAdmin();
         return true;
     }
 
@@ -66,14 +74,14 @@ public class CmdNotifications extends BaxShopCommand
         if (actor.getNumArgs() == 1) {
             Main.getState().showNotification(actor.getPlayer());
         }
-        else if (actor.getNumArgs() == 2 && actor.getArg(1).equalsIgnoreCase("clear")) {
-            if (actor.isAdmin()) {
+        else if (actor.getNumArgs() == 2) {
+            if (actor.getArg(1).equalsIgnoreCase("clear")) {
                 ArrayDeque<Notification> notes = Main.getState().getNotifications(actor.getPlayer());
                 notes.clear();
                 actor.getPlayer().sendMessage("Your notifications have been cleared");
             }
             else {
-                actor.exitError(Resources.NO_PERMISSION);
+                actor.exitError("Unknown notification action %s", actor.getArg(2));
             }
         }
     }
