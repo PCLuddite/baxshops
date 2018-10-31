@@ -17,7 +17,6 @@ import org.bukkit.inventory.PlayerInventory;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Main;
 import tbax.baxshops.ShopSelection;
-import tbax.baxshops.executer.CmdRequisite;
 import tbax.baxshops.serialization.StateFile;
 
 import java.util.*;
@@ -35,7 +34,6 @@ public final class ShopCmdActor
     private Player pl;
     private String name;
     private String action;
-    private CmdRequisite requisite;
     
     private String[] args;
     
@@ -84,6 +82,8 @@ public final class ShopCmdActor
 
     public boolean hasPermission(String perm)
     {
+        if (perm == null)
+            return true;
         return sender.hasPermission(perm);
     }
     
@@ -207,10 +207,7 @@ public final class ShopCmdActor
      */
     public void appendArg(Object arg)
     {
-        String[] newArgs = new String[args.length + 1];
-        System.arraycopy(args, 0, newArgs, 0, args.length);
-        newArgs[args.length] = arg.toString();
-        args = newArgs;
+        appendArgs(arg);
     }
 
     public void appendArgs(Object... newArgs)
@@ -243,15 +240,16 @@ public final class ShopCmdActor
         List<ItemStack> ret = new ArrayList<>();
         int qty;
         if ("all".equalsIgnoreCase(arg)) {
+            ItemStack clone = item.clone();
             qty = takeFromInventory(item, Integer.MAX_VALUE);
-            ret.add(item.clone());
-            ret.get(0).setAmount(qty);
+            clone.setAmount(qty);
+            ret.add(clone);
         }
         else if ("most".equalsIgnoreCase(arg)) {
 
         }
         else if ("any".equalsIgnoreCase(arg)) {
-
+            
         }
         else {
             int amt;
@@ -261,11 +259,19 @@ public final class ShopCmdActor
             catch (NumberFormatException e) {
                 throw new PrematureAbortException(e, String.format("%s is not a valid quantity", arg));
             }
+            ItemStack clone = item.clone();
             qty = takeFromInventory(item, amt);
-            ret.add(item.clone());
-            ret.get(0).setAmount(qty);
+            clone.setAmount(qty);
+            ret.add(clone);
         }
         return ret;
+    }
+
+    private List<ItemStack> takeAnyFromInventory()
+    {
+        ItemStack curr;
+        PlayerInventory inv = pl.getInventory();
+        
     }
 
     public int takeFromInventory(ItemStack item, int amt)

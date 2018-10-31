@@ -29,17 +29,62 @@ public final class BaxShop implements ConfigurationSerializable
 {
     public static final int ITEMS_PER_PAGE = 7;
     
-    public long id = -1;
-    public String owner;
-    public ArrayList<Location> locations = new ArrayList<>();
-    public ArrayList<BaxEntry> inventory = new ArrayList<>();
+    private long id = -1;
+    private String owner;
+    private final ArrayList<Location> locations = new ArrayList<>();
+    private final ArrayList<BaxEntry> inventory = new ArrayList<>();
     // shop flags
-    public boolean infinite = false;
-    public boolean sellToShop = false;
-    public boolean notify = true;
-    public boolean buyRequests = false;
-    public boolean sellRequests = true;
+    private boolean infinite = false;
+    private boolean sellToShop = false;
+    private boolean notify = true;
+    private boolean buyRequests = false;
+    private boolean sellRequests = true;
     
+    public boolean hasFlagNotify()
+    {
+        
+    }
+
+    public void setFlagSellToShop(boolean flag)
+    {
+        sellToShop = flag;
+    }
+
+    public boolean hasFlagSellToShop()
+    {
+        return sellToShop;
+    }
+
+    public void setFlagInfinite(boolean flag)
+    {
+        infinite = flag;
+    }
+
+    public boolean hasFlagInfinite()
+    {
+        return infinite;
+    }
+
+    public long getId()
+    {
+        return id;
+    }
+
+    public void setId(long newId)
+    {
+        id = newId;
+    }
+
+    public String getOwner()
+    {
+        return owner;
+    }
+
+    public void setOwner(String newOwner)
+    {
+        owner = newOwner;
+    }
+
     public BaxShop()
     {
     }

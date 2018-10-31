@@ -30,10 +30,10 @@ import tbax.baxshops.serialization.ItemNames;
 public final class BaxEntry implements ConfigurationSerializable
 {
     private ItemStack stack;
-    public double retailPrice = -1;
-    public double refundPrice = -1;
-    public boolean infinite = false;
-    public int quantity = 0;
+    private BigDecimal retailPrice = new BigDecimal(-1);
+    private BigDecimal refundPrice = new BigDecimal(-1);
+    private boolean infinite = false;
+    private int quantity = 0;
     
     public BaxEntry()
     {
@@ -42,14 +42,34 @@ public final class BaxEntry implements ConfigurationSerializable
     public BaxEntry(Map<String, Object> args)
     {
         quantity = (int)args.get("quantity");
-        retailPrice = (double)args.get("retailPrice");
-        refundPrice = (double)args.get("refundPrice");
+        retailPrice = new BigDecimal((double)args.get("retailPrice"));
+        refundPrice = new BigDecimal((double)args.get("refundPrice"));
         stack = ItemStack.deserialize((Map)args.get("stack"));
     }
     
     public BaxEntry(ItemStack item)
     {
         setItem(item);
+    }
+
+    public BigDecimal getRetailPrice()
+    {
+        return retailPrice;
+    }
+
+    public void setRetailPrice(BigDecimal price)
+    {
+        retailPrice = price;
+    }
+
+    public BigDecimal getRefundPrice()
+    {
+        return refundPrice;
+    }
+
+    public void setRefundPrice(BigDecimal price)
+    {
+        refundPrice = price;
     }
         
     public Material getType()
@@ -73,7 +93,7 @@ public final class BaxEntry implements ConfigurationSerializable
         add(argToAmnt(amt));
     }
     
-    public void subtract(int amt) throws PrematureAbortException
+    public void subtract(int amt)
     {
         quantity -= amt;
     }
@@ -202,12 +222,7 @@ public final class BaxEntry implements ConfigurationSerializable
     public boolean isItemEqual(ItemStack item)
     {
         assert item != null;
-        if (item.getAmount() > 0) {
-            stack.setAmount(item.getAmount());
-        }
-        boolean is_equal = stack.equals(item);
-        stack.setAmount(1);
-        return is_equal;
+        return stack.isSimilar(item);
     }
     
     public BaxEntry clone() // decided not to declare throwing CloneNotSupported. Java exceptions are a nightmare. 11/10/15
@@ -365,8 +380,8 @@ public final class BaxEntry implements ConfigurationSerializable
     {
         HashMap<String, Object> map = new HashMap<>();
         map.put("quantity", quantity);
-        map.put("retailPrice", retailPrice);
-        map.put("refundPrice", refundPrice);
+        map.put("retailPrice", retailPrice.doubleValue());
+        map.put("refundPrice", refundPrice.doubleValue());
         map.put("stack", stack.serialize());
         return map;
     }
