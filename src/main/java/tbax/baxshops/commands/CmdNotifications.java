@@ -69,6 +69,12 @@ public class CmdNotifications extends BaxShopCommand
     }
 
     @Override
+    public boolean requiresItemInHand(ShopCmdActor actor)
+    {
+        return false;
+    }
+
+    @Override
     public boolean hasPermission(ShopCmdActor actor) {
         if (actor.getNumArgs() == 2 && actor.getArg(1).equalsIgnoreCase("clear"))
             return actor.isAdmin();

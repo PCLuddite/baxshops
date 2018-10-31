@@ -61,6 +61,12 @@ public class CmdAccept extends BaxShopCommand
     }
 
     @Override
+    public boolean requiresItemInHand(ShopCmdActor actor)
+    {
+        return false;
+    }
+
+    @Override
     public void onCommand(ShopCmdActor actor) throws PrematureAbortException
     {
         ArrayDeque<Notification> notifications = Main.getState().getNotifications(actor.getPlayer());

@@ -64,7 +64,13 @@ public class CmdLollipop extends BaxShopCommand
     {
         return false;
     }
-    
+
+    @Override
+    public boolean requiresItemInHand(ShopCmdActor actor)
+    {
+        return false;
+    }
+
     @Override
     public void onCommand(ShopCmdActor actor) throws PrematureAbortException
     {

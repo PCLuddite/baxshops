@@ -59,6 +59,12 @@ public class CmdBackup extends BaxShopCommand
     }
 
     @Override
+    public boolean requiresItemInHand(ShopCmdActor actor)
+    {
+        return false;
+    }
+
+    @Override
     public void onCommand(ShopCmdActor actor)
     {
         Main.getState().backup();

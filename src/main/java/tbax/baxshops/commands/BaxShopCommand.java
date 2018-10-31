@@ -22,6 +22,7 @@ public abstract class BaxShopCommand
     public abstract boolean requiresSelection(ShopCmdActor actor);
     public abstract boolean requiresOwner(ShopCmdActor actor);
     public abstract boolean requiresPlayer(ShopCmdActor actor);
+    public abstract boolean requiresItemInHand(ShopCmdActor actor);
     public abstract void onCommand(ShopCmdActor actor) throws PrematureAbortException;
 
     public String[] getAliases()

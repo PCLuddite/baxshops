@@ -9,13 +9,18 @@ package tbax.baxshops.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Main;
 import tbax.baxshops.ShopSelection;
 import tbax.baxshops.executer.CmdRequisite;
 import tbax.baxshops.serialization.StateFile;
 
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -112,6 +117,28 @@ public final class ShopCmdActor
         }
     }
 
+    public boolean isArgInt(int index)
+    {
+        try {
+            Integer.parseInt(args[index]);
+            return true;
+        }
+        catch(NumberFormatException e) {
+            return false;
+        }
+    }
+
+    public boolean isArgDouble(int index)
+    {
+        try {
+            Double.parseDouble(args[index]);
+            return true;
+        }
+        catch(NumberFormatException e) {
+            return false;
+        }
+    }
+
     public double getArgDouble(int index) throws PrematureAbortException
     {
         return getArgDouble(index, String.format("Expecting argument %d to be a number", index));
@@ -204,6 +231,72 @@ public final class ShopCmdActor
     public void sendMessage(String format, Object... args)
     {
         getSender().sendMessage(String.format(format, args));
+    }
+
+    public ItemStack getItemInHand()
+    {
+        return pl.getInventory().getItemInMainHand();
+    }
+
+    public List<ItemStack> takeArgFromInventory(ItemStack item, String arg) throws PrematureAbortException
+    {
+        List<ItemStack> ret = new ArrayList<>();
+        int qty;
+        if ("all".equalsIgnoreCase(arg)) {
+            qty = takeFromInventory(item, Integer.MAX_VALUE);
+            ret.add(item.clone());
+            ret.get(0).setAmount(qty);
+        }
+        else if ("most".equalsIgnoreCase(arg)) {
+
+        }
+        else if ("any".equalsIgnoreCase(arg)) {
+
+        }
+        else {
+            int amt;
+            try {
+                amt = Integer.parseInt(arg);
+            }
+            catch (NumberFormatException e) {
+                throw new PrematureAbortException(e, String.format("%s is not a valid quantity", arg));
+            }
+            qty = takeFromInventory(item, amt);
+            ret.add(item.clone());
+            ret.get(0).setAmount(qty);
+        }
+        return ret;
+    }
+
+    public int takeFromInventory(ItemStack item, int amt)
+    {
+        PlayerInventory inv = pl.getInventory();
+        ItemStack hand = getItemInHand();
+        int qty = 0;
+        if (hand != null && hand.isSimilar(item)) {
+            qty += hand.getAmount();
+            if (hand.getAmount() < amt) {
+                hand.setAmount(hand.getAmount() - amt);
+            }
+            else {
+                inv.setItemInMainHand(null);
+            }
+        }
+
+        for(int x = 0; x < inv.getSize() && qty < amt; ++x) {
+            ItemStack other = inv.getItem(x);
+            if (other != null && other.isSimilar(item)) {
+                qty += other.getAmount();
+                if (other.getAmount() < amt) {
+                    other.setAmount(other.getAmount() - amt);
+                }
+                else {
+                    inv.setItem(x, null);
+                }
+            }
+        }
+
+        return qty;
     }
 
     @Override

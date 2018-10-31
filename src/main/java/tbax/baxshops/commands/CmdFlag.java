@@ -58,6 +58,12 @@ public class CmdFlag extends BaxShopCommand
     }
 
     @Override
+    public boolean requiresItemInHand(ShopCmdActor actor)
+    {
+        return false;
+    }
+
+    @Override
     public void onCommand(ShopCmdActor actor)
     {
 

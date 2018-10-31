@@ -68,6 +68,12 @@ public class CmdGiveXp extends BaxShopCommand
     }
 
     @Override
+    public boolean requiresItemInHand(ShopCmdActor actor)
+    {
+        return false;
+    }
+
+    @Override
     public void onCommand(ShopCmdActor actor) throws PrematureAbortException
     {
         int levels = actor.getArgInt(1, String.format(Resources.INVALID_DECIMAL, "number of XP levels"));
