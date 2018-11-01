@@ -50,7 +50,7 @@ public class CmdBuy extends BaxShopCommand
     public boolean hasValidArgCount(ShopCmdActor actor)
     {
         if (actor.getNumArgs() == 1) {
-            return actor.getShop() != null && actor.getShop().inventory.size() == 1;
+            return actor.getShop() != null && actor.getShop().getInventorySize() == 1;
         }
         return actor.getNumArgs() == 2 || actor.getNumArgs() == 3;
     }
@@ -99,12 +99,12 @@ public class CmdBuy extends BaxShopCommand
         else if (amount < 0) {
             actor.exitError(Resources.INVALID_DECIMAL, "buy amount");
         }
-        else if (entry.getAmount() < amount && !shop.infinite) {
+        else if (entry.getAmount() < amount && !shop.hasFlagInfinite()) {
             actor.exitError(Resources.NO_SUPPLIES);
         }
 
         String itemName = ItemNames.getName(entry);
-        double price = Main.roundTwoPlaces(amount * entry.retailPrice);
+        double price = Main.roundTwoPlaces(amount * entry.getRetailPrice());
 
         if (!Main.getEconomy().has(actor.getPlayer(), price)) {
             actor.exitError(Resources.NO_MONEY);
@@ -113,13 +113,13 @@ public class CmdBuy extends BaxShopCommand
         BaxEntry purchased = entry.clone();
         purchased.setAmount(amount);
 
-        if (shop.buyRequests) {
-            if (!shop.infinite) {
+        if (shop.hasFlagBuyRequests()) {
+            if (!shop.hasFlagInfinite()) {
                 entry.subtract(amount);
             }
 
-            BuyRequest request = new BuyRequest(shop.id, actor.getPlayer().getName(), shop.owner, purchased);
-            Main.getState().sendNotification(shop.owner, request);
+            BuyRequest request = new BuyRequest(shop.getId(), actor.getPlayer().getName(), shop.getOwner(), purchased);
+            Main.getState().sendNotification(shop.getOwner(), request);
             actor.sendMessage("Your request to buy %s for %s has been sent.", Format.itemname(purchased.getAmount(), itemName), Format.money(price));
             actor.sendMessage("This request will expire in %s days.", Format.number(Resources.EXPIRE_TIME_DAYS));
         }
@@ -129,23 +129,23 @@ public class CmdBuy extends BaxShopCommand
                 if (overflow == amount) {
                     actor.exitError(Resources.NO_ROOM);
                 }
-                price = Main.roundTwoPlaces((amount - overflow) * entry.retailPrice);
+                price = Main.roundTwoPlaces((amount - overflow) * entry.getRetailPrice());
                 actor.sendMessage(Resources.SOME_ROOM + " " + Resources.CHARGED_MSG, amount - overflow, itemName, Format.money(price));
             }
             else {
                 actor.sendMessage("You bought %s for %s.", Format.itemname(amount, itemName), Format.money(price));
             }
             Main.getEconomy().withdrawPlayer(actor.getPlayer(), price);
-            if (!shop.infinite) {
+            if (!shop.hasFlagInfinite()) {
                 entry.subtract(amount - overflow);
             }
 
-            Main.getEconomy().depositPlayer(shop.owner, price);
+            Main.getEconomy().depositPlayer(shop.getOwner(), price);
 
             purchased.subtract(overflow);
 
             actor.sendMessage(Resources.CURRENT_BALANCE, Format.money2(Main.getEconomy().getBalance(actor.getPlayer())));
-            Main.getState().sendNotification(shop.owner, new BuyNotification(actor.getPlayer().getName(), shop.owner, purchased));
+            Main.getState().sendNotification(shop.getOwner(), new BuyNotification(actor.getPlayer().getName(), shop.getOwner(), purchased));
         }
     }
 }

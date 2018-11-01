@@ -54,6 +54,12 @@ public class CmdSave extends BaxShopCommand
     }
 
     @Override
+    public boolean requiresItemInHand(ShopCmdActor actor)
+    {
+        return false;
+    }
+
+    @Override
     public boolean requiresOwner(ShopCmdActor actor)
     {
         return false;

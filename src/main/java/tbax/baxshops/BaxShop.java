@@ -33,36 +33,25 @@ public final class BaxShop implements ConfigurationSerializable
     private String owner;
     private final ArrayList<Location> locations = new ArrayList<>();
     private final ArrayList<BaxEntry> inventory = new ArrayList<>();
-    // shop flags
-    private boolean infinite = false;
-    private boolean sellToShop = false;
-    private boolean notify = true;
-    private boolean buyRequests = false;
-    private boolean sellRequests = true;
+
+    private long flags = BaxShopFlag.NOTIFY | BaxShopFlag.SELL_REQUESTS;
+
+    public BaxShop()
+    {
+    }
     
-    public boolean hasFlagNotify()
+    public BaxShop(Map<String, Object> args)
     {
-        
-    }
-
-    public void setFlagSellToShop(boolean flag)
-    {
-        sellToShop = flag;
-    }
-
-    public boolean hasFlagSellToShop()
-    {
-        return sellToShop;
-    }
-
-    public void setFlagInfinite(boolean flag)
-    {
-        infinite = flag;
-    }
-
-    public boolean hasFlagInfinite()
-    {
-        return infinite;
+        id = (long)args.get("id");
+        owner = (String)args.get("owner");
+        flags = (long)args.get("flags");
+        inventory.addAll((ArrayList)args.get("inventory"));
+        locations.addAll((ArrayList)args.get("locations"));
+        if (hasFlagInfinite()) {
+            for(BaxEntry entry : inventory) {
+                entry.setInfinite(hasFlagInfinite());
+            }
+        }
     }
 
     public long getId()
@@ -84,43 +73,6 @@ public final class BaxShop implements ConfigurationSerializable
     {
         owner = newOwner;
     }
-
-    public BaxShop()
-    {
-    }
-    
-    public BaxShop(Map<String, Object> args)
-    {
-        if (args.get("id") instanceof Integer) {
-            id = (int)args.get("id");
-        }
-        else {
-            id = (long)args.get("id");
-        }
-        if (args.containsKey("buyRequests")) {
-            buyRequests = (boolean)args.get("buyRequests");
-        }
-        if (args.containsKey("infinite")) {
-            infinite = (boolean)args.get("infinite");
-        }
-        if (args.containsKey("notify")) {
-            notify = (boolean)args.get("notify");
-        }
-        if (args.containsKey("sellRequests")) {
-            sellRequests = (boolean)args.get("sellRequests");
-        }
-        if (args.containsKey("sellToShop")) {
-            sellToShop = (boolean)args.get("sellToShop");
-        }
-        owner = (String)args.get("owner");
-        inventory = (ArrayList)args.get("inventory");
-        locations = (ArrayList)args.get("locations");
-        if (infinite) {
-            for(BaxEntry entry : inventory) {
-                entry.infinite = infinite;
-            }
-        }
-    }
     
     public int getIndexOfEntry(BaxEntry entry)
     {
@@ -132,11 +84,8 @@ public final class BaxShop implements ConfigurationSerializable
         return -1; // not found
     }
     
-    public ArrayList<Location> getLocations()
+    public List<Location> getLocations()
     {
-        if (locations == null) {
-            locations = new ArrayList<>();
-        }
         return locations;
     }
     
@@ -313,28 +262,64 @@ public final class BaxShop implements ConfigurationSerializable
         }
         return lines;
     }
-    
+
+    public void setFlagBuyRequests(boolean value)
+    {
+        flags = BaxShopFlag.setFlag(flags, BaxShopFlag.BUY_REQUESTS, value);
+    }
+
+    public boolean hasFlagBuyRequests()
+    {
+        return BaxShopFlag.hasFlag(flags, BaxShopFlag.BUY_REQUESTS);
+    }
+
+    public void setFlagSellRequests(boolean value)
+    {
+        flags = BaxShopFlag.setFlag(flags, BaxShopFlag.SELL_REQUESTS, value);
+    }
+
+    public boolean hasFlagSellRequests()
+    {
+        return BaxShopFlag.hasFlag(flags, BaxShopFlag.SELL_REQUESTS);
+    }
+
+    public void setFlagNotify(boolean value)
+    {
+        flags = BaxShopFlag.setFlag(flags, BaxShopFlag.NOTIFY, value);
+    }
+
+    public boolean hasFlagNotify()
+    {
+        return BaxShopFlag.hasFlag(flags, BaxShopFlag.NOTIFY);
+    }
+
+    public void setFlagSellToShop(boolean value)
+    {
+        flags = BaxShopFlag.setFlag(flags, BaxShopFlag.SELL_TO_SHOP, value);
+    }
+
+    public boolean hasFlagSellToShop()
+    {
+        return BaxShopFlag.hasFlag(flags, BaxShopFlag.SELL_TO_SHOP);
+    }
+
+    public void setFlagInfinite(boolean value)
+    {
+        flags = BaxShopFlag.setFlag(flags, BaxShopFlag.INFINITE, value);
+    }
+
+    public boolean hasFlagInfinite()
+    {
+        return BaxShopFlag.hasFlag(flags, BaxShopFlag.INFINITE);
+    }
+
     @Override
     public Map<String, Object> serialize()
     {
         HashMap<String, Object> map = new HashMap<>();
         map.put("id", id);
         map.put("owner", owner);
-        if (infinite) {
-            map.put("infinite", infinite);
-        }
-        if (!notify) {
-            map.put("notify", notify);
-        }
-        if (sellToShop) {
-            map.put("sellToShop", sellToShop);   
-        }
-        if (buyRequests) {
-            map.put("buyRequests", buyRequests);
-        }
-        if (!sellRequests) {
-            map.put("sellRequests", sellRequests);
-        }
+        map.put("flag", flags);
         map.put("inventory", inventory);
         map.put("locations", locations);
         return map;

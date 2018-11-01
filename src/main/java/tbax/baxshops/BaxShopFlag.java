@@ -7,24 +7,37 @@
 
 package tbax.baxshops;
 
-public enum BaxShopFlag
+public final class BaxShopFlag
 {
-    None(1<<0),
-    Infinite(1<<2),
-    SellToShop(1<<3),
-    Notify(1<<4),
-    BuyRequests(1<<5),
-    SellRequests(1<<6);
+    public static final long NONE = 0;              // 000000
+    public static final long INFINITE = 1<<1;       // 000001
+    public static final long SELL_TO_SHOP = 1<<2;   // 000010
+    public static final long NOTIFY = 1<<3;         // 000100
+    public static final long BUY_REQUESTS = 1<<4;   // 001000
+    public static final long SELL_REQUESTS = 1<<5;  // 010000
 
-    private final long flag;
-
-    BaxShopFlag(long flag)
+    public static boolean hasFlag(long lng, long flag)
     {
-        this.flag = flag;
+        return (lng & flag) == flag;
     }
 
-    public long getFlag()
+    public static long setFlag(long lng, long flag, boolean value)
     {
-        return flag;
+        if (value) {
+            return setFlag(lng, flag);
+        }
+        else {
+            return unsetFlag(lng, flag);
+        }
+    }
+
+    public static long setFlag(long lng, long flag)
+    {
+        return lng | flag;
+    }
+
+    public static long unsetFlag(long lng, long flag)
+    {
+        return lng & (~flag);
     }
 }

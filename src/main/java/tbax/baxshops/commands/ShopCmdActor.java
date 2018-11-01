@@ -200,7 +200,6 @@ public final class ShopCmdActor
         args = newArgs;
     }
     
-    
     /**
      * Appends an argument to the end of the argument list
      * @param arg 
@@ -314,5 +313,10 @@ public final class ShopCmdActor
             sb.append(s);
         }
         return sb.toString();
+    }
+
+    public void setArg(int index, Object value)
+    {
+        args[index] = value.toString();
     }
 }

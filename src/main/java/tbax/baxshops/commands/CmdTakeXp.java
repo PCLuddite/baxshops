@@ -7,13 +7,10 @@
 
 package tbax.baxshops.commands;
 
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import tbax.baxshops.Format;
 import tbax.baxshops.Main;
 import tbax.baxshops.Resources;
-import tbax.baxshops.executer.CmdRequisite;
 import tbax.baxshops.help.CommandHelp;
 
 public class CmdTakeXp extends BaxShopCommand
@@ -50,6 +47,12 @@ public class CmdTakeXp extends BaxShopCommand
 
     @Override
     public boolean requiresPlayer(ShopCmdActor actor)
+    {
+        return false;
+    }
+
+    @Override
+    public boolean requiresItemInHand(ShopCmdActor actor)
     {
         return false;
     }

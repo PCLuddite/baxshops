@@ -92,15 +92,15 @@ public class CmdAdd extends BaxShopCommand
 
         BaxEntry newEntry = new BaxEntry();
         newEntry.setItem(stack);
-        newEntry.retailPrice = retailAmount;
-        newEntry.refundPrice = refundAmount;
-        if (actor.getShop().infinite) {
-            newEntry.infinite = true;
+        newEntry.setRetailPrice(retailAmount);
+        newEntry.setRefundPrice(refundAmount);
+        if (actor.getShop().hasFlagInfinite()) {
+            newEntry.setInfinite(true);
         }
         actor.getShop().addEntry(newEntry);
         actor.sendMessage("A new entry for %s was added to the shop.", Format.itemname(newEntry.getAmount(), ItemNames.getName(newEntry)));
-        if (!actor.getShop().infinite) {
-            actor.getPlayer().setItemInHand(null);
+        if (!actor.getShop().hasFlagInfinite()) {
+            actor.getPlayer().getInventory().setItemInMainHand(null);
         }
     }
 }

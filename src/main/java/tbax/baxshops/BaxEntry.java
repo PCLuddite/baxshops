@@ -10,6 +10,8 @@ package tbax.baxshops;
 
 import tbax.baxshops.commands.PrematureAbortException;
 import tbax.baxshops.help.CommandHelp;
+
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.ChatColor;
@@ -30,8 +32,8 @@ import tbax.baxshops.serialization.ItemNames;
 public final class BaxEntry implements ConfigurationSerializable
 {
     private ItemStack stack;
-    private BigDecimal retailPrice = new BigDecimal(-1);
-    private BigDecimal refundPrice = new BigDecimal(-1);
+    private double retailPrice = -1;
+    private double refundPrice = -1;
     private boolean infinite = false;
     private int quantity = 0;
     
@@ -42,8 +44,8 @@ public final class BaxEntry implements ConfigurationSerializable
     public BaxEntry(Map<String, Object> args)
     {
         quantity = (int)args.get("quantity");
-        retailPrice = new BigDecimal((double)args.get("retailPrice"));
-        refundPrice = new BigDecimal((double)args.get("refundPrice"));
+        retailPrice = (double)args.get("retailPrice");
+        refundPrice = (double) args.get("refundPrice");
         stack = ItemStack.deserialize((Map)args.get("stack"));
     }
     
@@ -52,22 +54,32 @@ public final class BaxEntry implements ConfigurationSerializable
         setItem(item);
     }
 
-    public BigDecimal getRetailPrice()
+    public void setInfinite(boolean value)
+    {
+        infinite = value;
+    }
+
+    public boolean isInfinite()
+    {
+        return infinite;
+    }
+
+    public double getRetailPrice()
     {
         return retailPrice;
     }
 
-    public void setRetailPrice(BigDecimal price)
+    public void setRetailPrice(double price)
     {
         retailPrice = price;
     }
 
-    public BigDecimal getRefundPrice()
+    public double getRefundPrice()
     {
         return refundPrice;
     }
 
-    public void setRefundPrice(BigDecimal price)
+    public void setRefundPrice(double price)
     {
         refundPrice = price;
     }
@@ -76,13 +88,7 @@ public final class BaxEntry implements ConfigurationSerializable
     {
         return stack.getType();
     }
-    
-    @Deprecated
-    public int getTypeId()
-    {
-        return stack.getTypeId();
-    }
-    
+
     public void add(int amt)
     {
         quantity += amt;
@@ -380,8 +386,8 @@ public final class BaxEntry implements ConfigurationSerializable
     {
         HashMap<String, Object> map = new HashMap<>();
         map.put("quantity", quantity);
-        map.put("retailPrice", retailPrice.doubleValue());
-        map.put("refundPrice", refundPrice.doubleValue());
+        map.put("retailPrice", retailPrice);
+        map.put("refundPrice", refundPrice);
         map.put("stack", stack.serialize());
         return map;
     }
