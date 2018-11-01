@@ -16,32 +16,81 @@ import org.bukkit.command.CommandSender;
  * A ShopSelection represents a user's selected shop.
  * Shops are selected by right- or left-clicking on them in-game.
  */
-public final class ShopSelection {
-    public ShopSelection() { }
-
+public final class ShopSelection
+{
     /**
      * The selected shop
      */
-    public BaxShop shop;
+    private BaxShop shop;
+
     /**
      * The displayed inventory page number
      */
-    public int page = 0;
+    private int page = 0;
+
     /**
      * Whether the player who selected this shop owns it 
      */
-    public boolean isOwner;
+    private boolean owner;
 
-    public Location location;
+    private Location location;
+
+    public ShopSelection(Location shopLoc, Player p, BaxShop selected)
+    {
+        owner = (p.getName().equalsIgnoreCase(shop.getOwner()));
+        location = shopLoc;
+        shop = selected;
+    }
+
+    public void setLocation(Location value)
+    {
+        location = value;
+    }
+
+    public Location getLocation()
+    {
+        return location;
+    }
+
+    public boolean isOwner()
+    {
+        return owner;
+    }
+
+    public void setIsOwner(boolean value)
+    {
+        owner = value;
+    }
+
+    public void setShop(BaxShop value)
+    {
+        shop = value;
+    }
+
+    public BaxShop getShop()
+    {
+        return shop;
+    }
+
+    public void setPage(int value)
+    {
+        page = value;
+    }
+
+    public int getPage()
+    {
+        return page;
+    }
         
-    public void showListing(CommandSender sender) {
+    public void showListing(CommandSender sender)
+    {
         int pages = shop.getPages();
         if (pages == 0) {
             sender.sendMessage(CommandHelp.header("Empty"));
             sender.sendMessage("");
             sender.sendMessage("This shop has no items");
             int stop = BaxShop.ITEMS_PER_PAGE - 2;
-            if (isOwner) {
+            if (owner) {
                 sender.sendMessage("Use /shop add to add items");
                 stop--;
             }
