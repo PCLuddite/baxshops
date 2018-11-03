@@ -110,52 +110,49 @@ public final class Main extends JavaPlugin
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
-        ShopCmd cmd = new ShopCmd(this, sender, command, args);
+        ShopCmdActor actor = new ShopCmdActor(this, sender, command, args);
         
-        if (cmd.getName().equalsIgnoreCase("buy") || cmd.getName().equalsIgnoreCase("sell") ||
-            cmd.getName().equalsIgnoreCase("restock") || cmd.getName().equalsIgnoreCase("restockall")) {
-            cmd.insertAction(cmd.getName());
-            cmd.setName("shop");
+        if (actor.nameIs("buy", "sell", "restock", "restockall")) {
+            actor.insertAction(actor.getName());
+            actor.setName("shop");
         }
         
-        if (cmd.getNumArgs() == 0) {
+        if (actor.getNumArgs() == 0) {
            Help.showHelp(sender);
-           return true;
+           return false;
         }
-        
-        if (MainExecuter.execute(cmd)){
-            return true;
-        }     
-        
-        // Sender is not a player
-        if (cmd.getPlayer() == null && cmd.getNumArgs() > 0) {
-            switch(cmd.getAction()){
-                case "takexp": case "givexp":
-                    break;
-                case "removeallnotifications":
-                    state.pending.clear();
-                    return true;
-                default:
-                    sendError(sender, "/shop commands can only be used by a player");
-                    return true;
+
+        BaxShopCommand cmd = findCommand(actor.getAction());
+        if (cmd == null) {
+            actor.sendMessage(Resources.INVALID_SHOP_ACTION, actor.getAction());
+        }
+        if (!cmd.hasValidArgCount(actor)) {
+            actor.sendMessage(cmd.getHelp().toString());
+        }
+        else if(!cmd.hasPermission(actor)) {
+            actor.sendError(Resources.NO_PREMISSION);
+        }
+        else if(cmd.requiresPlayer(actor) && actor.getPlayer() == null) {
+            actor.sendError("You must be a player to use this command.");
+        }
+        else if(cmd.requiresSelection(actor) && actor.getSelection() == null) {
+            actor.sendError(Resources.NOT_FOUND_SELECTED);
+        }
+        else if(cmd.requiresOwner(actor) && !actor.isOwner()) {
+            actor.sendError("You must be the owner of the shop to use /shop %s", cmd.getAction());
+        }
+        else if(cmd.requiresItemInHand(actor) && actor.getItemInHand() == null) {
+            actor.
+        }
+        else {
+            try {
+            }
+            catch(PrematureAbortException e) {
+                actor.sendError(e.getMessage());
             }
         }
-        if (ShopExecuter.execute(cmd)) {
-            return true;
-        }
-        if (ShopCreatorExecuter.execute(cmd)) {
-            return true;
-        }
-        if (MoneyExecuter.execute(cmd)) {
-            return true;
-        }
-        if (FlagCmdExecuter.execute(cmd)) {
-            return true;
-        }
-        if (RefCmdExecuter.execute(cmd)) {
-            return true;
-        }
-        return NotifyExecuter.execute(cmd);
+        
+        return true;
     }
     
     public static StateFile getState()
@@ -191,51 +188,6 @@ public final class Main extends JavaPlugin
 
         econ = rsp.getProvider();
         return econ != null;
-    }
-    
-    /**
-     * Informs a player of an error.
-     *
-     * @param sender the player
-     * @param message the error message
-     */
-    public static void sendError(CommandSender sender, String message)
-    {
-        if (sender != null) {
-            sender.sendMessage(ChatColor.RED + message);
-        }
-    }
-    
-    /**
-     * Warns a player with a message
-     *
-     * @param sender the player
-     * @param message the error message
-     */
-    public static void sendWarning(CommandSender sender, String message)
-    {
-        if (sender != null) {
-            sender.sendMessage(ChatColor.GOLD + message);
-        }
-    }
-    
-    /**
-     * Tests if two items are equal, ignoring quantities
-     * @param stack1
-     * @param stack2
-     * @return 
-     */
-    public static boolean isItemEqual(ItemStack stack1, ItemStack stack2)
-    {
-        if (stack1 == null || stack2 == null) {
-            return stack1 == stack2;
-        }
-        // cloning may be ineficient, but I don't want to modify the original objects
-        ItemStack cloned1 = stack1.clone(),
-                  cloned2 = stack2.clone();
-        cloned1.setAmount(1);
-        cloned2.setAmount(1);
-        return cloned1.equals(cloned2);
     }
     
     /**

@@ -87,6 +87,15 @@ public final class ShopCmdActor
         return sender.hasPermission(perm);
     }
     
+    public boolean nameIs(String... names)
+    {
+        for(int x = 0; x < names.length; ++x) {
+            if (name.equalsIgnoreCase(names[x]))
+                return true;
+        }
+        return false;
+    }
+
     public ShopSelection getSelection()
     {
         return main.selectedShops.get(pl);
@@ -219,9 +228,19 @@ public final class ShopCmdActor
         args = allArgs;
     }
 
-    public void exitError(String formatStr, Object... args) throws PrematureAbortException
+    public void exitError(String format, Object... args) throws PrematureAbortException
     {
-        throw new PrematureAbortException(String.format(formatStr, args));
+        throw new PrematureAbortException(String.format(format, args));
+    }
+
+    public void sendError(String format, Object... args)
+    {
+        getSender().sendMessage(ChatColor.RED + String.format(format, args));
+    }
+
+    public void sendWarning(String format, Object... args)
+    {
+        getSender().sendMessage(ChatColor.GOLD + String.format(format, args));
     }
 
     public void sendMessage(String format, Object... args)
