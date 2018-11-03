@@ -10,9 +10,7 @@ package tbax.baxshops.commands;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import tbax.baxshops.BaxShop;
@@ -95,7 +93,7 @@ public final class ShopCmdActor
         return sender.hasPermission(perm);
     }
     
-    public boolean nameIs(String... names)
+    public boolean cmdIs(String... names)
     {
         for(int x = 0; x < names.length; ++x) {
             if (name.equalsIgnoreCase(names[x]))
@@ -183,12 +181,12 @@ public final class ShopCmdActor
         return null;
     }
     
-    public void setName(String name)
+    public void setCmdName(String name)
     {
         this.name = name;
     }
     
-    public String getName()
+    public String getCmdName()
     {
         return name;
     }

@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
@@ -28,7 +27,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import tbax.baxshops.executer.*;
 import tbax.baxshops.notification.*;
 import tbax.baxshops.serialization.StateFile;
 
@@ -143,9 +141,9 @@ public final class Main extends JavaPlugin
     {
         ShopCmdActor actor = new ShopCmdActor(this, sender, command, args);
         
-        if (actor.nameIs("buy", "sell", "restock", "restockall")) {
-            actor.insertAction(actor.getName());
-            actor.setName("shop");
+        if (actor.cmdIs("buy", "sell", "restock", "restockall")) {
+            actor.insertAction(actor.getCmdName());
+            actor.setCmdName("shop");
         }
         
         if (actor.getNumArgs() == 0) {
