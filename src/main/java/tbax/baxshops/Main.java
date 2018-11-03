@@ -8,10 +8,12 @@
 
 package tbax.baxshops;
 
+import tbax.baxshops.commands.*;
 import tbax.baxshops.help.Help;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.ChatColor;
@@ -42,6 +44,8 @@ public final class Main extends JavaPlugin
      * The file and text resources for the plugin
      */
     private static StateFile state;
+
+    private static final Map<String, BaxShopCommand> commands = initCommands();
     
     /**
      * The Vault economy
@@ -107,6 +111,33 @@ public final class Main extends JavaPlugin
         state.saveAll();
     }
 
+    private static Map<String, BaxShopCommand> initCommands()
+    {
+        List<BaxShopCommand> cmds = new ArrayList<>();
+        cmds.add(new CmdAccept());
+        cmds.add(new CmdAdd());
+        cmds.add(new CmdBackup());
+        cmds.add(new CmdBuy());
+        cmds.add(new CmdFlag());
+        cmds.add(new CmdGiveXp());
+        cmds.add(new CmdHelp());
+        cmds.add(new CmdLollipop());
+        cmds.add(new CmdNotifications());
+        cmds.add(new CmdReject());
+        cmds.add(new CmdRestock());
+        cmds.add(new CmdSave());
+        cmds.add(new CmdSkip());
+        cmds.add(new CmdTakeXp());
+
+        HashMap<String, BaxShopCommand> map = new HashMap<>();
+        for(BaxShopCommand cmd : cmds) {
+            for(String alias : cmd.getAliases()) {
+                map.put(alias, cmd);
+            }
+        }
+        return map;
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
@@ -122,7 +153,7 @@ public final class Main extends JavaPlugin
            return false;
         }
 
-        BaxShopCommand cmd = findCommand(actor.getAction());
+        BaxShopCommand cmd = commands.get(actor.getAction());
         if (cmd == null) {
             actor.sendMessage(Resources.INVALID_SHOP_ACTION, actor.getAction());
         }
@@ -130,7 +161,7 @@ public final class Main extends JavaPlugin
             actor.sendMessage(cmd.getHelp().toString());
         }
         else if(!cmd.hasPermission(actor)) {
-            actor.sendError(Resources.NO_PREMISSION);
+            actor.sendError(Resources.NO_PERMISSION);
         }
         else if(cmd.requiresPlayer(actor) && actor.getPlayer() == null) {
             actor.sendError("You must be a player to use this command.");
@@ -139,13 +170,14 @@ public final class Main extends JavaPlugin
             actor.sendError(Resources.NOT_FOUND_SELECTED);
         }
         else if(cmd.requiresOwner(actor) && !actor.isOwner()) {
-            actor.sendError("You must be the owner of the shop to use /shop %s", cmd.getAction());
+            actor.sendError("You must be the owner of the shop to use /shop %s", actor.getAction());
         }
         else if(cmd.requiresItemInHand(actor) && actor.getItemInHand() == null) {
-            actor.
+            actor.sendError(Resources.NOT_FOUND_HELDITEM);
         }
         else {
             try {
+                cmd.onCommand(actor);
             }
             catch(PrematureAbortException e) {
                 actor.sendError(e.getMessage());
@@ -213,7 +245,7 @@ public final class Main extends JavaPlugin
                     return true;
                 }
             }
-            else if (isItemEqual(curr, item)) {
+            else if (curr.isSimilar(item)) {
                 quantity -= max - curr.getAmount();
                 if (quantity <= 0) {
                     return true;
@@ -381,23 +413,23 @@ public final class Main extends JavaPlugin
         
         while (i < inv.getSize()) {
         
-            if (pl.getItemInHand() != null) {
-                if (Main.isItemEqual(pl.getItemInHand(), entry.getItemStack())) {
-                    addSize += pl.getItemInHand().getAmount();
+            if (pl.getInventory().getItemInMainHand() != null) {
+                if (pl.getInventory().getItemInMainHand().isSimilar(entry.getItemStack())) {
+                    addSize += pl.getInventory().getItemInMainHand().getAmount();
                     if (addSize > count) {
                         int leftover = addSize - count;
                         if (leftover > 0) {
-                            pl.getItemInHand().setAmount(leftover);
+                            pl.getInventory().getItemInMainHand().setAmount(leftover);
                         }
                         return count;
                     }
                     else {
-                        pl.setItemInHand(null);
+                        pl.getInventory().setItemInMainHand(null);
                     }
                 }
             }
             
-            if(Main.isItemEqual(inv.getItem(i), entry.getItemStack())) {
+            if(inv.getItem(i).isSimilar(entry.getItemStack())) {
                 ItemStack stack = inv.getItem(i);
                 addSize += stack.getAmount();
                 
@@ -455,15 +487,15 @@ public final class Main extends JavaPlugin
             int i = 0;
             int addSize = 0;
         
-            if (pl.getItemInHand() != null) {
-                if (Main.isItemEqual(pl.getItemInHand(), entry.getItemStack())) {
-                    addSize += pl.getItemInHand().getAmount();
-                    pl.setItemInHand(null);
+            if (pl.getInventory().getItemInMainHand() != null) {
+                if (pl.getInventory().getItemInMainHand().isSimilar(entry.getItemStack())) {
+                    addSize += pl.getInventory().getItemInMainHand().getAmount();
+                    pl.getInventory().setItemInMainHand(null);
                 }
             }
             
             while (i < inv.getSize()){
-                if(Main.isItemEqual(inv.getItem(i), entry.getItemStack())) {
+                if(inv.getItem(i).isSimilar(entry.getItemStack())) {
                     addSize += inv.getItem(i).getAmount();
                     inv.setItem(i, null);
                 }

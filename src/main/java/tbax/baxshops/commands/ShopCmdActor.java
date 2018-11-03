@@ -7,6 +7,7 @@
 
 package tbax.baxshops.commands;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Item;
@@ -78,6 +79,13 @@ public final class ShopCmdActor
     public boolean isAdmin()
     {
         return sender.hasPermission("shops.admin");
+    }
+
+    public boolean isOwner()
+    {
+        return getShop() != null
+                && pl != null
+                && pl.getName().equalsIgnoreCase(getShop().getOwner());
     }
 
     public boolean hasPermission(String perm)
@@ -171,7 +179,7 @@ public final class ShopCmdActor
     public BaxShop getShop()
     {
         if (getSelection() != null)
-            return getSelection().shop;
+            return getSelection().getShop();
         return null;
     }
     
