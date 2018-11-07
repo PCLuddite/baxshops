@@ -76,7 +76,7 @@ public class CmdSkip extends BaxShopCommand
     {
         ArrayDeque<Notification> notifications = Main.getState().getNotifications(actor.getPlayer());
         if (notifications.isEmpty()) {
-            Main.sendError(actor.getPlayer(), Resources.NOT_FOUND_NOTE);
+            actor.sendError(Resources.NOT_FOUND_NOTE);
         }
         else {
             notifications.add(notifications.removeFirst());

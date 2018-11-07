@@ -12,8 +12,6 @@ import tbax.baxshops.Resources;
 import tbax.baxshops.help.CommandHelp;
 import tbax.baxshops.help.Help;
 
-import static tbax.baxshops.Main.sendError;
-
 public class CmdHelp extends BaxShopCommand
 {
     @Override
@@ -78,7 +76,7 @@ public class CmdHelp extends BaxShopCommand
             String helpCmd = actor.getArg(1);
             CommandHelp h = Help.getHelpFor(helpCmd);
             if (h == null) {
-                sendError(actor.getSender(), String.format(Resources.INVALID_SHOP_ACTION, helpCmd));
+                actor.sendError(Resources.INVALID_SHOP_ACTION, helpCmd);
             }
             else {
                 actor.getSender().sendMessage(h.toHelpString());
