@@ -1,15 +1,11 @@
 package tbax.baxshops.commands;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
-import tbax.baxshops.Main;
 import tbax.baxshops.Resources;
-import tbax.baxshops.executer.CmdRequisite;
 import tbax.baxshops.help.CommandHelp;
-import tbax.baxshops.help.Help;
 import tbax.baxshops.serialization.ItemNames;
 
 import java.util.List;
@@ -67,7 +63,7 @@ public class CmdRestock extends BaxShopCommand
     @Override
     public boolean requiresItemInHand(ShopCmdActor actor)
     {
-        return actor.isArgInt(1) || actor.getArg(1).equalsIgnoreCase("most");
+        return actor.getNumArgs() < 3 || actor.isArgInt(1) || actor.getArg(1).equalsIgnoreCase("all") || actor.getArg(1).equalsIgnoreCase("most");
     }
 
     @Override

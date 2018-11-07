@@ -128,7 +128,7 @@ public final class ShopCmdActor
             return Integer.parseInt(args[index]);
         }
         catch(NumberFormatException e) {
-            throw new PrematureAbortException(e, errMsg);
+            throw new CommandErrorException(e, errMsg);
         }
     }
 
@@ -154,6 +154,16 @@ public final class ShopCmdActor
         }
     }
 
+    public double getArgRoundedDouble(int index) throws PrematureAbortException
+    {
+        return Math.round(100d * getArgDouble(index)) / 100d;
+    }
+
+    public double getArgRoundedDouble(int index, String errMsg) throws PrematureAbortException
+    {
+        return Math.round(100d * getArgDouble(index, errMsg)) / 100d;
+    }
+
     public double getArgDouble(int index) throws PrematureAbortException
     {
         return getArgDouble(index, String.format("Expecting argument %d to be a number", index));
@@ -165,8 +175,24 @@ public final class ShopCmdActor
             return Double.parseDouble(args[index]);
         }
         catch (NumberFormatException e) {
-            throw new PrematureAbortException(e, errMsg);
+            throw new CommandErrorException(e, errMsg);
         }
+    }
+
+    public boolean getArgBoolean(int index) throws PrematureAbortException
+    {
+        return getArgBoolean(index, String.format("Expecting argument %d to be yes/no", index));
+    }
+
+    public boolean getArgBoolean(int index, String errMsg) throws PrematureAbortException
+    {
+        if ("true".equalsIgnoreCase(args[index]) || "false".equalsIgnoreCase(args[index]))
+            return "true".equalsIgnoreCase(args[index]);
+        if ("yes".equalsIgnoreCase(args[index]) || "no".equalsIgnoreCase(args[index]))
+            return "yes".equalsIgnoreCase(args[index]);
+        if ("1".equalsIgnoreCase(args[index]) || "0".equalsIgnoreCase(args[index]))
+            return "1".equalsIgnoreCase(args[index]);
+        throw new CommandErrorException(errMsg);
     }
 
     public Logger getLogger()
@@ -236,7 +262,7 @@ public final class ShopCmdActor
 
     public void exitError(String format, Object... args) throws PrematureAbortException
     {
-        throw new PrematureAbortException(String.format(format, args));
+        throw new CommandErrorException(String.format(format, args));
     }
 
     public void sendError(String format, Object... args)
@@ -281,7 +307,7 @@ public final class ShopCmdActor
                 amt = Integer.parseInt(arg);
             }
             catch (NumberFormatException e) {
-                throw new PrematureAbortException(e, String.format("%s is not a valid quantity", arg));
+                throw new CommandErrorException(e, String.format("%s is not a valid quantity", arg));
             }
             ItemStack clone = item.clone();
             qty = takeFromInventory(item, amt);
@@ -295,7 +321,7 @@ public final class ShopCmdActor
     {
         ItemStack curr;
         PlayerInventory inv = pl.getInventory();
-        
+
     }
 
     public int takeFromInventory(ItemStack item, int amt)

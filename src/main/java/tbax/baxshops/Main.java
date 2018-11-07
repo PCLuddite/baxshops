@@ -145,10 +145,15 @@ public final class Main extends JavaPlugin
             actor.insertAction(actor.getCmdName());
             actor.setCmdName("shop");
         }
-        
+
+        return runCommand(actor);
+    }
+
+    public static boolean runCommand(ShopCmdActor actor)
+    {
         if (actor.getNumArgs() == 0) {
-           Help.showHelp(sender);
-           return false;
+            Help.showHelp(actor.getSender());
+            return false;
         }
 
         BaxShopCommand cmd = commands.get(actor.getAction());
@@ -181,7 +186,6 @@ public final class Main extends JavaPlugin
                 actor.sendError(e.getMessage());
             }
         }
-        
         return true;
     }
     
