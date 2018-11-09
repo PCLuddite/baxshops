@@ -189,7 +189,7 @@ public final class Main extends JavaPlugin
                 cmd.onCommand(actor);
             }
             catch(PrematureAbortException e) {
-                actor.sendError(e.getMessage());
+                actor.getSender().sendMessage(e.getMessage());
             }
         }
         return true;

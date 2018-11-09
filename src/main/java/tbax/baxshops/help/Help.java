@@ -138,7 +138,7 @@ public final class Help
             if (sender.hasPermission("shops.admin")) {
                 sender.sendMessage(HelpIndex.SELECTED_ADMIN);
             }
-            if (selection.isOwner) {
+            if (selection.isOwner()) {
                 sender.sendMessage(HelpIndex.OWNER);
             }
             else {

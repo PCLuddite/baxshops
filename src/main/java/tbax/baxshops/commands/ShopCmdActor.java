@@ -262,7 +262,7 @@ public final class ShopCmdActor
 
     public void exitError(String format, Object... args) throws PrematureAbortException
     {
-        throw new CommandErrorException(String.format(format, args));
+        throw new CommandErrorException(ChatColor.RED + String.format(format, args));
     }
 
     public void sendError(String format, Object... args)
@@ -275,9 +275,34 @@ public final class ShopCmdActor
         getSender().sendMessage(ChatColor.GOLD + String.format(format, args));
     }
 
+    public void exitWarning(String format, Object... args) throws PrematureAbortException
+    {
+        throw new CommandErrorException(ChatColor.GOLD + String.format(format, args));
+    }
+
     public void sendMessage(String format, Object... args)
     {
         getSender().sendMessage(String.format(format, args));
+    }
+
+    public void exitMessage(String format, Object... args) throws PrematureAbortException
+    {
+        throw new CommandErrorException(String.format(format, args));
+    }
+
+    public void logError(String format, Object... args)
+    {
+        getLogger().severe(String.format(format, args));
+    }
+
+    public void logWarning(String format, Object... args)
+    {
+        getLogger().warning(String.format(format, args));
+    }
+
+    public void logMessage(String format, Object... args)
+    {
+        getLogger().info(String.format(format, args));
     }
 
     public ItemStack getItemInHand()
