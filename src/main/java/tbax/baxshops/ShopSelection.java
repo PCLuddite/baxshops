@@ -8,6 +8,8 @@
 
 package tbax.baxshops;
 
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import tbax.baxshops.help.CommandHelp;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -109,5 +111,20 @@ public final class ShopSelection
         for (; i < stop; i++) {
             sender.sendMessage("");
         }
+    }
+
+    public String[] getSignText()
+    {
+        return shop.getSignText(location);
+    }
+
+    public String getSignTextString()
+    {
+        return shop.getSignTextString(location);
+    }
+
+    public ItemStack toItem()
+    {
+        return shop.toItem(location);
     }
 }

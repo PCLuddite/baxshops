@@ -8,13 +8,12 @@
 
 package tbax.baxshops;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -206,12 +205,17 @@ public final class BaxShop implements ConfigurationSerializable
         }
         return null;
     }
-    
-    public ItemStack toItem(List<String> sign)
+
+    public ItemStack toItem(int index)
+    {
+        return toItem(locations.get(index));
+    }
+
+    public ItemStack toItem(Location loc)
     {
         ItemStack item = new ItemStack(Material.SIGN, 1);
         ArrayList<String> lore = new ArrayList<>();
-        for(String line : sign) {
+        for(String line : getSignText(loc)) {
             lore.add(ChatColor.BLUE + line);
         }
         lore.add(ChatColor.GRAY + "ID: " + id);
@@ -311,6 +315,71 @@ public final class BaxShop implements ConfigurationSerializable
     public boolean hasFlagInfinite()
     {
         return BaxShopFlag.hasFlag(flags, BaxShopFlag.INFINITE);
+    }
+
+    public String getSignTextString(int index)
+    {
+        return getSignTextString(locations.get(index));
+    }
+
+    public String getSignTextString(Location loc)
+    {
+        try {
+            Sign sign = (Sign)loc.getBlock().getState();
+            StringBuilder ret = new StringBuilder();
+            for(int line = 0; line < 4; line++) {
+                if (!sign.getLine(line).isEmpty()) {
+                    if (ret.length() > 0 && ret.charAt(ret.length() - 1) != '|') {
+                        ret.append("|");
+                    }
+                    ret.append(sign.getLine(line));
+                }
+            }
+            if (ret.length() == 0) {
+                return ChatColor.RED + "<NO TEXT>";
+            }
+            else {
+                return ChatColor.GREEN.toString() + (ret.length() > 15 ? ret.toString().substring(0,14) : ret);
+            }
+        }
+        catch(Exception ex){
+            return ChatColor.RED + Resources.ERROR_INLINE;
+        }
+    }
+
+    public String[] getSignText(int index)
+    {
+        return getSignText(locations.get(index));
+    }
+
+    public String[] getSignText(Location loc)
+    {
+        try {
+            Sign sign = (Sign) loc.getBlock().getState();
+            String[] allLines = sign.getLines();
+            int emptylines = 0;
+            for(int i = allLines.length - 1; i >= 0; --i) {
+                if (allLines[i].isEmpty()) {
+                    ++emptylines;
+                }
+                else {
+                    break;
+                }
+            }
+            if (emptylines == allLines.length) {
+                return new String[0];
+            }
+            int start = 0, end = allLines.length - 1;
+
+            while(allLines[start].isEmpty())
+                ++start;
+            while(allLines[end].isEmpty())
+                --end;
+
+            return Arrays.copyOfRange(allLines, start, end);
+        } catch (ClassCastException e) {
+            return new String[0];
+        }
     }
 
     @Override

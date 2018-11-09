@@ -116,16 +116,22 @@ public final class Main extends JavaPlugin
         cmds.add(new CmdAdd());
         cmds.add(new CmdBackup());
         cmds.add(new CmdBuy());
+        cmds.add(new CmdCopy());
+        cmds.add(new CmdCreate());
         cmds.add(new CmdFlag());
         cmds.add(new CmdGiveXp());
         cmds.add(new CmdHelp());
+        cmds.add(new CmdList());
         cmds.add(new CmdLollipop());
         cmds.add(new CmdNotifications());
         cmds.add(new CmdReject());
         cmds.add(new CmdRestock());
         cmds.add(new CmdSave());
+        cmds.add(new CmdSell());
+        cmds.add(new CmdSet());
         cmds.add(new CmdSkip());
         cmds.add(new CmdTakeXp());
+        cmds.add(new CmdTeleport());
 
         HashMap<String, BaxShopCommand> map = new HashMap<>();
         for(BaxShopCommand cmd : cmds) {
@@ -332,37 +338,6 @@ public final class Main extends JavaPlugin
     {
         if (selectedShops.get(pl) != null) {
             selectedShops.remove(pl);
-        }
-    }
-
-    public static List<String> getSignText(Location loc)
-    {
-        try {
-            Sign sign = (Sign) loc.getBlock().getState();
-            String[] allLines = sign.getLines();
-            int emptylines = 0;
-            for(int i = allLines.length - 1; i >= 0; --i) {
-                if (allLines[i].isEmpty()) {
-                    ++emptylines;
-                }
-                else {
-                    break;
-                }
-            }
-            if (emptylines == allLines.length) {
-                return new ArrayList<>();
-            }
-            int start = 0;
-            while(allLines[start].isEmpty()) {
-                ++start;
-            }
-            ArrayList<String> lines = new ArrayList<>();
-            for(int i = start; i < allLines.length - emptylines; ++i) {
-                lines.add(allLines[i]);
-            }
-            return lines;
-        } catch (ClassCastException e) {
-            return new ArrayList<>();
         }
     }
     
