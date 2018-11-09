@@ -111,35 +111,30 @@ public final class Main extends JavaPlugin
 
     private static Map<String, BaxShopCommand> initCommands()
     {
-        List<BaxShopCommand> cmds = new ArrayList<>();
-        cmds.add(new CmdAccept());
-        cmds.add(new CmdAdd());
-        cmds.add(new CmdBackup());
-        cmds.add(new CmdBuy());
-        cmds.add(new CmdCopy());
-        cmds.add(new CmdCreate());
-        cmds.add(new CmdFlag());
-        cmds.add(new CmdGiveXp());
-        cmds.add(new CmdHelp());
-        cmds.add(new CmdList());
-        cmds.add(new CmdLollipop());
-        cmds.add(new CmdNotifications());
-        cmds.add(new CmdReject());
-        cmds.add(new CmdRestock());
-        cmds.add(new CmdSave());
-        cmds.add(new CmdSell());
-        cmds.add(new CmdSet());
-        cmds.add(new CmdSkip());
-        cmds.add(new CmdTakeXp());
-        cmds.add(new CmdTeleport());
-
-        HashMap<String, BaxShopCommand> map = new HashMap<>();
-        for(BaxShopCommand cmd : cmds) {
-            for(String alias : cmd.getAliases()) {
-                map.put(alias, cmd);
-            }
-        }
-        return map;
+		return BaxShopCommand.createCommandMap(
+			CmdAccept.class,
+			CmdAdd.class,
+			CmdAccept.class,
+			CmdAdd.class,
+			CmdBackup.class,
+			CmdBuy.class,
+			CmdCopy.class,
+			CmdCreate.class,
+			CmdFlag.class,
+			CmdGiveXp.class,
+			CmdHelp.class,
+			CmdList.class,
+			CmdLollipop.class,
+			CmdNotifications.class,
+			CmdReject.class,
+			CmdRestock.class,
+			CmdSave.class,
+			CmdSell.class,
+			CmdSet.class,
+			CmdSkip.class,
+			CmdTakeXp.class,
+			CmdTeleport.class
+		);
     }
 
     @Override

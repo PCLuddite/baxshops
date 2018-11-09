@@ -36,4 +36,21 @@ public abstract class BaxShopCommand
             return true;
         return actor.hasPermission(getPermission());
     }
+	
+	public static Map<String, BaxShopCommand> createCommandMap(Class<? extends BaxShopCommand>... classes)
+	{
+		Map<String, BaxShopCommand> map = new HashMap<String, BaxShopCommand>();
+		for(int x = 0; i < classes.length; ++x) {
+			try {
+				BaxShopCommand cmd = classes[i].newInstance();
+				for(String alias : cmd.getAliases()) {
+					map.put(alias, cmd);
+				}
+			}
+			catch(Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return map;
+	}
 }
