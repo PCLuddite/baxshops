@@ -8,6 +8,7 @@
 package tbax.baxshops.commands;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -15,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Main;
+import tbax.baxshops.Resources;
 import tbax.baxshops.ShopSelection;
 import tbax.baxshops.serialization.StateFile;
 
@@ -307,6 +309,8 @@ public final class ShopCmdActor
 
     public ItemStack getItemInHand()
     {
+        if (pl == null)
+            return null;
         return pl.getInventory().getItemInMainHand();
     }
 
@@ -321,18 +325,23 @@ public final class ShopCmdActor
             ret.add(clone);
         }
         else if ("most".equalsIgnoreCase(arg)) {
-
+            if (getItemInHand() == null || getItemInHand().getType() == Material.AIR)
+                exitError(Resources.NOT_FOUND_HELDITEM);
+            ItemStack clone = item.clone();
+            qty = takeFromInventory(item, getItemInHand().getAmount() - 1);
+            clone.setAmount(qty);
+            ret.add(clone);
         }
         else if ("any".equalsIgnoreCase(arg)) {
-            
+            return takeAnyFromInventory();
         }
         else {
-            int amt;
+            int amt = 0;
             try {
                 amt = Integer.parseInt(arg);
             }
             catch (NumberFormatException e) {
-                throw new CommandErrorException(e, String.format("%s is not a valid quantity", arg));
+                exitError("%s is not a valid quantity", arg);
             }
             ItemStack clone = item.clone();
             qty = takeFromInventory(item, amt);
@@ -401,5 +410,27 @@ public final class ShopCmdActor
     public void setArg(int index, Object value)
     {
         args[index] = value.toString();
+    }
+
+    public void giveItem(ItemStack item) throws PrematureAbortException
+    {
+        ItemStack[] contents = getInventory().getStorageContents();
+        int max = item.getMaxStackSize();
+        int space = 0;
+
+        for(int x = 0; x < contents.length; ++x) {
+            if (contents[x] == null || contents[x].getType() == Material.AIR) {
+                space += max;
+            }
+            else if (contents[x].isSimilar(item)) {
+                space += max - contents[x].getAmount();
+            }
+        }
+
+        if (space == 0) {
+            exitError(Resources.NO_ROOM);
+        }
+
+        getInventory().addItem(item.clone());
     }
 }

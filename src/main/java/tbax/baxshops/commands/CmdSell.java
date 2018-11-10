@@ -1,5 +1,6 @@
 package tbax.baxshops.commands;
 
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import tbax.baxshops.*;
 import tbax.baxshops.help.CommandHelp;
@@ -7,6 +8,7 @@ import tbax.baxshops.notification.SellRequest;
 import tbax.baxshops.serialization.ItemNames;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class CmdSell extends BaxShopCommand
 {
@@ -81,142 +83,71 @@ public class CmdSell extends BaxShopCommand
             actor.appendArg(actor.getItemInHand().getAmount());
         }
 
-        if (cmd.getNumArgs() > 1 && cmd.getArg(1).equalsIgnoreCase("any")) {
-            ArrayList<ItemStack> toSell = Main.clearItems(cmd.getPlayer(), cmd.getShop().inventory);
-            if (toSell.isEmpty()) {
-                Main.sendError(cmd.getPlayer(), "You did not have any items that could be sold at this shop.");
-            }
-            else {
-                double total = 0.0;
-                for(ItemStack itemStack : toSell) {
-                    BaxEntry entry = cmd.getShop().findEntry(itemStack);
-                    if (itemStack.getAmount() > 0 && entry != null) {
-                        double price = Main.roundTwoPlaces(sell(cmd, itemStack, false));
-                        if (price >= 0.0) {
-                            total += price;
-                        }
-                    }
+        if (actor.getArg(1).equalsIgnoreCase("most")) {
+            actor.setArg(1, actor.getItemInHand().getAmount() - 1);
+        }
+
+        List<ItemStack> items = actor.takeArgFromInventory(actor.getItemInHand(), actor.getArg(1));
+
+        if (items.isEmpty()) {
+            actor.exitWarning("You did not have anything to sell at this shop.");
+        }
+
+        double total = 0.0;
+        for(ItemStack itemStack : items) {
+            BaxEntry entry = actor.getShop().findEntry(itemStack);
+            if (itemStack.getAmount() > 0 && entry != null) {
+                double price = sell(actor, itemStack, false);
+                if (price >= 0.0) {
+                    total += price;
                 }
-                if (total > 0.0) {
-                    cmd.getPlayer().sendMessage(String.format("You earned %s.", Format.money(total)));
-                }
-                cmd.getPlayer().sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.getEconomy().getBalance(cmd.getPlayer().getName()))));
-            }
-            return true;
-        }
-
-        ItemStack itemsToSell = cmd.getPlayer().getItemInHand().clone();
-        if (itemsToSell == null || itemsToSell.getType().equals(Material.AIR)) {
-            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_HELDITEM);
-            return true;
-        }
-
-        if (cmd.getNumArgs() == 1) {
-            cmd.appendArg(String.valueOf(cmd.getPlayer().getItemInHand().getAmount())); // sell in hand if nothing specified
-        }
-
-        BaxShop shop = cmd.getShop();
-        BaxEntry entry = shop.findEntry(itemsToSell);
-        if (entry == null || entry.refundPrice < 0) {
-            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SHOPITEM);
-            return true;
-        }
-
-        int actualAmt;
-        try {
-            int desiredAmt = Integer.parseInt(cmd.getArg(1));
-            actualAmt = Main.clearItems(cmd.getPlayer(), entry, desiredAmt);
-            if (actualAmt < desiredAmt) {
-                cmd.getPlayer().sendMessage(
-                        String.format("You did not have enough to sell " + ChatColor.RED + "%d %s" + ChatColor.RESET + ", so only %s were sold.",
-                                desiredAmt,
-                                desiredAmt == 1 ? "item" : "items",
-                                Format.number(actualAmt)
-                        )
-                );
             }
         }
-        catch (NumberFormatException e) {
-            if (cmd.getArg(1).equalsIgnoreCase("all")) {
-                actualAmt = Main.clearItems(cmd.getPlayer(), entry);
-            }
-            else if (cmd.getArg(1).equalsIgnoreCase("most")) {
-                actualAmt = Main.clearItems(cmd.getPlayer(), entry) - 1;
-                ItemStack inHand = entry.toItemStack();
-                inHand.setAmount(1);
-                cmd.getPlayer().setItemInHand(inHand);
-                itemsToSell.setAmount(actualAmt);
-                sell(cmd, itemsToSell,true);
-                return true;
-            }
-            else {
-                Main.sendError(cmd.getPlayer(), String.format(Resources.INVALID_DECIMAL, "amount"));
-                return true;
-            }
+        if (total > 0.0) {
+            actor.sendMessage("You earned %s.", Format.money(total));
         }
-        itemsToSell.setAmount(actualAmt);
-        sell(cmd, itemsToSell, true);
-        return true;
+        else if (total == 0) {
+            actor.sendMessage("Your money will be deposited when the buyer accepts the sale.");
+        }
     }
 
-    private static double sell(ShopCmd cmd, ItemStack itemsToSell, boolean showExtra)
+    private static double sell(ShopCmdActor actor, ItemStack itemsToSell, boolean showExtra) throws PrematureAbortException
     {
-        BaxShop shop = cmd.getShop();
+        BaxShop shop = actor.getShop();
         BaxEntry entry = shop.findEntry(itemsToSell);
-        if (entry == null || entry.refundPrice < 0) {
-            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SHOPITEM);
-            return -1.0;
+        if (entry == null || entry.getRefundPrice() < 0) {
+            actor.exitError(Resources.NOT_FOUND_SHOPITEM);
         }
 
         String name = ItemNames.getName(itemsToSell);
+        SellRequest request = new SellRequest(shop.getId(), shop.getOwner(), actor.getPlayer().getName(), entry.clone());
 
-        BaxEntry req = new BaxEntry();
-        req.setItem(itemsToSell);
+        double price = MathUtil.multiply(itemsToSell.getAmount(), entry.getAmount());
 
-        req.refundPrice = entry.refundPrice;
+        if (shop.hasFlagSellRequests()) {
+            Main.getState().sendNotification(shop.getOwner(), request);
+            actor.sendMessage("Your request to sell %s for %s has been sent.",
+                Format.itemname(itemsToSell.getAmount(), name),
+                Format.money(price)
 
-        SellRequest request = new SellRequest(shop.id, shop.owner, cmd.getPlayer().getName(), req);
-
-        double price = Main.roundTwoPlaces((double)itemsToSell.getAmount() * entry.refundPrice);
-
-        if (shop.sellRequests) {
-            Main.getState().sendNotification(shop.owner, request);
-            cmd.getPlayer().sendMessage(
-                    String.format("Your request to sell %s for %s has been sent.",
-                            Format.itemname(itemsToSell.getAmount(), name),
-                            Format.money(price)
-                    )
             );
             if (showExtra) {
-                cmd.getPlayer().sendMessage(String.format("This request will expire in %s days.", Format.number(Resources.EXPIRE_TIME_DAYS)));
+                actor.sendMessage("This request will expire in %s days.", Format.number(Resources.EXPIRE_TIME_DAYS));
             }
+            return 0;
         }
         else {
-            int error = request.autoAccept(cmd.getPlayer());
-            if (error == 1) {
-                cmd.getPlayer().sendMessage(String.format(
-                        "You have sold %s for %s to %s.",
-                        Format.itemname(itemsToSell.getAmount(), name),
-                        Format.money(price),
-                        Format.username(shop.owner)
-                        )
-                );
-                if (showExtra) {
-                    cmd.getPlayer().sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.getEconomy().getBalance(cmd.getPlayer().getName()))));
-                }
-                return price;
+            request.autoAccept(actor);
+            actor.sendMessage(
+                "You have sold %s for %s to %s.",
+                Format.itemname(itemsToSell.getAmount(), name),
+                Format.money(price),
+                Format.username(shop.getOwner())
+            );
+            if (showExtra) {
+                actor.sendMessage(Resources.CURRENT_BALANCE, Format.money2(Main.getEconomy().getBalance(actor.getPlayer())));
             }
-            else if (error == 0) {
-                Main.getState().sendNotification(shop.owner, request);
-                Main.sendError(cmd.getPlayer(),
-                        String.format("The owner could not purchase %d %s. A request has been sent to the owner to accept your offer at a later time.",
-                                itemsToSell.getAmount(), name)
-                );
-                if (showExtra) {
-                    Main.sendError(cmd.getPlayer(), String.format("This request will expire in %d days.", Resources.EXPIRE_TIME_DAYS));
-                }
-            }
+            return price;
         }
-        return -1.0;
     }
 }

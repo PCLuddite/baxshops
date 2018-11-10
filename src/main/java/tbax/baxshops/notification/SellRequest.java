@@ -8,22 +8,21 @@
 
 package tbax.baxshops.notification;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import tbax.baxshops.BaxEntry;
-import tbax.baxshops.BaxShop;
-import tbax.baxshops.Format;
-import tbax.baxshops.Main;
-import static tbax.baxshops.Main.sendError;
-import tbax.baxshops.Resources;
+import tbax.baxshops.*;
+import tbax.baxshops.commands.CommandErrorException;
+import tbax.baxshops.commands.PrematureAbortException;
+import tbax.baxshops.commands.ShopCmdActor;
 import tbax.baxshops.serialization.ItemNames;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A SellRequest notifies a shop owner that someone has requested
@@ -92,30 +91,29 @@ public final class SellRequest implements ConfigurationSerializable, Request, Ti
                 Format.username(seller), 
                 Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
                 Format.username2(buyer),
-                Format.money(entry.refundPrice * entry.getAmount())
+                Format.money(MathUtil.multiply(entry.getRefundPrice(), entry.getAmount()))
             );
         }
         else {
             return String.format("%s wants to sell you %s for %s.",
                 Format.username(seller), 
                 Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
-                Format.money(entry.refundPrice * entry.getAmount())
+                Format.money(MathUtil.multiply(entry.getRefundPrice(), entry.getAmount()))
             );
         }
     }
     
     @Override
-    public boolean accept(Player player)
+    public boolean accept(ShopCmdActor actor) throws PrematureAbortException
     {
-        double price = Main.roundTwoPlaces(entry.getAmount() * entry.refundPrice);
+        double price = MathUtil.multiply(entry.getAmount(), entry.getRefundPrice());
 
         ItemStack item = entry.toItemStack();
         
         Economy econ = Main.getEconomy();
 
         if (!econ.has(buyer, price)) {
-            Main.sendError(player, Resources.NO_MONEY);
-            return false;
+            actor.exitError(Resources.NO_MONEY);
         }
         
         econ.withdrawPlayer(buyer, price);
@@ -124,91 +122,79 @@ public final class SellRequest implements ConfigurationSerializable, Request, Ti
         BaxShop shop = Main.getState().getShop(shopid);
         if (shop == null) {
             DeletedShopClaim shopDeleted = new DeletedShopClaim(buyer, entry);
-            Main.getState().sendNotification(player, shopDeleted);
+            Main.getState().sendNotification(actor.getPlayer(), shopDeleted);
             return true;
         }
-        else if (shop.sellToShop) {
-            if (!sellToShop(shop, item, player)) {
-                return false;
-            }
+        else if (shop.hasFlagSellToShop()) {
+            sellToShop(shop, entry.toItemStack());
         }
-        else if (!Main.tryGiveItem(player, item)) {
-            sendError(player, Resources.NO_ROOM);
-            return false;
-        }
+        actor.giveItem(item);
 
-        SaleNotification n = new SaleNotification(shop.owner, seller, entry);
+        SaleNotification n = new SaleNotification(shop.getOwner(), seller, entry);
         Main.getState().sendNotification(seller, n);
         
-        player.sendMessage("Offer accepted");
-        player.sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.getEconomy().getBalance(player.getName()))));
+        actor.sendMessage("Offer accepted");
+        actor.sendMessage(Resources.CURRENT_BALANCE, Format.money2(Main.getEconomy().getBalance(actor.getPlayer())));
         
         return true;
     }
     
     /**
      * Auto-accepts the sale
-     * @param sender
-     * @return 1 if success, 0 if insufficient funds, -1 if invalid item
      */
-    public int autoAccept(CommandSender sender)
+    public void autoAccept(ShopCmdActor actor) throws PrematureAbortException
     {
-        double price = Main.roundTwoPlaces(entry.getAmount() * entry.refundPrice);
-        
+        double price = MathUtil.multiply(entry.getAmount(), entry.getRefundPrice());
+
         Economy econ = Main.getEconomy();
-        
+
         if (!econ.has(buyer, price)) {
-            return 0;
+            throw new CommandErrorException("You do not have enough money to complete this command.");
         }
-        
+
         econ.withdrawPlayer(buyer, price);
         econ.depositPlayer(seller, price);
-        
+
         Notification buyerNote;
-        
+
         BaxShop shop = Main.getState().getShop(shopid);
         if (shop == null) {
             DeletedShopClaim shopDeleted = new DeletedShopClaim(buyer, entry);
             Main.getState().sendNotification(buyer, shopDeleted);
-            return 1;
         }
-        else if (shop.sellToShop) {
-            if (!sellToShop(shop, entry.toItemStack(), sender)) {
-                return -1;
-            }
-            buyerNote = new SaleNotificationAuto(shop.owner, seller, entry);
-            Main.getState().sendNotification(shop.owner, buyerNote);
+        else if (shop.hasFlagSellToShop()) {
+            sellToShop(shop, entry.toItemStack());
+            buyerNote = new SaleNotificationAuto(shop.getOwner(), seller, entry);
+            Main.getState().sendNotification(shop.getOwner(), buyerNote);
         }
         else {
             buyerNote = new SaleNotificationAutoClaim(buyer, seller, entry);
-            Main.getState().sendNotification(shop.owner, buyerNote);
+            Main.getState().sendNotification(shop.getOwner(), buyerNote);
         }
-        return 1;
     }
     
-    private boolean sellToShop(BaxShop shop, ItemStack item, CommandSender sender)
+    @Override
+    public boolean reject(ShopCmdActor player)
+    {
+        SaleRejection n = new SaleRejection(buyer, seller, entry);
+        Main.getState().sendNotification(seller, n);
+        player.sendMessage("§cOffer rejected");
+        return true;
+    }
+
+    private void sellToShop(BaxShop shop, ItemStack item)
     {
         BaxEntry shopEntry = shop.findEntry(item);
         if (shopEntry == null) {
             shopEntry = new BaxEntry();
             shopEntry.setItem(item);
         }
-        if (shop.infinite) {
-            shopEntry.infinite = true;
+        if (shop.hasFlagInfinite()) {
+            shopEntry.setInfinite(true);
         }
         else {
             shopEntry.add(item.getAmount());
         }
-        return true;
-    }
-    
-    @Override
-    public boolean reject(Player player)
-    {
-        SaleRejection n = new SaleRejection(buyer, seller, entry);
-        Main.getState().sendNotification(seller, n);
-        player.sendMessage("§cOffer rejected");
-        return true;
     }
 
     @Override

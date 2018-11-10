@@ -7,8 +7,6 @@
 
 package tbax.baxshops.commands;
 
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import tbax.baxshops.Format;
 import tbax.baxshops.Main;

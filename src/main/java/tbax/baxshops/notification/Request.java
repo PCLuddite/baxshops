@@ -8,7 +8,8 @@
 
 package tbax.baxshops.notification;
 
-import org.bukkit.entity.Player;
+import tbax.baxshops.commands.PrematureAbortException;
+import tbax.baxshops.commands.ShopCmdActor;
 
 /**
  * A Request represents a /accept- or /reject-able {@link Notification}.
@@ -20,11 +21,11 @@ public interface Request extends Notification
      * @param player the player who is accepting the notification
      * @return true if the notification could be accepted, false otherwise
      */
-    public boolean accept(Player player);
+    public boolean accept(ShopCmdActor player) throws PrematureAbortException;
     /**
      * Attempts to reject this notification.
      * @param player the player who is rejecting the notification
      * @return true if the notification could be rejected, false otherwise
      */
-    public boolean reject(Player player);
+    public boolean reject(ShopCmdActor player) throws PrematureAbortException;
 }

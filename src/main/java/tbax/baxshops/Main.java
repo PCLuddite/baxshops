@@ -9,13 +9,10 @@
 package tbax.baxshops;
 
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import tbax.baxshops.commands.*;
@@ -23,9 +20,7 @@ import tbax.baxshops.help.Help;
 import tbax.baxshops.notification.*;
 import tbax.baxshops.serialization.StateFile;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -224,127 +219,13 @@ public final class Main extends JavaPlugin
         return econ != null;
     }
     
-    /**
-     * Checks whether an item stack will fit in a player's inventory.
-     *
-     * @param pl the player
-     * @param item the item
-     * @return whether the item will fit
-     */
-    public static boolean inventoryFitsItem(Player pl, ItemStack item)
-    {
-        int quantity = item.getAmount(),
-            max      = item.getMaxStackSize();
-        Inventory inv = pl.getInventory();
-        ItemStack[] contents = inv.getContents();
-        if (max == -1) {
-            max = inv.getMaxStackSize();
-        }
-        for (ItemStack curr : contents) {
-            if (curr == null || curr.getType() == Material.AIR) {
-                quantity -= max;
-                if (quantity <= 0) {
-                    return true;
-                }
-            }
-            else if (curr.isSimilar(item)) {
-                quantity -= max - curr.getAmount();
-                if (quantity <= 0) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-    
-    /**
-     * Gives as much of an item as possible to a player
-     *
-     * @param pl the player receiving the item
-     * @param item the item to give
-     * @return the number of items that could not be added
-     */
-    public static int giveItem(Player pl, ItemStack item)
-    {
-        int amnt = item.getAmount(),
-            max = item.getMaxStackSize();
-        if (max == -1) {
-            max = pl.getInventory().getMaxStackSize();
-        }
-        HashMap<Integer, ItemStack> overflow = new HashMap<>();
-        if (amnt > max) {
-            do {
-                amnt -= max;
-                if (amnt > 0) {
-                    overflow = pl.getInventory().addItem(cloneAmnt(item, max));
-                    if (!overflow.isEmpty()) {
-                        return overflow.get(0).getAmount() + amnt;
-                    }
-                }
-                else {
-                    overflow = pl.getInventory().addItem(cloneAmnt(item, amnt + max));
-                }
-            }
-            while(amnt > 0);
-        }
-        else {
-            overflow = pl.getInventory().addItem(item);
-        }
-        if (overflow.isEmpty()) {
-            return 0;
-        }
-        else {
-            return overflow.get(0).getAmount();
-        }
-    }
-    
-    /**
-     * Clones an ItemStack and sets the amount
-     * @param item
-     * @param amt
-     * @return a cloned ItemStack
-     */
-    public static ItemStack cloneAmnt(ItemStack item, int amt)
-    {
-        ItemStack cloned = item.clone();
-        cloned.setAmount(amt);
-        return cloned;
-    }
-    
-    /**
-     * Checks if an ItemStack can be given to a player, then gives it
-     * @param player
-     * @param item
-     * @return true if ItemStack was given, false otherwise
-     */
-    public static boolean tryGiveItem(Player player, ItemStack item)
-    {
-        if (inventoryFitsItem(player, item)){
-            giveItem(player, item);
-            return true;
-        }
-        else {
-            return false;
-        }
-    }
-    
     public void removeSelection(Player pl)
     {
         if (selectedShops.get(pl) != null) {
             selectedShops.remove(pl);
         }
     }
-    
-    /**
-     * Tries to get around the imprecision of the double type
-     * @param value the value to round
-     * @return the rounded value
-     */
-    public static double roundTwoPlaces(double value)
-    {
-        return Math.round(value*100.0d)/100.0d;
-    }
-    
+
     public void sendInfo(Player pl, String message)
     {
         if (pl != null) {
@@ -367,117 +248,5 @@ public final class Main extends JavaPlugin
         }
         sb.append(Format.toAnsiColor(message));
         log.info(sb.toString());
-    }
-    
-    /**
-     * Removes a set number of items from an inventory
-     * @param pl
-     * @param entry
-     * @param count
-     * @return 
-     */
-    public static int clearItems(Player pl, BaxEntry entry, int count)
-    {
-        Inventory inv = pl.getInventory();
-        int i = 0;
-        int addSize = 0;
-        
-        while (i < inv.getSize()) {
-        
-            if (pl.getInventory().getItemInMainHand() != null) {
-                if (pl.getInventory().getItemInMainHand().isSimilar(entry.getItemStack())) {
-                    addSize += pl.getInventory().getItemInMainHand().getAmount();
-                    if (addSize > count) {
-                        int leftover = addSize - count;
-                        if (leftover > 0) {
-                            pl.getInventory().getItemInMainHand().setAmount(leftover);
-                        }
-                        return count;
-                    }
-                    else {
-                        pl.getInventory().setItemInMainHand(null);
-                    }
-                }
-            }
-            
-            if(inv.getItem(i).isSimilar(entry.getItemStack())) {
-                ItemStack stack = inv.getItem(i);
-                addSize += stack.getAmount();
-                
-                if (addSize > count) {
-                    int leftover = addSize - count;
-                    if (leftover > 0) {
-                        stack.setAmount(leftover);
-                    }
-                    return count;
-                }
-                else {
-                    inv.clear(i);
-                }
-            }
-            i++;
-        }
-        return addSize;
-    }
-    
-    /**
-     * Removes from an inventory a single item
-     * @param pl
-     * @param entry
-     * @return The number of items that have been removed
-     */
-    public static int clearItems(Player pl, BaxEntry entry)
-    {
-        ArrayList<BaxEntry> entries = new ArrayList<>();
-        entries.add(entry);
-        ArrayList<ItemStack> list = clearItems(pl, entries);
-        if (list.isEmpty()) {
-            return 0;
-        }
-        else {
-            int num = 0;
-            for(ItemStack stack : list) {
-                num += stack.getAmount();
-            }
-            return num;
-        }
-    }
-    
-    /**
-     * Removes from an inventory all items in the the List&lt;BaxEntry&gt;
-     * @param pl
-     * @param entries
-     * @return The items that have been removed. Each ItemStack is a different item type and may exceed the material's max stack.
-     */
-    public static ArrayList<ItemStack> clearItems(Player pl, List<BaxEntry> entries)
-    {
-        ArrayList<ItemStack> removedItems = new ArrayList<>();
-        Inventory inv = pl.getInventory();
-        for(BaxEntry entry : entries) {
-        
-            int i = 0;
-            int addSize = 0;
-        
-            if (pl.getInventory().getItemInMainHand() != null) {
-                if (pl.getInventory().getItemInMainHand().isSimilar(entry.getItemStack())) {
-                    addSize += pl.getInventory().getItemInMainHand().getAmount();
-                    pl.getInventory().setItemInMainHand(null);
-                }
-            }
-            
-            while (i < inv.getSize()){
-                if(inv.getItem(i).isSimilar(entry.getItemStack())) {
-                    addSize += inv.getItem(i).getAmount();
-                    inv.setItem(i, null);
-                }
-                i++;
-            }
-            if (addSize > 0) {
-                ItemStack stack = entry.toItemStack();
-                stack.setAmount(addSize);
-                removedItems.add(stack);
-            }
-        }
-        return removedItems;
     }
 }
