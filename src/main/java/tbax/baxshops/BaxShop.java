@@ -13,9 +13,11 @@ import java.util.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import tbax.baxshops.commands.CommandErrorException;
 import tbax.baxshops.commands.PrematureAbortException;
@@ -409,5 +411,42 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
     public Iterator<BaxEntry> iterator()
     {
         return inventory.iterator();
+    }
+
+    public Block buildShopSign(Location loc, String[] signLines) throws PrematureAbortException
+    {
+        Location locUnder = loc;
+        locUnder.setY(locUnder.getY() - 1);
+
+        Block b = loc.getWorld().getBlockAt(loc);
+        Block blockUnder = locUnder.getWorld().getBlockAt(locUnder);
+        if (blockUnder.getType() == Material.AIR || blockUnder.getType() == Material.TNT){
+            throw new CommandErrorException("Sign does not have a block to place it on");
+        }
+
+        byte angle = (byte) ((((int) loc.getYaw() + 225) / 90) << 2);
+
+        b.setType(Material.SIGN_POST);
+        try {
+            b.setData(angle, false);
+        }
+        catch(Exception e) {
+        }
+        if (!b.getType().equals(Material.SIGN)) {
+            b.setType(Material.SIGN_POST);
+            if (!b.getType().equals(Material.SIGN) && !b.getType().equals(Material.SIGN_POST)) {
+                throw new CommandErrorException(String.format("Unable to place sign! Block type is %s.", b.getType().toString()));
+            }
+        }
+
+        addLocation(loc);
+
+        Sign sign = (Sign)b.getState();
+        for(int i = 0; i < signLines.length; i++) {
+            sign.setLine(i, signLines[i]);
+        }
+        sign.update();
+
+        return b;
     }
 }

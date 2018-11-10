@@ -1,6 +1,8 @@
 package tbax.baxshops.commands;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
@@ -71,32 +73,36 @@ public class CmdCreate extends BaxShopCommand
     public void onCommand(ShopCmdActor actor) throws PrematureAbortException
     {
         String owner = actor.isAdmin() ? actor.getArg(1) : actor.getPlayer().getName();
+        Location loc = actor.getPlayer().getLocation().getWorld().getBlockAt(actor.getPlayer().getLocation()).getLocation();
+
+        if (!actor.isAdmin() && !actor.getInventory().containsAtLeast(new ItemStack(Material.SIGN), 1)) {
+            actor.exitError("You need a sign to set up a shop.");
+        }
+
         BaxShop shop = new BaxShop();
-        shop.addLocation(actor.getPlayer().getLocation().getWorld().getBlockAt(actor.getPlayer().getLocation()).getLocation());
         shop.setOwner(owner);
 
-        if (buildShopSign(cmd, new String[] {
+        Block b = shop.buildShopSign(
+            loc, new String[] {
                 "",
                 (owner.length() < 13 ? owner : owner.substring(0, 12) + '…') + "'s",
                 "shop",
                 ""
-        }) == null) {
-            return true; // Couldn't build the sign. Retreat!
-        }
-
-         admin && cmd.getNumArgs() > 2 && (cmd.getArg(2).equalsIgnoreCase("yes") || cmd.getArg(2).equalsIgnoreCase("true"));
-        shop.sellRequests = !shop.infinite;
-        shop.buyRequests = false;
-
-        if (!Main.getState().addShop(cmd.getPlayer(), shop)) {
-            if (!admin) {
-                cmd.getPlayer().getInventory().addItem(new ItemStack(Material.SIGN)); // give the sign back
             }
-            return true;
+        );
+
+        if (actor.isAdmin() && actor.getNumArgs() == 3) {
+            shop.setFlagInfinite(actor.getArgBoolean(2));
         }
-        cmd.getPlayer().sendMessage(Format.username(shop.owner) + "'s shop has been created.");
-        cmd.getPlayer().sendMessage(Format.flag("Buy requests") + " for this shop are " + Format.keyword(shop.buyRequests ? "on" : "off"));
-        cmd.getPlayer().sendMessage(Format.flag("Sell requests") + " for this shop are " + Format.keyword(shop.sellRequests ? "on" : "off"));
-        return true;
+
+        shop.setFlagSellRequests(shop.hasFlagInfinite());
+        shop.setFlagBuyRequests(false);
+
+        if (!actor.isAdmin()) {
+            actor.getInventory().remove(Material.SIGN);
+        }
+        actor.sendMessage(Format.username(shop.getOwner()) + "'s shop has been created.");
+        actor.sendMessage(Format.flag("Buy requests") + " for this shop are " + Format.keyword(shop.hasFlagBuyRequests() ? "on" : "off"));
+        actor.sendMessage(Format.flag("Sell requests") + " for this shop are " + Format.keyword(shop.hasFlagSellRequests() ? "on" : "off"));
     }
 }

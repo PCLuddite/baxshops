@@ -381,6 +381,12 @@ public final class ShopCmdActor
         return qty;
     }
 
+    public PlayerInventory getInventory() {
+        if (pl == null)
+            return null;
+        return pl.getInventory();
+    }
+
     @Override
     public String toString()
     {
