@@ -9,6 +9,9 @@ package tbax.baxshops.commands;
 
 import tbax.baxshops.help.CommandHelp;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
@@ -40,9 +43,9 @@ public abstract class BaxShopCommand
 	public static Map<String, BaxShopCommand> createCommandMap(Class<? extends BaxShopCommand>... classes)
 	{
 		Map<String, BaxShopCommand> map = new HashMap<String, BaxShopCommand>();
-		for(int x = 0; i < classes.length; ++x) {
+		for(int x = 0; x < classes.length; ++x) {
 			try {
-				BaxShopCommand cmd = classes[i].newInstance();
+				BaxShopCommand cmd = classes[x].newInstance();
 				for(String alias : cmd.getAliases()) {
 					map.put(alias, cmd);
 				}

@@ -344,9 +344,10 @@ public final class ShopCmdActor
 
     private List<ItemStack> takeAnyFromInventory()
     {
+        // TODO: IMPLEMENT THIS METHOD
         ItemStack curr;
         PlayerInventory inv = pl.getInventory();
-
+        return null;
     }
 
     public int takeFromInventory(ItemStack item, int amt)

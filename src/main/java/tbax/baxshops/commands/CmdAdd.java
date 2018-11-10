@@ -1,8 +1,10 @@
 package tbax.baxshops.commands;
 
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import tbax.baxshops.*;
+import tbax.baxshops.BaxEntry;
+import tbax.baxshops.BaxShop;
+import tbax.baxshops.Format;
+import tbax.baxshops.Resources;
 import tbax.baxshops.help.CommandHelp;
 import tbax.baxshops.serialization.ItemNames;
 

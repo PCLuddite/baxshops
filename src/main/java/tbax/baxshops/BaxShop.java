@@ -17,6 +17,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import tbax.baxshops.commands.CommandErrorException;
 import tbax.baxshops.commands.PrematureAbortException;
 import tbax.baxshops.serialization.ItemNames;
 
@@ -24,7 +25,7 @@ import tbax.baxshops.serialization.ItemNames;
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public final class BaxShop implements ConfigurationSerializable
+public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEntry>
 {
     public static final int ITEMS_PER_PAGE = 7;
     
@@ -155,7 +156,7 @@ public final class BaxShop implements ConfigurationSerializable
             return ItemNames.getItemFromAlias(arg, this);
         }
         catch (IndexOutOfBoundsException e) {
-            throw new PrematureAbortException(e, Resources.NOT_FOUND_SHOPITEM);
+            throw new CommandErrorException(e, Resources.NOT_FOUND_SHOPITEM);
         }
     }
 
@@ -402,5 +403,11 @@ public final class BaxShop implements ConfigurationSerializable
     public static BaxShop valueOf(Map<String, Object> args)
     {
         return deserialize(args);
+    }
+
+    @Override
+    public Iterator<BaxEntry> iterator()
+    {
+        return inventory.iterator();
     }
 }

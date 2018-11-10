@@ -7,7 +7,6 @@
 
 package tbax.baxshops.commands;
 
-import org.bukkit.entity.Player;
 import tbax.baxshops.Main;
 import tbax.baxshops.help.CommandHelp;
 import tbax.baxshops.notification.LollipopNotification;

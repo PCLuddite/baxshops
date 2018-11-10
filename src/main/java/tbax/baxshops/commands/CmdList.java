@@ -75,7 +75,7 @@ public class CmdList extends BaxShopCommand
                 actor.sendMessage("%-3s %-16s %-18s %s",
                                 ChatColor.WHITE.toString() + (index + 1) + ".",
                                 Format.location(selection.getShop().getLocations().get(index)),
-                                ChatColor.LIGHT_PURPLE + selection.getShop().getSignText(index),
+                                ChatColor.LIGHT_PURPLE + selection.getShop().getSignTextString(index),
                                 (selection.getLocation().equals(selection.getShop().getLocations().get(index)) ? ChatColor.LIGHT_PURPLE + " (current)" : ""));
             }
         }

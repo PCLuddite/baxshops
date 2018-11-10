@@ -7,8 +7,12 @@
 
 package tbax.baxshops.commands;
 
-import org.bukkit.entity.Player;
+import tbax.baxshops.BaxEntry;
+import tbax.baxshops.BaxShop;
+import tbax.baxshops.Format;
 import tbax.baxshops.help.CommandHelp;
+
+import java.util.Map;
 
 public class CmdFlag extends BaxShopCommand
 {
@@ -116,13 +120,13 @@ public class CmdFlag extends BaxShopCommand
 	private class FlagCmdSellToShop extends FlagCmd
 	{
 		@Override
-		public String getAliases() { return new String[]{"selltoshop","sell_to_shop"}; }
+		public String[] getAliases() { return new String[]{"selltoshop","sell_to_shop"}; }
 		
 		@Override
 		public void onCommand(ShopCmdActor actor) throws PrematureAbortException
 		{
 			BaxShop shop = actor.getShop();
-			boolean value = actor.getBoolean(2, "Usage:\n/shop flag sell_to_shop [true|false]");
+			boolean value = actor.getArgBoolean(2, "Usage:\n/shop flag sell_to_shop [true|false]");
 			shop.setFlagSellToShop(value);
 			actor.sendMessage(Format.flag("Sell to Shop") + " is " + Format.keyword(value ? "enabled" : "disabled"));
 		}
@@ -131,15 +135,15 @@ public class CmdFlag extends BaxShopCommand
 	private class FlagCmdInfinite extends FlagCmd
 	{
 		@Override
-		public String getAliases() { return new String[]{"infinite", "isinfinite","inf"}; }
+		public String[] getAliases() { return new String[]{"infinite", "isinfinite","inf"}; }
 		
 		@Override
 		public void onCommand(ShopCmdActor actor) throws PrematureAbortException
 		{
 			BaxShop shop = actor.getShop();
-			boolean value = actor.getBoolean(2, "Usage:\n/shop flag infinite [true|false]");
+			boolean value = actor.getArgBoolean(2, "Usage:\n/shop flag infinite [true|false]");
 			shop.setFlagInfinite(value);
-			for(BaxEntry e : shop.getInventory())
+			for(BaxEntry e : shop)
 			{
 				e.setInfinite(value);
 			}
@@ -151,13 +155,13 @@ public class CmdFlag extends BaxShopCommand
 	private class FlagCmdSellRequests extends FlagCmd
 	{
 		@Override
-		public String getAliases() { return new String[]{"sellrequests","sellrequest","sell_request","sell_requests"}; }
+		public String[] getAliases() { return new String[]{"sellrequests","sellrequest","sell_request","sell_requests"}; }
 		
 		@Override
 		public void onCommand(ShopCmdActor actor) throws PrematureAbortException
 		{
 			BaxShop shop = actor.getShop();
-			boolean value = actor.getBoolean(2, "Usage:\n/shop flag sellrequests [true|false]");
+			boolean value = actor.getArgBoolean(2, "Usage:\n/shop flag sellrequests [true|false]");
 			shop.setFlagSellRequests(value);
 			actor.sendMessage(Format.flag("Sell requests") + " for this shop are " + Format.keyword(value ? "enabled" : "disabled"));
 		}
@@ -166,13 +170,13 @@ public class CmdFlag extends BaxShopCommand
 	private class FlagCmdBuyRequests extends FlagCmd
 	{
 		@Override
-		public String getAliases() { return new String[]{"buyrequests","buyrequest","buy_request","buy_requests"}; }
+		public String[] getAliases() { return new String[]{"buyrequests","buyrequest","buy_request","buy_requests"}; }
 		
 		@Override
 		public void onCommand(ShopCmdActor actor) throws PrematureAbortException
 		{
 			BaxShop shop = actor.getShop();
-			boolean value = actor.getBoolean(2, "Usage:\n/shop flag buyrequests [true|false]");
+			boolean value = actor.getArgBoolean(2, "Usage:\n/shop flag buyrequests [true|false]");
 			shop.setFlagBuyRequests(value);
 			actor.sendMessage(Format.flag("Buy requests") + " for this shop are " + Format.keyword(value ? "enabled" : "disabled"));
 		}
@@ -181,13 +185,13 @@ public class CmdFlag extends BaxShopCommand
 	private class FlagCmdOwner extends FlagCmd
 	{
 		@Override
-		public String getAliases() { return new String[]{"owner"}; }
+		public String[] getAliases() { return new String[]{"owner"}; }
 		
 		@Override
 		public void onCommand(ShopCmdActor actor) throws PrematureAbortException
 		{
 			BaxShop shop = actor.getShop();
-			shop.setOwner(cmd.getArg(2));
+			shop.setOwner(actor.getArg(2));
 			actor.sendMessage(Format.username(shop.getOwner()) + " is now the owner!");
 			if (actor.isOwner()) {
 				actor.sendMessage("You will still be able to edit this shop until you leave or reselect it.");
@@ -198,7 +202,7 @@ public class CmdFlag extends BaxShopCommand
 	private class FlagCmdList extends FlagCmd
 	{
 		@Override
-		public String getAliases() { return new String[]{"list"}; }
+		public String[] getAliases() { return new String[]{"list"}; }
 		
 		@Override
 		public boolean hasValidArgCount(ShopCmdActor actor) { return actor.getNumArgs() == 2; }
