@@ -82,7 +82,7 @@ public class CmdReject extends BaxShopCommand
             Notification n = notifications.getFirst();
             if (n instanceof Request) {
                 Request r = (Request) n;
-                if (r.reject(actor.getPlayer())) {
+                if (r.reject(actor)) {
                     notifications.removeFirst();
                 }
             }

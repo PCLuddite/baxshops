@@ -412,7 +412,7 @@ public final class ShopCmdActor
         args[index] = value.toString();
     }
 
-    public void giveItem(ItemStack item) throws PrematureAbortException
+    public int giveItem(ItemStack item) throws PrematureAbortException
     {
         ItemStack[] contents = getInventory().getStorageContents();
         int max = item.getMaxStackSize();
@@ -431,6 +431,10 @@ public final class ShopCmdActor
             exitError(Resources.NO_ROOM);
         }
 
-        getInventory().addItem(item.clone());
+        int overflow = Math.max(item.getAmount() - space, 0);
+        item = item.clone();
+        item.setAmount(Math.min(item.getAmount(), space));
+        getInventory().addItem(item);
+        return overflow;
     }
 }

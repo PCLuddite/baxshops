@@ -77,7 +77,7 @@ public class CmdAccept extends BaxShopCommand
             Notification n = notifications.getFirst();
             if (n instanceof Request) {
                 Request r = (Request) n;
-                if (r.accept(actor.getPlayer())) {
+                if (r.accept(actor)) {
                     notifications.removeFirst();
                 }
             } else if (n instanceof Claimable) {

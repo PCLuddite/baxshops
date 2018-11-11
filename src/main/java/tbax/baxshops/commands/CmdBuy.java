@@ -104,7 +104,7 @@ public class CmdBuy extends BaxShopCommand
         }
 
         String itemName = ItemNames.getName(entry);
-        double price = Main.roundTwoPlaces(amount * entry.getRetailPrice());
+        double price = MathUtil.multiply(amount, entry.getRetailPrice());
 
         if (!Main.getEconomy().has(actor.getPlayer(), price)) {
             actor.exitError(Resources.NO_MONEY);
@@ -124,12 +124,9 @@ public class CmdBuy extends BaxShopCommand
             actor.sendMessage("This request will expire in %s days.", Format.number(Resources.EXPIRE_TIME_DAYS));
         }
         else {
-            int overflow = Main.giveItem(actor.getPlayer(), purchased.toItemStack());
+            int overflow = actor.giveItem(purchased.toItemStack());
             if (overflow > 0) {
-                if (overflow == amount) {
-                    actor.exitError(Resources.NO_ROOM);
-                }
-                price = Main.roundTwoPlaces((amount - overflow) * entry.getRetailPrice());
+                price = MathUtil.multiply((amount - overflow), entry.getRetailPrice());
                 actor.sendMessage(Resources.SOME_ROOM + " " + Resources.CHARGED_MSG, amount - overflow, itemName, Format.money(price));
             }
             else {

@@ -76,7 +76,7 @@ public class CmdCopy extends BaxShopCommand
             inv.removeItem(sign);
         }
 
-        int i = Main.giveItem(actor.getPlayer(), actor.getSelection().toItem());
+        int i = actor.giveItem(actor.getSelection().toItem());
         if (i > 0) {
             actor.sendMessage(Resources.NO_ROOM);
             actor.getPlayer().getInventory().addItem(new ItemStack(Material.SIGN, 1));
