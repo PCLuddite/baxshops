@@ -342,7 +342,7 @@ public final class ShopCmdActor
         int qty;
         if ("all".equalsIgnoreCase(arg)) {
             ItemStack clone = item.clone();
-            qty = takeFromInventory(item, Integer.MAX_VALUE);
+            qty = takeFromInventory(clone, Integer.MAX_VALUE);
             clone.setAmount(qty);
             ret.add(clone);
         }
@@ -353,9 +353,6 @@ public final class ShopCmdActor
             qty = takeFromInventory(item, getItemInHand().getAmount() - 1);
             clone.setAmount(qty);
             ret.add(clone);
-        }
-        else if ("any".equalsIgnoreCase(arg)) {
-            return takeAnyFromInventory();
         }
         else {
             int amt = 0;
@@ -373,12 +370,32 @@ public final class ShopCmdActor
         return ret;
     }
 
-    private List<ItemStack> takeAnyFromInventory()
+    private List<BaxEntry> takeAnyFromInventory()
     {
-        // TODO: IMPLEMENT THIS METHOD
-        ItemStack curr;
-        PlayerInventory inv = pl.getInventory();
-        return null;
+        BaxShop shop = getShop();
+        PlayerInventory inv;
+        ArrayList<ItemStack> list = new ArrayList<>();
+
+        if (shop == null || pl == null)
+            return list;
+
+        inv = pl.getInventory();
+
+        for (BaxEntry entry : shop) {
+            BaxEntry curr = entry.clone();
+            for (int x = 0; x < inv.getSize(); ++x) {
+                ItemStack item = inv.getItem(x);
+                if (curr.isSimilar(item)) {
+                    curr.add(item.getAmount());
+                    inv.setItem(x, null);
+                }
+            }
+            if (curr.getAmount() > 0) {
+                list.add(curr);
+            }
+        }
+
+        return list;
     }
 
     public int takeFromInventory(ItemStack item, int amt)
