@@ -27,9 +27,6 @@ public final class ShopExecuter
     public static boolean execute(ShopCmd cmd)
     {
         switch(cmd.getAction()) {
-            case "remove":
-            case "rm":
-                return remove(cmd);
             case "take":
             case "t":
                 return take(cmd);
@@ -131,57 +128,7 @@ public final class ShopExecuter
         
         return true;
     }
-    
-    public static boolean remove(ShopCmd cmd)
-    {
-        CmdRequisite requisite = cmd.getRequirements();
-        
-        requisite.hasSelection();
-        requisite.hasOwnership();
-        requisite.hasExactArgs(2, Help.REMOVE);
-        
-        if (!requisite.isValid()) return true;
 
-        BaxShop shop = cmd.getShop();
-        BaxEntry entry;
-        try {
-            int index = Integer.parseInt(cmd.getArg(1));
-            entry = shop.getEntryAt(index - 1);
-        }
-        catch (NumberFormatException e) {
-            entry = ItemNames.getItemFromAlias(cmd.getArg(1), shop, cmd.getSender());
-            if (entry == null) {
-                return true;
-            }
-        } 
-        catch (IndexOutOfBoundsException e) {
-            entry = null;
-        }
-        if (entry == null) {
-            Main.sendError(cmd.getPlayer(), Resources.NOT_FOUND_SHOPITEM);
-            return true;
-        }
-        
-        if (!shop.infinite && entry.getAmount() > 0) {
-            ItemStack stack = entry.toItemStack();
-            if (!Main.tryGiveItem(cmd.getPlayer(), stack)) {
-                Main.sendError(cmd.getPlayer(), Resources.NO_ROOM);
-                return true;
-            }
-
-            cmd.getMain().sendInfo(cmd.getPlayer(),
-                String.format("%s %s added to your inventory.",
-                    Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
-                    entry.getAmount() == 1 ? "was" : "were"
-                )
-            );
-        }
-        shop.inventory.remove(entry);
-        cmd.getMain().sendInfo(cmd.getPlayer(), "The shop entry was removed.");
-        
-        return true;
-    }
-    
     public static boolean take(ShopCmd cmd)
     {
         CmdRequisite requisite = cmd.getRequirements();

@@ -14,10 +14,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import tbax.baxshops.BaxShop;
-import tbax.baxshops.Main;
-import tbax.baxshops.Resources;
-import tbax.baxshops.ShopSelection;
+import tbax.baxshops.*;
+import tbax.baxshops.serialization.ItemNames;
 import tbax.baxshops.serialization.StateFile;
 
 import java.util.*;
@@ -195,6 +193,30 @@ public final class ShopCmdActor
         if ("1".equalsIgnoreCase(args[index]) || "0".equalsIgnoreCase(args[index]))
             return "1".equalsIgnoreCase(args[index]);
         throw new CommandErrorException(errMsg);
+    }
+
+    public BaxEntry getArgEntry(int index) throws PrematureAbortException
+    {
+        return getArgEntry(index, Resources.NOT_FOUND_SHOPITEM);
+    }
+
+    public BaxEntry getArgEntry(int index, String errMsg) throws PrematureAbortException
+    {
+        BaxEntry entry = null;
+        if (isArgInt(index)) {
+            index = getArgInt(1) - 1;
+            if (index < getShop().getInventorySize() && index >= 0) {
+                entry = getShop().getEntryAt(index);
+            }
+        }
+        else {
+            entry = ItemNames.getItemFromAlias(getArg(1), getShop());
+        }
+
+        if (entry == null) {
+            exitError(errMsg);
+        }
+        return entry;
     }
 
     public Logger getLogger()

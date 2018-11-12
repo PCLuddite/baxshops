@@ -8,6 +8,7 @@
 
 package tbax.baxshops;
 
+import tbax.baxshops.commands.CommandErrorException;
 import tbax.baxshops.commands.PrematureAbortException;
 import tbax.baxshops.help.CommandHelp;
 
@@ -154,7 +155,7 @@ public final class BaxEntry implements ConfigurationSerializable
             return Integer.parseInt(arg);
         }
         catch (NumberFormatException e) {
-            throw new PrematureAbortException(e, String.format(Resources.INVALID_DECIMAL, "amount"));
+            throw new CommandErrorException(e, String.format(Resources.INVALID_DECIMAL, "amount"));
         }
     }
     

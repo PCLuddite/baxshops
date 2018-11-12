@@ -76,17 +76,7 @@ public class CmdRemove extends BaxShopCommand
     public void onCommand(ShopCmdActor actor) throws PrematureAbortException
     {
         BaxShop shop = actor.getShop();
-        BaxEntry entry = null;
-
-        if (actor.isArgInt(1)) {
-            int index = actor.getArgInt(1) - 1;
-            if (index < shop.getInventorySize() && index >= 0) {
-                entry = shop.getEntryAt(index);
-            }
-        }
-        else {
-            entry = ItemNames.getItemFromAlias(actor.getArg(1), shop);
-        }
+        BaxEntry entry = actor.getArgEntry(1);
 
         if (entry == null) {
             actor.exitError(Resources.NOT_FOUND_SHOPITEM);
