@@ -414,19 +414,7 @@ public final class ShopCmdActor
 
     public int giveItem(ItemStack item) throws PrematureAbortException
     {
-        ItemStack[] contents = getInventory().getStorageContents();
-        int max = item.getMaxStackSize();
-        int space = 0;
-
-        for(int x = 0; x < contents.length; ++x) {
-            if (contents[x] == null || contents[x].getType() == Material.AIR) {
-                space += max;
-            }
-            else if (contents[x].isSimilar(item)) {
-                space += max - contents[x].getAmount();
-            }
-        }
-
+        int space = getSpaceForItem(item);
         if (space == 0) {
             exitError(Resources.NO_ROOM);
         }
@@ -436,5 +424,27 @@ public final class ShopCmdActor
         item.setAmount(Math.min(item.getAmount(), space));
         getInventory().addItem(item);
         return overflow;
+    }
+
+    public int getSpaceForItem(ItemStack stack)
+    {
+        ItemStack[] contents = getInventory().getStorageContents();
+        int max = stack.getMaxStackSize();
+        int space = 0;
+
+        for(int x = 0; x < contents.length; ++x) {
+            if (contents[x] == null || contents[x].getType() == Material.AIR) {
+                space += max;
+            }
+            else if (contents[x].isSimilar(stack)) {
+                space += max - contents[x].getAmount();
+            }
+        }
+        return space;
+    }
+
+    public boolean hasRoomForItem(ItemStack stack)
+    {
+        return stack.getAmount() <= getSpaceForItem(stack);
     }
 }

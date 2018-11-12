@@ -449,4 +449,9 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
 
         return b;
     }
+
+    public boolean remove(BaxEntry entry)
+    {
+        return inventory.remove(entry);
+    }
 }

@@ -15,6 +15,7 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import tbax.baxshops.commands.CommandErrorException;
 import tbax.baxshops.commands.PrematureAbortException;
 
 /**
@@ -41,32 +42,13 @@ public final class ItemNames
      * A list of enchantment names
      */
     private static final HashMap<Enchantment, String> enchants = new HashMap<>();
-        
-    /**
-     * Attempts to find an item which matches the given item name (alias)
-     *
-     * @param input the item name
-     * @param shop the shop
-     * @param sender the sender (to show errors)
-     * @return a list of entries that match the alias
-     */
-    public static BaxEntry getItemFromAlias(String input, BaxShop shop, CommandSender sender)
-    {
-        try {
-            return getItemFromAlias(input, shop);
-        }
-        catch (PrematureAbortException e) {
-            Main.sendError(sender, e.getMessage());
-        }
-        return  null;
-    }
 
     public static BaxEntry getItemFromAlias(String input, BaxShop shop) throws PrematureAbortException
     {
         String[] inputwords = getItemAlias(input);
         HashMap<Double,ArrayList<BaxEntry>> match_percentages = new HashMap<>();
         double highest = 0;
-        for(BaxEntry entry : shop.inventory) {
+        for(BaxEntry entry : shop) {
             Long id = getItemId(entry.getItemStack());
             String[] alias = aliases.get(id);
             if (alias == null) {
@@ -97,11 +79,11 @@ public final class ItemNames
                     error.append(getName(entry)).append("\n");
                 }
                 error.append("BaxShops isn't sure what you want.");
-                throw new PrematureAbortException(error.toString());
+                throw new CommandErrorException(error.toString());
             }
         }
         else {
-            throw new PrematureAbortException("No items could be found with that name.");
+            throw new CommandErrorException("No items could be found with that name.");
         }
     }
     
