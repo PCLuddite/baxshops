@@ -20,8 +20,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.commands.CommandErrorException;
-import tbax.baxshops.commands.PrematureAbortException;
 import tbax.baxshops.serialization.ItemNames;
 
 /**
@@ -480,5 +478,22 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
     public boolean remove(BaxEntry entry)
     {
         return inventory.remove(entry);
+    }
+
+    public BaxEntry remove(int index)
+    {
+        return inventory.remove(index);
+    }
+
+    public void add(int index, BaxEntry entry)
+    {
+        entry.setInfinite(hasFlagInfinite());
+        inventory.add(index, entry);
+    }
+
+    public void add(BaxEntry entry)
+    {
+        entry.setInfinite(hasFlagInfinite());
+        inventory.add(entry);
     }
 }

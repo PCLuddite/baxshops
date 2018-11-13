@@ -14,8 +14,6 @@ import tbax.baxshops.*;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import tbax.baxshops.commands.CommandErrorException;
-import tbax.baxshops.commands.PrematureAbortException;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
 

@@ -184,6 +184,21 @@ public final class ShopCmdActor
         }
     }
 
+    public short getArgShort(int index) throws PrematureAbortException
+    {
+        return getArgShort(index, String.format("Expecting argument %d to be a small whole number", index));
+    }
+
+    public short getArgShort(int index, String errMsg) throws PrematureAbortException
+    {
+        try {
+            return Short.parseShort(args[index]);
+        }
+        catch (NumberFormatException e) {
+            throw new CommandErrorException(e, errMsg);
+        }
+    }
+
     public boolean getArgBoolean(int index) throws PrematureAbortException
     {
         return getArgBoolean(index, String.format("Expecting argument %d to be yes/no", index));
