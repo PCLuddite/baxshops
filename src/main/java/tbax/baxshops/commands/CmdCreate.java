@@ -6,6 +6,7 @@ import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
+import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.help.CommandHelp;
 
 public class CmdCreate extends BaxShopCommand

@@ -5,19 +5,19 @@
  *  +++====+++
  **/
 
-package tbax.baxshops.commands;
+package tbax.baxshops.errors;
 
-public class CommandErrorException extends PrematureAbortException
+public class CommandMessageException extends PrematureAbortException
 {
     private Exception innerEx;
     private String errMsg;
 
-    public CommandErrorException(String errorMsg)
+    public CommandMessageException(String errorMsg)
     {
         errMsg = errorMsg;
     }
 
-    public CommandErrorException(Exception e, String errorMsg)
+    public CommandMessageException(Exception e, String errorMsg)
     {
         innerEx = e;
         errMsg = errorMsg;

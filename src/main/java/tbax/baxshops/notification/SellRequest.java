@@ -9,7 +9,6 @@
 package tbax.baxshops.notification;
 
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

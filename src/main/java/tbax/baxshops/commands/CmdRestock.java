@@ -5,6 +5,7 @@ import org.bukkit.inventory.ItemStack;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
 import tbax.baxshops.Resources;
+import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.help.CommandHelp;
 import tbax.baxshops.serialization.ItemNames;
 
@@ -87,10 +88,10 @@ public class CmdRestock extends BaxShopCommand
             actor.exitError(Resources.NOT_FOUND_SHOPITEM);
         }
 
-        List<ItemStack> taken = actor.takeArgFromInventory(actor.getItemInHand(), actor.getArg(1));
+        List<BaxEntry> taken = actor.takeArgFromInventory(actor.getArg(1));
 
         if (requiresItemInHand(actor)) {
-            ItemStack takenItem = taken.get(0);
+            BaxEntry takenItem = taken.get(0);
             entry.add(takenItem.getAmount());
             if (takenItem.getAmount() < actor.getArgInt(1)) {
                 actor.sendMessage("Could only restock with " + ChatColor.RED + "%d %s" + ChatColor.RESET + ". The shop now has %s.",
@@ -108,14 +109,12 @@ public class CmdRestock extends BaxShopCommand
                 actor.sendMessage("You did not have any items that could be restocked at this shop.");
             }
             else {
-                for(ItemStack itemStack : taken) {
-                    if (itemStack.getAmount() == 0) {
-                        continue;
-                    }
-                    entry = actor.getShop().findEntry(itemStack);
-                    if (entry != null) {
-                        entry.add(itemStack.getAmount());
-                        actor.sendMessage("Restocked %s.", Format.itemname(itemStack.getAmount(), ItemNames.getName(entry)));
+                for (int i = 0; i < taken.size(); i++) {
+                    entry = taken.get(i);
+                    BaxEntry shopEntry = actor.getShop().findEntry(entry);
+                    if (entry.getAmount() > 0) {
+                        entry.add(entry.getAmount());
+                        actor.sendMessage("Restocked %s.", Format.itemname(entry.getAmount(), ItemNames.getName(entry)));
                     }
                 }
             }

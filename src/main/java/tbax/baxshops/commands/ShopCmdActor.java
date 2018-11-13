@@ -15,10 +15,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import tbax.baxshops.*;
+import tbax.baxshops.errors.CommandErrorException;
+import tbax.baxshops.errors.CommandMessageException;
+import tbax.baxshops.errors.CommandWarningException;
+import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.ItemNames;
 import tbax.baxshops.serialization.StateFile;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -169,7 +174,7 @@ public final class ShopCmdActor
         return getArgDouble(index, String.format("Expecting argument %d to be a number", index));
     }
 
-    public double getArgDouble(int index, String errMsg) throws  PrematureAbortException
+    public double getArgDouble(int index, String errMsg) throws PrematureAbortException
     {
         try {
             return Double.parseDouble(args[index]);
@@ -286,7 +291,7 @@ public final class ShopCmdActor
 
     public void exitError(String format, Object... args) throws PrematureAbortException
     {
-        throw new CommandErrorException(ChatColor.RED + String.format(format, args));
+        throw new CommandErrorException(String.format(format, args));
     }
 
     public void sendError(String format, Object... args)
@@ -301,7 +306,7 @@ public final class ShopCmdActor
 
     public void exitWarning(String format, Object... args) throws PrematureAbortException
     {
-        throw new CommandErrorException(ChatColor.GOLD + String.format(format, args));
+        throw new CommandWarningException(String.format(format, args));
     }
 
     public void sendMessage(String format, Object... args)
@@ -311,7 +316,7 @@ public final class ShopCmdActor
 
     public void exitMessage(String format, Object... args) throws PrematureAbortException
     {
-        throw new CommandErrorException(String.format(format, args));
+        throw new CommandMessageException(String.format(format, args));
     }
 
     public void logError(String format, Object... args)
@@ -336,23 +341,27 @@ public final class ShopCmdActor
         return pl.getInventory().getItemInMainHand();
     }
 
-    public List<ItemStack> takeArgFromInventory(ItemStack item, String arg) throws PrematureAbortException
+    public List<BaxEntry> takeArgFromInventory(String arg) throws PrematureAbortException
     {
-        List<ItemStack> ret = new ArrayList<>();
+        List<BaxEntry> ret = new ArrayList<>();
         int qty;
+
+        if ("any".equalsIgnoreCase(arg))
+            return takeAnyFromInventory();
+
+        if (getShop() == null)
+            throw new CommandErrorException(Resources.NOT_FOUND_SELECTED);
+
+        if (getItemInHand() == null || getItemInHand().getType() == Material.AIR)
+            throw new CommandErrorException(Resources.NOT_FOUND_HELDITEM);
+
+        BaxEntry clone = getShop().findEntry(getItemInHand()).clone();
+
         if ("all".equalsIgnoreCase(arg)) {
-            ItemStack clone = item.clone();
-            qty = takeFromInventory(clone, Integer.MAX_VALUE);
-            clone.setAmount(qty);
-            ret.add(clone);
+            qty = takeFromInventory(clone.getItemStack(), Integer.MAX_VALUE);
         }
         else if ("most".equalsIgnoreCase(arg)) {
-            if (getItemInHand() == null || getItemInHand().getType() == Material.AIR)
-                exitError(Resources.NOT_FOUND_HELDITEM);
-            ItemStack clone = item.clone();
-            qty = takeFromInventory(item, getItemInHand().getAmount() - 1);
-            clone.setAmount(qty);
-            ret.add(clone);
+            qty = takeFromInventory(clone.getItemStack(), getItemInHand().getAmount() - 1);
         }
         else {
             int amt = 0;
@@ -362,11 +371,10 @@ public final class ShopCmdActor
             catch (NumberFormatException e) {
                 exitError("%s is not a valid quantity", arg);
             }
-            ItemStack clone = item.clone();
-            qty = takeFromInventory(item, amt);
-            clone.setAmount(qty);
-            ret.add(clone);
+            qty = takeFromInventory(clone.getItemStack(), amt);
         }
+        clone.setAmount(qty);
+        ret.add(clone);
         return ret;
     }
 
@@ -374,7 +382,7 @@ public final class ShopCmdActor
     {
         BaxShop shop = getShop();
         PlayerInventory inv;
-        ArrayList<ItemStack> list = new ArrayList<>();
+        ArrayList<BaxEntry> list = new ArrayList<>();
 
         if (shop == null || pl == null)
             return list;

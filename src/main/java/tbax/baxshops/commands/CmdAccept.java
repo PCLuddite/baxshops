@@ -9,6 +9,7 @@ package tbax.baxshops.commands;
 
 import tbax.baxshops.Main;
 import tbax.baxshops.Resources;
+import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.help.CommandHelp;
 import tbax.baxshops.notification.Claimable;
 import tbax.baxshops.notification.Notification;

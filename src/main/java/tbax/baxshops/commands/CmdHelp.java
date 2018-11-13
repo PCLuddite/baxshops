@@ -9,6 +9,7 @@ package tbax.baxshops.commands;
 
 import tbax.baxshops.Format;
 import tbax.baxshops.Resources;
+import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.help.CommandHelp;
 import tbax.baxshops.help.Help;
 
@@ -70,13 +71,13 @@ public class CmdHelp extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(ShopCmdActor actor)
+    public void onCommand(ShopCmdActor actor) throws PrematureAbortException
     {
         if (actor.getNumArgs() > 1) {
             String helpCmd = actor.getArg(1);
             CommandHelp h = Help.getHelpFor(helpCmd);
             if (h == null) {
-                actor.sendError(Resources.INVALID_SHOP_ACTION, helpCmd);
+                actor.exitError(Resources.INVALID_SHOP_ACTION, helpCmd);
             }
             else {
                 actor.getSender().sendMessage(h.toHelpString());

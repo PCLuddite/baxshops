@@ -3,6 +3,7 @@ package tbax.baxshops.commands;
 import org.bukkit.Location;
 import tbax.baxshops.Format;
 import tbax.baxshops.ShopSelection;
+import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.help.CommandHelp;
 
 public class CmdTeleport extends BaxShopCommand

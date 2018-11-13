@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import tbax.baxshops.Format;
 import tbax.baxshops.Main;
 import tbax.baxshops.Resources;
+import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.help.CommandHelp;
 
 public class CmdGiveXp extends BaxShopCommand

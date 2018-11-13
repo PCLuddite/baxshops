@@ -5,7 +5,7 @@
  *  +++====+++
 **/
 
-package tbax.baxshops.commands;
+package tbax.baxshops.errors;
 
 public class PrematureAbortException extends Exception
 {

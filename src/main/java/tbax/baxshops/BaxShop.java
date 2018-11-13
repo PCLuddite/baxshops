@@ -17,8 +17,9 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
+import tbax.baxshops.errors.CommandErrorException;
+import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.commands.CommandErrorException;
 import tbax.baxshops.commands.PrematureAbortException;
 import tbax.baxshops.serialization.ItemNames;
@@ -197,23 +198,49 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
      * Find an entry for an item in this shop's inventory.
      *
      * @param stack the item to find
-     * @return the item's entry, or null
+     * @return the item's entry, or null if not found
      */
     public BaxEntry findEntry(ItemStack stack)
     {
         for (BaxEntry e : inventory) {
-            if (e.isItemEqual(stack)) {
+            if (e.isSimilar(stack)) {
                 return e;
             }
         }
         return null;
     }
 
+    /**
+     * Find an entry for an item in this shop's inventory.
+     *
+     * @param entry the item to find
+     * @return the item's entry, or null if not found
+     */
+    public BaxEntry findEntry(BaxEntry entry)
+    {
+        for (BaxEntry e : inventory) {
+            if (e.isSimilar(entry)) {
+                return e;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Creates a sign item for a given shop location
+     * @param index the index of the shop location
+     * @return the ItemStack containing the sign
+     */
     public ItemStack toItem(int index)
     {
         return toItem(locations.get(index));
     }
 
+    /**
+     * Creates a sign item for a given shop location
+     * @param loc the shop location to pull sign text
+     * @return the ItemStack containing the sign
+     */
     public ItemStack toItem(Location loc)
     {
         ItemStack item = new ItemStack(Material.SIGN, 1);

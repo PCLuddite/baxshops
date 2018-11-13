@@ -9,6 +9,7 @@ package tbax.baxshops.commands;
 
 import org.bukkit.block.Block;
 import tbax.baxshops.Format;
+import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.help.CommandHelp;
 
 public class CmdSetAngle extends BaxShopCommand

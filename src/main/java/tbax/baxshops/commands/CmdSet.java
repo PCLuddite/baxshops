@@ -11,6 +11,7 @@ import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
 import tbax.baxshops.Resources;
+import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.help.CommandHelp;
 import tbax.baxshops.serialization.ItemNames;
 
@@ -92,7 +93,7 @@ public class CmdSet extends BaxShopCommand
             }
         }
         else {
-            entry = ItemNames.getItemFromAlias(actor.getArg(1), shop, actor.getSender());
+            entry = ItemNames.getItemFromAlias(actor.getArg(1), shop);
         }
 
         if (entry == null) {

@@ -10,8 +10,8 @@ package tbax.baxshops.commands;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import tbax.baxshops.Main;
 import tbax.baxshops.Resources;
+import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.help.CommandHelp;
 
 public class CmdCopy extends BaxShopCommand

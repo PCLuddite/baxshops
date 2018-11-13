@@ -8,11 +8,12 @@
 
 package tbax.baxshops;
 
+import tbax.baxshops.errors.CommandErrorException;
+import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.commands.CommandErrorException;
 import tbax.baxshops.commands.PrematureAbortException;
 import tbax.baxshops.help.CommandHelp;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import org.bukkit.ChatColor;
@@ -220,18 +221,7 @@ public final class BaxEntry implements ConfigurationSerializable
         float damage = (pct / 100f) * ItemNames.getMaxDamage(stack.getType());
         stack.setDurability((short)damage);
     }
-    
-    /**
-     * Tests if the item material is equal, not taking into account the quantity
-     * @param item
-     * @return 
-     */
-    public boolean isItemEqual(ItemStack item)
-    {
-        assert item != null;
-        return stack.isSimilar(item);
-    }
-    
+
     public BaxEntry clone() // decided not to declare throwing CloneNotSupported. Java exceptions are a nightmare. 11/10/15
     {
         BaxEntry cloned = new BaxEntry();
@@ -401,5 +391,19 @@ public final class BaxEntry implements ConfigurationSerializable
     public static BaxEntry valueOf(Map<String, Object> args)
     {
         return deserialize(args);
+    }
+
+    public boolean isSimilar(ItemStack item)
+    {
+        if (item == null)
+            return false;
+        return stack.isSimilar(item);
+    }
+
+    public boolean isSimilar(BaxEntry entry)
+    {
+        if (entry == null)
+            return false;
+        return stack.isSimilar(entry.stack);
     }
 }

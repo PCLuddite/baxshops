@@ -9,6 +9,7 @@ package tbax.baxshops.commands;
 
 import tbax.baxshops.Main;
 import tbax.baxshops.Resources;
+import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.help.CommandHelp;
 import tbax.baxshops.notification.Notification;
 
@@ -76,7 +77,7 @@ public class CmdSkip extends BaxShopCommand
     {
         ArrayDeque<Notification> notifications = Main.getState().getNotifications(actor.getPlayer());
         if (notifications.isEmpty()) {
-            actor.sendError(Resources.NOT_FOUND_NOTE);
+            actor.exitError(Resources.NOT_FOUND_NOTE);
         }
         else {
             notifications.add(notifications.removeFirst());

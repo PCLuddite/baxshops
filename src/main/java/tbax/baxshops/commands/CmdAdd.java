@@ -5,6 +5,7 @@ import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
 import tbax.baxshops.Resources;
+import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.help.CommandHelp;
 import tbax.baxshops.serialization.ItemNames;
 
@@ -71,11 +72,11 @@ public class CmdAdd extends BaxShopCommand
     @Override
     public void onCommand(ShopCmdActor actor) throws PrematureAbortException
     {
-        double retailAmount = Math.round(100d * actor.getArgDouble(1, String.format(Resources.INVALID_DECIMAL, "buy price")))/100d,
+        double retailAmount = actor.getArgRoundedDouble(1, String.format(Resources.INVALID_DECIMAL, "buy price")),
                 refundAmount = -1;
 
         if (actor.getNumArgs() == 3) {
-            refundAmount = Math.round(100d * actor.getArgDouble(2, String.format(Resources.INVALID_DECIMAL, "sell price")))/100d;
+            refundAmount = actor.getArgRoundedDouble(2, String.format(Resources.INVALID_DECIMAL, "sell price"));
         }
 
         ItemStack stack = actor.getItemInHand();
