@@ -17,7 +17,6 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.commands.*;
-import tbax.baxshops.help.Help;
 import tbax.baxshops.notification.*;
 import tbax.baxshops.serialization.StateFile;
 
@@ -38,7 +37,7 @@ public final class Main extends JavaPlugin
      */
     private static StateFile state;
 
-    private static final Map<String, BaxShopCommand> commands = initCommands();
+    private static final CommandMap commands = initCommands();
     
     /**
      * The Vault economy
@@ -49,6 +48,11 @@ public final class Main extends JavaPlugin
     
     public Main()
     {
+    }
+
+    public static Map<String, BaxShopCommand> getCommands()
+    {
+        return commands;
     }
 
     @Override
@@ -104,9 +108,9 @@ public final class Main extends JavaPlugin
         state.saveAll();
     }
 
-    private static Map<String, BaxShopCommand> initCommands()
+    private static CommandMap initCommands()
     {
-		return BaxShopCommand.createCommandMap(
+		return new CommandMap(
 			CmdAccept.class,
 			CmdAdd.class,
 			CmdAccept.class,
@@ -148,7 +152,6 @@ public final class Main extends JavaPlugin
     public static boolean runCommand(ShopCmdActor actor)
     {
         if (actor.getNumArgs() == 0) {
-            Help.showHelp(actor.getSender());
             return false;
         }
 

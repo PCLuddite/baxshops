@@ -13,7 +13,7 @@ import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
 import tbax.baxshops.Resources;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.help.CommandHelp;
+import tbax.baxshops.CommandHelp;
 import tbax.baxshops.serialization.ItemNames;
 
 public class CmdRemove extends BaxShopCommand

@@ -12,7 +12,7 @@ import tbax.baxshops.Format;
 import tbax.baxshops.Main;
 import tbax.baxshops.Resources;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.help.CommandHelp;
+import tbax.baxshops.CommandHelp;
 
 public class CmdTakeXp extends BaxShopCommand
 {

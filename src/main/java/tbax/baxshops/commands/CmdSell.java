@@ -2,7 +2,7 @@ package tbax.baxshops.commands;
 
 import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.help.CommandHelp;
+import tbax.baxshops.CommandHelp;
 import tbax.baxshops.notification.SellRequest;
 import tbax.baxshops.serialization.ItemNames;
 

@@ -11,7 +11,7 @@ import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Resources;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.help.CommandHelp;
+import tbax.baxshops.CommandHelp;
 
 public class CmdSetAmnt extends BaxShopCommand
 {

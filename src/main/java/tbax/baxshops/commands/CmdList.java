@@ -11,7 +11,7 @@ import org.bukkit.ChatColor;
 import tbax.baxshops.Format;
 import tbax.baxshops.ShopSelection;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.help.CommandHelp;
+import tbax.baxshops.CommandHelp;
 
 public class CmdList extends BaxShopCommand
 {

@@ -10,7 +10,6 @@ package tbax.baxshops;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import tbax.baxshops.help.CommandHelp;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 

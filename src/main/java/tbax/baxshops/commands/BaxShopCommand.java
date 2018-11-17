@@ -8,7 +8,7 @@
 package tbax.baxshops.commands;
 
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.help.CommandHelp;
+import tbax.baxshops.CommandHelp;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,21 +40,9 @@ public abstract class BaxShopCommand
             return true;
         return actor.hasPermission(getPermission());
     }
-	
-	public static Map<String, BaxShopCommand> createCommandMap(Class<? extends BaxShopCommand>... classes)
-	{
-		Map<String, BaxShopCommand> map = new HashMap<String, BaxShopCommand>();
-		for(int x = 0; x < classes.length; ++x) {
-			try {
-				BaxShopCommand cmd = classes[x].newInstance();
-				for(String alias : cmd.getAliases()) {
-					map.put(alias, cmd);
-				}
-			}
-			catch(Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return map;
-	}
+
+    public boolean requiresAdmin(ShopCmdActor actor)
+    {
+        return "shops.admin".equalsIgnoreCase(getPermission());
+    }
 }

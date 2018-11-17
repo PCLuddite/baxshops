@@ -12,7 +12,6 @@ import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.commands.CommandErrorException;
 import tbax.baxshops.commands.PrematureAbortException;
-import tbax.baxshops.help.CommandHelp;
 
 import java.util.HashMap;
 import java.util.Map;

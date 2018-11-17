@@ -6,7 +6,7 @@ import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
 import tbax.baxshops.Resources;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.help.CommandHelp;
+import tbax.baxshops.CommandHelp;
 import tbax.baxshops.serialization.ItemNames;
 
 import java.util.List;

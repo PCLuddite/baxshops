@@ -10,7 +10,7 @@ package tbax.baxshops.commands;
 import org.bukkit.inventory.ItemStack;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.help.CommandHelp;
+import tbax.baxshops.CommandHelp;
 import tbax.baxshops.serialization.ItemNames;
 
 public class CmdTake extends BaxShopCommand

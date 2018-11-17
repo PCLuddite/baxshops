@@ -9,7 +9,7 @@ package tbax.baxshops.commands;
 
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.help.CommandHelp;
+import tbax.baxshops.CommandHelp;
 
 public class CmdInfo extends BaxShopCommand
 {

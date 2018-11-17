@@ -9,7 +9,7 @@ package tbax.baxshops.commands;
 
 import tbax.baxshops.Main;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.help.CommandHelp;
+import tbax.baxshops.CommandHelp;
 import tbax.baxshops.notification.LollipopNotification;
 
 public class CmdLollipop extends BaxShopCommand

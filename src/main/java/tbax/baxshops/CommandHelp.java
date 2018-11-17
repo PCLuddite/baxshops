@@ -6,7 +6,7 @@
  *  +++====+++
 **/
 
-package tbax.baxshops.help;
+package tbax.baxshops;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -197,7 +197,7 @@ public final class CommandHelp
 
     /**
      * Generates the 'help' description string for each of a list of arguments, separated by newlines
-     * @param args... a list of (name, description) pairs
+     * @param args a list of (name, description) pairs
      * @return the string
      */
     public static String[] args(String... args) {

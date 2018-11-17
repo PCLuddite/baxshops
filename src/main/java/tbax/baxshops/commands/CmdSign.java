@@ -12,7 +12,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import tbax.baxshops.Resources;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.help.CommandHelp;
+import tbax.baxshops.CommandHelp;
 
 public class CmdSign extends BaxShopCommand
 {
