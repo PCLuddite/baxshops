@@ -2,11 +2,8 @@ package tbax.baxshops.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
-import tbax.baxshops.BaxEntry;
-import tbax.baxshops.Format;
-import tbax.baxshops.Resources;
+import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.CommandHelp;
 import tbax.baxshops.serialization.ItemNames;
 
 import java.util.List;
@@ -32,9 +29,14 @@ public class CmdRestock extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp()
+    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
     {
-        return new CommandHelp("shop restock", "r", null, "restock this shop with your held item");
+        CommandHelp help = super.getHelp(actor);
+        help.setDescription("Restock a shop with the held item, or any item in the player's inventory");
+        help.setArgs(
+            new CommandHelpArgument("quantity", "the amount to restock", false)
+        );
+        return help;
     }
 
     @Override

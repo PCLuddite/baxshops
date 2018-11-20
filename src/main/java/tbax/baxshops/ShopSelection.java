@@ -87,7 +87,7 @@ public final class ShopSelection
     {
         int pages = shop.getPages();
         if (pages == 0) {
-            sender.sendMessage(CommandHelp.header("Empty"));
+            sender.sendMessage(Format.header("Empty"));
             sender.sendMessage("");
             sender.sendMessage("This shop has no items");
             int stop = BaxShop.ITEMS_PER_PAGE - 2;
@@ -100,7 +100,7 @@ public final class ShopSelection
             }
             return;
         }
-        sender.sendMessage(CommandHelp.header(String.format("Showing page %d of %d", page + 1, pages)));
+        sender.sendMessage(Format.header(String.format("Showing page %d of %d", page + 1, pages)));
         int i = page * BaxShop.ITEMS_PER_PAGE,
                 stop = (page + 1) * BaxShop.ITEMS_PER_PAGE,
                 max = Math.min(stop, shop.getInventorySize());

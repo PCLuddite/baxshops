@@ -1,6 +1,7 @@
 package tbax.baxshops.commands;
 
 import org.bukkit.Location;
+import tbax.baxshops.CommandHelpArgument;
 import tbax.baxshops.Format;
 import tbax.baxshops.ShopSelection;
 import tbax.baxshops.errors.PrematureAbortException;
@@ -27,12 +28,14 @@ public class CmdTeleport extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp()
+    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
     {
-        return new CommandHelp("teleport", "tp", "index",
-                "Teleports the player to a specific shop location. Use /shop list for a list of shop locations.",
-                CommandHelp.args("index", "the index of the shop location")
+        CommandHelp help = super.getHelp(actor);
+        help.setDescription("Teleport to a specific shop location. Use /shop list for a list of locations");
+        help.setArgs(
+            new CommandHelpArgument("index", "the index of the shop location", true)
         );
+        return help;
     }
 
     @Override

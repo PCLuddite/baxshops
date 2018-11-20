@@ -7,6 +7,7 @@
 
 package tbax.baxshops.commands;
 
+import tbax.baxshops.CommandHelpArgument;
 import tbax.baxshops.Main;
 import tbax.baxshops.Resources;
 import tbax.baxshops.errors.PrematureAbortException;
@@ -26,15 +27,23 @@ public class CmdAccept extends BaxShopCommand
     }
 
     @Override
+    public String[] getAliases()
+    {
+        return new String[]{"yes","a"};
+    }
+
+    @Override
     public String getPermission()
     {
         return null;
     }
 
     @Override
-    public CommandHelp getHelp()
+    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
     {
-        return new CommandHelp("shop accept", "yes,a", null, "accept your most recent notification");
+        CommandHelp help = super.getHelp(actor);
+        help.setDescription("accept your most recent notification");
+        return help;
     }
 
     @Override

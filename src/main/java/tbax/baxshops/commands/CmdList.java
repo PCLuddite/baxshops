@@ -28,9 +28,11 @@ public class CmdList extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp()
+    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
     {
-        return new CommandHelp("shop list", null, "", "List all shop locations");
+        CommandHelp help = super.getHelp(actor);
+        help.setDescription("List all locations for this shop");
+        return help;
     }
 
     @Override
@@ -68,7 +70,7 @@ public class CmdList extends BaxShopCommand
     {
         ShopSelection selection = actor.getSelection();
 
-        actor.sendMessage(CommandHelp.header("Shop Locations"));
+        actor.sendMessage(Format.header("Shop Locations"));
         if (!selection.getShop().getLocations().isEmpty()) {
             actor.sendMessage(" %-3s %-16s %-18s", ChatColor.GRAY + "#", ChatColor.WHITE + "Location", ChatColor.WHITE + "Sign Text");
 

@@ -7,12 +7,8 @@
 
 package tbax.baxshops.commands;
 
-import tbax.baxshops.BaxEntry;
-import tbax.baxshops.BaxShop;
-import tbax.baxshops.Format;
-import tbax.baxshops.Resources;
+import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.CommandHelp;
 import tbax.baxshops.serialization.ItemNames;
 
 public class CmdSet extends BaxShopCommand
@@ -36,14 +32,16 @@ public class CmdSet extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp()
+    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
     {
-        return new CommandHelp("shop set", null, "<item> <$buy> <$sell>", "change an item's price",
-                CommandHelp.args(
-                        "item", "the ID or name of the item to modify",
-                        "buy-price", "the new price of a single item in the stack",
-                        "sell-price", "the selling price of a single item in the stack (by default the item cannot be sold)"
-                ));
+        CommandHelp help = super.getHelp(actor);
+        help.setDescription("change the buy or sell price for a shop item");
+        help.setArgs(
+            new CommandHelpArgument("item", "the item in the shop", true),
+            new CommandHelpArgument("$buy", "the new price for buying a single item", true),
+            new CommandHelpArgument("$sell", "the new price for selling a single item. If no price is specified, the item cannot be sold.", false)
+        );
+        return help;
     }
 
     @Override

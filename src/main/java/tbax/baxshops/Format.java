@@ -245,4 +245,19 @@ public class Format
         }
         return sb.toString();
     }
+
+    /**
+     * Generates a chat header with the given title
+     * @param title the text in the header
+     * @return the chat header
+     */
+    public static String header(String title) {
+        return (new StringBuilder(ChatColor.GRAY.toString()).
+                append("------------ ").
+                append(ChatColor.WHITE).
+                append(title).
+                append(ChatColor.GRAY).
+                append(" ------------").
+                append(ChatColor.RESET)).toString();
+    }
 }

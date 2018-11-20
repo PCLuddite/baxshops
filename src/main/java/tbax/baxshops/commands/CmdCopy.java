@@ -29,9 +29,11 @@ public class CmdCopy extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp()
+    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
     {
-        return new CommandHelp("shop copy", null, null, "Copies the shop using a sign from the player's inventory");
+        CommandHelp help = super.getHelp(actor);
+        help.setDescription("Copies the shop using a sign from the player's inventory");
+        return help;
     }
 
     @Override

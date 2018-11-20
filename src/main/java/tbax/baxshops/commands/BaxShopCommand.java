@@ -21,7 +21,12 @@ public abstract class BaxShopCommand
 {
     public abstract String getName();
     public abstract String getPermission();
-    public abstract CommandHelp getHelp();
+
+    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
+    {
+        return new CommandHelp(getName(), getAliases());
+    }
+
     public abstract boolean hasValidArgCount(ShopCmdActor actor);
     public abstract boolean requiresSelection(ShopCmdActor actor);
     public abstract boolean requiresOwner(ShopCmdActor actor);

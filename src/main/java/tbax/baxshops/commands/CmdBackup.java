@@ -7,8 +7,9 @@
 
 package tbax.baxshops.commands;
 
-import tbax.baxshops.Main;
 import tbax.baxshops.CommandHelp;
+import tbax.baxshops.Main;
+import tbax.baxshops.errors.PrematureAbortException;
 
 /**
  *
@@ -29,9 +30,11 @@ public class CmdBackup extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp()
+    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
     {
-        return new CommandHelp("shop backup", null, null, "backs up shops");
+        CommandHelp help = super.getHelp(actor);
+        help.setDescription("backs up shops");
+        return help;
     }
 
     @Override

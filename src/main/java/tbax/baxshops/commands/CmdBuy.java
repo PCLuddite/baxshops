@@ -38,13 +38,15 @@ public class CmdBuy extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp()
+    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
     {
-        return new CommandHelp("shop buy", "b", "[item] <amount>", "buy an item from this shop",
-                CommandHelp.args(
-                        "item", "the name of the item or an entry number in the shop.    §LNote:§R enchanted items must be bought with an entry number",
-                        "quantity", "the quantity you wish to buy"
-                ));
+        CommandHelp help = super.getHelp(actor);
+        help.setDescription("buy an item from this shop");
+        help.setArgs(
+            new CommandHelpArgument("item", "the name of the item or an entry number in the shop.    §LNote:§R enchanted items must be bought with an entry number", true),
+            new CommandHelpArgument("quantity", "the quantity you wish to buy", false, 1)
+        );
+        return help;
     }
 
     @Override

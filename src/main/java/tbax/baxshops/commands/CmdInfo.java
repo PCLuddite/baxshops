@@ -8,6 +8,7 @@
 package tbax.baxshops.commands;
 
 import tbax.baxshops.BaxEntry;
+import tbax.baxshops.CommandHelpArgument;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
 
@@ -26,10 +27,14 @@ public class CmdInfo extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp()
+    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
     {
-        return new CommandHelp("shop info", null, "<index>", "Gets extended information about an entry in a shop",
-            CommandHelp.args("index", "the name or shop index of the entry"));
+        CommandHelp help = super.getHelp(actor);
+        help.setDescription("Gets extended information about an entry in a shop");
+        help.setArgs(
+            new CommandHelpArgument("item", "the name or shop index of the entry", true)
+        );
+        return help;
     }
 
     @Override

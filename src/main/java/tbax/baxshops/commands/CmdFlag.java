@@ -7,21 +7,18 @@
 
 package tbax.baxshops.commands;
 
-import tbax.baxshops.BaxEntry;
-import tbax.baxshops.BaxShop;
-import tbax.baxshops.Format;
+import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.CommandHelp;
 
 import java.util.Map;
 
 public class CmdFlag extends BaxShopCommand
 {
-	private final Map<String, BaxShopCommand> flagCmds;
+	private final CommandMap flagCmds;
 	
 	public CmdFlag()
 	{
-		flagCmds = createCommandMap(
+		flagCmds = new CommandMap(
 			FlagCmdSellToShop.class,
 			FlagCmdInfinite.class,
 			FlagCmdSellRequests.class,
@@ -44,12 +41,15 @@ public class CmdFlag extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp()
+    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
     {
-        return new CommandHelp("shop flag", null, "<name|list> [setting]", "Set a specific flag or list all flags applied to a selected shop",
-                CommandHelp.args("name", "the name of the flag to set",
-                        "setting", "the option to set the flag",
-                        "list", "lists all flags applied to the shop"));
+        CommandHelp help = super.getHelp(actor);
+        help.setDescription("Set a specific flag or list all flags applied to a selected shop");
+        help.setArgs(
+            new CommandHelpArgument("name|list", "the name of the flag to set or a list of all flags currently applied to this shop", true),
+            new CommandHelpArgument("setting", "the value this flag should be set to", false)
+        );
+        return help;
     }
 
     @Override
@@ -101,9 +101,6 @@ public class CmdFlag extends BaxShopCommand
 		
 		@Override
 		public String[] getAliases() { return null; }
-
-		@Override
-		public CommandHelp getHelp() { return null; }
 
 		@Override
 		public boolean requiresSelection(ShopCmdActor actor) { return true; }

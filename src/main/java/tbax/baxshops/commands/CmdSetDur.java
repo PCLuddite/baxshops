@@ -8,6 +8,7 @@
 package tbax.baxshops.commands;
 
 import tbax.baxshops.BaxEntry;
+import tbax.baxshops.CommandHelpArgument;
 import tbax.baxshops.Resources;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
@@ -27,9 +28,15 @@ public class CmdSetDur extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp()
+    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
     {
-        return null;
+        CommandHelp help = super.getHelp(actor);
+        help.setDescription("Set the damage percentage for an item");
+        help.setArgs(
+            new CommandHelpArgument("item", "the item for which to set the durability", true),
+            new CommandHelpArgument("damage", "the damage percentage", true)
+        );
+        return help;
     }
 
     @Override

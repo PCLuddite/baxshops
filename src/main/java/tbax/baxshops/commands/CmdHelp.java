@@ -7,10 +7,7 @@
 
 package tbax.baxshops.commands;
 
-import tbax.baxshops.CommandHelp;
-import tbax.baxshops.Format;
-import tbax.baxshops.Main;
-import tbax.baxshops.Resources;
+import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
 
 public class CmdHelp extends BaxShopCommand
@@ -34,10 +31,14 @@ public class CmdHelp extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp()
+    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
     {
-        return new CommandHelp("shop help", "h", "[action]", "show help with shops",
-                CommandHelp.arg("action", "get help on a /shop action, e.g. /shop h create"));
+        CommandHelp help = super.getHelp(actor);
+        help.setDescription("show help with shops");
+        help.setArgs(
+            new CommandHelpArgument("action", "get help on a /shop action, e.g. /shop h create", true)
+        );
+        return help;
     }
 
     @Override
@@ -85,11 +86,14 @@ public class CmdHelp extends BaxShopCommand
             if (cmd == null) {
                 actor.exitError(Resources.INVALID_SHOP_ACTION, actor.getArg(1));
             }
-            CommandHelp help = cmd.getHelp();
+            CommandHelp help = cmd.getHelp(actor);
             if (cmd == null) {
                 actor.exitWarning("No documentation was found for this command.");
             }
-            actor.getSender().sendMessage(help.toHelpString());
+            else if (!cmd.hasPermission(actor)) {
+                actor.sendError("You do not have permission to view the documentation for this command");
+            }
+            actor.getSender().sendMessage(help.toString());
         }
     }
 }

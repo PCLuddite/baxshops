@@ -8,11 +8,8 @@
 package tbax.baxshops.commands;
 
 import org.bukkit.entity.Player;
-import tbax.baxshops.Format;
-import tbax.baxshops.Main;
-import tbax.baxshops.Resources;
+import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.CommandHelp;
 
 public class CmdTakeXp extends BaxShopCommand
 {
@@ -29,9 +26,22 @@ public class CmdTakeXp extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp()
+    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
     {
-        return null;
+        CommandHelp help = super.getHelp(actor);
+        help.setDescription("trade XP for currency");
+        if (actor.isAdmin()) {
+            help.setArgs(
+                new CommandHelpArgument("levels", "the number of XP levels to take", true),
+                new CommandHelpArgument("player", "the name of the player to trade currency", false)
+            );
+        }
+        else {
+            help.setArgs(
+                new CommandHelpArgument("levels", "the number of XP levels to take", true)
+            );
+        }
+        return help;
     }
 
     @Override
@@ -72,18 +82,24 @@ public class CmdTakeXp extends BaxShopCommand
         if (levels < 0) {
             actor.exitError(Resources.INVALID_DECIMAL, "number of XP levels");
         }
+
+        Player p;
+        if (actor.isAdmin() && actor.getNumArgs() == 3) {
+            p = actor.getPlayer().getServer().getPlayer(actor.getArg(2));
+        }
         else {
-            Player p = actor.getPlayer();
-            double money = levels * actor.getMain().getConfig().getDouble("XPConvert", 4d);
+            p = actor.getPlayer();
+        }
 
-            if (levels > p.getLevel()) {
-                actor.exitError("You do not have enough experience for this exchange.");
-            } else {
-                Main.getEconomy().depositPlayer(p, money);
-                p.setLevel(p.getLevel() - levels);
+        double money = levels * actor.getMain().getConfig().getDouble("XPConvert", 4d);
 
-                p.sendMessage(String.format("You have exchanged %s levels for %s", Format.enchantments(levels + " XP"), Format.money(money)));
-            }
+        if (levels > p.getLevel()) {
+            actor.exitError("You do not have enough experience for this exchange.");
+        } else {
+            Main.getEconomy().depositPlayer(p, money);
+            p.setLevel(p.getLevel() - levels);
+
+            p.sendMessage(String.format("You have exchanged %s levels for %s", Format.enchantments(levels + " XP"), Format.money(money)));
         }
     }
 }

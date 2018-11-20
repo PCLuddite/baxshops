@@ -34,11 +34,15 @@ public class CmdTake extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp()
+    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
     {
-        return new CommandHelp("shop take", null, "<name> [amount]", "Takes an item from the shop",
-            CommandHelp.args("name", "the name of the item",
-                "amount", "the amount to take. Default is 1."));
+        CommandHelp help = super.getHelp(actor);
+        help.setDescription("take an item from a shop without purchasing it");
+        help.setArgs(
+            new CommandHelpArgument("item", "the item to take from the shop", true),
+            new CommandHelpArgument("quantity", "the quantity to take from the shop", false, 1)
+        );
+        return help;
     }
 
     @Override

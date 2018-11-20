@@ -7,11 +7,8 @@
 
 package tbax.baxshops.commands;
 
-import tbax.baxshops.BaxEntry;
-import tbax.baxshops.BaxShop;
-import tbax.baxshops.Resources;
+import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.CommandHelp;
 
 public class CmdSetAmnt extends BaxShopCommand
 {
@@ -34,11 +31,15 @@ public class CmdSetAmnt extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp()
+    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
     {
-        return new CommandHelp("shop setamnt", null, "<name> <amount>", "Sets the amount of an item is in the shop",
-            CommandHelp.args("name", "the name or index of the item",
-                "amount", "the amount to stock"));
+        CommandHelp help = super.getHelp(actor);
+        help.setDescription("set the quantity for an item in a shop");
+        help.setArgs(
+            new CommandHelpArgument("item", "the item for which to set the quantity", true),
+            new CommandHelpArgument("quantity", "the quantity for the item", true)
+        );
+        return help;
     }
 
     @Override

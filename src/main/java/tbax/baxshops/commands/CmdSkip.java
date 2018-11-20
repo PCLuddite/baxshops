@@ -36,10 +36,11 @@ public class CmdSkip extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp()
+    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
     {
-        return new CommandHelp("shop skip", "sk", null, "skip your most recent notification",
-                "Moves your most recent notification to the end of the list");
+        CommandHelp help = super.getHelp(actor);
+        help.setDescription("skip your most recent notification");
+        return help;
     }
 
     @Override

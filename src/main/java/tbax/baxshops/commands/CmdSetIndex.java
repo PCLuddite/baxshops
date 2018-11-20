@@ -8,6 +8,7 @@
 package tbax.baxshops.commands;
 
 import tbax.baxshops.BaxEntry;
+import tbax.baxshops.CommandHelpArgument;
 import tbax.baxshops.Resources;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
@@ -33,11 +34,15 @@ public class CmdSetIndex extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp()
+    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
     {
-        return new CommandHelp("shop setindex", null, "<old index> <new index>", "Changes the order of entries in a shop",
-            CommandHelp.args("old index", "the original index for the entry",
-                "new index", "the new index for the entry"));
+        CommandHelp help = super.getHelp(actor);
+        help.setDescription("Change the order of an entry in the shop");
+        help.setArgs(
+            new CommandHelpArgument("old-index", "the current index of the item", true),
+            new CommandHelpArgument("new-index", "the new index of the item", true)
+        );
+        return help;
     }
 
     @Override

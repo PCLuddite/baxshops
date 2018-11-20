@@ -29,13 +29,14 @@ public class CmdSell extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp()
+    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
     {
-        return new CommandHelp("shop sell", "s", "<item> <quantity>", "request to sell an item to this shop",
-                CommandHelp.args(
-                        "item", "the name of the item",
-                        "quantity", "the quantity you wish to sell"
-                ));
+        CommandHelp help = super.getHelp(actor);
+        help.setDescription("sell an item to a shop or request to sell if sell requests for the shop are active");
+        help.setArgs(
+            new CommandHelpArgument("quantity", "the quantity to you wish to sell", false)
+        );
+        return help;
     }
 
     @Override

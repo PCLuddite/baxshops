@@ -37,9 +37,11 @@ public class CmdReject extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp()
+    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
     {
-        return new CommandHelp("shop reject", "no", null, "reject your most recent notification");
+        CommandHelp help = super.getHelp(actor);
+        help.setDescription("reject your most recent notification");
+        return help;
     }
 
     @Override

@@ -9,6 +9,7 @@ package tbax.baxshops.commands;
 
 import tbax.baxshops.Main;
 import tbax.baxshops.CommandHelp;
+import tbax.baxshops.errors.PrematureAbortException;
 
 /**
  *
@@ -30,9 +31,11 @@ public class CmdSave extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp()
+    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
     {
-        return new CommandHelp("shop save", null, null, "saves all shops");
+        CommandHelp help = super.getHelp(actor);
+        help.setDescription("saves all shops");
+        return help;
     }
 
     @Override

@@ -8,6 +8,7 @@
 package tbax.baxshops.commands;
 
 import org.bukkit.block.Block;
+import tbax.baxshops.CommandHelpArgument;
 import tbax.baxshops.Format;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
@@ -33,10 +34,14 @@ public class CmdSetAngle extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp()
+    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
     {
-        return new CommandHelp("shop setface", "setangle", "<direction>", "Rotates the sign to face another direction",
-            CommandHelp.args("direction", "\"North\", \"South\", \"East\", or \"West\""));
+        CommandHelp help = super.getHelp(actor);
+        help.setDescription("rotates a shop sign to face another direction");
+        help.setArgs(
+            new CommandHelpArgument("direction", "A cardinal direction (i.e., 'north', 'south', 'east' or 'west')", true)
+        );
+        return help;
     }
 
     @Override

@@ -10,6 +10,7 @@ package tbax.baxshops.commands;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import tbax.baxshops.CommandHelpArgument;
 import tbax.baxshops.Resources;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
@@ -29,10 +30,14 @@ public class CmdSign extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp()
+    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
     {
-        return  new CommandHelp("shop sign", null, "<line1>|<line2>…", "changes a shop's sign",
-                CommandHelp.arg("text", "the new text of the sign, separated by |'s"));
+        CommandHelp help = super.getHelp(actor);
+        help.setDescription("changes the text on a shop sign");
+        help.setArgs(
+            new CommandHelpArgument("text", "the new text of the sign, each line separated by |", true)
+        );
+        return help;
     }
 
     @Override

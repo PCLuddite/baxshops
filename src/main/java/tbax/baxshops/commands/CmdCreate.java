@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import tbax.baxshops.BaxShop;
+import tbax.baxshops.CommandHelpArgument;
 import tbax.baxshops.Format;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
@@ -30,12 +31,17 @@ public class CmdCreate extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp()
+    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
     {
-        return new CommandHelp("shop create", "mk", "<owner> [inf=no]", "create a new shop",
-                CommandHelp.args(
-                        "owner", "the owner of the shop",
-                        "inf", "whether the shop is infinite"));
+        CommandHelp help = super.getHelp(actor);
+        help.setDescription("create a new shop");
+        if (actor.isAdmin()) {
+            help.setArgs(
+                new CommandHelpArgument("owner", "the owner of the shop", true),
+                new CommandHelpArgument("infinite", "whether the shop is infinite", false, "no")
+            );
+        }
+        return help;
     }
 
     @Override

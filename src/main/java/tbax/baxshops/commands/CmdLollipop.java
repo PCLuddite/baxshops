@@ -7,6 +7,7 @@
 
 package tbax.baxshops.commands;
 
+import tbax.baxshops.CommandHelpArgument;
 import tbax.baxshops.Main;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
@@ -33,12 +34,15 @@ public class CmdLollipop extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp()
+    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
     {
-        return new CommandHelp("shop lollipop", "lol", "[player [tastiness]]", CommandHelp.args(
-                "player", "the player",
-                "tastiness", "the tastiness (0-100)"
-        ));
+        CommandHelp help = super.getHelp(actor);
+        help.setDescription("Hand out lollipop");
+        help.setArgs(
+            new CommandHelpArgument("player", "player to send lollipop", true),
+            new CommandHelpArgument("tastiness", "the tastiness (0-100)", true)
+        );
+        return help;
     }
 
     @Override

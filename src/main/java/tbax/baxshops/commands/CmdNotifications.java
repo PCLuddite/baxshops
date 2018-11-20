@@ -35,13 +35,16 @@ public class CmdNotifications extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp()
+    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
     {
-        return new CommandHelp("shop notifications", "n,pending,p", null, "view notifications",
-                "Shows a list of notifications to sell items to your shops",
-                "These can be offers (e.g., someone wishes to sell you an item)",
-                "or messages (e.g., an offer was accepted).",
-                "Use /shop accept and /shop reject on offers.");
+        CommandHelp help = super.getHelp(actor);
+        help.setDescription(
+            "Shows a list of notifications to sell items to your shops\n" +
+            "These can be offers (e.g., someone wishes to sell you an item)\n" +
+            "or messages (e.g., an offer was accepted).\n" +
+            "Use /shop accept and /shop reject on offers."
+        );
+        return help;
     }
 
     @Override

@@ -8,12 +8,8 @@
 package tbax.baxshops.commands;
 
 import org.bukkit.inventory.ItemStack;
-import tbax.baxshops.BaxEntry;
-import tbax.baxshops.BaxShop;
-import tbax.baxshops.Format;
-import tbax.baxshops.Resources;
+import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.CommandHelp;
 import tbax.baxshops.serialization.ItemNames;
 
 public class CmdRemove extends BaxShopCommand
@@ -37,10 +33,14 @@ public class CmdRemove extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp()
+    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
     {
-        return new CommandHelp("shop remove", "rm", "<item>", "removes an item",
-            CommandHelp.arg("item", "the name or entry number of the item to remove"));
+        CommandHelp help = super.getHelp(actor);
+        help.setDescription("remove an item from the shop");
+        help.setArgs(
+            new CommandHelpArgument("item", "the name or entry number of the item to remove", true)
+        );
+        return help;
     }
 
     @Override

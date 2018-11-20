@@ -1,12 +1,8 @@
 package tbax.baxshops.commands;
 
 import org.bukkit.inventory.ItemStack;
-import tbax.baxshops.BaxEntry;
-import tbax.baxshops.BaxShop;
-import tbax.baxshops.Format;
-import tbax.baxshops.Resources;
+import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.CommandHelp;
 import tbax.baxshops.serialization.ItemNames;
 
 public class CmdAdd extends BaxShopCommand
@@ -30,13 +26,15 @@ public class CmdAdd extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp()
+    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
     {
-        return new CommandHelp("shop add", "+,ad", "<$buy> [$sell=no]", "add held item to this shop",
-                CommandHelp.args(
-                        "buy-price", "the price of a single item in the stack",
-                        "sell-price", "the selling price of a single item in the stack (by default the item cannot be sold)"
-                ));
+        CommandHelp help = super.getHelp(actor);
+        help.setDescription("add held item to this shop");
+        help.setArgs(
+          new CommandHelpArgument("buy price", "the price of a single item in the stack", true),
+          new CommandHelpArgument("sell price", "the selling price of a single item in the stack (by default the item cannot be sold)", false)
+        );
+        return help;
     }
 
     @Override

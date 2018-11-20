@@ -8,11 +8,8 @@
 package tbax.baxshops.commands;
 
 import org.bukkit.entity.Player;
-import tbax.baxshops.Format;
-import tbax.baxshops.Main;
-import tbax.baxshops.Resources;
+import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.CommandHelp;
 
 public class CmdGiveXp extends BaxShopCommand
 {
@@ -29,23 +26,28 @@ public class CmdGiveXp extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp()
+    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
     {
-        return null;
+        CommandHelp help = super.getHelp(actor);
+        help.setDescription("trade currency for XP");
+        if (actor.isAdmin()) {
+            help.setArgs(
+                new CommandHelpArgument("levels", "the number of XP levels to give", true),
+                new CommandHelpArgument("player", "the name of the player to trade currency", false)
+            );
+        }
+        else {
+            help.setArgs(
+                new CommandHelpArgument("levels", "the number of XP levels to give", true)
+                );
+        }
+        return help;
     }
 
     @Override
     public boolean hasValidArgCount(ShopCmdActor actor)
     {
         return ((actor.getNumArgs() == 3 && actor.isAdmin()) || actor.getNumArgs() == 2);
-    }
-
-    @Override
-    public boolean hasPermission(ShopCmdActor actor)
-    {
-        if (actor.getNumArgs() == 3)
-            return actor.isAdmin();
-        return true;
     }
 
     @Override
@@ -80,14 +82,22 @@ public class CmdGiveXp extends BaxShopCommand
         if (levels < 0) {
             actor.exitError(String.format(Resources.INVALID_DECIMAL, "number of XP levels"));
         }
-        else {
-            Player p = actor.getPlayer();
-            double money = levels * actor.getMain().getConfig().getDouble("XPConvert", 4d);
 
-            Main.getEconomy().withdrawPlayer(p, money);
-            p.setLevel(p.getLevel() + levels);
-
-            p.sendMessage(String.format("You have been charged %s for %s levels", Format.money(money), Format.enchantments(levels + " XP")));
+        Player p;
+        if (actor.isAdmin() && actor.getNumArgs() == 3) {
+            p = actor.getPlayer().getServer().getPlayer(actor.getArg(2));
         }
+        else {
+            p = actor.getPlayer();
+        }
+
+        double money = levels * actor.getMain().getConfig().getDouble("XPConvert", 4d);
+        if (!Main.getEconomy().has(p, money)) {
+            actor.sendError("You do not have enough funds to make this exchange");
+        }
+        Main.getEconomy().withdrawPlayer(p, money);
+        p.setLevel(p.getLevel() + levels);
+
+        p.sendMessage(String.format("You have been charged %s for %s levels", Format.money(money), Format.enchantments(levels + " XP")));
     }
 }
