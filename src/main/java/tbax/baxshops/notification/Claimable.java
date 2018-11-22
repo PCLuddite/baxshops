@@ -8,10 +8,13 @@
 
 package tbax.baxshops.notification;
 
-import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import tbax.baxshops.BaxEntry;
-import tbax.baxshops.Main;
 import tbax.baxshops.Resources;
+import tbax.baxshops.commands.ShopCmdActor;
+import tbax.baxshops.errors.CommandErrorException;
+import tbax.baxshops.errors.CommandWarningException;
+import tbax.baxshops.errors.PrematureAbortException;
 
 /**
  * A Claimable represents a notification which must wait for
@@ -28,18 +31,28 @@ public abstract class Claimable implements Notification
     
     /**
      * Attempts to claim this notification.
-     * @param player the player who is claiming the notification
+     * @param actor the actor who is claiming the notification
      * @return true if the notification could be claimed, false otherwise
      */
-    public boolean claim(Player player)
+    public boolean claim(ShopCmdActor actor)
     {
-        if (Main.tryGiveItem(player, entry.toItemStack())) {
-            player.sendMessage(Resources.ITEM_ADDED);
+        ItemStack stack = entry.toItemStack();
+        try {
+            actor.giveItem(stack);
+            actor.sendMessage(Resources.ITEM_ADDED);
             return true;
         }
-        else {
-            Main.sendError(player, Resources.NO_ROOM);
+        catch (CommandErrorException e) {
+            actor.sendError(e.getMessage());
             return false;
+        }
+        catch (CommandWarningException e) {
+            actor.sendWarning(e.getMessage());
+            return false;
+        }
+        catch (PrematureAbortException e) {
+            actor.sendMessage(e.getMessage());
+            return true;
         }
     }
 }

@@ -48,7 +48,7 @@ public final class SaleNotification implements ConfigurationSerializable, Notifi
                 buyer = Resources.ERROR_INLINE;
             }
             else {
-                buyer = shop.owner;
+                buyer = shop.getOwner();
             }
         }
         else {
@@ -77,14 +77,14 @@ public final class SaleNotification implements ConfigurationSerializable, Notifi
                         Format.username(buyer), 
                         Format.username2(seller),
                         Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
-                        Format.money(entry.refundPrice * entry.getAmount())
+                        Format.money(entry.getRefundPrice() * entry.getAmount())
                     );
         }
         else {
             return String.format("%s accepted your request to sell %s for %s.",
                         Format.username(buyer), 
                         Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
-                        Format.money(entry.refundPrice * entry.getAmount())
+                        Format.money(entry.getRefundPrice() * entry.getAmount())
                     );
         }
     }

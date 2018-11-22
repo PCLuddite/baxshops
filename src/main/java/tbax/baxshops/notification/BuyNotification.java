@@ -16,6 +16,7 @@ import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
 import tbax.baxshops.Main;
 import tbax.baxshops.Resources;
+import tbax.baxshops.commands.ShopCmdActor;
 import tbax.baxshops.serialization.ItemNames;
 
 /**
@@ -50,7 +51,7 @@ public final class BuyNotification implements Notification
                 seller = Resources.ERROR_INLINE;
             }
             else {
-                seller = shop.owner;
+                seller = shop.getOwner();
             }
         }
     }
@@ -69,21 +70,21 @@ public final class BuyNotification implements Notification
     }
     
     @Override
-    public String getMessage(Player player) 
+    public String getMessage(ShopCmdActor actor)
     {
-        if (player == null || !player.getName().equals(seller)) {
+        if (actor.getPlayer() == null || !actor.getPlayer().getName().equals(seller)) {
             return String.format("%s bought %s from %s for %s.",
                         Format.username(buyer),
                         Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
                         Format.username2(seller),
-                        Format.money(entry.retailPrice * entry.getAmount())
+                        Format.money(entry.getRetailPrice() * entry.getAmount())
                     );
         }
         else {
             return String.format("%s bought %s from you for %s.",
                         Format.username(buyer),
                         Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
-                        Format.money(entry.retailPrice * entry.getAmount())
+                        Format.money(entry.getRetailPrice() * entry.getAmount())
                     );
         }
     }

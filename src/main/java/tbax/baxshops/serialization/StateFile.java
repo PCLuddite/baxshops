@@ -8,6 +8,9 @@
 package tbax.baxshops.serialization;
 
 import tbax.baxshops.*;
+import tbax.baxshops.commands.ShopCmdActor;
+import tbax.baxshops.errors.CommandErrorException;
+import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.*;
 import java.io.*;
 import java.util.*;
@@ -200,42 +203,42 @@ public final class StateFile
         return true;
     }
     
-    public boolean addShop(Player pl, BaxShop shop)
+    public boolean addShop(ShopCmdActor actor, BaxShop shop)
     {
-        if (shop.id < 0) {
-            shop.id = getUniqueId();
+        if (shop.getId() < 0) {
+            shop.setId(getUniqueId());
         }
         for(Location loc : shop.getLocations()) {
-            if (!addLocation(pl, loc, shop)) {
+            if (!addLocation(actor, loc, shop)) {
                 return false;
             }
         }
-        shops.put(shop.id, shop);
+        shops.put(shop.getId(), shop);
         return true;
     }
     
-    public boolean addLocation(Player pl, Location loc, BaxShop shop)
+    public boolean addLocation(ShopCmdActor actor, Location loc, BaxShop shop)
     {
         Long otherUid = locations.get(loc);
         if (otherUid == null) {
-            locations.put(loc, shop.id);
+            locations.put(loc, shop.getId());
         }
-        else if (otherUid != shop.id) {
-            Main.sendError(pl, "You can't create a new shop here! Another shop already exists on this block!");
+        else if (otherUid != shop.getId()) {
+            actor.sendError("You can't create a new shop here! Another shop already exists on this block!");
             return false;
         }
         return true;
     }
     
-    public void removeShop(CommandSender pl, BaxShop shop)
+    public void removeShop(CommandSender pl, BaxShop shop) throws PrematureAbortException
     {
-        for(Location loc : (ArrayList<Location>)shop.getLocations().clone()) {
+        for(Location loc : (Location[])shop.getLocations().toArray()) {
             removeLocation(pl, loc);
         }
-        pl.sendMessage(String.format("%s's shop has been deleted.", Format.username(shop.owner)));
+        pl.sendMessage(String.format("%s's shop has been deleted.", Format.username(shop.getOwner())));
     }
     
-    public void removeLocation(CommandSender pl, Location loc)
+    public void removeLocation(CommandSender pl, Location loc) throws PrematureAbortException
     {
         Long uid = locations.get(loc);
         if (uid != null) {
@@ -245,17 +248,17 @@ public final class StateFile
                 Sign sign = (Sign) b.getState();
                 sign.setLine(0, Resources.SIGN_CLOSED[0]);
                 sign.setLine(1, Resources.SIGN_CLOSED[1]);
-                sign.setLine(2, (pl.getName().equals(shop.owner) ? "the owner" : "an admin") + ".");
+                sign.setLine(2, (pl.getName().equals(shop.getOwner()) ? "the owner" : "an admin") + ".");
                 sign.setLine(3, "");
                 sign.update();
             }
             catch(NullPointerException | ClassCastException e) {
-                Main.sendError(pl, "Unable to change the sign text at " + Format.location(loc));
+                throw new CommandErrorException("Unable to change the sign text at " + Format.location(loc));
             }
             shop.removeLocation(loc);
             locations.remove(loc);
             if (shop.getLocations().isEmpty()) {
-               shops.remove(shop.id); 
+               shops.remove(shop.getId());
             }
         }
     }
@@ -268,69 +271,65 @@ public final class StateFile
      */
     public ArrayDeque<Notification> getNotifications(Player pl)
     {
-        return getNotifications(pl.getName());
-    }
-	
-    /**
-     * Gets a list of notifications for a player.
-     *
-     * @param player the player
-     * @return the player's notifications
-     */
-    public ArrayDeque<Notification> getNotifications(String player)
-    {
-        ArrayDeque<Notification> n = pending.get(player);
+        ArrayDeque<Notification> n = pending.get(pl.getName());
         if (n == null) {
             n = new ArrayDeque<>();
-            pending.put(player, n);
+            pending.put(pl.getName(), n);
         }
         return n;
+    }
+
+    public ArrayDeque<Notification> getNotifications(ShopCmdActor actor)
+    {
+        return getNotifications(actor.getPlayer());
     }
     
     /**
      * Shows a player his/her most recent notification. Also shows the
      * notification count.
      *
-     * @param pl the player
+     * @param actor the player
      */
-    public void showNotification(Player pl)
+    public void showNotification(ShopCmdActor actor)
     {
-        showNotification(pl, true);
+        showNotification(actor, true);
     }
 
     /**
      * Shows a player his/her most recent notification.
      *
-     * @param pl the player
+     * @param actor the player
      * @param showCount whether the notification count should be shown as well
      */
-    public void showNotification(Player pl, boolean showCount)
+    public void showNotification(ShopCmdActor actor, boolean showCount)
     {
-        ArrayDeque<Notification> notifications = getNotifications(pl);
+        ArrayDeque<Notification> notifications = getNotifications(actor);
         if (notifications.isEmpty()) {
             if (showCount) {
-                pl.sendMessage("You have no notifications.");
+                actor.sendMessage("You have no notifications.");
             }
             return;
         }
         if (showCount) {
             int size = notifications.size();
-            pl.sendMessage(String.format("You have %s %s.", Format.number(size), size == 1 ? "notification" : "notifications"));
+            actor.sendMessage("You have %s %s.", Format.number(size), size == 1 ? "notification" : "notifications");
         }
 
         Notification n = notifications.getFirst();
-        pl.sendMessage(n.getMessage(pl));
+        actor.sendMessage(n.getMessage(actor));
         if (n instanceof BuyClaim) {
-            if (((Claimable)n).claim(pl)) {
+            if (((Claimable)n).claim(actor)) {
                 notifications.removeFirst();
                 return;
             }
         }
         if (n instanceof Request) {
-            pl.sendMessage("Use " + Format.command("/shop accept") + " or " + Format.command("/shop reject") + " to manage this request.");
+            actor.sendMessage("Use %s or %s to manage this request.",
+                Format.command("/shop accept"),
+                Format.command("/shop reject"));
         } 
         else if (n instanceof Claimable) {
-            pl.sendMessage("Use " + Format.command("/shop claim") + " to claim and remove this notification.");
+            actor.sendMessage("Use %s to claim and remove this notification.", Format.command("/shop claim") );
         } 
         else {
             notifications.removeFirst();
@@ -340,42 +339,31 @@ public final class StateFile
     /**
      * Sends a notification to a player.
      *
-     * @param pl the player
+     * @param actor the player
      * @param n the notification
      */
-    public void sendNotification(Player pl, Notification n)
+    public void sendNotification(ShopCmdActor actor, Notification n)
     {
-        sendNotification(pl.getName(), n);
-    }
-    
-    /**
-     * Sends a notification to a player.
-     *
-     * @param player the player
-     * @param n the notification
-     */
-    public void sendNotification(String player, Notification n)
-    {
-        sendNotification(player, n, main.getConfig().getBoolean("LogNotes"));
+        sendNotification(actor, n, main.getConfig().getBoolean("LogNotes"));
     }
 
     /**
      * Sends a notification to a player.
      *
-     * @param player the player
+     * @param actor the player
      * @param n the notification
      * @param log_it should show it in the log
      */
-    public void sendNotification(String player, Notification n, boolean log_it)
+    public void sendNotification(ShopCmdActor actor, Notification n, boolean log_it)
     {
-        ArrayDeque<Notification> ns = getNotifications(player);
+        ArrayDeque<Notification> ns = getNotifications(actor);
         if (log_it) {
             log.info(Format.toAnsiColor(n.getMessage(null)));
         }
         ns.add(n);
-        Player pl = main.getServer().getPlayer(player);
+        Player pl = actor.getPlayer();
         if (pl != null && pl.isOnline()) {
-            showNotification(pl, false);
+            showNotification(actor, false);
         }
     }
     

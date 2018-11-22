@@ -10,6 +10,7 @@ package tbax.baxshops.notification;
 
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
+import tbax.baxshops.commands.ShopCmdActor;
 
 /**
  * The notification interface is used to represent shop-related
@@ -29,6 +30,6 @@ public interface Notification extends ConfigurationSerializable
      * @param player the player to which the message will be sent (may be null)
      * @return the notification message
      */
-    public String getMessage(Player player);
+    public String getMessage(ShopCmdActor actor);
     public boolean checkIntegrity();
 }

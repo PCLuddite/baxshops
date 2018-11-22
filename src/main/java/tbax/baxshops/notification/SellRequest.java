@@ -13,9 +13,9 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import tbax.baxshops.*;
-import tbax.baxshops.commands.CommandErrorException;
-import tbax.baxshops.commands.PrematureAbortException;
 import tbax.baxshops.commands.ShopCmdActor;
+import tbax.baxshops.errors.CommandErrorException;
+import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.ItemNames;
 
 import java.util.Calendar;

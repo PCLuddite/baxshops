@@ -66,7 +66,7 @@ public final class Clipboard
         if (id == null) {
             id = "DEFAULT";
         }
-        clipboard.get(pl).put(id, shop.id);
+        clipboard.get(pl).put(id, shop.getId());
     }
     
     public static BaxShop get(Player pl, String id) {

@@ -47,7 +47,7 @@ public class SaleNotificationAuto implements Notification, ConfigurationSerializ
                 buyer = Resources.ERROR_INLINE;
             }
             else {
-                buyer = shop.owner;
+                buyer = shop.getOwner();
             }
         }
     }
@@ -78,14 +78,14 @@ public class SaleNotificationAuto implements Notification, ConfigurationSerializ
                         Format.username(seller),
                         Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
                         Format.username2(buyer),
-                        Format.money(entry.refundPrice * entry.getAmount())
+                        Format.money(entry.getRefundPrice() * entry.getAmount())
                     );
         }
         else {
             return String.format("%s sold you %s for %s.",
                         Format.username(seller),
                         Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
-                        Format.money(entry.refundPrice * entry.getAmount())
+                        Format.money(entry.getRefundPrice() * entry.getAmount())
                     );
         }
     }

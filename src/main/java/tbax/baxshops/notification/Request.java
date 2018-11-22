@@ -8,8 +8,8 @@
 
 package tbax.baxshops.notification;
 
-import tbax.baxshops.commands.PrematureAbortException;
 import tbax.baxshops.commands.ShopCmdActor;
+import tbax.baxshops.errors.PrematureAbortException;
 
 /**
  * A Request represents a /accept- or /reject-able {@link Notification}.

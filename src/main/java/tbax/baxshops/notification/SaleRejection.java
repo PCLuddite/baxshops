@@ -56,7 +56,7 @@ public final class SaleRejection extends Claimable implements ConfigurationSeria
                 buyer = Resources.ERROR_INLINE;
             }
             else {
-                buyer = shop.owner;
+                buyer = shop.getOwner();
             }
         }
         else {
@@ -72,14 +72,14 @@ public final class SaleRejection extends Claimable implements ConfigurationSeria
                 Format.username(buyer),
                 Format.username2(seller),
                 Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
-                Format.money(entry.refundPrice * entry.getAmount())
+                Format.money(entry.getRefundPrice() * entry.getAmount())
             );
         }
         else {
             return String.format("%s rejected your request to sell %s for %s.",
                 Format.username(buyer),
                 Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
-                Format.money(entry.refundPrice * entry.getAmount())
+                Format.money(entry.getRefundPrice() * entry.getAmount())
             );
         }
     }

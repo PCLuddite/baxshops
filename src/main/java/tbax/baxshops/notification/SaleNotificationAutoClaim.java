@@ -11,6 +11,7 @@ import java.util.Map;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Player;
 import tbax.baxshops.BaxEntry;
+import tbax.baxshops.commands.ShopCmdActor;
 
 /**
  *
@@ -38,10 +39,10 @@ public class SaleNotificationAutoClaim extends Claimable implements Configuratio
     }
     
     @Override
-    public boolean claim(Player player)
+    public boolean claim(ShopCmdActor actor)
     {
         super.entry = note.entry;
-        return super.claim(player);
+        return super.claim(actor);
     }
     
     @Override

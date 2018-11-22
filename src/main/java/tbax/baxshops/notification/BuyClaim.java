@@ -15,6 +15,7 @@ import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
 import tbax.baxshops.Main;
 import tbax.baxshops.Resources;
+import tbax.baxshops.commands.ShopCmdActor;
 import tbax.baxshops.serialization.ItemNames;
 
 /**
@@ -55,7 +56,7 @@ public final class BuyClaim extends Claimable
                 seller = Resources.ERROR_INLINE;
             }
             else {
-                seller = shop.owner;
+                seller = shop.getOwner();
             }
         }
         else {
@@ -64,21 +65,21 @@ public final class BuyClaim extends Claimable
     }
 
     @Override
-    public String getMessage(Player player)
+    public String getMessage(ShopCmdActor actor)
     {
-        if (player == null || !player.getName().equals(buyer)) {
+        if (actor.getPlayer() == null || !actor.getPlayer().getName().equals(buyer)) {
             return String.format("%s accepted %s's request to buy %s for %s.",
                         Format.username(seller), 
                         Format.username2(buyer),
                         Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
-                        Format.money(entry.retailPrice * entry.getAmount())
+                        Format.money(entry.getRetailPrice() * entry.getAmount())
                     );
         }
         else {
             return String.format("%s accepted your request to buy %s for %s.",
                     Format.username(seller),
                     Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
-                    Format.money(entry.retailPrice * entry.getAmount())
+                    Format.money(entry.getRetailPrice() * entry.getAmount())
             );
         }
     }

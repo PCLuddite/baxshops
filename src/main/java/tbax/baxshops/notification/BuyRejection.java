@@ -16,6 +16,7 @@ import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
 import tbax.baxshops.Main;
 import tbax.baxshops.Resources;
+import tbax.baxshops.commands.ShopCmdActor;
 import tbax.baxshops.serialization.ItemNames;
 
 /**
@@ -50,7 +51,7 @@ public final class BuyRejection implements Notification
                 seller = Resources.ERROR_INLINE;
             }
             else {
-                seller = shop.owner;
+                seller = shop.getOwner();
             }
         }
         this.entry = (BaxEntry)args.get("entry");
@@ -70,21 +71,21 @@ public final class BuyRejection implements Notification
     }
 
     @Override
-    public String getMessage(Player player)
+    public String getMessage(ShopCmdActor actor)
     {
-        if (player == null || !player.getName().equals(seller)) {
+        if (actor.getPlayer() == null || !actor.getPlayer().getName().equals(seller)) {
             return String.format("%s " + ChatColor.RED + "rejected" + ChatColor.RESET + " %s's request to buy %s for %s.",
                         Format.username(seller),
                         Format.username2(buyer),
                         Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
-                        Format.money(entry.refundPrice * entry.getAmount())
+                        Format.money(entry.getRetailPrice() * entry.getAmount())
                     );
         }
         else {
             return String.format("%s " + ChatColor.RED + "rejected" + ChatColor.RESET + " your request to buy %s for %s.",
                         Format.username(seller),
                         Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
-                        Format.money(entry.refundPrice * entry.getAmount())
+                        Format.money(entry.getRetailPrice() * entry.getAmount())
                     );
         }
     }

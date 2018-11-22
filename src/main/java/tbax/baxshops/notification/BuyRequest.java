@@ -13,11 +13,8 @@ import java.util.HashMap;
 import java.util.Map;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.entity.Player;
-import tbax.baxshops.BaxEntry;
-import tbax.baxshops.BaxShop;
-import tbax.baxshops.Format;
-import tbax.baxshops.Main;
-import tbax.baxshops.Resources;
+import tbax.baxshops.*;
+import tbax.baxshops.commands.ShopCmdActor;
 import tbax.baxshops.serialization.ItemNames;
 
 /**
@@ -87,22 +84,22 @@ public final class BuyRequest implements Request, TimedNotification
                         Format.username(buyer),
                         Format.itemname(purchased.getAmount(), ItemNames.getName(purchased)),
                         Format.username2(seller),
-                        Format.money(purchased.retailPrice * purchased.getAmount())
+                        Format.money(purchased.getRetailPrice() * purchased.getAmount())
                     );
         }
         else {
             return String.format("%s wants to buy %s from you for %s.",
                         Format.username(buyer),
                         Format.itemname(purchased.getAmount(), ItemNames.getName(purchased)),
-                        Format.money(purchased.retailPrice * purchased.getAmount())
+                        Format.money(purchased.getRetailPrice() * purchased.getAmount())
                     );
         }
     }
 	
     @Override
-    public boolean accept(Player acceptingPlayer)
+    public boolean accept(ShopCmdActor actor)
     {            
-        double price = Main.roundTwoPlaces(purchased.getAmount() * purchased.refundPrice);
+        double price = MathUtil.multiply(purchased.getAmount(), purchased.getRetailPrice());
 
         Economy econ = Main.getEconomy();
         
@@ -112,21 +109,21 @@ public final class BuyRequest implements Request, TimedNotification
         BuyClaim n = new BuyClaim(seller, purchased, buyer);
         Main.getState().sendNotification(buyer, n);
         
-        acceptingPlayer.sendMessage("Offer accepted");
-        acceptingPlayer.sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.getEconomy().getBalance(acceptingPlayer.getName()))));
+        actor.sendMessage("Offer accepted");
+        actor.sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.getEconomy().getBalance(actor.getPlayer()))));
         return true;
     }
 	
     @Override
-    public boolean reject(Player player)
+    public boolean reject(ShopCmdActor actor)
     {
         BaxShop shop = Main.getState().getShop(shopid);
         if (shop == null) {
             DeletedShopClaim shopDeleted = new DeletedShopClaim(buyer, purchased);
-            Main.getState().sendNotification(player, shopDeleted);
+            Main.getState().sendNotification(actor, shopDeleted);
             return true;
         }
-        else if (!shop.infinite) {
+        else if (!shop.hasFlagInfinite()) {
             BaxEntry shopEntry = shop.findEntry(purchased.getItemStack());
             if (shopEntry == null) {
                 shop.addEntry(purchased);
@@ -138,7 +135,7 @@ public final class BuyRequest implements Request, TimedNotification
 
         BuyRejection n = new BuyRejection(seller, buyer, purchased);
         Main.getState().sendNotification(buyer, n);
-        player.sendMessage("Offer rejected");
+        actor.sendMessage("Offer rejected");
         return true;
     }
 
