@@ -2,6 +2,7 @@ package tbax.baxshops.commands;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import tbax.baxshops.BaxShop;
@@ -79,7 +80,14 @@ public class CmdCreate extends BaxShopCommand
     @Override
     public void onCommand(ShopCmdActor actor) throws PrematureAbortException
     {
-        String owner = actor.isAdmin() ? actor.getArg(1) : actor.getPlayer().getName();
+        OfflinePlayer owner;
+        if (actor.isAdmin()) {
+            owner = actor.getMain().getServer().getOfflinePlayer(actor.getArg(1));
+        }
+        else {
+            owner = actor.getPlayer();
+        }
+
         Location loc = actor.getPlayer().getLocation().getWorld().getBlockAt(actor.getPlayer().getLocation()).getLocation();
 
         if (!actor.isAdmin() && !actor.getInventory().containsAtLeast(new ItemStack(Material.SIGN), 1)) {
@@ -92,7 +100,7 @@ public class CmdCreate extends BaxShopCommand
         Block b = shop.buildShopSign(
             loc, new String[] {
                 "",
-                (owner.length() < 13 ? owner : owner.substring(0, 12) + '…') + "'s",
+                (owner.getName().length() < 13 ? owner : owner.getName().substring(0, 12) + '…') + "'s",
                 "shop",
                 ""
             }
@@ -108,7 +116,7 @@ public class CmdCreate extends BaxShopCommand
         if (!actor.isAdmin()) {
             actor.getInventory().remove(Material.SIGN);
         }
-        actor.sendMessage(Format.username(shop.getOwner()) + "'s shop has been created.");
+        actor.sendMessage(Format.username(shop.getOwner().getName()) + "'s shop has been created.");
         actor.sendMessage(Format.flag("Buy requests") + " for this shop are " + Format.keyword(shop.hasFlagBuyRequests() ? "on" : "off"));
         actor.sendMessage(Format.flag("Sell requests") + " for this shop are " + Format.keyword(shop.hasFlagSellRequests() ? "on" : "off"));
     }

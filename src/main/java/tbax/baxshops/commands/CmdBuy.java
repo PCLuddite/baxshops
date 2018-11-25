@@ -13,6 +13,7 @@ import tbax.baxshops.CommandHelp;
 import tbax.baxshops.notification.BuyNotification;
 import tbax.baxshops.notification.BuyRequest;
 import tbax.baxshops.serialization.ItemNames;
+import tbax.baxshops.serialization.StateFile;
 
 /**
  *
@@ -122,7 +123,7 @@ public class CmdBuy extends BaxShopCommand
             }
 
             BuyRequest request = new BuyRequest(shop.getId(), actor.getPlayer().getName(), shop.getOwner(), purchased);
-            Main.getState().sendNotification(shop.getOwner(), request);
+            StateFile.sendNotification(shop.getOwner(), request);
             actor.sendMessage("Your request to buy %s for %s has been sent.", Format.itemname(purchased.getAmount(), itemName), Format.money(price));
             actor.sendMessage("This request will expire in %s days.", Format.number(Resources.EXPIRE_TIME_DAYS));
         }

@@ -11,6 +11,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -476,8 +477,13 @@ public final class ShopCmdActor
 
     public int giveItem(ItemStack item) throws PrematureAbortException
     {
+        return giveItem(item, false);
+    }
+
+    public int giveItem(ItemStack item, boolean allOrNothing) throws PrematureAbortException
+    {
         int space = getSpaceForItem(item);
-        if (space == 0) {
+        if (space == 0 || (allOrNothing && space < item.getAmount())) {
             exitError(Resources.NO_ROOM);
         }
 
@@ -508,5 +514,21 @@ public final class ShopCmdActor
     public boolean hasRoomForItem(ItemStack stack)
     {
         return stack.getAmount() <= getSpaceForItem(stack);
+    }
+
+    public boolean tryGiveItem(ItemStack stack)
+    {
+        try {
+            giveItem(stack, true);
+            return true;
+        }
+        catch (CommandErrorException | CommandWarningException e) {
+            sendMessage(e.getMessage());
+            return false;
+        }
+        catch (PrematureAbortException e) {
+            sendMessage(e.getMessage());
+            return true;
+        }
     }
 }

@@ -7,9 +7,9 @@
 
 package tbax.baxshops.commands;
 
-import tbax.baxshops.Main;
 import tbax.baxshops.CommandHelp;
 import tbax.baxshops.errors.PrematureAbortException;
+import tbax.baxshops.serialization.StateFile;
 
 /**
  *
@@ -71,7 +71,7 @@ public class CmdSave extends BaxShopCommand
     @Override
     public void onCommand(ShopCmdActor actor)
     {
-        Main.getState().saveAll();
+        StateFile.saveAll();
         actor.getSender().sendMessage("Shops successfully saved");
     }
 }

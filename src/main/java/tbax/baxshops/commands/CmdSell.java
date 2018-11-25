@@ -137,7 +137,7 @@ public class CmdSell extends BaxShopCommand
                 "You have sold %s for %s to %s.",
                 Format.itemname(entry.getAmount(), name),
                 Format.money(price),
-                Format.username(shop.getOwner())
+                Format.username(shop.getOwner().getName())
             );
             return price;
         }
