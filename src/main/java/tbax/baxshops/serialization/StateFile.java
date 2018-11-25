@@ -7,6 +7,7 @@
 
 package tbax.baxshops.serialization;
 
+import org.bukkit.OfflinePlayer;
 import tbax.baxshops.*;
 import tbax.baxshops.commands.ShopCmdActor;
 import tbax.baxshops.errors.CommandErrorException;
@@ -33,42 +34,36 @@ public final class StateFile
     public static final String YAML_FILE_PATH = "shops.yml";
     public static final String YAMLBAK_FILE_PATH = "backups/%d.yml";
     
-    public static final double STATE_VERSION = 3.0; // state file format version
+    public static final double STATE_VERSION = 4.0; // state file format version
     
     /**
      * A map of locations to their shop ids, accessed by their location in the world
      */
-    public HashMap<Location, Long> locations = new HashMap<>();
+    private static HashMap<Location, Long> locations = new HashMap<>();
     
     /**
      * A map of ids map to their shops
      */
-    public HashMap<Long, BaxShop> shops = new HashMap<>();
+    private static HashMap<Long, BaxShop> shops = new HashMap<>();
     /**
      * A map containing each player's notifications
      */
-    public HashMap<String, ArrayDeque<Notification>> pending = new HashMap<>();
+    private static HashMap<UUID, ArrayDeque<Notification>> pending = new HashMap<>();
     
     /**
      * The next available shop id
      */
-    public long nextId = 0;
-    
-    private final Logger log;
-    private final Main main;
-    
-    public StateFile(Main main)
-    {
-        this.main = main;
-        this.log = Main.getLog();
-    }
-    
-    public BaxShop getShop(long uid)
+    private static long nextId = 0;
+
+    private static Main plugin;
+    private static Logger log;
+
+    public static BaxShop getShop(long uid)
     {
         return shops.get(uid);
     }
     
-    public BaxShop getShop(Location loc)
+    public static BaxShop getShop(Location loc)
     {
         Long uid = locations.get(loc);
         if (uid == null) {
@@ -77,8 +72,11 @@ public final class StateFile
         return shops.get(uid);
     }
     
-    public void load()
+    public static void load(Main main)
     {
+        plugin = main;
+        log = main.getLogger();
+
         ItemNames.loadDamageable(main);
         ItemNames.loadEnchants(main);
         
@@ -94,12 +92,12 @@ public final class StateFile
      * Attempts to back up the shops.yml save file.
      * @return a boolean indicating success
      */
-    public boolean backup()
+    public static boolean backup()
     {
-        File stateLocation = new File(main.getDataFolder(), YAML_FILE_PATH);
+        File stateLocation = new File(plugin.getDataFolder(), YAML_FILE_PATH);
         if (stateLocation.exists()) {
             long timestamp = new Date().getTime();
-            File backupFolder = new File(main.getDataFolder(), "backups");
+            File backupFolder = new File(plugin.getDataFolder(), "backups");
             if (!backupFolder.exists()) {
                 backupFolder.mkdirs();
             }
@@ -110,7 +108,7 @@ public final class StateFile
                     return name.endsWith(".yml");
                 }
             });
-            int b = main.getConfig().getInt("Backups", 15);
+            int b = plugin.getConfig().getInt("Backups", 15);
             if (b > 0 && backups.length >= b) {
                 File delete = null;
                 long oldest = Long.MAX_VALUE;
@@ -132,7 +130,7 @@ public final class StateFile
             }
 
             try {
-                File backup = new File(main.getDataFolder(), String.format(YAMLBAK_FILE_PATH, timestamp));
+                File backup = new File(plugin.getDataFolder(), String.format(YAMLBAK_FILE_PATH, timestamp));
                 OutputStream out;
                 try (InputStream in = new FileInputStream(stateLocation)) {
                     out = new FileOutputStream(backup);
@@ -161,9 +159,9 @@ public final class StateFile
     /*
      * Loads all shops from shop.yml file
      */
-    public boolean loadState()
+    public static boolean loadState()
     {
-        File stateLocation = new File(main.getDataFolder(), YAML_FILE_PATH);
+        File stateLocation = new File(plugin.getDataFolder(), YAML_FILE_PATH);
         if (!stateLocation.exists()) {
             log.info("YAML file did not exist");
             return false;
@@ -175,38 +173,35 @@ public final class StateFile
         for(BaxShop shop : shoplist) {
             addShop(null, shop);
         }
-        
-        if (state.isLong("nextid")) {
-            nextId = state.getLong("nextid");
+
+        nextId = -1;
+        for(Long id : shops.keySet()) {
+            if (id >= nextId) {
+                nextId = id + 1;
+            }
         }
-        else {
-            nextId = -1;
-            for(Long id : shops.keySet()) {
-                if (id >= nextId) {
-                    nextId = id + 1;
-                }
-            }
-            if (nextId < 0) {
-                nextId = 0;
-            }
+        if (nextId < 0) {
+            nextId = 0;
         }
         
         ConfigurationSection yNotes = state.getConfigurationSection("notes");
         for(Map.Entry<String, Object> player : yNotes.getValues(false).entrySet()) {
             ArrayDeque<Notification> playerNotes = new ArrayDeque<>();
+            UUID uuid = UUID.fromString(player.getKey());
+
             List yPlayerNotes = (List)player.getValue();
             for(Object yNote : yPlayerNotes) {
                 playerNotes.add((Notification)yNote);
             }
-            pending.put(player.getKey(), playerNotes);
+            pending.put(UUID.fromString(player.getKey()), playerNotes);
         }
         return true;
     }
     
-    public boolean addShop(ShopCmdActor actor, BaxShop shop)
+    public static boolean addShop(ShopCmdActor actor, BaxShop shop)
     {
         if (shop.getId() < 0) {
-            shop.setId(getUniqueId());
+            shop.setId(getNextId());
         }
         for(Location loc : shop.getLocations()) {
             if (!addLocation(actor, loc, shop)) {
@@ -217,7 +212,7 @@ public final class StateFile
         return true;
     }
     
-    public boolean addLocation(ShopCmdActor actor, Location loc, BaxShop shop)
+    public static boolean addLocation(ShopCmdActor actor, Location loc, BaxShop shop)
     {
         Long otherUid = locations.get(loc);
         if (otherUid == null) {
@@ -230,7 +225,7 @@ public final class StateFile
         return true;
     }
     
-    public void removeShop(CommandSender pl, BaxShop shop) throws PrematureAbortException
+    public static void removeShop(CommandSender pl, BaxShop shop) throws PrematureAbortException
     {
         for(Location loc : (Location[])shop.getLocations().toArray()) {
             removeLocation(pl, loc);
@@ -238,7 +233,7 @@ public final class StateFile
         pl.sendMessage(String.format("%s's shop has been deleted.", Format.username(shop.getOwner())));
     }
     
-    public void removeLocation(CommandSender pl, Location loc) throws PrematureAbortException
+    public static void removeLocation(CommandSender pl, Location loc) throws PrematureAbortException
     {
         Long uid = locations.get(loc);
         if (uid != null) {
@@ -266,70 +261,57 @@ public final class StateFile
     /**
      * Gets a list of notifications for a player.
      *
-     * @param pl the player
+     * @param player the player
      * @return the player's notifications
      */
-    public ArrayDeque<Notification> getNotifications(Player pl)
+    public static ArrayDeque<Notification> getNotifications(OfflinePlayer player)
     {
-        ArrayDeque<Notification> n = pending.get(pl.getName());
+        ArrayDeque<Notification> n = pending.get(player);
         if (n == null) {
             n = new ArrayDeque<>();
-            pending.put(pl.getName(), n);
+            pending.put(player.getUniqueId(), n);
         }
         return n;
-    }
-
-    public ArrayDeque<Notification> getNotifications(ShopCmdActor actor)
-    {
-        return getNotifications(actor.getPlayer());
     }
     
     /**
      * Shows a player his/her most recent notification. Also shows the
      * notification count.
      *
-     * @param actor the player
+     * @param player the player
      */
-    public void showNotification(ShopCmdActor actor)
+    public static void showNotification(Player player)
     {
-        showNotification(actor, true);
+        showNotification(player, true);
     }
 
     /**
      * Shows a player his/her most recent notification.
      *
-     * @param actor the player
+     * @param player the player
      * @param showCount whether the notification count should be shown as well
      */
-    public void showNotification(ShopCmdActor actor, boolean showCount)
+    public static void showNotification(Player player, boolean showCount)
     {
-        ArrayDeque<Notification> notifications = getNotifications(actor);
+        ArrayDeque<Notification> notifications = getNotifications(player.getPlayer());
         if (notifications.isEmpty()) {
             if (showCount) {
-                actor.sendMessage("You have no notifications.");
+                player.sendMessage("You have no notifications.");
             }
             return;
         }
         if (showCount) {
             int size = notifications.size();
-            actor.sendMessage("You have %s %s.", Format.number(size), size == 1 ? "notification" : "notifications");
+            player.sendMessage(String.format("You have %s %s.", Format.number(size), size == 1 ? "notification" : "notifications"));
         }
 
         Notification n = notifications.getFirst();
-        actor.sendMessage(n.getMessage(actor));
-        if (n instanceof BuyClaim) {
-            if (((Claimable)n).claim(actor)) {
-                notifications.removeFirst();
-                return;
-            }
-        }
+        player.sendMessage(n.getMessage(player.getPlayer()));
         if (n instanceof Request) {
-            actor.sendMessage("Use %s or %s to manage this request.",
-                Format.command("/shop accept"),
-                Format.command("/shop reject"));
+            player.sendMessage(String.format("Use %s or %s to manage this request.", Format.command("/shop accept"), Format.command("/shop reject")));
         } 
-        else if (n instanceof Claimable) {
-            actor.sendMessage("Use %s to claim and remove this notification.", Format.command("/shop claim") );
+        else if (n instanceof Claim) {
+            player.sendMessage(String.format("Use %s to claim and remove this notification.", Format.command("/shop claim")));
         } 
         else {
             notifications.removeFirst();
@@ -339,35 +321,34 @@ public final class StateFile
     /**
      * Sends a notification to a player.
      *
-     * @param actor the player
+     * @param player the player
      * @param n the notification
      */
-    public void sendNotification(ShopCmdActor actor, Notification n)
+    public static void sendNotification(OfflinePlayer player, Notification n)
     {
-        sendNotification(actor, n, main.getConfig().getBoolean("LogNotes"));
+        sendNotification(player, n, plugin.getConfig().getBoolean("LogNotes"));
     }
 
     /**
      * Sends a notification to a player.
      *
-     * @param actor the player
+     * @param player the player
      * @param n the notification
-     * @param log_it should show it in the log
+     * @param logNote should show it in the log
      */
-    public void sendNotification(ShopCmdActor actor, Notification n, boolean log_it)
+    public static void sendNotification(OfflinePlayer player, Notification n, boolean logNote)
     {
-        ArrayDeque<Notification> ns = getNotifications(actor);
-        if (log_it) {
+        ArrayDeque<Notification> ns = getNotifications(player);
+        if (logNote) {
             log.info(Format.toAnsiColor(n.getMessage(null)));
         }
         ns.add(n);
-        Player pl = actor.getPlayer();
-        if (pl != null && pl.isOnline()) {
-            showNotification(actor, false);
+        if (player != null && player.isOnline()) {
+            showNotification(player.getPlayer(), false);
         }
     }
     
-    private long getUniqueId()
+    private static long getNextId()
     {
         return nextId++;
     }
@@ -375,7 +356,7 @@ public final class StateFile
     /**
      * Saves all shops
      */
-    public void saveAll()
+    public static void saveAll()
     {
         if (!backup()) {
             log.warning("Failed to back up BaxShops");
@@ -383,31 +364,19 @@ public final class StateFile
 
         FileConfiguration state = new YamlConfiguration();
         state.set("version", STATE_VERSION);
-        state.set("nextid", nextId);
-        state.set("shops", new ArrayList(shops.values()));
+        state.set("shops", new ArrayList<>(shops.values()));
         int invalid = 0;
-        HashMap<String, List<String>> yNotes = new HashMap<>();
-        for(Map.Entry<String, ArrayDeque<Notification>> player : pending.entrySet()) {
+        HashMap<String, List<String>> notes = new HashMap<>();
+        for(Map.Entry<UUID, ArrayDeque<Notification>> entry : pending.entrySet()) {
             ArrayList ylist = new ArrayList();
-            for(Notification note : player.getValue()) {
-                if (note.checkIntegrity()) {
-                    ylist.add(note);
-                }
-                else {
-                    ++invalid;
-                }
-            }
-            yNotes.put(player.getKey(), ylist);
+            ylist.addAll(entry.getValue());
+            notes.put(entry.getKey().toString(), ylist);
         }
         
-        if (invalid > 0) {
-            log.warning(invalid + " notification(s) were invalid and could not be saved.");
-        }
-        
-        state.createSection("notes", yNotes);
+        state.createSection("notes", notes);
         
         try {
-            File dir = main.getDataFolder();
+            File dir = plugin.getDataFolder();
             if (!dir.exists()) {
                 dir.mkdirs();
             }

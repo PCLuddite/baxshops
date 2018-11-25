@@ -9,16 +9,16 @@
 package tbax.baxshops;
 
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.commands.*;
-import tbax.baxshops.notification.*;
+import tbax.baxshops.errors.PrematureAbortException;
+import tbax.baxshops.notification.SaleNotification;
+import tbax.baxshops.notification.SaleRejection;
 import tbax.baxshops.serialization.StateFile;
 
 import java.util.HashMap;
@@ -32,11 +32,6 @@ public final class Main extends JavaPlugin
      * selection data
      */
     public HashMap<Player, ShopSelection> selectedShops = new HashMap<>();
-
-    /**
-     * The file and text resources for the plugin
-     */
-    private static StateFile state;
 
     private static final CommandMap commands = initCommands();
     
@@ -69,9 +64,8 @@ public final class Main extends JavaPlugin
         }
         
         loadConfigurationSerializable();
-        
-        state = new StateFile(this);
-        state.load();
+
+        StateFile.load(this);
         
         saveDefaultConfig();
         
@@ -113,27 +107,33 @@ public final class Main extends JavaPlugin
     {
 		return new CommandMap(
 			CmdAccept.class,
-			CmdAdd.class,
-			CmdAccept.class,
-			CmdAdd.class,
-			CmdBackup.class,
-			CmdBuy.class,
-			CmdCopy.class,
-			CmdCreate.class,
-			CmdFlag.class,
-			CmdGiveXp.class,
-			CmdHelp.class,
-			CmdList.class,
-			CmdLollipop.class,
-			CmdNotifications.class,
-			CmdReject.class,
-			CmdRestock.class,
-			CmdSave.class,
-			CmdSell.class,
-			CmdSet.class,
-			CmdSkip.class,
-			CmdTakeXp.class,
-			CmdTeleport.class
+            CmdAdd.class,
+            CmdBackup.class,
+            CmdBuy.class,
+            CmdCopy.class,
+            CmdCreate.class,
+            CmdFlag.class,
+            CmdGiveXp.class,
+            CmdHelp.class,
+            CmdInfo.class,
+            CmdList.class,
+            CmdLollipop.class,
+            CmdNotifications.class,
+            CmdReject.class,
+            CmdRemove.class,
+            CmdRestock.class,
+            CmdSave.class,
+            CmdSell.class,
+            CmdSet.class,
+            CmdSetAmnt.class,
+            CmdSetAngle.class,
+            CmdSetDur.class,
+            CmdSetIndex.class,
+            CmdSign.class,
+            CmdSkip.class,
+            CmdTake.class,
+            CmdTakeXp.class,
+            CmdTeleport.class
 		);
     }
 
@@ -157,43 +157,38 @@ public final class Main extends JavaPlugin
         }
 
         BaxShopCommand cmd = commands.get(actor.getAction());
-        if (cmd == null) {
-            actor.sendMessage(Resources.INVALID_SHOP_ACTION, actor.getAction());
-        }
-        if (!cmd.hasValidArgCount(actor)) {
-            actor.sendMessage(cmd.getHelp().toString());
-        }
-        else if(!cmd.hasPermission(actor)) {
-            actor.sendError(Resources.NO_PERMISSION);
-        }
-        else if(cmd.requiresPlayer(actor) && actor.getPlayer() == null) {
-            actor.sendError("You must be a player to use this command.");
-        }
-        else if(cmd.requiresSelection(actor) && actor.getSelection() == null) {
-            actor.sendError(Resources.NOT_FOUND_SELECTED);
-        }
-        else if(cmd.requiresOwner(actor) && !actor.isOwner()) {
-            actor.sendError("You must be the owner of the shop to use /shop %s", actor.getAction());
-        }
-        else if(cmd.requiresItemInHand(actor) && actor.getItemInHand() == null) {
-            actor.sendError(Resources.NOT_FOUND_HELDITEM);
-        }
-        else {
-            try {
+        try {
+            if (cmd == null) {
+                actor.sendMessage(Resources.INVALID_SHOP_ACTION, actor.getAction());
+            }
+            if (!cmd.hasValidArgCount(actor)) {
+                actor.sendMessage(cmd.getHelp(actor).toString());
+            }
+            else if(!cmd.hasPermission(actor)) {
+                actor.sendError(Resources.NO_PERMISSION);
+            }
+            else if(cmd.requiresPlayer(actor) && actor.getPlayer() == null) {
+                actor.sendError("You must be a player to use this command.");
+            }
+            else if(cmd.requiresSelection(actor) && actor.getSelection() == null) {
+                actor.sendError(Resources.NOT_FOUND_SELECTED);
+            }
+            else if(cmd.requiresOwner(actor) && !actor.isOwner()) {
+                actor.sendError("You must be the owner of the shop to use /shop %s", actor.getAction());
+            }
+            else if(cmd.requiresItemInHand(actor) && actor.getItemInHand() == null) {
+                actor.sendError(Resources.NOT_FOUND_HELDITEM);
+            }
+            else {
                 cmd.onCommand(actor);
             }
-            catch(PrematureAbortException e) {
-                actor.getSender().sendMessage(e.getMessage());
-            }
+        }
+        catch(PrematureAbortException e) {
+            actor.getSender().sendMessage(e.getMessage());
         }
         return true;
     }
-    
-    public static StateFile getState()
-    {
-        return state;
-    }
-    
+
     public static Logger getLog()
     {
         return log;
