@@ -7,11 +7,8 @@
 
 package tbax.baxshops.commands;
 
-import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
-
-import java.util.HashMap;
-import java.util.Map;
+import tbax.baxshops.errors.PrematureAbortException;
 
 /**
  *

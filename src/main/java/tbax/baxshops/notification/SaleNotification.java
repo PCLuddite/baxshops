@@ -11,7 +11,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
-import tbax.baxshops.commands.ShopCmdActor;
 
 import java.util.HashMap;
 import java.util.Map;

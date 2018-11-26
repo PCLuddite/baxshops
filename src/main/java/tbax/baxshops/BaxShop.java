@@ -8,8 +8,6 @@
 
 package tbax.baxshops;
 
-import java.util.*;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -23,6 +21,8 @@ import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.ItemNames;
 import tbax.baxshops.serialization.SavedData;
+
+import java.util.*;
 
 /**
  *

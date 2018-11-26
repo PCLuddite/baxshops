@@ -7,16 +7,8 @@
 
 package tbax.baxshops.serialization;
 
-import org.bukkit.OfflinePlayer;
-import tbax.baxshops.*;
-import tbax.baxshops.commands.ShopCmdActor;
-import tbax.baxshops.errors.CommandErrorException;
-import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.notification.*;
-import java.io.*;
-import java.util.*;
-import java.util.logging.Logger;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.command.CommandSender;
@@ -24,6 +16,16 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import tbax.baxshops.*;
+import tbax.baxshops.errors.CommandErrorException;
+import tbax.baxshops.errors.PrematureAbortException;
+import tbax.baxshops.notification.Claimable;
+import tbax.baxshops.notification.Notification;
+import tbax.baxshops.notification.Request;
+
+import java.io.*;
+import java.util.*;
+import java.util.logging.Logger;
 
 /**
  *

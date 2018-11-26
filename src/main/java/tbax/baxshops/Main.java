@@ -20,7 +20,6 @@ import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.*;
 import tbax.baxshops.serialization.SavedData;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
