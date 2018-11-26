@@ -1,45 +1,49 @@
 /** +++====+++
- *  
+ *
  *  Copyright (c) Timothy Baxendale
- *  Copyright (c) 2012 Nathan Dinsmore and Sam Lazarus
  *
  *  +++====+++
-**/
+ **/
 
 package tbax.baxshops.notification;
 
-import java.util.HashMap;
-import java.util.Map;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
-import tbax.baxshops.serialization.ItemNames;
+import tbax.baxshops.commands.ShopCmdActor;
 
-/**
- *
- * @author Timothy Baxendale (pcluddite@hotmail.com)
- */
-public class DeletedShopClaim extends Claimable implements ConfigurationSerializable
+import java.util.HashMap;
+import java.util.Map;
+
+public class DeletedShopClaim implements Claimable
 {
-    public String owner;
-    
+    private OfflinePlayer owner;
+    private BaxEntry entry;
+
     public DeletedShopClaim(Map<String, Object> args)
     {
         entry = (BaxEntry)args.get("entry");
-        owner = (String)args.get("owner");
+        owner = (OfflinePlayer)args.get("owner");
     }
-    
-    public DeletedShopClaim(String owner, BaxEntry entry)
+
+    public DeletedShopClaim(OfflinePlayer owner, BaxEntry entry)
     {
         this.owner = owner;
         this.entry = entry;
     }
-    
+
     @Override
-    public String getMessage(Player player)
+    public String getMessage(CommandSender sender)
     {
-        return String.format("The shop that had this entry no longer exists. You have %s outstanding.", Format.itemname(entry.getAmount(), ItemNames.getName(entry)));
+        if (sender == null || !sender.equals(owner)) {
+            return String.format("The shop that had this entry no longer exists. %s has %s outstanding.",
+                Format.username(owner.getName()), entry.getFormattedName()
+            );
+        }
+        else {
+            return String.format("The shop that had this entry no longer exists. You have %s outstanding.", entry.getFormattedName());
+        }
     }
 
     @Override
@@ -50,21 +54,26 @@ public class DeletedShopClaim extends Claimable implements ConfigurationSerializ
         args.put("owner", owner);
         return args;
     }
-    
+
     public static DeletedShopClaim deserialize(Map<String, Object> args)
     {
         return new DeletedShopClaim(args);
     }
-    
+
     public static DeletedShopClaim valueOf(Map<String, Object> args)
     {
         return new DeletedShopClaim(args);
     }
 
     @Override
-    public boolean checkIntegrity()
+    public BaxEntry getEntry()
     {
-        return true;
+        return entry;
     }
-    
+
+    @Override
+    public boolean claim(ShopCmdActor actor)
+    {
+        return actor.tryGiveItem(entry.toItemStack());
+    }
 }

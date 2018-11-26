@@ -10,7 +10,7 @@ package tbax.baxshops.commands;
 import tbax.baxshops.CommandHelp;
 import tbax.baxshops.Resources;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.notification.Claim;
+import tbax.baxshops.notification.Claimable;
 import tbax.baxshops.notification.Notification;
 import tbax.baxshops.notification.Request;
 import tbax.baxshops.serialization.StateFile;
@@ -89,8 +89,8 @@ public class CmdAccept extends BaxShopCommand
                 if (r.accept(actor)) {
                     notifications.removeFirst();
                 }
-            } else if (n instanceof Claim) {
-                Claim c = (Claim) n;
+            } else if (n instanceof Claimable) {
+                Claimable c = (Claimable) n;
                 if (c.claim(actor)) {
                     notifications.removeFirst();
                 }

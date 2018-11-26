@@ -1,85 +1,90 @@
 /** +++====+++
- *  
+ *
  *  Copyright (c) Timothy Baxendale
- *  Copyright (c) 2012 Nathan Dinsmore and Sam Lazarus
  *
  *  +++====+++
-**/
+ **/
 
 package tbax.baxshops.notification;
 
-import java.util.HashMap;
-import java.util.Map;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
-import tbax.baxshops.Main;
-import tbax.baxshops.Resources;
-import tbax.baxshops.serialization.ItemNames;
+import tbax.baxshops.commands.ShopCmdActor;
+import tbax.baxshops.serialization.StateFile;
 
-/**
- * A SaleRejection notifies a seller that his/her offer was rejected.
- */
-public final class SaleRejection extends Claimable implements ConfigurationSerializable
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+public class SaleRejection implements Claimable
 {
-    /**
-     * The seller of the item
-     */
-    public String seller;
-    /**
-     * The buyer of the item
-     */
-    public String buyer;
+    private OfflinePlayer seller;
+    private OfflinePlayer buyer;
+    private BaxEntry entry;
+    private UUID shopId;
 
-    /**
-     * Constructs a new notification.
-     * @param buyer the buyer of the item
-     * @param entry an entry for the item (note: not the one in the shop)
-     * @param seller the seller of the item
-     */
-    public SaleRejection(String buyer, String seller, BaxEntry entry)
-    {
-        this.buyer = buyer;
-        this.entry = entry;
-        this.seller = seller;
-    }
-    
     public SaleRejection(Map<String, Object> args)
     {
-        this.seller = (String)args.get("seller");
-        this.entry = (BaxEntry)args.get("entry");
-        if (args.containsKey("shop")) {
-            BaxShop shop = Main.getState().getShop((int)args.get("shop"));
-            if (shop == null) {
-                buyer = Resources.ERROR_INLINE;
-            }
-            else {
-                buyer = shop.getOwner();
-            }
-        }
-        else {
-            this.buyer = (String)args.get("buyer");
-        }
+        shopId = UUID.fromString((String)args.get("shopId"));
+        seller = (OfflinePlayer)args.get("seller");
+        buyer = (OfflinePlayer)args.get("buyer");
+        entry = (BaxEntry)args.get("entry");
+    }
+
+    public SaleRejection(UUID shopId, OfflinePlayer buyer, OfflinePlayer seller, BaxEntry entry)
+    {
+        this.seller = seller;
+        this.buyer = buyer;
+        this.entry = entry;
+        this.shopId = shopId;
+    }
+
+    public UUID getShopId()
+    {
+        return shopId;
+    }
+
+    public BaxShop getShop()
+    {
+        return StateFile.getShop(shopId);
+    }
+
+    public OfflinePlayer getBuyer()
+    {
+        return buyer;
+    }
+
+    public OfflinePlayer getSeller()
+    {
+        return seller;
     }
 
     @Override
-    public String getMessage(Player player)
+    public BaxEntry getEntry()
     {
-        if (player == null || !player.getName().equals(seller)) {
-            return String.format("%s rejected %s's request to sell %s for %s.",
-                Format.username(buyer),
-                Format.username2(seller),
-                Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
-                Format.money(entry.getRefundPrice() * entry.getAmount())
-            );
+        return entry;
+    }
+
+    @Override
+    public boolean claim(ShopCmdActor actor)
+    {
+        return actor.tryGiveItem(entry.toItemStack());
+    }
+
+    @Override
+    public String getMessage(CommandSender sender)
+    {
+        if (sender == null || !seller.equals(sender)) {
+            return String.format("%s rejected %s's request to sell %s",
+                Format.username(buyer.getName()), Format.username2(seller.getName()), entry.getFormattedName()
+                );
         }
         else {
-            return String.format("%s rejected your request to sell %s for %s.",
-                Format.username(buyer),
-                Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
-                Format.money(entry.getRefundPrice() * entry.getAmount())
+            return String.format("%s rejected your request to sell %s",
+                Format.username(buyer.getName()), entry.getFormattedName()
             );
         }
     }
@@ -88,25 +93,20 @@ public final class SaleRejection extends Claimable implements ConfigurationSeria
     public Map<String, Object> serialize()
     {
         Map<String, Object> args = new HashMap<>();
-        args.put("seller", seller);
+        args.put("shopId", shopId.toString());
         args.put("buyer", buyer);
+        args.put("seller", seller);
         args.put("entry", entry);
         return args;
     }
-    
+
     public static SaleRejection deserialize(Map<String, Object> args)
     {
         return new SaleRejection(args);
     }
-    
+
     public static SaleRejection valueOf(Map<String, Object> args)
     {
         return deserialize(args);
-    }
-
-    @Override
-    public boolean checkIntegrity()
-    {
-        return true;
     }
 }

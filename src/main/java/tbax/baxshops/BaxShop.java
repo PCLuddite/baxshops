@@ -13,6 +13,7 @@ import java.util.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -21,6 +22,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.ItemNames;
+import tbax.baxshops.serialization.StateFile;
 
 /**
  *
@@ -30,8 +32,8 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
 {
     public static final int ITEMS_PER_PAGE = 7;
     
-    private long id = -1;
-    private String owner;
+    private UUID id;
+    private OfflinePlayer owner;
     private final ArrayList<Location> locations = new ArrayList<>();
     private final ArrayList<BaxEntry> inventory = new ArrayList<>();
 
@@ -43,8 +45,8 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
     
     public BaxShop(Map<String, Object> args)
     {
-        id = (long)args.get("id");
-        owner = (String)args.get("owner");
+        id = UUID.fromString((String)args.get("id"));
+        owner = (OfflinePlayer)args.get("owner");
         flags = (long)args.get("flags");
         inventory.addAll((ArrayList)args.get("inventory"));
         locations.addAll((ArrayList)args.get("locations"));
@@ -55,22 +57,22 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
         }
     }
 
-    public long getId()
+    public UUID getId()
     {
         return id;
     }
 
-    public void setId(long newId)
+    public void setId(UUID newId)
     {
         id = newId;
     }
 
-    public String getOwner()
+    public OfflinePlayer getOwner()
     {
         return owner;
     }
 
-    public void setOwner(String newOwner)
+    public void setOwner(OfflinePlayer newOwner)
     {
         owner = newOwner;
     }
@@ -248,7 +250,7 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
         }
         lore.add(ChatColor.GRAY + "ID: " + id);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.WHITE + owner + "'s shop");
+        meta.setDisplayName(ChatColor.WHITE + owner.getName() + "'s shop");
         meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
@@ -276,7 +278,7 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
     public static BaxShop fromItem(ItemStack item)
     {
         long uid = Long.parseLong(item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1).substring((ChatColor.GRAY + "ID: ").length()));
-        return Main.getState().getShop(uid);
+        return StateFile.getShop(uid);
     }
     
     /**

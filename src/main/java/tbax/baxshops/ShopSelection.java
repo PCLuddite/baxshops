@@ -38,7 +38,7 @@ public final class ShopSelection
 
     public ShopSelection(Location shopLoc, Player p, BaxShop selected)
     {
-        owner = (p.getName().equalsIgnoreCase(shop.getOwner()));
+        owner = shop.getOwner().equals(p);
         location = shopLoc;
         shop = selected;
     }

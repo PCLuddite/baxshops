@@ -1,117 +1,103 @@
 /** +++====+++
- *  
+ *
  *  Copyright (c) Timothy Baxendale
- *  Copyright (c) 2012 Nathan Dinsmore and Sam Lazarus
  *
  *  +++====+++
-**/
+ **/
 
 package tbax.baxshops.notification;
 
+import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
+import tbax.baxshops.BaxEntry;
+import tbax.baxshops.Format;
+import tbax.baxshops.MathUtil;
+
 import java.util.HashMap;
 import java.util.Map;
-import org.bukkit.entity.Player;
-import tbax.baxshops.BaxEntry;
-import tbax.baxshops.BaxShop;
-import tbax.baxshops.Format;
-import tbax.baxshops.Main;
-import tbax.baxshops.Resources;
-import tbax.baxshops.commands.ShopCmdActor;
-import tbax.baxshops.serialization.ItemNames;
+import java.util.UUID;
 
-/**
- * A BuyNotification notifies a shop owner that someone bought an item
- * from him/her.
- */
-public final class BuyNotification implements Notification
+public class BuyNotification implements Notification
 {
-    /**
-     * An entry for the offered item
-     */
-    public BaxEntry entry;
-    /**
-     *  The user who sold the item
-     */
-    public String seller;
-    /**
-     * The seller of the item
-     */
-    public String buyer;
+    private BaxEntry entry;
+    private OfflinePlayer buyer;
+    private OfflinePlayer seller;
+    private UUID shopId;
+
+    public BuyNotification(UUID shopId, OfflinePlayer buyer, OfflinePlayer seller, BaxEntry entry)
+    {
+        this.shopId = shopId;
+        this.buyer = buyer;
+        this.seller = seller;
+        this.entry = entry.clone();
+    }
 
     public BuyNotification(Map<String, Object> args)
     {
-        buyer = (String)args.get("buyer");
         entry = (BaxEntry)args.get("entry");
-        if (args.containsKey("seller")) {
-            seller = (String)args.get("seller");
-        }
-        else if (args.containsKey("shop")) {
-            BaxShop shop = Main.getState().getShop((int)args.get("shop"));
-            if (shop == null) {
-                seller = Resources.ERROR_INLINE;
-            }
-            else {
-                seller = shop.getOwner();
-            }
-        }
+        buyer = (OfflinePlayer)args.get("buyer");
+        seller = (OfflinePlayer)args.get("seller");
+        shopId = UUID.fromString((String)args.get("shopId"));
     }
-    
-    /**
-     * Constructs a new notification.
-     * @param seller the username of the seller
-     * @param entry an entry for the item (note: not the one in the shop)
-     * @param buyer the buyer of the item
-     */
-    public BuyNotification(String buyer, String seller, BaxEntry entry)
+
+    public OfflinePlayer getBuyer()
     {
-        this.seller = seller;
-        this.entry = entry;
-        this.buyer = buyer;
+        return buyer;
     }
-    
+
+    public BaxEntry getEntry()
+    {
+        return entry;
+    }
+
+    public OfflinePlayer getSeller()
+    {
+        return seller;
+    }
+
+    public UUID getShopId()
+    {
+        return shopId;
+    }
+
     @Override
-    public String getMessage(ShopCmdActor actor)
+    public String getMessage(CommandSender sender)
     {
-        if (actor.getPlayer() == null || !actor.getPlayer().getName().equals(seller)) {
+        if (sender == null || !sender.equals(seller)) {
             return String.format("%s bought %s from %s for %s.",
-                        Format.username(buyer),
-                        Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
-                        Format.username2(seller),
-                        Format.money(entry.getRetailPrice() * entry.getAmount())
-                    );
+                Format.username(buyer.getName()),
+                entry.getFormattedName(),
+                Format.username2(seller.getName()),
+                Format.money(MathUtil.multiply(entry.getRetailPrice(), entry.getAmount()))
+            );
         }
         else {
             return String.format("%s bought %s from you for %s.",
-                        Format.username(buyer),
-                        Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
-                        Format.money(entry.getRetailPrice() * entry.getAmount())
-                    );
+                Format.username(buyer.getName()),
+                entry.getFormattedName(),
+                Format.money(MathUtil.multiply(entry.getRetailPrice(), entry.getAmount()))
+            );
         }
     }
-    
+
     @Override
     public Map<String, Object> serialize()
     {
-        Map<String, Object> args = new HashMap<>();
+        Map<String,Object> args = new HashMap<>();
+        args.put("entry", entry);
         args.put("buyer", buyer);
         args.put("seller", seller);
-        args.put("entry", entry);
-        return args;
+        args.put("shopId", shopId.toString());
+        return null;
     }
-    
+
     public static BuyNotification deserialize(Map<String, Object> args)
     {
         return new BuyNotification(args);
     }
-    
+
     public static BuyNotification valueOf(Map<String, Object> args)
     {
         return deserialize(args);
-    }
-
-    @Override
-    public boolean checkIntegrity()
-    {
-        return true;
     }
 }

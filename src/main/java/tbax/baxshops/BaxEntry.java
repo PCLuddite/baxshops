@@ -219,6 +219,36 @@ public final class BaxEntry implements ConfigurationSerializable
         stack.setDurability((short)damage);
     }
 
+    public String getName()
+    {
+        return ItemNames.getName(this);
+    }
+
+    public String getFormattedName()
+    {
+        return Format.itemname(getAmount(), getName());
+    }
+
+    public String getFormattedSellPrice()
+    {
+        return Format.money(MathUtil.multiply(refundPrice, getAmount()));
+    }
+
+    public String getFormattedSellPrice2()
+    {
+        return Format.money2(MathUtil.multiply(refundPrice, getAmount()));
+    }
+
+    public String getFormattedBuyPrice()
+    {
+        return Format.money(MathUtil.multiply(retailPrice, getAmount()));
+    }
+
+    public String getFormattedBuyPrice2()
+    {
+        return Format.money2(MathUtil.multiply(retailPrice, getAmount()));
+    }
+
     public BaxEntry clone() // decided not to declare throwing CloneNotSupported. Java exceptions are a nightmare. 11/10/15
     {
         BaxEntry cloned = new BaxEntry();

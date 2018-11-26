@@ -10,20 +10,21 @@ package tbax.baxshops.notification;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import tbax.baxshops.BaxEntry;
+import tbax.baxshops.Format;
 import tbax.baxshops.commands.ShopCmdActor;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class BuyClaim implements Claimable
+public class SaleClaim implements Claimable
 {
-    private BaxEntry entry;
     private OfflinePlayer buyer;
     private OfflinePlayer seller;
+    private BaxEntry entry;
     private UUID shopId;
 
-    public BuyClaim(UUID shopId, OfflinePlayer buyer, OfflinePlayer seller, BaxEntry entry)
+    public SaleClaim(UUID shopId, OfflinePlayer buyer, OfflinePlayer seller, BaxEntry entry)
     {
         this.shopId = shopId;
         this.buyer = buyer;
@@ -31,22 +32,17 @@ public class BuyClaim implements Claimable
         this.entry = entry.clone();
     }
 
-    public BuyClaim(Map<String, Object> args)
+    public SaleClaim(Map<String, Object> args)
     {
         shopId = UUID.fromString((String)args.get("shopId"));
         buyer = (OfflinePlayer)args.get("buyer");
         seller = (OfflinePlayer)args.get("seller");
-        entry = (BaxEntry)args.get("entry");
+        entry = (BaxEntry) args.get("entry");
     }
 
     public OfflinePlayer getSeller()
     {
         return seller;
-    }
-
-    public UUID getShopId()
-    {
-        return shopId;
     }
 
     public OfflinePlayer getBuyer()
@@ -63,13 +59,22 @@ public class BuyClaim implements Claimable
     @Override
     public boolean claim(ShopCmdActor actor)
     {
-        return false;
+        return actor.tryGiveItem(entry.toItemStack());
     }
 
     @Override
     public String getMessage(CommandSender sender)
     {
-        return null;
+        if (sender == null || !buyer.equals(sender)) {
+            return String.format("%s has sold %s to %s for %s",
+                Format.username(seller.getName()), entry.getFormattedName(), Format.username2(buyer.getName()),entry.getFormattedSellPrice()
+                );
+        }
+        else {
+            return String.format("You bought %s from %s for %s",
+                entry.getFormattedName(), Format.username(buyer.getName()), entry.getFormattedSellPrice()
+            );
+        }
     }
 
     @Override
@@ -80,15 +85,15 @@ public class BuyClaim implements Claimable
         args.put("buyer", buyer);
         args.put("seller", seller);
         args.put("entry", entry);
-        return args;
+        return null;
     }
 
-    public static BuyClaim deserialize(Map<String, Object> args)
+    public static SaleClaim deserialize(Map<String, Object> args)
     {
-        return new BuyClaim(args);
+        return new SaleClaim(args);
     }
 
-    public static BuyClaim valueOf(Map<String, Object> args)
+    public static SaleClaim valueOf(Map<String, Object> args)
     {
         return deserialize(args);
     }

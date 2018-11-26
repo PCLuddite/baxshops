@@ -1,116 +1,98 @@
 /** +++====+++
- *  
+ *
  *  Copyright (c) Timothy Baxendale
- *  Copyright (c) 2012 Nathan Dinsmore and Sam Lazarus
  *
  *  +++====+++
-**/
+ **/
 
 package tbax.baxshops.notification;
 
+import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
+import tbax.baxshops.BaxEntry;
+import tbax.baxshops.Format;
+import tbax.baxshops.commands.ShopCmdActor;
+
 import java.util.HashMap;
 import java.util.Map;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.entity.Player;
-import tbax.baxshops.BaxEntry;
-import tbax.baxshops.BaxShop;
-import tbax.baxshops.Format;
-import tbax.baxshops.Main;
-import tbax.baxshops.Resources;
-import tbax.baxshops.serialization.ItemNames;
+import java.util.UUID;
 
-/**
- * A SaleNotification notifies a player that his/her sale of an
- * item was successful.
- */
-public final class SaleNotification implements ConfigurationSerializable, Notification 
+public final class SaleNotification implements Notification
 {
-    /**
-     * An entry for the offered item
-     */
-    public BaxEntry entry;
-    /**
-     * The seller of the item
-     */
-    public String seller;
-    /**
-     * The buyer of the item
-     */
-    public String buyer;
+    private UUID shopId;
+    private OfflinePlayer buyer;
+    private OfflinePlayer seller;
+    private BaxEntry entry;
 
     public SaleNotification(Map<String, Object> args)
     {
-        this.seller = (String)args.get("seller");
-        this.entry = (BaxEntry)args.get("entry");
-        if (args.containsKey("shop")) {
-            BaxShop shop = Main.getState().getShop((int)args.get("shop"));
-            if (shop == null) {
-                buyer = Resources.ERROR_INLINE;
-            }
-            else {
-                buyer = shop.getOwner();
-            }
-        }
-        else {
-            buyer = (String)args.get("buyer");
-        }
+        shopId = UUID.fromString((String)args.get("shopId"));
+        seller = (OfflinePlayer) args.get("seller");
+        entry = (BaxEntry)args.get("entry");
+        buyer = (OfflinePlayer)args.get("buyer");
     }
-    
-    /**
-     * Constructs a new notification.
-     * @param buyer the buyer of the item
-     * @param entry an entry for the item (note: not the one in the shop)
-     * @param seller the seller of the item
-     */
-    public SaleNotification(String buyer, String seller, BaxEntry entry) 
+
+    public SaleNotification(UUID shopId, OfflinePlayer buyer, OfflinePlayer seller, BaxEntry entry)
     {
+        this.shopId = shopId;
         this.buyer = buyer;
-        this.entry = entry;
         this.seller = seller;
+        this.entry = entry;
+    }
+
+    public UUID getShopId()
+    {
+        return shopId;
+    }
+
+    public OfflinePlayer getBuyer()
+    {
+        return buyer;
+    }
+
+    public OfflinePlayer getSeller()
+    {
+        return seller;
+    }
+
+    public BaxEntry getItem()
+    {
+        return entry;
     }
 
     @Override
-    public String getMessage(Player player) 
+    public String getMessage(CommandSender sender)
     {
-        if (player == null || !player.getName().equals(seller)) {
+        if (sender == null || !seller.equals(sender)) {
             return String.format("%s accepted %s's request to sell %s for %s.",
-                        Format.username(buyer), 
-                        Format.username2(seller),
-                        Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
-                        Format.money(entry.getRefundPrice() * entry.getAmount())
-                    );
+                Format.username(buyer.getName()), Format.username2(seller.getName()), entry.getFormattedName(), entry.getFormattedSellPrice()
+            );
         }
         else {
             return String.format("%s accepted your request to sell %s for %s.",
-                        Format.username(buyer), 
-                        Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
-                        Format.money(entry.getRefundPrice() * entry.getAmount())
-                    );
+                Format.username(buyer.getName()), entry.getFormattedName(), entry.getFormattedSellPrice()
+            );
         }
     }
-    
+
+    @Override
     public Map<String, Object> serialize()
     {
         Map<String, Object> args = new HashMap<>();
+        args.put("shopId", shopId.toString());
         args.put("seller", seller);
         args.put("buyer", buyer);
         args.put("entry", entry);
         return args;
     }
-    
+
     public static SaleNotification deserialize(Map<String, Object> args)
     {
         return new SaleNotification(args);
     }
-    
+
     public static SaleNotification valueOf(Map<String, Object> args)
     {
         return deserialize(args);
-    }
-
-    @Override
-    public boolean checkIntegrity()
-    {
-        return true;
     }
 }

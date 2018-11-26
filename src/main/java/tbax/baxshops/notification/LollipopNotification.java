@@ -1,19 +1,21 @@
 /** +++====+++
- *  
+ *
  *  Copyright (c) Timothy Baxendale
  *  Copyright (c) 2012 Nathan Dinsmore and Sam Lazarus
  *
  *  +++====+++
-**/
+ **/
 
 package tbax.baxshops.notification;
+
+import org.bukkit.OfflinePlayer;
+import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.bukkit.entity.Player;
 
 /**
  * A LollipopNotification notifies a player that someone sent him/her a
@@ -22,7 +24,7 @@ import org.bukkit.entity.Player;
 public final class LollipopNotification implements ConfigurationSerializable, Notification
 {
     public static final double DEFAULT_TASTINESS = 40;
-    public static final Map<Double, String> adjectives = new LinkedHashMap<>();
+    private static final Map<Double, String> adjectives = new LinkedHashMap<>();
     static {
         adjectives.put(0.0, "a disgusting");
         adjectives.put(10.0, "a bad");
@@ -38,33 +40,33 @@ public final class LollipopNotification implements ConfigurationSerializable, No
         adjectives.put(99.0, "a wonderful");
     }
 
-    public String sender;
-    public double tastiness;
-    
+    private OfflinePlayer sender;
+    private double tastiness;
+
     public LollipopNotification(Map<String, Object> args)
     {
-        this.sender = (String)args.get("sender");
+        this.sender = (OfflinePlayer)args.get("sender");
         this.tastiness = (double)args.get("tastiness");
     }
 
-    public LollipopNotification(String sender, double tastiness)
+    public LollipopNotification(OfflinePlayer sender, double tastiness)
     {
         this.sender = sender;
         this.tastiness = tastiness < 0 ? 0 : tastiness > 100 ? 100 : tastiness;
     }
 
     @Override
-    public String getMessage(Player player)
+    public String getMessage(CommandSender sender)
     {
         String adjective = null;
         for (Entry<Double, String> entry : adjectives.entrySet()) {
-                if (tastiness >= entry.getKey()) {
-                        adjective = entry.getValue();
-                }
+            if (tastiness >= entry.getKey()) {
+                adjective = entry.getValue();
+            }
         }
         return sender + " sent you " + adjective + " lollipop";
     }
-    
+
     public Map<String, Object> serialize()
     {
         Map<String, Object> args = new HashMap<>();
@@ -72,20 +74,14 @@ public final class LollipopNotification implements ConfigurationSerializable, No
         args.put("tastiness", tastiness);
         return args;
     }
-    
+
     public static LollipopNotification deserialize(Map<String, Object> args)
     {
         return new LollipopNotification(args);
     }
-    
+
     public static LollipopNotification valueOf(Map<String, Object> args)
     {
         return deserialize(args);
-    }
-
-    @Override
-    public boolean checkIntegrity()
-    {
-        return true;
     }
 }

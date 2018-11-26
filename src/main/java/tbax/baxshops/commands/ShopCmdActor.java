@@ -11,7 +11,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -21,7 +20,6 @@ import tbax.baxshops.errors.CommandMessageException;
 import tbax.baxshops.errors.CommandWarningException;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.ItemNames;
-import tbax.baxshops.serialization.StateFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +34,7 @@ public final class ShopCmdActor
     private final CommandSender sender;
     private final Command command;
     private final Main main;
-    private Player pl;
+    private Player player;
     private String name;
     private String action;
     
@@ -51,7 +49,7 @@ public final class ShopCmdActor
         System.arraycopy(args, 0, this.args, 0, args.length);
         this.name = command.getName();
         if (sender instanceof Player) {
-            pl = (Player)sender;
+            player = (Player)sender;
         }
     }
     
@@ -64,15 +62,10 @@ public final class ShopCmdActor
     {
         return command;
     }
-    
-    public StateFile getState()
-    {
-        return Main.getState();
-    }
-    
+
     public Player getPlayer()
     {
-        return pl;
+        return player;
     }
     
     public Main getMain()
@@ -87,9 +80,7 @@ public final class ShopCmdActor
 
     public boolean isOwner()
     {
-        return getShop() != null
-                && pl != null
-                && pl.getName().equalsIgnoreCase(getShop().getOwner());
+        return getShop() != null && sender.equals(getShop().getOwner());
     }
 
     public boolean hasPermission(String perm)
@@ -110,7 +101,7 @@ public final class ShopCmdActor
 
     public ShopSelection getSelection()
     {
-        return main.selectedShops.get(pl);
+        return main.selectedShops.get(player);
     }
     
     public int getNumArgs()
@@ -352,9 +343,9 @@ public final class ShopCmdActor
 
     public ItemStack getItemInHand()
     {
-        if (pl == null)
+        if (player == null)
             return null;
-        return pl.getInventory().getItemInMainHand();
+        return player.getInventory().getItemInMainHand();
     }
 
     public List<BaxEntry> takeArgFromInventory(String arg) throws PrematureAbortException
@@ -400,10 +391,10 @@ public final class ShopCmdActor
         PlayerInventory inv;
         ArrayList<BaxEntry> list = new ArrayList<>();
 
-        if (shop == null || pl == null)
+        if (shop == null || player == null)
             return list;
 
-        inv = pl.getInventory();
+        inv = player.getInventory();
 
         for (BaxEntry entry : shop) {
             BaxEntry curr = entry.clone();
@@ -424,7 +415,7 @@ public final class ShopCmdActor
 
     public int takeFromInventory(ItemStack item, int amt)
     {
-        PlayerInventory inv = pl.getInventory();
+        PlayerInventory inv = player.getInventory();
         ItemStack hand = getItemInHand();
         int qty = 0;
         if (hand != null && hand.isSimilar(item)) {
@@ -454,9 +445,9 @@ public final class ShopCmdActor
     }
 
     public PlayerInventory getInventory() {
-        if (pl == null)
+        if (player == null)
             return null;
-        return pl.getInventory();
+        return player.getInventory();
     }
 
     @Override
@@ -477,58 +468,26 @@ public final class ShopCmdActor
 
     public int giveItem(ItemStack item) throws PrematureAbortException
     {
-        return giveItem(item, false);
+        return PlayerUtil.giveItem(player, item);
     }
 
     public int giveItem(ItemStack item, boolean allOrNothing) throws PrematureAbortException
     {
-        int space = getSpaceForItem(item);
-        if (space == 0 || (allOrNothing && space < item.getAmount())) {
-            exitError(Resources.NO_ROOM);
-        }
-
-        int overflow = Math.max(item.getAmount() - space, 0);
-        item = item.clone();
-        item.setAmount(Math.min(item.getAmount(), space));
-        getInventory().addItem(item);
-        return overflow;
+        return PlayerUtil.giveItem(player, item, allOrNothing);
     }
 
     public int getSpaceForItem(ItemStack stack)
     {
-        ItemStack[] contents = getInventory().getStorageContents();
-        int max = stack.getMaxStackSize();
-        int space = 0;
-
-        for(int x = 0; x < contents.length; ++x) {
-            if (contents[x] == null || contents[x].getType() == Material.AIR) {
-                space += max;
-            }
-            else if (contents[x].isSimilar(stack)) {
-                space += max - contents[x].getAmount();
-            }
-        }
-        return space;
+        return PlayerUtil.getSpaceForItem(player, stack);
     }
 
     public boolean hasRoomForItem(ItemStack stack)
     {
-        return stack.getAmount() <= getSpaceForItem(stack);
+        return PlayerUtil.hasRoomForItem(player, stack);
     }
 
     public boolean tryGiveItem(ItemStack stack)
     {
-        try {
-            giveItem(stack, true);
-            return true;
-        }
-        catch (CommandErrorException | CommandWarningException e) {
-            sendMessage(e.getMessage());
-            return false;
-        }
-        catch (PrematureAbortException e) {
-            sendMessage(e.getMessage());
-            return true;
-        }
+        return PlayerUtil.tryGiveItem(player, stack);
     }
 }

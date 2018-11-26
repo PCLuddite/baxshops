@@ -3,8 +3,9 @@ package tbax.baxshops.commands;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
-import tbax.baxshops.notification.SellRequest;
+import tbax.baxshops.notification.SaleRequest;
 import tbax.baxshops.serialization.ItemNames;
+import tbax.baxshops.serialization.StateFile;
 
 import java.util.List;
 
@@ -118,21 +119,19 @@ public class CmdSell extends BaxShopCommand
         }
 
         String name = ItemNames.getName(entry.getItemStack());
-        SellRequest request = new SellRequest(shop.getId(), shop.getOwner(), actor.getPlayer().getName(), entry.clone());
 
         double price = MathUtil.multiply(entry.getAmount(), entry.getAmount());
 
         if (shop.hasFlagSellRequests()) {
-            Main.getState().sendNotification(shop.getOwner(), request);
+            SaleRequest request = new SaleRequest(shop.getId(), shop.getOwner(), actor.getPlayer(), entry);
+            StateFile.sendNotification(shop.getOwner(), request);
             actor.sendMessage("Your request to sell %s for %s has been sent.",
-                Format.itemname(entry.getAmount(), name),
-                Format.money(price)
-
+                Format.itemname(entry.getAmount(), name), Format.money(price)
             );
             return 0;
         }
         else {
-            request.autoAccept(actor);
+            PlayerUtil.sellItem(shop, shop.getOwner(), actor.getPlayer(), entry);
             actor.sendMessage(
                 "You have sold %s for %s to %s.",
                 Format.itemname(entry.getAmount(), name),

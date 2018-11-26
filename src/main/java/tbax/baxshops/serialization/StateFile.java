@@ -39,33 +39,28 @@ public final class StateFile
     /**
      * A map of locations to their shop ids, accessed by their location in the world
      */
-    private static HashMap<Location, Long> locations = new HashMap<>();
+    private static HashMap<Location, UUID> locations = new HashMap<>();
     
     /**
      * A map of ids map to their shops
      */
-    private static HashMap<Long, BaxShop> shops = new HashMap<>();
+    private static HashMap<UUID, BaxShop> shops = new HashMap<>();
     /**
      * A map containing each player's notifications
      */
     private static HashMap<UUID, ArrayDeque<Notification>> pending = new HashMap<>();
-    
-    /**
-     * The next available shop id
-     */
-    private static long nextId = 0;
 
     private static Main plugin;
     private static Logger log;
 
-    public static BaxShop getShop(long uid)
+    public static BaxShop getShop(UUID uid)
     {
         return shops.get(uid);
     }
     
     public static BaxShop getShop(Location loc)
     {
-        Long uid = locations.get(loc);
+        UUID uid = locations.get(loc);
         if (uid == null) {
             return null;
         }
@@ -174,16 +169,6 @@ public final class StateFile
             addShop(null, shop);
         }
 
-        nextId = -1;
-        for(Long id : shops.keySet()) {
-            if (id >= nextId) {
-                nextId = id + 1;
-            }
-        }
-        if (nextId < 0) {
-            nextId = 0;
-        }
-        
         ConfigurationSection yNotes = state.getConfigurationSection("notes");
         for(Map.Entry<String, Object> player : yNotes.getValues(false).entrySet()) {
             ArrayDeque<Notification> playerNotes = new ArrayDeque<>();
@@ -200,9 +185,6 @@ public final class StateFile
     
     public static boolean addShop(ShopCmdActor actor, BaxShop shop)
     {
-        if (shop.getId() < 0) {
-            shop.setId(getNextId());
-        }
         for(Location loc : shop.getLocations()) {
             if (!addLocation(actor, loc, shop)) {
                 return false;
@@ -214,28 +196,28 @@ public final class StateFile
     
     public static boolean addLocation(ShopCmdActor actor, Location loc, BaxShop shop)
     {
-        Long otherUid = locations.get(loc);
+        UUID otherUid = locations.get(loc);
         if (otherUid == null) {
             locations.put(loc, shop.getId());
         }
-        else if (otherUid != shop.getId()) {
+        else if (!otherUid.equals(shop.getId())) {
             actor.sendError("You can't create a new shop here! Another shop already exists on this block!");
             return false;
         }
         return true;
     }
     
-    public static void removeShop(CommandSender pl, BaxShop shop) throws PrematureAbortException
+    public static void removeShop(CommandSender sender, BaxShop shop) throws PrematureAbortException
     {
         for(Location loc : (Location[])shop.getLocations().toArray()) {
-            removeLocation(pl, loc);
+            removeLocation(sender, loc);
         }
-        pl.sendMessage(String.format("%s's shop has been deleted.", Format.username(shop.getOwner())));
+        sender.sendMessage(String.format("%s's shop has been deleted.", Format.username(shop.getOwner().getName())));
     }
     
-    public static void removeLocation(CommandSender pl, Location loc) throws PrematureAbortException
+    public static void removeLocation(CommandSender sender, Location loc) throws PrematureAbortException
     {
-        Long uid = locations.get(loc);
+        UUID uid = locations.get(loc);
         if (uid != null) {
             BaxShop shop = shops.get(uid);
             try {
@@ -243,7 +225,7 @@ public final class StateFile
                 Sign sign = (Sign) b.getState();
                 sign.setLine(0, Resources.SIGN_CLOSED[0]);
                 sign.setLine(1, Resources.SIGN_CLOSED[1]);
-                sign.setLine(2, (pl.getName().equals(shop.getOwner()) ? "the owner" : "an admin") + ".");
+                sign.setLine(2, (sender.getName().equals(shop.getOwner()) ? "the owner" : "an admin") + ".");
                 sign.setLine(3, "");
                 sign.update();
             }
@@ -310,7 +292,7 @@ public final class StateFile
         if (n instanceof Request) {
             player.sendMessage(String.format("Use %s or %s to manage this request.", Format.command("/shop accept"), Format.command("/shop reject")));
         } 
-        else if (n instanceof Claim) {
+        else if (n instanceof Claimable) {
             player.sendMessage(String.format("Use %s to claim and remove this notification.", Format.command("/shop claim")));
         } 
         else {
@@ -327,6 +309,12 @@ public final class StateFile
     public static void sendNotification(OfflinePlayer player, Notification n)
     {
         sendNotification(player, n, plugin.getConfig().getBoolean("LogNotes"));
+    }
+
+    @Deprecated
+    public static void sendNotification(String playerName, Notification n)
+    {
+        sendNotification(plugin.getServer().getOfflinePlayer(playerName), n);
     }
 
     /**
@@ -346,11 +334,6 @@ public final class StateFile
         if (player != null && player.isOnline()) {
             showNotification(player.getPlayer(), false);
         }
-    }
-    
-    private static long getNextId()
-    {
-        return nextId++;
     }
     
     /**
