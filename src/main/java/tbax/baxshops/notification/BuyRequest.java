@@ -63,28 +63,35 @@ public class BuyRequest implements Request
     }
 
     @Override
-    public void accept(ShopCmdActor acceptingActor) throws PrematureAbortException
+    public boolean accept(ShopCmdActor acceptingActor)
     {
-        double price = MathUtil.multiply(entry.getAmount(), entry.getRetailPrice());
+        try {
+            double price = MathUtil.multiply(entry.getAmount(), entry.getRetailPrice());
 
-        Economy econ = Main.getEconomy();
+            Economy econ = Main.getEconomy();
 
-        if (!econ.has(buyer, price)) {
-            acceptingActor.exitError(Resources.NO_MONEY_SELLER);
+            if (!econ.has(buyer, price)) {
+                acceptingActor.exitError(Resources.NO_MONEY_SELLER);
+            }
+
+            econ.withdrawPlayer(buyer, price);
+            econ.depositPlayer(seller, price);
+
+            BuyClaim n = new BuyClaim(shopId, buyer, seller, entry);
+            StateFile.sendNotification(buyer, n);
+
+            acceptingActor.sendMessage("Offer accepted");
+            acceptingActor.sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.getEconomy().getBalance(acceptingActor.getPlayer()))));
+            return true;
         }
-
-        econ.withdrawPlayer(buyer, price);
-        econ.depositPlayer(seller, price);
-
-        BuyClaim n = new BuyClaim(shopId, buyer, seller, entry);
-        StateFile.sendNotification(buyer, n);
-
-        acceptingActor.sendMessage("Offer accepted");
-        acceptingActor.sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.getEconomy().getBalance(acceptingActor.getPlayer()))));
+        catch (PrematureAbortException e) {
+            acceptingActor.sendMessage(e.getMessage());
+            return false;
+        }
     }
 
     @Override
-    public void reject(ShopCmdActor rejectingActor) throws PrematureAbortException
+    public boolean reject(ShopCmdActor rejectingActor)
     {
         BaxShop shop = StateFile.getShop(shopId);
         if (shop == null) {
@@ -104,6 +111,7 @@ public class BuyRequest implements Request
         BuyRejection n = new BuyRejection(shopId, seller, buyer, entry);
         StateFile.sendNotification(buyer, n);
         rejectingActor.sendMessage("Offer rejected");
+        return true;
     }
 
     @Override
