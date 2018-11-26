@@ -35,6 +35,12 @@ public final class SavedData
     public static final String YAMLBAK_FILE_PATH = "backups/%d.yml";
     
     public static final double STATE_VERSION = 4.0; // state file format version
+
+    /**
+     * A map containing each player's currently selected shop and other
+     * selection data
+     */
+    private static HashMap<Player, ShopSelection> selectedShops = new HashMap<>();
     
     /**
      * A map of locations to their shop ids, accessed by their location in the world
@@ -183,10 +189,10 @@ public final class SavedData
         return true;
     }
     
-    public static boolean addShop(ShopCmdActor actor, BaxShop shop)
+    public static boolean addShop(Player player, BaxShop shop)
     {
         for(Location loc : shop.getLocations()) {
-            if (!addLocation(actor, loc, shop)) {
+            if (!addLocation(player, loc, shop)) {
                 return false;
             }
         }
@@ -194,17 +200,22 @@ public final class SavedData
         return true;
     }
     
-    public static boolean addLocation(ShopCmdActor actor, Location loc, BaxShop shop)
+    public static boolean addLocation(Player player, Location loc, BaxShop shop)
     {
-        UUID otherUid = locations.get(loc);
-        if (otherUid == null) {
-            locations.put(loc, shop.getId());
+        try {
+            UUID otherUid = locations.get(loc);
+            if (otherUid == null) {
+                locations.put(loc, shop.getId());
+            }
+            else if (!otherUid.equals(shop.getId())) {
+                throw new CommandErrorException("You can't create a new shop here! Another shop already exists on this block!");
+            }
+            return true;
         }
-        else if (!otherUid.equals(shop.getId())) {
-            actor.sendError("You can't create a new shop here! Another shop already exists on this block!");
+        catch (PrematureAbortException e) {
+            player.sendMessage(e.getMessage());
             return false;
         }
-        return true;
     }
     
     public static void removeShop(CommandSender sender, BaxShop shop) throws PrematureAbortException
@@ -367,6 +378,23 @@ public final class SavedData
         } catch (IOException e) {
             log.warning("Save failed");
             e.printStackTrace();
+        }
+    }
+
+    public static ShopSelection getSelection(Player player)
+    {
+        ShopSelection selected = selectedShops.get(player);
+        if (selected == null) {
+            selected = new ShopSelection();
+            selectedShops.put(player, selected);
+        }
+        return selected;
+    }
+
+    public static void clearSelection(Player player)
+    {
+        if (selectedShops.containsKey(player)) {
+            selectedShops.remove(player);
         }
     }
 }

@@ -8,7 +8,6 @@
 
 package tbax.baxshops;
 
-import java.util.ArrayDeque;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -30,7 +29,14 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
+import tbax.baxshops.errors.CommandErrorException;
+import tbax.baxshops.errors.CommandWarningException;
+import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.Notification;
+import tbax.baxshops.serialization.SavedData;
+
+import java.util.ArrayDeque;
+import java.util.UUID;
 
 /**
  *
@@ -38,44 +44,47 @@ import tbax.baxshops.notification.Notification;
  */
 public class EventListener implements Listener
 {
-    private final Main main;
+    private final Main plugin;
     
-    public EventListener(Main main)
+    public EventListener(Main plugin)
     {
-        this.main = main;
+        this.plugin = plugin;
     }
     
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockBreak(BlockBreakEvent event)
     {
-        BaxShop shop = Main.getState().getShop(event.getBlock().getLocation());
-        if (shop != null) {
-            if (shop.owner.equals(event.getPlayer().getName()) || event.getPlayer().hasPermission("shops.admin")) {
-                if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
-                    event.setCancelled(true);
-                }
-                else if (shop.getLocations().size() == 1)  {
-                    Main.sendWarning(event.getPlayer(), "This is the only location for this shop. It cannot be destroyed.");
-                    event.setCancelled(true);
+        try {
+            BaxShop shop = SavedData.getShop(event.getBlock().getLocation());
+            if (shop != null) {
+                if (shop.getOwner().equals(event.getPlayer()) || event.getPlayer().hasPermission("shops.admin")) {
+                    if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
+                        event.setCancelled(true);
+                    }
+                    else if (shop.getLocations().size() == 1) {
+                        throw new CommandWarningException("This is the only location for this shop. It cannot be destroyed.");
+                    }
+                    else {
+                        event.setCancelled(true);
+                        event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), shop.toItem(event.getBlock().getLocation()));
+                        SavedData.removeLocation(null, event.getBlock().getLocation()); // we don't need to tell the player if there's an error 12/5/15
+                        SavedData.clearSelection(event.getPlayer());
+                        event.getBlock().setType(Material.AIR);
+                    }
                 }
                 else {
-                    event.setCancelled(true);
-                    event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), shop.toItem(Main.getSignText(event.getBlock().getLocation())));
-                    Main.getState().removeLocation(null, event.getBlock().getLocation()); // we don't need to tell the player if there's an error 12/5/15
-                    main.removeSelection(event.getPlayer());
-                    event.getBlock().setType(Material.AIR);
+                    throw new CommandErrorException("You don't have permission to remove this shop.");
                 }
             }
-            else {
-                event.setCancelled(true);
-                Main.sendError(event.getPlayer(), "You don't have permission to remove this shop.");
+            Location above = event.getBlock().getLocation();
+            above.setY(above.getY() + 1);
+            if (SavedData.getShop(above) != null) {
+                throw new CommandWarningException("You cannot break this block because there is a shop above it.");
             }
         }
-        Location above = event.getBlock().getLocation();
-        above.setY(above.getY() + 1);
-        if (Main.getState().getShop(above) != null) {
-            Main.sendWarning(event.getPlayer(), "You cannot break this block because there is a shop above it.");
-            event.setCancelled(true); 
+        catch (PrematureAbortException e) {
+            event.setCancelled(true);
+            event.getPlayer().sendMessage(e.getMessage());
         }
     }
 
@@ -83,14 +92,16 @@ public class EventListener implements Listener
     public void onPlayerInteract(PlayerInteractEvent event)
     {
         Block b = event.getClickedBlock();
+        Player player = event.getPlayer();
+
         if (b == null) {
             return;
         }
         
-        BaxShop shop = Main.getState().getShop(b.getLocation());
+        BaxShop shop = SavedData.getShop(b.getLocation());
         if (shop == null) {
             if (b.hasMetadata("shopid")) {
-                shop = Main.getState().getShop(b.getMetadata("shopid").get(0).asLong());
+                shop = SavedData.getShop(UUID.fromString(b.getMetadata("shopid").get(0).asString()));
                 if (shop == null) {
                     event.getPlayer().sendMessage("This shop has been closed.");
                     return;
@@ -100,63 +111,43 @@ public class EventListener implements Listener
                 return;
             }
         }
-        Player pl = event.getPlayer();
         
-        boolean isOwner = shop.owner.equals(pl.getName());
-        
-        /*if (!pl.hasPermission("shop.admin") && !isOwner) {
-            if ((boolean)shop.getOption("whitelist_enabled") &&
-                !((ArrayList<String>)shop.getOption("whitelist")).contains(pl.getName())) {
-                sendError(pl, "You need to be whitelisted at this shop to view its inventory.");
-                return;
-            }
-            if ((boolean)shop.getOption("blacklist_enabled") &&
-                ((ArrayList<String>)shop.getOption("blacklist")).contains(pl.getName())) {
-                sendError(pl, "You have been banned from this shop and cannot view its inventory.");
-                return;
-            }
-        }*/
-        
-        ShopSelection selection = main.selectedShops.get(pl);
-        if (selection == null) {
-            selection = new ShopSelection();
-            main.selectedShops.put(pl, selection);
-        }
-        selection.location = b.getLocation();
-        
-        //res.log.log(Level.INFO, "{0} selected {1}''s shop at ({2}, {3}, {4})", new Object[]{pl.getName(), shop.owner, selection.location.getBlockX(), selection.location.getBlockY(), selection.location.getBlockX()});
-        
-        if (selection.shop == shop) {
+        boolean isOwner = shop.getOwner().equals(player);
+
+        ShopSelection selection = SavedData.getSelection(player);
+        selection.setLocation(b.getLocation());
+
+        if (selection.getShop() == shop) {
             int pages = shop.getPages();
             if (pages == 0) {
-                selection.page = 0;
+                selection.setPage(0);
             }
             else {
                 int delta = event.getAction() == Action.LEFT_CLICK_BLOCK ? 1 : -1;
-                selection.page = (((selection.page + delta) % pages) + pages) % pages;
+                selection.setPage((((selection.getPage() + delta) % pages) + pages) % pages);
             }
-            pl.sendMessage("");
-            pl.sendMessage("");
+            player.sendMessage("");
+            player.sendMessage("");
         }
         else {
-            selection.isOwner = isOwner;
-            selection.shop = shop;
-            selection.page = 0;
+            selection.setIsOwner(isOwner);
+            selection.setShop(shop);
+            selection.setPage(0);
             StringBuilder intro = new StringBuilder(ChatColor.WHITE.toString());
             intro.append("Welcome to ");
             if (isOwner) {
                 intro.append(Format.username("your"));
             }
             else {
-                intro.append(Format.username(shop.owner)).append("'s");
+                intro.append(Format.username(shop.getOwner().getName())).append("'s");
             }
             intro.append(" shop\n");
             intro.append(ChatColor.GRAY.toString());
             intro.append("For help with shops, type /shop help.");
-            pl.sendMessage(intro.toString());
+            player.sendMessage(intro.toString());
         }
 
-        selection.showListing(pl);
+        selection.showListing(player);
     }
 	
     @EventHandler(priority = EventPriority.LOWEST)
@@ -164,12 +155,12 @@ public class EventListener implements Listener
     {
         for (Block b : event.blockList()) {
             Location loc = b.getLocation();
-            if (Main.getState().getShop(loc) != null) {
+            if (SavedData.getShop(loc) != null) {
                 event.setCancelled(true);
                 return;
             }
             loc.setY(loc.getY() + 1);
-            if (Main.getState().getShop(loc) != null) {
+            if (SavedData.getShop(loc) != null) {
                 event.setCancelled(true);
                 return;
             }
@@ -179,41 +170,44 @@ public class EventListener implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockPlace(BlockPlaceEvent event)
     {
-        ItemStack item = event.getItemInHand();
-        if (BaxShop.isShop(item)) {
-            BaxShop shop = BaxShop.fromItem(item);
-            if (shop == null) {
-                Main.sendWarning(event.getPlayer(), "This shop has been closed and can't be placed.");
-                event.setCancelled(true);
-            }
-            else {
-                Main.getState().addLocation(event.getPlayer(), event.getBlockPlaced().getLocation(), shop);
-                shop.addLocation(event.getBlockPlaced().getLocation());
-                String[] lines = BaxShop.extractSignText(item);
-                if (lines.length > 0) {
-                    Sign sign = (Sign)event.getBlockPlaced().getState();
-                    if (lines.length < 3) {
-                        sign.setLine(0, "");
-                        sign.setLine(1, lines[0]);
-                        sign.setLine(2, lines.length > 1 ? lines[1] : "");
-                        sign.setLine(3, "");
+        try {
+            ItemStack item = event.getItemInHand();
+            if (BaxShop.isShop(item)) {
+                BaxShop shop = BaxShop.fromItem(item);
+                if (shop == null) {
+                    throw new CommandWarningException("This shop has been closed and can't be placed.");
+                } else {
+                    SavedData.addLocation(event.getPlayer(), event.getBlockPlaced().getLocation(), shop);
+                    shop.addLocation(event.getBlockPlaced().getLocation());
+                    String[] lines = BaxShop.extractSignText(item);
+                    if (lines.length > 0) {
+                        Sign sign = (Sign) event.getBlockPlaced().getState();
+                        if (lines.length < 3) {
+                            sign.setLine(0, "");
+                            sign.setLine(1, lines[0]);
+                            sign.setLine(2, lines.length > 1 ? lines[1] : "");
+                            sign.setLine(3, "");
+                        } else {
+                            sign.setLine(0, lines[0]);
+                            sign.setLine(1, lines.length > 1 ? lines[1] : "");
+                            sign.setLine(2, lines.length > 2 ? lines[2] : "");
+                            sign.setLine(3, lines.length > 3 ? lines[3] : "");
+                        }
+                        sign.update();
                     }
-                    else {
-                        sign.setLine(0, lines[0]);
-                        sign.setLine(1, lines.length > 1 ? lines[1] : "");
-                        sign.setLine(2, lines.length > 2 ? lines[2] : "");
-                        sign.setLine(3, lines.length > 3 ? lines[3] : "");
-                    }
-                    sign.update();
                 }
             }
+        }
+        catch (PrematureAbortException e) {
+            event.setCancelled(true);
+            event.getPlayer().sendMessage(e.getMessage());
         }
     }
     
     @EventHandler(priority = EventPriority.LOWEST)
     public void onSignChange(SignChangeEvent event)
     {
-        BaxShop shop = Main.getState().getShop(event.getBlock().getLocation());
+        BaxShop shop = SavedData.getShop(event.getBlock().getLocation());
         if (shop != null) {
             for(String line : event.getLines()) {
                 if (!line.isEmpty()) {
@@ -227,7 +221,7 @@ public class EventListener implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event)
     {
-        ArrayDeque<Notification> p = Main.getState().getNotifications(event.getPlayer());
+        ArrayDeque<Notification> p = SavedData.getNotifications(event.getPlayer());
         if (!p.isEmpty()) {
             event.getPlayer().sendMessage(ChatColor.WHITE + "You have new notifications. Use " + Format.command("/shop notifications") + ChatColor.WHITE + " to view them");
         }
@@ -237,18 +231,18 @@ public class EventListener implements Listener
     public void onPlayerMove(PlayerMoveEvent event)
     {
         Player pl = event.getPlayer();
-        ShopSelection s = main.selectedShops.get(pl);
-        if (s != null) {
-            Location shopLoc = s.location;
+        ShopSelection s = SavedData.getSelection(pl);
+        if (s.getShop() != null) {
+            Location shopLoc = s.getLocation();
             Location pLoc = event.getTo();
             if (shopLoc.getWorld() != pl.getWorld() || shopLoc.distanceSquared(pLoc) > Resources.SHOP_RANGE) {
-                if (s.isOwner) {
+                if (s.isOwner()) {
                     pl.sendMessage("[Left " + Format.username("your") + " shop]");
                 }
                 else {
-                    pl.sendMessage("[Left " + Format.username(s.shop.owner) + "'s shop]");
+                    pl.sendMessage("[Left " + Format.username(s.getShop().getOwner().getName()) + "'s shop]");
                 }
-                main.selectedShops.remove(event.getPlayer());
+                SavedData.clearSelection(event.getPlayer());
             }
         }
     }
@@ -256,15 +250,15 @@ public class EventListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDeath(PlayerDeathEvent event)
     {
-        String name = main.getConfig().getString("DeathTax.GoesTo", null);
+        String name = plugin.getConfig().getString("DeathTax.GoesTo", null);
         if (name != null) {
             Player pl = event.getEntity();
             if (Main.getEconomy().has(pl, 100.00) && isStupidDeath(pl.getLastDamageCause().getCause())) {
-                double death_tax = Main.getEconomy().getBalance(pl) * main.getConfig().getDouble("DeathTax.Percentage", 0.04);
+                double death_tax = Main.getEconomy().getBalance(pl) * plugin.getConfig().getDouble("DeathTax.Percentage", 0.04);
                 Main.getEconomy().withdrawPlayer(pl, death_tax);
                 Main.getEconomy().depositPlayer(name, death_tax);
                 pl.sendMessage(String.format("You were fined %s for dying.", Format.money(death_tax)));
-                if (main.getConfig().getBoolean("LogNotes", false)) {
+                if (plugin.getConfig().getBoolean("LogNotes", false)) {
                     Main.getLog().info(Format.toAnsiColor(String.format("%s was fined %s for dying.", Format.username(pl.getName()), Format.money(death_tax))));
                 }
             }

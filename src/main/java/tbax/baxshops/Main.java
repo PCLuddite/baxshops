@@ -25,13 +25,7 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 public final class Main extends JavaPlugin
-{    
-    /**
-     * A map containing each player's currently selected shop and other
-     * selection data
-     */
-    public HashMap<Player, ShopSelection> selectedShops = new HashMap<>();
-
+{
     private static final CommandMap commands = initCommands();
     
     /**
@@ -214,13 +208,6 @@ public final class Main extends JavaPlugin
 
         econ = rsp.getProvider();
         return econ != null;
-    }
-    
-    public void removeSelection(Player pl)
-    {
-        if (selectedShops.get(pl) != null) {
-            selectedShops.remove(pl);
-        }
     }
 
     public void sendInfo(Player pl, String message)
