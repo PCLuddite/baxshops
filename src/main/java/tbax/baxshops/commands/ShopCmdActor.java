@@ -24,6 +24,7 @@ import tbax.baxshops.serialization.ItemNames;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
+import tbax.baxshops.serialization.SavedData;
 
 /**
  *
@@ -101,7 +102,7 @@ public final class ShopCmdActor
 
     public ShopSelection getSelection()
     {
-        return main.selectedShops.get(player);
+        return SavedData.getSelection(player);
     }
     
     public int getNumArgs()

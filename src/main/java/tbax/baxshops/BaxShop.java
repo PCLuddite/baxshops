@@ -277,7 +277,7 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
      */
     public static BaxShop fromItem(ItemStack item)
     {
-        long uid = Long.parseLong(item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1).substring((ChatColor.GRAY + "ID: ").length()));
+        UUID uid = UUID.fromString(item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1).substring((ChatColor.GRAY + "ID: ").length()));
         return SavedData.getShop(uid);
     }
     

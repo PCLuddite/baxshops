@@ -98,7 +98,7 @@ public class CmdCreate extends BaxShopCommand
         BaxShop shop = new BaxShop();
         shop.setOwner(owner);
         
-        if (!SavedData.addShop(actor, shop))
+        if (!SavedData.addShop(actor.getPlayer(), shop))
             return;;
 
         Block b = shop.buildShopSign(
