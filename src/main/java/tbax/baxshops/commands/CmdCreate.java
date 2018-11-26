@@ -10,9 +10,7 @@ import tbax.baxshops.CommandHelpArgument;
 import tbax.baxshops.Format;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
-import tbax.baxshops.serialization.StateFile;
-
-import java.util.UUID;
+import tbax.baxshops.serialization.SavedData;
 
 public class CmdCreate extends BaxShopCommand
 {
@@ -100,7 +98,7 @@ public class CmdCreate extends BaxShopCommand
         BaxShop shop = new BaxShop();
         shop.setOwner(owner);
         
-        if (!StateFile.addShop(actor, shop))
+        if (!SavedData.addShop(actor, shop))
             return;;
 
         Block b = shop.buildShopSign(

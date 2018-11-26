@@ -16,8 +16,7 @@ import tbax.baxshops.errors.CommandWarningException;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.DeletedShopClaim;
 import tbax.baxshops.notification.SaleClaim;
-import tbax.baxshops.notification.SaleNotification;
-import tbax.baxshops.serialization.StateFile;
+import tbax.baxshops.serialization.SavedData;
 
 import java.util.UUID;
 
@@ -82,7 +81,7 @@ public class PlayerUtil
 
     public static void sellItem(UUID shopId, OfflinePlayer buyer, OfflinePlayer seller, BaxEntry entry) throws PrematureAbortException
     {
-        sellItem(StateFile.getShop(shopId), buyer, seller, entry);
+        sellItem(SavedData.getShop(shopId), buyer, seller, entry);
     }
 
     public static void sellItem(BaxShop shop, OfflinePlayer buyer, OfflinePlayer seller, BaxEntry entry) throws PrematureAbortException
@@ -98,7 +97,7 @@ public class PlayerUtil
 
         if (shop == null) {
             DeletedShopClaim deletedClaim = new DeletedShopClaim(buyer, entry.clone());
-            StateFile.sendNotification(buyer, deletedClaim);
+            SavedData.sendNotification(buyer, deletedClaim);
         }
         else if (shop.hasFlagSellToShop()) {
             ItemStack item = entry.toItemStack();
@@ -121,7 +120,7 @@ public class PlayerUtil
             }
             else {
                 SaleClaim claim = new SaleClaim(shop.getId(), buyer, seller, entry);
-                StateFile.sendNotification(buyer, claim);
+                SavedData.sendNotification(buyer, claim);
             }
         }
     }

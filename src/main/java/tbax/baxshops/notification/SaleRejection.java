@@ -13,7 +13,7 @@ import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
 import tbax.baxshops.commands.ShopCmdActor;
-import tbax.baxshops.serialization.StateFile;
+import tbax.baxshops.serialization.SavedData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,7 +49,7 @@ public class SaleRejection implements Claimable
 
     public BaxShop getShop()
     {
-        return StateFile.getShop(shopId);
+        return SavedData.getShop(shopId);
     }
 
     public OfflinePlayer getBuyer()

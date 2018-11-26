@@ -7,11 +7,10 @@
 
 package tbax.baxshops.commands;
 
-import tbax.baxshops.Main;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
 import tbax.baxshops.notification.Notification;
-import tbax.baxshops.serialization.StateFile;
+import tbax.baxshops.serialization.SavedData;
 
 import java.util.ArrayDeque;
 
@@ -89,11 +88,11 @@ public class CmdNotifications extends BaxShopCommand
     public void onCommand(ShopCmdActor actor) throws PrematureAbortException
     {
         if (actor.getNumArgs() == 1) {
-            StateFile.showNotification(actor.getPlayer());
+            SavedData.showNotification(actor.getPlayer());
         }
         else if (actor.getNumArgs() == 2) {
             if (actor.getArg(1).equalsIgnoreCase("clear")) {
-                ArrayDeque<Notification> notes = StateFile.getNotifications(actor.getPlayer());
+                ArrayDeque<Notification> notes = SavedData.getNotifications(actor.getPlayer());
                 notes.clear();
                 actor.getPlayer().sendMessage("Your notifications have been cleared");
             }

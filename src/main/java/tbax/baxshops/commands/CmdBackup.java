@@ -8,9 +8,8 @@
 package tbax.baxshops.commands;
 
 import tbax.baxshops.CommandHelp;
-import tbax.baxshops.Main;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.serialization.StateFile;
+import tbax.baxshops.serialization.SavedData;
 
 /**
  *
@@ -71,7 +70,7 @@ public class CmdBackup extends BaxShopCommand
     @Override
     public void onCommand(ShopCmdActor actor)
     {
-        StateFile.backup();
+        SavedData.backup();
         actor.getSender().sendMessage("Shops successfully backed up state.json");
     }
 }

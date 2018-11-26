@@ -9,11 +9,10 @@ package tbax.baxshops.notification;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
-import org.bukkit.inventory.ItemStack;
 import tbax.baxshops.*;
 import tbax.baxshops.commands.ShopCmdActor;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.serialization.StateFile;
+import tbax.baxshops.serialization.SavedData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,7 +48,7 @@ public class SaleRequest implements Request
 
     public BaxShop getShop()
     {
-        return StateFile.getShop(shopId);
+        return SavedData.getShop(shopId);
     }
 
     public OfflinePlayer getBuyer()
@@ -72,7 +71,7 @@ public class SaleRequest implements Request
     {
         try {
             PlayerUtil.sellItem(shopId, buyer, seller, entry);
-            StateFile.sendNotification(seller, new SaleNotification(shopId, buyer, seller, entry.clone()));
+            SavedData.sendNotification(seller, new SaleNotification(shopId, buyer, seller, entry.clone()));
             return true;
         }
         catch (PrematureAbortException e) {
@@ -85,7 +84,7 @@ public class SaleRequest implements Request
     public boolean reject(ShopCmdActor rejectingActor)
     {
         SaleRejection rejection = new SaleRejection(shopId, buyer, seller, entry);
-        StateFile.sendNotification(seller, rejection);
+        SavedData.sendNotification(seller, rejection);
         rejectingActor.sendError("Offer rejected");
         return true;
     }

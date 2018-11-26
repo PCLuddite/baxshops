@@ -13,7 +13,7 @@ import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.Claimable;
 import tbax.baxshops.notification.Notification;
 import tbax.baxshops.notification.Request;
-import tbax.baxshops.serialization.StateFile;
+import tbax.baxshops.serialization.SavedData;
 
 import java.util.ArrayDeque;
 
@@ -78,7 +78,7 @@ public class CmdAccept extends BaxShopCommand
     @Override
     public void onCommand(ShopCmdActor actor) throws PrematureAbortException
     {
-        ArrayDeque<Notification> notifications = StateFile.getNotifications(actor.getPlayer());
+        ArrayDeque<Notification> notifications = SavedData.getNotifications(actor.getPlayer());
         if (notifications.isEmpty()) {
             actor.exitError(Resources.NOT_FOUND_NOTE);
         }
@@ -96,6 +96,6 @@ public class CmdAccept extends BaxShopCommand
                 }
             }
         }
-        StateFile.showNotification(actor.getPlayer());
+        SavedData.showNotification(actor.getPlayer());
     }
 }

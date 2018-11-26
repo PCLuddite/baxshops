@@ -7,13 +7,12 @@
 
 package tbax.baxshops.commands;
 
-import tbax.baxshops.Main;
 import tbax.baxshops.Resources;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
 import tbax.baxshops.notification.Notification;
 import tbax.baxshops.notification.Request;
-import tbax.baxshops.serialization.StateFile;
+import tbax.baxshops.serialization.SavedData;
 
 import java.util.ArrayDeque;
 
@@ -78,7 +77,7 @@ public class CmdReject extends BaxShopCommand
     @Override
     public void onCommand(ShopCmdActor actor) throws PrematureAbortException
     {
-        ArrayDeque<Notification> notifications = StateFile.getNotifications(actor.getPlayer());
+        ArrayDeque<Notification> notifications = SavedData.getNotifications(actor.getPlayer());
         if (notifications.isEmpty()) {
             actor.exitError(Resources.NOT_FOUND_NOTE);
         }
@@ -89,7 +88,7 @@ public class CmdReject extends BaxShopCommand
                 if (r.reject(actor)) {
                     notifications.removeFirst();
                 }
-                StateFile.showNotification(actor.getPlayer());
+                SavedData.showNotification(actor.getPlayer());
             }
             else {
                 actor.sendError("Your current notification is not a request.");

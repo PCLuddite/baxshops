@@ -22,7 +22,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.ItemNames;
-import tbax.baxshops.serialization.StateFile;
+import tbax.baxshops.serialization.SavedData;
 
 /**
  *
@@ -278,7 +278,7 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
     public static BaxShop fromItem(ItemStack item)
     {
         long uid = Long.parseLong(item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1).substring((ChatColor.GRAY + "ID: ").length()));
-        return StateFile.getShop(uid);
+        return SavedData.getShop(uid);
     }
     
     /**

@@ -13,7 +13,7 @@ import org.bukkit.command.CommandSender;
 import tbax.baxshops.*;
 import tbax.baxshops.commands.ShopCmdActor;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.serialization.StateFile;
+import tbax.baxshops.serialization.SavedData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -78,7 +78,7 @@ public class BuyRequest implements Request
             econ.depositPlayer(seller, price);
 
             BuyClaim n = new BuyClaim(shopId, buyer, seller, entry);
-            StateFile.sendNotification(buyer, n);
+            SavedData.sendNotification(buyer, n);
 
             acceptingActor.sendMessage("Offer accepted");
             acceptingActor.sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.getEconomy().getBalance(acceptingActor.getPlayer()))));
@@ -93,10 +93,10 @@ public class BuyRequest implements Request
     @Override
     public boolean reject(ShopCmdActor rejectingActor)
     {
-        BaxShop shop = StateFile.getShop(shopId);
+        BaxShop shop = SavedData.getShop(shopId);
         if (shop == null) {
             DeletedShopClaim shopDeleted = new DeletedShopClaim(buyer, entry);
-            StateFile.sendNotification(buyer, shopDeleted);
+            SavedData.sendNotification(buyer, shopDeleted);
         }
         else if (!shop.hasFlagInfinite()) {
             BaxEntry shopEntry = shop.findEntry(entry.getItemStack());
@@ -109,7 +109,7 @@ public class BuyRequest implements Request
         }
 
         BuyRejection n = new BuyRejection(shopId, seller, buyer, entry);
-        StateFile.sendNotification(buyer, n);
+        SavedData.sendNotification(buyer, n);
         rejectingActor.sendMessage("Offer rejected");
         return true;
     }

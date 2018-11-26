@@ -29,7 +29,7 @@ import org.bukkit.entity.Player;
  *
  * @author Timothy Baxendale (pcluddite@hotmail.com)
  */
-public final class StateFile
+public final class SavedData
 {
     public static final String YAML_FILE_PATH = "shops.yml";
     public static final String YAMLBAK_FILE_PATH = "backups/%d.yml";
