@@ -11,8 +11,6 @@ import org.bukkit.OfflinePlayer;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
 
-import java.util.Map;
-
 public class CmdFlag extends BaxShopCommand
 {
 	private final CommandMap flagCmds;
@@ -190,7 +188,7 @@ public class CmdFlag extends BaxShopCommand
 		public void onCommand(ShopCmdActor actor) throws PrematureAbortException
 		{
 			BaxShop shop = actor.getShop();
-			OfflinePlayer owner = actor.getMain().getServer().getOfflinePlayer(actor.getArg(2));
+			OfflinePlayer owner = actor.getPlugin().getServer().getOfflinePlayer(actor.getArg(2));
 			shop.setOwner(owner);
 			actor.sendMessage(Format.username(shop.getOwner().getName()) + " is now the owner!");
 			if (actor.isOwner()) {

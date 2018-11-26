@@ -68,7 +68,7 @@ public final class ShopCmdActor
         return player;
     }
     
-    public Main getMain()
+    public Main getPlugin()
     {
         return main;
     }
