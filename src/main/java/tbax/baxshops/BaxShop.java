@@ -8,10 +8,7 @@
 
 package tbax.baxshops;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
@@ -29,7 +26,7 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
     public static final int ITEMS_PER_PAGE = 7;
     
     private UUID id;
-    private OfflinePlayer owner;
+    private UUID ownerId;
     private final ArrayList<Location> locations = new ArrayList<>();
     private final ArrayList<BaxEntry> inventory = new ArrayList<>();
 
@@ -42,7 +39,7 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
     public BaxShop(Map<String, Object> args)
     {
         id = UUID.fromString((String)args.get("id"));
-        owner = (OfflinePlayer)args.get("owner");
+        ownerId = UUID.fromString((String)args.get("owner"));
         flags = (long)args.get("flags");
         inventory.addAll((ArrayList)args.get("inventory"));
         locations.addAll((ArrayList)args.get("locations"));
@@ -65,12 +62,12 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
 
     public OfflinePlayer getOwner()
     {
-        return owner;
+        return Bukkit.getOfflinePlayer(ownerId);
     }
 
     public void setOwner(OfflinePlayer newOwner)
     {
-        owner = newOwner;
+        ownerId = newOwner.getUniqueId();
     }
     
     public int getIndexOfEntry(BaxEntry entry)
@@ -246,7 +243,7 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
         }
         lore.add(ChatColor.GRAY + "ID: " + id);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(ChatColor.WHITE + owner.getName() + "'s shop");
+        meta.setDisplayName(ChatColor.WHITE + getOwner().getName() + "'s shop");
         meta.setLore(lore);
         item.setItemMeta(meta);
         return item;
@@ -413,7 +410,7 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
     {
         HashMap<String, Object> map = new HashMap<>();
         map.put("id", id.toString());
-        map.put("owner", owner);
+        map.put("owner", ownerId.toString());
         map.put("flag", flags);
         map.put("inventory", inventory);
         map.put("locations", locations);
