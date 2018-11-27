@@ -13,20 +13,15 @@ import tbax.baxshops.errors.PrematureAbortException;
 
 public class CmdFlag extends BaxShopCommand
 {
-	private final CommandMap flagCmds;
-	
-	public CmdFlag()
-	{
-		flagCmds = new CommandMap(
-			FlagCmdSellToShop.class,
-			FlagCmdInfinite.class,
-			FlagCmdSellRequests.class,
-			FlagCmdBuyRequests.class,
-			FlagCmdOwner.class,
-			FlagCmdList.class
-		);
-	}
-	
+    private final CommandMap flagCmds = new CommandMap(
+        FlagCmdSellToShop.class,
+        FlagCmdInfinite.class,
+        FlagCmdSellRequests.class,
+        FlagCmdBuyRequests.class,
+        FlagCmdOwner.class,
+        FlagCmdList.class
+    );
+
     @Override
     public String getName()
     {
