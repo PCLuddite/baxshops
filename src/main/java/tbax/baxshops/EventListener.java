@@ -38,10 +38,6 @@ import tbax.baxshops.serialization.SavedData;
 import java.util.ArrayDeque;
 import java.util.UUID;
 
-/**
- *
- * @author Timothy Baxendale (pcluddite@hotmail.com)
- */
 public class EventListener implements Listener
 {
     private final Main plugin;

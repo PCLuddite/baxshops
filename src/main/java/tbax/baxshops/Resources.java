@@ -9,10 +9,6 @@ package tbax.baxshops;
 
 import org.bukkit.ChatColor;
 
-/**
- *
- * @author Timothy Baxendale (pcluddite@hotmail.com)
- */
 public final class Resources
 {
     // TODO: Timed notifications

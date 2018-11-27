@@ -10,14 +10,6 @@ package tbax.baxshops;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 
-/**
- *
- * @author Timothy Baxendale (pcluddite@hotmail.com)
- * 
- * This class contains the various formats for the
- * bits of information printed in chat
- * 
- */
 public class Format
 {   
     public static String money(String in)

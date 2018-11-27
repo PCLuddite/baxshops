@@ -11,10 +11,6 @@ import tbax.baxshops.CommandHelp;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.SavedData;
 
-/**
- *
- * @author Timothy Baxendale (pcluddite@hotmail.com)
- */
 public class CmdSave extends BaxShopCommand
 {
 

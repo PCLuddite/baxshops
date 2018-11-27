@@ -4,7 +4,7 @@
  *  Copyright (c) 2012 Nathan Dinsmore and Sam Lazarus
  *
  *  +++====+++
- **/
+**/
 
 package tbax.baxshops.notification;
 

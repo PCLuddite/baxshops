@@ -10,10 +10,6 @@ package tbax.baxshops.commands;
 import tbax.baxshops.CommandHelp;
 import tbax.baxshops.errors.PrematureAbortException;
 
-/**
- *
- * @author Timothy Baxendale (pcluddite@hotmail.com)
- */
 public abstract class BaxShopCommand
 {
     public abstract String getName();

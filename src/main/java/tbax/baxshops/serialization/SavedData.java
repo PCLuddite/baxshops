@@ -27,10 +27,6 @@ import java.io.*;
 import java.util.*;
 import java.util.logging.Logger;
 
-/**
- *
- * @author Timothy Baxendale (pcluddite@hotmail.com)
- */
 public final class SavedData
 {
     public static final String YAML_FILE_PATH = "shops.yml";

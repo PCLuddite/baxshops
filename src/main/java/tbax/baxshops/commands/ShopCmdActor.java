@@ -26,10 +26,6 @@ import java.util.List;
 import java.util.logging.Logger;
 import tbax.baxshops.serialization.SavedData;
 
-/**
- *
- * @author Timothy Baxendale (pcluddite@hotmail.com)
- */
 public final class ShopCmdActor
 {
     private final CommandSender sender;

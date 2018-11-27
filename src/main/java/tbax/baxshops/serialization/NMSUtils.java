@@ -15,9 +15,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-/**
- * @author iFamasssxD Modified by Timothy Baxendale
- */
 public class NMSUtils
 {
     static String version = "";

@@ -24,10 +24,6 @@ import tbax.baxshops.serialization.ItemNames;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- *
- * @author Timothy Baxendale (pcluddite@hotmail.com)
- */
 public final class BaxEntry implements ConfigurationSerializable
 {
     private ItemStack stack;

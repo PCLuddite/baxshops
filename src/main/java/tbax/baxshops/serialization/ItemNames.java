@@ -27,10 +27,6 @@ import java.util.HashMap;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-/**
- *
- * @author Timothy Baxendale (pcluddite@hotmail.com)
- */
 public final class ItemNames
 {
     /**

@@ -3,7 +3,7 @@
  *  Copyright (c) Timothy Baxendale
  *
  *  +++====+++
- **/
+**/
 
 package tbax.baxshops.commands;
 
@@ -15,10 +15,6 @@ import tbax.baxshops.notification.BuyRequest;
 import tbax.baxshops.serialization.ItemNames;
 import tbax.baxshops.serialization.SavedData;
 
-/**
- *
- * @author Timothy Baxendale (pcluddite@hotmail.com)
- */
 public class CmdBuy extends BaxShopCommand
 {
     @Override

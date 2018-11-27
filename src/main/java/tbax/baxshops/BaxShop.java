@@ -24,10 +24,6 @@ import tbax.baxshops.serialization.SavedData;
 
 import java.util.*;
 
-/**
- *
- * @author Timothy Baxendale (pcluddite@hotmail.com)
- */
 public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEntry>
 {
     public static final int ITEMS_PER_PAGE = 7;
