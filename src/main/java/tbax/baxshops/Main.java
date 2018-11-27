@@ -103,7 +103,7 @@ public final class Main extends JavaPlugin
             CmdCopy.class,
             CmdCreate.class,
             CmdDelete.class,
-            CmdFlag.class,
+            //CmdFlag.class,
             CmdGiveXp.class,
             CmdHelp.class,
             CmdInfo.class,
