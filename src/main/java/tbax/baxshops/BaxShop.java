@@ -412,7 +412,7 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
     public Map<String, Object> serialize()
     {
         HashMap<String, Object> map = new HashMap<>();
-        map.put("id", id);
+        map.put("id", id.toString());
         map.put("owner", owner);
         map.put("flag", flags);
         map.put("inventory", inventory);

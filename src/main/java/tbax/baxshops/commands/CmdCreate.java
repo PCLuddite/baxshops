@@ -19,6 +19,8 @@ import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
 import tbax.baxshops.serialization.SavedData;
 
+import java.util.UUID;
+
 public class CmdCreate extends BaxShopCommand
 {
     @Override
@@ -96,13 +98,15 @@ public class CmdCreate extends BaxShopCommand
             owner = actor.getPlayer();
         }
 
-        Location loc = actor.getPlayer().getLocation().getWorld().getBlockAt(actor.getPlayer().getLocation()).getLocation();
+        Location loc = actor.getPlayer().getLocation();
+        loc = loc.getWorld().getBlockAt(loc).getLocation();
 
         if (!actor.isAdmin() && !actor.getInventory().containsAtLeast(new ItemStack(Material.SIGN), 1)) {
             actor.exitError("You need a sign to set up a shop.");
         }
 
         BaxShop shop = new BaxShop();
+        shop.setId(UUID.randomUUID());
         shop.setOwner(owner);
         
         if (!SavedData.addShop(actor.getPlayer(), shop))
