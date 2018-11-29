@@ -82,7 +82,7 @@ public class CmdHelp extends BaxShopCommand
             actor.sendMessage("To lookup a command, use:\n%s\n", Format.command("/shop help <command>"));
         }
         else {
-            BaxShopCommand cmd = Main.getCommands().get(actor.getArg(1));
+            BaxShopCommand cmd = ShopPlugin.getCommands().get(actor.getArg(1));
             if (cmd == null) {
                 actor.exitError(Resources.INVALID_SHOP_ACTION, actor.getArg(1));
             }

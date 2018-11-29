@@ -105,7 +105,7 @@ public class CmdBuy extends BaxShopCommand
         String itemName = ItemNames.getName(entry);
         double price = MathUtil.multiply(amount, entry.getRetailPrice());
 
-        if (!Main.getEconomy().has(actor.getPlayer(), price)) {
+        if (!ShopPlugin.getEconomy().has(actor.getPlayer(), price)) {
             actor.exitError(Resources.NO_MONEY_BUYER);
         }
 
@@ -118,7 +118,7 @@ public class CmdBuy extends BaxShopCommand
             }
 
             BuyRequest request = new BuyRequest(shop.getId(), actor.getPlayer(), shop.getOwner(), purchased);
-            Main.sendNotification(shop.getOwner(), request);
+            ShopPlugin.sendNotification(shop.getOwner(), request);
             actor.sendMessage("Your request to buy %s for %s has been sent.", Format.itemname(purchased.getAmount(), itemName), Format.money(price));
         }
         else {
@@ -130,18 +130,18 @@ public class CmdBuy extends BaxShopCommand
             else {
                 actor.sendMessage("You bought %s for %s.", Format.itemname(amount, itemName), Format.money(price));
             }
-            Main.getEconomy().withdrawPlayer(actor.getPlayer(), price);
+            ShopPlugin.getEconomy().withdrawPlayer(actor.getPlayer(), price);
             if (!shop.hasFlagInfinite()) {
                 entry.subtract(amount - overflow);
             }
 
-            Main.getEconomy().depositPlayer(shop.getOwner(), price);
+            ShopPlugin.getEconomy().depositPlayer(shop.getOwner(), price);
 
             purchased.subtract(overflow);
 
-            actor.sendMessage(Resources.CURRENT_BALANCE, Format.money2(Main.getEconomy().getBalance(actor.getPlayer())));
+            actor.sendMessage(Resources.CURRENT_BALANCE, Format.money2(ShopPlugin.getEconomy().getBalance(actor.getPlayer())));
             if (shop.hasFlagNotify()) {
-                Main.sendNotification(shop.getOwner(), new BuyNotification(shop.getId(), actor.getPlayer(), shop.getOwner(), purchased));
+                ShopPlugin.sendNotification(shop.getOwner(), new BuyNotification(shop.getId(), actor.getPlayer(), shop.getOwner(), purchased));
             }
         }
     }

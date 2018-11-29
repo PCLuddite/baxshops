@@ -81,7 +81,7 @@ public class CmdSell extends BaxShopCommand
     {
         if (actor.isOwner()) {
             actor.setCmdName("restock");  // if they're the owner, use the restock command
-            Main.runCommand(actor);
+            ShopPlugin.runCommand(actor);
             return;
         }
 
@@ -110,7 +110,7 @@ public class CmdSell extends BaxShopCommand
         }
         if (total > 0.0) {
             actor.sendMessage("You earned %s.", Format.money(total));
-            actor.sendMessage(Resources.CURRENT_BALANCE, Format.money2(Main.getEconomy().getBalance(actor.getPlayer())));
+            actor.sendMessage(Resources.CURRENT_BALANCE, Format.money2(ShopPlugin.getEconomy().getBalance(actor.getPlayer())));
         }
         else if (total == 0) {
             actor.sendMessage("Your money will be deposited when the buyer accepts the sale.");
@@ -130,7 +130,7 @@ public class CmdSell extends BaxShopCommand
 
         if (shop.hasFlagSellRequests()) {
             SaleRequest request = new SaleRequest(shop.getId(), shop.getOwner(), actor.getPlayer(), entry);
-            Main.sendNotification(shop.getOwner(), request);
+            ShopPlugin.sendNotification(shop.getOwner(), request);
             actor.sendMessage("Your request to sell %s for %s has been sent.",
                 Format.itemname(entry.getAmount(), name), Format.money(price)
             );

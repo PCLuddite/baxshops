@@ -96,7 +96,7 @@ public class CmdTakeXp extends BaxShopCommand
         if (levels > p.getLevel()) {
             actor.exitError("You do not have enough experience for this exchange.");
         } else {
-            Main.getEconomy().depositPlayer(p, money);
+            ShopPlugin.getEconomy().depositPlayer(p, money);
             p.setLevel(p.getLevel() - levels);
 
             p.sendMessage(String.format("You have exchanged %s levels for %s", Format.enchantments(levels + " XP"), Format.money(money)));

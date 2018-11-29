@@ -8,7 +8,7 @@
 package tbax.baxshops.commands;
 
 import tbax.baxshops.CommandHelpArgument;
-import tbax.baxshops.Main;
+import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
 import tbax.baxshops.notification.LollipopNotification;
@@ -82,6 +82,6 @@ public class CmdLollipop extends BaxShopCommand
         if (actor.getNumArgs() == 3) {
             tastiness = actor.getArgDouble(2, "Invalid tastiness");
         }
-        Main.sendNotification(actor.getArg(1), new LollipopNotification(actor.getPlayer(), tastiness));
+        ShopPlugin.sendNotification(actor.getArg(1), new LollipopNotification(actor.getPlayer(), tastiness));
     }
 }

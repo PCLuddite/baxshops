@@ -92,10 +92,10 @@ public class CmdGiveXp extends BaxShopCommand
         }
 
         double money = levels * actor.getPlugin().getConfig().getDouble("XPConvert", 4d);
-        if (!Main.getEconomy().has(p, money)) {
+        if (!ShopPlugin.getEconomy().has(p, money)) {
             actor.sendError("You do not have enough funds to make this exchange");
         }
-        Main.getEconomy().withdrawPlayer(p, money);
+        ShopPlugin.getEconomy().withdrawPlayer(p, money);
         p.setLevel(p.getLevel() + levels);
 
         p.sendMessage(String.format("You have been charged %s for %s levels", Format.money(money), Format.enchantments(levels + " XP")));

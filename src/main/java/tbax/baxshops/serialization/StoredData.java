@@ -20,10 +20,7 @@ import org.bukkit.entity.Player;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.notification.Claimable;
 import tbax.baxshops.notification.Notification;
-import tbax.baxshops.notification.Request;
-import tbax.baxshops.notification.SaleRejection;
 
 import java.io.*;
 import java.util.*;
@@ -55,7 +52,7 @@ public final class StoredData
      */
     private static Map<UUID, StoredPlayer> players = new HashMap<>();
 
-    private static Main plugin;
+    private static ShopPlugin plugin;
     private static Logger log;
 
     public static BaxShop getShop(UUID uid)
@@ -72,13 +69,13 @@ public final class StoredData
         return shops.get(uid);
     }
     
-    public static void load(Main main)
+    public static void load(ShopPlugin plugin)
     {
-        plugin = main;
-        log = main.getLogger();
+        StoredData.plugin = plugin;
+        log = plugin.getLogger();
 
-        ItemNames.loadDamageable(main);
-        ItemNames.loadEnchants(main);
+        ItemNames.loadDamageable(plugin);
+        ItemNames.loadEnchants(plugin);
         
         loadState();
         

@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
-import tbax.baxshops.Main;
+import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
 
@@ -192,11 +192,11 @@ public final class ItemNames
     
     /**
      * Loads the damageable items list from the damageable.txt resource.
-     * @param main
+     * @param plugin
      */
-    public static void loadDamageable(Main main)
+    public static void loadDamageable(ShopPlugin plugin)
     {
-        InputStream stream = main.getResource("damageable.txt");
+        InputStream stream = plugin.getResource("damageable.txt");
         if (stream == null) {
             return;
         }
@@ -217,21 +217,21 @@ public final class ItemNames
             stream.close();
         }
         catch (IOException e) {
-            Main.getLog().warning("Failed to load damageable: " + e.toString());
+            ShopPlugin.getLog().warning("Failed to load damageable: " + e.toString());
         }
         catch (NoSuchElementException e) {
-            Main.getLog().info("loadDamageable broke at line: " + i);
+            ShopPlugin.getLog().info("loadDamageable broke at line: " + i);
             e.printStackTrace();
         }
     }
     
     /**
      * Loads the enchantment names in enchants.txt
-     * @param main 
+     * @param plugin
      */
-    public static void loadEnchants(Main main)
+    public static void loadEnchants(ShopPlugin plugin)
     {
-        InputStream stream = main.getResource("enchants.txt");
+        InputStream stream = plugin.getResource("enchants.txt");
         if (stream == null) {
             return;
         }
@@ -257,7 +257,7 @@ public final class ItemNames
             stream.close();
         }
         catch (IOException e) {
-            Main.getLog().warning("Failed to load enchants: " + e.toString());
+            ShopPlugin.getLog().warning("Failed to load enchants: " + e.toString());
         }
     }
 }

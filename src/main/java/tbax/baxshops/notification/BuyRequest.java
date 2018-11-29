@@ -68,7 +68,7 @@ public class BuyRequest implements Request
         try {
             double price = MathUtil.multiply(entry.getAmount(), entry.getRetailPrice());
 
-            Economy econ = Main.getEconomy();
+            Economy econ = ShopPlugin.getEconomy();
 
             if (!econ.has(getBuyer(), price)) {
                 acceptingActor.exitError(Resources.NO_MONEY_SELLER);
@@ -78,10 +78,10 @@ public class BuyRequest implements Request
             econ.depositPlayer(getSeller(), price);
 
             BuyClaim n = new BuyClaim(shopId, buyer, seller, entry);
-            Main.sendNotification(getBuyer(), n);
+            ShopPlugin.sendNotification(getBuyer(), n);
 
             acceptingActor.sendMessage("Offer accepted");
-            acceptingActor.sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.getEconomy().getBalance(acceptingActor.getPlayer()))));
+            acceptingActor.sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(ShopPlugin.getEconomy().getBalance(acceptingActor.getPlayer()))));
             return true;
         }
         catch (PrematureAbortException e) {
@@ -96,7 +96,7 @@ public class BuyRequest implements Request
         BaxShop shop = StoredData.getShop(shopId);
         if (shop == null) {
             DeletedShopClaim shopDeleted = new DeletedShopClaim(buyer, entry);
-            Main.sendNotification(getBuyer(), shopDeleted);
+            ShopPlugin.sendNotification(getBuyer(), shopDeleted);
         }
         else if (!shop.hasFlagInfinite()) {
             BaxEntry shopEntry = shop.findEntry(entry.getItemStack());
@@ -109,7 +109,7 @@ public class BuyRequest implements Request
         }
 
         BuyRejection n = new BuyRejection(shopId, buyer, seller, entry);
-        Main.sendNotification(buyer, n);
+        ShopPlugin.sendNotification(buyer, n);
         rejectingActor.sendError("Offer rejected");
         return true;
     }

@@ -27,7 +27,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
 
-public final class Main extends JavaPlugin
+public final class ShopPlugin extends JavaPlugin
 {
     private static final CommandMap commands = initCommands();
     
@@ -36,7 +36,7 @@ public final class Main extends JavaPlugin
      */
     private static Economy econ;
 
-    private static Main plugin;
+    private static ShopPlugin plugin;
     private static Logger log;
     /**
      * A map containing each player's currently selected shop and other
@@ -44,7 +44,7 @@ public final class Main extends JavaPlugin
      */
     private static Map<UUID, ShopSelection> selectedShops = new HashMap<>();
 
-    public Main()
+    public ShopPlugin()
     {
         plugin = this; // gross
     }

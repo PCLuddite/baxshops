@@ -7,7 +7,7 @@
 
 package tbax.baxshops.commands;
 
-import tbax.baxshops.Main;
+import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
 import tbax.baxshops.notification.Notification;
@@ -89,7 +89,7 @@ public class CmdNotifications extends BaxShopCommand
     public void onCommand(ShopCmdActor actor) throws PrematureAbortException
     {
         if (actor.getNumArgs() == 1) {
-            Main.showNotification(actor.getPlayer());
+            ShopPlugin.showNotification(actor.getPlayer());
         }
         else if (actor.getNumArgs() == 2) {
             if (actor.getArg(1).equalsIgnoreCase("clear")) {

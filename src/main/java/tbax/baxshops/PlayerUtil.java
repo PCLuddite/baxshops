@@ -88,16 +88,16 @@ public class PlayerUtil
     {
         double price = MathUtil.multiply(entry.getRefundPrice(), entry.getAmount());
 
-        if (!Main.getEconomy().has(buyer, price)) {
+        if (!ShopPlugin.getEconomy().has(buyer, price)) {
             throw new CommandErrorException(Resources.NO_MONEY_SELLER);
         }
 
-        Main.getEconomy().withdrawPlayer(buyer, price);
-        Main.getEconomy().depositPlayer(seller, price);
+        ShopPlugin.getEconomy().withdrawPlayer(buyer, price);
+        ShopPlugin.getEconomy().depositPlayer(seller, price);
 
         if (shop == null) {
             DeletedShopClaim deletedClaim = new DeletedShopClaim(buyer, entry.clone());
-            Main.sendNotification(buyer, deletedClaim);
+            ShopPlugin.sendNotification(buyer, deletedClaim);
         }
         else if (shop.hasFlagSellToShop()) {
             ItemStack item = entry.toItemStack();
@@ -120,7 +120,7 @@ public class PlayerUtil
             }
             else {
                 SaleClaim claim = new SaleClaim(shop.getId(), buyer, seller, entry);
-                Main.sendNotification(buyer, claim);
+                ShopPlugin.sendNotification(buyer, claim);
             }
         }
     }

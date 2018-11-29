@@ -329,9 +329,9 @@ public final class BaxEntry implements ConfigurationSerializable
             info.append("Enchants: ").append(Format.enchantments(enchants)).append('\n');
         }
         info.append("Quantity: ").append(quantity == 0 ? ChatColor.DARK_RED + "OUT OF STOCK" + ChatColor.RESET : Format.number(quantity)).append('\n');
-        info.append("Buy Price: ").append(ChatColor.DARK_GREEN).append(Main.getEconomy().format(retailPrice)).append(ChatColor.RESET).append('\n');
+        info.append("Buy Price: ").append(ChatColor.DARK_GREEN).append(ShopPlugin.getEconomy().format(retailPrice)).append(ChatColor.RESET).append('\n');
         if (refundPrice >= 0) {
-            info.append("Sell Price: ").append(ChatColor.BLUE).append(Main.getEconomy().format(refundPrice)).append(ChatColor.RESET).append('\n');
+            info.append("Sell Price: ").append(ChatColor.BLUE).append(ShopPlugin.getEconomy().format(refundPrice)).append(ChatColor.RESET).append('\n');
         }
         return info.toString();
     }
@@ -378,10 +378,10 @@ public final class BaxEntry implements ConfigurationSerializable
         else {
             if (getAmount() <= 0) {
                 if (refundPrice < 0) {
-                    return String.format(ChatColor.RED.toString() + ChatColor.STRIKETHROUGH + "%d. (0) %s (%s)", index, name, Main.getEconomy().format(retailPrice));
+                    return String.format(ChatColor.RED.toString() + ChatColor.STRIKETHROUGH + "%d. (0) %s (%s)", index, name, ShopPlugin.getEconomy().format(retailPrice));
                 }
                 else {
-                    return String.format(ChatColor.RED.toString() + ChatColor.STRIKETHROUGH + "%d. (0) %s (%s) (%s)", index, name, Main.getEconomy().format(retailPrice), Main.getEconomy().format(refundPrice));
+                    return String.format(ChatColor.RED.toString() + ChatColor.STRIKETHROUGH + "%d. (0) %s (%s) (%s)", index, name, ShopPlugin.getEconomy().format(retailPrice), ShopPlugin.getEconomy().format(refundPrice));
                 }
             }
             else {

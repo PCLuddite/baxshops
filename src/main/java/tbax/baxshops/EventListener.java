@@ -40,9 +40,9 @@ import java.util.UUID;
 
 public class EventListener implements Listener
 {
-    private final Main plugin;
+    private final ShopPlugin plugin;
     
-    public EventListener(Main plugin)
+    public EventListener(ShopPlugin plugin)
     {
         this.plugin = plugin;
     }
@@ -64,7 +64,7 @@ public class EventListener implements Listener
                         event.setCancelled(true);
                         event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), shop.toItem(event.getBlock().getLocation()));
                         StoredData.removeLocation(null, event.getBlock().getLocation()); // we don't need to tell the player if there's an error 12/5/15
-                        Main.clearSelection(event.getPlayer());
+                        ShopPlugin.clearSelection(event.getPlayer());
                         event.getBlock().setType(Material.AIR);
                     }
                 }
@@ -110,7 +110,7 @@ public class EventListener implements Listener
 
         boolean isOwner = shop.getOwner().equals(player);
 
-        ShopSelection selection = Main.getSelection(player);
+        ShopSelection selection = ShopPlugin.getSelection(player);
         selection.setLocation(b.getLocation());
 
         if (selection.getShop() == shop) {
@@ -228,7 +228,7 @@ public class EventListener implements Listener
     public void onPlayerMove(PlayerMoveEvent event)
     {
         Player pl = event.getPlayer();
-        ShopSelection s = Main.getSelection(pl);
+        ShopSelection s = ShopPlugin.getSelection(pl);
         if (s.getShop() != null) {
             Location shopLoc = s.getLocation();
             Location pLoc = event.getTo();
@@ -239,7 +239,7 @@ public class EventListener implements Listener
                 else {
                     pl.sendMessage("[Left " + Format.username(s.getShop().getOwner().getName()) + "'s shop]");
                 }
-                Main.clearSelection(event.getPlayer());
+                ShopPlugin.clearSelection(event.getPlayer());
             }
         }
     }
@@ -250,13 +250,13 @@ public class EventListener implements Listener
         String name = plugin.getConfig().getString("DeathTax.GoesTo", null);
         if (name != null) {
             Player pl = event.getEntity();
-            if (Main.getEconomy().has(pl, 100.00) && isStupidDeath(pl.getLastDamageCause().getCause())) {
-                double death_tax = Main.getEconomy().getBalance(pl) * plugin.getConfig().getDouble("DeathTax.Percentage", 0.04);
-                Main.getEconomy().withdrawPlayer(pl, death_tax);
-                Main.getEconomy().depositPlayer(name, death_tax);
+            if (ShopPlugin.getEconomy().has(pl, 100.00) && isStupidDeath(pl.getLastDamageCause().getCause())) {
+                double death_tax = ShopPlugin.getEconomy().getBalance(pl) * plugin.getConfig().getDouble("DeathTax.Percentage", 0.04);
+                ShopPlugin.getEconomy().withdrawPlayer(pl, death_tax);
+                ShopPlugin.getEconomy().depositPlayer(name, death_tax);
                 pl.sendMessage(String.format("You were fined %s for dying.", Format.money(death_tax)));
                 if (plugin.getConfig().getBoolean("LogNotes", false)) {
-                    Main.getLog().info(Format.toAnsiColor(String.format("%s was fined %s for dying.", Format.username(pl.getName()), Format.money(death_tax))));
+                    ShopPlugin.getLog().info(Format.toAnsiColor(String.format("%s was fined %s for dying.", Format.username(pl.getName()), Format.money(death_tax))));
                 }
             }
         }
