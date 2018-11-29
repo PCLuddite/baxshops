@@ -7,6 +7,7 @@
 
 package tbax.baxshops.serialization;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
@@ -22,6 +23,7 @@ import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.Claimable;
 import tbax.baxshops.notification.Notification;
 import tbax.baxshops.notification.Request;
+import tbax.baxshops.notification.SaleRejection;
 
 import java.io.*;
 import java.util.*;
@@ -405,13 +407,22 @@ public final class SavedData
         selectedShops.remove(player.getUniqueId());
     }
 
-    public static StoredPlayer getOfflinePlayer(UUID uuid)
+    public static OfflinePlayer getOfflinePlayer(UUID uuid)
     {
-        return players.get(uuid);
+        StoredPlayer player = players.get(uuid);
+        if (player == null) {
+            return Bukkit.getOfflinePlayer(uuid);
+        }
+        return player;
     }
 
     public static StoredPlayer joinPlayer(Player player)
     {
         return players.put(player.getUniqueId(), new StoredPlayer(player));
+    }
+
+    public static void sendNotification(UUID playerId, Notification note)
+    {
+        sendNotification(getOfflinePlayer(playerId), note);
     }
 }

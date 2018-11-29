@@ -12,37 +12,49 @@ import org.bukkit.command.CommandSender;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
 import tbax.baxshops.commands.ShopCmdActor;
+import tbax.baxshops.serialization.SavedData;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class DeletedShopClaim implements Claimable
 {
-    private OfflinePlayer owner;
+    private UUID owner;
     private BaxEntry entry;
 
     public DeletedShopClaim(Map<String, Object> args)
     {
         entry = (BaxEntry)args.get("entry");
-        owner = (OfflinePlayer)args.get("owner");
+        owner = UUID.fromString((String)args.get("owner"));
     }
 
     public DeletedShopClaim(OfflinePlayer owner, BaxEntry entry)
     {
-        this.owner = owner;
+        this.owner = owner.getUniqueId();
         this.entry = entry;
+    }
+
+    public DeletedShopClaim(UUID owner, BaxEntry entry)
+    {
+        this(SavedData.getOfflinePlayer(owner), entry);
+    }
+
+    public OfflinePlayer getOwner()
+    {
+        return SavedData.getOfflinePlayer(owner);
     }
 
     @Override
     public String getMessage(CommandSender sender)
     {
-        if (sender == null || !sender.equals(owner)) {
-            return String.format("The shop that had this entry no longer exists. %s has %s outstanding.",
-                Format.username(owner.getName()), entry.getFormattedName()
-            );
+        if (getOwner().equals(sender)) {
+            return String.format("The shop that had this entry no longer exists. You have %s outstanding.", entry.getFormattedName());
         }
         else {
-            return String.format("The shop that had this entry no longer exists. You have %s outstanding.", entry.getFormattedName());
+            return String.format("The shop that had this entry no longer exists. %s has %s outstanding.",
+                Format.username(owner), entry.getFormattedName()
+            );
         }
     }
 
@@ -51,7 +63,7 @@ public class DeletedShopClaim implements Claimable
     {
         HashMap<String, Object> args = new HashMap<>();
         args.put("entry", entry);
-        args.put("owner", owner);
+        args.put("owner", owner.toString());
         return args;
     }
 

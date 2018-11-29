@@ -21,25 +21,30 @@ import java.util.UUID;
 
 public class SaleRejection implements Claimable
 {
-    private OfflinePlayer seller;
-    private OfflinePlayer buyer;
+    private UUID seller;
+    private UUID buyer;
     private BaxEntry entry;
     private UUID shopId;
 
     public SaleRejection(Map<String, Object> args)
     {
         shopId = UUID.fromString((String)args.get("shopId"));
-        seller = (OfflinePlayer)args.get("seller");
-        buyer = (OfflinePlayer)args.get("buyer");
+        seller = UUID.fromString((String)args.get("seller"));
+        buyer = UUID.fromString((String)args.get("buyer"));
         entry = (BaxEntry)args.get("entry");
     }
 
     public SaleRejection(UUID shopId, OfflinePlayer buyer, OfflinePlayer seller, BaxEntry entry)
     {
-        this.seller = seller;
-        this.buyer = buyer;
+        this.seller = seller.getUniqueId();
+        this.buyer = buyer.getUniqueId();
         this.entry = entry;
         this.shopId = shopId;
+    }
+
+    public SaleRejection(UUID shopId, UUID buyer, UUID seller, BaxEntry entry)
+    {
+        this(shopId, SavedData.getOfflinePlayer(buyer), SavedData.getOfflinePlayer(seller), entry);
     }
 
     public UUID getShopId()
@@ -54,12 +59,12 @@ public class SaleRejection implements Claimable
 
     public OfflinePlayer getBuyer()
     {
-        return buyer;
+        return SavedData.getOfflinePlayer(buyer);
     }
 
     public OfflinePlayer getSeller()
     {
-        return seller;
+        return SavedData.getOfflinePlayer(seller);
     }
 
     @Override
@@ -77,14 +82,14 @@ public class SaleRejection implements Claimable
     @Override
     public String getMessage(CommandSender sender)
     {
-        if (sender == null || !seller.equals(sender)) {
-            return String.format("%s rejected %s's request to sell %s",
-                Format.username(buyer.getName()), Format.username2(seller.getName()), entry.getFormattedName()
-                );
+        if (getSeller().equals(sender)) {
+            return String.format("%s rejected your request to sell %s",
+                Format.username(buyer), entry.getFormattedName()
+            );
         }
         else {
-            return String.format("%s rejected your request to sell %s",
-                Format.username(buyer.getName()), entry.getFormattedName()
+            return String.format("%s rejected %s's request to sell %s",
+                Format.username(buyer), Format.username2(seller), entry.getFormattedName()
             );
         }
     }
@@ -94,8 +99,8 @@ public class SaleRejection implements Claimable
     {
         Map<String, Object> args = new HashMap<>();
         args.put("shopId", shopId.toString());
-        args.put("buyer", buyer);
-        args.put("seller", seller);
+        args.put("buyer", buyer.toString());
+        args.put("seller", seller.toString());
         args.put("entry", entry);
         return args;
     }

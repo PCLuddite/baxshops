@@ -11,11 +11,13 @@ package tbax.baxshops.notification;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import tbax.baxshops.serialization.SavedData;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.UUID;
 
 /**
  * A LollipopNotification notifies a player that someone sent him/her a
@@ -40,19 +42,24 @@ public final class LollipopNotification implements ConfigurationSerializable, No
         adjectives.put(99.0, "a wonderful");
     }
 
-    private OfflinePlayer sender;
+    private UUID sender;
     private double tastiness;
 
     public LollipopNotification(Map<String, Object> args)
     {
-        this.sender = (OfflinePlayer)args.get("sender");
+        this.sender = UUID.fromString((String)args.get("sender"));
         this.tastiness = (double)args.get("tastiness");
     }
 
     public LollipopNotification(OfflinePlayer sender, double tastiness)
     {
-        this.sender = sender;
+        this.sender = sender.getUniqueId();
         this.tastiness = tastiness < 0 ? 0 : tastiness > 100 ? 100 : tastiness;
+    }
+
+    public OfflinePlayer getSender()
+    {
+        return SavedData.getOfflinePlayer(sender);
     }
 
     @Override
@@ -64,13 +71,13 @@ public final class LollipopNotification implements ConfigurationSerializable, No
                 adjective = entry.getValue();
             }
         }
-        return sender + " sent you " + adjective + " lollipop";
+        return getSender().getName() + " sent you " + adjective + " lollipop";
     }
 
     public Map<String, Object> serialize()
     {
         Map<String, Object> args = new HashMap<>();
-        args.put("sender", sender);
+        args.put("sender", sender.toString());
         args.put("tastiness", tastiness);
         return args;
     }

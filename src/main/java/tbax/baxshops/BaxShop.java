@@ -62,7 +62,7 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
 
     public OfflinePlayer getOwner()
     {
-        return Bukkit.getOfflinePlayer(ownerId);
+        return SavedData.getOfflinePlayer(ownerId);
     }
 
     public void setOwner(OfflinePlayer newOwner)

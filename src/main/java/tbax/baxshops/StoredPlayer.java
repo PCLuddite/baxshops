@@ -130,6 +130,23 @@ public class StoredPlayer implements OfflinePlayer
     }
 
     @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+            return true;
+        if (obj instanceof OfflinePlayer)
+            return equals((OfflinePlayer)obj);
+        return false;
+    }
+
+    public boolean equals(OfflinePlayer player)
+    {
+        if (player == null)
+            return false;
+        return uuid.equals(player.getUniqueId());
+    }
+
+    @Override
     public Map<String, Object> serialize()
     {
         Map<String, Object> args = new HashMap<>();

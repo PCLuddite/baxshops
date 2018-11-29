@@ -28,6 +28,7 @@ tbax\baxshops\serialization\SavedData.class
 tbax\baxshops\BaxEntry.class
 tbax\baxshops\notification\Notification.class
 tbax\baxshops\commands\CmdSkip.class
+tbax\baxshops\StoredPlayer.class
 tbax\baxshops\commands\CmdTakeXp.class
 tbax\baxshops\commands\CmdSet.class
 tbax\baxshops\notification\BuyClaim.class

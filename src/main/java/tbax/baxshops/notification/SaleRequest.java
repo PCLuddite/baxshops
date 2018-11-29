@@ -20,24 +20,24 @@ import java.util.UUID;
 
 public class SaleRequest implements Request
 {
-    private OfflinePlayer buyer;
-    private OfflinePlayer seller;
+    private UUID buyer;
+    private UUID seller;
     private BaxEntry entry;
     private UUID shopId;
 
     public SaleRequest(Map<String, Object> args)
     {
         shopId = UUID.fromString((String)args.get("shopId"));
-        buyer = (OfflinePlayer)args.get("buyer");
-        seller = (OfflinePlayer)args.get("seller");
+        buyer = UUID.fromString((String)args.get("buyer"));
+        seller = UUID.fromString((String)args.get("seller"));
         entry = (BaxEntry)args.get("entry");
     }
 
     public SaleRequest(UUID shopId, OfflinePlayer buyer, OfflinePlayer seller, BaxEntry entry)
     {
         this.shopId = shopId;
-        this.buyer = buyer;
-        this.seller = seller;
+        this.buyer = buyer.getUniqueId();
+        this.seller = seller.getUniqueId();
         this.entry = entry;
     }
 
@@ -53,12 +53,12 @@ public class SaleRequest implements Request
 
     public OfflinePlayer getBuyer()
     {
-        return buyer;
+        return SavedData.getOfflinePlayer(buyer);
     }
 
     public OfflinePlayer getSeller()
     {
-        return seller;
+        return SavedData.getOfflinePlayer(seller);
     }
 
     public BaxEntry getEntry()
@@ -92,14 +92,14 @@ public class SaleRequest implements Request
     @Override
     public String getMessage(CommandSender sender)
     {
-        if (sender == null || !sender.equals(buyer)) {
-            return String.format("%s wants to sell %s to %s for %s.",
-                Format.username(seller.getName()), entry.getFormattedName(), Format.username2(buyer.getName()), entry.getFormattedSellPrice()
+        if (getBuyer().equals(sender)) {
+            return String.format("%s wants to sell you %s for %s.",
+                Format.username(seller), entry.getFormattedName(), entry.getFormattedSellPrice()
             );
         }
         else {
-            return String.format("%s wants to sell you %s for %s.",
-                Format.username(seller.getName()), entry.getFormattedName(), entry.getFormattedSellPrice()
+            return String.format("%s wants to sell %s to %s for %s.",
+                Format.username(seller), entry.getFormattedName(), Format.username2(buyer), entry.getFormattedSellPrice()
             );
         }
     }

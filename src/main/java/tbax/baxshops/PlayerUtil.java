@@ -124,4 +124,9 @@ public class PlayerUtil
             }
         }
     }
+
+    public static void sellItem(UUID shopId, UUID buyer, UUID seller, BaxEntry entry) throws PrematureAbortException
+    {
+        sellItem(shopId, SavedData.getOfflinePlayer(buyer), SavedData.getOfflinePlayer(seller), entry);
+    }
 }

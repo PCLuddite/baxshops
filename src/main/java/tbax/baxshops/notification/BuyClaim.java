@@ -42,6 +42,11 @@ public class BuyClaim implements Claimable
         entry = (BaxEntry)args.get("entry");
     }
 
+    public BuyClaim(UUID shopId, UUID buyer, UUID seller, BaxEntry entry)
+    {
+        this(shopId, SavedData.getOfflinePlayer(buyer), SavedData.getOfflinePlayer(seller), entry);
+    }
+
     public OfflinePlayer getSeller()
     {
         return SavedData.getOfflinePlayer(seller);

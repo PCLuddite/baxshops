@@ -11,6 +11,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
+import tbax.baxshops.serialization.SavedData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,24 +20,29 @@ import java.util.UUID;
 public final class SaleNotification implements Notification
 {
     private UUID shopId;
-    private OfflinePlayer buyer;
-    private OfflinePlayer seller;
+    private UUID buyer;
+    private UUID seller;
     private BaxEntry entry;
 
     public SaleNotification(Map<String, Object> args)
     {
         shopId = UUID.fromString((String)args.get("shopId"));
-        seller = (OfflinePlayer) args.get("seller");
+        seller = UUID.fromString((String) args.get("seller"));
+        buyer = UUID.fromString((String)args.get("buyer"));
         entry = (BaxEntry)args.get("entry");
-        buyer = (OfflinePlayer)args.get("buyer");
     }
 
     public SaleNotification(UUID shopId, OfflinePlayer buyer, OfflinePlayer seller, BaxEntry entry)
     {
         this.shopId = shopId;
-        this.buyer = buyer;
-        this.seller = seller;
+        this.buyer = buyer.getUniqueId();
+        this.seller = seller.getUniqueId();
         this.entry = entry;
+    }
+
+    public SaleNotification(UUID shopId, UUID buyer, UUID seller, BaxEntry entry)
+    {
+        this(shopId, SavedData.getOfflinePlayer(buyer), SavedData.getOfflinePlayer(seller), entry);
     }
 
     public UUID getShopId()
@@ -46,12 +52,12 @@ public final class SaleNotification implements Notification
 
     public OfflinePlayer getBuyer()
     {
-        return buyer;
+        return SavedData.getOfflinePlayer(buyer);
     }
 
     public OfflinePlayer getSeller()
     {
-        return seller;
+        return SavedData.getOfflinePlayer(seller);
     }
 
     public BaxEntry getItem()
@@ -62,14 +68,14 @@ public final class SaleNotification implements Notification
     @Override
     public String getMessage(CommandSender sender)
     {
-        if (sender == null || !seller.equals(sender)) {
-            return String.format("%s accepted %s's request to sell %s for %s.",
-                Format.username(buyer.getName()), Format.username2(seller.getName()), entry.getFormattedName(), entry.getFormattedSellPrice()
+        if (getSeller().equals(sender)) {
+            return String.format("%s accepted your request to sell %s for %s.",
+                Format.username(buyer), entry.getFormattedName(), entry.getFormattedSellPrice()
             );
         }
         else {
-            return String.format("%s accepted your request to sell %s for %s.",
-                Format.username(buyer.getName()), entry.getFormattedName(), entry.getFormattedSellPrice()
+            return String.format("%s accepted %s's request to sell %s for %s.",
+                Format.username(buyer), Format.username2(seller), entry.getFormattedName(), entry.getFormattedSellPrice()
             );
         }
     }
@@ -79,8 +85,8 @@ public final class SaleNotification implements Notification
     {
         Map<String, Object> args = new HashMap<>();
         args.put("shopId", shopId.toString());
-        args.put("seller", seller);
-        args.put("buyer", buyer);
+        args.put("seller", seller.toString());
+        args.put("buyer", buyer.toString());
         args.put("entry", entry);
         return args;
     }

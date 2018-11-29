@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
 import tbax.baxshops.MathUtil;
+import tbax.baxshops.serialization.SavedData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,29 +21,29 @@ import java.util.UUID;
 public class BuyNotification implements Notification
 {
     private BaxEntry entry;
-    private OfflinePlayer buyer;
-    private OfflinePlayer seller;
+    private UUID buyer;
+    private UUID seller;
     private UUID shopId;
 
     public BuyNotification(UUID shopId, OfflinePlayer buyer, OfflinePlayer seller, BaxEntry entry)
     {
         this.shopId = shopId;
-        this.buyer = buyer;
-        this.seller = seller;
+        this.buyer = buyer.getUniqueId();
+        this.seller = seller.getUniqueId();
         this.entry = entry.clone();
     }
 
     public BuyNotification(Map<String, Object> args)
     {
         entry = (BaxEntry)args.get("entry");
-        buyer = (OfflinePlayer)args.get("buyer");
-        seller = (OfflinePlayer)args.get("seller");
+        buyer = UUID.fromString((String)args.get("buyer"));
+        seller = UUID.fromString((String)args.get("seller"));
         shopId = UUID.fromString((String)args.get("shopId"));
     }
 
     public OfflinePlayer getBuyer()
     {
-        return buyer;
+        return SavedData.getOfflinePlayer(buyer);
     }
 
     public BaxEntry getEntry()
@@ -52,7 +53,7 @@ public class BuyNotification implements Notification
 
     public OfflinePlayer getSeller()
     {
-        return seller;
+        return SavedData.getOfflinePlayer(seller);
     }
 
     public UUID getShopId()
@@ -63,18 +64,18 @@ public class BuyNotification implements Notification
     @Override
     public String getMessage(CommandSender sender)
     {
-        if (sender == null || !sender.equals(seller)) {
-            return String.format("%s bought %s from %s for %s.",
-                Format.username(buyer.getName()),
+        if (getSeller().equals(sender)) {
+            return String.format("%s bought %s from you for %s.",
+                Format.username(buyer),
                 entry.getFormattedName(),
-                Format.username2(seller.getName()),
                 Format.money(MathUtil.multiply(entry.getRetailPrice(), entry.getAmount()))
             );
         }
         else {
-            return String.format("%s bought %s from you for %s.",
-                Format.username(buyer.getName()),
+            return String.format("%s bought %s from %s for %s.",
+                Format.username(buyer),
                 entry.getFormattedName(),
+                Format.username2(seller),
                 Format.money(MathUtil.multiply(entry.getRetailPrice(), entry.getAmount()))
             );
         }
@@ -83,10 +84,10 @@ public class BuyNotification implements Notification
     @Override
     public Map<String, Object> serialize()
     {
-        Map<String,Object> args = new HashMap<>();
+        Map<String, Object> args = new HashMap<>();
         args.put("entry", entry);
-        args.put("buyer", buyer);
-        args.put("seller", seller);
+        args.put("buyer", buyer.toString());
+        args.put("seller", seller.toString());
         args.put("shopId", shopId.toString());
         return null;
     }
