@@ -9,6 +9,9 @@ package tbax.baxshops;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import tbax.baxshops.serialization.SavedData;
+
+import java.util.UUID;
 
 public class Format
 {   
@@ -67,6 +70,16 @@ public class Format
         return reset(ChatColor.GREEN + name);
     }
     
+    public static String username(UUID uuid)
+    {
+        return username(SavedData.getOfflinePlayer(uuid).getName());
+    }
+
+    public static String username2(UUID uuid)
+    {
+        return username2(SavedData.getOfflinePlayer(uuid).getName());
+    }
+
     public static String username(String name)
     {
         return reset(ChatColor.DARK_BLUE + name);
