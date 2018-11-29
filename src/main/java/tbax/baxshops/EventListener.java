@@ -256,7 +256,7 @@ public class EventListener implements Listener
                 ShopPlugin.getEconomy().depositPlayer(name, death_tax);
                 pl.sendMessage(String.format("You were fined %s for dying.", Format.money(death_tax)));
                 if (plugin.getConfig().getBoolean("LogNotes", false)) {
-                    ShopPlugin.getLog().info(Format.toAnsiColor(String.format("%s was fined %s for dying.", Format.username(pl.getName()), Format.money(death_tax))));
+                    ShopPlugin.getInstance().getLogger().info(Format.toAnsiColor(String.format("%s was fined %s for dying.", Format.username(pl.getName()), Format.money(death_tax))));
                 }
             }
         }

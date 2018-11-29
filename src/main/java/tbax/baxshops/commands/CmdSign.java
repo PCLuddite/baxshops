@@ -12,6 +12,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import tbax.baxshops.CommandHelpArgument;
 import tbax.baxshops.Resources;
+import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
 
@@ -75,7 +76,7 @@ public class CmdSign extends BaxShopCommand
     {
         Block b = actor.getSelection().getLocation().getBlock();
         if (!b.getType().equals(Material.SIGN) && !b.getType().equals(Material.SIGN_POST)) {
-            actor.getLogger().warning(String.format(Resources.NOT_FOUND_SIGN, actor.getShop().getOwner()));
+            ShopPlugin.getInstance().getLogger().warning(String.format(Resources.NOT_FOUND_SIGN, actor.getShop().getOwner()));
             actor.exitWarning("This shop is missing its sign.");
         }
 

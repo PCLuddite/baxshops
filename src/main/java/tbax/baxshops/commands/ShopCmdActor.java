@@ -61,7 +61,7 @@ public final class ShopCmdActor
     {
         return player;
     }
-        
+
     public boolean isAdmin()
     {
         return sender.hasPermission("shops.admin");
@@ -219,11 +219,6 @@ public final class ShopCmdActor
         }
         return entry;
     }
-
-    public Logger getLogger()
-    {
-        return ShopPlugin.getLog();
-    }
     
     public BaxShop getShop()
     {
@@ -317,17 +312,17 @@ public final class ShopCmdActor
 
     public void logError(String format, Object... args)
     {
-        getLogger().severe(String.format(format, args));
+        ShopPlugin.getInstance().getLogger().severe(String.format(format, args));
     }
 
     public void logWarning(String format, Object... args)
     {
-        getLogger().warning(String.format(format, args));
+        ShopPlugin.getInstance().getLogger().warning(String.format(format, args));
     }
 
     public void logMessage(String format, Object... args)
     {
-        getLogger().info(String.format(format, args));
+        ShopPlugin.getInstance().getLogger().info(String.format(format, args));
     }
 
     public ItemStack getItemInHand()
