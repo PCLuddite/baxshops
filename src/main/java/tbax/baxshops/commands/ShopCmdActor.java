@@ -29,16 +29,14 @@ public final class ShopCmdActor
 {
     private final CommandSender sender;
     private final Command command;
-    private final ShopPlugin plugin;
     private Player player;
     private String name;
     private String action;
     
     private String[] args;
     
-    public ShopCmdActor(ShopPlugin plugin, CommandSender sender, Command command, String[] args)
+    public ShopCmdActor(CommandSender sender, Command command, String[] args)
     {
-        this.plugin = plugin;
         this.sender = sender;
         this.command = command;
         this.args = new String[args.length];
@@ -66,7 +64,7 @@ public final class ShopCmdActor
     
     public ShopPlugin getPlugin()
     {
-        return plugin;
+        return ShopPlugin.getInstance();
     }
     
     public boolean isAdmin()
@@ -229,7 +227,7 @@ public final class ShopCmdActor
 
     public Logger getLogger()
     {
-        return plugin.getLogger();
+        return ShopPlugin.getLog();
     }
     
     public BaxShop getShop()

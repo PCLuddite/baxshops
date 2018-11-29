@@ -242,7 +242,7 @@ public final class ShopPlugin extends JavaPlugin
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
-        ShopCmdActor actor = new ShopCmdActor(this, sender, command, args);
+        ShopCmdActor actor = new ShopCmdActor(sender, command, args);
         
         if (actor.cmdIs("buy", "sell", "restock", "restockall")) {
             actor.insertAction(actor.getCmdName());
