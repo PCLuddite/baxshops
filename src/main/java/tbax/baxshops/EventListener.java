@@ -107,7 +107,7 @@ public class EventListener implements Listener
                 return;
             }
         }
-        
+
         boolean isOwner = shop.getOwner().equals(player);
 
         ShopSelection selection = SavedData.getSelection(player);
@@ -217,6 +217,7 @@ public class EventListener implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event)
     {
+        SavedData.joinPlayer(event.getPlayer());
         ArrayDeque<Notification> p = SavedData.getNotifications(event.getPlayer());
         if (!p.isEmpty()) {
             event.getPlayer().sendMessage(ChatColor.WHITE + "You have new notifications. Use " + Format.command("/shop notifications") + ChatColor.WHITE + " to view them");

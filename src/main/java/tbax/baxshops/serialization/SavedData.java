@@ -38,21 +38,26 @@ public final class SavedData
      * A map containing each player's currently selected shop and other
      * selection data
      */
-    private static HashMap<Player, ShopSelection> selectedShops = new HashMap<>();
+    private static Map<UUID, ShopSelection> selectedShops = new HashMap<>();
     
     /**
      * A map of locations to their shop ids, accessed by their location in the world
      */
-    private static HashMap<Location, UUID> locations = new HashMap<>();
+    private static Map<Location, UUID> locations = new HashMap<>();
     
     /**
      * A map of ids map to their shops
      */
-    private static HashMap<UUID, BaxShop> shops = new HashMap<>();
+    private static Map<UUID, BaxShop> shops = new HashMap<>();
     /**
      * A map containing each player's notifications
      */
-    private static HashMap<UUID, ArrayDeque<Notification>> pending = new HashMap<>();
+    private static Map<UUID, ArrayDeque<Notification>> pending = new HashMap<>();
+
+    /**
+     * A map containing each player's display names for when they're offline
+     */
+    private static Map<UUID, StoredPlayer> players = new HashMap<>();
 
     private static Main plugin;
     private static Logger log;
@@ -183,6 +188,11 @@ public final class SavedData
                 playerNotes.add((Notification)yNote);
             }
             pending.put(UUID.fromString(player.getKey()), playerNotes);
+        }
+
+        ArrayList<StoredPlayer> playerList = (ArrayList)state.getList("players");
+        for(StoredPlayer player : playerList) {
+            players.put(player.getUniqueId(), player);
         }
         return true;
     }
@@ -357,15 +367,16 @@ public final class SavedData
         FileConfiguration state = new YamlConfiguration();
         state.set("version", STATE_VERSION);
         state.set("shops", new ArrayList<>(shops.values()));
-        int invalid = 0;
+
         HashMap<String, List<String>> notes = new HashMap<>();
         for(Map.Entry<UUID, ArrayDeque<Notification>> entry : pending.entrySet()) {
-            ArrayList ylist = new ArrayList();
-            ylist.addAll(entry.getValue());
-            notes.put(entry.getKey().toString(), ylist);
+            ArrayList noteList = new ArrayList();
+            noteList.addAll(entry.getValue());
+            notes.put(entry.getKey().toString(), noteList);
         }
         
         state.createSection("notes", notes);
+        state.set("players", new ArrayList<>(players.values()));
         
         try {
             File dir = plugin.getDataFolder();
@@ -384,15 +395,23 @@ public final class SavedData
         ShopSelection selected = selectedShops.get(player);
         if (selected == null) {
             selected = new ShopSelection();
-            selectedShops.put(player, selected);
+            selectedShops.put(player.getUniqueId(), selected);
         }
         return selected;
     }
 
     public static void clearSelection(Player player)
     {
-        if (selectedShops.containsKey(player)) {
-            selectedShops.remove(player);
-        }
+        selectedShops.remove(player.getUniqueId());
+    }
+
+    public static StoredPlayer getOfflinePlayer(UUID uuid)
+    {
+        return players.get(uuid);
+    }
+
+    public static StoredPlayer joinPlayer(Player player)
+    {
+        return players.put(player.getUniqueId(), new StoredPlayer(player));
     }
 }
