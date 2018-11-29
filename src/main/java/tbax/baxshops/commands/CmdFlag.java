@@ -10,6 +10,7 @@ package tbax.baxshops.commands;
 import org.bukkit.OfflinePlayer;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
+import tbax.baxshops.serialization.StoredData;
 
 public class CmdFlag extends BaxShopCommand
 {
@@ -183,7 +184,7 @@ public class CmdFlag extends BaxShopCommand
 		public void onCommand(ShopCmdActor actor) throws PrematureAbortException
 		{
 			BaxShop shop = actor.getShop();
-			OfflinePlayer owner = actor.getPlugin().getServer().getOfflinePlayer(actor.getArg(2));
+			OfflinePlayer owner = StoredData.getOfflinePlayer(actor.getArg(2));
 			shop.setOwner(owner);
 			actor.sendMessage(Format.username(shop.getOwner().getName()) + " is now the owner!");
 			if (actor.isOwner()) {

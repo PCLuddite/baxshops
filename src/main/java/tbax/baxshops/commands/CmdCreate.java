@@ -12,11 +12,8 @@ import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
-import tbax.baxshops.BaxShop;
-import tbax.baxshops.CommandHelpArgument;
-import tbax.baxshops.Format;
+import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.CommandHelp;
 import tbax.baxshops.serialization.StoredData;
 
 import java.util.UUID;
@@ -92,7 +89,7 @@ public class CmdCreate extends BaxShopCommand
     {
         OfflinePlayer owner;
         if (actor.isAdmin()) {
-            owner = actor.getPlugin().getServer().getOfflinePlayer(actor.getArg(1));
+            owner = StoredData.getOfflinePlayer(actor.getArg(1));
         }
         else {
             owner = actor.getPlayer();

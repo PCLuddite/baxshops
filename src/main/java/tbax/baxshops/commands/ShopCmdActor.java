@@ -61,12 +61,7 @@ public final class ShopCmdActor
     {
         return player;
     }
-    
-    public ShopPlugin getPlugin()
-    {
-        return ShopPlugin.getInstance();
-    }
-    
+        
     public boolean isAdmin()
     {
         return sender.hasPermission("shops.admin");
