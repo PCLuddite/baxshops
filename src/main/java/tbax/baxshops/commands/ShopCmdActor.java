@@ -69,7 +69,7 @@ public final class ShopCmdActor
 
     public boolean isOwner()
     {
-        return getShop() != null && sender.equals(getShop().getOwner());
+        return getShop() != null && getShop().getOwner().equals(sender);
     }
 
     public boolean hasPermission(String perm)
