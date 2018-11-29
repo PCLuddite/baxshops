@@ -12,7 +12,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
-import tbax.baxshops.serialization.SavedData;
+import tbax.baxshops.serialization.StoredData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,17 +43,17 @@ public class BuyRejection implements Notification
 
     public BuyRejection(UUID shopId, UUID buyer, UUID seller, BaxEntry entry)
     {
-        this(shopId, SavedData.getOfflinePlayer(seller), SavedData.getOfflinePlayer(buyer), entry);
+        this(shopId, StoredData.getOfflinePlayer(seller), StoredData.getOfflinePlayer(buyer), entry);
     }
 
     public OfflinePlayer getBuyer()
     {
-        return SavedData.getOfflinePlayer(buyer);
+        return StoredData.getOfflinePlayer(buyer);
     }
 
     public OfflinePlayer getSeller()
     {
-        return SavedData.getOfflinePlayer(seller);
+        return StoredData.getOfflinePlayer(seller);
     }
 
     public BaxEntry getEntry()

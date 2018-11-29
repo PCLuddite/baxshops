@@ -13,7 +13,7 @@ import org.bukkit.command.CommandSender;
 import tbax.baxshops.*;
 import tbax.baxshops.commands.ShopCmdActor;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.serialization.SavedData;
+import tbax.baxshops.serialization.StoredData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,12 +44,12 @@ public class BuyRequest implements Request
 
     public OfflinePlayer getBuyer()
     {
-        return SavedData.getOfflinePlayer(buyer);
+        return StoredData.getOfflinePlayer(buyer);
     }
 
     public OfflinePlayer getSeller()
     {
-        return SavedData.getOfflinePlayer(seller);
+        return StoredData.getOfflinePlayer(seller);
     }
 
     public UUID getShopId()
@@ -78,7 +78,7 @@ public class BuyRequest implements Request
             econ.depositPlayer(getSeller(), price);
 
             BuyClaim n = new BuyClaim(shopId, buyer, seller, entry);
-            SavedData.sendNotification(getBuyer(), n);
+            StoredData.sendNotification(getBuyer(), n);
 
             acceptingActor.sendMessage("Offer accepted");
             acceptingActor.sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(Main.getEconomy().getBalance(acceptingActor.getPlayer()))));
@@ -93,10 +93,10 @@ public class BuyRequest implements Request
     @Override
     public boolean reject(ShopCmdActor rejectingActor)
     {
-        BaxShop shop = SavedData.getShop(shopId);
+        BaxShop shop = StoredData.getShop(shopId);
         if (shop == null) {
             DeletedShopClaim shopDeleted = new DeletedShopClaim(buyer, entry);
-            SavedData.sendNotification(getBuyer(), shopDeleted);
+            StoredData.sendNotification(getBuyer(), shopDeleted);
         }
         else if (!shop.hasFlagInfinite()) {
             BaxEntry shopEntry = shop.findEntry(entry.getItemStack());
@@ -109,7 +109,7 @@ public class BuyRequest implements Request
         }
 
         BuyRejection n = new BuyRejection(shopId, buyer, seller, entry);
-        SavedData.sendNotification(buyer, n);
+        StoredData.sendNotification(buyer, n);
         rejectingActor.sendError("Offer rejected");
         return true;
     }

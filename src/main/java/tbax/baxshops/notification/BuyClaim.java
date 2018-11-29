@@ -12,8 +12,7 @@ import org.bukkit.command.CommandSender;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
 import tbax.baxshops.commands.ShopCmdActor;
-import tbax.baxshops.serialization.ItemNames;
-import tbax.baxshops.serialization.SavedData;
+import tbax.baxshops.serialization.StoredData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,12 +43,12 @@ public class BuyClaim implements Claimable
 
     public BuyClaim(UUID shopId, UUID buyer, UUID seller, BaxEntry entry)
     {
-        this(shopId, SavedData.getOfflinePlayer(buyer), SavedData.getOfflinePlayer(seller), entry);
+        this(shopId, StoredData.getOfflinePlayer(buyer), StoredData.getOfflinePlayer(seller), entry);
     }
 
     public OfflinePlayer getSeller()
     {
-        return SavedData.getOfflinePlayer(seller);
+        return StoredData.getOfflinePlayer(seller);
     }
 
     public UUID getShopId()
@@ -59,7 +58,7 @@ public class BuyClaim implements Claimable
 
     public OfflinePlayer getBuyer()
     {
-        return SavedData.getOfflinePlayer(buyer);
+        return StoredData.getOfflinePlayer(buyer);
     }
 
     @Override

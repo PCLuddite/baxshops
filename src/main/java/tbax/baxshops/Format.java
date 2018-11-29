@@ -9,7 +9,7 @@ package tbax.baxshops;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import tbax.baxshops.serialization.SavedData;
+import tbax.baxshops.serialization.StoredData;
 
 import java.util.UUID;
 
@@ -72,12 +72,12 @@ public class Format
     
     public static String username(UUID uuid)
     {
-        return username(SavedData.getOfflinePlayer(uuid).getName());
+        return username(StoredData.getOfflinePlayer(uuid).getName());
     }
 
     public static String username2(UUID uuid)
     {
-        return username2(SavedData.getOfflinePlayer(uuid).getName());
+        return username2(StoredData.getOfflinePlayer(uuid).getName());
     }
 
     public static String username(String name)

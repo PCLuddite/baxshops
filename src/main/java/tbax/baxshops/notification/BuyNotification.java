@@ -12,7 +12,7 @@ import org.bukkit.command.CommandSender;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
 import tbax.baxshops.MathUtil;
-import tbax.baxshops.serialization.SavedData;
+import tbax.baxshops.serialization.StoredData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -43,7 +43,7 @@ public class BuyNotification implements Notification
 
     public OfflinePlayer getBuyer()
     {
-        return SavedData.getOfflinePlayer(buyer);
+        return StoredData.getOfflinePlayer(buyer);
     }
 
     public BaxEntry getEntry()
@@ -53,7 +53,7 @@ public class BuyNotification implements Notification
 
     public OfflinePlayer getSeller()
     {
-        return SavedData.getOfflinePlayer(seller);
+        return StoredData.getOfflinePlayer(seller);
     }
 
     public UUID getShopId()

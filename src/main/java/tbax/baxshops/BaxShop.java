@@ -17,7 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.ItemNames;
-import tbax.baxshops.serialization.SavedData;
+import tbax.baxshops.serialization.StoredData;
 
 import java.util.*;
 
@@ -62,7 +62,7 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
 
     public OfflinePlayer getOwner()
     {
-        return SavedData.getOfflinePlayer(ownerId);
+        return StoredData.getOfflinePlayer(ownerId);
     }
 
     public void setOwner(OfflinePlayer newOwner)
@@ -271,7 +271,7 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
     public static BaxShop fromItem(ItemStack item)
     {
         UUID uid = UUID.fromString(item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1).substring((ChatColor.GRAY + "ID: ").length()));
-        return SavedData.getShop(uid);
+        return StoredData.getShop(uid);
     }
     
     /**

@@ -11,7 +11,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
-import tbax.baxshops.serialization.SavedData;
+import tbax.baxshops.serialization.StoredData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,7 +42,7 @@ public final class SaleNotification implements Notification
 
     public SaleNotification(UUID shopId, UUID buyer, UUID seller, BaxEntry entry)
     {
-        this(shopId, SavedData.getOfflinePlayer(buyer), SavedData.getOfflinePlayer(seller), entry);
+        this(shopId, StoredData.getOfflinePlayer(buyer), StoredData.getOfflinePlayer(seller), entry);
     }
 
     public UUID getShopId()
@@ -52,12 +52,12 @@ public final class SaleNotification implements Notification
 
     public OfflinePlayer getBuyer()
     {
-        return SavedData.getOfflinePlayer(buyer);
+        return StoredData.getOfflinePlayer(buyer);
     }
 
     public OfflinePlayer getSeller()
     {
-        return SavedData.getOfflinePlayer(seller);
+        return StoredData.getOfflinePlayer(seller);
     }
 
     public BaxEntry getItem()

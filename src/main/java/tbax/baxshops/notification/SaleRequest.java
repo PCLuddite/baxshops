@@ -12,7 +12,7 @@ import org.bukkit.command.CommandSender;
 import tbax.baxshops.*;
 import tbax.baxshops.commands.ShopCmdActor;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.serialization.SavedData;
+import tbax.baxshops.serialization.StoredData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -48,17 +48,17 @@ public class SaleRequest implements Request
 
     public BaxShop getShop()
     {
-        return SavedData.getShop(shopId);
+        return StoredData.getShop(shopId);
     }
 
     public OfflinePlayer getBuyer()
     {
-        return SavedData.getOfflinePlayer(buyer);
+        return StoredData.getOfflinePlayer(buyer);
     }
 
     public OfflinePlayer getSeller()
     {
-        return SavedData.getOfflinePlayer(seller);
+        return StoredData.getOfflinePlayer(seller);
     }
 
     public BaxEntry getEntry()
@@ -71,7 +71,7 @@ public class SaleRequest implements Request
     {
         try {
             PlayerUtil.sellItem(shopId, buyer, seller, entry);
-            SavedData.sendNotification(seller, new SaleNotification(shopId, buyer, seller, entry.clone()));
+            StoredData.sendNotification(seller, new SaleNotification(shopId, buyer, seller, entry.clone()));
             return true;
         }
         catch (PrematureAbortException e) {
@@ -84,7 +84,7 @@ public class SaleRequest implements Request
     public boolean reject(ShopCmdActor rejectingActor)
     {
         SaleRejection rejection = new SaleRejection(shopId, buyer, seller, entry);
-        SavedData.sendNotification(seller, rejection);
+        StoredData.sendNotification(seller, rejection);
         rejectingActor.sendError("Offer rejected");
         return true;
     }

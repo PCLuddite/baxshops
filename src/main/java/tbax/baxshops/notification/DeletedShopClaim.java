@@ -12,7 +12,7 @@ import org.bukkit.command.CommandSender;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
 import tbax.baxshops.commands.ShopCmdActor;
-import tbax.baxshops.serialization.SavedData;
+import tbax.baxshops.serialization.StoredData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,12 +37,12 @@ public class DeletedShopClaim implements Claimable
 
     public DeletedShopClaim(UUID owner, BaxEntry entry)
     {
-        this(SavedData.getOfflinePlayer(owner), entry);
+        this(StoredData.getOfflinePlayer(owner), entry);
     }
 
     public OfflinePlayer getOwner()
     {
-        return SavedData.getOfflinePlayer(owner);
+        return StoredData.getOfflinePlayer(owner);
     }
 
     @Override

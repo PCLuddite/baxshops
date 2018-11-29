@@ -29,7 +29,7 @@ import java.io.*;
 import java.util.*;
 import java.util.logging.Logger;
 
-public final class SavedData
+public final class StoredData
 {
     public static final String YAML_FILE_PATH = "shops.yml";
     public static final String YAMLBAK_FILE_PATH = "backups/%d.yml";

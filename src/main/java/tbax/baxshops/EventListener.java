@@ -33,7 +33,7 @@ import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.CommandWarningException;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.Notification;
-import tbax.baxshops.serialization.SavedData;
+import tbax.baxshops.serialization.StoredData;
 
 import java.util.ArrayDeque;
 import java.util.UUID;
@@ -51,7 +51,7 @@ public class EventListener implements Listener
     public void onBlockBreak(BlockBreakEvent event)
     {
         try {
-            BaxShop shop = SavedData.getShop(event.getBlock().getLocation());
+            BaxShop shop = StoredData.getShop(event.getBlock().getLocation());
             if (shop != null) {
                 if (shop.getOwner().equals(event.getPlayer()) || event.getPlayer().hasPermission("shops.admin")) {
                     if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
@@ -63,8 +63,8 @@ public class EventListener implements Listener
                     else {
                         event.setCancelled(true);
                         event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), shop.toItem(event.getBlock().getLocation()));
-                        SavedData.removeLocation(null, event.getBlock().getLocation()); // we don't need to tell the player if there's an error 12/5/15
-                        SavedData.clearSelection(event.getPlayer());
+                        StoredData.removeLocation(null, event.getBlock().getLocation()); // we don't need to tell the player if there's an error 12/5/15
+                        StoredData.clearSelection(event.getPlayer());
                         event.getBlock().setType(Material.AIR);
                     }
                 }
@@ -74,7 +74,7 @@ public class EventListener implements Listener
             }
             Location above = event.getBlock().getLocation();
             above.setY(above.getY() + 1);
-            if (SavedData.getShop(above) != null) {
+            if (StoredData.getShop(above) != null) {
                 throw new CommandWarningException("You cannot break this block because there is a shop above it.");
             }
         }
@@ -94,10 +94,10 @@ public class EventListener implements Listener
             return;
         }
         
-        BaxShop shop = SavedData.getShop(b.getLocation());
+        BaxShop shop = StoredData.getShop(b.getLocation());
         if (shop == null) {
             if (b.hasMetadata("shopid")) {
-                shop = SavedData.getShop(UUID.fromString(b.getMetadata("shopid").get(0).asString()));
+                shop = StoredData.getShop(UUID.fromString(b.getMetadata("shopid").get(0).asString()));
                 if (shop == null) {
                     event.getPlayer().sendMessage("This shop has been closed.");
                     return;
@@ -110,7 +110,7 @@ public class EventListener implements Listener
 
         boolean isOwner = shop.getOwner().equals(player);
 
-        ShopSelection selection = SavedData.getSelection(player);
+        ShopSelection selection = StoredData.getSelection(player);
         selection.setLocation(b.getLocation());
 
         if (selection.getShop() == shop) {
@@ -151,12 +151,12 @@ public class EventListener implements Listener
     {
         for (Block b : event.blockList()) {
             Location loc = b.getLocation();
-            if (SavedData.getShop(loc) != null) {
+            if (StoredData.getShop(loc) != null) {
                 event.setCancelled(true);
                 return;
             }
             loc.setY(loc.getY() + 1);
-            if (SavedData.getShop(loc) != null) {
+            if (StoredData.getShop(loc) != null) {
                 event.setCancelled(true);
                 return;
             }
@@ -173,7 +173,7 @@ public class EventListener implements Listener
                 if (shop == null) {
                     throw new CommandWarningException("This shop has been closed and can't be placed.");
                 } else {
-                    SavedData.addLocation(event.getPlayer(), event.getBlockPlaced().getLocation(), shop);
+                    StoredData.addLocation(event.getPlayer(), event.getBlockPlaced().getLocation(), shop);
                     shop.addLocation(event.getBlockPlaced().getLocation());
                     String[] lines = BaxShop.extractSignText(item);
                     if (lines.length > 0) {
@@ -203,7 +203,7 @@ public class EventListener implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onSignChange(SignChangeEvent event)
     {
-        BaxShop shop = SavedData.getShop(event.getBlock().getLocation());
+        BaxShop shop = StoredData.getShop(event.getBlock().getLocation());
         if (shop != null) {
             for(String line : event.getLines()) {
                 if (!line.isEmpty()) {
@@ -217,8 +217,8 @@ public class EventListener implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event)
     {
-        SavedData.joinPlayer(event.getPlayer());
-        ArrayDeque<Notification> p = SavedData.getNotifications(event.getPlayer());
+        StoredData.joinPlayer(event.getPlayer());
+        ArrayDeque<Notification> p = StoredData.getNotifications(event.getPlayer());
         if (!p.isEmpty()) {
             event.getPlayer().sendMessage(ChatColor.WHITE + "You have new notifications. Use " + Format.command("/shop notifications") + ChatColor.WHITE + " to view them");
         }
@@ -228,7 +228,7 @@ public class EventListener implements Listener
     public void onPlayerMove(PlayerMoveEvent event)
     {
         Player pl = event.getPlayer();
-        ShopSelection s = SavedData.getSelection(pl);
+        ShopSelection s = StoredData.getSelection(pl);
         if (s.getShop() != null) {
             Location shopLoc = s.getLocation();
             Location pLoc = event.getTo();
@@ -239,7 +239,7 @@ public class EventListener implements Listener
                 else {
                     pl.sendMessage("[Left " + Format.username(s.getShop().getOwner().getName()) + "'s shop]");
                 }
-                SavedData.clearSelection(event.getPlayer());
+                StoredData.clearSelection(event.getPlayer());
             }
         }
     }

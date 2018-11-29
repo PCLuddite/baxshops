@@ -11,7 +11,7 @@ package tbax.baxshops.notification;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import tbax.baxshops.serialization.SavedData;
+import tbax.baxshops.serialization.StoredData;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -59,7 +59,7 @@ public final class LollipopNotification implements ConfigurationSerializable, No
 
     public OfflinePlayer getSender()
     {
-        return SavedData.getOfflinePlayer(sender);
+        return StoredData.getOfflinePlayer(sender);
     }
 
     @Override

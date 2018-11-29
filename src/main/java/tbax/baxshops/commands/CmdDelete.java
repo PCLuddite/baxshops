@@ -8,7 +8,7 @@
 package tbax.baxshops.commands;
 
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.serialization.SavedData;
+import tbax.baxshops.serialization.StoredData;
 
 public class CmdDelete extends BaxShopCommand
 {
@@ -69,13 +69,13 @@ public class CmdDelete extends BaxShopCommand
                 actor.sendError("Please remove all inventory before deleting it.");
             }
             else {
-                SavedData.removeShop(actor.getPlayer(), actor.getShop());
-                SavedData.clearSelection(actor.getPlayer());
+                StoredData.removeShop(actor.getPlayer(), actor.getShop());
+                StoredData.clearSelection(actor.getPlayer());
             }
         }
         else {
-            SavedData.removeLocation(actor.getPlayer(), actor.getSelection().getLocation());
-            SavedData.clearSelection(actor.getPlayer());
+            StoredData.removeLocation(actor.getPlayer(), actor.getSelection().getLocation());
+            StoredData.clearSelection(actor.getPlayer());
         }
     }
     

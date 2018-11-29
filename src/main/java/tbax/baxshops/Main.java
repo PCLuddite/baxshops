@@ -18,7 +18,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import tbax.baxshops.commands.*;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.*;
-import tbax.baxshops.serialization.SavedData;
+import tbax.baxshops.serialization.StoredData;
 
 import java.util.Map;
 import java.util.logging.Logger;
@@ -57,7 +57,7 @@ public final class Main extends JavaPlugin
         
         loadConfigurationSerializable();
 
-        SavedData.load(this);
+        StoredData.load(this);
         
         saveDefaultConfig();
         
@@ -66,7 +66,7 @@ public final class Main extends JavaPlugin
         this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
             @Override
             public void run() {
-                SavedData.saveAll();
+                StoredData.saveAll();
             }
         }, 6000L, 36000L);
         log.info("BaxShops has loaded successfully!");
@@ -90,7 +90,7 @@ public final class Main extends JavaPlugin
     @Override
     public void onDisable()
     {
-        SavedData.saveAll();
+        StoredData.saveAll();
     }
 
     private static CommandMap initCommands()

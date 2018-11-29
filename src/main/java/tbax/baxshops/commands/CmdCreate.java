@@ -17,7 +17,7 @@ import tbax.baxshops.CommandHelpArgument;
 import tbax.baxshops.Format;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
-import tbax.baxshops.serialization.SavedData;
+import tbax.baxshops.serialization.StoredData;
 
 import java.util.UUID;
 
@@ -109,7 +109,7 @@ public class CmdCreate extends BaxShopCommand
         shop.setId(UUID.randomUUID());
         shop.setOwner(owner);
         
-        if (!SavedData.addShop(actor.getPlayer(), shop))
+        if (!StoredData.addShop(actor.getPlayer(), shop))
             return;;
 
         Block b = shop.buildShopSign(
