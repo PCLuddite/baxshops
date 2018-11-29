@@ -7,6 +7,7 @@
 
 package tbax.baxshops.commands;
 
+import tbax.baxshops.Main;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.StoredData;
 
@@ -70,12 +71,12 @@ public class CmdDelete extends BaxShopCommand
             }
             else {
                 StoredData.removeShop(actor.getPlayer(), actor.getShop());
-                StoredData.clearSelection(actor.getPlayer());
+                Main.clearSelection(actor.getPlayer());
             }
         }
         else {
             StoredData.removeLocation(actor.getPlayer(), actor.getSelection().getLocation());
-            StoredData.clearSelection(actor.getPlayer());
+            Main.clearSelection(actor.getPlayer());
         }
     }
     

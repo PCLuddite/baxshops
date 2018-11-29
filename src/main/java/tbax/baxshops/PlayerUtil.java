@@ -97,7 +97,7 @@ public class PlayerUtil
 
         if (shop == null) {
             DeletedShopClaim deletedClaim = new DeletedShopClaim(buyer, entry.clone());
-            StoredData.sendNotification(buyer, deletedClaim);
+            Main.sendNotification(buyer, deletedClaim);
         }
         else if (shop.hasFlagSellToShop()) {
             ItemStack item = entry.toItemStack();
@@ -120,7 +120,7 @@ public class PlayerUtil
             }
             else {
                 SaleClaim claim = new SaleClaim(shop.getId(), buyer, seller, entry);
-                StoredData.sendNotification(buyer, claim);
+                Main.sendNotification(buyer, claim);
             }
         }
     }

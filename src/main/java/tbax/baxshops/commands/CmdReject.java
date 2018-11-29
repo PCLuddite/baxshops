@@ -7,6 +7,7 @@
 
 package tbax.baxshops.commands;
 
+import tbax.baxshops.Main;
 import tbax.baxshops.Resources;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
@@ -88,7 +89,7 @@ public class CmdReject extends BaxShopCommand
                 if (r.reject(actor)) {
                     notifications.removeFirst();
                 }
-                StoredData.showNotification(actor.getPlayer());
+                Main.showNotification(actor.getPlayer());
             }
             else {
                 actor.sendError("Your current notification is not a request.");
