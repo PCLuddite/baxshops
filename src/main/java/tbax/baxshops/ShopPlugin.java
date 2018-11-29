@@ -344,4 +344,9 @@ public final class ShopPlugin extends JavaPlugin
         sb.append(Format.toAnsiColor(message));
         log.info(sb.toString());
     }
+
+    public static ShopPlugin getInstance()
+    {
+        return plugin;
+    }
 }
