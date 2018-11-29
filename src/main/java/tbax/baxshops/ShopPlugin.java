@@ -290,11 +290,6 @@ public final class ShopPlugin extends JavaPlugin
         }
         return true;
     }
-
-    public static Logger getLog()
-    {
-        return log;
-    }
     
     public static Economy getEconomy()
     {
