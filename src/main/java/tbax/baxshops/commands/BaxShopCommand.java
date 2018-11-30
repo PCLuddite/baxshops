@@ -39,7 +39,7 @@ public abstract class BaxShopCommand
         return actor.hasPermission(getPermission());
     }
 
-    public boolean requiresAdmin(ShopCmdActor actor)
+    public final boolean requiresAdmin()
     {
         return "shops.admin".equalsIgnoreCase(getPermission());
     }

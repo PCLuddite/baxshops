@@ -118,7 +118,7 @@ public class CommandMap implements Map<String, BaxShopCommand>
     public CommandMap getAdminCommands(ShopCmdActor actor)
     {
         return cmds.entrySet().stream()
-            .filter(entry -> entry.getValue().requiresAdmin(actor))
+            .filter(entry -> entry.getValue().requiresAdmin())
             .collect(Collectors.toMap(Entry::getKey, Entry::getValue, (a, b) -> b, CommandMap::new));
     }
 
