@@ -30,7 +30,7 @@ public class SaleClaim implements Claimable
         this.shopId = shopId;
         this.buyer = buyer.getUniqueId();
         this.seller = seller.getUniqueId();
-        this.entry = entry.clone();
+        this.entry = new BaxEntry(entry);
     }
 
     public SaleClaim(Map<String, Object> args)

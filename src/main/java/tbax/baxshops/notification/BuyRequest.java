@@ -31,7 +31,7 @@ public class BuyRequest implements Request
         this.shopId = shopId;
         this.buyer = buyer.getUniqueId();
         this.seller = seller.getUniqueId();
-        this.entry = entry.clone();
+        this.entry = new BaxEntry(entry);
     }
 
     public BuyRequest(Map<String, Object> args)

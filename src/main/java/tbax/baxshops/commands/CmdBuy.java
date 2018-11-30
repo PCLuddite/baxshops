@@ -109,7 +109,7 @@ public class CmdBuy extends BaxShopCommand
             actor.exitError(Resources.NO_MONEY_BUYER);
         }
 
-        BaxEntry purchased = entry.clone();
+        BaxEntry purchased = new BaxEntry(entry);
         purchased.setAmount(amount);
 
         if (shop.hasFlagBuyRequests()) {

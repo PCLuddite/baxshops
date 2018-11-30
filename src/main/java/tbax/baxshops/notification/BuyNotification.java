@@ -30,7 +30,7 @@ public class BuyNotification implements Notification
         this.shopId = shopId;
         this.buyer = buyer.getUniqueId();
         this.seller = seller.getUniqueId();
-        this.entry = entry.clone();
+        this.entry = new BaxEntry(entry);
     }
 
     public BuyNotification(Map<String, Object> args)

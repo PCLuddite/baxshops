@@ -35,6 +35,15 @@ public final class BaxEntry implements ConfigurationSerializable
     public BaxEntry()
     {
     }
+
+    public BaxEntry(BaxEntry other)
+    {
+        infinite = other.infinite;
+        refundPrice = other.refundPrice;
+        retailPrice = other.retailPrice;
+        quantity = other.quantity;
+        stack = other.stack.clone();
+    }
     
     public BaxEntry(Map<String, Object> args)
     {
@@ -243,17 +252,6 @@ public final class BaxEntry implements ConfigurationSerializable
     public String getFormattedBuyPrice2()
     {
         return Format.money2(MathUtil.multiply(retailPrice, getAmount()));
-    }
-
-    public BaxEntry clone() // decided not to declare throwing CloneNotSupported. Java exceptions are a nightmare. 11/10/15
-    {
-        BaxEntry cloned = new BaxEntry();
-        cloned.infinite = infinite;
-        cloned.refundPrice = refundPrice;
-        cloned.retailPrice = retailPrice;
-        cloned.quantity = quantity;
-        cloned.stack = stack.clone();
-        return cloned;
     }
     
     private static Map<Enchantment, Integer> getEnchants(ItemStack item)

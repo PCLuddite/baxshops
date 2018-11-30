@@ -96,7 +96,7 @@ public class PlayerUtil
         ShopPlugin.getEconomy().depositPlayer(seller, price);
 
         if (shop == null) {
-            DeletedShopClaim deletedClaim = new DeletedShopClaim(buyer, entry.clone());
+            DeletedShopClaim deletedClaim = new DeletedShopClaim(buyer, entry);
             ShopPlugin.sendNotification(buyer, deletedClaim);
         }
         else if (shop.hasFlagSellToShop()) {

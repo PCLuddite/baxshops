@@ -346,7 +346,7 @@ public final class ShopCmdActor
         if (getItemInHand() == null || getItemInHand().getType() == Material.AIR)
             throw new CommandErrorException(Resources.NOT_FOUND_HELDITEM);
 
-        BaxEntry clone = getShop().findEntry(getItemInHand()).clone();
+        BaxEntry clone = new BaxEntry(getShop().findEntry(getItemInHand()));
 
         if ("all".equalsIgnoreCase(arg)) {
             qty = takeFromInventory(clone.getItemStack(), Integer.MAX_VALUE);
@@ -381,7 +381,7 @@ public final class ShopCmdActor
         inv = player.getInventory();
 
         for (BaxEntry entry : shop) {
-            BaxEntry curr = entry.clone();
+            BaxEntry curr = new BaxEntry(entry);
             for (int x = 0; x < inv.getSize(); ++x) {
                 ItemStack item = inv.getItem(x);
                 if (curr.isSimilar(item)) {

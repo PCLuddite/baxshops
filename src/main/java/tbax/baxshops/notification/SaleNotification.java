@@ -37,7 +37,7 @@ public final class SaleNotification implements Notification
         this.shopId = shopId;
         this.buyer = buyer.getUniqueId();
         this.seller = seller.getUniqueId();
-        this.entry = entry;
+        this.entry = new BaxEntry(entry);
     }
 
     public SaleNotification(UUID shopId, UUID buyer, UUID seller, BaxEntry entry)

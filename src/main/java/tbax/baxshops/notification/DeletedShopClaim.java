@@ -32,7 +32,7 @@ public class DeletedShopClaim implements Claimable
     public DeletedShopClaim(OfflinePlayer owner, BaxEntry entry)
     {
         this.owner = owner.getUniqueId();
-        this.entry = entry;
+        this.entry = new BaxEntry(entry);
     }
 
     public DeletedShopClaim(UUID owner, BaxEntry entry)

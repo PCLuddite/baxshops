@@ -71,7 +71,7 @@ public class SaleRequest implements Request
     {
         try {
             PlayerUtil.sellItem(shopId, buyer, seller, entry);
-            ShopPlugin.sendNotification(seller, new SaleNotification(shopId, buyer, seller, entry.clone()));
+            ShopPlugin.sendNotification(seller, new SaleNotification(shopId, buyer, seller, entry));
             return true;
         }
         catch (PrematureAbortException e) {
