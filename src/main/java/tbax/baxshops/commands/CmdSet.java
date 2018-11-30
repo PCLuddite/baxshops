@@ -105,10 +105,10 @@ public class CmdSet extends BaxShopCommand
         entry.setRefundPrice(refundAmount);
 
         if (shop.hasFlagInfinite()) {
-            actor.sendMessage("The price for %s was set.", Format.itemname(ItemNames.getName(entry)));
+            actor.sendMessage("The price for %s was set.", Format.itemName(ItemNames.getName(entry)));
         }
         else {
-            actor.sendMessage("The price for %s was set.", Format.itemname(entry.getAmount(), ItemNames.getName(entry)));
+            actor.sendMessage("The price for %s was set.", Format.itemName(entry.getAmount(), ItemNames.getName(entry)));
         }
     }
 }

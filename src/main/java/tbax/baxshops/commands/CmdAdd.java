@@ -106,7 +106,7 @@ public class CmdAdd extends BaxShopCommand
             newEntry.setInfinite(true);
         }
         actor.getShop().addEntry(newEntry);
-        actor.sendMessage("A new entry for %s was added to the shop.", Format.itemname(newEntry.getAmount(), ItemNames.getName(newEntry)));
+        actor.sendMessage("A new entry for %s was added to the shop.", Format.itemName(newEntry.getAmount(), ItemNames.getName(newEntry)));
         if (!actor.getShop().hasFlagInfinite()) {
             actor.getPlayer().getInventory().setItemInMainHand(null);
         }

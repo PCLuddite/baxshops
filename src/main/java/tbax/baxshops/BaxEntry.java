@@ -231,7 +231,7 @@ public final class BaxEntry implements ConfigurationSerializable
 
     public String getFormattedName()
     {
-        return Format.itemname(getAmount(), getName());
+        return Format.itemName(getAmount(), getName());
     }
 
     public String getFormattedSellPrice()
@@ -290,7 +290,7 @@ public final class BaxEntry implements ConfigurationSerializable
         StringBuilder info = new StringBuilder();
         info.append(Format.header("BaxEntry Information"));
         info.append('\n');
-        info.append("Name: ").append(Format.itemname(ItemNames.getName(this))).append('\n');
+        info.append("Name: ").append(Format.itemName(ItemNames.getName(this))).append('\n');
         info.append("Material: ").append(Format.command(stack.getType().toString())).append('\n');
         if (ItemNames.isDamageable(stack.getType())) {
             info.append("Damage: ").append(ChatColor.YELLOW).append(getDamagePercent()).append('%').append(ChatColor.RESET).append('\n');
@@ -367,10 +367,10 @@ public final class BaxEntry implements ConfigurationSerializable
         
         if (infinite) {
             if (refundPrice < 0) {
-                return String.format("%s. %s %s", Format.bullet(index), Format.listname(name.toString()), Format.retailprice(retailPrice));
+                return String.format("%s. %s %s", Format.bullet(index), Format.listname(name.toString()), Format.retailPrice(retailPrice));
             }
             else {
-                return String.format("%s. %s %s %s", Format.bullet(index), Format.listname(name.toString()), Format.retailprice(retailPrice), Format.refundprice(refundPrice));
+                return String.format("%s. %s %s %s", Format.bullet(index), Format.listname(name.toString()), Format.retailPrice(retailPrice), Format.refundPrice(refundPrice));
             }
         }
         else {
@@ -384,10 +384,10 @@ public final class BaxEntry implements ConfigurationSerializable
             }
             else {
                 if (refundPrice < 0) {
-                    return String.format("%d. " + ChatColor.GRAY + "(%d) %s %s", index, getAmount(), Format.listname(name.toString()), Format.retailprice(retailPrice));
+                    return String.format("%d. " + ChatColor.GRAY + "(%d) %s %s", index, getAmount(), Format.listname(name.toString()), Format.retailPrice(retailPrice));
                 }
                 else {
-                    return String.format("%d. " + ChatColor.GRAY + "(%d) %s %s %s", index, getAmount(), Format.listname(name.toString()), Format.retailprice(retailPrice), Format.refundprice(refundPrice));
+                    return String.format("%d. " + ChatColor.GRAY + "(%d) %s %s %s", index, getAmount(), Format.listname(name.toString()), Format.retailPrice(retailPrice), Format.refundPrice(refundPrice));
                 }
             }
         }

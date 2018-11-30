@@ -110,7 +110,7 @@ public class CmdTake extends BaxShopCommand
             actor.sendMessage(Resources.SOME_ROOM, amt - overflow, ItemNames.getName(stack));
         }
         else {
-            actor.sendMessage("%s %s added to your inventory.",Format.itemname(amt, ItemNames.getName(entry)), amt == 1 ? "was" : "were");
+            actor.sendMessage("%s %s added to your inventory.",Format.itemName(amt, ItemNames.getName(entry)), amt == 1 ? "was" : "were");
         }
     }
 }

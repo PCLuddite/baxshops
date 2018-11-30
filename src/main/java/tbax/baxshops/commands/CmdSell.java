@@ -132,7 +132,7 @@ public class CmdSell extends BaxShopCommand
             SaleRequest request = new SaleRequest(shop.getId(), shop.getOwner(), actor.getPlayer(), entry);
             ShopPlugin.sendNotification(shop.getOwner(), request);
             actor.sendMessage("Your request to sell %s for %s has been sent.",
-                Format.itemname(entry.getAmount(), name), Format.money(price)
+                Format.itemName(entry.getAmount(), name), Format.money(price)
             );
             return 0;
         }
@@ -140,7 +140,7 @@ public class CmdSell extends BaxShopCommand
             PlayerUtil.sellItem(shop, shop.getOwner(), actor.getPlayer(), entry);
             actor.sendMessage(
                 "You have sold %s for %s to %s.",
-                Format.itemname(entry.getAmount(), name),
+                Format.itemName(entry.getAmount(), name),
                 Format.money(price),
                 Format.username(shop.getOwner().getName())
             );

@@ -109,7 +109,7 @@ public class CmdRestock extends BaxShopCommand
             }
             else {
                 actor.sendMessage("Restocked with %s in hand. The shop now has %s.",
-                                Format.itemname(stack.getAmount(), ItemNames.getName(entry)), Format.number(entry.getAmount())
+                                Format.itemName(stack.getAmount(), ItemNames.getName(entry)), Format.number(entry.getAmount())
                 );
             }
         }
@@ -123,7 +123,7 @@ public class CmdRestock extends BaxShopCommand
                     BaxEntry shopEntry = actor.getShop().findEntry(entry);
                     if (entry.getAmount() > 0) {
                         entry.add(entry.getAmount());
-                        actor.sendMessage("Restocked %s.", Format.itemname(entry.getAmount(), ItemNames.getName(entry)));
+                        actor.sendMessage("Restocked %s.", Format.itemName(entry.getAmount(), ItemNames.getName(entry)));
                     }
                 }
             }

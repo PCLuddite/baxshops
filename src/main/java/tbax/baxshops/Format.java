@@ -13,7 +13,10 @@ import tbax.baxshops.serialization.StoredData;
 
 import java.util.UUID;
 
-public class Format
+/**
+ * Methods for formatting strings
+ */
+public final class Format
 {   
     public static String money(String in)
     {
@@ -60,12 +63,12 @@ public class Format
         return location(String.format("(%d,%d,%d)", loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) + ChatColor.RESET;
     }
     
-    public static String itemname(int amount, String name)
+    public static String itemName(int amount, String name)
     {
-        return itemname(String.format("%d %s", amount, name));
+        return itemName(String.format("%d %s", amount, name));
     }
     
-    public static String itemname(String name)
+    public static String itemName(String name)
     {
         return reset(ChatColor.GREEN + name);
     }
@@ -95,29 +98,29 @@ public class Format
         return reset(ChatColor.AQUA + cmd);
     }
     
-    public static String retailprice(String price)
+    public static String retailPrice(String price)
     {
         return reset(ChatColor.DARK_GREEN + price);
     }
     
-    public static String retailprice(double price)
+    public static String retailPrice(double price)
     {
-        return retailprice(String.format("(%s)", ShopPlugin.getEconomy().format(price)));
+        return retailPrice(String.format("(%s)", ShopPlugin.getEconomy().format(price)));
     }
     
-    public static String refundprice(String price)
+    public static String refundPrice(String price)
     {
         return reset(ChatColor.BLUE + price);
     }
     
-    public static String refundprice(double price)
+    public static String refundPrice(double price)
     {
-        return refundprice(String.format("(%s)", ShopPlugin.getEconomy().format(price)));
+        return refundPrice(String.format("(%s)", ShopPlugin.getEconomy().format(price)));
     }
     
-    public static String enchantments(String ench)
+    public static String enchantments(String enchant)
     {
-        return reset(ChatColor.DARK_PURPLE + ench);
+        return reset(ChatColor.DARK_PURPLE + enchant);
     }
     
     public static String bullet(String b)
@@ -152,8 +155,8 @@ public class Format
     
     /**
      * Converts a number 1-5 to a Roman numeral
-     * @param n
-     * @return 
+     * @param n the number (1-5) to convert to a numeral
+     * @return a string of the roman numeral
      */
     public static String toNumeral(int n)
     {
@@ -256,7 +259,8 @@ public class Format
      * @param title the text in the header
      * @return the chat header
      */
-    public static String header(String title) {
+    public static String header(String title)
+    {
         return (new StringBuilder(ChatColor.GRAY.toString()).
                 append("------------ ").
                 append(ChatColor.WHITE).

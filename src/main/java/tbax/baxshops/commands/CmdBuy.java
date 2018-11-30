@@ -119,7 +119,7 @@ public class CmdBuy extends BaxShopCommand
 
             BuyRequest request = new BuyRequest(shop.getId(), actor.getPlayer(), shop.getOwner(), purchased);
             ShopPlugin.sendNotification(shop.getOwner(), request);
-            actor.sendMessage("Your request to buy %s for %s has been sent.", Format.itemname(purchased.getAmount(), itemName), Format.money(price));
+            actor.sendMessage("Your request to buy %s for %s has been sent.", Format.itemName(purchased.getAmount(), itemName), Format.money(price));
         }
         else {
             int overflow = actor.giveItem(purchased.toItemStack());
@@ -128,7 +128,7 @@ public class CmdBuy extends BaxShopCommand
                 actor.sendMessage(Resources.SOME_ROOM + " " + Resources.CHARGED_MSG, amount - overflow, itemName, Format.money(price));
             }
             else {
-                actor.sendMessage("You bought %s for %s.", Format.itemname(amount, itemName), Format.money(price));
+                actor.sendMessage("You bought %s for %s.", Format.itemName(amount, itemName), Format.money(price));
             }
             ShopPlugin.getEconomy().withdrawPlayer(actor.getPlayer(), price);
             if (!shop.hasFlagInfinite()) {

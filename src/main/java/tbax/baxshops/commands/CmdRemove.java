@@ -90,7 +90,7 @@ public class CmdRemove extends BaxShopCommand
             }
 
             actor.sendMessage("%s %s added to your inventory.",
-                Format.itemname(entry.getAmount(), ItemNames.getName(entry)),
+                Format.itemName(entry.getAmount(), ItemNames.getName(entry)),
                 entry.getAmount() == 1 ? "was" : "were");
         }
 
