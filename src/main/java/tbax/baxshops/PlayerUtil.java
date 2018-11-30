@@ -20,13 +20,31 @@ import tbax.baxshops.serialization.StoredData;
 
 import java.util.UUID;
 
-public class PlayerUtil
+/**
+ * Methods for dealing with interactions with players
+ */
+public final class PlayerUtil
 {
+    /**
+     * gives an ItemStack to a player
+     * @param player recipient of the ItemStack
+     * @param item item to give the player
+     * @return the amount that could not be added to the player's inventory
+     * @throws PrematureAbortException thrown if no space is available
+     */
     public static int giveItem(Player player, ItemStack item) throws PrematureAbortException
     {
         return giveItem(player, item, false);
     }
 
+    /**
+     * gives an ItemStack to a player
+     * @param player recipient of the ItemStack
+     * @param item item to give the player
+     * @param allOrNothing if true, there must be space for the full amount of the ItemStack
+     * @return the amount that could not be added to the player's inventory
+     * @throws PrematureAbortException thrown if no space is available
+     */
     public static int giveItem(Player player, ItemStack item, boolean allOrNothing) throws PrematureAbortException
     {
         int space = getSpaceForItem(player, item);
@@ -41,32 +59,51 @@ public class PlayerUtil
         return overflow;
     }
 
-    public static int getSpaceForItem(Player player, ItemStack stack)
+    /**
+     * gets the amount of space in the player's inventory for a given item
+     * @param player the player whose inventory to check
+     * @param item item to check
+     * @return the amount available to add in the player's inventory
+     */
+    public static int getSpaceForItem(Player player, ItemStack item)
     {
         ItemStack[] contents = player.getInventory().getStorageContents();
-        int max = stack.getMaxStackSize();
+        int max = item.getMaxStackSize();
         int space = 0;
 
         for(int x = 0; x < contents.length; ++x) {
             if (contents[x] == null || contents[x].getType() == Material.AIR) {
                 space += max;
             }
-            else if (contents[x].isSimilar(stack)) {
+            else if (contents[x].isSimilar(item)) {
                 space += max - contents[x].getAmount();
             }
         }
         return space;
     }
 
-    public static boolean hasRoomForItem(Player player, ItemStack stack)
+    /**
+     * determines whether there is enough space available in a player's inventory for the full amount of an ItemStack
+     * @param player the player whose inventory to check
+     * @param item item to check
+     * @return true if there is enough space, otherwise false
+     */
+    public static boolean hasRoomForItem(Player player, ItemStack item)
     {
-        return stack.getAmount() <= getSpaceForItem(player, stack);
+        return item.getAmount() <= getSpaceForItem(player, item);
     }
 
-    public static boolean tryGiveItem(Player player, ItemStack stack)
+    /**
+     * gives an ItemStack to a player
+     * @apiNote This differs from giveItem() in that it does not throw an exception, but sends the message to the player
+     * @param player
+     * @param item
+     * @return
+     */
+    public static boolean tryGiveItem(Player player, ItemStack item)
     {
         try {
-            giveItem(player, stack, true);
+            giveItem(player, item, true);
             return true;
         }
         catch (CommandErrorException | CommandWarningException e) {
@@ -79,11 +116,27 @@ public class PlayerUtil
         }
     }
 
+    /**
+     * Sells a BaxEntry to a player
+     * @param shopId the UUID of the shop this entry is a part of
+     * @param buyer the player who is purchasing the item
+     * @param seller the player who is selling the item
+     * @param entry the BaxEntry that is being sold
+     * @throws PrematureAbortException thrown if the seller has insufficient funds
+     */
     public static void sellItem(UUID shopId, OfflinePlayer buyer, OfflinePlayer seller, BaxEntry entry) throws PrematureAbortException
     {
         sellItem(StoredData.getShop(shopId), buyer, seller, entry);
     }
 
+    /**
+     * Sells a BaxEntry to a player
+     * @param shop the shop this entry is a part of
+     * @param buyer the player who is purchasing the item
+     * @param seller the player who is selling the item
+     * @param entry the BaxEntry that is being sold
+     * @throws PrematureAbortException thrown if the seller has insufficient funds
+     */
     public static void sellItem(BaxShop shop, OfflinePlayer buyer, OfflinePlayer seller, BaxEntry entry) throws PrematureAbortException
     {
         double price = MathUtil.multiply(entry.getRefundPrice(), entry.getAmount());
@@ -125,6 +178,14 @@ public class PlayerUtil
         }
     }
 
+    /**
+     * Sells a BaxEntry to a player
+     * @param shopId the UUID of the shop this entry is a part of
+     * @param buyer the UUID of the player who is purchasing the item
+     * @param seller the UUID of the player who is selling the item
+     * @param entry the BaxEntry that is being sold
+     * @throws PrematureAbortException thrown if the seller has insufficient funds
+     */
     public static void sellItem(UUID shopId, UUID buyer, UUID seller, BaxEntry entry) throws PrematureAbortException
     {
         sellItem(shopId, StoredData.getOfflinePlayer(buyer), StoredData.getOfflinePlayer(seller), entry);
