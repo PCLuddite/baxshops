@@ -16,7 +16,10 @@ import tbax.baxshops.errors.PrematureAbortException;
 public class FlagCmdInfinite extends FlagCmd
 {
     @Override
-    public String[] getAliases() { return new String[]{"infinite", "isinfinite","inf"}; }
+    public String[] getAliases()
+    {
+        return new String[]{"infinite", "isinfinite", "inf"};
+    }
 
     @Override
     public void onCommand(ShopCmdActor actor) throws PrematureAbortException
@@ -24,8 +27,7 @@ public class FlagCmdInfinite extends FlagCmd
         BaxShop shop = actor.getShop();
         boolean value = actor.getArgBoolean(2, "Usage:\n/shop flag infinite [true|false]");
         shop.setFlagInfinite(value);
-        for(BaxEntry e : shop)
-        {
+        for (BaxEntry e : shop) {
             e.setInfinite(value);
         }
 
