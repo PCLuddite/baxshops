@@ -313,14 +313,14 @@ public final class StoredData
     }
 
     @Deprecated
-    public static OfflinePlayer getOfflinePlayer(String playerName)
+    public static OfflinePlayer getOfflinePlayer(String playerName) throws PrematureAbortException
     {
         for (StoredPlayer player : players.values()) {
             if (player.getName().equals(playerName)) {
                 return player;
             }
         }
-        throw new NullPointerException("playerName was not found");
+        throw new CommandErrorException("This player has not been set up yet. The player must log in at least once.");
     }
 
     public static StoredPlayer joinPlayer(Player player)

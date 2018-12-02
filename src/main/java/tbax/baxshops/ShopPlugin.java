@@ -110,7 +110,7 @@ public final class ShopPlugin extends JavaPlugin
     }
 
     @Deprecated
-    public static void sendNotification(String playerName, Notification n)
+    public static void sendNotification(String playerName, Notification n) throws PrematureAbortException
     {
         sendNotification(StoredData.getOfflinePlayer(playerName), n);
     }
