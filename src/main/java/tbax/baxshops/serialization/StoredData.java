@@ -168,19 +168,16 @@ public final class StoredData
         
         ArrayList<BaxShop> shoplist = (ArrayList)state.getList("shops");
         for(BaxShop shop : shoplist) {
-            addShop(null, shop);
+            for (Location loc : shop.getLocations()) {
+                locations.put(loc, shop.getId());
+            }
+            shops.put(shop.getId(), shop);
         }
 
         ConfigurationSection yNotes = state.getConfigurationSection("notes");
         for(Map.Entry<String, Object> player : yNotes.getValues(false).entrySet()) {
-            ArrayDeque<Notification> playerNotes = new ArrayDeque<>();
             UUID uuid = UUID.fromString(player.getKey());
-
-            List yPlayerNotes = (List)player.getValue();
-            for(Object yNote : yPlayerNotes) {
-                playerNotes.add((Notification)yNote);
-            }
-            pending.put(UUID.fromString(player.getKey()), playerNotes);
+            pending.put(UUID.fromString(player.getKey()), new ArrayDeque<>((List)player.getValue()));
         }
 
         ArrayList<StoredPlayer> playerList = (ArrayList)state.getList("players");

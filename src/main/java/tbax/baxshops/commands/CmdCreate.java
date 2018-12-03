@@ -112,7 +112,7 @@ public class CmdCreate extends BaxShopCommand
         Block b = shop.buildShopSign(
             loc, new String[] {
                 "",
-                (owner.getName().length() < 13 ? owner : owner.getName().substring(0, 12) + '…') + "'s",
+                (owner.getName().length() < 13 ? owner.getName() : owner.getName().substring(0, 12) + '…') + "'s",
                 "shop",
                 ""
             }

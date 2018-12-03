@@ -435,7 +435,7 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
 
     public Block buildShopSign(Location loc, String[] signLines) throws PrematureAbortException
     {
-        Location locUnder = loc;
+        Location locUnder = loc.clone();
         locUnder.setY(locUnder.getY() - 1);
 
         Block b = loc.getWorld().getBlockAt(loc);
