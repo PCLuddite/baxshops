@@ -30,7 +30,7 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
     private final ArrayList<Location> locations = new ArrayList<>();
     private final ArrayList<BaxEntry> inventory = new ArrayList<>();
 
-    private long flags = BaxShopFlag.NOTIFY | BaxShopFlag.SELL_REQUESTS;
+    private int flags = BaxShopFlag.NOTIFY | BaxShopFlag.SELL_REQUESTS;
 
     public BaxShop()
     {
@@ -40,12 +40,12 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
     {
         id = UUID.fromString((String)args.get("id"));
         ownerId = UUID.fromString((String)args.get("owner"));
-        flags = (long)args.get("flags");
+        flags = (int)args.get("flags");
         inventory.addAll((ArrayList)args.get("inventory"));
         locations.addAll((ArrayList)args.get("locations"));
         if (hasFlagInfinite()) {
             for(BaxEntry entry : inventory) {
-                entry.setInfinite(hasFlagInfinite());
+                entry.setInfinite(true);
             }
         }
     }
@@ -411,7 +411,7 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
         HashMap<String, Object> map = new HashMap<>();
         map.put("id", id.toString());
         map.put("owner", ownerId.toString());
-        map.put("flag", flags);
+        map.put("flags", flags);
         map.put("inventory", inventory);
         map.put("locations", locations);
         return map;
