@@ -35,7 +35,7 @@ import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.Notification;
 import tbax.baxshops.serialization.StoredData;
 
-import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.UUID;
 
 public class EventListener implements Listener
@@ -218,7 +218,7 @@ public class EventListener implements Listener
     public void onPlayerJoin(PlayerJoinEvent event)
     {
         StoredData.joinPlayer(event.getPlayer());
-        ArrayDeque<Notification> p = StoredData.getNotifications(event.getPlayer());
+        Deque<Notification> p = StoredData.getNotifications(event.getPlayer());
         if (!p.isEmpty()) {
             event.getPlayer().sendMessage(ChatColor.WHITE + "You have new notifications. Use " + Format.command("/shop notifications") + ChatColor.WHITE + " to view them");
         }

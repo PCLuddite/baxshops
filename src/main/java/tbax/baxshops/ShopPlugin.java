@@ -21,7 +21,7 @@ import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.*;
 import tbax.baxshops.serialization.StoredData;
 
-import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -73,7 +73,7 @@ public final class ShopPlugin extends JavaPlugin
      */
     public static void showNotification(Player player, boolean showCount)
     {
-        ArrayDeque<Notification> notifications = StoredData.getNotifications(player.getPlayer());
+        Deque<Notification> notifications = StoredData.getNotifications(player.getPlayer());
         if (notifications.isEmpty()) {
             if (showCount) {
                 player.sendMessage("You have no notifications.");
@@ -124,7 +124,7 @@ public final class ShopPlugin extends JavaPlugin
      */
     public static void sendNotification(OfflinePlayer player, Notification n, boolean logNote)
     {
-        ArrayDeque<Notification> ns = StoredData.getNotifications(player);
+        Deque<Notification> ns = StoredData.getNotifications(player);
         if (logNote) {
             log.info(Format.toAnsiColor(n.getMessage(null)));
         }
@@ -193,9 +193,12 @@ public final class ShopPlugin extends JavaPlugin
         ConfigurationSerialization.registerClass(BuyRequest.class);
         ConfigurationSerialization.registerClass(DeletedShopClaim.class);
         ConfigurationSerialization.registerClass(LollipopNotification.class);
+        ConfigurationSerialization.registerClass(NoteSet.class);
+        ConfigurationSerialization.registerClass(SaleClaim.class);
         ConfigurationSerialization.registerClass(SaleNotification.class);
         ConfigurationSerialization.registerClass(SaleRejection.class);
         ConfigurationSerialization.registerClass(SaleRequest.class);
+        ConfigurationSerialization.registerClass(StoredPlayer.class);
     }
     
     @Override

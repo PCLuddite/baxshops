@@ -14,7 +14,7 @@ import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.Notification;
 import tbax.baxshops.serialization.StoredData;
 
-import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class CmdSkip extends BaxShopCommand
 {
@@ -77,7 +77,7 @@ public class CmdSkip extends BaxShopCommand
     @Override
     public void onCommand(ShopCmdActor actor) throws PrematureAbortException
     {
-        ArrayDeque<Notification> notifications = StoredData.getNotifications(actor.getPlayer());
+        Deque<Notification> notifications = StoredData.getNotifications(actor.getPlayer());
         if (notifications.isEmpty()) {
             actor.exitError(Resources.NOT_FOUND_NOTE);
         }

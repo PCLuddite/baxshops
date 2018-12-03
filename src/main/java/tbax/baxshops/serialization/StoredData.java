@@ -13,13 +13,13 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
+import tbax.baxshops.notification.NoteSet;
 import tbax.baxshops.notification.Notification;
 
 import java.io.*;
@@ -45,7 +45,7 @@ public final class StoredData
     /**
      * A map containing each player's notifications
      */
-    private static Map<UUID, ArrayDeque<Notification>> pending = new HashMap<>();
+    private static Map<UUID, Deque<Notification>> pending = new HashMap<>();
 
     /**
      * A map containing each player's display names for when they're offline
@@ -166,7 +166,7 @@ public final class StoredData
         
         FileConfiguration state = YamlConfiguration.loadConfiguration(stateLocation);
         
-        ArrayList<BaxShop> shoplist = (ArrayList)state.getList("shops");
+        List<BaxShop> shoplist = (List)state.getList("shops");
         for(BaxShop shop : shoplist) {
             for (Location loc : shop.getLocations()) {
                 locations.put(loc, shop.getId());
@@ -174,13 +174,12 @@ public final class StoredData
             shops.put(shop.getId(), shop);
         }
 
-        ConfigurationSection yNotes = state.getConfigurationSection("notes");
-        for(Map.Entry<String, Object> player : yNotes.getValues(false).entrySet()) {
-            UUID uuid = UUID.fromString(player.getKey());
-            pending.put(UUID.fromString(player.getKey()), new ArrayDeque<>((List)player.getValue()));
+        List<NoteSet> notes = (List)state.getList("notes");
+        for(NoteSet note : notes) {
+            pending.put(note.getRecipient(), note.getNotifications());
         }
 
-        ArrayList<StoredPlayer> playerList = (ArrayList)state.getList("players");
+        List<StoredPlayer> playerList = (List)state.getList("players");
         for(StoredPlayer player : playerList) {
             players.put(player.getUniqueId(), player);
         }
@@ -255,9 +254,9 @@ public final class StoredData
      * @param player the player
      * @return the player's notifications
      */
-    public static ArrayDeque<Notification> getNotifications(OfflinePlayer player)
+    public static Deque<Notification> getNotifications(OfflinePlayer player)
     {
-        ArrayDeque<Notification> n = pending.get(player);
+        Deque<Notification> n = pending.get(player);
         if (n == null) {
             n = new ArrayDeque<>();
             pending.put(player.getUniqueId(), n);
@@ -277,16 +276,12 @@ public final class StoredData
         FileConfiguration state = new YamlConfiguration();
         state.set("version", STATE_VERSION);
         state.set("shops", new ArrayList<>(shops.values()));
-
-        HashMap<String, List<String>> notes = new HashMap<>();
-        for(Map.Entry<UUID, ArrayDeque<Notification>> entry : pending.entrySet()) {
-            ArrayList noteList = new ArrayList();
-            noteList.addAll(entry.getValue());
-            notes.put(entry.getKey().toString(), noteList);
-        }
-        
-        state.createSection("notes", notes);
         state.set("players", new ArrayList<>(players.values()));
+        List<NoteSet> notes = new ArrayList<>();
+        for(Map.Entry<UUID, Deque<Notification>> entry : pending.entrySet()) {
+            notes.add(new NoteSet(entry.getKey(), entry.getValue()));
+        }
+        state.set("notes", notes);
         
         try {
             File dir = plugin.getDataFolder();

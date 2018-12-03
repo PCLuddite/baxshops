@@ -13,7 +13,7 @@ import tbax.baxshops.CommandHelp;
 import tbax.baxshops.notification.Notification;
 import tbax.baxshops.serialization.StoredData;
 
-import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class CmdNotifications extends BaxShopCommand
 {
@@ -93,7 +93,7 @@ public class CmdNotifications extends BaxShopCommand
         }
         else if (actor.getNumArgs() == 2) {
             if (actor.getArg(1).equalsIgnoreCase("clear")) {
-                ArrayDeque<Notification> notes = StoredData.getNotifications(actor.getPlayer());
+                Deque<Notification> notes = StoredData.getNotifications(actor.getPlayer());
                 notes.clear();
                 actor.getPlayer().sendMessage("Your notifications have been cleared");
             }
