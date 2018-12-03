@@ -154,4 +154,10 @@ public class StoredPlayer implements OfflinePlayer
         args.put("name", lastSeenName);
         return args;
     }
+
+    @Override
+    public String toString()
+    {
+        return getName();
+    }
 }
