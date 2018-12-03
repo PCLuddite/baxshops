@@ -65,7 +65,7 @@ public class CmdAdd extends BaxShopCommand
     @Override
     public boolean requiresPlayer(ShopCmdActor actor)
     {
-        return false;
+        return true;
     }
 
     @Override
