@@ -105,18 +105,16 @@ public class CmdCreate extends BaxShopCommand
         BaxShop shop = new BaxShop();
         shop.setId(UUID.randomUUID());
         shop.setOwner(owner);
-        
-        if (!StoredData.addShop(actor.getPlayer(), shop))
-            return;;
 
-        Block b = shop.buildShopSign(
-            loc, new String[] {
-                "",
-                (owner.getName().length() < 13 ? owner.getName() : owner.getName().substring(0, 12) + '…') + "'s",
-                "shop",
-                ""
-            }
+        Block b = shop.buildShopSign(loc,
+            "",
+            (owner.getName().length() < 13 ? owner.getName() : owner.getName().substring(0, 12) + '…') + "'s",
+            "shop",
+            ""
         );
+
+        if (!StoredData.addShop(actor.getPlayer(), shop))
+            return;
 
         if (actor.isAdmin() && actor.getNumArgs() == 3) {
             shop.setFlagInfinite(actor.getArgBoolean(2));

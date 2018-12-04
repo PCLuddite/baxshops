@@ -433,7 +433,7 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
         return inventory.iterator();
     }
 
-    public Block buildShopSign(Location loc, String[] signLines) throws PrematureAbortException
+    public Block buildShopSign(Location loc, String... signLines) throws PrematureAbortException
     {
         Location locUnder = loc.clone();
         locUnder.setY(locUnder.getY() - 1);
@@ -447,22 +447,19 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
         byte angle = (byte) ((((int) loc.getYaw() + 225) / 90) << 2);
 
         b.setType(Material.SIGN_POST);
-        try {
-            b.setData(angle, false);
-        }
-        catch(Exception e) {
-        }
+        loc.setYaw(angle);
+
         if (!b.getType().equals(Material.SIGN)) {
             b.setType(Material.SIGN_POST);
-            if (!b.getType().equals(Material.SIGN) && !b.getType().equals(Material.SIGN_POST)) {
+            if (!(b.getType().equals(Material.SIGN) || b.getType().equals(Material.SIGN_POST))) {
                 throw new CommandErrorException(String.format("Unable to place sign! Block type is %s.", b.getType().toString()));
             }
         }
 
-        addLocation(loc);
+        addLocation(b.getLocation());
 
         Sign sign = (Sign)b.getState();
-        for(int i = 0; i < signLines.length; i++) {
+        for(int i = 0; i < signLines.length; ++i) {
             sign.setLine(i, signLines[i]);
         }
         sign.update();
