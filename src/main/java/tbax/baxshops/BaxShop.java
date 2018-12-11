@@ -118,10 +118,6 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
     {
         locations.add(loc);
     }
-    
-    private int ceil(double x) {
-        return (int) Math.ceil(x);
-    }
 
     /**
      * Gets the number of pages in this shop's inventory.
@@ -130,7 +126,7 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
      */
     public int getPages()
     {
-        return ceil((double) inventory.size() / ITEMS_PER_PAGE);
+        return (int)Math.ceil((double) inventory.size() / ITEMS_PER_PAGE);
     }
 
     /**
