@@ -7,6 +7,8 @@ import java.lang.reflect.Method;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
+import tbax.baxshops.Format;
+import tbax.baxshops.Main;
 
 /**
  * @author iFamasssxD Modified by Timothy Baxendale
@@ -53,9 +55,9 @@ public class NMSUtils
             Method getName = getMethod(getNMSClass("ItemStack"), "getName");
             return (String)getName.invoke(nmsCopy);
         } catch (Exception e) {
-            e.printStackTrace();
+            Main.getLog().warning("Could not get item name for " + stack.getType());
         }
-        return null;
+        return stack.toString().replace("ItemStack", "");
     }
 
     public static Object getHandle(Entity entity) throws Exception
