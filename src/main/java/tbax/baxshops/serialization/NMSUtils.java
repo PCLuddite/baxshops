@@ -10,6 +10,7 @@ package tbax.baxshops.serialization;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
+import tbax.baxshops.ShopPlugin;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -55,11 +56,17 @@ public class NMSUtils
             Method asNMSCopy = getMethod(getCraftClass("inventory.CraftItemStack"), "asNMSCopy", new Class<?>[] { ItemStack.class });
             Object nmsCopy = asNMSCopy.invoke(null, stack);
             Method getName = getMethod(getNMSClass("ItemStack"), "getName");
-            return (String)getName.invoke(nmsCopy);
+            try {
+                return (String) getName.invoke(nmsCopy);
+            }
+            catch(ClassCastException e) {
+                Object msg = getName.invoke(nmsCopy);
+                return (String)msg.getClass().getMethod("getText").invoke(msg);
+            }
         } catch (Exception e) {
-            e.printStackTrace();
+            ShopPlugin.getInstance().getLogger().warning("Could not get item name for " + stack.getType());
+            return stack.getType().toString();
         }
-        return null;
     }
 
     public static Object getHandle(Entity entity) throws Exception
