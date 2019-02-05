@@ -1,14 +1,13 @@
 package tbax.baxshops.serialization;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
-import tbax.baxshops.Format;
 import tbax.baxshops.Main;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * @author iFamasssxD Modified by Timothy Baxendale
@@ -53,11 +52,17 @@ public class NMSUtils
             Method asNMSCopy = getMethod(getCraftClass("inventory.CraftItemStack"), "asNMSCopy", new Class<?>[] { ItemStack.class });
             Object nmsCopy = asNMSCopy.invoke(null, stack);
             Method getName = getMethod(getNMSClass("ItemStack"), "getName");
-            return (String)getName.invoke(nmsCopy);
+            try {
+                return (String) getName.invoke(nmsCopy);
+            }
+            catch(ClassCastException e) {
+                Object msg = getName.invoke(nmsCopy);
+                return (String)msg.getClass().getMethod("getText").invoke(msg);
+            }
         } catch (Exception e) {
             Main.getLog().warning("Could not get item name for " + stack.getType());
+            return stack.toString().replace("ItemStack", "");
         }
-        return stack.toString().replace("ItemStack", "");
     }
 
     public static Object getHandle(Entity entity) throws Exception
