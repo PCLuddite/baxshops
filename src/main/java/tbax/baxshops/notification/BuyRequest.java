@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class BuyRequest implements Request
+public final class BuyRequest implements Request
 {
     private UUID buyer;
     private UUID seller;

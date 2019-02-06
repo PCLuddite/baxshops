@@ -11,7 +11,7 @@ import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.StoredData;
 
-public class CmdDelete extends BaxShopCommand
+public final class CmdDelete extends BaxShopCommand
 {
     @Override
     public String getName()

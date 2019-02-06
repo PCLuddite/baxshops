@@ -15,7 +15,7 @@ import tbax.baxshops.serialization.ItemNames;
 
 import java.util.List;
 
-public class CmdRestock extends BaxShopCommand
+public final class CmdRestock extends BaxShopCommand
 {
     @Override
     public String getName()

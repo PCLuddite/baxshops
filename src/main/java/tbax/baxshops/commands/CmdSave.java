@@ -11,7 +11,7 @@ import tbax.baxshops.CommandHelp;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.StoredData;
 
-public class CmdSave extends BaxShopCommand
+public final class CmdSave extends BaxShopCommand
 {
 
     @Override

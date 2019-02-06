@@ -14,7 +14,7 @@ import tbax.baxshops.Resources;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
 
-public class CmdCopy extends BaxShopCommand
+public final class CmdCopy extends BaxShopCommand
 {
     @Override
     public String getName()

@@ -55,6 +55,10 @@ public final class StoredData
     private static ShopPlugin plugin;
     private static Logger log;
 
+    private StoredData()
+    {
+    }
+
     public static BaxShop getShop(UUID uid)
     {
         return shops.get(uid);

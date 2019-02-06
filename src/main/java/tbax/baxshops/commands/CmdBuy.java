@@ -14,7 +14,7 @@ import tbax.baxshops.notification.BuyNotification;
 import tbax.baxshops.notification.BuyRequest;
 import tbax.baxshops.serialization.ItemNames;
 
-public class CmdBuy extends BaxShopCommand
+public final class CmdBuy extends BaxShopCommand
 {
     @Override
     public String getName()

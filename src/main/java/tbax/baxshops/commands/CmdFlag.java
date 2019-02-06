@@ -12,7 +12,7 @@ import tbax.baxshops.CommandHelpArgument;
 import tbax.baxshops.commands.flags.*;
 import tbax.baxshops.errors.PrematureAbortException;
 
-public class CmdFlag extends BaxShopCommand
+public final class CmdFlag extends BaxShopCommand
 {
     private final CommandMap flagCmds = new CommandMap(
         FlagCmdSellToShop.class,

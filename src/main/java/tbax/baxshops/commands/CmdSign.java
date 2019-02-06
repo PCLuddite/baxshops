@@ -16,7 +16,7 @@ import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
 
-public class CmdSign extends BaxShopCommand
+public final class CmdSign extends BaxShopCommand
 {
     @Override
     public String getName()

@@ -11,7 +11,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 import java.util.*;
 
-public class NoteSet implements ConfigurationSerializable
+public final class NoteSet implements ConfigurationSerializable
 {
     private UUID recipient;
     private Deque<Notification> notes = new ArrayDeque<>();

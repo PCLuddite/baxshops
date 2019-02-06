@@ -10,7 +10,7 @@ package tbax.baxshops.commands;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
 
-public class CmdSetAmnt extends BaxShopCommand
+public final class CmdSetAmnt extends BaxShopCommand
 {
     @Override
     public String getName()

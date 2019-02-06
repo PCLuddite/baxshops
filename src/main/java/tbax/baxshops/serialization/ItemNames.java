@@ -48,6 +48,10 @@ public final class ItemNames
      */
     private static final HashMap<Enchantment, String> enchants = new HashMap<>();
 
+    private ItemNames()
+    {
+    }
+    
     public static BaxEntry getItemFromAlias(String input, BaxShop shop) throws PrematureAbortException
     {
         String[] inputwords = getItemAlias(input);

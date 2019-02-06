@@ -7,6 +7,6 @@
 
 package tbax.baxshops.errors;
 
-public class PrematureAbortException extends Exception
+public abstract class PrematureAbortException extends Exception
 {
 }

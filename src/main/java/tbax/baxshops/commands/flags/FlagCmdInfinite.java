@@ -13,7 +13,7 @@ import tbax.baxshops.Format;
 import tbax.baxshops.commands.ShopCmdActor;
 import tbax.baxshops.errors.PrematureAbortException;
 
-public class FlagCmdInfinite extends FlagCmd
+public final class FlagCmdInfinite extends FlagCmd
 {
     @Override
     public String[] getAliases()

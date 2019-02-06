@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class SaleRequest implements Request
+public final class SaleRequest implements Request
 {
     private UUID buyer;
     private UUID seller;

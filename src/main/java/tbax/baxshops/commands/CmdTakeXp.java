@@ -11,7 +11,7 @@ import org.bukkit.entity.Player;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
 
-public class CmdTakeXp extends BaxShopCommand
+public final class CmdTakeXp extends BaxShopCommand
 {
     @Override
     public String getName()

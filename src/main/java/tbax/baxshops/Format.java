@@ -18,6 +18,10 @@ import java.util.UUID;
  */
 public final class Format
 {   
+    private Format()
+    {
+    }
+
     public static String money(String in)
     {
         return reset(ChatColor.GREEN + in);

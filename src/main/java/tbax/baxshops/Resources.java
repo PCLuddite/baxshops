@@ -11,11 +11,10 @@ import org.bukkit.ChatColor;
 
 public final class Resources
 {
-    // TODO: Timed notifications
-    /**
-     * The block ID for a signpost
-     */
-    public static final int SIGN = 63;
+    private Resources()
+    {
+    }
+
 
     /**
      * The distance from the sign in any direction which the player can go

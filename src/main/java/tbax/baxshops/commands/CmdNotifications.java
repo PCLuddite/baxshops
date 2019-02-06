@@ -15,7 +15,7 @@ import tbax.baxshops.serialization.StoredData;
 
 import java.util.Deque;
 
-public class CmdNotifications extends BaxShopCommand
+public final class CmdNotifications extends BaxShopCommand
 {
     @Override
     public String getName()

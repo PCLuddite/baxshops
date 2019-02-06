@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class BuyNotification implements Notification
+public final class BuyNotification implements Notification
 {
     private BaxEntry entry;
     private UUID buyer;

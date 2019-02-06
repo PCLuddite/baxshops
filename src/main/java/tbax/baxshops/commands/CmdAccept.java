@@ -18,7 +18,7 @@ import tbax.baxshops.serialization.StoredData;
 
 import java.util.Deque;
 
-public class CmdAccept extends BaxShopCommand
+public final class CmdAccept extends BaxShopCommand
 {
     @Override
     public String getName()

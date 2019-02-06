@@ -14,7 +14,7 @@ import tbax.baxshops.ShopSelection;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
 
-public class CmdTeleport extends BaxShopCommand
+public final class CmdTeleport extends BaxShopCommand
 {
     @Override
     public String getName()

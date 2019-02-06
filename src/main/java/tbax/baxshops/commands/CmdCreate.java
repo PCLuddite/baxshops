@@ -18,7 +18,7 @@ import tbax.baxshops.serialization.StoredData;
 
 import java.util.UUID;
 
-public class CmdCreate extends BaxShopCommand
+public final class CmdCreate extends BaxShopCommand
 {
     @Override
     public String getName()

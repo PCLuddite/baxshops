@@ -7,7 +7,7 @@
 
 package tbax.baxshops.errors;
 
-public class CommandMessageException extends PrematureAbortException
+public final class CommandMessageException extends PrematureAbortException
 {
     private Exception innerEx;
     private String errMsg;

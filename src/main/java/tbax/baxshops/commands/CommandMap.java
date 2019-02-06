@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class CommandMap implements Map<String, BaxShopCommand>
+public final class CommandMap implements Map<String, BaxShopCommand>
 {
     private final Map<String, BaxShopCommand> cmds = new HashMap<>();
 

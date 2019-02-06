@@ -14,7 +14,7 @@ import tbax.baxshops.commands.ShopCmdActor;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.StoredData;
 
-public class FlagCmdOwner extends FlagCmd
+public final class FlagCmdOwner extends FlagCmd
 {
     @Override
     public String[] getAliases()

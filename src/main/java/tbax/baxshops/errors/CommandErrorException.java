@@ -9,7 +9,7 @@ package tbax.baxshops.errors;
 
 import org.bukkit.ChatColor;
 
-public class CommandErrorException extends PrematureAbortException
+public final class CommandErrorException extends PrematureAbortException
 {
     private Exception innerEx;
     private String errMsg;

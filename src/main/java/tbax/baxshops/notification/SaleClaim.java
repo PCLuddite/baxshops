@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class SaleClaim implements Claimable
+public final class SaleClaim implements Claimable
 {
     private UUID buyer;
     private UUID seller;

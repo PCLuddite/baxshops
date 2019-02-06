@@ -19,7 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class SaleRejection implements Claimable
+public final class SaleRejection implements Claimable
 {
     private UUID seller;
     private UUID buyer;

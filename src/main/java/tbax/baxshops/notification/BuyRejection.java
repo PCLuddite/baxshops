@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class BuyRejection implements Notification
+public final class BuyRejection implements Notification
 {
     private UUID seller;
     private UUID buyer;

@@ -9,6 +9,10 @@ package tbax.baxshops;
 
 public final class MathUtil
 {
+    private MathUtil()
+    {
+    }
+
     public static double roundedDouble(double n)
     {
         return Math.round(100d * n) / 100d;

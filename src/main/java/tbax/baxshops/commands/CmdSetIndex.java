@@ -13,7 +13,7 @@ import tbax.baxshops.Resources;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
 
-public class CmdSetIndex extends BaxShopCommand
+public final class CmdSetIndex extends BaxShopCommand
 {
     @Override
     public String getName()

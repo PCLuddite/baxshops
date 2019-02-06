@@ -25,6 +25,10 @@ import java.util.UUID;
  */
 public final class PlayerUtil
 {
+    private PlayerUtil()
+    {
+    }
+
     /**
      * gives an ItemStack to a player
      * @param player recipient of the ItemStack

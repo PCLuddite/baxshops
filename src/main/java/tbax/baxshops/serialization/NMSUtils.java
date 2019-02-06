@@ -16,7 +16,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class NMSUtils
+public final class NMSUtils
 {
     static String version = "";
 
@@ -24,6 +24,10 @@ public class NMSUtils
         String name = Bukkit.getServer().getClass().getPackage().getName();
         String mcVersion = name.substring(name.lastIndexOf('.') + 1);
         version = mcVersion + ".";
+    }
+
+    private NMSUtils()
+    {
     }
 
     public static Class<?> getCraftClass(String ClassName)

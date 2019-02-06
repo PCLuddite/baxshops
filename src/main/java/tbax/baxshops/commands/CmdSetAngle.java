@@ -13,7 +13,7 @@ import tbax.baxshops.Format;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
 
-public class CmdSetAngle extends BaxShopCommand
+public final class CmdSetAngle extends BaxShopCommand
 {
     @Override
     public String getName()

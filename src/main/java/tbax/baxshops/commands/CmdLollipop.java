@@ -13,7 +13,7 @@ import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
 import tbax.baxshops.notification.LollipopNotification;
 
-public class CmdLollipop extends BaxShopCommand
+public final class CmdLollipop extends BaxShopCommand
 {
     @Override
     public String getName()

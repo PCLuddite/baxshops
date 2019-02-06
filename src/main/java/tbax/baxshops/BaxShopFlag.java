@@ -16,6 +16,10 @@ public final class BaxShopFlag
     public static final int BUY_REQUESTS = 1<<4;   // 001000
     public static final int SELL_REQUESTS = 1<<5;  // 010000
 
+    private BaxShopFlag()
+    {
+    }
+    
     public static boolean hasFlag(int n, int flag)
     {
         return (n & flag) == flag;

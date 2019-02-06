@@ -11,7 +11,7 @@ import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.ItemNames;
 
-public class CmdSet extends BaxShopCommand
+public final class CmdSet extends BaxShopCommand
 {
     @Override
     public String getName()
