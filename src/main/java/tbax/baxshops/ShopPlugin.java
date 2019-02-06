@@ -136,7 +136,7 @@ public final class ShopPlugin extends JavaPlugin
 
     public static ShopSelection getSelection(Player player)
     {
-        ShopSelection selected = selectedShops.get(player);
+        ShopSelection selected = selectedShops.get(player.getUniqueId());
         if (selected == null) {
             selected = new ShopSelection();
             selectedShops.put(player.getUniqueId(), selected);
@@ -278,7 +278,7 @@ public final class ShopPlugin extends JavaPlugin
             else if(cmd.requiresSelection(actor) && actor.getSelection() == null) {
                 actor.sendError(Resources.NOT_FOUND_SELECTED);
             }
-            else if(cmd.requiresOwner(actor) && !actor.isOwner()) {
+            else if(cmd.requiresOwner(actor) && !(actor.isOwner() || actor.isAdmin())) {
                 actor.sendError("You must be the owner of the shop to use /shop %s", actor.getAction());
             }
             else if(cmd.requiresItemInHand(actor) && actor.getItemInHand() == null) {
