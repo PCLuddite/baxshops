@@ -17,6 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.ItemNames;
+import tbax.baxshops.serialization.StateConversion;
 import tbax.baxshops.serialization.StoredData;
 
 import java.util.*;
@@ -27,6 +28,7 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
     
     private UUID id;
     private UUID ownerId;
+    private String legacyOwner;
     private final ArrayList<Location> locations = new ArrayList<>();
     private final ArrayList<BaxEntry> inventory = new ArrayList<>();
 
@@ -38,13 +40,21 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
     
     public BaxShop(Map<String, Object> args)
     {
-        id = UUID.fromString((String)args.get("id"));
-        ownerId = UUID.fromString((String)args.get("owner"));
-        flags = (int)args.get("flags");
-        inventory.addAll((ArrayList)args.get("inventory"));
-        locations.addAll((ArrayList)args.get("locations"));
+        if (args.containsKey("flag")) {
+            id = UUID.fromString((String) args.get("id"));
+            ownerId = UUID.fromString((String) args.get("owner"));
+            flags = (int) args.get("flags");
+        }
+        else {
+            id = UUID.randomUUID();
+            legacyOwner = (String)args.get("owner");
+            ownerId = null;
+            flags = StateConversion.flagMapToFlag(args);
+        }
+        inventory.addAll((ArrayList) args.get("inventory"));
+        locations.addAll((ArrayList) args.get("locations"));
         if (hasFlagInfinite()) {
-            for(BaxEntry entry : inventory) {
+            for (BaxEntry entry : inventory) {
                 entry.setInfinite(true);
             }
         }
@@ -62,7 +72,16 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
 
     public OfflinePlayer getOwner()
     {
-        return StoredData.getOfflinePlayer(ownerId);
+        if (ownerId == null) {
+            try {
+                return StoredData.getOfflinePlayer(legacyOwner);
+            }
+            catch (PrematureAbortException e) {
+                return null;
+            }
+        } else {
+            return StoredData.getOfflinePlayer(ownerId);
+        }
     }
 
     public void setOwner(OfflinePlayer newOwner)
@@ -406,7 +425,7 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
     {
         HashMap<String, Object> map = new HashMap<>();
         map.put("id", id.toString());
-        map.put("owner", ownerId.toString());
+        map.put("owner", getOwner() == null ? null : getOwner().getUniqueId().toString());
         map.put("flags", flags);
         map.put("inventory", inventory);
         map.put("locations", locations);

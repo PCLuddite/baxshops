@@ -175,13 +175,17 @@ public final class StoredData
         }
 
         List<NoteSet> notes = (List)state.getList("notes");
-        for(NoteSet note : notes) {
-            pending.put(note.getRecipient(), note.getNotifications());
+        if (notes != null) {
+            for (NoteSet note : notes) {
+                pending.put(note.getRecipient(), note.getNotifications());
+            }
         }
 
         List<StoredPlayer> playerList = (List)state.getList("players");
-        for(StoredPlayer player : playerList) {
-            players.put(player.getUniqueId(), player);
+        if (playerList != null) {
+            for (StoredPlayer player : playerList) {
+                players.put(player.getUniqueId(), player);
+            }
         }
         return true;
     }
