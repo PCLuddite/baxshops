@@ -264,9 +264,9 @@ public final class ShopPlugin extends JavaPlugin
         BaxShopCommand cmd = commands.get(actor.getAction());
         try {
             if (cmd == null) {
-                actor.sendMessage(Resources.INVALID_SHOP_ACTION, actor.getAction());
+                actor.sendError(Resources.INVALID_SHOP_ACTION, actor.getAction());
             }
-            if (!cmd.hasValidArgCount(actor)) {
+            else if (!cmd.hasValidArgCount(actor)) {
                 actor.sendMessage(cmd.getHelp(actor).toString());
             }
             else if(!cmd.hasPermission(actor)) {
