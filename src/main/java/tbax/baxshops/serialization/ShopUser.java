@@ -24,6 +24,7 @@ public final class ShopUser
     public ShopUser(String name)
     {
         legacyName = name;
+        StoredData.getOfflinePlayer(name);
     }
 
     public boolean isLegacy()

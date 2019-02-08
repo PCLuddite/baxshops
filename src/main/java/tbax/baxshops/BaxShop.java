@@ -415,7 +415,7 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
     {
         HashMap<String, Object> map = new HashMap<>();
         map.put("id", id.toString());
-        map.put("owner", getOwner() == null ? null : getOwner().getUniqueId().toString());
+        map.put("owner", owner.getOfflinePlayer().getUniqueId().toString());
         map.put("flags", flags);
         map.put("inventory", inventory);
         map.put("locations", locations);
