@@ -16,8 +16,11 @@ LogNotes: false
 # How much 1 XP level costs.
 XPConvert: 4.00
 
-# Whether or not to instate a death tax. Stupid deaths will be taxed by percentage
-# and deposited into an account. Uncomment this structure to enable it.
+# Stupid deaths can be taxed by percentage and deposited into an account. 
+# Uncomment this structure to enable this feature. The default UUID
+# below is a dummy account. If used, funds will not be deposited into any account.
+#
 # DeathTax:
-#      GoesTo:     world
+#      GoesTo:     "326a36ea-b465-3192-a4f7-c313f347edc9"
 #      Percentage: 0.04
+#      Minimum:    100.00

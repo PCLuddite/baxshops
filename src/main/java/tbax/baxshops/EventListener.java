@@ -247,18 +247,38 @@ public class EventListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDeath(PlayerDeathEvent event)
     {
-        String name = plugin.getConfig().getString("DeathTax.GoesTo", null);
-        if (name != null) {
+        if (!isStupidDeath(event.getEntity().getLastDamageCause().getCause()))
+            return;
+
+        try {
+            String stringId = plugin.getConfig().getString("DeathTax.GoesTo", null);
+            if (stringId == null)
+                return;
+
+            UUID uuid;
+            try {
+                uuid = UUID.fromString(stringId);
+            }
+            catch (IllegalArgumentException e) {
+                throw new CommandWarningException("Cannot impose death tax because player id is invalid.");
+            }
+
             Player pl = event.getEntity();
-            if (ShopPlugin.getEconomy().has(pl, 100.00) && isStupidDeath(pl.getLastDamageCause().getCause())) {
-                double death_tax = ShopPlugin.getEconomy().getBalance(pl) * plugin.getConfig().getDouble("DeathTax.Percentage", 0.04);
+            double minimum = plugin.getConfig().getDouble("DeathTax.Minimum", 100.0d);
+            double percent = plugin.getConfig().getDouble("DeathTax.Percentage", 0.04);
+            if (ShopPlugin.getEconomy().has(pl, minimum)) {
+                double death_tax = MathUtil.multiply(ShopPlugin.getEconomy().getBalance(pl), percent);
                 ShopPlugin.getEconomy().withdrawPlayer(pl, death_tax);
-                ShopPlugin.getEconomy().depositPlayer(name, death_tax);
                 pl.sendMessage(String.format("You were fined %s for dying.", Format.money(death_tax)));
+                if (!uuid.equals(WorldPlayer.PLAYER.getUniqueId())) // do not deposit in dummy world account
+                    ShopPlugin.getEconomy().depositPlayer(StoredData.getOfflinePlayer(uuid), death_tax);
                 if (plugin.getConfig().getBoolean("LogNotes", false)) {
                     ShopPlugin.getInstance().getLogger().info(Format.toAnsiColor(String.format("%s was fined %s for dying.", Format.username(pl.getName()), Format.money(death_tax))));
                 }
             }
+        }
+        catch (PrematureAbortException e) {
+            plugin.getLogger().warning(e.getMessage());
         }
     }
     
