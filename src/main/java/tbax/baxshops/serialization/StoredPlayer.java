@@ -21,8 +21,9 @@ public class StoredPlayer implements OfflinePlayer
     public static final String DUMMY_NAME = "world";
     public static final StoredPlayer DUMMY = new StoredPlayer(DUMMY_NAME, DUMMY_UUID);
 
-    private final UUID uuid;
+    private UUID uuid;
     private String lastSeenName;
+    private boolean legacyPlayer;
 
     private StoredPlayer(String name, UUID uuid)
     {
@@ -32,19 +33,24 @@ public class StoredPlayer implements OfflinePlayer
 
     public StoredPlayer(Player player)
     {
+        legacyPlayer = false;
         uuid = player.getUniqueId();
         lastSeenName = player.getName();
     }
 
-    public StoredPlayer(UUID uuid)
+    @Deprecated
+    public StoredPlayer(String name)
     {
-        this.uuid = uuid;
+        legacyPlayer = true;
+        uuid = UUID.randomUUID();
+        lastSeenName = name;
     }
 
     public StoredPlayer(Map<String, Object> args)
     {
         uuid = UUID.fromString((String)args.get("uuid"));
         lastSeenName = (String)args.get("name");
+        legacyPlayer = (boolean)args.getOrDefault("legacy", true);
     }
 
     public OfflinePlayer getOfflinePlayer()
@@ -54,6 +60,18 @@ public class StoredPlayer implements OfflinePlayer
             lastSeenName = player.getPlayer().getName();
         }
         return  player;
+    }
+
+    public boolean isLegacyPlayer()
+    {
+        return legacyPlayer;
+    }
+
+    public void convertLegacy(Player player)
+    {
+        this.legacyPlayer = false;
+        uuid = player.getUniqueId();
+        lastSeenName = player.getName();
     }
 
     @Override
@@ -162,6 +180,7 @@ public class StoredPlayer implements OfflinePlayer
         Map<String, Object> args = new HashMap<>();
         args.put("uuid", uuid.toString());
         args.put("name", lastSeenName);
+        args.put("legacy", legacyPlayer);
         return args;
     }
 

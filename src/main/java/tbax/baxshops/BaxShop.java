@@ -17,6 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.ItemNames;
+import tbax.baxshops.serialization.ShopUser;
 import tbax.baxshops.serialization.StateConversion;
 import tbax.baxshops.serialization.StoredData;
 
@@ -27,10 +28,9 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
     public static final int ITEMS_PER_PAGE = 7;
     
     private UUID id;
-    private UUID ownerId;
-    private String legacyOwner;
-    private final ArrayList<Location> locations = new ArrayList<>();
-    private final ArrayList<BaxEntry> inventory = new ArrayList<>();
+    private ShopUser owner;
+    private final List<Location> locations = new ArrayList<>();
+    private final List<BaxEntry> inventory = new ArrayList<>();
 
     private int flags = BaxShopFlag.NOTIFY | BaxShopFlag.SELL_REQUESTS;
 
@@ -42,13 +42,12 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
     {
         if (args.containsKey("flags")) {
             id = UUID.fromString((String) args.get("id"));
-            ownerId = UUID.fromString((String) args.get("owner"));
+            owner = new ShopUser(UUID.fromString((String)args.get("owner")));
             flags = (int) args.get("flags");
         }
         else {
             id = UUID.randomUUID();
-            legacyOwner = (String)args.get("owner");
-            ownerId = null;
+            owner = new ShopUser((String)args.get("owner"));
             flags = StateConversion.flagMapToFlag(args);
         }
         inventory.addAll((ArrayList) args.get("inventory"));
@@ -72,21 +71,12 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
 
     public OfflinePlayer getOwner()
     {
-        if (ownerId == null) {
-            try {
-                return StoredData.getOfflinePlayer(legacyOwner);
-            }
-            catch (PrematureAbortException e) {
-                return null;
-            }
-        } else {
-            return StoredData.getOfflinePlayer(ownerId);
-        }
+        return owner.getOfflinePlayer();
     }
 
     public void setOwner(OfflinePlayer newOwner)
     {
-        ownerId = newOwner.getUniqueId();
+        owner = new ShopUser(newOwner.getUniqueId());
     }
     
     public int getIndexOfEntry(BaxEntry entry)

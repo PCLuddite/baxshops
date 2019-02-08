@@ -51,6 +51,7 @@ public final class StoredData
      * A map containing each player's display names for when they're offline
      */
     private static Map<UUID, StoredPlayer> players = new HashMap<>();
+    private static Map<String, StoredPlayer> legacyPlayers = new HashMap<>();
 
     private static ShopPlugin plugin;
     private static Logger log;
@@ -191,6 +192,8 @@ public final class StoredData
             for (StoredPlayer player : playerList) {
                 if (player.equals(StoredPlayer.DUMMY))
                     hasWorld = true;
+                if (player.isLegacyPlayer())
+                    legacyPlayers.put(player.getName(), player);
                 players.put(player.getUniqueId(), player);
             }
         }
@@ -320,19 +323,28 @@ public final class StoredData
     }
 
     @Deprecated
-    public static OfflinePlayer getOfflinePlayer(String playerName) throws PrematureAbortException
+    public static OfflinePlayer getOfflinePlayer(String playerName)
     {
-        for (StoredPlayer player : players.values()) {
-            if (player.getName().equals(playerName)) {
-                return player;
-            }
+        StoredPlayer player = legacyPlayers.get(playerName);
+        if (player == null) {
+            player = new StoredPlayer(playerName);
+            legacyPlayers.put(playerName, player);
+            players.put(player.getUniqueId(), player);
         }
-        throw new CommandErrorException("This player has not been set up yet. The player must log in at least once.");
+        return player;
     }
 
     public static StoredPlayer joinPlayer(Player player)
     {
-        return players.put(player.getUniqueId(), new StoredPlayer(player));
+        StoredPlayer storedPlayer = legacyPlayers.remove(player.getName());
+        if (storedPlayer == null) {
+            storedPlayer = new StoredPlayer(player);
+        }
+        else {
+            players.remove(storedPlayer.getUniqueId());
+            storedPlayer.convertLegacy(player);
+        }
+        return players.put(storedPlayer.getUniqueId(), storedPlayer);
     }
 
 }
