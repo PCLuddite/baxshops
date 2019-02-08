@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public final class StoredPlayer implements OfflinePlayer
+public class StoredPlayer implements OfflinePlayer
 {
     private UUID uuid;
     private String lastSeenName;

@@ -186,11 +186,18 @@ public final class StoredData
         }
 
         List<StoredPlayer> playerList = (List)state.getList("players");
+        boolean hasWorld = false;
         if (playerList != null) {
             for (StoredPlayer player : playerList) {
+                if (player.equals(WorldPlayer.PLAYER))
+                    hasWorld = true;
                 players.put(player.getUniqueId(), player);
             }
         }
+
+        if (!hasWorld)
+            players.put(WorldPlayer.PLAYER.getUniqueId(), WorldPlayer.PLAYER);
+
         return true;
     }
     
