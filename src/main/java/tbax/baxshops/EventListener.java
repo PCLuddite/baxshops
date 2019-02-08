@@ -34,7 +34,7 @@ import tbax.baxshops.errors.CommandWarningException;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.Notification;
 import tbax.baxshops.serialization.StoredData;
-import tbax.baxshops.serialization.WorldPlayer;
+import tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.Deque;
 import java.util.UUID;
@@ -271,7 +271,7 @@ public class EventListener implements Listener
                 double death_tax = MathUtil.multiply(ShopPlugin.getEconomy().getBalance(pl), percent);
                 ShopPlugin.getEconomy().withdrawPlayer(pl, death_tax);
                 pl.sendMessage(String.format("You were fined %s for dying.", Format.money(death_tax)));
-                if (!uuid.equals(WorldPlayer.PLAYER.getUniqueId())) // do not deposit in dummy world account
+                if (!uuid.equals(StoredPlayer.DUMMY_UUID)) // do not deposit in dummy world account
                     ShopPlugin.getEconomy().depositPlayer(StoredData.getOfflinePlayer(uuid), death_tax);
                 if (plugin.getConfig().getBoolean("LogNotes", false)) {
                     ShopPlugin.getInstance().getLogger().info(Format.toAnsiColor(String.format("%s was fined %s for dying.", Format.username(pl.getName()), Format.money(death_tax))));

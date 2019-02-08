@@ -189,14 +189,14 @@ public final class StoredData
         boolean hasWorld = false;
         if (playerList != null) {
             for (StoredPlayer player : playerList) {
-                if (player.equals(WorldPlayer.PLAYER))
+                if (player.equals(StoredPlayer.DUMMY))
                     hasWorld = true;
                 players.put(player.getUniqueId(), player);
             }
         }
 
         if (!hasWorld)
-            players.put(WorldPlayer.PLAYER.getUniqueId(), WorldPlayer.PLAYER);
+            players.put(StoredPlayer.DUMMY_UUID, StoredPlayer.DUMMY);
 
         return true;
     }

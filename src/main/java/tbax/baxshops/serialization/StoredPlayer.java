@@ -17,8 +17,18 @@ import java.util.UUID;
 
 public class StoredPlayer implements OfflinePlayer
 {
-    private UUID uuid;
+    public static final UUID DUMMY_UUID = UUID.fromString("326a36ea-b465-3192-a4f7-c313f347edc9");
+    public static final String DUMMY_NAME = "world";
+    public static final StoredPlayer DUMMY = new StoredPlayer(DUMMY_NAME, DUMMY_UUID);
+
+    private final UUID uuid;
     private String lastSeenName;
+
+    private StoredPlayer(String name, UUID uuid)
+    {
+        this.uuid = uuid;
+        this.lastSeenName = name;
+    }
 
     public StoredPlayer(Player player)
     {
