@@ -20,6 +20,7 @@ import tbax.baxshops.commands.*;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.*;
 import tbax.baxshops.serialization.StoredData;
+import tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.Deque;
 import java.util.HashMap;

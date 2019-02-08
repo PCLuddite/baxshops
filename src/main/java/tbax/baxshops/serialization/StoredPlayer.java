@@ -4,7 +4,7 @@
  *
  *  +++====+++
 **/
-package tbax.baxshops;
+package tbax.baxshops.serialization;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

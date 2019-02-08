@@ -34,6 +34,7 @@ import tbax.baxshops.errors.CommandWarningException;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.Notification;
 import tbax.baxshops.serialization.StoredData;
+import tbax.baxshops.serialization.WorldPlayer;
 
 import java.util.Deque;
 import java.util.UUID;
