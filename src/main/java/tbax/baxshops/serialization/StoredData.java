@@ -274,7 +274,7 @@ public final class StoredData
      */
     public static Deque<Notification> getNotifications(OfflinePlayer player)
     {
-        Deque<Notification> n = pending.get(player);
+        Deque<Notification> n = pending.get(player.getUniqueId());
         if (n == null) {
             n = new ArrayDeque<>();
             pending.put(player.getUniqueId(), n);
@@ -334,17 +334,20 @@ public final class StoredData
         return player;
     }
 
-    public static StoredPlayer joinPlayer(Player player)
+    public static void joinPlayer(Player player)
     {
         StoredPlayer storedPlayer = legacyPlayers.remove(player.getName());
         if (storedPlayer == null) {
             storedPlayer = new StoredPlayer(player);
         }
         else {
+            Deque<Notification> notes = pending.remove(storedPlayer.getUniqueId());
             players.remove(storedPlayer.getUniqueId());
             storedPlayer.convertLegacy(player);
+            if (notes != null)
+                pending.put(storedPlayer.getUniqueId(), notes);
         }
-        return players.put(storedPlayer.getUniqueId(), storedPlayer);
+        players.put(storedPlayer.getUniqueId(), storedPlayer);
     }
 
 }
