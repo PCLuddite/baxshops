@@ -40,7 +40,7 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
     
     public BaxShop(Map<String, Object> args)
     {
-        if (args.containsKey("flag")) {
+        if (args.containsKey("flags")) {
             id = UUID.fromString((String) args.get("id"));
             ownerId = UUID.fromString((String) args.get("owner"));
             flags = (int) args.get("flags");
