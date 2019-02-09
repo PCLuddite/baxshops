@@ -86,8 +86,8 @@ public final class CmdSet extends BaxShopCommand
 
         if (actor.isArgInt(1)) {
             int index = actor.getArgInt(1) - 1;
-            if (index < shop.getInventorySize() && index >= 0) {
-                entry = shop.getEntryAt(index);
+            if (index < shop.size() && index >= 0) {
+                entry = shop.getEntry(index);
             }
         }
         else {

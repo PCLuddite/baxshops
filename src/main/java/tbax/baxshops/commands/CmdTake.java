@@ -52,7 +52,7 @@ public final class CmdTake extends BaxShopCommand
         if (actor.getNumArgs() == 3 || actor.getNumArgs() == 2)
             return true;
         shop = actor.getShop();
-        return actor.getNumArgs() == 1 && shop != null && shop.getInventorySize() == 1;
+        return actor.getNumArgs() == 1 && shop != null && shop.size() == 1;
     }
 
     @Override

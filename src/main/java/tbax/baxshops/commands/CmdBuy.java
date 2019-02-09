@@ -49,7 +49,7 @@ public final class CmdBuy extends BaxShopCommand
     public boolean hasValidArgCount(ShopCmdActor actor)
     {
         if (actor.getNumArgs() == 1) {
-            return actor.getShop() != null && actor.getShop().getInventorySize() == 1;
+            return actor.getShop() != null && actor.getShop().size() == 1;
         }
         return actor.getNumArgs() == 2 || actor.getNumArgs() == 3;
     }

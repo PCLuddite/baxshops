@@ -23,7 +23,7 @@ import tbax.baxshops.serialization.StoredData;
 
 import java.util.*;
 
-public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEntry>
+public final class BaxShop implements ConfigurationSerializable, Collection<BaxEntry>
 {
     public static final int ITEMS_PER_PAGE = 7;
     
@@ -37,7 +37,8 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
     public BaxShop()
     {
     }
-    
+
+    @SuppressWarnings("unchecked")
     public BaxShop(Map<String, Object> args)
     {
         if (args.containsKey("flags")) {
@@ -57,6 +58,15 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
                 entry.setInfinite(true);
             }
         }
+    }
+
+    public BaxShop(BaxShop shop)
+    {
+        id = shop.id;
+        owner = shop.owner;
+        locations.addAll(shop.locations);
+        shop.stream().map(BaxEntry::new).forEach(inventory::add);
+        flags = shop.flags;
     }
 
     public UUID getId()
@@ -79,7 +89,7 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
         owner = new ShopUser(newOwner.getUniqueId());
     }
     
-    public int getIndexOfEntry(BaxEntry entry)
+    public int indexOf(BaxEntry entry)
     {
         for(int index = 0; index < inventory.size(); index++) {
             if (inventory.get(index).equals(entry)) {
@@ -112,6 +122,7 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
         return false;
     }
     
+    @SuppressWarnings("UnusedReturnValue")
     public boolean removeLocation(Location loc)
     {
         for(int i = 0; i < locations.size(); ++i) {
@@ -128,30 +139,37 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
         locations.add(loc);
     }
 
-    /**
-     * Gets the number of pages in this shop's inventory.
-     *
-     * @return the number of pages
-     */
     public int getPages()
     {
         return (int)Math.ceil((double) inventory.size() / ITEMS_PER_PAGE);
     }
 
-    /**
-     * Gets the number of items in this shop's inventory.
-     *
-     * @return the number of items
-     */
-    public int getInventorySize()
+    @Override
+    public int size()
     {
         return inventory.size();
+    }
+
+    @Override
+    public boolean isEmpty()
+    {
+        return inventory.isEmpty();
+    }
+
+    @Override
+    public boolean contains(Object o)
+    {
+        if (o instanceof BaxEntry)
+            return contains((BaxEntry)o);
+        if (o instanceof ItemStack)
+            return contains((ItemStack)o);
+        return false;
     }
 
     public BaxEntry getEntry(String arg) throws PrematureAbortException
     {
         try {
-            return getEntryAt(Integer.parseInt(arg) - 1);
+            return getEntry(Integer.parseInt(arg) - 1);
         }
         catch (NumberFormatException e) {
             return ItemNames.getItemFromAlias(arg, this);
@@ -161,44 +179,67 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
         }
     }
 
-    /**
-     * Gets the entry at the given index in this shop's inventory.
-     *
-     * @param index
-     * @return the shop entry
-     */
-    public BaxEntry getEntryAt(int index)
+    public BaxEntry getEntry(int index)
     {
         return inventory.get(index);
     }
 
-    /**
-     * Add an item to this shop's inventory.
-     * @param entry
-     */
-    public void addEntry(BaxEntry entry)
+    @Override
+    public boolean add(BaxEntry entry)
     {
-        inventory.add(entry);
+        entry.setInfinite(hasFlagInfinite());
+        return inventory.add(entry);
     }
 
-    /**
-     * Checks if this shop's inventory contains an item.
-     *
-     * @param stack the item to check for
-     * @return whether the shop contains the item
-     */
-    public boolean containsItem(ItemStack stack)
+    @Override
+    public boolean remove(Object o)
     {
-        return findEntry(stack) != null;
+        if (o instanceof BaxEntry)
+            return remove((BaxEntry)o);
+        return false;
     }
 
-    /**
-     * Find an entry for an item in this shop's inventory.
-     *
-     * @param stack the item to find
-     * @return the item's entry, or null if not found
-     */
-    public BaxEntry findEntry(ItemStack stack)
+    @Override
+    public boolean containsAll(Collection<?> c)
+    {
+        return inventory.containsAll(c);
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends BaxEntry> c)
+    {
+        return inventory.addAll(c);
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c)
+    {
+        return inventory.removeAll(c);
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c)
+    {
+        return inventory.retainAll(c);
+    }
+
+    @Override
+    public void clear()
+    {
+        inventory.clear();
+    }
+
+    public boolean contains(ItemStack stack)
+    {
+        return find(stack) != null;
+    }
+
+    public boolean contains(BaxEntry entry)
+    {
+        return indexOf(entry) > -1;
+    }
+
+    public BaxEntry find(ItemStack stack)
     {
         for (BaxEntry e : inventory) {
             if (e.isSimilar(stack)) {
@@ -208,13 +249,7 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
         return null;
     }
 
-    /**
-     * Find an entry for an item in this shop's inventory.
-     *
-     * @param entry the item to find
-     * @return the item's entry, or null if not found
-     */
-    public BaxEntry findEntry(BaxEntry entry)
+    public BaxEntry find(BaxEntry entry)
     {
         for (BaxEntry e : inventory) {
             if (e.isSimilar(entry)) {
@@ -224,21 +259,11 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
         return null;
     }
 
-    /**
-     * Creates a sign item for a given shop location
-     * @param index the index of the shop location
-     * @return the ItemStack containing the sign
-     */
     public ItemStack toItem(int index)
     {
         return toItem(locations.get(index));
     }
 
-    /**
-     * Creates a sign item for a given shop location
-     * @param loc the shop location to pull sign text
-     * @return the ItemStack containing the sign
-     */
     public ItemStack toItem(Location loc)
     {
         ItemStack item = new ItemStack(Material.SIGN, 1);
@@ -253,12 +278,7 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
         item.setItemMeta(meta);
         return item;
     }
-    
-    /**
-     * Determines whether an item is a shop
-     * @param item
-     * @return 
-     */
+
     public static boolean isShop(ItemStack item)
     {
         return item.getType() == Material.SIGN &&
@@ -266,25 +286,13 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
                item.getItemMeta().hasLore() &&
                item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1).startsWith(ChatColor.GRAY + "ID: ");
     }
-    
-    /**
-     * Converts an item to a BaxShop
-     * Note: This should only be used after calling isShop()
-     * @param item
-     * @return 
-     */
+
     public static BaxShop fromItem(ItemStack item)
     {
         UUID uid = UUID.fromString(item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1).substring((ChatColor.GRAY + "ID: ").length()));
         return StoredData.getShop(uid);
     }
-    
-    /**
-     * Extracts the sign text from the lore of a shop item
-     * Note: This should only be used after calling isShop()
-     * @param item
-     * @return 
-     */
+
     public static String[] extractSignText(ItemStack item)
     {
         List<String> lore = item.getItemMeta().getLore().subList(0, item.getItemMeta().getLore().size() - 1);
@@ -438,6 +446,19 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
         return inventory.iterator();
     }
 
+    @Override
+    public Object[] toArray()
+    {
+        return inventory.toArray();
+    }
+
+    @Override
+    @SuppressWarnings("SuspiciousToArrayCall")
+    public <T> T[] toArray(T[] a)
+    {
+        return inventory.toArray(a);
+    }
+
     public Block buildShopSign(Location loc, String... signLines) throws PrematureAbortException
     {
         Location locUnder = loc.clone();
@@ -477,20 +498,14 @@ public final class BaxShop implements ConfigurationSerializable, Iterable<BaxEnt
         return inventory.remove(entry);
     }
 
-    public BaxEntry remove(int index)
+    public BaxEntry removeEntryAt(int index)
     {
         return inventory.remove(index);
     }
 
-    public void add(int index, BaxEntry entry)
+    public void addEntry(int index, BaxEntry entry)
     {
         entry.setInfinite(hasFlagInfinite());
         inventory.add(index, entry);
-    }
-
-    public void add(BaxEntry entry)
-    {
-        entry.setInfinite(hasFlagInfinite());
-        inventory.add(entry);
     }
 }

@@ -65,7 +65,7 @@ public final class CmdDelete extends BaxShopCommand
     public void onCommand(ShopCmdActor actor) throws PrematureAbortException
     {
         if (actor.getShop().getLocations().size() == 1) {
-            if (actor.getShop().getInventorySize() > 0 && !actor.getShop().hasFlagInfinite()) {
+            if (actor.getShop().size() > 0 && !actor.getShop().hasFlagInfinite()) {
                 actor.sendError("There is still inventory at this shop!");
                 actor.sendError("Please remove all inventory before deleting it.");
             }

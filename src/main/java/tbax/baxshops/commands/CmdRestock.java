@@ -93,7 +93,7 @@ public final class CmdRestock extends BaxShopCommand
 
         ItemStack stack = actor.getItemInHand();
         BaxEntry entry = null;
-        if (stack != null && (entry = actor.getShop().findEntry(stack)) == null && requiresItemInHand(actor)) {
+        if (stack != null && (entry = actor.getShop().find(stack)) == null && requiresItemInHand(actor)) {
             actor.exitError(Resources.NOT_FOUND_SHOPITEM);
         }
 
@@ -120,7 +120,7 @@ public final class CmdRestock extends BaxShopCommand
             else {
                 for (int i = 0; i < taken.size(); i++) {
                     entry = taken.get(i);
-                    BaxEntry shopEntry = actor.getShop().findEntry(entry);
+                    BaxEntry shopEntry = actor.getShop().find(entry);
                     if (entry.getAmount() > 0) {
                         entry.add(entry.getAmount());
                         actor.sendMessage("Restocked %s.", Format.itemName(entry.getAmount(), ItemNames.getName(entry)));

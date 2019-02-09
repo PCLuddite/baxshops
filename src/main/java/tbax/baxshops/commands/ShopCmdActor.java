@@ -23,7 +23,6 @@ import tbax.baxshops.serialization.ItemNames;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 public final class ShopCmdActor
 {
@@ -206,8 +205,8 @@ public final class ShopCmdActor
         BaxEntry entry = null;
         if (isArgInt(index)) {
             index = getArgInt(1) - 1;
-            if (index < getShop().getInventorySize() && index >= 0) {
-                entry = getShop().getEntryAt(index);
+            if (index < getShop().size() && index >= 0) {
+                entry = getShop().getEntry(index);
             }
         }
         else {
@@ -346,7 +345,7 @@ public final class ShopCmdActor
         if (getItemInHand() == null || getItemInHand().getType() == Material.AIR)
             throw new CommandErrorException(Resources.NOT_FOUND_HELDITEM);
 
-        BaxEntry clone = new BaxEntry(getShop().findEntry(getItemInHand()));
+        BaxEntry clone = new BaxEntry(getShop().find(getItemInHand()));
 
         if ("all".equalsIgnoreCase(arg)) {
             qty = takeFromInventory(clone.getItemStack(), Integer.MAX_VALUE);

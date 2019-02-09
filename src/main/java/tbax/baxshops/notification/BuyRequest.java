@@ -99,9 +99,9 @@ public final class BuyRequest implements Request
             ShopPlugin.sendNotification(getBuyer(), shopDeleted);
         }
         else if (!shop.hasFlagInfinite()) {
-            BaxEntry shopEntry = shop.findEntry(entry.getItemStack());
+            BaxEntry shopEntry = shop.find(entry.getItemStack());
             if (shopEntry == null) {
-                shop.addEntry(entry);
+                shop.add(entry);
             }
             else {
                 shopEntry.add(entry.getAmount());

@@ -78,9 +78,9 @@ public final class CmdSetIndex extends BaxShopCommand
     @Override
     public void onCommand(ShopCmdActor actor) throws PrematureAbortException
     {
-        int oldIndex = actor.getShop().getIndexOfEntry(actor.getArgEntry(1));
+        int oldIndex = actor.getShop().indexOf(actor.getArgEntry(1));
         int newIndex = actor.getArgInt(2, String.format(Resources.INVALID_DECIMAL, "new index"));
-        if (newIndex > actor.getShop().getInventorySize()) {
+        if (newIndex > actor.getShop().size()) {
             actor.exitError( "You must choose a new index that is less than the number of items in the shop!");
         }
         if (newIndex < 1) {
@@ -89,12 +89,12 @@ public final class CmdSetIndex extends BaxShopCommand
         if (newIndex == oldIndex) {
             actor.exitWarning( "The index has not been changed.");
         }
-        BaxEntry entry = actor.getShop().remove(oldIndex - 1);
-        if (actor.getShop().getInventorySize() < newIndex) {
+        BaxEntry entry = actor.getShop().removeEntryAt(oldIndex - 1);
+        if (actor.getShop().size() < newIndex) {
             actor.getShop().add(entry);
         }
         else {
-            actor.getShop().add(newIndex - 1, entry);
+            actor.getShop().addEntry(newIndex - 1, entry);
         }
         actor.sendMessage("The index for this item was successfully changed.");
     }

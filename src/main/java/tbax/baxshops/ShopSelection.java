@@ -107,9 +107,9 @@ public final class ShopSelection
         sender.sendMessage(Format.header(String.format("Showing page %d of %d", page + 1, pages)));
         int i = page * BaxShop.ITEMS_PER_PAGE,
                 stop = (page + 1) * BaxShop.ITEMS_PER_PAGE,
-                max = Math.min(stop, shop.getInventorySize());
+                max = Math.min(stop, shop.size());
         for (; i < max; i++) {
-            sender.sendMessage(shop.getEntryAt(i).toString(i + 1));
+            sender.sendMessage(shop.getEntry(i).toString(i + 1));
         }
         for (; i < stop; i++) {
             sender.sendMessage("");

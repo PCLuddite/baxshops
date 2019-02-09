@@ -158,7 +158,7 @@ public final class PlayerUtil
         }
         else if (shop.hasFlagSellToShop()) {
             ItemStack item = entry.toItemStack();
-            BaxEntry shopEntry = shop.findEntry(item);
+            BaxEntry shopEntry = shop.find(item);
             if (shopEntry == null) {
                 shopEntry = new BaxEntry();
                 shopEntry.setItem(item);
