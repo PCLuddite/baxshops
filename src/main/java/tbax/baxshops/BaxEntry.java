@@ -24,6 +24,7 @@ import tbax.baxshops.serialization.ItemNames;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings({"unused", "JavaDoc", "WeakerAccess"})
 public final class BaxEntry implements ConfigurationSerializable
 {
     private ItemStack stack;
@@ -44,7 +45,8 @@ public final class BaxEntry implements ConfigurationSerializable
         quantity = other.quantity;
         stack = other.stack.clone();
     }
-    
+
+    @SuppressWarnings("unchecked")
     public BaxEntry(Map<String, Object> args)
     {
         quantity = (int)args.get("quantity");
@@ -87,7 +89,7 @@ public final class BaxEntry implements ConfigurationSerializable
     {
         refundPrice = price;
     }
-        
+
     public Material getType()
     {
         return stack.getType();
@@ -311,7 +313,7 @@ public final class BaxEntry implements ConfigurationSerializable
         if (getEnchants(stack) != null) {
             String enchants;
             Map<Enchantment, Integer> enchmap = getEnchants(stack);
-            if (enchmap.isEmpty()) {
+            if (enchmap == null || enchmap.isEmpty()) {
                 enchants = "NONE";
             }
             else {
@@ -334,6 +336,7 @@ public final class BaxEntry implements ConfigurationSerializable
         return info.toString();
     }
     
+    @SuppressWarnings("ConstantConditions")
     public String toString(int index)
     {
         StringBuilder name = new StringBuilder(ItemNames.getName(this));
@@ -341,7 +344,7 @@ public final class BaxEntry implements ConfigurationSerializable
         if (getEnchants(stack) != null) {
             StringBuilder enchName = new StringBuilder(" ("); // Enchanted items are in purple
             for(Map.Entry<Enchantment, Integer> ench : getEnchants(stack).entrySet()) {
-                enchName.append(ItemNames.getEnchantName(ench.getKey()).toUpperCase().substring(0,4)); // List each enchantment
+                enchName.append(ItemNames.getEnchantName(ench.getKey()).toUpperCase(), 0, 4); // List each enchantment
                 enchName.append(ench.getValue()); // and its value
                 enchName.append(", "); // separated by commas
             }

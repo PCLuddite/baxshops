@@ -32,6 +32,7 @@ public abstract class BaxShopCommand
         return new String[]{getName()};
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean hasPermission(ShopCmdActor actor)
     {
         if (getPermission() == null)

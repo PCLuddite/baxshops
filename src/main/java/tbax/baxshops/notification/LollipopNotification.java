@@ -23,6 +23,7 @@ import java.util.UUID;
  * A LollipopNotification notifies a player that someone sent him/her a
  * lollipop.
  */
+@SuppressWarnings("WeakerAccess")
 public final class LollipopNotification implements ConfigurationSerializable, Notification
 {
     public static final double DEFAULT_TASTINESS = 40;

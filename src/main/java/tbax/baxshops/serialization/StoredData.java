@@ -28,10 +28,10 @@ import java.util.logging.Logger;
 
 public final class StoredData
 {
-    public static final String YAML_FILE_PATH = "shops.yml";
-    public static final String YAMLBAK_FILE_PATH = "backups/%d.yml";
+    private static final String YAML_FILE_PATH = "shops.yml";
+    private static final String YAMLBAK_FILE_PATH = "backups/%d.yml";
     
-    public static final double STATE_VERSION = 4.0; // state file format version
+    private static final double STATE_VERSION = 4.0; // state file format version
 
     /**
      * A map of locations to their shop ids, accessed by their location in the world
@@ -101,17 +101,13 @@ public final class StoredData
             long timestamp = new Date().getTime();
             File backupFolder = new File(plugin.getDataFolder(), "backups");
             if (!backupFolder.exists()) {
+                //noinspection ResultOfMethodCallIgnored
                 backupFolder.mkdirs();
             }
 
-            File[] backups = backupFolder.listFiles(new FilenameFilter() {
-                @Override
-                public boolean accept(File f, String name) {
-                    return name.endsWith(".yml");
-                }
-            });
+            File[] backups = backupFolder.listFiles((f, name) -> name.endsWith(".yml"));
             int b = plugin.getConfig().getInt("Backups", 15);
-            if (b > 0 && backups.length >= b) {
+            if (backups != null && b > 0 && backups.length >= b) {
                 File delete = null;
                 long oldest = Long.MAX_VALUE;
                 for (File f : backups) {
@@ -123,10 +119,12 @@ public final class StoredData
                             oldest = compare;
                             delete = f;
                         }
-                    } catch (NumberFormatException e) {
+                    }
+                    catch (NumberFormatException ignored) {
                     }
                 }
                 if (delete != null) {
+                    //noinspection ResultOfMethodCallIgnored
                     delete.delete();
                 }
             }
@@ -143,10 +141,6 @@ public final class StoredData
                     }
                 }
                 out.close();
-            } catch (FileNotFoundException e) {
-                log.warning("Backup failed");
-                e.printStackTrace();
-                return false;
             } catch (IOException e) {
                 log.warning("Backup failed");
                 e.printStackTrace();
@@ -161,12 +155,13 @@ public final class StoredData
     /*
      * Loads all shops from shop.yml file
      */
-    public static boolean loadState()
+    @SuppressWarnings("unchecked")
+    private static void loadState()
     {
         File stateLocation = new File(plugin.getDataFolder(), YAML_FILE_PATH);
         if (!stateLocation.exists()) {
             log.info("YAML file did not exist");
-            return false;
+            return;
         }
         
         FileConfiguration state = YamlConfiguration.loadConfiguration(stateLocation);
@@ -201,7 +196,6 @@ public final class StoredData
         if (!hasWorld)
             players.put(StoredPlayer.DUMMY_UUID, StoredPlayer.DUMMY);
 
-        return true;
     }
     
     public static boolean addShop(Player player, BaxShop shop)
@@ -251,7 +245,7 @@ public final class StoredData
                 Sign sign = (Sign) b.getState();
                 sign.setLine(0, Resources.SIGN_CLOSED[0]);
                 sign.setLine(1, Resources.SIGN_CLOSED[1]);
-                sign.setLine(2, (sender.getName().equals(shop.getOwner()) ? "the owner" : "an admin") + ".");
+                sign.setLine(2, (shop.getOwner().equals(sender) ? "the owner" : "an admin") + ".");
                 sign.setLine(3, "");
                 sign.update();
             }
@@ -304,6 +298,7 @@ public final class StoredData
         try {
             File dir = plugin.getDataFolder();
             if (!dir.exists()) {
+                //noinspection ResultOfMethodCallIgnored
                 dir.mkdirs();
             }
             state.save(new File(dir, YAML_FILE_PATH));

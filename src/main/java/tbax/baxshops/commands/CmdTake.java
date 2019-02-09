@@ -84,7 +84,7 @@ public final class CmdTake extends BaxShopCommand
     {
         BaxShop shop = actor.getShop();
         BaxEntry entry;
-
+        assert shop != null;
         if (actor.getNumArgs() == 1) {
             actor.appendArgs(1, 1);
         }

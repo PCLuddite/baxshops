@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+@SuppressWarnings("WeakerAccess")
 public final class BuyRejection implements Notification
 {
     private UUID seller;

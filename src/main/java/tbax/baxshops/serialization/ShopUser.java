@@ -27,11 +27,6 @@ public final class ShopUser
         StoredData.getOfflinePlayer(name);
     }
 
-    public boolean isLegacy()
-    {
-        return uuid == null;
-    }
-
     public OfflinePlayer getOfflinePlayer()
     {
         if (uuid == null) {

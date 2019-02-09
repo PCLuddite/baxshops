@@ -9,6 +9,7 @@ package tbax.baxshops;
 
 import org.bukkit.ChatColor;
 
+@SuppressWarnings({"WeakerAccess", "unused"})
 public final class CommandHelp
 {
     private String command;

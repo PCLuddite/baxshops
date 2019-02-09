@@ -66,7 +66,7 @@ public final class CmdList extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(ShopCmdActor actor) throws PrematureAbortException
+    public void onCommand(ShopCmdActor actor)
     {
         ShopSelection selection = actor.getSelection();
 

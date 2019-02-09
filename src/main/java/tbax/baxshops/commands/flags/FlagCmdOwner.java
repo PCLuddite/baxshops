@@ -26,6 +26,7 @@ public final class FlagCmdOwner extends FlagCmd
     public void onCommand(ShopCmdActor actor) throws PrematureAbortException
     {
         BaxShop shop = actor.getShop();
+        assert shop != null;
         OfflinePlayer owner = StoredData.getOfflinePlayer(actor.getArg(2));
         shop.setOwner(owner);
         actor.sendMessage(Format.username(shop.getOwner().getName()) + " is now the owner!");

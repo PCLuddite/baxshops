@@ -75,12 +75,11 @@ public final class PlayerUtil
         int max = item.getMaxStackSize();
         int space = 0;
 
-        for(int x = 0; x < contents.length; ++x) {
-            if (contents[x] == null || contents[x].getType() == Material.AIR) {
+        for (ItemStack content : contents) {
+            if (content == null || content.getType() == Material.AIR) {
                 space += max;
-            }
-            else if (contents[x].isSimilar(item)) {
-                space += max - contents[x].getAmount();
+            } else if (content.isSimilar(item)) {
+                space += max - content.getAmount();
             }
         }
         return space;
@@ -100,9 +99,9 @@ public final class PlayerUtil
     /**
      * gives an ItemStack to a player
      * @apiNote This differs from giveItem() in that it does not throw an exception, but sends the message to the player
-     * @param player
-     * @param item
-     * @return
+     * @param player the player
+     * @param item the item
+     * @return true if the item was given, otherwise false
      */
     public static boolean tryGiveItem(Player player, ItemStack item)
     {

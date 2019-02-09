@@ -74,6 +74,7 @@ public final class CmdSign extends BaxShopCommand
     @Override
     public void onCommand(ShopCmdActor actor) throws PrematureAbortException
     {
+        assert actor.getShop() != null;
         Block b = actor.getSelection().getLocation().getBlock();
         if (!b.getType().equals(Material.SIGN) && !b.getType().equals(Material.SIGN_POST)) {
             ShopPlugin.getInstance().getLogger().warning(String.format(Resources.NOT_FOUND_SIGN, actor.getShop().getOwner()));
@@ -107,8 +108,8 @@ public final class CmdSign extends BaxShopCommand
         }
         else {
             sign.setLine(0, lines[0]);
-            sign.setLine(1, lines.length > 1 ? lines[1] : "");
-            sign.setLine(2, lines.length > 2 ? lines[2] : "");
+            sign.setLine(1, lines[1]);
+            sign.setLine(2, lines[2]);
             sign.setLine(3, lines.length > 3 ? lines[3] : "");
         }
         sign.update();

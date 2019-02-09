@@ -82,7 +82,7 @@ public final class CmdRemove extends BaxShopCommand
         if (entry == null) {
             actor.exitError(Resources.NOT_FOUND_SHOPITEM);
         }
-
+        assert shop != null;
         if (!shop.hasFlagInfinite() && entry.getAmount() > 0) {
             ItemStack stack = entry.toItemStack();
             if (!actor.hasRoomForItem(stack)) {

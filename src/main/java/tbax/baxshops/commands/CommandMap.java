@@ -23,14 +23,14 @@ public final class CommandMap implements Map<String, BaxShopCommand>
 
     public CommandMap(Class<? extends BaxShopCommand>... commands)
     {
-        for(int x = 0; x < commands.length; ++x) {
+        for (Class<? extends BaxShopCommand> command : commands) {
             try {
-                BaxShopCommand cmd = commands[x].newInstance();
-                for(String alias : cmd.getAliases()) {
+                BaxShopCommand cmd = command.newInstance();
+                for (String alias : cmd.getAliases()) {
                     cmds.put(alias, cmd);
                 }
             }
-            catch(Exception e) {
+            catch (Exception e) {
                 e.printStackTrace();
             }
         }

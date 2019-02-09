@@ -39,6 +39,7 @@ import tbax.baxshops.serialization.StoredPlayer;
 import java.util.Deque;
 import java.util.UUID;
 
+@SuppressWarnings("unused")
 public class EventListener implements Listener
 {
     private final ShopPlugin plugin;
@@ -186,8 +187,8 @@ public class EventListener implements Listener
                             sign.setLine(3, "");
                         } else {
                             sign.setLine(0, lines[0]);
-                            sign.setLine(1, lines.length > 1 ? lines[1] : "");
-                            sign.setLine(2, lines.length > 2 ? lines[2] : "");
+                            sign.setLine(1, lines[1]);
+                            sign.setLine(2, lines[2]);
                             sign.setLine(3, lines.length > 3 ? lines[3] : "");
                         }
                         sign.update();

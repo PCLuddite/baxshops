@@ -16,9 +16,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+@SuppressWarnings("SameParameterValue")
 public final class NMSUtils
 {
-    static String version = "";
+    private static String version = "";
 
     static {
         String name = Bukkit.getServer().getClass().getPackage().getName();
@@ -30,7 +31,7 @@ public final class NMSUtils
     {
     }
 
-    public static Class<?> getCraftClass(String ClassName)
+    private static Class<?> getCraftClass(String ClassName)
     {
         String className = "org.bukkit.craftbukkit." + version + ClassName;
         Class<?> c = null;
@@ -42,7 +43,7 @@ public final class NMSUtils
         return c;
     }
     
-    public static Class<?> getNMSClass(String ClassName)
+    private static Class<?> getNMSClass(String ClassName)
     {
         String className = "net.minecraft.server." + version + ClassName;
         Class<?> c = null;
@@ -85,25 +86,14 @@ public final class NMSUtils
         return nms_entity;
     }
 
-    public static Method getMethod(Class<?> cl, String method) throws Exception
+    private static Method getMethod(Class<?> cl, String method) throws Exception
     {
         return cl.getDeclaredMethod(method);
     }
 
-    public static Method getMethod(Class<?> cl, String method, Class<?>[] args) throws Exception
+    private static Method getMethod(Class<?> cl, String method, Class<?>[] args) throws Exception
     {
         return cl.getDeclaredMethod(method, args);
     }
 
-    public static Field getField(Class<?> cl, String field_name)
-    {
-        try {
-            Field field = cl.getDeclaredField(field_name);
-            field.setAccessible(true);
-            return field;
-        } catch (SecurityException | NoSuchFieldException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }

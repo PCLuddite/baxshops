@@ -87,6 +87,7 @@ public final class CmdHelp extends BaxShopCommand
                 actor.exitError(Resources.INVALID_SHOP_ACTION, actor.getArg(1));
             }
             CommandHelp help = cmd.getHelp(actor);
+            //noinspection ConstantConditions
             if (cmd == null) {
                 actor.exitWarning("No documentation was found for this command.");
             }

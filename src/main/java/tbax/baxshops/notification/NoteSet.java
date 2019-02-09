@@ -11,6 +11,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 import java.util.*;
 
+@SuppressWarnings("WeakerAccess")
 public final class NoteSet implements ConfigurationSerializable
 {
     private UUID recipient;
@@ -22,6 +23,7 @@ public final class NoteSet implements ConfigurationSerializable
         this.notes.addAll(notes);
     }
 
+    @SuppressWarnings("unchecked")
     public NoteSet(Map<String, Object> args)
     {
         recipient = UUID.fromString((String)args.get("recipient"));

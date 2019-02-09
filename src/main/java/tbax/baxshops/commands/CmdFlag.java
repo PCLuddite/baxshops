@@ -14,7 +14,8 @@ import tbax.baxshops.errors.PrematureAbortException;
 
 public final class CmdFlag extends BaxShopCommand
 {
-    private final CommandMap flagCmds = new CommandMap(
+    @SuppressWarnings("unchecked")
+    private static final CommandMap flagCmds = new CommandMap(
         FlagCmdSellToShop.class,
         FlagCmdInfinite.class,
         FlagCmdSellRequests.class,

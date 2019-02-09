@@ -84,7 +84,7 @@ public final class CmdSell extends BaxShopCommand
             ShopPlugin.runCommand(actor);
             return;
         }
-
+        assert actor.getItemInHand() != null;
         if (actor.getNumArgs() == 1) {
             actor.appendArg(actor.getItemInHand().getAmount());
         }
@@ -120,6 +120,7 @@ public final class CmdSell extends BaxShopCommand
     private static double sell(ShopCmdActor actor, BaxEntry entry) throws PrematureAbortException
     {
         BaxShop shop = actor.getShop();
+        assert shop != null;
         if (entry == null || entry.getRefundPrice() < 0) {
             actor.exitError(Resources.NOT_FOUND_SHOPITEM);
         }

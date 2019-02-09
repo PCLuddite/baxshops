@@ -7,6 +7,7 @@
 
 package tbax.baxshops.errors;
 
+@SuppressWarnings("unused")
 public final class CommandMessageException extends PrematureAbortException
 {
     private Exception innerEx;

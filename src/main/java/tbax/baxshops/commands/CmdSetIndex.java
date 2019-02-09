@@ -78,6 +78,7 @@ public final class CmdSetIndex extends BaxShopCommand
     @Override
     public void onCommand(ShopCmdActor actor) throws PrematureAbortException
     {
+        assert actor.getShop() != null;
         int oldIndex = actor.getShop().indexOf(actor.getArgEntry(1));
         int newIndex = actor.getArgInt(2, String.format(Resources.INVALID_DECIMAL, "new index"));
         if (newIndex > actor.getShop().size()) {

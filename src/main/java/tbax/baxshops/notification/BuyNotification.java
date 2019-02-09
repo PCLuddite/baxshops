@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+@SuppressWarnings("WeakerAccess")
 public final class BuyNotification implements Notification
 {
     private BaxEntry entry;
@@ -89,7 +90,7 @@ public final class BuyNotification implements Notification
         args.put("buyer", buyer.toString());
         args.put("seller", seller.toString());
         args.put("shopId", shopId.toString());
-        return null;
+        return args;
     }
 
     public static BuyNotification deserialize(Map<String, Object> args)

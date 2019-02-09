@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+@SuppressWarnings("JavaDoc")
 public final class ItemNames
 {
     /**
@@ -66,11 +67,7 @@ public final class ItemNames
             }
             int matches = getNumMatches(alias, inputwords);
             double percent = (double)matches / (double)alias.length;
-            ArrayList<BaxEntry> entrylist = match_percentages.get(percent);
-            if (entrylist == null) {
-                entrylist = new ArrayList<>();
-                match_percentages.put(percent, entrylist);
-            }
+            ArrayList<BaxEntry> entrylist = match_percentages.computeIfAbsent(percent, k -> new ArrayList<>());
             entrylist.add(entry);
             if (percent > highest) {
                 highest = percent;
@@ -135,11 +132,6 @@ public final class ItemNames
     private static Long getItemId(ItemStack item)
     {
         return (long) item.getTypeId() << 16 | item.getDurability();
-    }
-    
-    private static Long getItemId(Material item)
-    {
-        return (long)item.getId() << 16;
     }
 
     /**
@@ -249,9 +241,9 @@ public final class ItemNames
                 }
                 Scanner current = new Scanner(line);
                 String id = current.next();
-                String name = "";
+                StringBuilder name = new StringBuilder();
                 while (current.hasNext()) {
-                    name += ' ' + current.next();
+                    name.append(' ').append(current.next());
                 }
                 if (name.length() == 0) {
                     break;

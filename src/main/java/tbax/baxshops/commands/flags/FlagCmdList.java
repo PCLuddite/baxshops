@@ -30,6 +30,7 @@ public final class FlagCmdList extends FlagCmd
     public void onCommand(ShopCmdActor actor) throws PrematureAbortException
     {
         BaxShop shop = actor.getShop();
+        assert shop != null;
         actor.sendMessage("\nFlags currently applied to this shop:");
         actor.sendMessage("%s: %s", Format.flag("Infinite"), Format.keyword(shop.hasFlagInfinite() ? "Yes" : "No"));
         actor.sendMessage("%s: %s", Format.flag("Notify"), Format.keyword(shop.hasFlagNotify() ? "Yes" : "No"));

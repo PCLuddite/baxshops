@@ -25,6 +25,7 @@ public final class FlagCmdBuyRequests extends FlagCmd
     {
         BaxShop shop = actor.getShop();
         boolean value = actor.getArgBoolean(2, "Usage:\n/shop flag buyrequests [true|false]");
+        assert shop != null;
         shop.setFlagBuyRequests(value);
         actor.sendMessage(Format.flag("Buy requests") + " for this shop are " + Format.keyword(value ? "enabled" : "disabled"));
     }

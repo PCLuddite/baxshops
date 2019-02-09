@@ -12,6 +12,6 @@ import tbax.baxshops.commands.ShopCmdActor;
 
 public interface Claimable extends Notification
 {
-    public BaxEntry getEntry();
-    public boolean claim(ShopCmdActor actor);
+    BaxEntry getEntry();
+    boolean claim(ShopCmdActor actor);
 }

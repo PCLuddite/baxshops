@@ -79,7 +79,7 @@ public final class CmdSet extends BaxShopCommand
     {
         BaxShop shop = actor.getShop();
         BaxEntry entry = null;
-
+        assert shop != null;
         if (actor.getNumArgs() == 3) {
             actor.appendArg(-1);
         }

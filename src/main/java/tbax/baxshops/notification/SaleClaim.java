@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+@SuppressWarnings({"WeakerAccess", "unused"})
 public final class SaleClaim implements Claimable
 {
     private UUID buyer;
@@ -86,7 +87,7 @@ public final class SaleClaim implements Claimable
         args.put("buyer", buyer.toString());
         args.put("seller", seller.toString());
         args.put("entry", entry);
-        return null;
+        return args;
     }
 
     public static SaleClaim deserialize(Map<String, Object> args)

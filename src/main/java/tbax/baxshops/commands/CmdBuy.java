@@ -89,6 +89,7 @@ public final class CmdBuy extends BaxShopCommand
         }
 
         BaxShop shop = actor.getShop();
+        assert shop != null;
         BaxEntry entry = shop.getEntry(actor.getArg(1));
 
         int amount = entry.argToAmnt(actor.getArg(2));

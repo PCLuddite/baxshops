@@ -75,7 +75,6 @@ public final class CmdSetAmnt extends BaxShopCommand
     @Override
     public void onCommand(ShopCmdActor actor) throws PrematureAbortException
     {
-        BaxShop shop = actor.getShop();
         BaxEntry entry = actor.getArgEntry(1);
 
         int amnt = actor.getArgInt(2, String.format(Resources.INVALID_DECIMAL, "amount"));

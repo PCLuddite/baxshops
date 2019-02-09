@@ -9,6 +9,7 @@ package tbax.baxshops;
 
 import org.bukkit.ChatColor;
 
+@SuppressWarnings("unused")
 public final class Resources
 {
     private Resources()

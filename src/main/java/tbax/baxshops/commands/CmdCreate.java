@@ -97,7 +97,7 @@ public final class CmdCreate extends BaxShopCommand
 
         Location loc = actor.getPlayer().getLocation();
         loc = loc.getWorld().getBlockAt(loc).getLocation();
-
+        assert actor.getInventory() != null;
         if (!actor.isAdmin() && !actor.getInventory().containsAtLeast(new ItemStack(Material.SIGN), 1)) {
             actor.exitError("You need a sign to set up a shop.");
         }
@@ -106,7 +106,7 @@ public final class CmdCreate extends BaxShopCommand
         shop.setId(UUID.randomUUID());
         shop.setOwner(owner);
 
-        Block b = shop.buildShopSign(loc,
+        shop.buildShopSign(loc,
             "",
             (owner.getName().length() < 13 ? owner.getName() : owner.getName().substring(0, 12) + '…') + "'s",
             "shop",

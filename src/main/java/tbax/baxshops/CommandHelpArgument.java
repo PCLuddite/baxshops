@@ -9,12 +9,13 @@ package tbax.baxshops;
 
 import org.bukkit.ChatColor;
 
+@SuppressWarnings("unused")
 public final class CommandHelpArgument
 {
     private String description;
     private String argument;
     private boolean required;
-    private String defaultValue = null;
+    private String defaultValue;
 
     public CommandHelpArgument(String arg, String desc, boolean req)
     {

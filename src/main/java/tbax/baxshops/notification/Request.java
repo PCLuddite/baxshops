@@ -11,6 +11,6 @@ import tbax.baxshops.commands.ShopCmdActor;
 
 public interface Request extends Notification
 {
-    public boolean accept(ShopCmdActor acceptingActor);
-    public boolean reject(ShopCmdActor rejectingActor);
+    boolean accept(ShopCmdActor acceptingActor);
+    boolean reject(ShopCmdActor rejectingActor);
 }

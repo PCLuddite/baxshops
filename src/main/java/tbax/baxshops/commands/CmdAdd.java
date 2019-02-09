@@ -85,6 +85,8 @@ public final class CmdAdd extends BaxShopCommand
         }
 
         ItemStack stack = actor.getItemInHand();
+        assert stack != null;
+        assert actor.getShop() != null;
         if (BaxShop.isShop(stack)) {
             actor.exitError("You can't add a shop to a shop.");
         }

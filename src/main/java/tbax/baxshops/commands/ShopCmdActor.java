@@ -24,6 +24,7 @@ import tbax.baxshops.serialization.ItemNames;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings({"WeakerAccess", "unused"})
 public final class ShopCmdActor
 {
     private final CommandSender sender;
@@ -80,8 +81,8 @@ public final class ShopCmdActor
     
     public boolean cmdIs(String... names)
     {
-        for(int x = 0; x < names.length; ++x) {
-            if (name.equalsIgnoreCase(names[x]))
+        for (String name : names) {
+            if (this.name.equalsIgnoreCase(name))
                 return true;
         }
         return false;
@@ -203,6 +204,7 @@ public final class ShopCmdActor
     public BaxEntry getArgEntry(int index, String errMsg) throws PrematureAbortException
     {
         BaxEntry entry = null;
+        assert getShop() != null;
         if (isArgInt(index)) {
             index = getArgInt(1) - 1;
             if (index < getShop().size() && index >= 0) {
@@ -238,7 +240,7 @@ public final class ShopCmdActor
     
     /**
      * Gets the first argument (if present) in lower case
-     * @return 
+     * @return the first argument in lower case
      */
     public String getAction()
     {
@@ -262,7 +264,7 @@ public final class ShopCmdActor
     
     /**
      * Appends an argument to the end of the argument list
-     * @param arg 
+     * @param arg the argument to append
      */
     public void appendArg(Object arg)
     {
@@ -345,7 +347,9 @@ public final class ShopCmdActor
         if (getItemInHand() == null || getItemInHand().getType() == Material.AIR)
             throw new CommandErrorException(Resources.NOT_FOUND_HELDITEM);
 
-        BaxEntry clone = new BaxEntry(getShop().find(getItemInHand()));
+        BaxEntry entry = getShop().find(getItemInHand());
+        assert entry != null;
+        BaxEntry clone = new BaxEntry(entry);
 
         if ("all".equalsIgnoreCase(arg)) {
             qty = takeFromInventory(clone.getItemStack(), Integer.MAX_VALUE);

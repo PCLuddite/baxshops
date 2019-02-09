@@ -26,6 +26,7 @@ public final class FlagCmdInfinite extends FlagCmd
     {
         BaxShop shop = actor.getShop();
         boolean value = actor.getArgBoolean(2, "Usage:\n/shop flag infinite [true|false]");
+        assert shop != null;
         shop.setFlagInfinite(value);
         for (BaxEntry e : shop) {
             e.setInfinite(value);

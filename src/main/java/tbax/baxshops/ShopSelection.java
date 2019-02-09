@@ -8,7 +8,6 @@
 
 package tbax.baxshops;
 
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -38,13 +37,6 @@ public final class ShopSelection
 
     public ShopSelection()
     {
-    }
-
-    public ShopSelection(Location shopLoc, Player p, BaxShop selected)
-    {
-        owner = shop.getOwner().equals(p);
-        location = shopLoc;
-        shop = selected;
     }
 
     public void setLocation(Location value)
@@ -114,16 +106,6 @@ public final class ShopSelection
         for (; i < stop; i++) {
             sender.sendMessage("");
         }
-    }
-
-    public String[] getSignText()
-    {
-        return shop.getSignText(location);
-    }
-
-    public String getSignTextString()
-    {
-        return shop.getSignTextString(location);
     }
 
     public ItemStack toItem()

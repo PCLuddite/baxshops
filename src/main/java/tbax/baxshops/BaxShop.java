@@ -23,6 +23,7 @@ import tbax.baxshops.serialization.StoredData;
 
 import java.util.*;
 
+@SuppressWarnings({"WeakerAccess", "unused", "NullableProblems"})
 public final class BaxShop implements ConfigurationSerializable, Collection<BaxEntry>
 {
     public static final int ITEMS_PER_PAGE = 7;
@@ -38,7 +39,7 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
     {
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "deprecation"})
     public BaxShop(Map<String, Object> args)
     {
         if (args.containsKey("flags")) {

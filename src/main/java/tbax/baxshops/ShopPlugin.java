@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Logger;
 
+@SuppressWarnings("WeakerAccess")
 public final class ShopPlugin extends JavaPlugin
 {
     private static final CommandMap commands = initCommands();
@@ -130,7 +131,7 @@ public final class ShopPlugin extends JavaPlugin
             log.info(Format.toAnsiColor(n.getMessage(null)));
         }
         ns.add(n);
-        if (player != null && player.isOnline()) {
+        if (player.isOnline()) {
             showNotification(player.getPlayer(), false);
         }
     }
@@ -175,12 +176,7 @@ public final class ShopPlugin extends JavaPlugin
         
         // run an initial save 5 minutes after starting, then a recurring save
         // every 30 minutes after the first save
-        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, new Runnable() {
-            @Override
-            public void run() {
-                StoredData.saveAll();
-            }
-        }, 6000L, 36000L);
+        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, StoredData::saveAll, 6000L, 36000L);
         log.info("BaxShops has loaded successfully!");
     }
     
@@ -208,6 +204,7 @@ public final class ShopPlugin extends JavaPlugin
         StoredData.saveAll();
     }
 
+    @SuppressWarnings("unchecked")
     private static CommandMap initCommands()
     {
 		return new CommandMap(
