@@ -24,6 +24,7 @@ import java.util.UUID;
 /**
  * Methods for dealing with interactions with players
  */
+@SuppressWarnings("WeakerAccess")
 public final class PlayerUtil
 {
     private PlayerUtil()
