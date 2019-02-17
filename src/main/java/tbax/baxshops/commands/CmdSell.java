@@ -127,7 +127,7 @@ public final class CmdSell extends BaxShopCommand
 
         String name = ItemNames.getName(entry.getItemStack());
 
-        double price = MathUtil.multiply(entry.getAmount(), entry.getAmount());
+        double price = MathUtil.multiply(entry.getAmount(), entry.getRefundPrice());
 
         if (shop.hasFlagSellRequests()) {
             SaleRequest request = new SaleRequest(shop.getId(), shop.getOwner(), actor.getPlayer(), entry);
