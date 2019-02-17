@@ -17,6 +17,7 @@ import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.DeletedShopClaim;
 import tbax.baxshops.notification.SaleClaim;
 import tbax.baxshops.serialization.StoredData;
+import tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.UUID;
 
@@ -144,11 +145,12 @@ public final class PlayerUtil
     {
         double price = MathUtil.multiply(entry.getRefundPrice(), entry.getAmount());
 
-        if (!ShopPlugin.getEconomy().has(buyer, price)) {
-            throw new CommandErrorException(Resources.NO_MONEY_SELLER);
+        if (!buyer.equals(StoredPlayer.DUMMY)) { // don't charge the dummy
+            if (!ShopPlugin.getEconomy().has(buyer, price)) {
+                throw new CommandErrorException(Resources.NO_MONEY_SELLER);
+            }
+            ShopPlugin.getEconomy().withdrawPlayer(buyer, price);
         }
-
-        ShopPlugin.getEconomy().withdrawPlayer(buyer, price);
         ShopPlugin.getEconomy().depositPlayer(seller, price);
 
         if (shop == null) {
