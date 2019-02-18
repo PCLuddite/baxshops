@@ -67,6 +67,6 @@ public final class CmdBackup extends BaxShopCommand
     public void onCommand(ShopCmdActor actor)
     {
         StoredData.backup();
-        actor.getSender().sendMessage("Shops successfully backed up state.json");
+        actor.getSender().sendMessage("Shops successfully backed up shops.yml");
     }
 }
