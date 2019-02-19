@@ -406,11 +406,12 @@ public final class ShopCmdActor
         ItemStack hand = getItemInHand();
         int qty = 0;
         if (hand != null && hand.isSimilar(item)) {
-            qty += hand.getAmount();
-            if (hand.getAmount() < amt) {
+            if (amt < hand.getAmount()) {
                 hand.setAmount(hand.getAmount() - amt);
+                qty += amt;
             }
             else {
+                qty += hand.getAmount();
                 inv.setItemInMainHand(null);
             }
         }
@@ -418,11 +419,12 @@ public final class ShopCmdActor
         for(int x = 0; x < inv.getSize() && qty < amt; ++x) {
             ItemStack other = inv.getItem(x);
             if (other != null && other.isSimilar(item)) {
-                qty += other.getAmount();
-                if (other.getAmount() < amt) {
-                    other.setAmount(other.getAmount() - amt);
+                if (amt - qty < other.getAmount()) {
+                    other.setAmount(other.getAmount() - (amt - qty));
+                    qty = amt;
                 }
                 else {
+                    qty += other.getAmount();
                     inv.setItem(x, null);
                 }
             }

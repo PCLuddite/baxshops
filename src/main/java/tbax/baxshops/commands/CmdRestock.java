@@ -73,7 +73,10 @@ public final class CmdRestock extends BaxShopCommand
     @Override
     public boolean requiresItemInHand(ShopCmdActor actor)
     {
-        return actor.getNumArgs() < 3 || actor.isArgInt(1) || actor.getArg(1).equalsIgnoreCase("all") || actor.getArg(1).equalsIgnoreCase("most");
+        return actor.getNumArgs() < 3
+            || actor.isArgInt(1)
+            || actor.getArg(1).equalsIgnoreCase("all")
+            || actor.getArg(1).equalsIgnoreCase("most");
     }
 
     @Override
@@ -84,12 +87,8 @@ public final class CmdRestock extends BaxShopCommand
             actor.exitError("This shop does not need to be restocked.");
         }
 
-        if (actor.getItemInHand() != null) {
-            if (actor.getNumArgs() == 1) {
-                actor.appendArg(actor.getItemInHand().getAmount()); // restock all in hand if nothing specified
-            } else if ("most".equalsIgnoreCase(actor.getArg(1))) {
-                actor.setArg(1, actor.getItemInHand().getAmount() - 1);
-            }
+        if (actor.getItemInHand() != null && actor.getNumArgs() == 1) {
+            actor.appendArg(actor.getItemInHand().getAmount()); // restock all in hand if nothing specified
         }
 
         ItemStack stack = actor.getItemInHand();
@@ -104,14 +103,15 @@ public final class CmdRestock extends BaxShopCommand
         if (requiresItemInHand(actor)) {
             BaxEntry takenItem = taken.get(0);
             entry.add(takenItem.getAmount());
-            if (takenItem.getAmount() < actor.getArgInt(1)) {
+            if (!("all".equalsIgnoreCase(actor.getArg(1)) || "most".equalsIgnoreCase(actor.getArg(1)))
+                && takenItem.getAmount() < actor.getArgInt(1)) {
                 actor.sendMessage("Could only restock with " + ChatColor.RED + "%d %s" + ChatColor.RESET + ". The shop now has %s.",
                                     takenItem.getAmount(), ItemNames.getName(takenItem), Format.number(entry.getAmount())
                 );
             }
             else {
-                actor.sendMessage("Restocked with %s in hand. The shop now has %s.",
-                                Format.itemName(stack.getAmount(), ItemNames.getName(entry)), Format.number(entry.getAmount())
+                actor.sendMessage("Restocked with %s in inventory. The shop now has %s.",
+                                Format.itemName(takenItem.getAmount(), ItemNames.getName(entry)), Format.number(entry.getAmount())
                 );
             }
         }
