@@ -34,7 +34,7 @@ public final class CmdDelete extends BaxShopCommand
     @Override
     public boolean hasValidArgCount(ShopCmdActor actor)
     {
-        return actor.getNumArgs() == 2;
+        return actor.getNumArgs() == 1;
     }
 
     @Override
