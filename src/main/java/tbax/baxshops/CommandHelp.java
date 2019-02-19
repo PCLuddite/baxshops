@@ -97,13 +97,17 @@ public final class CommandHelp
     {
         StringBuilder sb = new StringBuilder();
         sb.append(Format.header(String.format("Help: /shop %s", command))).append('\n');
-        sb.append(ChatColor.WHITE).append(description).append('\n');
+        if (description != null) {
+            sb.append(ChatColor.WHITE).append(description).append('\n');
+        }
         sb.append(getUsageString()).append('\n');
         if (aliases != null && aliases.length != 0) {
             sb.append(getAliasString()).append('\n');
         }
-        for(CommandHelpArgument arg : args) {
-            sb.append('\n').append(arg);
+        if (args != null) {
+            for (CommandHelpArgument arg : args) {
+                sb.append('\n').append(arg);
+            }
         }
         return sb.toString();
     }
