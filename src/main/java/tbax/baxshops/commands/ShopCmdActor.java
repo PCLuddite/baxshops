@@ -335,9 +335,6 @@ public final class ShopCmdActor
 
     public List<BaxEntry> takeArgFromInventory(String arg) throws PrematureAbortException
     {
-        List<BaxEntry> ret = new ArrayList<>();
-        int qty;
-
         if ("any".equalsIgnoreCase(arg))
             return takeAnyFromInventory();
 
@@ -347,27 +344,14 @@ public final class ShopCmdActor
         if (getItemInHand() == null || getItemInHand().getType() == Material.AIR)
             throw new CommandErrorException(Resources.NOT_FOUND_HELDITEM);
 
+        List<BaxEntry> ret = new ArrayList<>();
+
         BaxEntry entry = getShop().find(getItemInHand());
         assert entry != null;
         BaxEntry clone = new BaxEntry(entry);
 
-        if ("all".equalsIgnoreCase(arg)) {
-            qty = takeFromInventory(clone.getItemStack(), Integer.MAX_VALUE);
-        }
-        else if ("most".equalsIgnoreCase(arg)) {
-            qty = takeFromInventory(clone.getItemStack(), getItemInHand().getAmount() - 1);
-        }
-        else {
-            int amt = 0;
-            try {
-                amt = Integer.parseInt(arg);
-            }
-            catch (NumberFormatException e) {
-                exitError("%s is not a valid quantity", arg);
-            }
-            qty = takeFromInventory(clone.getItemStack(), amt);
-        }
-        clone.setAmount(qty);
+        BaxQuantity quantity = new BaxQuantity(player, entry, arg);
+        clone.setAmount(takeFromInventory(clone.getItemStack(), quantity.getQuantity()));
         ret.add(clone);
         return ret;
     }
