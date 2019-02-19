@@ -93,7 +93,7 @@ public final class CmdTake extends BaxShopCommand
         }
 
         entry = actor.getArgEntry(1);
-        int amt = entry.argToAmnt(actor.getArg(1));
+        int amt = entry.argToAmnt(actor.getArg(2));
 
         if (!shop.hasFlagInfinite() && amt > entry.getAmount()) {
             actor.exitError(Resources.NO_SUPPLIES);
