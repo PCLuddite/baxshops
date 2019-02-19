@@ -90,7 +90,7 @@ public final class CmdSetIndex extends BaxShopCommand
         if (newIndex == oldIndex) {
             actor.exitWarning( "The index has not been changed.");
         }
-        BaxEntry entry = actor.getShop().removeEntryAt(oldIndex - 1);
+        BaxEntry entry = actor.getShop().removeEntryAt(oldIndex);
         if (actor.getShop().size() < newIndex) {
             actor.getShop().add(entry);
         }
