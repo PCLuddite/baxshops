@@ -273,7 +273,7 @@ public final class ShopPlugin extends JavaPlugin
             else if(cmd.requiresPlayer(actor) && actor.getPlayer() == null) {
                 actor.sendError("You must be a player to use this command.");
             }
-            else if(cmd.requiresSelection(actor) && actor.getSelection() == null) {
+            else if(cmd.requiresSelection(actor) && actor.getShop() == null) {
                 actor.sendError(Resources.NOT_FOUND_SELECTED);
             }
             else if(cmd.requiresOwner(actor) && !(actor.isOwner() || actor.isAdmin())) {
