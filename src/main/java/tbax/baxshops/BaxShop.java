@@ -394,27 +394,15 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
         try {
             Sign sign = (Sign) loc.getBlock().getState();
             String[] allLines = sign.getLines();
-            int emptylines = 0;
-            for(int i = allLines.length - 1; i >= 0; --i) {
-                if (allLines[i].isEmpty()) {
-                    ++emptylines;
-                }
-                else {
-                    break;
-                }
-            }
-            if (emptylines == allLines.length) {
-                return new String[0];
-            }
             int start = 0, end = allLines.length - 1;
-
-            while(allLines[start].isEmpty())
+            while(start < end && allLines[start].isEmpty())
                 ++start;
-            while(allLines[end].isEmpty())
+            while(end > start && allLines[end].isEmpty())
                 --end;
 
-            return Arrays.copyOfRange(allLines, start, end);
-        } catch (ClassCastException e) {
+            return Arrays.copyOfRange(allLines, start, end + 1);
+        }
+        catch (ClassCastException e) {
             return new String[0];
         }
     }
@@ -460,6 +448,7 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
         return inventory.toArray(a);
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public Block buildShopSign(Location loc, String... signLines) throws PrematureAbortException
     {
         Location locUnder = loc.clone();
