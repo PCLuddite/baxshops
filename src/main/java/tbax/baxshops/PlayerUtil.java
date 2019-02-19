@@ -59,9 +59,22 @@ public final class PlayerUtil
         }
 
         int overflow = Math.max(item.getAmount() - space, 0);
+        int fullStacks;
         item = item.clone();
         item.setAmount(Math.min(item.getAmount(), space));
-        player.getInventory().addItem(item);
+
+        fullStacks = item.getAmount() / item.getMaxStackSize();
+        item.setAmount(item.getAmount() - fullStacks * item.getMaxStackSize());
+
+        if (item.getAmount() > 0)
+            player.getInventory().addItem(item);
+
+        while(fullStacks-- > 0) {
+            ItemStack stack = item.clone();
+            stack.setAmount(stack.getMaxStackSize());
+            player.getInventory().addItem(stack);
+        }
+
         return overflow;
     }
 
