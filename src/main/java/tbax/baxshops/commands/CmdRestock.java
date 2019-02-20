@@ -73,10 +73,7 @@ public final class CmdRestock extends BaxShopCommand
     @Override
     public boolean requiresItemInHand(ShopCmdActor actor)
     {
-        return actor.getNumArgs() < 3
-            || actor.isArgInt(1)
-            || actor.getArg(1).equalsIgnoreCase("all")
-            || actor.getArg(1).equalsIgnoreCase("most");
+        return actor.getNumArgs() < 3 || actor.isArgQtyNotAny(2);
     }
 
     @Override
@@ -98,13 +95,13 @@ public final class CmdRestock extends BaxShopCommand
         }
         assert entry != null;
 
-        List<BaxEntry> taken = actor.takeArgFromInventory(actor.getArg(1));
+        BaxQuantity qty = new BaxQuantity(actor.getArg(1));
+        List<BaxEntry> taken = actor.takeQtyFromInventory(qty);
 
         if (requiresItemInHand(actor)) {
             BaxEntry takenItem = taken.get(0);
             entry.add(takenItem.getAmount());
-            if (!("all".equalsIgnoreCase(actor.getArg(1)) || "most".equalsIgnoreCase(actor.getArg(1)))
-                && takenItem.getAmount() < actor.getArgInt(1)) {
+            if (!(qty.isAll() || qty.isMost()) && takenItem.getAmount() < qty.getQuantity()) {
                 actor.sendMessage("Could only restock with " + ChatColor.RED + "%d %s" + ChatColor.RESET + ". The shop now has %s.",
                                     takenItem.getAmount(), ItemNames.getName(takenItem), Format.number(entry.getAmount())
                 );

@@ -103,6 +103,21 @@ public final class ShopCmdActor
         return args[index];
     }
 
+    public BaxQuantity getArgQty(int index)
+    {
+        return new BaxQuantity(args[index], getItemInHand(), player.getInventory());
+    }
+
+    public boolean isArgQty(int index)
+    {
+        return getArgQty(index).isQuantity();
+    }
+
+    public boolean isArgQtyNotAny(int index)
+    {
+        return getArgQty(index).isArgQtyNotAny();
+    }
+
     public int getArgInt(int index) throws PrematureAbortException
     {
         return getArgInt(index, String.format("Expecting argument %d to be a whole number", index));
@@ -330,28 +345,37 @@ public final class ShopCmdActor
     {
         if (player == null)
             return null;
-        return player.getInventory().getItemInMainHand();
+        ItemStack item = player.getInventory().getItemInMainHand();
+        if (item == null || item.getType().getMaterial() == Material.AIR)
+            return null;
+        return item;
     }
 
-    public List<BaxEntry> takeArgFromInventory(String arg) throws PrematureAbortException
+    public List<BaxEntry> takeArgFromInventory(int index) throws PrematureAbortException
     {
-        if ("any".equalsIgnoreCase(arg))
+        return takeQtyFromInventory(new BaxQuantity(args[index]));
+    }
+
+    public List<BaxEntry> takeQtyFromInventory(BaxQuantity qty) throws PrematureAbortException
+    {
+        if (qty.isAny())
             return takeAnyFromInventory();
 
         if (getShop() == null)
             throw new CommandErrorException(Resources.NOT_FOUND_SELECTED);
 
-        if (getItemInHand() == null || getItemInHand().getType() == Material.AIR)
+        if (getItemInHand() == null)
             throw new CommandErrorException(Resources.NOT_FOUND_HELDITEM);
+
+        qty.setItem(getItemInHand());
+        qty.setInventory(player.getInventory());
 
         List<BaxEntry> ret = new ArrayList<>();
 
         BaxEntry entry = getShop().find(getItemInHand());
         assert entry != null;
         BaxEntry clone = new BaxEntry(entry);
-
-        BaxQuantity quantity = new BaxQuantity(player, entry, arg);
-        clone.setAmount(takeFromInventory(clone.getItemStack(), quantity.getQuantity()));
+        clone.setAmount(takeFromInventory(clone.getItemStack(), qty.getQuantity()));
         ret.add(clone);
         return ret;
     }

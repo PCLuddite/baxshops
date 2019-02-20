@@ -14,14 +14,39 @@ import tbax.baxshops.errors.PrematureAbortException;
 public class BaxQuantity
 {
     private String argument;
-    private BaxEntry entry;
-    private Player player;
+    private ItemStack stack;
+    private Iterable<ItemStack> inventory;
 
-    public BaxQuantity(Player pl, BaxEntry baxEntry, String arg)
+    public BaxQuantity(String arg)
+    {
+        this(arg, null, null);
+    }
+
+    public BaxQuantity(String arg, ItemStack item, Iterable<ItemStack> inv)
     {
         argument = arg;
-        entry = baxEntry;
-        player = pl;
+        stack = item;
+        inventory = inv;
+    }
+
+    public void setItem(ItemStack stack)
+    {
+        this.stack = stack;
+    }
+
+    public void getItem()
+    {
+        return stack;
+    }
+
+    public void setInventory(Iterable<ItemStack> inv)
+    {
+        inventory = inv;
+    }
+
+    public void getInventory()
+    {
+        return inventory;
     }
 
     public int getQuantity() throws PrematureAbortException
@@ -34,17 +59,33 @@ public class BaxQuantity
                 return getAmountInInventory();
             }
             else if (isMost()) {
-                return player.getInventory().getItemInMainHand().getAmount() - 1;
+                return stack.getAmount() - 1;
             }
             throw new CommandErrorException(e, argument + " is not a valid quantity");
         }
     }
 
+    public boolean isQuantityNotAny()
+    {
+        try {
+            getQuantity();
+            return true;
+        }
+        catch(PrematureAbortException e) {
+            return false;
+        }
+    }
+
+    public boolean isQuantity()
+    {
+        return isQuantityNotAny() || isAny();
+    }
+
     private int getAmountInInventory()
     {
         int qty = 0;
-        for(ItemStack stack : player.getInventory()) {
-            if (entry.isSimilar(stack)) {
+        for(ItemStack stack : inventory) {
+            if (stack.isSimilar(this.stack)) {
                 qty += stack.getAmount();
             }
         }
@@ -54,6 +95,11 @@ public class BaxQuantity
     public boolean isAll()
     {
         return "all".equalsIgnoreCase(argument);
+    }
+
+    public boolean isAny()
+    {
+        return "any".equalsIgnoreCase(argument);
     }
 
     public boolean isMost()

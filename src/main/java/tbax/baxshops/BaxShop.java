@@ -498,4 +498,14 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
         entry.setInfinite(hasFlagInfinite());
         inventory.add(index, entry);
     }
+
+    public ItemStack[] getItemStackInventory()
+    {
+        ItemStack[] inv = new ItemStack[size()];
+        int i = 0;
+        for(BaxEntry entry : this) {
+            inv[i++] = entry.getItemStack();
+        }
+        return inv;
+    }
 }
