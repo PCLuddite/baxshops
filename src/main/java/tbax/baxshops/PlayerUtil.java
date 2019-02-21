@@ -9,8 +9,11 @@ package tbax.baxshops;
 
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.CommandWarningException;
 import tbax.baxshops.errors.PrematureAbortException;
@@ -19,7 +22,7 @@ import tbax.baxshops.notification.SaleClaim;
 import tbax.baxshops.serialization.StoredData;
 import tbax.baxshops.serialization.StoredPlayer;
 
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Methods for dealing with interactions with players
@@ -208,5 +211,97 @@ public final class PlayerUtil
     public static void sellItem(UUID shopId, UUID buyer, UUID seller, BaxEntry entry) throws PrematureAbortException
     {
         sellItem(shopId, StoredData.getOfflinePlayer(buyer), StoredData.getOfflinePlayer(seller), entry);
+    }
+
+    public static List<BaxEntry> takeQtyFromInventory(BaxQuantity qty) throws PrematureAbortException
+    {
+        return takeQtyFromInventory(qty, null, null);
+    }
+
+    public static List<BaxEntry> takeQtyFromInventory(BaxQuantity qty, BaxShop shop, Iterable<ItemStack> inv) throws PrematureAbortException
+    {
+        if (qty.isAny()) {
+            if (shop == null || !(inv instanceof PlayerInventory))
+                throw new CommandErrorException("'any' cannot be used for this action");
+            return takeAnyFromInventory(shop, (PlayerInventory)inv);
+        }
+
+        BaxEntry clone = new BaxEntry(qty.getItem());
+        clone.setAmount(takeFromInventory(inv, clone.getItemStack(), qty.getQuantity()));
+        return Collections.singletonList(clone);
+    }
+
+    private static List<BaxEntry> takeAnyFromInventory(BaxShop shop, PlayerInventory inv)
+    {
+        ArrayList<BaxEntry> list = new ArrayList<>();
+
+        if (shop == null)
+            return list;
+
+        for (BaxEntry entry : shop) {
+            BaxEntry curr = new BaxEntry(entry);
+            for (int x = 0; x < inv.getSize(); ++x) {
+                ItemStack item = inv.getItem(x);
+                if (curr.isSimilar(item)) {
+                    curr.add(item.getAmount());
+                    inv.setItem(x, null);
+                }
+            }
+            if (curr.getAmount() > 0) {
+                list.add(curr);
+            }
+        }
+
+        return list;
+    }
+
+    public static int takeFromInventory(Iterable<ItemStack> stacks, ItemStack item, int amt)
+    {
+        int qty = 0;
+        if (stacks instanceof Inventory) {
+            Inventory inv = (Inventory)stacks;
+            if (inv instanceof PlayerInventory) {
+                ItemStack hand = ((PlayerInventory)inv).getItemInMainHand();
+                if (hand != null && hand.isSimilar(item)) {
+                    if (amt < hand.getAmount()) {
+                        hand.setAmount(hand.getAmount() - amt);
+                        qty += amt;
+                    } else {
+                        qty += hand.getAmount();
+                        ((PlayerInventory)inv).setItemInMainHand(null);
+                    }
+                }
+            }
+
+            for (int x = 0; x < inv.getSize() && qty < amt; ++x) {
+                ItemStack other = inv.getItem(x);
+                if (other != null && other.isSimilar(item)) {
+                    if (amt - qty < other.getAmount()) {
+                        other.setAmount(other.getAmount() - (amt - qty));
+                        qty = amt;
+                    }
+                    else {
+                        qty += other.getAmount();
+                        inv.setItem(x, null);
+                    }
+                }
+            }
+        }
+        else {
+            for(ItemStack invItem : stacks) {
+                if (invItem.isSimilar(item)) {
+                    if (amt - qty < invItem.getAmount()) {
+                        invItem.setAmount(invItem.getAmount() - (amt - qty));
+                        qty = amt;
+                    }
+                    else {
+                        qty += invItem.getAmount();
+                        invItem.setAmount(0);
+                    }
+                }
+            }
+        }
+
+        return qty;
     }
 }
