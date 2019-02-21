@@ -3,13 +3,12 @@
  *  Copyright (c) Timothy Baxendale
  *
  *  +++====+++
- **/
+**/
 
 package tbax.baxshops;
 
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -22,7 +21,10 @@ import tbax.baxshops.notification.SaleClaim;
 import tbax.baxshops.serialization.StoredData;
 import tbax.baxshops.serialization.StoredPlayer;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Methods for dealing with interactions with players
@@ -213,21 +215,44 @@ public final class PlayerUtil
         sellItem(shopId, StoredData.getOfflinePlayer(buyer), StoredData.getOfflinePlayer(seller), entry);
     }
 
+    /**
+     * Removes a BaxQuantity from an inventory
+     * @param qty the BaxQuantity to remove
+     * @return a list of BaxEntries with the removed items
+     * @throws PrematureAbortException thrown when 'any' is specified
+     */
     public static List<BaxEntry> takeQtyFromInventory(BaxQuantity qty) throws PrematureAbortException
     {
         return takeQtyFromInventory(qty, null, null);
     }
 
-    public static List<BaxEntry> takeQtyFromInventory(BaxQuantity qty, BaxShop shop, Iterable<ItemStack> inv) throws PrematureAbortException
+    /**
+     * Removes a BaxQuantity from an inventory
+     * @param qty the BaxQuantity to remove
+     * @param shop the shop to use if 'any' is specified
+     * @param inv the inventory to search through if 'any' is specified
+     * @return a list of BaxEntries with the removed items
+     * @throws PrematureAbortException thrown when any is specified and shop is null or inv is null
+     */
+    public static List<BaxEntry> takeQtyFromInventory(BaxQuantity qty, BaxShop shop, PlayerInventory inv) throws PrematureAbortException
     {
         if (qty.isAny()) {
-            if (shop == null || !(inv instanceof PlayerInventory))
+            if (shop == null || inv == null)
                 throw new CommandErrorException("'any' cannot be used for this action");
-            return takeAnyFromInventory(shop, (PlayerInventory)inv);
+            return takeAnyFromInventory(shop, inv);
         }
 
-        BaxEntry clone = new BaxEntry(qty.getItem());
-        clone.setAmount(takeFromInventory(inv, clone.getItemStack(), qty.getQuantity()));
+        BaxEntry clone = null;
+        if (shop != null) {
+            clone = shop.find(qty.getItem());
+        }
+        if (clone == null) {
+            clone = new BaxEntry(qty.getItem());
+        }
+        else {
+            clone = new BaxEntry(clone);
+        }
+        clone.setAmount(takeFromInventory(qty.getInventory(), clone.getItemStack(), qty.getQuantity()));
         return Collections.singletonList(clone);
     }
 
@@ -255,11 +280,19 @@ public final class PlayerUtil
         return list;
     }
 
-    public static int takeFromInventory(Iterable<ItemStack> stacks, ItemStack item, int amt)
+    /**
+     * Searches for an ItemStack and removes a specified amount from the Iterable. When the amount removes the entire
+     * quantity of an ItemStack, the item is removed if the Iterable passed is an Inventory object or set to zero
+     * @param inventory the Iterable containing the ItemStack inventory
+     * @param item the item
+     * @param amt the amount to remove
+     * @return the actual quantity removed
+     */
+    public static int takeFromInventory(Iterable<ItemStack> inventory, ItemStack item, int amt)
     {
         int qty = 0;
-        if (stacks instanceof Inventory) {
-            Inventory inv = (Inventory)stacks;
+        if (inventory instanceof Inventory) {
+            Inventory inv = (Inventory)inventory;
             if (inv instanceof PlayerInventory) {
                 ItemStack hand = ((PlayerInventory)inv).getItemInMainHand();
                 if (hand != null && hand.isSimilar(item)) {
@@ -288,7 +321,7 @@ public final class PlayerUtil
             }
         }
         else {
-            for(ItemStack invItem : stacks) {
+            for(ItemStack invItem : inventory) {
                 if (invItem.isSimilar(item)) {
                     if (amt - qty < invItem.getAmount()) {
                         invItem.setAmount(invItem.getAmount() - (amt - qty));
