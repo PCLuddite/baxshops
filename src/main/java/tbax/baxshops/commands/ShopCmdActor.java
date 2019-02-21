@@ -103,19 +103,26 @@ public final class ShopCmdActor
         return args[index];
     }
 
-    public BaxQuantity getArgQty(int index)
+    public BaxQuantity getArgPlayerQty(int index)
     {
         return new BaxQuantity(args[index], getItemInHand(), player.getInventory());
     }
 
+    public BaxQuantity getArgShopQty(int index, BaxEntry entry) throws PrematureAbortException
+    {
+        if (getShop() == null)
+            throw new CommandErrorException(Resources.NOT_FOUND_SELECTED);
+        return new BaxQuantity(args[index], entry.getItemStack(), getShop().getItemStackInventory());
+    }
+
     public boolean isArgQty(int index)
     {
-        return getArgQty(index).isQuantity();
+        return BaxQuantity.isQuantity(args[index]);
     }
 
     public boolean isArgQtyNotAny(int index)
     {
-        return getArgQty(index).isArgQtyNotAny();
+        return BaxQuantity.isQuantityNotAny(args[index]);
     }
 
     public int getArgInt(int index) throws PrematureAbortException
@@ -346,14 +353,14 @@ public final class ShopCmdActor
         if (player == null)
             return null;
         ItemStack item = player.getInventory().getItemInMainHand();
-        if (item == null || item.getType().getMaterial() == Material.AIR)
+        if (item == null || item.getType() == Material.AIR)
             return null;
         return item;
     }
 
     public List<BaxEntry> takeArgFromInventory(int index) throws PrematureAbortException
     {
-        return takeQtyFromInventory(new BaxQuantity(args[index]));
+        return takeQtyFromInventory(getArgPlayerQty(index));
     }
 
     public List<BaxEntry> takeQtyFromInventory(BaxQuantity qty) throws PrematureAbortException

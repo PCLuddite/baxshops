@@ -93,7 +93,7 @@ public final class CmdSell extends BaxShopCommand
             actor.setArg(1, actor.getItemInHand().getAmount() - 1);
         }
 
-        List<BaxEntry> items = actor.takeArgFromInventory(actor.getArg(1));
+        List<BaxEntry> items = actor.takeArgFromInventory(1);
 
         if (items.isEmpty()) {
             actor.exitWarning("You did not have anything to sell at this shop.");

@@ -95,8 +95,8 @@ public final class CmdRestock extends BaxShopCommand
         }
         assert entry != null;
 
-        BaxQuantity qty = new BaxQuantity(actor.getArg(1));
-        List<BaxEntry> taken = actor.takeQtyFromInventory(qty);
+        BaxQuantity qty = actor.getArgPlayerQty(1);
+        List<BaxEntry> taken = actor.takeArgFromInventory(1);
 
         if (requiresItemInHand(actor)) {
             BaxEntry takenItem = taken.get(0);

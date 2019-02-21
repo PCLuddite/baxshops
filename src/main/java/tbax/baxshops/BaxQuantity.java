@@ -6,21 +6,17 @@
 **/
 package tbax.baxshops;
 
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
+
+import java.util.Arrays;
 
 public class BaxQuantity
 {
     private String argument;
     private ItemStack stack;
     private Iterable<ItemStack> inventory;
-
-    public BaxQuantity(String arg)
-    {
-        this(arg, null, null);
-    }
 
     public BaxQuantity(String arg, ItemStack item, Iterable<ItemStack> inv)
     {
@@ -29,12 +25,17 @@ public class BaxQuantity
         inventory = inv;
     }
 
+    public BaxQuantity(String arg, ItemStack item, ItemStack[] inv)
+    {
+        this(arg, item, Arrays.asList(inv));
+    }
+
     public void setItem(ItemStack stack)
     {
         this.stack = stack;
     }
 
-    public void getItem()
+    public ItemStack getItem()
     {
         return stack;
     }
@@ -44,7 +45,12 @@ public class BaxQuantity
         inventory = inv;
     }
 
-    public void getInventory()
+    public void setInventory(ItemStack[] inv)
+    {
+        setInventory(Arrays.asList(inv));
+    }
+
+    public Iterable<ItemStack> getInventory()
     {
         return inventory;
     }
@@ -67,18 +73,28 @@ public class BaxQuantity
 
     public boolean isQuantityNotAny()
     {
-        try {
-            getQuantity();
-            return true;
-        }
-        catch(PrematureAbortException e) {
-            return false;
-        }
+        return isQuantityNotAny(argument);
     }
 
     public boolean isQuantity()
     {
-        return isQuantityNotAny() || isAny();
+        return isQuantity(argument);
+    }
+
+    public static boolean isQuantityNotAny(String qty)
+    {
+        try {
+            Integer.parseInt(qty);
+            return true;
+        }
+        catch (NumberFormatException e) {
+            return "all".equalsIgnoreCase(qty) || "most".equalsIgnoreCase(qty);
+        }
+    }
+
+    public static boolean isQuantity(String qty)
+    {
+        return isQuantityNotAny(qty) || "any".equalsIgnoreCase(qty);
     }
 
     private int getAmountInInventory()
