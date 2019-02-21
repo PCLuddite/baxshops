@@ -73,7 +73,7 @@ public final class CmdSell extends BaxShopCommand
     @Override
     public boolean requiresItemInHand(ShopCmdActor actor)
     {
-        return actor.getNumArgs() < 2 || actor.isArgInt(1) || actor.getArg(1).equalsIgnoreCase("all") || actor.getArg(1).equalsIgnoreCase("most");
+        return actor.getNumArgs() < 2 || actor.isArgQtyNotAny(1);
     }
 
     @Override
@@ -87,10 +87,6 @@ public final class CmdSell extends BaxShopCommand
         assert actor.getItemInHand() != null;
         if (actor.getNumArgs() == 1) {
             actor.appendArg(actor.getItemInHand().getAmount());
-        }
-
-        if (actor.getArg(1).equalsIgnoreCase("most")) {
-            actor.setArg(1, actor.getItemInHand().getAmount() - 1);
         }
 
         List<BaxEntry> items = actor.takeArgFromInventory(1);

@@ -360,92 +360,13 @@ public final class ShopCmdActor
 
     public List<BaxEntry> takeArgFromInventory(int index) throws PrematureAbortException
     {
-        return takeQtyFromInventory(getArgPlayerQty(index));
-    }
-
-    public List<BaxEntry> takeQtyFromInventory(BaxQuantity qty) throws PrematureAbortException
-    {
-        if (qty.isAny())
-            return takeAnyFromInventory();
-
         if (getShop() == null)
             throw new CommandErrorException(Resources.NOT_FOUND_SELECTED);
 
         if (getItemInHand() == null)
             throw new CommandErrorException(Resources.NOT_FOUND_HELDITEM);
 
-        qty.setItem(getItemInHand());
-        qty.setInventory(player.getInventory());
-
-        List<BaxEntry> ret = new ArrayList<>();
-
-        BaxEntry entry = getShop().find(getItemInHand());
-        assert entry != null;
-        BaxEntry clone = new BaxEntry(entry);
-        clone.setAmount(takeFromInventory(clone.getItemStack(), qty.getQuantity()));
-        ret.add(clone);
-        return ret;
-    }
-
-    private List<BaxEntry> takeAnyFromInventory()
-    {
-        BaxShop shop = getShop();
-        PlayerInventory inv;
-        ArrayList<BaxEntry> list = new ArrayList<>();
-
-        if (shop == null || player == null)
-            return list;
-
-        inv = player.getInventory();
-
-        for (BaxEntry entry : shop) {
-            BaxEntry curr = new BaxEntry(entry);
-            for (int x = 0; x < inv.getSize(); ++x) {
-                ItemStack item = inv.getItem(x);
-                if (curr.isSimilar(item)) {
-                    curr.add(item.getAmount());
-                    inv.setItem(x, null);
-                }
-            }
-            if (curr.getAmount() > 0) {
-                list.add(curr);
-            }
-        }
-
-        return list;
-    }
-
-    public int takeFromInventory(ItemStack item, int amt)
-    {
-        PlayerInventory inv = player.getInventory();
-        ItemStack hand = getItemInHand();
-        int qty = 0;
-        if (hand != null && hand.isSimilar(item)) {
-            if (amt < hand.getAmount()) {
-                hand.setAmount(hand.getAmount() - amt);
-                qty += amt;
-            }
-            else {
-                qty += hand.getAmount();
-                inv.setItemInMainHand(null);
-            }
-        }
-
-        for(int x = 0; x < inv.getSize() && qty < amt; ++x) {
-            ItemStack other = inv.getItem(x);
-            if (other != null && other.isSimilar(item)) {
-                if (amt - qty < other.getAmount()) {
-                    other.setAmount(other.getAmount() - (amt - qty));
-                    qty = amt;
-                }
-                else {
-                    qty += other.getAmount();
-                    inv.setItem(x, null);
-                }
-            }
-        }
-
-        return qty;
+        return PlayerUtil.takeQtyFromInventory(getArgPlayerQty(index), getShop());
     }
 
     public PlayerInventory getInventory() {

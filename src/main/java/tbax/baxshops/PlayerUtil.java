@@ -223,23 +223,22 @@ public final class PlayerUtil
      */
     public static List<BaxEntry> takeQtyFromInventory(BaxQuantity qty) throws PrematureAbortException
     {
-        return takeQtyFromInventory(qty, null, null);
+        return takeQtyFromInventory(qty, null);
     }
 
     /**
      * Removes a BaxQuantity from an inventory
      * @param qty the BaxQuantity to remove
-     * @param shop the shop to use if 'any' is specified
-     * @param inv the inventory to search through if 'any' is specified
+     * @param shop the shop to use if 'any' is specified, or for the returned BaxEntry
      * @return a list of BaxEntries with the removed items
      * @throws PrematureAbortException thrown when any is specified and shop is null or inv is null
      */
-    public static List<BaxEntry> takeQtyFromInventory(BaxQuantity qty, BaxShop shop, PlayerInventory inv) throws PrematureAbortException
+    public static List<BaxEntry> takeQtyFromInventory(BaxQuantity qty, BaxShop shop) throws PrematureAbortException
     {
         if (qty.isAny()) {
-            if (shop == null || inv == null)
+            if (shop == null || !(qty.getInventory() instanceof PlayerInventory))
                 throw new CommandErrorException("'any' cannot be used for this action");
-            return takeAnyFromInventory(shop, inv);
+            return takeAnyFromInventory(shop, (PlayerInventory)qty.getInventory());
         }
 
         BaxEntry clone = null;
