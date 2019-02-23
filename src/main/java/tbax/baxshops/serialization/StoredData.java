@@ -324,7 +324,6 @@ public final class StoredData
         return player;
     }
 
-    @Deprecated
     public static OfflinePlayer getOfflinePlayer(String playerName)
     {
         StoredPlayer player = legacyPlayers.get(playerName);
@@ -407,7 +406,6 @@ public final class StoredData
         sendNotification(player, n, ShopPlugin.getInstance().getConfig().getBoolean("LogNotes"));
     }
 
-    @Deprecated
     public static void sendNotification(String playerName, Notification n)
     {
         sendNotification(getOfflinePlayer(playerName), n);

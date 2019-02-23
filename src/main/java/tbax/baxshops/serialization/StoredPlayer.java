@@ -39,7 +39,6 @@ public class StoredPlayer implements OfflinePlayer
         lastSeenName = player.getName();
     }
 
-    @Deprecated
     public StoredPlayer(String name)
     {
         legacyPlayer = true;
