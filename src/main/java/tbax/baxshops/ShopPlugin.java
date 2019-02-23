@@ -9,7 +9,6 @@
 package tbax.baxshops;
 
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
@@ -22,10 +21,7 @@ import tbax.baxshops.notification.*;
 import tbax.baxshops.serialization.StoredData;
 import tbax.baxshops.serialization.StoredPlayer;
 
-import java.util.Deque;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 import java.util.logging.Logger;
 
 @SuppressWarnings("WeakerAccess")
@@ -212,10 +208,10 @@ public final class ShopPlugin extends JavaPlugin
         return econ != null;
     }
 
-    public void sendInfo(Player pl, String message)
+    public static void sendInfo(Player pl, String message)
     {
         if (pl != null) {
-            if (getConfig().getBoolean("LogNotes", false)) {
+            if (plugin.getConfig().getBoolean("LogNotes", false)) {
                 pl.sendMessage(message);
                 logPlayerMessage(pl, message);
             }
