@@ -16,10 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.serialization.ItemNames;
-import tbax.baxshops.serialization.ShopUser;
-import tbax.baxshops.serialization.StateConversion;
-import tbax.baxshops.serialization.StoredData;
+import tbax.baxshops.serialization.*;
 
 import java.util.*;
 
@@ -48,8 +45,14 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
             flags = (int) args.get("flags");
         }
         else {
+            String name = (String)args.get("owner");
             id = UUID.randomUUID();
-            owner = new ShopUser((String)args.get("owner"));
+            if (StoredPlayer.DUMMY_NAME.equalsIgnoreCase(name)) {
+                owner = new ShopUser(StoredPlayer.DUMMY_UUID);
+            }
+            else {
+                owner = new ShopUser(name);
+            }
             flags = StateConversion.flagMapToFlag(args);
         }
         inventory.addAll((ArrayList) args.get("inventory"));
