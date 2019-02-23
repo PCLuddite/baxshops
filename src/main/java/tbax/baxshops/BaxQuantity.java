@@ -101,7 +101,7 @@ public class BaxQuantity
     {
         int qty = 0;
         for(ItemStack stack : inventory) {
-            if (stack.isSimilar(this.stack)) {
+            if (stack != null && stack.isSimilar(this.stack)) {
                 qty += stack.getAmount();
             }
         }
