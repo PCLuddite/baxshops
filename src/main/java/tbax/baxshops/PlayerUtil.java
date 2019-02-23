@@ -174,7 +174,7 @@ public final class PlayerUtil
 
         if (shop == null) {
             DeletedShopClaim deletedClaim = new DeletedShopClaim(buyer, entry);
-            ShopPlugin.sendNotification(buyer, deletedClaim);
+            StoredData.sendNotification(buyer, deletedClaim);
         }
         else if (shop.hasFlagSellToShop()) {
             ItemStack item = entry.toItemStack();
@@ -197,7 +197,7 @@ public final class PlayerUtil
             }
             else {
                 SaleClaim claim = new SaleClaim(shop.getId(), buyer, seller, entry);
-                ShopPlugin.sendNotification(buyer, claim);
+                StoredData.sendNotification(buyer, claim);
             }
         }
     }

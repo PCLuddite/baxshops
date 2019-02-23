@@ -72,7 +72,7 @@ public final class SaleRequest implements Request
     {
         try {
             PlayerUtil.sellItem(shopId, buyer, seller, entry);
-            ShopPlugin.sendNotification(seller, new SaleNotification(shopId, buyer, seller, entry));
+            StoredData.sendNotification(seller, new SaleNotification(shopId, buyer, seller, entry));
             return true;
         }
         catch (PrematureAbortException e) {
@@ -85,7 +85,7 @@ public final class SaleRequest implements Request
     public boolean reject(ShopCmdActor rejectingActor)
     {
         SaleRejection rejection = new SaleRejection(shopId, buyer, seller, entry);
-        ShopPlugin.sendNotification(seller, rejection);
+        StoredData.sendNotification(seller, rejection);
         rejectingActor.sendError("Offer rejected");
         return true;
     }

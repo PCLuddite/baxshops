@@ -40,11 +40,6 @@ public final class ShopPlugin extends JavaPlugin
 
     private static ShopPlugin plugin;
     private static Logger log;
-    /**
-     * A map containing each player's currently selected shop and other
-     * selection data
-     */
-    private static Map<UUID, ShopSelection> selectedShops = new HashMap<>();
 
     public ShopPlugin()
     {
@@ -54,106 +49,6 @@ public final class ShopPlugin extends JavaPlugin
     public static Map<String, BaxShopCommand> getCommands()
     {
         return commands;
-    }
-
-    /**
-     * Shows a player his/her most recent notification. Also shows the
-     * notification count.
-     *
-     * @param player the player
-     */
-    public static void showNotification(Player player)
-    {
-        showNotification(player, true);
-    }
-
-    /**
-     * Shows a player his/her most recent notification.
-     *
-     * @param player the player
-     * @param showCount whether the notification count should be shown as well
-     */
-    public static void showNotification(Player player, boolean showCount)
-    {
-        Deque<Notification> notifications = StoredData.getNotifications(player.getPlayer());
-        if (notifications.isEmpty()) {
-            if (showCount) {
-                player.sendMessage("You have no notifications.");
-            }
-            return;
-        }
-        if (showCount) {
-            int size = notifications.size();
-            player.sendMessage(String.format("You have %s %s.", Format.number(size), size == 1 ? "notification" : "notifications"));
-        }
-
-        Notification n = notifications.getFirst();
-        player.sendMessage(n.getMessage(player.getPlayer()));
-        if (n instanceof Request) {
-            player.sendMessage(String.format("Use %s or %s to manage this request.", Format.command("/shop accept"), Format.command("/shop reject")));
-        }
-        else if (n instanceof Claimable) {
-            player.sendMessage(String.format("Use %s to claim and remove this notification.", Format.command("/shop claim")));
-        }
-        else {
-            notifications.removeFirst();
-        }
-    }
-
-    /**
-     * Sends a notification to a player.
-     *
-     * @param player the player
-     * @param n the notification
-     */
-    public static void sendNotification(OfflinePlayer player, Notification n)
-    {
-        sendNotification(player, n, plugin.getConfig().getBoolean("LogNotes"));
-    }
-
-    @Deprecated
-    public static void sendNotification(String playerName, Notification n) throws PrematureAbortException
-    {
-        sendNotification(StoredData.getOfflinePlayer(playerName), n);
-    }
-
-    /**
-     * Sends a notification to a player.
-     *
-     * @param player the player
-     * @param n the notification
-     * @param logNote should show it in the log
-     */
-    public static void sendNotification(OfflinePlayer player, Notification n, boolean logNote)
-    {
-        Deque<Notification> ns = StoredData.getNotifications(player);
-        if (logNote) {
-            log.info(Format.toAnsiColor(n.getMessage(null)));
-        }
-        ns.add(n);
-        if (player.isOnline()) {
-            showNotification(player.getPlayer(), false);
-        }
-    }
-
-    public static ShopSelection getSelection(Player player)
-    {
-        ShopSelection selected = selectedShops.get(player.getUniqueId());
-        if (selected == null) {
-            selected = new ShopSelection();
-            selectedShops.put(player.getUniqueId(), selected);
-        }
-        return selected;
-    }
-
-    public static void clearSelection(Player player)
-    {
-        selectedShops.remove(player.getUniqueId());
-    }
-
-    public static void sendNotification(UUID playerId, Notification note)
-    {
-        sendNotification(StoredData.getOfflinePlayer(playerId), note);
     }
 
     @Override

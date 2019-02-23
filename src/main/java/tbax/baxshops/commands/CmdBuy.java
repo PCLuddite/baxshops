@@ -13,6 +13,7 @@ import tbax.baxshops.CommandHelp;
 import tbax.baxshops.notification.BuyNotification;
 import tbax.baxshops.notification.BuyRequest;
 import tbax.baxshops.serialization.ItemNames;
+import tbax.baxshops.serialization.StoredData;
 
 public final class CmdBuy extends BaxShopCommand
 {
@@ -119,7 +120,7 @@ public final class CmdBuy extends BaxShopCommand
             }
 
             BuyRequest request = new BuyRequest(shop.getId(), actor.getPlayer(), shop.getOwner(), purchased);
-            ShopPlugin.sendNotification(shop.getOwner(), request);
+            StoredData.sendNotification(shop.getOwner(), request);
             actor.sendMessage("Your request to buy %s for %s has been sent.", Format.itemName(purchased.getAmount(), itemName), Format.money(price));
         }
         else {
@@ -142,7 +143,7 @@ public final class CmdBuy extends BaxShopCommand
 
             actor.sendMessage(Resources.CURRENT_BALANCE, Format.money2(ShopPlugin.getEconomy().getBalance(actor.getPlayer())));
             if (shop.hasFlagNotify()) {
-                ShopPlugin.sendNotification(shop.getOwner(), new BuyNotification(shop.getId(), actor.getPlayer(), shop.getOwner(), purchased));
+                StoredData.sendNotification(shop.getOwner(), new BuyNotification(shop.getId(), actor.getPlayer(), shop.getOwner(), purchased));
             }
         }
     }

@@ -8,7 +8,6 @@
 package tbax.baxshops.commands;
 
 import tbax.baxshops.CommandHelp;
-import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.Resources;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.Claimable;
@@ -97,6 +96,6 @@ public final class CmdAccept extends BaxShopCommand
                 }
             }
         }
-        ShopPlugin.showNotification(actor.getPlayer());
+        StoredData.showNotification(actor.getPlayer());
     }
 }

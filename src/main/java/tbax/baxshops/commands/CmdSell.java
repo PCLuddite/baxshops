@@ -12,6 +12,7 @@ import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
 import tbax.baxshops.notification.SaleRequest;
 import tbax.baxshops.serialization.ItemNames;
+import tbax.baxshops.serialization.StoredData;
 
 import java.util.List;
 
@@ -127,7 +128,7 @@ public final class CmdSell extends BaxShopCommand
 
         if (shop.hasFlagSellRequests()) {
             SaleRequest request = new SaleRequest(shop.getId(), shop.getOwner(), actor.getPlayer(), entry);
-            ShopPlugin.sendNotification(shop.getOwner(), request);
+            StoredData.sendNotification(shop.getOwner(), request);
             actor.sendMessage("Your request to sell %s for %s has been sent.",
                 Format.itemName(entry.getAmount(), name), Format.money(price)
             );

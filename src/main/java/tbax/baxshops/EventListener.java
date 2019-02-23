@@ -66,7 +66,7 @@ public class EventListener implements Listener
                         event.setCancelled(true);
                         event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), shop.toItem(event.getBlock().getLocation()));
                         StoredData.removeLocation(null, event.getBlock().getLocation()); // we don't need to tell the player if there's an error 12/5/15
-                        ShopPlugin.clearSelection(event.getPlayer());
+                        StoredData.clearSelection(event.getPlayer());
                         event.getBlock().setType(Material.AIR);
                     }
                 }
@@ -112,7 +112,7 @@ public class EventListener implements Listener
 
         boolean isOwner = shop.getOwner().equals(player);
 
-        ShopSelection selection = ShopPlugin.getSelection(player);
+        ShopSelection selection = StoredData.getSelection(player);
         selection.setLocation(b.getLocation());
 
         if (selection.getShop() == shop) {
@@ -230,7 +230,7 @@ public class EventListener implements Listener
     public void onPlayerMove(PlayerMoveEvent event)
     {
         Player pl = event.getPlayer();
-        ShopSelection s = ShopPlugin.getSelection(pl);
+        ShopSelection s = StoredData.getSelection(pl);
         if (s.getShop() != null) {
             Location shopLoc = s.getLocation();
             Location pLoc = event.getTo();
@@ -241,7 +241,7 @@ public class EventListener implements Listener
                 else {
                     pl.sendMessage("[Left " + Format.username(s.getShop().getOwner().getName()) + "'s shop]");
                 }
-                ShopPlugin.clearSelection(event.getPlayer());
+                StoredData.clearSelection(event.getPlayer());
             }
         }
     }

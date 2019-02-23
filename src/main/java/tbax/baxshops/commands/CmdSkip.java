@@ -8,7 +8,6 @@
 package tbax.baxshops.commands;
 
 import tbax.baxshops.CommandHelp;
-import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.Resources;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.Notification;
@@ -83,7 +82,7 @@ public final class CmdSkip extends BaxShopCommand
         }
         else {
             notifications.add(notifications.removeFirst());
-            ShopPlugin.showNotification(actor.getPlayer());
+            StoredData.showNotification(actor.getPlayer());
         }
     }
 }

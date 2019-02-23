@@ -20,8 +20,8 @@ import tbax.baxshops.errors.CommandMessageException;
 import tbax.baxshops.errors.CommandWarningException;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.ItemNames;
+import tbax.baxshops.serialization.StoredData;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
@@ -90,7 +90,7 @@ public final class ShopCmdActor
 
     public ShopSelection getSelection()
     {
-        return ShopPlugin.getSelection(player);
+        return StoredData.getSelection(player);
     }
     
     public int getNumArgs()

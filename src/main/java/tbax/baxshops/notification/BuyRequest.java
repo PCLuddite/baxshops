@@ -79,7 +79,7 @@ public final class BuyRequest implements Request
             econ.depositPlayer(getSeller(), price);
 
             BuyClaim n = new BuyClaim(shopId, buyer, seller, entry);
-            ShopPlugin.sendNotification(getBuyer(), n);
+            StoredData.sendNotification(getBuyer(), n);
 
             acceptingActor.sendMessage("Offer accepted");
             acceptingActor.sendMessage(String.format(Resources.CURRENT_BALANCE, Format.money2(ShopPlugin.getEconomy().getBalance(acceptingActor.getPlayer()))));
@@ -97,7 +97,7 @@ public final class BuyRequest implements Request
         BaxShop shop = StoredData.getShop(shopId);
         if (shop == null) {
             DeletedShopClaim shopDeleted = new DeletedShopClaim(buyer, entry);
-            ShopPlugin.sendNotification(getBuyer(), shopDeleted);
+            StoredData.sendNotification(getBuyer(), shopDeleted);
         }
         else if (!shop.hasFlagInfinite()) {
             BaxEntry shopEntry = shop.find(entry.getItemStack());
@@ -110,7 +110,7 @@ public final class BuyRequest implements Request
         }
 
         BuyRejection n = new BuyRejection(shopId, buyer, seller, entry);
-        ShopPlugin.sendNotification(buyer, n);
+        StoredData.sendNotification(buyer, n);
         rejectingActor.sendError("Offer rejected");
         return true;
     }
