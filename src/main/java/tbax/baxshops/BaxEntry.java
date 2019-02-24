@@ -20,6 +20,7 @@ import org.bukkit.potion.PotionData;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.ItemNames;
+import tbax.baxshops.serialization.SafeMap;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,10 +50,11 @@ public final class BaxEntry implements ConfigurationSerializable
     @SuppressWarnings("unchecked")
     public BaxEntry(Map<String, Object> args)
     {
-        quantity = (int)args.get("quantity");
-        retailPrice = (double)args.get("retailPrice");
-        refundPrice = (double) args.get("refundPrice");
-        stack = ItemStack.deserialize((Map)args.get("stack"));
+        SafeMap map = new SafeMap(args);
+        quantity = map.getInteger("quantity");
+        retailPrice = map.getDouble("retailPrice", 10000);
+        refundPrice = map.getDouble("refundPrice");
+        stack = map.getItemStack("stack", new ItemStack(Material.DIRT));
     }
     
     public BaxEntry(ItemStack item)

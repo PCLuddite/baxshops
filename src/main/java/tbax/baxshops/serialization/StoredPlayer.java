@@ -49,9 +49,10 @@ public class StoredPlayer implements OfflinePlayer
     @SuppressWarnings("unused")
     public StoredPlayer(Map<String, Object> args)
     {
-        uuid = UUID.fromString((String)args.get("uuid"));
-        lastSeenName = (String)args.get("name");
-        legacyPlayer = (boolean)args.getOrDefault("legacy", true);
+        SafeMap map = new SafeMap(args);
+        uuid = map.getUUID("uuid", UUID.randomUUID());
+        lastSeenName = map.getString("name", uuid.toString());
+        legacyPlayer = map.getBoolean("legacy", true);
     }
 
     public OfflinePlayer getOfflinePlayer()

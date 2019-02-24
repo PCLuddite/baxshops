@@ -36,16 +36,16 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
     {
     }
 
-    @SuppressWarnings({"unchecked", "deprecation"})
     public BaxShop(Map<String, Object> args)
     {
-        if (args.containsKey("flags")) {
-            id = UUID.fromString((String) args.get("id"));
-            owner = new ShopUser(UUID.fromString((String)args.get("owner")));
-            flags = (int) args.get("flags");
+        SafeMap map = new SafeMap(args);
+        if (map.containsKey("flags")) {
+            id =  map.getUUID("id", UUID.randomUUID());
+            owner = new ShopUser(map.getUUID("owner", StoredPlayer.DUMMY_UUID));
+            flags = map.getInteger("flags");
         }
         else {
-            String name = (String)args.get("owner");
+            String name = map.getString("owner", StoredPlayer.DUMMY_NAME);
             id = UUID.randomUUID();
             if (StoredPlayer.DUMMY_NAME.equalsIgnoreCase(name)) {
                 owner = new ShopUser(StoredPlayer.DUMMY_UUID);
@@ -53,15 +53,11 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
             else {
                 owner = new ShopUser(name);
             }
-            flags = StateConversion.flagMapToFlag(args);
+            flags = StateConversion.flagMapToFlag(map);
         }
-        inventory.addAll((ArrayList) args.get("inventory"));
-        locations.addAll((ArrayList) args.get("locations"));
-        if (hasFlagInfinite()) {
-            for (BaxEntry entry : inventory) {
-                entry.setInfinite(true);
-            }
-        }
+        inventory.addAll(map.getList("inventory"));
+        locations.addAll(map.getList("locations"));
+        inventory.forEach(entry -> entry.setInfinite(hasFlagInfinite()));
     }
 
     public BaxShop(BaxShop shop)
