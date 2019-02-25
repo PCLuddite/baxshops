@@ -315,16 +315,14 @@ public final class StoredData
         }
     }
 
-    public static OfflinePlayer getOfflinePlayer(UUID uuid)
+    public static StoredPlayer getOfflinePlayer(UUID uuid)
     {
         StoredPlayer player = players.get(uuid);
-        if (player == null) {
-            return Bukkit.getOfflinePlayer(uuid);
-        }
+        assert player != null;
         return player;
     }
 
-    public static OfflinePlayer getOfflinePlayer(String playerName)
+    public static StoredPlayer getOfflinePlayer(String playerName)
     {
         StoredPlayer player = legacyPlayers.get(playerName);
         if (player == null) {
