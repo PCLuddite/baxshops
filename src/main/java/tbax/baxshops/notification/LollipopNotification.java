@@ -78,7 +78,7 @@ public final class LollipopNotification implements ConfigurationSerializable, No
     public Map<String, Object> serialize()
     {
         Map<String, Object> args = new HashMap<>();
-        args.put("sender", sender.toString());
+        args.put("sender", getSender().getUniqueId().toString());
         args.put("tastiness", tastiness);
         return args;
     }

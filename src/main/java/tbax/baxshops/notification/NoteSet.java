@@ -7,7 +7,10 @@
 
 package tbax.baxshops.notification;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import tbax.baxshops.serialization.StoredData;
+import tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.*;
 
@@ -54,7 +57,7 @@ public final class NoteSet implements ConfigurationSerializable
     public Map<String, Object> serialize()
     {
         Map<String, Object> args = new HashMap<>();
-        args.put("recipient", recipient.toString());
+        args.put("recipient", StoredData.getOfflinePlayer(recipient).getUniqueId().toString());
         args.put("notes", new ArrayList<>(notes));
         return args;
     }

@@ -135,8 +135,8 @@ public final class BuyRequest implements Request
     {
         Map<String, Object> args = new HashMap<>();
         args.put("shopId", shopId.toString());
-        args.put("buyer", buyer.toString());
-        args.put("seller", seller.toString());
+        args.put("buyer", getBuyer().getUniqueId().toString());
+        args.put("seller", getSeller().getUniqueId().toString());
         args.put("entry", entry);
         return args;
     }

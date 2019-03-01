@@ -86,8 +86,8 @@ public final class SaleNotification implements Notification
     {
         Map<String, Object> args = new HashMap<>();
         args.put("shopId", shopId.toString());
-        args.put("seller", seller.toString());
-        args.put("buyer", buyer.toString());
+        args.put("seller", getSeller().toString());
+        args.put("buyer", getBuyer().toString());
         args.put("entry", entry);
         return args;
     }

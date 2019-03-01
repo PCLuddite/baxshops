@@ -64,7 +64,7 @@ public final class DeletedShopClaim implements Claimable
     {
         HashMap<String, Object> args = new HashMap<>();
         args.put("entry", entry);
-        args.put("owner", owner.toString());
+        args.put("owner", getOwner().getUniqueId().toString());
         return args;
     }
 

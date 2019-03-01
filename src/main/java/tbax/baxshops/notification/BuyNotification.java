@@ -87,8 +87,8 @@ public final class BuyNotification implements Notification
     {
         Map<String, Object> args = new HashMap<>();
         args.put("entry", entry);
-        args.put("buyer", buyer.toString());
-        args.put("seller", seller.toString());
+        args.put("buyer", getBuyer().getUniqueId().toString());
+        args.put("seller", getSeller().getUniqueId().toString());
         args.put("shopId", shopId.toString());
         return args;
     }
