@@ -7,7 +7,6 @@
 
 package tbax.baxshops.serialization;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
@@ -50,10 +49,9 @@ public final class StoredData
     private static Map<UUID, Deque<Notification>> pending = new HashMap<>();
 
     /**
-     * A map containing each player's display names for when they're offline
+     * A map containing each player's attributes for when they're offline
      */
-    private static Map<UUID, StoredPlayer> players = new HashMap<>();
-    private static Map<String, StoredPlayer> legacyPlayers = new HashMap<>();
+    private static PlayerMap player = new PlayerMap();
 
     private static ShopPlugin plugin;
     private static Logger log;
@@ -194,14 +192,12 @@ public final class StoredData
             for (StoredPlayer player : playerList) {
                 if (player.equals(StoredPlayer.DUMMY))
                     hasWorld = true;
-                if (player.isLegacyPlayer())
-                    legacyPlayers.put(player.getName(), player);
-                players.put(player.getUniqueId(), player);
+                StoredData.player.put(player.getUniqueId(), player);
             }
         }
 
         if (!hasWorld)
-            players.put(StoredPlayer.DUMMY_UUID, StoredPlayer.DUMMY);
+            player.put(StoredPlayer.DUMMY_UUID, StoredPlayer.DUMMY);
 
     }
     
@@ -295,7 +291,7 @@ public final class StoredData
         FileConfiguration state = new YamlConfiguration();
         state.set("version", STATE_VERSION);
         state.set("shops", new ArrayList<>(shops.values()));
-        state.set("players", new ArrayList<>(players.values()));
+        state.set("players", new ArrayList<>(player.values()));
         List<NoteSet> notes = new ArrayList<>();
         for(Map.Entry<UUID, Deque<Notification>> entry : pending.entrySet()) {
             notes.add(new NoteSet(entry.getKey(), entry.getValue()));
@@ -317,36 +313,30 @@ public final class StoredData
 
     public static StoredPlayer getOfflinePlayer(UUID uuid)
     {
-        StoredPlayer player = players.get(uuid);
+        StoredPlayer player = StoredData.player.get(uuid);
         assert player != null;
         return player;
     }
 
     public static StoredPlayer getOfflinePlayer(String playerName)
     {
-        StoredPlayer player = legacyPlayers.get(playerName);
-        if (player == null) {
-            player = new StoredPlayer(playerName);
-            legacyPlayers.put(playerName, player);
-            players.put(player.getUniqueId(), player);
-        }
-        return player;
+        return player.get(playerName);
     }
 
     public static void joinPlayer(Player player)
     {
-        StoredPlayer storedPlayer = legacyPlayers.remove(player.getName());
+        StoredPlayer storedPlayer = StoredData.player.getLegacy(player.getName());
         if (storedPlayer == null) {
             storedPlayer = new StoredPlayer(player);
         }
         else {
             Deque<Notification> notes = pending.remove(storedPlayer.getUniqueId());
-            players.remove(storedPlayer.getUniqueId());
+            StoredData.player.remove(storedPlayer.getUniqueId());
             storedPlayer.convertLegacy(player);
             if (notes != null)
                 pending.put(storedPlayer.getUniqueId(), notes);
         }
-        players.put(storedPlayer.getUniqueId(), storedPlayer);
+        StoredData.player.put(storedPlayer.getUniqueId(), storedPlayer);
     }
 
     /**
