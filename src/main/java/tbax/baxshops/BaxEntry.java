@@ -32,18 +32,17 @@ public final class BaxEntry implements ConfigurationSerializable
     private double retailPrice = -1;
     private double refundPrice = -1;
     private boolean infinite = false;
-    private int quantity = 0;
     
     public BaxEntry()
     {
+        stack = new ItemStack(Material.AIR);
     }
 
-    public BaxEntry(BaxEntry other)
+    public BaxEntry(@NotNull BaxEntry other)
     {
         infinite = other.infinite;
         refundPrice = other.refundPrice;
         retailPrice = other.retailPrice;
-        quantity = other.quantity;
         stack = other.stack.clone();
     }
 
@@ -51,10 +50,12 @@ public final class BaxEntry implements ConfigurationSerializable
     public BaxEntry(Map<String, Object> args)
     {
         SafeMap map = new SafeMap(args);
-        quantity = map.getInteger("quantity");
         retailPrice = map.getDouble("retailPrice", 10000);
         refundPrice = map.getDouble("refundPrice");
-        stack = map.getItemStack("stack", new ItemStack(Material.DIRT));
+        stack = map.getItemStack("stack", new ItemStack(Material.AIR));
+        if (map.containsKey("quantity")) {
+            stack.setAmount(map.getInteger("quantity"));
+        }
     }
     
     public BaxEntry(ItemStack item)
@@ -99,73 +100,29 @@ public final class BaxEntry implements ConfigurationSerializable
 
     public void add(int amt)
     {
-        quantity += amt;
-    }
-    
-    public void add(String amt) throws PrematureAbortException
-    {
-        add(argToAmnt(amt));
+        setAmount(getAmount() + amt);
     }
     
     public void subtract(int amt)
     {
-        quantity -= amt;
+        setAmount(getAmount() - amt);
     }
     
-    public void subtract(String amt) throws PrematureAbortException
+    public void setItem(@NotNull ItemStack item)
     {
-        subtract(argToAmnt(amt));
-    }
-    
-    public void setItem(ItemStack item)
-    {
-        assert item != null;
-        quantity = item.getAmount();
         stack = item.clone();
-        stack.setAmount(1);
     }
     
     public void setItem(Material type)
     {
-        stack = new ItemStack(type, 1);
+        stack = new ItemStack(type, getAmount());
     }
     
     public void setItem(Material type, short damage)
     {
-        stack = new ItemStack(type, 1, damage);
+        stack = new ItemStack(type, getAmount(), damage);
     }
         
-    /**
-     * Converts a string amount keyword ("all","most") or number to an int
-     * @param arg
-     * @return
-     */
-    public int argToAmnt(String arg) throws PrematureAbortException
-    {
-        if ("all".equalsIgnoreCase(arg)) {
-            if (infinite) {
-                return getItemStack().getMaxStackSize();
-            }
-            else {
-                return getAmount();
-            }
-        }
-        else if ("most".equalsIgnoreCase(arg)) {
-            if (infinite) {
-                return getItemStack().getMaxStackSize() - 1;
-            }
-            else {
-                return getAmount() - 1;
-            }
-        }
-        try {
-            return Integer.parseInt(arg);
-        }
-        catch (NumberFormatException e) {
-            throw new CommandErrorException(e, String.format(Resources.INVALID_DECIMAL, "amount"));
-        }
-    }
-    
     /**
      * clones this entry's item stack and sets its amount to this entry's quantity
      * If the entry quantity is equal to zero, the material type may be AIR
@@ -173,13 +130,11 @@ public final class BaxEntry implements ConfigurationSerializable
      */
     public ItemStack toItemStack()
     {
-        ItemStack newstack = stack.clone();
-        newstack.setAmount(quantity);
-        return newstack;
+        return stack.clone();
     }
     
     /**
-     * gets a reference to the item stack that this entry points to, which is not guaranteed to have the proper quantity
+     * gets a reference to the item stack that this entry points to
      * @return 
      */
     public ItemStack getItemStack()
@@ -204,12 +159,12 @@ public final class BaxEntry implements ConfigurationSerializable
         
     public void setAmount(int amt)
     {
-        quantity = amt;
+        stack.setAmount(amt);
     }
     
     public int getAmount()
     {
-        return quantity;
+        return stack.getAmount();
     }
     
     public short getDurability()
@@ -330,7 +285,7 @@ public final class BaxEntry implements ConfigurationSerializable
             }
             info.append("Enchants: ").append(Format.enchantments(enchants)).append('\n');
         }
-        info.append("Quantity: ").append(quantity == 0 ? ChatColor.DARK_RED + "OUT OF STOCK" + ChatColor.RESET : Format.number(quantity)).append('\n');
+        info.append("Quantity: ").append(stack.getAmount() == 0 ? ChatColor.DARK_RED + "OUT OF STOCK" + ChatColor.RESET : Format.number(stack.getAmount())).append('\n');
         info.append("Buy Price: ").append(ChatColor.DARK_GREEN).append(ShopPlugin.getEconomy().format(retailPrice)).append(ChatColor.RESET).append('\n');
         if (refundPrice >= 0) {
             info.append("Sell Price: ").append(ChatColor.BLUE).append(ShopPlugin.getEconomy().format(refundPrice)).append(ChatColor.RESET).append('\n');
@@ -402,7 +357,6 @@ public final class BaxEntry implements ConfigurationSerializable
     public Map<String, Object> serialize()
     {
         HashMap<String, Object> map = new HashMap<>();
-        map.put("quantity", quantity);
         map.put("retailPrice", retailPrice);
         map.put("refundPrice", refundPrice);
         map.put("stack", stack.serialize());
