@@ -182,18 +182,19 @@ public class PlayerMap implements Map<UUID, StoredPlayer>
     public StoredPlayer convertLegacy(Player player)
     {
         List<UUID> uuids = playerNames.get(player.getName());
-        if (!(uuids == null || uuids.isEmpty())) {
-            for (UUID id : uuids) {
-                StoredPlayer storedPlayer = get(id);
-                if (storedPlayer != null && storedPlayer.isLegacyPlayer()) {
-                    players.remove(id);
-                    storedPlayer.convertLegacy(player);
-                    put(storedPlayer);
-                    survivorship.put(id, storedPlayer.getUniqueId());
-                    return storedPlayer;
-                }
+        if (uuids == null || uuids.isEmpty())
+            return null;
+
+        for (UUID id : uuids) {
+            StoredPlayer storedPlayer = get(id);
+            if (storedPlayer != null && storedPlayer.isLegacyPlayer()) {
+                players.remove(id);
+                storedPlayer.convertLegacy(player);
+                put(storedPlayer);
+                survivorship.put(id, storedPlayer.getUniqueId());
+                return storedPlayer;
             }
-        }
+        }        
         return null;
     }
 
