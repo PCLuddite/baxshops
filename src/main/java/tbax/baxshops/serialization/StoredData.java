@@ -51,7 +51,7 @@ public final class StoredData
     /**
      * A map containing each player's attributes for when they're offline
      */
-    private static PlayerMap player = new PlayerMap();
+    private static PlayerMap players = new PlayerMap();
 
     private static ShopPlugin plugin;
     private static Logger log;
@@ -192,12 +192,12 @@ public final class StoredData
             for (StoredPlayer player : playerList) {
                 if (player.equals(StoredPlayer.DUMMY))
                     hasWorld = true;
-                StoredData.player.put(player.getUniqueId(), player);
+                players.put(player.getUniqueId(), player);
             }
         }
 
         if (!hasWorld)
-            player.put(StoredPlayer.DUMMY_UUID, StoredPlayer.DUMMY);
+            players.put(StoredPlayer.DUMMY_UUID, StoredPlayer.DUMMY);
 
     }
     
@@ -291,7 +291,7 @@ public final class StoredData
         FileConfiguration state = new YamlConfiguration();
         state.set("version", STATE_VERSION);
         state.set("shops", new ArrayList<>(shops.values()));
-        state.set("players", new ArrayList<>(player.values()));
+        state.set("players", new ArrayList<>(players.values()));
         List<NoteSet> notes = new ArrayList<>();
         for(Map.Entry<UUID, Deque<Notification>> entry : pending.entrySet()) {
             notes.add(new NoteSet(entry.getKey(), entry.getValue()));
@@ -313,30 +313,30 @@ public final class StoredData
 
     public static StoredPlayer getOfflinePlayer(UUID uuid)
     {
-        StoredPlayer player = StoredData.player.get(uuid);
+        StoredPlayer player = players.get(uuid);
         assert player != null;
         return player;
     }
 
     public static StoredPlayer getOfflinePlayer(String playerName)
     {
-        return player.get(playerName);
+        return players.get(playerName);
     }
 
     public static void joinPlayer(Player player)
     {
-        StoredPlayer storedPlayer = StoredData.player.getLegacy(player.getName());
+        StoredPlayer storedPlayer = players.convertLegacy(player);
         if (storedPlayer == null) {
             storedPlayer = new StoredPlayer(player);
         }
         else {
             Deque<Notification> notes = pending.remove(storedPlayer.getUniqueId());
-            StoredData.player.remove(storedPlayer.getUniqueId());
+            players.remove(storedPlayer.getUniqueId());
             storedPlayer.convertLegacy(player);
             if (notes != null)
                 pending.put(storedPlayer.getUniqueId(), notes);
         }
-        StoredData.player.put(storedPlayer.getUniqueId(), storedPlayer);
+        players.put(storedPlayer.getUniqueId(), storedPlayer);
     }
 
     /**
