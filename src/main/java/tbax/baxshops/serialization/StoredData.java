@@ -332,7 +332,6 @@ public final class StoredData
         else {
             Deque<Notification> notes = pending.remove(storedPlayer.getUniqueId());
             players.remove(storedPlayer.getUniqueId());
-            storedPlayer.convertLegacy(player);
             if (notes != null)
                 pending.put(storedPlayer.getUniqueId(), notes);
         }
