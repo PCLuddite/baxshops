@@ -25,7 +25,7 @@ public class StoredPlayer implements OfflinePlayer
     private String lastSeenName;
     private boolean legacyPlayer;
 
-    private StoredPlayer(String name, UUID uuid)
+    public StoredPlayer(String name, UUID uuid)
     {
         this.uuid = uuid;
         this.lastSeenName = name;

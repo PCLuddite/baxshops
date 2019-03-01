@@ -15,7 +15,9 @@ import org.bukkit.inventory.ItemStack;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.StoredData;
+import tbax.baxshops.serialization.StoredPlayer;
 
+import java.util.List;
 import java.util.UUID;
 
 public final class CmdCreate extends BaxShopCommand
@@ -89,7 +91,15 @@ public final class CmdCreate extends BaxShopCommand
     {
         OfflinePlayer owner;
         if (actor.isAdmin()) {
-            owner = StoredData.getOfflinePlayer(actor.getArg(1));
+            if (actor.isArgUuid(1)) {
+                owner = StoredData.getOfflinePlayerSafe(actor.getArgUuid(1));
+            }
+            else {
+                List<StoredPlayer> players = StoredData.getOfflinePlayer(actor.getArg(1));
+                if (players.size() > 1)
+                    actor.exitError(Resources.TooManyPlayers(players));
+                owner = players.get(0);
+            }
         }
         else {
             owner = actor.getPlayer();

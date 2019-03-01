@@ -23,6 +23,7 @@ import tbax.baxshops.serialization.ItemNames;
 import tbax.baxshops.serialization.StoredData;
 
 import java.util.List;
+import java.util.UUID;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public final class ShopCmdActor
@@ -414,5 +415,32 @@ public final class ShopCmdActor
     public boolean tryGiveItem(ItemStack stack)
     {
         return PlayerUtil.tryGiveItem(player, stack);
+    }
+
+    @SuppressWarnings("ResultOfMethodCallIgnored")
+    public boolean isArgUuid(int index)
+    {
+        try {
+            UUID.fromString(args[index]);
+            return true;
+        }
+        catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    public UUID getArgUuid(int index) throws PrematureAbortException
+    {
+        return getArgUuid(index, String.format("Expecting argument %d to be a UUID", index));
+    }
+
+    public UUID getArgUuid(int index, String errMsg) throws PrematureAbortException
+    {
+        try {
+            return UUID.fromString(args[index]);
+        }
+        catch (IllegalArgumentException e) {
+            throw new CommandErrorException(e, errMsg);
+        }
     }
 }

@@ -8,6 +8,9 @@
 package tbax.baxshops;
 
 import org.bukkit.ChatColor;
+import tbax.baxshops.serialization.StoredPlayer;
+
+import java.util.List;
 
 @SuppressWarnings("unused")
 public final class Resources
@@ -45,4 +48,14 @@ public final class Resources
     public static final String NOT_FOUND_SIGN = "%s's shop is missing its sign.";
     public static final String NOT_FOUND_NOTE = "You have no notifications for this action.";
     public static final String ITEM_ADDED = "The item(s) have been added to your inventory.";
+
+    public static String TooManyPlayers(List<StoredPlayer> players)
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append("There are multiple players with that name. Please specify the UUID instead.\n");
+        for (StoredPlayer player : players) {
+            sb.append(Format.keyword(player.getUniqueId().toString())).append('\n');
+        }
+        return sb.toString();
+    }
 }

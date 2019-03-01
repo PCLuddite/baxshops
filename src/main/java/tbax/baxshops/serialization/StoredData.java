@@ -318,7 +318,17 @@ public final class StoredData
         return player;
     }
 
-    public static StoredPlayer getOfflinePlayer(String playerName)
+    public static StoredPlayer getOfflinePlayerSafe(UUID uuid)
+    {
+        StoredPlayer player = players.get(uuid);
+        if (player == null) {
+            player = new StoredPlayer(uuid.toString(), uuid);
+            players.put(player);
+        }
+        return player;
+    }
+
+    public static List<StoredPlayer> getOfflinePlayer(String playerName)
     {
         return players.get(playerName);
     }
@@ -395,7 +405,12 @@ public final class StoredData
 
     public static void sendNotification(String playerName, Notification n)
     {
-        sendNotification(getOfflinePlayer(playerName), n);
+        List<StoredPlayer> players = getOfflinePlayer(playerName);
+        if (players == null || players.isEmpty())
+            return;
+        for(StoredPlayer player : players) {
+            sendNotification(player, n);
+        }
     }
 
     /**

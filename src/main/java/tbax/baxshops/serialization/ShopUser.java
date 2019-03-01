@@ -30,7 +30,7 @@ public final class ShopUser
     public OfflinePlayer getOfflinePlayer()
     {
         if (uuid == null) {
-            return StoredData.getOfflinePlayer(legacyName);
+            return StoredData.getOfflinePlayer(legacyName).get(0);
         }
         else {
             return StoredData.getOfflinePlayer(uuid);
