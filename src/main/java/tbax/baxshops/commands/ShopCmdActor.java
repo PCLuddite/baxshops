@@ -21,6 +21,7 @@ import tbax.baxshops.errors.CommandWarningException;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.ItemNames;
 import tbax.baxshops.serialization.StoredData;
+import tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.List;
 import java.util.UUID;
@@ -441,6 +442,19 @@ public final class ShopCmdActor
         }
         catch (IllegalArgumentException e) {
             throw new CommandErrorException(e, errMsg);
+        }
+    }
+
+    public StoredPlayer getArgPlayer(int index) throws PrematureAbortException
+    {
+        try {
+            return StoredData.getOfflinePlayerSafe(getArgUuid(index));
+        }
+        catch (PrematureAbortException e){
+            List<StoredPlayer> players = StoredData.getOfflinePlayer(args[index]);
+            if (players.size() > 1)
+                exitError(Resources.TooManyPlayers(players));
+            return players.get(0);
         }
     }
 }

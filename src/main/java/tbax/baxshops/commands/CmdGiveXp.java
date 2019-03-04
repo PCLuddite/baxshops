@@ -7,6 +7,7 @@
 
 package tbax.baxshops.commands;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
@@ -85,7 +86,10 @@ public final class CmdGiveXp extends BaxShopCommand
 
         Player p;
         if (actor.isAdmin() && actor.getNumArgs() == 3) {
-            p = actor.getPlayer().getServer().getPlayer(actor.getArg(2));
+            OfflinePlayer offlinePlayer = actor.getArgPlayer(2);
+            if (!offlinePlayer.isOnline())
+                actor.exitError(Resources.NOT_ONLINE);
+            p = offlinePlayer.getPlayer();
         }
         else {
             p = actor.getPlayer();

@@ -29,6 +29,7 @@ public final class Resources
     public static final String NOT_FOUND_SELECTED = "You do not have any shop selected!\nYou must select a shop to perform this action!";
     public static final String[] SIGN_CLOSED = {"This shop has", "been closed by", "%s"};
     // Errors
+    public static final String NOT_ONLINE = "The player needs to be online to use this command.";
     public static final String NO_ROOM = "Your inventory is full.";
     public static final String NO_PERMISSION = "You do not have permission to use this command.";
     public static final String NOT_FOUND_SHOPITEM = "That item has not been added to this shop.\nUse /shop add to add a new item";

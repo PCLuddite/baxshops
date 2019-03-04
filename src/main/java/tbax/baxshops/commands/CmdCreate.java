@@ -91,15 +91,7 @@ public final class CmdCreate extends BaxShopCommand
     {
         OfflinePlayer owner;
         if (actor.isAdmin()) {
-            if (actor.isArgUuid(1)) {
-                owner = StoredData.getOfflinePlayerSafe(actor.getArgUuid(1));
-            }
-            else {
-                List<StoredPlayer> players = StoredData.getOfflinePlayer(actor.getArg(1));
-                if (players.size() > 1)
-                    actor.exitError(Resources.TooManyPlayers(players));
-                owner = players.get(0);
-            }
+            owner = actor.getArgPlayer(1);
         }
         else {
             owner = actor.getPlayer();

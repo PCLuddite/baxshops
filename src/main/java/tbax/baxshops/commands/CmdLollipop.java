@@ -82,6 +82,6 @@ public final class CmdLollipop extends BaxShopCommand
         if (actor.getNumArgs() == 3) {
             tastiness = actor.getArgDouble(2, "Invalid tastiness");
         }
-        StoredData.sendNotification(actor.getArg(1), new LollipopNotification(actor.getPlayer(), tastiness));
+        StoredData.sendNotification(actor.getArgPlayer(1), new LollipopNotification(actor.getPlayer(), tastiness));
     }
 }
