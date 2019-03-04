@@ -30,6 +30,7 @@ public final class BaxEntry implements ConfigurationSerializable
     private ItemStack stack;
     private double retailPrice = -1;
     private double refundPrice = -1;
+    private int quantity = 0;
     private boolean infinite = false;
     
     public BaxEntry()
@@ -40,6 +41,7 @@ public final class BaxEntry implements ConfigurationSerializable
     public BaxEntry(@NotNull BaxEntry other)
     {
         infinite = other.infinite;
+        quantity = other.quantity;
         refundPrice = other.refundPrice;
         retailPrice = other.retailPrice;
         stack = other.stack.clone();
@@ -52,9 +54,7 @@ public final class BaxEntry implements ConfigurationSerializable
         retailPrice = map.getDouble("retailPrice", 10000);
         refundPrice = map.getDouble("refundPrice");
         stack = map.getItemStack("stack", new ItemStack(Material.AIR));
-        if (map.containsKey("quantity")) {
-            stack.setAmount(map.getInteger("quantity"));
-        }
+        quantity = map.getInteger("quantity");
     }
     
     public BaxEntry(ItemStack item)
@@ -129,12 +129,15 @@ public final class BaxEntry implements ConfigurationSerializable
      */
     public ItemStack toItemStack()
     {
-        return stack.clone();
+        ItemStack stack = this.stack.clone();
+        stack.setAmount(quantity);
+        return stack;
     }
     
     /**
-     * gets a reference to the item stack that this entry points to
-     * @return 
+     * gets a reference to the ItemStack that this entry points to. the amount is not guaranteed to be the entry
+     * quantity
+     * @return the ItemStack
      */
     public ItemStack getItemStack()
     {
@@ -158,12 +161,12 @@ public final class BaxEntry implements ConfigurationSerializable
         
     public void setAmount(int amt)
     {
-        stack.setAmount(amt);
+        quantity = amt;
     }
     
     public int getAmount()
     {
-        return stack.getAmount();
+        return quantity;
     }
     
     public short getDurability()
@@ -284,15 +287,14 @@ public final class BaxEntry implements ConfigurationSerializable
             }
             info.append("Enchants: ").append(Format.enchantments(enchants)).append('\n');
         }
-        info.append("Quantity: ").append(stack.getAmount() == 0 ? ChatColor.DARK_RED + "OUT OF STOCK" + ChatColor.RESET : Format.number(stack.getAmount())).append('\n');
+        info.append("Quantity: ").append(getAmount() == 0 ? ChatColor.DARK_RED + "OUT OF STOCK" + ChatColor.RESET : Format.number(getAmount())).append('\n');
         info.append("Buy Price: ").append(ChatColor.DARK_GREEN).append(ShopPlugin.getEconomy().format(retailPrice)).append(ChatColor.RESET).append('\n');
         if (refundPrice >= 0) {
             info.append("Sell Price: ").append(ChatColor.BLUE).append(ShopPlugin.getEconomy().format(refundPrice)).append(ChatColor.RESET).append('\n');
         }
         return info.toString();
     }
-    
-    @SuppressWarnings("ConstantConditions")
+
     public String toString(int index)
     {
         StringBuilder name = new StringBuilder(ItemNames.getName(this));
