@@ -13,7 +13,6 @@ import org.bukkit.Material;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
@@ -45,7 +44,6 @@ public final class BaxEntry implements ConfigurationSerializable
         stack = other.stack.clone();
     }
 
-    @SuppressWarnings("unchecked")
     public BaxEntry(Map<String, Object> args)
     {
         SafeMap map = new SafeMap(args);
@@ -135,7 +133,7 @@ public final class BaxEntry implements ConfigurationSerializable
     
     public Map<Enchantment, Integer> getEnchantments()
     {
-        return stack.getEnchantments();
+        return EnchantMap.getEnchants(stack);
     }
     
     public boolean hasItemMeta()
@@ -203,23 +201,7 @@ public final class BaxEntry implements ConfigurationSerializable
     {
         return Format.money2(MathUtil.multiply(retailPrice, getAmount()));
     }
-    
-    private static Map<Enchantment, Integer> getEnchants(ItemStack item)
-    {
-        if (!item.getEnchantments().isEmpty()) {
-            return item.getEnchantments();
-        }
-        else if (item.hasItemMeta()) {
-            if (item.getItemMeta().hasEnchants()) {
-                return item.getItemMeta().getEnchants();
-            }
-            else if (item.getItemMeta() instanceof EnchantmentStorageMeta) {
-                return ((EnchantmentStorageMeta)item.getItemMeta()).getStoredEnchants();
-            }
-        }
-        return null;
-    }
-    
+
     private static String getPotionInfo(ItemStack item)
     {
         if (item.getType() == Material.POTION) {
@@ -258,10 +240,10 @@ public final class BaxEntry implements ConfigurationSerializable
                 info.append(ChatColor.RESET).append('\n');
             }
         }
-        if (getEnchants(stack) != null) {
+        Map<Enchantment, Integer> enchmap = getEnchantments();
+        if (enchmap != null) {
             String enchants;
-            Map<Enchantment, Integer> enchmap = getEnchants(stack);
-            if (enchmap == null || enchmap.isEmpty()) {
+            if (enchmap.isEmpty()) {
                 enchants = "NONE";
             }
             else {
@@ -287,20 +269,11 @@ public final class BaxEntry implements ConfigurationSerializable
     public String toString(int index, boolean infinite)
     {
         StringBuilder name = new StringBuilder(ItemNames.getName(this));
-        
-        if (getEnchants(stack) != null) {
-            StringBuilder enchName = new StringBuilder(" ("); // Enchanted items are in purple
-            for(Map.Entry<Enchantment, Integer> ench : getEnchants(stack).entrySet()) {
-                enchName.append(ItemNames.getEnchantName(ench.getKey()).toUpperCase(), 0, 4); // List each enchantment
-                enchName.append(ench.getValue()); // and its value
-                enchName.append(", "); // separated by commas
-            }
-            if (infinite || getAmount() > 0) {
-                name.append(Format.enchantments(enchName.substring(0, enchName.length() - 2) + ")")); // Remove the last comma, put in a closing parenthesis
-            }
-            else {
-                name.append(enchName.substring(0, enchName.length() - 2)).append(")");
-            }
+        Map<Enchantment, Integer> enchantMap = getEnchantments();
+        if (enchantMap != null) {
+            if (infinite || getAmount() > 0)
+                name.append(Format.enchantments(""));
+            name.append(" (").append(enchantMap).append(")");
         }
         
         String potionInfo = getPotionInfo(stack);
@@ -350,6 +323,7 @@ public final class BaxEntry implements ConfigurationSerializable
         map.put("retailPrice", retailPrice);
         map.put("refundPrice", refundPrice);
         map.put("stack", stack.serialize());
+        map.put("quantity", quantity);
         return map;
     }
     
