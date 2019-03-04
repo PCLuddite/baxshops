@@ -183,10 +183,7 @@ public final class PlayerUtil
                 shopEntry = new BaxEntry();
                 shopEntry.setItem(item);
             }
-            if (shop.hasFlagInfinite()) {
-                shopEntry.setInfinite(true);
-            }
-            else {
+            if (!shop.hasFlagInfinite()) {
                 shopEntry.add(item.getAmount());
             }
         }

@@ -57,7 +57,6 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
         }
         inventory.addAll(map.getList("inventory"));
         locations.addAll(map.getList("locations"));
-        inventory.forEach(entry -> entry.setInfinite(hasFlagInfinite()));
     }
 
     public BaxShop(BaxShop shop)
@@ -187,7 +186,6 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
     @Override
     public boolean add(BaxEntry entry)
     {
-        entry.setInfinite(hasFlagInfinite());
         return inventory.add(entry);
     }
 
@@ -494,7 +492,6 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
 
     public void addEntry(int index, BaxEntry entry)
     {
-        entry.setInfinite(hasFlagInfinite());
         inventory.add(index, entry);
     }
 

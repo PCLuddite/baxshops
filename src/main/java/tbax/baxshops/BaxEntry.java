@@ -31,7 +31,6 @@ public final class BaxEntry implements ConfigurationSerializable
     private double retailPrice = -1;
     private double refundPrice = -1;
     private int quantity = 0;
-    private boolean infinite = false;
     
     public BaxEntry()
     {
@@ -40,7 +39,6 @@ public final class BaxEntry implements ConfigurationSerializable
 
     public BaxEntry(@NotNull BaxEntry other)
     {
-        infinite = other.infinite;
         quantity = other.quantity;
         refundPrice = other.refundPrice;
         retailPrice = other.retailPrice;
@@ -62,15 +60,6 @@ public final class BaxEntry implements ConfigurationSerializable
         setItem(item);
     }
 
-    public void setInfinite(boolean value)
-    {
-        infinite = value;
-    }
-
-    public boolean isInfinite()
-    {
-        return infinite;
-    }
 
     public double getRetailPrice()
     {
@@ -295,7 +284,7 @@ public final class BaxEntry implements ConfigurationSerializable
         return info.toString();
     }
 
-    public String toString(int index)
+    public String toString(int index, boolean infinite)
     {
         StringBuilder name = new StringBuilder(ItemNames.getName(this));
         
