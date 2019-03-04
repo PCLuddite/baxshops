@@ -92,31 +92,30 @@ public final class CmdBuy extends BaxShopCommand
         BaxShop shop = actor.getShop();
         assert shop != null;
         BaxEntry entry = shop.getEntry(actor.getArg(1));
-
-        int amount = entry.argToAmnt(actor.getArg(2));
-        if (amount == 0) {
+        BaxQuantity amount = actor.getArgShopQty(2, entry);
+        if (amount.getQuantity() == 0) {
             actor.exitError("You purchased nothing.");
         }
-        else if (amount < 0) {
+        else if (amount.getQuantity() < 0) {
             actor.exitError(Resources.INVALID_DECIMAL, "buy amount");
         }
-        else if (entry.getAmount() < amount && !shop.hasFlagInfinite()) {
+        else if (entry.getAmount() < amount.getQuantity() && !shop.hasFlagInfinite()) {
             actor.exitError(Resources.NO_SUPPLIES);
         }
 
         String itemName = ItemNames.getName(entry);
-        double price = MathUtil.multiply(amount, entry.getRetailPrice());
+        double price = MathUtil.multiply(amount.getQuantity(), entry.getRetailPrice());
 
         if (!ShopPlugin.getEconomy().has(actor.getPlayer(), price)) {
             actor.exitError(Resources.NO_MONEY_BUYER);
         }
 
         BaxEntry purchased = new BaxEntry(entry);
-        purchased.setAmount(amount);
+        purchased.setAmount(amount.getQuantity());
 
         if (shop.hasFlagBuyRequests()) {
             if (!shop.hasFlagInfinite()) {
-                entry.subtract(amount);
+                entry.subtract(amount.getQuantity());
             }
 
             BuyRequest request = new BuyRequest(shop.getId(), actor.getPlayer(), shop.getOwner(), purchased);
@@ -126,15 +125,15 @@ public final class CmdBuy extends BaxShopCommand
         else {
             int overflow = actor.giveItem(purchased.toItemStack());
             if (overflow > 0) {
-                price = MathUtil.multiply((amount - overflow), entry.getRetailPrice());
-                actor.sendMessage(Resources.SOME_ROOM + " " + Resources.CHARGED_MSG, amount - overflow, itemName, Format.money(price));
+                price = MathUtil.multiply((amount.getQuantity() - overflow), entry.getRetailPrice());
+                actor.sendMessage(Resources.SOME_ROOM + " " + Resources.CHARGED_MSG, amount.getQuantity() - overflow, itemName, Format.money(price));
             }
             else {
-                actor.sendMessage("You bought %s for %s.", Format.itemName(amount, itemName), Format.money(price));
+                actor.sendMessage("You bought %s for %s.", Format.itemName(amount.getQuantity(), itemName), Format.money(price));
             }
             ShopPlugin.getEconomy().withdrawPlayer(actor.getPlayer(), price);
             if (!shop.hasFlagInfinite()) {
-                entry.subtract(amount - overflow);
+                entry.subtract(amount.getQuantity() - overflow);
             }
 
             ShopPlugin.getEconomy().depositPlayer(shop.getOwner(), price);

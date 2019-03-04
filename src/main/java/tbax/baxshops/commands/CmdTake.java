@@ -93,24 +93,29 @@ public final class CmdTake extends BaxShopCommand
         }
 
         entry = actor.getArgEntry(1);
-        int amt = entry.argToAmnt(actor.getArg(2));
+        BaxQuantity amt = actor.getArgShopQty(2, entry);
 
-        if (!shop.hasFlagInfinite() && amt > entry.getAmount()) {
+        if (!shop.hasFlagInfinite() && amt.getQuantity() > entry.getAmount()) {
             actor.exitError(Resources.NO_SUPPLIES);
         }
 
         ItemStack stack = entry.toItemStack();
-        stack.setAmount(amt);
+        stack.setAmount(amt.getQuantity());
 
-        entry.subtract(amt);
+        entry.subtract(amt.getQuantity());
 
         int overflow = actor.giveItem(stack);
         if (overflow > 0) {
             entry.add(overflow);
-            actor.sendMessage(Resources.SOME_ROOM, amt - overflow, ItemNames.getName(stack));
+            actor.sendMessage(Resources.SOME_ROOM, amt.getQuantity() - overflow, ItemNames.getName(stack));
         }
         else {
-            actor.sendMessage("%s %s added to your inventory.",Format.itemName(amt, ItemNames.getName(entry)), amt == 1 ? "was" : "were");
+            actor.sendMessage("%s %s added to your inventory.",
+                Format.itemName(
+                    amt.getQuantity(),
+                    ItemNames.getName(entry)),
+                amt.getQuantity() == 1 ? "was" : "were"
+            );
         }
     }
 }
