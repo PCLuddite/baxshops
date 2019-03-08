@@ -11,10 +11,7 @@ package tbax.baxshops.serialization;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import tbax.baxshops.BaxEntry;
-import tbax.baxshops.BaxShop;
-import tbax.baxshops.Format;
-import tbax.baxshops.ShopPlugin;
+import tbax.baxshops.*;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
 
@@ -22,10 +19,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.*;
 
 @SuppressWarnings("JavaDoc")
 public final class ItemNames
@@ -153,7 +147,20 @@ public final class ItemNames
      */
     public static String getName(ItemStack item)
     {
-        return NMSUtils.getItemName(item);
+        if (item.getType() == Material.ENCHANTED_BOOK) {
+            Map<Enchantment, Integer> enchants = EnchantMap.getEnchants(item);
+            StringBuilder sb = new StringBuilder();
+            for (Map.Entry<Enchantment, Integer> entry : enchants.entrySet()) {
+                sb.append(getEnchantName(entry.getKey())).append(" ")
+                  .append(Format.toNumeral(entry.getValue())).append(", ");
+            }
+            return Format.enchantments(sb.substring(0, sb.length() - 3));
+        }
+        else {
+            item = item.clone();
+            item.getItemMeta().setDisplayName(null);
+            return NMSUtils.getItemName(item);
+        }
     }
     
     public static String getEnchantName(Enchantment enchant)
