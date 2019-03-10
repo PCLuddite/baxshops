@@ -268,14 +268,7 @@ public final class BaxEntry implements ConfigurationSerializable
 
     public String toString(int index, boolean infinite)
     {
-        StringBuilder name = new StringBuilder(ItemNames.getName(this));
-        Map<Enchantment, Integer> enchantMap = getEnchantments();
-        if (enchantMap != null) {
-            if (infinite || getAmount() > 0)
-                name.append(Format.enchantments(""));
-            name.append(" (").append(enchantMap).append(")");
-        }
-        
+        StringBuilder name = new StringBuilder(Format.listname(ItemNames.getName(this)));
         String potionInfo = getPotionInfo(stack);
         if (!potionInfo.equals("")) {
             name.append(" ").append(potionInfo);
@@ -287,32 +280,19 @@ public final class BaxEntry implements ConfigurationSerializable
             }
             name.append(" (Damage: ").append(getDamagePercent()).append("%)");
         }
-        
+
+        name.append(" ").append(Format.retailPrice(retailPrice));
+        if (refundPrice >= 0)
+            name.append(" ").append(Format.refundPrice(refundPrice));
+
         if (infinite) {
-            if (refundPrice < 0) {
-                return String.format("%s. %s %s", Format.bullet(index), Format.listname(name.toString()), Format.retailPrice(retailPrice));
-            }
-            else {
-                return String.format("%s. %s %s %s", Format.bullet(index), Format.listname(name.toString()), Format.retailPrice(retailPrice), Format.refundPrice(refundPrice));
-            }
+            return String.format("%s. %s", Format.bullet(index), Format.listname(name.toString()));
+        }
+        else if (getAmount() <= 0) {
+            return String.format("%s. (0) %s", ChatColor.RED.toString() + ChatColor.STRIKETHROUGH + index, Format.stripColor(name.toString()));
         }
         else {
-            if (getAmount() <= 0) {
-                if (refundPrice < 0) {
-                    return String.format(ChatColor.RED.toString() + ChatColor.STRIKETHROUGH + "%d. (0) %s (%s)", index, name, ShopPlugin.getEconomy().format(retailPrice));
-                }
-                else {
-                    return String.format(ChatColor.RED.toString() + ChatColor.STRIKETHROUGH + "%d. (0) %s (%s) (%s)", index, name, ShopPlugin.getEconomy().format(retailPrice), ShopPlugin.getEconomy().format(refundPrice));
-                }
-            }
-            else {
-                if (refundPrice < 0) {
-                    return String.format("%d. " + ChatColor.GRAY + "(%d) %s %s", index, getAmount(), Format.listname(name.toString()), Format.retailPrice(retailPrice));
-                }
-                else {
-                    return String.format("%d. " + ChatColor.GRAY + "(%d) %s %s %s", index, getAmount(), Format.listname(name.toString()), Format.retailPrice(retailPrice), Format.refundPrice(refundPrice));
-                }
-            }
+            return String.format("%d. " + ChatColor.GRAY + "(%d) %s", index, getAmount(), name.toString());
         }
     }
 
