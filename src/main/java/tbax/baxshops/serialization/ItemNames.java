@@ -11,6 +11,7 @@ package tbax.baxshops.serialization;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
@@ -149,18 +150,24 @@ public final class ItemNames
     {
         if (item.getType() == Material.ENCHANTED_BOOK) {
             Map<Enchantment, Integer> enchants = EnchantMap.getEnchants(item);
-            StringBuilder sb = new StringBuilder();
-            for (Map.Entry<Enchantment, Integer> entry : enchants.entrySet()) {
-                sb.append(getEnchantName(entry.getKey())).append(" ")
-                  .append(Format.toNumeral(entry.getValue())).append(", ");
-            }
-            return Format.enchantments(sb.substring(0, sb.length() - 3));
+            if (enchants != null)
+                return getEnchantedBookName(enchants);
         }
-        else {
-            item = item.clone();
-            item.getItemMeta().setDisplayName(null);
-            return NMSUtils.getItemName(item);
+        item = item.clone();
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(null);
+        item.setItemMeta(meta);
+        return NMSUtils.getItemName(item);
+    }
+
+    private static String getEnchantedBookName(Map<Enchantment, Integer> enchants)
+    {
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<Enchantment, Integer> entry : enchants.entrySet()) {
+            sb.append(getEnchantName(entry.getKey())).append(" ")
+                .append(Format.toNumeral(entry.getValue() + 1)).append(", ");
         }
+        return sb.substring(0, sb.length() - 3);
     }
     
     public static String getEnchantName(Enchantment enchant)
