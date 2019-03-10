@@ -274,4 +274,19 @@ public final class Format
                 append(" ------------").
                 append(ChatColor.RESET)).toString();
     }
+
+    public static String stripColor(String str)
+    {
+        StringBuilder sb = new StringBuilder(str.length());
+        for (int idx = 0; idx < str.length(); ++idx) {
+            char c = str.charAt(idx);
+            if (c == ChatColor.COLOR_CHAR) {
+                ++idx;
+            }
+            else {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
 }
