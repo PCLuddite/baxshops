@@ -9,6 +9,8 @@
 package tbax.baxshops.serialization;
 
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -16,10 +18,7 @@ import tbax.baxshops.*;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.*;
 
 @SuppressWarnings("JavaDoc")
@@ -31,18 +30,13 @@ public final class ItemNames
      */
     private static final HashMap<Long, String[]> aliases = new HashMap<>();
     /**
-     * A lookup table for item names. Item names are stored as
-     * <code>(ID &lt;&lt; 16) | (damageValue) =&gt; itemName</code>
-     */
-    private static final HashMap<Long, String> itemNames = new HashMap<>();
-    /**
      * An array of items that can be damaged
      */
     private static final HashMap<Material, Short> damageable = new HashMap<>();
     /**
      * A list of enchantment names
      */
-    private static final HashMap<Enchantment, String> enchants = new HashMap<>();
+    private static final HashMap<Enchantment, Enchantable> enchants = new HashMap<>();
 
     private ItemNames()
     {
@@ -160,23 +154,28 @@ public final class ItemNames
         return NMSUtils.getItemName(item);
     }
 
-    private static String getEnchantedBookName(Map<Enchantment, Integer> enchants)
+    private static String getEnchantedBookName(Map<Enchantment, Integer> enchantMap)
     {
         StringBuilder sb = new StringBuilder();
-        for (Map.Entry<Enchantment, Integer> entry : enchants.entrySet()) {
-            sb.append(getEnchantName(entry.getKey())).append(" ")
-                .append(Format.toNumeral(entry.getValue() + 1)).append(", ");
+        for (Map.Entry<Enchantment, Integer> entry : enchantMap.entrySet()) {
+            Enchantable enchantable = enchants.get(entry.getKey());
+            if (enchantable == null) {
+                sb.append(Format.toFriendlyName(entry.getKey().getName()));
+            }
+            else {
+                sb.append(enchantable.toString(entry.getValue()));
+            }
+            sb.append(", ");
         }
-        return sb.substring(0, sb.length() - 3);
+        return sb.substring(0, sb.length() - 2);
     }
     
     public static String getEnchantName(Enchantment enchant)
     {
-        String name = enchants.get(enchant);
-        if (name == null) {
-            name = Format.toFriendlyName(enchant.getName());
-        }
-        return name;
+        Enchantable enchantable = enchants.get(enchant);
+        if (enchantable == null)
+            return Format.toFriendlyName(enchant.getName());
+        return enchantable.getName();
     }
     
     /**
@@ -241,30 +240,16 @@ public final class ItemNames
      */
     public static void loadEnchants(ShopPlugin plugin)
     {
-        InputStream stream = plugin.getResource("enchants.txt");
-        if (stream == null) {
-            return;
-        }
-        try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(stream));
-            String line;
-            
-            while ((line = br.readLine()) != null) {
-                if (line.length() == 0 || line.charAt(0) == '#') {
-                    continue;
-                }
-                Scanner current = new Scanner(line);
-                String id = current.next();
-                StringBuilder name = new StringBuilder();
-                while (current.hasNext()) {
-                    name.append(' ').append(current.next());
-                }
-                if (name.length() == 0) {
-                    break;
-                }
-                enchants.put(Enchantment.getByName(id), name.substring(1));
+        try (InputStream stream = plugin.getResource("enchants.yml")) {
+            YamlConfiguration enchantConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(stream));
+            List<Map<?, ?>> section = enchantConfig.getMapList("enchants");
+
+            for (Map<?, ?> enchantMap : section) {
+                Enchantment enchantment = Enchantment.getByName((String) enchantMap.get("enchantment"));
+                String name = (String) enchantMap.get("name");
+                boolean levels = (Boolean) enchantMap.get("levels");
+                enchants.put(enchantment, new Enchantable(name, levels));
             }
-            stream.close();
         }
         catch (IOException e) {
             ShopPlugin.getInstance().getLogger().warning("Failed to load enchants: " + e.toString());

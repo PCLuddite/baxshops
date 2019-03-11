@@ -1,0 +1,91 @@
+enchants:
+- enchantment: PROTECTION_ENVIRONMENTAL
+  name: Protection
+  levels: true
+- enchantment: PROTECTION_FIRE
+  name: Fire Protection
+  levels: true
+- enchantment: PROTECTION_FALL
+  name: Feather Falling
+  levels: true
+- enchantment: PROTECTION_EXPLOSIONS
+  name: Blast Protection
+  levels: true
+- enchantment: PROTECTION_PROJECTILE
+  name: Projectile Protection
+  levels: true
+- enchantment: OXYGEN
+  name: Respiration
+  levels: true
+- enchantment: WATER_WORKER
+  name: Aqua Affinity
+  levels: false
+- enchantment: THORNS
+  name: Thorns
+  levels: true
+- enchantment: DEPTH_STRIDER
+  name: Depth Strider
+  levels: true
+- enchantment: FROST_WALKER
+  name: Frost Walker
+  levels: true
+- enchantment: DAMAGE_ALL
+  name: Sharpness
+  levels: true
+- enchantment: DAMAGE_UNDEAD
+  name: Smite
+  levels: true
+- enchantment: DAMAGE_ARTHROPODS
+  name: Bane of Arthropods
+  levels: true
+- enchantment: KNOCKBACK
+  name: Knockback
+  levels: true
+- enchantment: FIRE_ASPECT
+  name: Fire Aspect
+  levels: true
+- enchantment: LOOT_BONUS_MOBS
+  name: Looting
+  levels: true
+- enchantment: DIG_SPEED
+  name: Efficiency
+  levels: true
+- enchantment: SILK_TOUCH
+  name: Silk Touch
+  levels: false
+- enchantment: DURABILITY
+  name: Unbreaking
+  levels: true
+- enchantment: LOOT_BONUS_BLOCKS
+  name: Fortune
+  levels: true
+- enchantment: ARROW_DAMAGE
+  name: Power
+  levels: true
+- enchantment: ARROW_KNOCKBACK
+  name: Punch
+  levels: true
+- enchantment: ARROW_FIRE
+  name: Flame
+  levels: false
+- enchantment: ARROW_INFINITE
+  name: Infinity
+  levels: false
+- enchantment: LUCK
+  name: Luck of the Sea
+  levels: true
+- enchantment: LURE
+  name: Lure
+  levels: true
+- enchantment: MENDING
+  name: Mending
+  levels: false
+- enchantment: VANISHING_CURSE
+  name: Vanishing Curse
+  levels: false
+- enchantment: SWEEPING_EDGE
+  name: Sweeping Edge
+  levels: true
+- enchantment: BINDING_CURSE
+  name: Binding Curse
+  levels: false
