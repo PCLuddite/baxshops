@@ -176,7 +176,28 @@ public final class ItemNames
      */
     public static String getName(ItemStack item)
     {
+        if (item.getType() == Material.ENCHANTED_BOOK) {
+            Map<Enchantment, Integer> enchantMap = BaxEntry.getEnchants(item);
+            if (enchantMap != null)
+                return getEnchantedBookName(enchantMap);
+        }
         return NMSUtils.getItemName(item);
+    }
+
+    private static String getEnchantedBookName(Map<Enchantment, Integer> enchantMap)
+    {
+        StringBuilder sb = new StringBuilder();
+        for (Map.Entry<Enchantment, Integer> entry : enchantMap.entrySet()) {
+            String enchantable = enchants.get(entry.getKey());
+            if (enchantable == null) {
+                sb.append(Format.toFriendlyName(entry.getKey().getName()));
+            }
+            else {
+                sb.append(enchantable);
+            }
+            sb.append(" ").append(Format.toNumeral(entry.getValue() + 1)).append(", ");
+        }
+        return sb.substring(0, sb.length() - 2);
     }
     
     public static String getEnchantName(Enchantment enchant)

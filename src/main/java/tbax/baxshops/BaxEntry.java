@@ -231,7 +231,7 @@ public final class BaxEntry implements ConfigurationSerializable
         return cloned;
     }
     
-    private static Map<Enchantment, Integer> getEnchants(ItemStack item)
+    public static Map<Enchantment, Integer> getEnchants(ItemStack item)
     {
         if (!item.getEnchantments().isEmpty()) {
             return item.getEnchantments();
@@ -314,21 +314,6 @@ public final class BaxEntry implements ConfigurationSerializable
     public String toString(int index)
     {
         StringBuilder name = new StringBuilder(ItemNames.getName(this));
-        
-        if (getEnchants(stack) != null) {
-            StringBuilder enchName = new StringBuilder(" ("); // Enchanted items are in purple
-            for(Map.Entry<Enchantment, Integer> ench : getEnchants(stack).entrySet()) {
-                enchName.append(ItemNames.getEnchantName(ench.getKey()).toUpperCase().substring(0,4)); // List each enchantment
-                enchName.append(ench.getValue()); // and its value
-                enchName.append(", "); // separated by commas
-            }
-            if (infinite || getAmount() > 0) {
-                name.append(Format.enchantments(enchName.substring(0, enchName.length() - 2) + ")")); // Remove the last comma, put in a closing parenthesis
-            }
-            else {
-                name.append(enchName.substring(0, enchName.length() - 2)).append(")");
-            }
-        }
         
         String potionInfo = getPotionInfo(stack);
         if (!potionInfo.equals("")) {
