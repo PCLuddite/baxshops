@@ -26,6 +26,8 @@ package tbax.baxshops.serialization;
 
 import java.io.*;
 import java.util.*;
+
+import org.bukkit.inventory.meta.ItemMeta;
 import tbax.baxshops.*;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
@@ -181,6 +183,10 @@ public final class ItemNames
             if (enchantMap != null)
                 return getEnchantedBookName(enchantMap);
         }
+        item = item.clone();
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(null);
+        item.setItemMeta(meta);
         return NMSUtils.getItemName(item);
     }
 

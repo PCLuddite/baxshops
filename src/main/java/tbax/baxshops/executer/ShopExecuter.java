@@ -201,10 +201,6 @@ public final class ShopExecuter
             Main.sendError(cmd.getSender(), "You can't add a shop to a shop.");
             return true;
         }
-        if (!cmd.getSender().hasPermission("shops.admin") && stack.hasItemMeta() && stack.getItemMeta().hasDisplayName()) {
-            Main.sendError(cmd.getSender(), "You cannot add an item to a shop that has been renamed.");
-            return true;
-        }
         if (cmd.getShop().containsItem(stack)) {
             Main.sendError(cmd.getPlayer(), "That item has already been added to this shop");
             Main.sendError(cmd.getPlayer(), "Use /shop restock to restock");
