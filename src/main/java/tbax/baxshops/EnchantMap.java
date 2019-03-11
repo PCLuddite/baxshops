@@ -37,6 +37,12 @@ public final class EnchantMap extends HashMap<Enchantment, Integer>
         return null;
     }
 
+    public static boolean isEnchanted(ItemStack stack)
+    {
+        Map<Enchantment, Integer> enchantMap = getEnchants(stack);
+        return !(enchantMap == null || enchantMap.isEmpty());
+    }
+
     @Override
     public String toString()
     {
