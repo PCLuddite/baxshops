@@ -38,7 +38,7 @@ public final class Enchantable
     public String toString(int levels)
     {
         if (hasLevels)
-            return name + " " + Format.toNumeral(levels + 1);
+            return name + " " + Format.toNumeral(levels);
         return name;
     }
 }

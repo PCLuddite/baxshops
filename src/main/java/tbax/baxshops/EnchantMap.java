@@ -56,7 +56,7 @@ public final class EnchantMap extends HashMap<Enchantment, Integer>
     public static String abbreviatedListString(Map<Enchantment, Integer> enchants)
     {
         List<String> names = enchants.entrySet().stream()
-            .map(e -> ItemNames.getEnchantName(e.getKey()).substring(0, 4).toUpperCase() + (e.getValue() + 1))
+            .map(e -> ItemNames.getEnchantName(e.getKey()).substring(0, 4).toUpperCase() + e.getValue())
             .collect(Collectors.toList());
         return String.join(",", names);
     }
