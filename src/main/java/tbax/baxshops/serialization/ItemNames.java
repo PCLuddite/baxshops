@@ -145,29 +145,13 @@ public final class ItemNames
         if (item.getType() == Material.ENCHANTED_BOOK) {
             Map<Enchantment, Integer> enchants = EnchantMap.getEnchants(item);
             if (enchants != null)
-                return getEnchantedBookName(enchants);
+                return EnchantMap.fullListString(enchants);
         }
         item = item.clone();
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(null);
         item.setItemMeta(meta);
         return NMSUtils.getItemName(item);
-    }
-
-    private static String getEnchantedBookName(Map<Enchantment, Integer> enchantMap)
-    {
-        StringBuilder sb = new StringBuilder();
-        for (Map.Entry<Enchantment, Integer> entry : enchantMap.entrySet()) {
-            Enchantable enchantable = enchants.get(entry.getKey());
-            if (enchantable == null) {
-                sb.append(Format.toFriendlyName(entry.getKey().getName()));
-            }
-            else {
-                sb.append(enchantable.toString(entry.getValue()));
-            }
-            sb.append(", ");
-        }
-        return sb.substring(0, sb.length() - 2);
     }
     
     public static String getEnchantName(Enchantment enchant)
