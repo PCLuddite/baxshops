@@ -240,23 +240,9 @@ public final class BaxEntry implements ConfigurationSerializable
                 info.append(ChatColor.RESET).append('\n');
             }
         }
-        Map<Enchantment, Integer> enchmap = getEnchantments();
-        if (enchmap != null) {
-            String enchants;
-            if (enchmap.isEmpty()) {
-                enchants = "NONE";
-            }
-            else {
-                StringBuilder enchsb = new StringBuilder();
-                for(Map.Entry<Enchantment, Integer> enchant : enchmap.entrySet()) {
-                    enchsb.append(ItemNames.getEnchantName(enchant.getKey()));
-                    enchsb.append(' ');
-                    enchsb.append(Format.toNumeral(enchant.getValue()));
-                    enchsb.append(", ");
-                }
-                enchants = enchsb.substring(0, enchsb.length() - 2);
-            }
-            info.append("Enchants: ").append(Format.enchantments(enchants)).append('\n');
+        Map<Enchantment, Integer> enchmap = EnchantMap.getEnchants(stack);
+        if (enchmap != null && !enchmap.isEmpty()) {
+            info.append("Enchants: ").append(Format.enchantments(EnchantMap.fullListString(enchmap))).append('\n');
         }
         info.append("Quantity: ").append(getAmount() == 0 ? ChatColor.DARK_RED + "OUT OF STOCK" + ChatColor.RESET : Format.number(getAmount())).append('\n');
         info.append("Buy Price: ").append(ChatColor.DARK_GREEN).append(ShopPlugin.getEconomy().format(retailPrice)).append(ChatColor.RESET).append('\n');
@@ -285,6 +271,10 @@ public final class BaxEntry implements ConfigurationSerializable
                 name.append(ChatColor.YELLOW);
             }
             name.append(" (Damage: ").append(getDamagePercent()).append("%)");
+        }
+
+        if (stack.getType() != Material.ENCHANTED_BOOK && EnchantMap.isEnchanted(stack)) {
+            name.append(" ").append(EnchantMap.abbreviatedListString(stack));
         }
 
         name.append(" ").append(Format.retailPrice(retailPrice));

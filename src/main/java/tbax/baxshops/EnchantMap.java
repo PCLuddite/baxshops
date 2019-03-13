@@ -12,7 +12,9 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import tbax.baxshops.serialization.ItemNames;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public final class EnchantMap extends HashMap<Enchantment, Integer>
 {
@@ -43,23 +45,41 @@ public final class EnchantMap extends HashMap<Enchantment, Integer>
         return !(enchantMap == null || enchantMap.isEmpty());
     }
 
+    public static String abbreviatedListString(ItemStack stack)
+    {
+        Map<Enchantment, Integer> enchants = getEnchants(stack);
+        if (enchants == null)
+            return "";
+        return abbreviatedListString(enchants);
+    }
+
+    public static String abbreviatedListString(Map<Enchantment, Integer> enchants)
+    {
+        List<String> names = enchants.entrySet().stream()
+            .map(e -> ItemNames.getEnchantName(e.getKey()).substring(0, 4).toUpperCase() + (e.getValue() + 1))
+            .collect(Collectors.toList());
+        return String.join(",", names);
+    }
+
+    public static String fullListString(ItemStack stack)
+    {
+        Map<Enchantment, Integer> enchants = getEnchants(stack);
+        if (enchants == null)
+            return "";
+        return fullListString(enchants);
+    }
+
+    public static String fullListString(Map<Enchantment, Integer> enchants)
+    {
+        List<String> names = enchants.entrySet().stream()
+            .map(e -> ItemNames.getEnchantName(e.getKey()))
+            .collect(Collectors.toList());
+        return String.join(", ", names);
+    }
+
     @Override
     public String toString()
     {
-        if (isEmpty())
-            return "";
-        boolean first = true;
-        StringBuilder sb = new StringBuilder();
-        for(Entry<Enchantment, Integer> ench : entrySet()) {
-            if (first) {
-                first = false;
-            }
-            else {
-                sb.append(", "); // separated by commas
-            }
-            sb.append(ItemNames.getEnchantName(ench.getKey()).toUpperCase(), 0, 4); // List each enchantment
-            sb.append(ench.getValue()); // and its value
-        }
-        return sb.toString();
+        return abbreviatedListString(this);
     }
 }
