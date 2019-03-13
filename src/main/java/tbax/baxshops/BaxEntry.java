@@ -313,7 +313,14 @@ public final class BaxEntry implements ConfigurationSerializable
     
     public String toString(int index)
     {
-        StringBuilder name = new StringBuilder(ItemNames.getName(this));
+        StringBuilder name;
+        Map<Enchantment, Integer> enchantMap;
+        if (quantity > 0 && stack.getType() == Material.ENCHANTED_BOOK && (enchantMap = getEnchants(stack)) != null && !enchantMap.isEmpty()) {
+            name = new StringBuilder(Format.enchantments(ItemNames.getName(this)));
+        }
+        else {
+            name = new StringBuilder(ItemNames.getName(this));
+        }
         
         String potionInfo = getPotionInfo(stack);
         if (!potionInfo.equals("")) {

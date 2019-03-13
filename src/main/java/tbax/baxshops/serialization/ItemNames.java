@@ -201,7 +201,7 @@ public final class ItemNames
             else {
                 sb.append(enchantable);
             }
-            sb.append(" ").append(Format.toNumeral(entry.getValue() + 1)).append(", ");
+            sb.append(" ").append(Format.toNumeral(entry.getValue())).append(", ");
         }
         return sb.substring(0, sb.length() - 2);
     }
