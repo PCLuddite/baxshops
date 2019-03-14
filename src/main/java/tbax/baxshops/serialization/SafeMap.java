@@ -7,15 +7,19 @@
 package tbax.baxshops.serialization;
 
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
 @SuppressWarnings("unused")
-public class SafeMap extends HashMap<String, Object>
+public class SafeMap implements Map<String, Object>
 {
-    public SafeMap(Map<String, Object> hashMap)
+    private Map<String, Object> argMap;
+
+    public SafeMap(Map<String, Object> map)
     {
-        putAll(hashMap);
+        argMap = map;
     }
 
     public boolean getBoolean(String key)
@@ -123,5 +127,77 @@ public class SafeMap extends HashMap<String, Object>
         catch (ClassCastException e) {
             return defaultValue;
         }
+    }
+
+    @Override
+    public int size()
+    {
+        return argMap.size();
+    }
+
+    @Override
+    public boolean isEmpty()
+    {
+        return argMap.isEmpty();
+    }
+
+    @Override
+    public boolean containsKey(Object key)
+    {
+        return argMap.containsKey(key);
+    }
+
+    @Override
+    public boolean containsValue(Object value)
+    {
+        return argMap.containsValue(value);
+    }
+
+    @Override
+    public Object get(Object key)
+    {
+        return argMap.get(key);
+    }
+
+    @Override
+    public @Nullable Object put(String key, Object value)
+    {
+        return argMap.put(key, value);
+    }
+
+    @Override
+    public Object remove(Object key)
+    {
+        return argMap.remove(key);
+    }
+
+    @Override
+    public void putAll(@NotNull Map<? extends String, ?> m)
+    {
+        argMap.putAll(m);
+    }
+
+    @Override
+    public void clear()
+    {
+        argMap.clear();
+    }
+
+    @Override
+    public @NotNull Set<String> keySet()
+    {
+        return argMap.keySet();
+    }
+
+    @Override
+    public @NotNull Collection<Object> values()
+    {
+        return argMap.values();
+    }
+
+    @Override
+    public @NotNull Set<Entry<String, Object>> entrySet()
+    {
+        return argMap.entrySet();
     }
 }
