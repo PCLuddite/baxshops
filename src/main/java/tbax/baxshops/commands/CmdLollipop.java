@@ -7,6 +7,7 @@
 
 package tbax.baxshops.commands;
 
+import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.CommandHelpArgument;
 import tbax.baxshops.errors.PrematureAbortException;
@@ -77,12 +78,15 @@ public final class CmdLollipop extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException // tested OK 3-14-19
     {
         double tastiness = LollipopNotification.DEFAULT_TASTINESS;
         if (actor.getNumArgs() == 3) {
             tastiness = actor.getArgDouble(2, "Invalid tastiness");
         }
-        StoredData.sendNotification(actor.getArgPlayer(1), new LollipopNotification(actor.getPlayer(), tastiness));
+        LollipopNotification lol = new LollipopNotification(actor.getPlayer(), tastiness);
+        OfflinePlayer recipient = actor.getArgPlayer(1);
+        StoredData.sendNotification(recipient, lol);
+        actor.sendMessage("Sent a %s lollipop to %s", lol.getTastiness(), recipient.getName());
     }
 }

@@ -66,13 +66,7 @@ public final class LollipopNotification implements ConfigurationSerializable, No
     @Override
     public String getMessage(CommandSender sender)
     {
-        String adjective = null;
-        for (Entry<Double, String> entry : adjectives.entrySet()) {
-            if (tastiness >= entry.getKey()) {
-                adjective = entry.getValue();
-            }
-        }
-        return getSender().getName() + " sent you " + adjective + " lollipop";
+        return getSender().getName() + " sent you a " + getTastiness() + " lollipop";
     }
 
     public Map<String, Object> serialize()
@@ -91,5 +85,16 @@ public final class LollipopNotification implements ConfigurationSerializable, No
     public static LollipopNotification valueOf(Map<String, Object> args)
     {
         return deserialize(args);
+    }
+
+    public String getTastiness()
+    {
+        String adjective = null;
+        for (Entry<Double, String> entry : adjectives.entrySet()) {
+            if (tastiness >= entry.getKey()) {
+                adjective = entry.getValue();
+            }
+        }
+        return adjective;
     }
 }
