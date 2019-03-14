@@ -75,7 +75,7 @@ public final class CmdAdd extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(ShopCmdActor actor) throws PrematureAbortException
+    public void onCommand(ShopCmdActor actor) throws PrematureAbortException // tested OK 3-13-19
     {
         double retailAmount = actor.getArgRoundedDouble(1, String.format(Resources.INVALID_DECIMAL, "buy price")),
                 refundAmount = -1;
@@ -101,7 +101,7 @@ public final class CmdAdd extends BaxShopCommand
         }
 
         BaxEntry newEntry = new BaxEntry();
-        newEntry.setItem(stack);
+        newEntry.setItem(stack, stack.getAmount());
         newEntry.setRetailPrice(retailAmount);
         newEntry.setRefundPrice(refundAmount);
         actor.getShop().add(newEntry);

@@ -98,6 +98,12 @@ public final class BaxEntry implements ConfigurationSerializable
     {
         stack = item.clone();
     }
+
+    public void setItem(@NotNull ItemStack item, int qty)
+    {
+        setItem(item);
+        quantity = qty;
+    }
     
     public void setItem(Material type)
     {
