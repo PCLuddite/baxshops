@@ -65,9 +65,13 @@ public final class CmdBackup extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor)
+    public void onCommand(@NotNull ShopCmdActor actor) // tested OK 3-14-19
     {
-        StoredData.backup();
-        actor.getSender().sendMessage("Shops successfully backed up shops.yml");
+        if (StoredData.backup()) {
+            actor.sendMessage("Shops successfully backed up shops.yml");
+        }
+        else {
+            actor.sendError("Unable to back up shops. Check the log for more details.");
+        }
     }
 }
