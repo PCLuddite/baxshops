@@ -7,18 +7,20 @@
 
 package tbax.baxshops.errors;
 
+import org.jetbrains.annotations.NotNull;
+
 @SuppressWarnings("unused")
 public final class CommandMessageException extends PrematureAbortException
 {
     private Exception innerEx;
     private String errMsg;
 
-    public CommandMessageException(String errorMsg)
+    public CommandMessageException(@NotNull String errorMsg)
     {
         errMsg = errorMsg;
     }
 
-    public CommandMessageException(Exception e, String errorMsg)
+    public CommandMessageException(Exception e, @NotNull String errorMsg)
     {
         innerEx = e;
         errMsg = errorMsg;
@@ -29,7 +31,7 @@ public final class CommandMessageException extends PrematureAbortException
         return innerEx;
     }
 
-    public String getMessage()
+    public @NotNull String getMessage()
     {
         return errMsg;
     }

@@ -57,6 +57,11 @@ public final class Format
     {
         return reset(ChatColor.RED + err);
     }
+
+    public static String warning(String msg)
+    {
+        return reset(ChatColor.GOLD + msg);
+    }
     
     public static String location(String loc)
     {

@@ -7,7 +7,8 @@
 
 package tbax.baxshops.errors;
 
-import org.bukkit.ChatColor;
+import org.jetbrains.annotations.NotNull;
+import tbax.baxshops.Format;
 
 @SuppressWarnings("unused")
 public final class CommandErrorException extends PrematureAbortException
@@ -15,12 +16,12 @@ public final class CommandErrorException extends PrematureAbortException
     private Exception innerEx;
     private String errMsg;
 
-    public CommandErrorException(String errorMsg)
+    public CommandErrorException(@NotNull String errorMsg)
     {
         errMsg = errorMsg;
     }
 
-    public CommandErrorException(Exception e, String errorMsg)
+    public CommandErrorException(Exception e, @NotNull String errorMsg)
     {
         innerEx = e;
         errMsg = errorMsg;
@@ -31,8 +32,8 @@ public final class CommandErrorException extends PrematureAbortException
         return innerEx;
     }
 
-    public String getMessage()
+    public @NotNull String getMessage()
     {
-        return ChatColor.RED + errMsg;
+        return Format.error(errMsg);
     }
 }
