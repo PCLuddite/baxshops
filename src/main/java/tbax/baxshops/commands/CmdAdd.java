@@ -90,12 +90,8 @@ public final class CmdAdd extends BaxShopCommand
         if (BaxShop.isShop(stack)) {
             actor.exitError("You can't add a shop to a shop.");
         }
-        if (!actor.isAdmin() && stack.hasItemMeta() && stack.getItemMeta().hasDisplayName()) {
-            actor.exitError("You cannot add an item to a shop that has been renamed.");
-        }
         if (actor.getShop().contains(stack)) {
-            actor.exitError(
-                    "That item has already been added to this shop\n" +
+            actor.exitError("That item has already been added to this shop\n" +
                             "Use /shop restock to restock"
             );
         }
