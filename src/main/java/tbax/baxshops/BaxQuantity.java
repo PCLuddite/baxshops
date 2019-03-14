@@ -7,6 +7,7 @@
 package tbax.baxshops;
 
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
 
@@ -18,39 +19,39 @@ public class BaxQuantity
     private ItemStack stack;
     private Iterable<ItemStack> inventory;
 
-    public BaxQuantity(String arg, ItemStack item, Iterable<ItemStack> inv)
+    public BaxQuantity(@NotNull String arg, @NotNull ItemStack item, @NotNull Iterable<ItemStack> inv)
     {
         argument = arg;
         stack = item;
         inventory = inv;
     }
 
-    public BaxQuantity(String arg, ItemStack item, ItemStack[] inv)
+    public BaxQuantity(@NotNull String arg, @NotNull ItemStack item, @NotNull ItemStack[] inv)
     {
         this(arg, item, Arrays.asList(inv));
     }
 
-    public void setItem(ItemStack stack)
+    public void setItem(@NotNull ItemStack stack)
     {
         this.stack = stack;
     }
 
-    public ItemStack getItem()
+    public @NotNull ItemStack getItem()
     {
         return stack;
     }
 
-    public void setInventory(Iterable<ItemStack> inv)
+    public void setInventory(@NotNull Iterable<ItemStack> inv)
     {
         inventory = inv;
     }
 
-    public void setInventory(ItemStack[] inv)
+    public void setInventory(@NotNull ItemStack[] inv)
     {
         setInventory(Arrays.asList(inv));
     }
 
-    public Iterable<ItemStack> getInventory()
+    public @NotNull Iterable<ItemStack> getInventory()
     {
         return inventory;
     }

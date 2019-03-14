@@ -8,6 +8,7 @@
 package tbax.baxshops;
 
 import org.bukkit.ChatColor;
+import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public final class CommandHelp
@@ -17,23 +18,23 @@ public final class CommandHelp
     private CommandHelpArgument[] args;
     private String description;
 
-    public CommandHelp(String cmdName)
+    public CommandHelp(@NotNull String cmdName)
     {
         command = cmdName;
     }
 
-    public CommandHelp(String cmdName, String... aliases)
+    public CommandHelp(@NotNull String cmdName, String... aliases)
     {
         command = cmdName;
         this.aliases = aliases;
     }
 
-    public String getName()
+    public @NotNull String getName()
     {
         return command;
     }
 
-    public String setName()
+    public @NotNull String setName()
     {
         return command;
     }
@@ -68,7 +69,7 @@ public final class CommandHelp
         this.args = args;
     }
 
-    public String getUsageString()
+    public @NotNull String getUsageString()
     {
         StringBuilder sb = new StringBuilder();
         sb.append(ChatColor.AQUA).append("Usage: ").append(ChatColor.WHITE).append("/shop ").append(command);
@@ -80,7 +81,7 @@ public final class CommandHelp
         return sb.toString();
     }
 
-    public String getAliasString()
+    public @NotNull String getAliasString()
     {
         StringBuilder sb = new StringBuilder();
         sb.append(ChatColor.AQUA);

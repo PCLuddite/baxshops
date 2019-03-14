@@ -53,7 +53,7 @@ public final class BaxEntry implements ConfigurationSerializable
         quantity = map.getInteger("quantity");
     }
     
-    public BaxEntry(ItemStack item)
+    public BaxEntry(@NotNull ItemStack item)
     {
         setItem(item);
     }
@@ -120,7 +120,7 @@ public final class BaxEntry implements ConfigurationSerializable
      * If the entry quantity is equal to zero, the material type may be AIR
      * @return 
      */
-    public ItemStack toItemStack()
+    public @NotNull ItemStack toItemStack()
     {
         ItemStack stack = this.stack.clone();
         stack.setAmount(quantity);
@@ -132,7 +132,7 @@ public final class BaxEntry implements ConfigurationSerializable
      * quantity
      * @return the ItemStack
      */
-    public ItemStack getItemStack()
+    public @NotNull ItemStack getItemStack()
     {
         return stack;
     }
@@ -178,32 +178,32 @@ public final class BaxEntry implements ConfigurationSerializable
         stack.setDurability((short)damage);
     }
 
-    public String getName()
+    public @NotNull String getName()
     {
         return ItemNames.getName(this);
     }
 
-    public String getFormattedName()
+    public @NotNull String getFormattedName()
     {
         return Format.itemName(getAmount(), getName());
     }
 
-    public String getFormattedSellPrice()
+    public @NotNull String getFormattedSellPrice()
     {
         return Format.money(MathUtil.multiply(refundPrice, getAmount()));
     }
 
-    public String getFormattedSellPrice2()
+    public @NotNull String getFormattedSellPrice2()
     {
         return Format.money2(MathUtil.multiply(refundPrice, getAmount()));
     }
 
-    public String getFormattedBuyPrice()
+    public @NotNull String getFormattedBuyPrice()
     {
         return Format.money(MathUtil.multiply(retailPrice, getAmount()));
     }
 
-    public String getFormattedBuyPrice2()
+    public @NotNull String getFormattedBuyPrice2()
     {
         return Format.money2(MathUtil.multiply(retailPrice, getAmount()));
     }

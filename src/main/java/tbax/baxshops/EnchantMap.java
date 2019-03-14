@@ -9,6 +9,7 @@ package tbax.baxshops;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.serialization.ItemNames;
 
 import java.util.HashMap;
@@ -23,7 +24,7 @@ public final class EnchantMap extends HashMap<Enchantment, Integer>
         putAll(m);
     }
 
-    public static Map<Enchantment, Integer> getEnchants(ItemStack item)
+    public static Map<Enchantment, Integer> getEnchants(@NotNull ItemStack item)
     {
         if (!item.getEnchantments().isEmpty()) {
             return new EnchantMap(item.getEnchantments());
@@ -39,13 +40,13 @@ public final class EnchantMap extends HashMap<Enchantment, Integer>
         return null;
     }
 
-    public static boolean isEnchanted(ItemStack stack)
+    public static boolean isEnchanted(@NotNull ItemStack stack)
     {
         Map<Enchantment, Integer> enchantMap = getEnchants(stack);
         return !(enchantMap == null || enchantMap.isEmpty());
     }
 
-    public static String abbreviatedListString(ItemStack stack)
+    public static @NotNull String abbreviatedListString(@NotNull ItemStack stack)
     {
         Map<Enchantment, Integer> enchants = getEnchants(stack);
         if (enchants == null)
@@ -53,7 +54,7 @@ public final class EnchantMap extends HashMap<Enchantment, Integer>
         return abbreviatedListString(enchants);
     }
 
-    public static String abbreviatedListString(Map<Enchantment, Integer> enchants)
+    public static @NotNull String abbreviatedListString(@NotNull Map<Enchantment, Integer> enchants)
     {
         List<String> names = enchants.entrySet().stream()
             .map(e -> ItemNames.getEnchantName(e.getKey()).substring(0, 4).toUpperCase() + e.getValue())
@@ -61,7 +62,7 @@ public final class EnchantMap extends HashMap<Enchantment, Integer>
         return String.join(",", names);
     }
 
-    public static String fullListString(ItemStack stack)
+    public static @NotNull String fullListString(@NotNull ItemStack stack)
     {
         Map<Enchantment, Integer> enchants = getEnchants(stack);
         if (enchants == null)
@@ -69,7 +70,7 @@ public final class EnchantMap extends HashMap<Enchantment, Integer>
         return fullListString(enchants);
     }
 
-    public static String fullListString(Map<Enchantment, Integer> enchants)
+    public static String fullListString(@NotNull Map<Enchantment, Integer> enchants)
     {
         List<String> names = enchants.entrySet().stream()
             .map(e -> ItemNames.getEnchantName(e.getKey()))

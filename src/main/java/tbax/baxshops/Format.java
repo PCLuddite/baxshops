@@ -7,8 +7,10 @@
 
 package tbax.baxshops;
 
+import net.milkbowl.vault.chat.Chat;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.serialization.StoredData;
 
 import java.util.UUID;
@@ -23,142 +25,142 @@ public final class Format
     {
     }
 
-    public static String money(String in)
+    public static @NotNull String money(@NotNull String in)
     {
         return reset(ChatColor.GREEN + in);
     }
     
-    public static String money(double d)
+    public static @NotNull String money(double d)
     {
         return money(ShopPlugin.getEconomy().format(d));
     }
     
-    public static String money2(String in)
+    public static @NotNull String money2(@NotNull String in)
     {
         return reset(ChatColor.DARK_GREEN + in);
     }
     
-    public static String money2(double d)
+    public static @NotNull String money2(double d)
     {
         return money2(ShopPlugin.getEconomy().format(d));
     }
     
-    public static String number(String n)
+    public static @NotNull String number(@NotNull String n)
     {
         return reset(ChatColor.AQUA + n);
     }
     
-    public static String number(int n)
+    public static @NotNull String number(int n)
     {
         return number(Integer.toString(n));
     }
     
-    public static String error(String err)
+    public static @NotNull String error(@NotNull String err)
     {
         return reset(ChatColor.RED + err);
     }
 
-    public static String warning(String msg)
+    public static @NotNull String warning(@NotNull String msg)
     {
         return reset(ChatColor.GOLD + msg);
     }
     
-    public static String location(String loc)
+    public static @NotNull String location(@NotNull String loc)
     {
         return reset(ChatColor.GOLD + loc);
     }
     
-    public static String location(Location loc)
+    public static @NotNull String location(@NotNull Location loc)
     {
         return location(String.format("(%d,%d,%d)", loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) + ChatColor.RESET;
     }
     
-    public static String itemName(int amount, String name)
+    public static @NotNull String itemName(int amount, @NotNull String name)
     {
         return itemName(String.format("%d %s", amount, name));
     }
     
-    public static String itemName(String name)
+    public static @NotNull String itemName(@NotNull String name)
     {
         return reset(ChatColor.GREEN + name);
     }
     
-    public static String username(UUID uuid)
+    public static @NotNull String username(@NotNull UUID uuid)
     {
         return username(StoredData.getOfflinePlayer(uuid).getName());
     }
 
-    public static String username2(UUID uuid)
+    public static @NotNull String username2(@NotNull UUID uuid)
     {
         return username2(StoredData.getOfflinePlayer(uuid).getName());
     }
 
-    public static String username(String name)
+    public static @NotNull String username(@NotNull String name)
     {
         return reset(ChatColor.DARK_BLUE + name);
     }
     
-    public static String username2(String name)
+    public static @NotNull String username2(@NotNull String name)
     {
         return reset(ChatColor.LIGHT_PURPLE + name);
     }
     
-    public static String command(String cmd)
+    public static @NotNull String command(@NotNull String cmd)
     {
         return reset(ChatColor.AQUA + cmd);
     }
     
-    public static String retailPrice(String price)
+    public static @NotNull String retailPrice(@NotNull String price)
     {
         return reset(ChatColor.DARK_GREEN + price);
     }
     
-    public static String retailPrice(double price)
+    public static @NotNull String retailPrice(double price)
     {
         return retailPrice(String.format("(%s)", ShopPlugin.getEconomy().format(price)));
     }
     
-    public static String refundPrice(String price)
+    public static @NotNull String refundPrice(@NotNull String price)
     {
         return reset(ChatColor.BLUE + price);
     }
     
-    public static String refundPrice(double price)
+    public static @NotNull String refundPrice(double price)
     {
         return refundPrice(String.format("(%s)", ShopPlugin.getEconomy().format(price)));
     }
     
-    public static String enchantments(String enchant)
+    public static @NotNull String enchantments(@NotNull String enchant)
     {
         return reset(ChatColor.DARK_PURPLE + enchant);
     }
     
-    public static String bullet(String b)
+    public static @NotNull String bullet(@NotNull String b)
     {
         return reset(ChatColor.GRAY + b);
     }
     
-    public static String bullet(int b)
+    public static @NotNull String bullet(int b)
     {
         return bullet(Integer.toString(b));
     }
     
-    public static String listname(String name)
+    public static @NotNull String listname(@NotNull String name)
     {
         return reset(ChatColor.WHITE + name);
     }
     
-    public static String flag(String flag)
+    public static @NotNull String flag(@NotNull String flag)
     {
         return reset(ChatColor.YELLOW + flag);
     }
     
-    public static String keyword(String word)
+    public static @NotNull String keyword(@NotNull String word)
     {
         return reset(ChatColor.GREEN + word);
     }
     
-    private static String reset(String format)
+    private static @NotNull String reset(@NotNull String format)
     {
         return format + ChatColor.RESET;
     }
@@ -218,13 +220,13 @@ public final class Format
         return sb.toString();
     }
     
-    public static String toAnsiColor(String message) // obnoxious method to convert minecraft message colors to ansi colors
+    public static @NotNull String toAnsiColor(@NotNull String message) // obnoxious method to convert minecraft message colors to ansi colors
     {
         StringBuilder sb = new StringBuilder();
         boolean has_ansi = false;
         for(int index = 0; index < message.length(); ++index) {
             char c = message.charAt(index);
-            if (c == '§' && ++index < message.length()) {
+            if (c == ChatColor.COLOR_CHAR && ++index < message.length()) {
                 c = Character.toLowerCase(message.charAt(index));
                 sb.append((char)27);
                 sb.append("[0;");
@@ -269,18 +271,18 @@ public final class Format
      * @param title the text in the header
      * @return the chat header
      */
-    public static String header(String title)
+    public static @NotNull String header(String title)
     {
-        return (new StringBuilder(ChatColor.GRAY.toString()).
-                append("------------ ").
-                append(ChatColor.WHITE).
-                append(title).
-                append(ChatColor.GRAY).
-                append(" ------------").
-                append(ChatColor.RESET)).toString();
+        return ChatColor.GRAY.toString() +
+            "------------ " +
+            ChatColor.WHITE +
+            title +
+            ChatColor.GRAY +
+            " ------------" +
+            ChatColor.RESET;
     }
 
-    public static String stripColor(String str)
+    public static @NotNull String stripColor(@NotNull String str)
     {
         StringBuilder sb = new StringBuilder(str.length());
         for (int idx = 0; idx < str.length(); ++idx) {

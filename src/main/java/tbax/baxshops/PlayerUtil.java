@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.CommandWarningException;
 import tbax.baxshops.errors.PrematureAbortException;
@@ -29,7 +30,7 @@ import java.util.UUID;
 /**
  * Methods for dealing with interactions with players
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "unused"})
 public final class PlayerUtil
 {
     private PlayerUtil()
@@ -43,7 +44,7 @@ public final class PlayerUtil
      * @return the amount that could not be added to the player's inventory
      * @throws PrematureAbortException thrown if no space is available
      */
-    public static int giveItem(Player player, ItemStack item) throws PrematureAbortException
+    public static int giveItem(@NotNull Player player, @NotNull ItemStack item) throws PrematureAbortException
     {
         return giveItem(player, item, false);
     }
@@ -56,7 +57,7 @@ public final class PlayerUtil
      * @return the amount that could not be added to the player's inventory
      * @throws PrematureAbortException thrown if no space is available
      */
-    public static int giveItem(Player player, ItemStack item, boolean allOrNothing) throws PrematureAbortException
+    public static int giveItem(@NotNull Player player, @NotNull ItemStack item, boolean allOrNothing) throws PrematureAbortException
     {
         int space = getSpaceForItem(player, item);
         if (space == 0 || (allOrNothing && space < item.getAmount())) {
@@ -89,7 +90,7 @@ public final class PlayerUtil
      * @param item item to check
      * @return the amount available to add in the player's inventory
      */
-    public static int getSpaceForItem(Player player, ItemStack item)
+    public static int getSpaceForItem(@NotNull Player player, @NotNull ItemStack item)
     {
         ItemStack[] contents = player.getInventory().getStorageContents();
         int max = item.getMaxStackSize();
@@ -111,7 +112,7 @@ public final class PlayerUtil
      * @param item item to check
      * @return true if there is enough space, otherwise false
      */
-    public static boolean hasRoomForItem(Player player, ItemStack item)
+    public static boolean hasRoomForItem(@NotNull Player player, @NotNull ItemStack item)
     {
         return item.getAmount() <= getSpaceForItem(player, item);
     }
@@ -123,7 +124,7 @@ public final class PlayerUtil
      * @param item the item
      * @return true if the item was given, otherwise false
      */
-    public static boolean tryGiveItem(Player player, ItemStack item)
+    public static boolean tryGiveItem(@NotNull Player player, @NotNull ItemStack item)
     {
         try {
             giveItem(player, item, true);
@@ -147,7 +148,7 @@ public final class PlayerUtil
      * @param entry the BaxEntry that is being sold
      * @throws PrematureAbortException thrown if the seller has insufficient funds
      */
-    public static void sellItem(UUID shopId, OfflinePlayer buyer, OfflinePlayer seller, BaxEntry entry) throws PrematureAbortException
+    public static void sellItem(@NotNull UUID shopId, @NotNull OfflinePlayer buyer, @NotNull OfflinePlayer seller, @NotNull BaxEntry entry) throws PrematureAbortException
     {
         sellItem(StoredData.getShop(shopId), buyer, seller, entry);
     }
@@ -160,7 +161,7 @@ public final class PlayerUtil
      * @param entry the BaxEntry that is being sold
      * @throws PrematureAbortException thrown if the seller has insufficient funds
      */
-    public static void sellItem(BaxShop shop, OfflinePlayer buyer, OfflinePlayer seller, BaxEntry entry) throws PrematureAbortException
+    public static void sellItem(BaxShop shop, @NotNull OfflinePlayer buyer, @NotNull OfflinePlayer seller, @NotNull BaxEntry entry) throws PrematureAbortException
     {
         double price = MathUtil.multiply(entry.getRefundPrice(), entry.getAmount());
 
@@ -207,7 +208,7 @@ public final class PlayerUtil
      * @param entry the BaxEntry that is being sold
      * @throws PrematureAbortException thrown if the seller has insufficient funds
      */
-    public static void sellItem(UUID shopId, UUID buyer, UUID seller, BaxEntry entry) throws PrematureAbortException
+    public static void sellItem(@NotNull UUID shopId, @NotNull UUID buyer, @NotNull UUID seller, @NotNull BaxEntry entry) throws PrematureAbortException
     {
         sellItem(shopId, StoredData.getOfflinePlayer(buyer), StoredData.getOfflinePlayer(seller), entry);
     }
@@ -218,7 +219,7 @@ public final class PlayerUtil
      * @return a list of BaxEntries with the removed items
      * @throws PrematureAbortException thrown when 'any' is specified
      */
-    public static List<BaxEntry> takeQtyFromInventory(BaxQuantity qty) throws PrematureAbortException
+    public static @NotNull List<BaxEntry> takeQtyFromInventory(@NotNull BaxQuantity qty) throws PrematureAbortException
     {
         return takeQtyFromInventory(qty, null);
     }
@@ -230,10 +231,10 @@ public final class PlayerUtil
      * @return a list of BaxEntries with the removed items
      * @throws PrematureAbortException thrown when any is specified and shop is null or inv is null
      */
-    public static List<BaxEntry> takeQtyFromInventory(BaxQuantity qty, BaxShop shop) throws PrematureAbortException
+    public static List<BaxEntry> takeQtyFromInventory(@NotNull BaxQuantity qty, BaxShop shop) throws PrematureAbortException
     {
         if (qty.isAny()) {
-            if (shop == null || !(qty.getInventory() instanceof PlayerInventory))
+            if (!(qty.getInventory() instanceof PlayerInventory))
                 throw new CommandErrorException("'any' cannot be used for this action");
             return takeAnyFromInventory(shop, (PlayerInventory)qty.getInventory());
         }
@@ -252,12 +253,9 @@ public final class PlayerUtil
         return Collections.singletonList(clone);
     }
 
-    private static List<BaxEntry> takeAnyFromInventory(BaxShop shop, PlayerInventory inv)
+    private static @NotNull List<BaxEntry> takeAnyFromInventory(@NotNull BaxShop shop, @NotNull PlayerInventory inv)
     {
         ArrayList<BaxEntry> list = new ArrayList<>();
-
-        if (shop == null)
-            return list;
 
         for (BaxEntry entry : shop) {
             BaxEntry curr = new BaxEntry(entry);
@@ -284,7 +282,7 @@ public final class PlayerUtil
      * @param amt the amount to remove
      * @return the actual quantity removed
      */
-    public static int takeFromInventory(Iterable<ItemStack> inventory, ItemStack item, int amt)
+    public static int takeFromInventory(@NotNull Iterable<ItemStack> inventory, @NotNull ItemStack item, int amt)
     {
         int qty = 0;
         if (inventory instanceof Inventory) {

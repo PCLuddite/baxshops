@@ -14,13 +14,14 @@ import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.*;
 
 import java.util.*;
 
-@SuppressWarnings({"WeakerAccess", "unused", "NullableProblems"})
+@SuppressWarnings({"WeakerAccess", "unused"})
 public final class BaxShop implements ConfigurationSerializable, Collection<BaxEntry>
 {
     public static final int ITEMS_PER_PAGE = 7;
@@ -198,25 +199,25 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
     }
 
     @Override
-    public boolean containsAll(Collection<?> c)
+    public boolean containsAll(@NotNull Collection<?> c)
     {
         return inventory.containsAll(c);
     }
 
     @Override
-    public boolean addAll(Collection<? extends BaxEntry> c)
+    public boolean addAll(@NotNull Collection<? extends BaxEntry> c)
     {
         return inventory.addAll(c);
     }
 
     @Override
-    public boolean removeAll(Collection<?> c)
+    public boolean removeAll(@NotNull Collection<?> c)
     {
         return inventory.removeAll(c);
     }
 
     @Override
-    public boolean retainAll(Collection<?> c)
+    public boolean retainAll(@NotNull Collection<?> c)
     {
         return inventory.retainAll(c);
     }
@@ -440,13 +441,13 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
 
     @Override
     @SuppressWarnings("SuspiciousToArrayCall")
-    public <T> T[] toArray(T[] a)
+    public <T> T[] toArray(@NotNull T[] a)
     {
         return inventory.toArray(a);
     }
 
     @SuppressWarnings("UnusedReturnValue")
-    public Block buildShopSign(Location loc, String... signLines) throws PrematureAbortException
+    public @NotNull Block buildShopSign(@NotNull Location loc, @NotNull String... signLines) throws PrematureAbortException
     {
         Location locUnder = loc.clone();
         locUnder.setY(locUnder.getY() - 1);
@@ -490,12 +491,12 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
         return inventory.remove(index);
     }
 
-    public void addEntry(int index, BaxEntry entry)
+    public void addEntry(int index, @NotNull BaxEntry entry)
     {
         inventory.add(index, entry);
     }
 
-    public ItemStack[] getItemStackInventory()
+    public @NotNull ItemStack[] getItemStackInventory()
     {
         ItemStack[] inv = new ItemStack[size()];
         int i = 0;

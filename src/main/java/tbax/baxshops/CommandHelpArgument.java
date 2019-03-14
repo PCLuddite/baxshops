@@ -8,6 +8,7 @@
 package tbax.baxshops;
 
 import org.bukkit.ChatColor;
+import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
 public final class CommandHelpArgument
@@ -17,12 +18,12 @@ public final class CommandHelpArgument
     private boolean required;
     private String defaultValue;
 
-    public CommandHelpArgument(String arg, String desc, boolean req)
+    public CommandHelpArgument(@NotNull String arg, @NotNull String desc, boolean req)
     {
         this(arg, desc, req, null);
     }
 
-    public CommandHelpArgument(String arg, String desc, boolean req, Object defaultVal)
+    public CommandHelpArgument(@NotNull String arg, @NotNull String desc, boolean req, Object defaultVal)
     {
         argument = arg;
         description = desc;
