@@ -7,19 +7,20 @@
 
 package tbax.baxshops.commands;
 
+import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.StoredData;
 
 public final class CmdDelete extends BaxShopCommand
 {
     @Override
-    public String getName()
+    public @NotNull String getName()
     {
         return "delete";
     }
 
     @Override
-    public String[] getAliases()
+    public @NotNull String[] getAliases()
     {
         return new String[]{"delete","del"};
     }
@@ -31,37 +32,37 @@ public final class CmdDelete extends BaxShopCommand
     }
 
     @Override
-    public boolean hasValidArgCount(ShopCmdActor actor)
+    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
     {
         return actor.getNumArgs() == 1;
     }
 
     @Override
-    public boolean requiresSelection(ShopCmdActor actor)
+    public boolean requiresSelection(@NotNull ShopCmdActor actor)
     {
         return true;
     }
 
     @Override
-    public boolean requiresOwner(ShopCmdActor actor)
+    public boolean requiresOwner(@NotNull ShopCmdActor actor)
     {
         return true;
     }
 
     @Override
-    public boolean requiresPlayer(ShopCmdActor actor)
+    public boolean requiresPlayer(@NotNull ShopCmdActor actor)
     {
         return true;
     }
 
     @Override
-    public boolean requiresItemInHand(ShopCmdActor actor)
+    public boolean requiresItemInHand(@NotNull ShopCmdActor actor)
     {
         return false;
     }
 
     @Override
-    public void onCommand(ShopCmdActor actor) throws PrematureAbortException
+    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         assert actor.getShop() != null;
         if (actor.getShop().getLocations().size() == 1) {

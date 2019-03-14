@@ -8,6 +8,7 @@
 package tbax.baxshops.commands;
 
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.ItemNames;
@@ -15,13 +16,13 @@ import tbax.baxshops.serialization.ItemNames;
 public final class CmdAdd extends BaxShopCommand
 {
     @Override
-    public String getName()
+    public @NotNull String getName()
     {
         return "add";
     }
 
     @Override
-    public String[] getAliases()
+    public @NotNull String[] getAliases()
     {
         return new String[]{"add","+","ad"};
     }
@@ -33,7 +34,7 @@ public final class CmdAdd extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
+    public CommandHelp getHelp(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         CommandHelp help = super.getHelp(actor);
         help.setDescription("add held item to this shop");
@@ -45,37 +46,37 @@ public final class CmdAdd extends BaxShopCommand
     }
 
     @Override
-    public boolean hasValidArgCount(ShopCmdActor actor)
+    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
     {
         return actor.getNumArgs() == 2 || actor.getNumArgs() == 3;
     }
 
     @Override
-    public boolean requiresSelection(ShopCmdActor actor)
+    public boolean requiresSelection(@NotNull ShopCmdActor actor)
     {
         return true;
     }
 
     @Override
-    public boolean requiresOwner(ShopCmdActor actor)
+    public boolean requiresOwner(@NotNull ShopCmdActor actor)
     {
         return true;
     }
 
     @Override
-    public boolean requiresPlayer(ShopCmdActor actor)
+    public boolean requiresPlayer(@NotNull ShopCmdActor actor)
     {
         return true;
     }
 
     @Override
-    public boolean requiresItemInHand(ShopCmdActor actor)
+    public boolean requiresItemInHand(@NotNull ShopCmdActor actor)
     {
         return true;
     }
 
     @Override
-    public void onCommand(ShopCmdActor actor) throws PrematureAbortException // tested OK 3-13-19
+    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException // tested OK 3-13-19
     {
         double retailAmount = actor.getArgRoundedDouble(1, String.format(Resources.INVALID_DECIMAL, "buy price")),
                 refundAmount = -1;

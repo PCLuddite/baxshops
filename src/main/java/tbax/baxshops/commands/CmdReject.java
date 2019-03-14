@@ -7,6 +7,7 @@
 
 package tbax.baxshops.commands;
 
+import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.Resources;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
@@ -19,13 +20,13 @@ import java.util.Deque;
 public final class CmdReject extends BaxShopCommand
 {
     @Override
-    public String getName()
+    public @NotNull String getName()
     {
         return "reject";
     }
 
     @Override
-    public String[] getAliases()
+    public @NotNull String[] getAliases()
     {
         return new String[]{"reject","no"};
     }
@@ -37,7 +38,7 @@ public final class CmdReject extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
+    public CommandHelp getHelp(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         CommandHelp help = super.getHelp(actor);
         help.setDescription("reject your most recent notification");
@@ -45,37 +46,37 @@ public final class CmdReject extends BaxShopCommand
     }
 
     @Override
-    public boolean hasValidArgCount(ShopCmdActor actor)
+    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
     {
         return actor.getNumArgs() == 1;
     }
 
     @Override
-    public boolean requiresSelection(ShopCmdActor actor)
+    public boolean requiresSelection(@NotNull ShopCmdActor actor)
     {
         return false;
     }
 
     @Override
-    public boolean requiresOwner(ShopCmdActor actor)
+    public boolean requiresOwner(@NotNull ShopCmdActor actor)
     {
         return false;
     }
 
     @Override
-    public boolean requiresPlayer(ShopCmdActor actor)
+    public boolean requiresPlayer(@NotNull ShopCmdActor actor)
     {
         return true;
     }
 
     @Override
-    public boolean requiresItemInHand(ShopCmdActor actor)
+    public boolean requiresItemInHand(@NotNull ShopCmdActor actor)
     {
         return false;
     }
 
     @Override
-    public void onCommand(ShopCmdActor actor) throws PrematureAbortException
+    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         Deque<Notification> notifications = StoredData.getNotifications(actor.getPlayer());
         if (notifications.isEmpty()) {

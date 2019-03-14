@@ -7,6 +7,7 @@
 
 package tbax.baxshops.commands.flags;
 
+import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
@@ -16,13 +17,13 @@ import tbax.baxshops.errors.PrematureAbortException;
 public final class FlagCmdInfinite extends FlagCmd
 {
     @Override
-    public String[] getAliases()
+    public @NotNull String[] getAliases()
     {
         return new String[]{"infinite", "isinfinite", "inf"};
     }
 
     @Override
-    public void onCommand(ShopCmdActor actor) throws PrematureAbortException
+    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         BaxShop shop = actor.getShop();
         boolean value = actor.getArgBoolean(2, "Usage:\n/shop flag infinite [true|false]");

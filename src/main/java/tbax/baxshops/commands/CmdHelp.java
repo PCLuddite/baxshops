@@ -7,19 +7,20 @@
 
 package tbax.baxshops.commands;
 
+import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
 
 public final class CmdHelp extends BaxShopCommand
 {
     @Override
-    public String getName()
+    public @NotNull String getName()
     {
         return "help";
     }
 
     @Override
-    public String[] getAliases()
+    public @NotNull String[] getAliases()
     {
         return new String[]{"help", "h"};
     }
@@ -31,7 +32,7 @@ public final class CmdHelp extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
+    public CommandHelp getHelp(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         CommandHelp help = super.getHelp(actor);
         help.setDescription("show help with shops");
@@ -42,37 +43,37 @@ public final class CmdHelp extends BaxShopCommand
     }
 
     @Override
-    public boolean hasValidArgCount(ShopCmdActor actor)
+    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
     {
         return actor.getNumArgs() == 1 || actor.getNumArgs() == 2;
     }
 
     @Override
-    public boolean requiresSelection(ShopCmdActor actor)
+    public boolean requiresSelection(@NotNull ShopCmdActor actor)
     {
         return false;
     }
 
     @Override
-    public boolean requiresOwner(ShopCmdActor actor)
+    public boolean requiresOwner(@NotNull ShopCmdActor actor)
     {
         return false;
     }
 
     @Override
-    public boolean requiresPlayer(ShopCmdActor actor)
+    public boolean requiresPlayer(@NotNull ShopCmdActor actor)
     {
         return false;
     }
 
     @Override
-    public boolean requiresItemInHand(ShopCmdActor actor)
+    public boolean requiresItemInHand(@NotNull ShopCmdActor actor)
     {
         return false;
     }
 
     @Override
-    public void onCommand(ShopCmdActor actor) throws PrematureAbortException
+    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         if (actor.getNumArgs() == 1) {
             actor.appendArg(1); // show page 1 by default

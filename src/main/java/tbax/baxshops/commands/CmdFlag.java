@@ -7,6 +7,7 @@
 
 package tbax.baxshops.commands;
 
+import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.CommandHelp;
 import tbax.baxshops.CommandHelpArgument;
 import tbax.baxshops.commands.flags.*;
@@ -25,7 +26,7 @@ public final class CmdFlag extends BaxShopCommand
     );
 
     @Override
-    public String getName()
+    public @NotNull String getName()
     {
         return "flag";
     }
@@ -37,7 +38,7 @@ public final class CmdFlag extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
+    public CommandHelp getHelp(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         CommandHelp help = super.getHelp(actor);
         help.setDescription("Set a specific flag or list all flags applied to a selected shop");
@@ -49,37 +50,37 @@ public final class CmdFlag extends BaxShopCommand
     }
 
     @Override
-    public boolean hasValidArgCount(ShopCmdActor actor)
+    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
     {
         return actor.getNumArgs() >= 2 && flagCmds.get(actor.getArg(1)).hasValidArgCount(actor);
     }
 
     @Override
-    public boolean requiresSelection(ShopCmdActor actor)
+    public boolean requiresSelection(@NotNull ShopCmdActor actor)
     {
         return actor.getNumArgs() >= 2 && flagCmds.get(actor.getArg(1)).requiresSelection(actor);
     }
 
     @Override
-    public boolean requiresOwner(ShopCmdActor actor)
+    public boolean requiresOwner(@NotNull ShopCmdActor actor)
     {
         return actor.getNumArgs() >= 2 && flagCmds.get(actor.getArg(1)).requiresOwner(actor);
     }
 
     @Override
-    public boolean requiresPlayer(ShopCmdActor actor)
+    public boolean requiresPlayer(@NotNull ShopCmdActor actor)
     {
         return actor.getNumArgs() >= 2 && flagCmds.get(actor.getArg(1)).requiresPlayer(actor);
     }
 
     @Override
-    public boolean requiresItemInHand(ShopCmdActor actor)
+    public boolean requiresItemInHand(@NotNull ShopCmdActor actor)
     {
         return actor.getNumArgs() >= 2 && flagCmds.get(actor.getArg(1)).requiresItemInHand(actor);
     }
 
     @Override
-    public void onCommand(ShopCmdActor actor) throws PrematureAbortException
+    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
 		flagCmds.get(actor.getArg(1)).onCommand(actor);
     }

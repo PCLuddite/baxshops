@@ -9,13 +9,14 @@ package tbax.baxshops.commands;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
 
 public final class CmdTakeXp extends BaxShopCommand
 {
     @Override
-    public String getName()
+    public @NotNull String getName()
     {
         return "takexp";
     }
@@ -27,7 +28,7 @@ public final class CmdTakeXp extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(ShopCmdActor actor) throws PrematureAbortException
+    public CommandHelp getHelp(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         CommandHelp help = super.getHelp(actor);
         help.setDescription("trade XP for currency");
@@ -46,37 +47,37 @@ public final class CmdTakeXp extends BaxShopCommand
     }
 
     @Override
-    public boolean hasValidArgCount(ShopCmdActor actor)
+    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
     {
         return false;
     }
 
     @Override
-    public boolean requiresSelection(ShopCmdActor actor)
+    public boolean requiresSelection(@NotNull ShopCmdActor actor)
     {
         return false;
     }
 
     @Override
-    public boolean requiresPlayer(ShopCmdActor actor)
+    public boolean requiresPlayer(@NotNull ShopCmdActor actor)
     {
         return false;
     }
 
     @Override
-    public boolean requiresItemInHand(ShopCmdActor actor)
+    public boolean requiresItemInHand(@NotNull ShopCmdActor actor)
     {
         return false;
     }
 
     @Override
-    public boolean requiresOwner(ShopCmdActor actor)
+    public boolean requiresOwner(@NotNull ShopCmdActor actor)
     {
         return false;
     }
 
     @Override
-    public void onCommand(ShopCmdActor actor) throws PrematureAbortException
+    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         int levels = actor.getArgInt(1, String.format(Resources.INVALID_DECIMAL, "number of XP levels"));
 

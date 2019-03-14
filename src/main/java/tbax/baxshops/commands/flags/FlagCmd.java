@@ -7,19 +7,20 @@
 
 package tbax.baxshops.commands.flags;
 
+import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.commands.BaxShopCommand;
 import tbax.baxshops.commands.ShopCmdActor;
 
 public abstract class FlagCmd extends BaxShopCommand
 {
     @Override
-    public String getName()
+    public @NotNull String getName()
     {
         return getAliases()[0];
     }
 
     @Override
-    public boolean hasValidArgCount(ShopCmdActor actor)
+    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
     {
         return actor.getNumArgs() == 3;
     }
@@ -30,6 +31,7 @@ public abstract class FlagCmd extends BaxShopCommand
         return "shops.owner";
     }
 
+    @NotNull
     @Override
     public String[] getAliases()
     {
@@ -37,25 +39,25 @@ public abstract class FlagCmd extends BaxShopCommand
     }
 
     @Override
-    public boolean requiresSelection(ShopCmdActor actor)
+    public boolean requiresSelection(@NotNull ShopCmdActor actor)
     {
         return true;
     }
 
     @Override
-    public boolean requiresOwner(ShopCmdActor actor)
+    public boolean requiresOwner(@NotNull ShopCmdActor actor)
     {
         return true;
     }
 
     @Override
-    public boolean requiresPlayer(ShopCmdActor actor)
+    public boolean requiresPlayer(@NotNull ShopCmdActor actor)
     {
         return true;
     }
 
     @Override
-    public boolean requiresItemInHand(ShopCmdActor actor)
+    public boolean requiresItemInHand(@NotNull ShopCmdActor actor)
     {
         return false;
     }

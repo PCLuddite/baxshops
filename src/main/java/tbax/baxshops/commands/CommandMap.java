@@ -7,6 +7,8 @@
 
 package tbax.baxshops.commands;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +23,7 @@ public final class CommandMap implements Map<String, BaxShopCommand>
     {
     }
 
-    public CommandMap(Class<? extends BaxShopCommand>... commands)
+    public CommandMap(@NotNull Class<? extends BaxShopCommand>... commands)
     {
         for (Class<? extends BaxShopCommand> command : commands) {
             try {
@@ -79,7 +81,7 @@ public final class CommandMap implements Map<String, BaxShopCommand>
     }
 
     @Override
-    public void putAll(Map<? extends String, ? extends BaxShopCommand> m)
+    public void putAll(@NotNull Map<? extends String, ? extends BaxShopCommand> m)
     {
         cmds.putAll(m);
     }
