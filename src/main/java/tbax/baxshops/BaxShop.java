@@ -501,7 +501,7 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
         ItemStack[] inv = new ItemStack[size()];
         int i = 0;
         for(BaxEntry entry : this) {
-            inv[i++] = entry.getItemStack();
+            inv[i++] = entry.toItemStack();
         }
         return inv;
     }

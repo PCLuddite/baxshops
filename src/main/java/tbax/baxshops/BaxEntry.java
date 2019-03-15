@@ -124,6 +124,8 @@ public final class BaxEntry implements ConfigurationSerializable
     {
         ItemStack stack = this.stack.clone();
         stack.setAmount(quantity);
+        if (quantity == 0)
+            stack.setType(this.stack.getType());
         return stack;
     }
     
