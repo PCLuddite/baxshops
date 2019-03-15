@@ -87,7 +87,7 @@ public final class CmdRemove extends BaxShopCommand
         if (!shop.hasFlagInfinite() && entry.getAmount() > 0) {
             ItemStack stack = entry.toItemStack();
             if (!actor.hasRoomForItem(stack)) {
-                actor.exitError(Resources.NO_ROOM);
+                actor.exitError(Resources.INVENTORY_IS_FULL);
             }
 
             actor.sendMessage("%s %s added to your inventory.",

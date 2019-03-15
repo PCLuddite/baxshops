@@ -19,6 +19,7 @@ import tbax.baxshops.errors.CommandWarningException;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.DeletedShopClaim;
 import tbax.baxshops.notification.SaleClaim;
+import tbax.baxshops.serialization.ItemNames;
 import tbax.baxshops.serialization.StoredData;
 import tbax.baxshops.serialization.StoredPlayer;
 
@@ -61,7 +62,7 @@ public final class PlayerUtil
     {
         int space = getSpaceForItem(player, item);
         if (space == 0 || (allOrNothing && space < item.getAmount())) {
-            throw new CommandErrorException(Resources.NO_ROOM);
+            throw new CommandErrorException(String.format(Resources.NO_ROOM_FOR_ITEM, item.getAmount(), ItemNames.getName(item)));
         }
 
         int overflow = Math.max(item.getAmount() - space, 0);
@@ -125,6 +126,19 @@ public final class PlayerUtil
      * @return true if the item was given, otherwise false
      */
     public static boolean tryGiveItem(@NotNull Player player, @NotNull ItemStack item)
+    {
+        return tryGiveItem(player, item, true);
+    }
+
+    /**
+     * gives an ItemStack to a player
+     * @apiNote This differs from giveItem() in that it does not throw an exception, but sends the message to the player
+     * @param player the player
+     * @param item the item
+     * @param allOrNothing if true, there must be space for the full amount of the ItemStack
+     * @return true if the item was given, otherwise false
+     */
+    public static boolean tryGiveItem(@NotNull Player player, @NotNull ItemStack item, boolean allOrNothing)
     {
         try {
             giveItem(player, item, true);

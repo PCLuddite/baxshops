@@ -30,7 +30,8 @@ public final class Resources
     public static final String[] SIGN_CLOSED = {"This shop has", "been closed by", "%s"};
     // Errors
     public static final String NOT_ONLINE = "The player needs to be online to use this command.";
-    public static final String NO_ROOM = "Your inventory is full.";
+    public static final String INVENTORY_IS_FULL = "Your inventory is full.";
+    public static final String NO_ROOM_FOR_ITEM = "You do not have enough room for %d %s";
     public static final String NO_PERMISSION = "You do not have permission to use this command.";
     public static final String NOT_FOUND_SHOPITEM = "That item has not been added to this shop.\nUse /shop add to add a new item";
     public static final String INVALID_DECIMAL = "The number entered for the %s is invalid.";

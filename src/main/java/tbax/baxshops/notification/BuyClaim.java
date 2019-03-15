@@ -12,7 +12,10 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
+import tbax.baxshops.Resources;
 import tbax.baxshops.commands.ShopCmdActor;
+import tbax.baxshops.errors.CommandErrorException;
+import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.StoredData;
 
@@ -74,7 +77,19 @@ public final class BuyClaim implements Claimable
     @Override
     public boolean claim(ShopCmdActor actor)
     {
-        return actor.tryGiveItem(entry.toItemStack());
+        try {
+            int overflow = actor.giveItem(entry.toItemStack(), false);
+            if (overflow > 0) {
+                actor.sendMessage(Resources.SOME_ROOM, entry.getAmount() - overflow, entry.getName());
+                entry.setAmount(overflow);
+                return false;
+            }
+            return true;
+        }
+        catch (PrematureAbortException e) {
+            actor.sendMessage(e.getMessage());
+            return false;
+        }
     }
 
     @Override

@@ -81,7 +81,7 @@ public final class CmdCopy extends BaxShopCommand
 
         int i = actor.giveItem(actor.getSelection().toItem());
         if (i > 0) {
-            actor.sendMessage(Resources.NO_ROOM);
+            actor.sendMessage(Resources.INVENTORY_IS_FULL);
             if (!actor.isAdmin()) {
                 actor.getPlayer().getInventory().addItem(new ItemStack(Material.SIGN, 1));
             }
