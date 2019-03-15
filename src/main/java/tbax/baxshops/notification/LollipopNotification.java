@@ -11,6 +11,7 @@ package tbax.baxshops.notification;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.StoredData;
 
 import java.util.HashMap;
@@ -48,8 +49,9 @@ public final class LollipopNotification implements ConfigurationSerializable, No
 
     public LollipopNotification(Map<String, Object> args)
     {
-        this.sender = UUID.fromString((String)args.get("sender"));
-        this.tastiness = (double)args.get("tastiness");
+        SafeMap map = new SafeMap(args);
+        sender = map.getUUID("sender");
+        tastiness = map.getDouble("tastiness");
     }
 
     public LollipopNotification(OfflinePlayer sender, double tastiness)

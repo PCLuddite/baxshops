@@ -13,6 +13,7 @@ import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
 import tbax.baxshops.commands.ShopCmdActor;
+import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.StoredData;
 
 import java.util.HashMap;
@@ -29,10 +30,11 @@ public final class SaleRejection implements Claimable
 
     public SaleRejection(Map<String, Object> args)
     {
-        shopId = UUID.fromString((String)args.get("shopId"));
-        seller = UUID.fromString((String)args.get("seller"));
-        buyer = UUID.fromString((String)args.get("buyer"));
-        entry = (BaxEntry)args.get("entry");
+        SafeMap map = new SafeMap(args);
+        shopId = map.getUUID("shopId");
+        seller = map.getUUID("seller");
+        buyer = map.getUUID("buyer");
+        entry = map.getBaxEntry("entry");
     }
 
     public SaleRejection(UUID shopId, OfflinePlayer buyer, OfflinePlayer seller, BaxEntry entry)

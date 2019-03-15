@@ -9,6 +9,7 @@ package tbax.baxshops.serialization;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tbax.baxshops.BaxEntry;
 
 import java.util.*;
 
@@ -199,5 +200,20 @@ public class SafeMap implements Map<String, Object>
     public @NotNull Set<Entry<String, Object>> entrySet()
     {
         return argMap.entrySet();
+    }
+
+    public BaxEntry getBaxEntry(String key)
+    {
+        return getBaxEntry(key, null);
+    }
+
+    public BaxEntry getBaxEntry(String key, BaxEntry defaultValue)
+    {
+        try {
+            return (BaxEntry)getOrDefault(key, defaultValue);
+        }
+        catch (ClassCastException e) {
+            return defaultValue;
+        }
     }
 }

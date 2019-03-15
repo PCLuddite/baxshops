@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
 import tbax.baxshops.MathUtil;
+import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.StoredData;
 
 import java.util.HashMap;
@@ -36,10 +37,11 @@ public final class BuyNotification implements Notification
 
     public BuyNotification(Map<String, Object> args)
     {
-        entry = (BaxEntry)args.get("entry");
-        buyer = UUID.fromString((String)args.get("buyer"));
-        seller = UUID.fromString((String)args.get("seller"));
-        shopId = UUID.fromString((String)args.get("shopId"));
+        SafeMap map = new SafeMap(args);
+        entry = map.getBaxEntry("entry");
+        buyer = map.getUUID("buyer");
+        seller = map.getUUID("seller");
+        shopId = map.getUUID("shopId");
     }
 
     public OfflinePlayer getBuyer()

@@ -12,6 +12,7 @@ import org.bukkit.command.CommandSender;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
 import tbax.baxshops.commands.ShopCmdActor;
+import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.StoredData;
 
 import java.util.HashMap;
@@ -36,10 +37,11 @@ public final class BuyClaim implements Claimable
 
     public BuyClaim(Map<String, Object> args)
     {
-        shopId = UUID.fromString((String)args.get("shopId"));
-        buyer = UUID.fromString((String)args.get("buyer"));
-        seller = UUID.fromString((String)args.get("seller"));
-        entry = (BaxEntry)args.get("entry");
+        SafeMap map = new SafeMap(args);
+        shopId = map.getUUID("shopId");
+        buyer = map.getUUID("buyer");
+        seller = map.getUUID("seller");
+        entry = map.getBaxEntry("entry");
     }
 
     public BuyClaim(UUID shopId, UUID buyer, UUID seller, BaxEntry entry)

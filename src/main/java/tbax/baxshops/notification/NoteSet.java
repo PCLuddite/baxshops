@@ -7,10 +7,9 @@
 
 package tbax.baxshops.notification;
 
-import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.StoredData;
-import tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.*;
 
@@ -26,11 +25,11 @@ public final class NoteSet implements ConfigurationSerializable
         this.notes.addAll(notes);
     }
 
-    @SuppressWarnings("unchecked")
     public NoteSet(Map<String, Object> args)
     {
-        recipient = UUID.fromString((String)args.get("recipient"));
-        notes.addAll((List)args.get("notes"));
+        SafeMap map = new SafeMap(args);
+        recipient = map.getUUID("recipient");
+        notes.addAll(map.getList("notes"));
     }
     
     public UUID getRecipient()
