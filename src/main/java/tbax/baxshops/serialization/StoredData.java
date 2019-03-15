@@ -359,6 +359,18 @@ public final class StoredData
         showNotification(player, true);
     }
 
+    public static void showNotificationCount(Player player)
+    {
+        Deque<Notification> notifications = getNotifications(player.getPlayer());
+        if (notifications.isEmpty()) {
+            player.sendMessage("You have no notifications.");
+        }
+        else {
+            int size = notifications.size();
+            player.sendMessage(String.format("You have %s %s.", Format.number(size), size == 1 ? "notification" : "notifications"));
+        }
+    }
+
     /**
      * Shows a player his/her most recent notification.
      *
@@ -368,16 +380,11 @@ public final class StoredData
     public static void showNotification(Player player, boolean showCount)
     {
         Deque<Notification> notifications = getNotifications(player.getPlayer());
-        if (notifications.isEmpty()) {
-            if (showCount) {
-                player.sendMessage("You have no notifications.");
-            }
+        if (showCount)
+            showNotificationCount(player);
+
+        if (notifications.isEmpty())
             return;
-        }
-        if (showCount) {
-            int size = notifications.size();
-            player.sendMessage(String.format("You have %s %s.", Format.number(size), size == 1 ? "notification" : "notifications"));
-        }
 
         Notification n = notifications.getFirst();
         player.sendMessage(n.getMessage(player.getPlayer()));

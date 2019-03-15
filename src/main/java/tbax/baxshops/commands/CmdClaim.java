@@ -78,8 +78,11 @@ public class CmdClaim extends BaxShopCommand
                 Claimable c = (Claimable) n;
                 if (c.claim(actor)) {
                     notifications.removeFirst();
+                    StoredData.showNotification(actor.getPlayer());
                 }
-                StoredData.showNotification(actor.getPlayer());
+                else {
+                    StoredData.showNotificationCount(actor.getPlayer());
+                }
             }
             else {
                 actor.sendError("Your current notification is not a claim.");
