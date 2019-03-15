@@ -12,10 +12,6 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
-import tbax.baxshops.Resources;
-import tbax.baxshops.commands.ShopCmdActor;
-import tbax.baxshops.errors.CommandErrorException;
-import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.StoredData;
 
@@ -24,7 +20,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
-public final class BuyClaim implements Claimable
+public final class BuyClaim extends Claimable
 {
     private BaxEntry entry;
     private UUID buyer;
@@ -72,24 +68,6 @@ public final class BuyClaim implements Claimable
     public BaxEntry getEntry()
     {
         return entry;
-    }
-
-    @Override
-    public boolean claim(ShopCmdActor actor)
-    {
-        try {
-            int overflow = actor.giveItem(entry.toItemStack(), false);
-            if (overflow > 0) {
-                actor.sendMessage(Resources.SOME_ROOM, entry.getAmount() - overflow, entry.getName());
-                entry.setAmount(overflow);
-                return false;
-            }
-            return true;
-        }
-        catch (PrematureAbortException e) {
-            actor.sendMessage(e.getMessage());
-            return false;
-        }
     }
 
     @Override

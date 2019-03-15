@@ -13,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
-import tbax.baxshops.commands.ShopCmdActor;
 import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.StoredData;
 
@@ -22,7 +21,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @SuppressWarnings("WeakerAccess")
-public final class SaleRejection implements Claimable
+public final class SaleRejection extends Claimable
 {
     private UUID seller;
     private UUID buyer;
@@ -75,12 +74,6 @@ public final class SaleRejection implements Claimable
     public BaxEntry getEntry()
     {
         return entry;
-    }
-
-    @Override
-    public boolean claim(ShopCmdActor actor)
-    {
-        return actor.tryGiveItem(entry.toItemStack());
     }
 
     @Override

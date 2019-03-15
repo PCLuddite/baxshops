@@ -12,7 +12,6 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
-import tbax.baxshops.commands.ShopCmdActor;
 import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.StoredData;
 
@@ -21,7 +20,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @SuppressWarnings("WeakerAccess")
-public final class DeletedShopClaim implements Claimable
+public final class DeletedShopClaim extends Claimable
 {
     private UUID owner;
     private BaxEntry entry;
@@ -91,11 +90,5 @@ public final class DeletedShopClaim implements Claimable
     public BaxEntry getEntry()
     {
         return entry;
-    }
-
-    @Override
-    public boolean claim(ShopCmdActor actor)
-    {
-        return actor.tryGiveItem(entry.toItemStack());
     }
 }
