@@ -68,7 +68,7 @@ public final class CmdCopy extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException // tested OK 3-14-19
     {
         if (!actor.isAdmin()) {
             PlayerInventory inv = actor.getPlayer().getInventory();
@@ -82,7 +82,9 @@ public final class CmdCopy extends BaxShopCommand
         int i = actor.giveItem(actor.getSelection().toItem());
         if (i > 0) {
             actor.sendMessage(Resources.NO_ROOM);
-            actor.getPlayer().getInventory().addItem(new ItemStack(Material.SIGN, 1));
+            if (!actor.isAdmin()) {
+                actor.getPlayer().getInventory().addItem(new ItemStack(Material.SIGN, 1));
+            }
         }
     }
 }
