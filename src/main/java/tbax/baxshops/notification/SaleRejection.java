@@ -9,6 +9,7 @@ package tbax.baxshops.notification;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
@@ -83,7 +84,7 @@ public final class SaleRejection implements Claimable
     }
 
     @Override
-    public String getMessage(CommandSender sender)
+    public @NotNull String getMessage(CommandSender sender)
     {
         if (getSeller().equals(sender)) {
             return String.format("%s rejected your request to sell %s",
@@ -91,10 +92,16 @@ public final class SaleRejection implements Claimable
             );
         }
         else {
-            return String.format("%s rejected %s's request to sell %s",
-                Format.username(buyer), Format.username2(seller), entry.getFormattedName()
-            );
+            return getMessage();
         }
+    }
+
+    @Override
+    public @NotNull String getMessage()
+    {
+        return String.format("%s rejected %s's request to sell %s",
+            Format.username(buyer), Format.username2(seller), entry.getFormattedName()
+        );
     }
 
     @Override

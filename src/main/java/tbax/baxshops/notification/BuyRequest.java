@@ -10,6 +10,7 @@ package tbax.baxshops.notification;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.*;
 import tbax.baxshops.commands.ShopCmdActor;
 import tbax.baxshops.errors.PrematureAbortException;
@@ -118,7 +119,7 @@ public final class BuyRequest implements Request
     }
 
     @Override
-    public String getMessage(CommandSender sender)
+    public @NotNull String getMessage(CommandSender sender)
     {
         if (getSeller().equals(sender)) {
             return String.format("%s wants to buy %s from you for %s.",
@@ -126,10 +127,16 @@ public final class BuyRequest implements Request
             );
         }
         else {
-            return String.format("%s wants to buy %s from %s for %s.",
-                Format.username(buyer), entry.getFormattedName(), Format.username2(seller), entry.getFormattedBuyPrice()
-            );
+            return getMessage();
         }
+    }
+
+    @Override
+    public @NotNull String getMessage()
+    {
+        return String.format("%s wants to buy %s from %s for %s.",
+            Format.username(buyer), entry.getFormattedName(), Format.username2(seller), entry.getFormattedBuyPrice()
+        );
     }
 
     @Override

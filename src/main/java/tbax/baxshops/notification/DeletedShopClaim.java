@@ -9,6 +9,7 @@ package tbax.baxshops.notification;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
 import tbax.baxshops.commands.ShopCmdActor;
@@ -49,16 +50,22 @@ public final class DeletedShopClaim implements Claimable
     }
 
     @Override
-    public String getMessage(CommandSender sender)
+    public @NotNull String getMessage(CommandSender sender)
     {
         if (getOwner().equals(sender)) {
             return String.format("The shop that had this entry no longer exists. You have %s outstanding.", entry.getFormattedName());
         }
         else {
-            return String.format("The shop that had this entry no longer exists. %s has %s outstanding.",
-                Format.username(owner), entry.getFormattedName()
-            );
+            return getMessage();
         }
+    }
+
+    @Override
+    public @NotNull String getMessage()
+    {
+        return String.format("The shop that had this entry no longer exists. %s has %s outstanding.",
+            Format.username(owner), entry.getFormattedName()
+        );
     }
 
     @Override

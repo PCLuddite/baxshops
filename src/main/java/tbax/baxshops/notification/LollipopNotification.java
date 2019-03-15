@@ -11,6 +11,7 @@ package tbax.baxshops.notification;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.StoredData;
 
@@ -66,7 +67,13 @@ public final class LollipopNotification implements ConfigurationSerializable, No
     }
 
     @Override
-    public String getMessage(CommandSender sender)
+    public @NotNull String getMessage(CommandSender sender)
+    {
+        return getMessage();
+    }
+
+    @Override
+    public @NotNull String getMessage()
     {
         return getSender().getName() + " sent you a " + getTastiness() + " lollipop";
     }

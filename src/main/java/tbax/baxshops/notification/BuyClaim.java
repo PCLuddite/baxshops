@@ -9,6 +9,7 @@ package tbax.baxshops.notification;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
 import tbax.baxshops.commands.ShopCmdActor;
@@ -77,23 +78,29 @@ public final class BuyClaim implements Claimable
     }
 
     @Override
-    public String getMessage(CommandSender sender)
+    public @NotNull String getMessage(CommandSender sender)
     {
         if (getBuyer().equals(sender)) {
-            return String.format("%s accepted %s's request to buy %s for %s.",
-                Format.username(seller),
-                Format.username2(buyer),
-                entry.getFormattedName(),
-                entry.getFormattedBuyPrice()
-            );
-        }
-        else {
             return String.format("%s accepted your request to buy %s for %s.",
                 Format.username(seller),
                 entry.getFormattedName(),
                 entry.getFormattedBuyPrice()
             );
         }
+        else {
+            return getMessage();
+        }
+    }
+
+    @Override
+    public @NotNull String getMessage()
+    {
+        return String.format("%s accepted %s's request to buy %s for %s.",
+            Format.username(seller),
+            Format.username2(buyer),
+            entry.getFormattedName(),
+            entry.getFormattedBuyPrice()
+        );
     }
 
     @Override

@@ -9,6 +9,7 @@ package tbax.baxshops.notification;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
 import tbax.baxshops.serialization.SafeMap;
@@ -69,7 +70,7 @@ public final class SaleNotification implements Notification
     }
 
     @Override
-    public String getMessage(CommandSender sender)
+    public @NotNull String getMessage(CommandSender sender)
     {
         if (getSeller().equals(sender)) {
             return String.format("%s accepted your request to sell %s for %s.",
@@ -77,10 +78,16 @@ public final class SaleNotification implements Notification
             );
         }
         else {
-            return String.format("%s accepted %s's request to sell %s for %s.",
-                Format.username(buyer), Format.username2(seller), entry.getFormattedName(), entry.getFormattedSellPrice()
-            );
+            return getMessage();
         }
+    }
+
+    @Override
+    public @NotNull String getMessage()
+    {
+        return String.format("%s accepted %s's request to sell %s for %s.",
+            Format.username(buyer), Format.username2(seller), entry.getFormattedName(), entry.getFormattedSellPrice()
+        );
     }
 
     @Override

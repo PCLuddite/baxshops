@@ -10,6 +10,7 @@ package tbax.baxshops.notification;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
 import tbax.baxshops.serialization.SafeMap;
@@ -65,7 +66,7 @@ public final class BuyRejection implements Notification
     }
 
     @Override
-    public String getMessage(CommandSender sender)
+    public @NotNull String getMessage(CommandSender sender)
     {
         if (getSeller().equals(sender)) {
             return String.format("%s " + ChatColor.RED + "rejected" + ChatColor.RESET + " your request to buy %s for %s.",
@@ -75,13 +76,19 @@ public final class BuyRejection implements Notification
             );
         }
         else {
-            return String.format("%s " + ChatColor.RED + "rejected" + ChatColor.RESET + " %s's request to buy %s for %s.",
-                Format.username(seller),
-                Format.username2(buyer),
-                entry.getFormattedName(),
-                entry.getFormattedBuyPrice()
-            );
+            return getMessage();
         }
+    }
+
+    @Override
+    public @NotNull String getMessage()
+    {
+        return String.format("%s " + ChatColor.RED + "rejected" + ChatColor.RESET + " %s's request to buy %s for %s.",
+            Format.username(seller),
+            Format.username2(buyer),
+            entry.getFormattedName(),
+            entry.getFormattedBuyPrice()
+        );
     }
 
     @Override

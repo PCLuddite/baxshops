@@ -9,6 +9,7 @@ package tbax.baxshops.notification;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
 import tbax.baxshops.MathUtil;
@@ -65,7 +66,7 @@ public final class BuyNotification implements Notification
     }
 
     @Override
-    public String getMessage(CommandSender sender)
+    public @NotNull String getMessage(CommandSender sender)
     {
         if (getSeller().equals(sender)) {
             return String.format("%s bought %s from you for %s.",
@@ -75,13 +76,19 @@ public final class BuyNotification implements Notification
             );
         }
         else {
-            return String.format("%s bought %s from %s for %s.",
-                Format.username(buyer),
-                entry.getFormattedName(),
-                Format.username2(seller),
-                Format.money(MathUtil.multiply(entry.getRetailPrice(), entry.getAmount()))
-            );
+            return getMessage();
         }
+    }
+
+    @Override
+    public @NotNull String getMessage()
+    {
+        return String.format("%s bought %s from %s for %s.",
+            Format.username(buyer),
+            entry.getFormattedName(),
+            Format.username2(seller),
+            Format.money(MathUtil.multiply(entry.getRetailPrice(), entry.getAmount()))
+        );
     }
 
     @Override
