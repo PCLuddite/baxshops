@@ -79,6 +79,18 @@ public final class CmdSell extends BaxShopCommand
     }
 
     @Override
+    public boolean hasAlternative(ShopCmdActor actor)
+    {
+        return actor.isOwner();
+    }
+
+    @Override
+    public @NotNull Class<? extends BaxShopCommand> getAlternative()
+    {
+        return CmdRestock.class;
+    }
+
+    @Override
     public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         if (actor.isOwner()) {

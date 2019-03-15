@@ -152,11 +152,26 @@ public final class ShopPlugin extends JavaPlugin
         }
 
         BaxShopCommand cmd = commands.get(actor.getAction());
-        try {
-            if (cmd == null) {
-                actor.sendError(Resources.INVALID_SHOP_ACTION, actor.getAction());
+        if (cmd == null) {
+            actor.sendError(Resources.INVALID_SHOP_ACTION, actor.getAction());
+            return true;
+        }
+        else if (cmd.hasAlternative(actor)) {
+            try {
+                cmd = cmd.getAlternative().newInstance();
+                actor.setAction(cmd.getName());
             }
-            else if (!cmd.hasValidArgCount(actor)) {
+            catch (InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
+        return runCommand(cmd, actor);
+    }
+
+    public static boolean runCommand(BaxShopCommand cmd, ShopCmdActor actor)
+    {
+        try {
+            if (!cmd.hasValidArgCount(actor)) {
                 actor.sendMessage(cmd.getHelp(actor).toString());
             }
             else if(!cmd.hasPermission(actor)) {

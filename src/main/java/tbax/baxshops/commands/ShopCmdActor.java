@@ -457,4 +457,9 @@ public final class ShopCmdActor
             return players.get(0);
         }
     }
+
+    public void setAction(String action)
+    {
+        this.action = action;
+    }
 }

@@ -41,6 +41,16 @@ public abstract class BaxShopCommand
         return actor.hasPermission(getPermission());
     }
 
+    public boolean hasAlternative(ShopCmdActor actor)
+    {
+        return false;
+    }
+
+    public @NotNull Class<? extends BaxShopCommand> getAlternative()
+    {
+        return this.getClass();
+    }
+
     public final boolean requiresAdmin()
     {
         return "shops.admin".equalsIgnoreCase(getPermission());

@@ -32,7 +32,7 @@ public final class CommandMap implements Map<String, BaxShopCommand>
                     cmds.put(alias, cmd);
                 }
             }
-            catch (Exception e) {
+            catch (InstantiationException | IllegalAccessException e) {
                 e.printStackTrace();
             }
         }
