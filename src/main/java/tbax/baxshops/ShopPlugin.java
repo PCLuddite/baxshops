@@ -103,6 +103,7 @@ public final class ShopPlugin extends JavaPlugin
             CmdAdd.class,
             CmdBackup.class,
             CmdBuy.class,
+            CmdClaim.class,
             CmdCopy.class,
             CmdCreate.class,
             CmdDelete.class,
