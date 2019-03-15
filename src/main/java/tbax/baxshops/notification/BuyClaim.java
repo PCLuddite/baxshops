@@ -74,7 +74,7 @@ public final class BuyClaim implements Claimable
     @Override
     public boolean claim(ShopCmdActor actor)
     {
-        return false;
+        return actor.tryGiveItem(entry.toItemStack());
     }
 
     @Override
