@@ -19,24 +19,24 @@ public class BaxQuantity
     private ItemStack stack;
     private Iterable<ItemStack> inventory;
 
-    public BaxQuantity(@NotNull String arg, @NotNull ItemStack item, @NotNull Iterable<ItemStack> inv)
+    public BaxQuantity(@NotNull String arg, ItemStack item, @NotNull Iterable<ItemStack> inv)
     {
         argument = arg;
         stack = item;
         inventory = inv;
     }
 
-    public BaxQuantity(@NotNull String arg, @NotNull ItemStack item, @NotNull ItemStack[] inv)
+    public BaxQuantity(@NotNull String arg, ItemStack item, @NotNull ItemStack[] inv)
     {
         this(arg, item, Arrays.asList(inv));
     }
 
-    public void setItem(@NotNull ItemStack stack)
+    public void setItem(ItemStack stack)
     {
         this.stack = stack;
     }
 
-    public @NotNull ItemStack getItem()
+    public ItemStack getItem()
     {
         return stack;
     }
@@ -68,7 +68,7 @@ public class BaxQuantity
             else if (isMost()) {
                 return stack.getAmount() - 1;
             }
-            throw new CommandErrorException(e, argument + " is not a valid quantity");
+            throw new CommandErrorException(e, "'" + argument + "' is not a valid quantity");
         }
     }
 

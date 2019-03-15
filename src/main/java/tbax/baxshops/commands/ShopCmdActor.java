@@ -362,12 +362,6 @@ public final class ShopCmdActor
 
     public List<BaxEntry> takeArgFromInventory(int index) throws PrematureAbortException
     {
-        if (getShop() == null)
-            throw new CommandErrorException(Resources.NOT_FOUND_SELECTED);
-
-        if (getItemInHand() == null)
-            throw new CommandErrorException(Resources.NOT_FOUND_HELDITEM);
-
         return PlayerUtil.takeQtyFromInventory(getArgPlayerQty(index), getShop());
     }
 

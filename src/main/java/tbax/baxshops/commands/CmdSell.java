@@ -93,13 +93,8 @@ public final class CmdSell extends BaxShopCommand
     @Override
     public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
-        if (actor.isOwner()) {
-            actor.setCmdName("restock");  // if they're the owner, use the restock command
-            ShopPlugin.runCommand(actor);
-            return;
-        }
-        assert actor.getItemInHand() != null;
         if (actor.getNumArgs() == 1) {
+            assert actor.getItemInHand() != null;
             actor.appendArg(actor.getItemInHand().getAmount());
         }
 

@@ -273,6 +273,7 @@ public final class PlayerUtil
 
         for (BaxEntry entry : shop) {
             BaxEntry curr = new BaxEntry(entry);
+            curr.setAmount(0);
             for (int x = 0; x < inv.getSize(); ++x) {
                 ItemStack item = inv.getItem(x);
                 if (curr.isSimilar(item)) {
