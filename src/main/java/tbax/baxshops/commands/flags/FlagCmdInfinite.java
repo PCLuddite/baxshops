@@ -3,12 +3,11 @@
  *  Copyright (c) Timothy Baxendale
  *
  *  +++====+++
- **/
+**/
 
 package tbax.baxshops.commands.flags;
 
 import org.jetbrains.annotations.NotNull;
-import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
 import tbax.baxshops.commands.ShopCmdActor;
@@ -20,6 +19,12 @@ public final class FlagCmdInfinite extends FlagCmd
     public @NotNull String[] getAliases()
     {
         return new String[]{"infinite", "isinfinite", "inf"};
+    }
+
+    @Override
+    public boolean requiresRealOwner(@NotNull ShopCmdActor actor)
+    {
+        return false;
     }
 
     @Override

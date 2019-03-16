@@ -41,6 +41,8 @@ public final class Resources
     public static final String NOT_FOUND_HELDITEM = "You need to be holding an item to perform this action.";
     public static final String INVALID_SHOP_ACTION = "'/shop %s' is not a valid action";
     public static final String ERROR_GENERIC = "The action could not be completed due to the following error:\n%s";
+    public static final String PLAYER_NOT_REAL = "%s is not a real player";
+    public static final String PLAYER_NO_NOTES = "%s is not a real player and cannot receive notifications.\nThe value of this flag cannot be changed.";
     // Info
     public static final String CURRENT_BALANCE = "Your current balance is %s.";
     public static final String SOME_ROOM = "Only " + ChatColor.RED + "%d %s" + ChatColor.RESET + " could fit in your inventory.";

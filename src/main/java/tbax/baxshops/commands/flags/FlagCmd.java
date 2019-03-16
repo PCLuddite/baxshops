@@ -3,7 +3,7 @@
  *  Copyright (c) Timothy Baxendale
  *
  *  +++====+++
- **/
+**/
 
 package tbax.baxshops.commands.flags;
 
@@ -61,4 +61,6 @@ public abstract class FlagCmd extends BaxShopCommand
     {
         return false;
     }
+
+    public abstract boolean requiresRealOwner(@NotNull ShopCmdActor actor);
 }

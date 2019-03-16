@@ -3,7 +3,7 @@
  *  Copyright (c) Timothy Baxendale
  *
  *  +++====+++
- **/
+**/
 
 package tbax.baxshops.commands.flags;
 
@@ -25,6 +25,12 @@ public final class FlagCmdList extends FlagCmd
     public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
     {
         return actor.getNumArgs() == 2;
+    }
+
+    @Override
+    public boolean requiresRealOwner(@NotNull ShopCmdActor actor)
+    {
+        return false;
     }
 
     @Override

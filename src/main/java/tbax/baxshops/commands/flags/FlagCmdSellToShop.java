@@ -3,7 +3,7 @@
  *  Copyright (c) Timothy Baxendale
  *
  *  +++====+++
- **/
+**/
 
 package tbax.baxshops.commands.flags;
 
@@ -19,6 +19,12 @@ public final class FlagCmdSellToShop extends FlagCmd
     public @NotNull String[] getAliases()
     {
         return new String[]{"selltoshop", "sell_to_shop"};
+    }
+
+    @Override
+    public boolean requiresRealOwner(@NotNull ShopCmdActor actor)
+    {
+        return true;
     }
 
     @Override

@@ -28,6 +28,12 @@ public class FlagCmdNotify extends FlagCmd
     }
 
     @Override
+    public boolean requiresRealOwner(@NotNull ShopCmdActor actor)
+    {
+        return true;
+    }
+
+    @Override
     public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         BaxShop shop = actor.getShop();

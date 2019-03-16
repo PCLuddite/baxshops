@@ -10,12 +10,14 @@ package tbax.baxshops.commands;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.CommandHelp;
 import tbax.baxshops.CommandHelpArgument;
+import tbax.baxshops.Resources;
 import tbax.baxshops.commands.flags.*;
 import tbax.baxshops.errors.PrematureAbortException;
+import tbax.baxshops.serialization.StoredPlayer;
 
 public final class CmdFlag extends BaxShopCommand
 {
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "MismatchedQueryAndUpdateOfCollection"})
     private static final CommandMap flagCmds = new CommandMap(
         FlagCmdSellToShop.class,
         FlagCmdInfinite.class,
@@ -52,36 +54,55 @@ public final class CmdFlag extends BaxShopCommand
     @Override
     public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
     {
-        return actor.getNumArgs() >= 2 && flagCmds.get(actor.getArg(1)).hasValidArgCount(actor);
+        if (actor.getNumArgs() < 2)
+            return false;
+        BaxShopCommand command = flagCmds.get(actor.getArg(1));
+        return command != null && command.hasValidArgCount(actor);
     }
 
     @Override
     public boolean requiresSelection(@NotNull ShopCmdActor actor)
     {
-        return actor.getNumArgs() >= 2 && flagCmds.get(actor.getArg(1)).requiresSelection(actor);
+        if (actor.getNumArgs() < 2)
+            return false;
+        BaxShopCommand command = flagCmds.get(actor.getArg(1));
+        return command != null && command.requiresSelection(actor);
     }
 
     @Override
     public boolean requiresOwner(@NotNull ShopCmdActor actor)
     {
-        return actor.getNumArgs() >= 2 && flagCmds.get(actor.getArg(1)).requiresOwner(actor);
+        if (actor.getNumArgs() < 2)
+            return false;
+        BaxShopCommand command = flagCmds.get(actor.getArg(1));
+        return command != null && command.requiresOwner(actor);
     }
 
     @Override
     public boolean requiresPlayer(@NotNull ShopCmdActor actor)
     {
-        return actor.getNumArgs() >= 2 && flagCmds.get(actor.getArg(1)).requiresPlayer(actor);
+        if (actor.getNumArgs() < 2)
+            return false;
+        BaxShopCommand command = flagCmds.get(actor.getArg(1));
+        return command != null && command.requiresPlayer(actor);
     }
 
     @Override
     public boolean requiresItemInHand(@NotNull ShopCmdActor actor)
     {
-        return actor.getNumArgs() >= 2 && flagCmds.get(actor.getArg(1)).requiresItemInHand(actor);
+        if (actor.getNumArgs() < 2)
+            return false;
+        BaxShopCommand command = flagCmds.get(actor.getArg(1));
+        return command != null && command.requiresItemInHand(actor);
     }
 
     @Override
     public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
-		flagCmds.get(actor.getArg(1)).onCommand(actor);
+		FlagCmd flagCmd = (FlagCmd)flagCmds.get(actor.getArg(1));
+		if (flagCmd.requiresRealOwner(actor) && actor.getShop() != null && StoredPlayer.DUMMY.equals(actor.getShop().getOwner())) {
+		    actor.exitError(Resources.PLAYER_NO_NOTES, actor.getShop().getOwner());
+        }
+		flagCmd.onCommand(actor);
     }
 }
