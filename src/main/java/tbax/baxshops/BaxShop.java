@@ -309,7 +309,7 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
 
     public boolean hasFlagBuyRequests()
     {
-        return BaxShopFlag.hasFlag(flags, BaxShopFlag.BUY_REQUESTS);
+        return !isWorldShop() && BaxShopFlag.hasFlag(flags, BaxShopFlag.BUY_REQUESTS);
     }
 
     public void setFlagSellRequests(boolean value)
@@ -319,7 +319,7 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
 
     public boolean hasFlagSellRequests()
     {
-        return BaxShopFlag.hasFlag(flags, BaxShopFlag.SELL_REQUESTS);
+        return !isWorldShop() && BaxShopFlag.hasFlag(flags, BaxShopFlag.SELL_REQUESTS);
     }
 
     public void setFlagNotify(boolean value)
@@ -329,7 +329,7 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
 
     public boolean hasFlagNotify()
     {
-        return BaxShopFlag.hasFlag(flags, BaxShopFlag.NOTIFY);
+        return !isWorldShop() && BaxShopFlag.hasFlag(flags, BaxShopFlag.NOTIFY);
     }
 
     public void setFlagSellToShop(boolean value)
@@ -339,7 +339,7 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
 
     public boolean hasFlagSellToShop()
     {
-        return BaxShopFlag.hasFlag(flags, BaxShopFlag.SELL_TO_SHOP);
+        return isWorldShop() || BaxShopFlag.hasFlag(flags, BaxShopFlag.SELL_TO_SHOP);
     }
 
     public void setFlagInfinite(boolean value)
@@ -504,5 +504,10 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
             inv[i++] = entry.toItemStack();
         }
         return inv;
+    }
+
+    public boolean isWorldShop()
+    {
+        return StoredPlayer.DUMMY.equals(getOwner());
     }
 }
