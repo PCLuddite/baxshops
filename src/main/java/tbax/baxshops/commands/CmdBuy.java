@@ -93,7 +93,7 @@ public final class CmdBuy extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException // tested OK 3/16/19
     {
         if (actor.getNumArgs() == 1) {
             actor.appendArgs(1, 1);

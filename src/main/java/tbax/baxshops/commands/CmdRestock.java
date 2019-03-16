@@ -78,7 +78,7 @@ public final class CmdRestock extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException // tested OK 3/16/19
     {
         assert actor.getShop() != null;
         if (actor.getShop().hasFlagInfinite()) {
@@ -118,14 +118,12 @@ public final class CmdRestock extends BaxShopCommand
                 actor.sendMessage("You did not have any items that could be restocked at this shop.");
             }
             else {
-                //noinspection ForLoopReplaceableByForEach
-                for (int i = 0; i < taken.size(); i++) {
-                    entry = taken.get(i);
-                    BaxEntry shopEntry = actor.getShop().find(entry);
-                    assert shopEntry != null;
-                    if (shopEntry.getAmount() > 0) {
-                        shopEntry.add(entry.getAmount());
-                        actor.sendMessage("Restocked %s.", Format.itemName(entry.getAmount(), ItemNames.getName(entry)));
+                for (BaxEntry takenEntry : taken) {
+                    if (takenEntry.getAmount() > 0) {
+                        BaxEntry shopEntry = actor.getShop().find(takenEntry);
+                        assert shopEntry != null;
+                        shopEntry.add(takenEntry.getAmount());
+                        actor.sendMessage("Restocked %s.", Format.itemName(takenEntry.getAmount(), ItemNames.getName(takenEntry)));
                     }
                 }
             }
