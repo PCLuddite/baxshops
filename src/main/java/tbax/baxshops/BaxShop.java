@@ -21,7 +21,7 @@ import tbax.baxshops.serialization.*;
 
 import java.util.*;
 
-@SuppressWarnings({"WeakerAccess", "unused"})
+@SuppressWarnings("WeakerAccess")
 public final class BaxShop implements ConfigurationSerializable, Collection<BaxEntry>
 {
     public static final int ITEMS_PER_PAGE = 7;
@@ -111,17 +111,7 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
                a.getBlockZ() == b.getBlockZ() &&
                a.getWorld().equals(b.getWorld());
     }
-    
-    public boolean hasLocation(Location loc)
-    {
-        for(Location l : locations) {
-            if (compareLoc(l, loc)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    
+
     @SuppressWarnings("UnusedReturnValue")
     public boolean removeLocation(Location loc)
     {
@@ -258,11 +248,6 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
         return null;
     }
 
-    public ItemStack toItem(int index)
-    {
-        return toItem(locations.get(index));
-    }
-
     public ItemStack toItem(Location loc)
     {
         ItemStack item = new ItemStack(Material.SIGN, 1);
@@ -382,11 +367,6 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
         }
     }
 
-    public String[] getSignText(int index)
-    {
-        return getSignText(locations.get(index));
-    }
-
     public String[] getSignText(Location loc)
     {
         try {
@@ -496,14 +476,24 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
         inventory.add(index, entry);
     }
 
-    public @NotNull ItemStack[] getItemStackInventory()
+    public @NotNull Iterable<ItemStack> getItemStackInventory()
     {
-        ItemStack[] inv = new ItemStack[size()];
-        int i = 0;
-        for(BaxEntry entry : this) {
-            inv[i++] = entry.toItemStack();
-        }
-        return inv;
+        return () -> new Iterator<ItemStack>()
+        {
+            private int current = 0;
+
+            @Override
+            public boolean hasNext()
+            {
+                return current < size();
+            }
+
+            @Override
+            public ItemStack next()
+            {
+                return inventory.get(current++).toItemStack();
+            }
+        };
     }
 
     public boolean isWorldShop()

@@ -334,4 +334,30 @@ public final class BaxEntry implements ConfigurationSerializable
             return false;
         return stack.isSimilar(entry.stack);
     }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+            return true;
+        if (obj instanceof BaxEntry)
+            return equals((BaxEntry)obj);
+        if (obj instanceof ItemStack)
+            return equals((ItemStack)obj);
+        return false;
+    }
+
+    public boolean equals(BaxEntry entry)
+    {
+        if (entry == null)
+            return false;
+        return stack.isSimilar(entry.getItemStack()) && quantity == entry.quantity;
+    }
+
+    public boolean equals(ItemStack stack)
+    {
+        if (stack == null)
+            return false;
+        return this.stack.isSimilar(stack) && stack.getAmount() == quantity;
+    }
 }

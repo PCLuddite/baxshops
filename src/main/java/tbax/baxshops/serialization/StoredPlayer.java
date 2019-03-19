@@ -85,7 +85,7 @@ public class StoredPlayer implements OfflinePlayer
     public String getName()
     {
         if (getOfflinePlayer().isOnline()) {
-            return getOfflinePlayer().getPlayer().getName();
+            return lastSeenName = getOfflinePlayer().getPlayer().getName();
         }
         else {
             return lastSeenName;

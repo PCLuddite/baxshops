@@ -26,11 +26,6 @@ public class BaxQuantity
         inventory = inv;
     }
 
-    public BaxQuantity(@NotNull String arg, ItemStack item, @NotNull ItemStack[] inv)
-    {
-        this(arg, item, Arrays.asList(inv));
-    }
-
     public void setItem(ItemStack stack)
     {
         this.stack = stack;
