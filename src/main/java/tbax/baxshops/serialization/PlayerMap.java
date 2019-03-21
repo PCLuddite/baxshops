@@ -1,3 +1,9 @@
+/** +++====+++
+ *
+ *  Copyright (c) Timothy Baxendale
+ *
+ *  +++====+++
+**/
 package tbax.baxshops.serialization;
 
 import org.bukkit.entity.Player;
