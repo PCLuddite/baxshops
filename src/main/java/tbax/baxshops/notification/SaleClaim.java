@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
-public final class SaleClaim extends Claimable
+public final class SaleClaim implements Claimable
 {
     private UUID buyer;
     private UUID seller;

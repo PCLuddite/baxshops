@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @SuppressWarnings("WeakerAccess")
-public final class DeletedShopClaim extends Claimable
+public final class DeletedShopClaim implements Claimable
 {
     private UUID owner;
     private BaxEntry entry;

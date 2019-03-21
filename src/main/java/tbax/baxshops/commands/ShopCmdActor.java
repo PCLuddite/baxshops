@@ -92,7 +92,7 @@ public final class ShopCmdActor
 
     public ShopSelection getSelection()
     {
-        return StoredData.getSelection(player);
+        return ShopPlugin.getSelection(player);
     }
     
     public int getNumArgs()

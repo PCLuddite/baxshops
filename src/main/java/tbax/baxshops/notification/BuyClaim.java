@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
-public final class BuyClaim extends Claimable
+public final class BuyClaim implements Claimable
 {
     private BaxEntry entry;
     private UUID buyer;

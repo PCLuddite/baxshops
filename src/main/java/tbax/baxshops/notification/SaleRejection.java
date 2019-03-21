@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @SuppressWarnings("WeakerAccess")
-public final class SaleRejection extends Claimable
+public final class SaleRejection implements Claimable
 {
     private UUID seller;
     private UUID buyer;

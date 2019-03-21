@@ -10,10 +10,10 @@ package tbax.baxshops.commands;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.CommandHelpArgument;
+import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
 import tbax.baxshops.notification.LollipopNotification;
-import tbax.baxshops.serialization.StoredData;
 
 public final class CmdLollipop extends BaxShopCommand
 {
@@ -86,7 +86,7 @@ public final class CmdLollipop extends BaxShopCommand
         }
         LollipopNotification lol = new LollipopNotification(actor.getPlayer(), tastiness);
         OfflinePlayer recipient = actor.getArgPlayer(1);
-        StoredData.sendNotification(recipient, lol);
+        ShopPlugin.sendNotification(recipient, lol);
         actor.sendMessage("Sent a %s lollipop to %s", lol.getTastiness(), recipient.getName());
     }
 }
