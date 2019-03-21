@@ -18,7 +18,7 @@ import java.util.UUID;
 /**
  * Methods for formatting strings
  */
-@SuppressWarnings({"WeakerAccess", "unused"})
+@SuppressWarnings("unused")
 public final class Format
 {   
     private Format()

@@ -31,7 +31,7 @@ import java.util.UUID;
 /**
  * Methods for dealing with interactions with players
  */
-@SuppressWarnings({"WeakerAccess", "unused"})
+@SuppressWarnings("unused")
 public final class PlayerUtil
 {
     private PlayerUtil()
@@ -141,7 +141,7 @@ public final class PlayerUtil
     public static boolean tryGiveItem(@NotNull Player player, @NotNull ItemStack item, boolean allOrNothing)
     {
         try {
-            giveItem(player, item, true);
+            giveItem(player, item, allOrNothing);
             return true;
         }
         catch (CommandErrorException | CommandWarningException e) {

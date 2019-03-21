@@ -23,7 +23,7 @@ import tbax.baxshops.serialization.SafeMap;
 import java.util.HashMap;
 import java.util.Map;
 
-@SuppressWarnings({"unused", "JavaDoc", "WeakerAccess"})
+@SuppressWarnings("unused")
 public final class BaxEntry implements ConfigurationSerializable
 {
     private ItemStack stack;
@@ -118,7 +118,7 @@ public final class BaxEntry implements ConfigurationSerializable
     /**
      * clones this entry's item stack and sets its amount to this entry's quantity
      * If the entry quantity is equal to zero, the material type may be AIR
-     * @return 
+     * @return an ItemStack
      */
     public @NotNull ItemStack toItemStack()
     {

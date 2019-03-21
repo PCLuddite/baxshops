@@ -7,7 +7,6 @@
 
 package tbax.baxshops;
 
-@SuppressWarnings("WeakerAccess")
 public final class BaxShopFlag
 {
     public static final int NONE = 0;              // 000000

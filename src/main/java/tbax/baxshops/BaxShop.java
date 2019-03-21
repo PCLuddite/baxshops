@@ -21,7 +21,6 @@ import tbax.baxshops.serialization.*;
 
 import java.util.*;
 
-@SuppressWarnings("WeakerAccess")
 public final class BaxShop implements ConfigurationSerializable, Collection<BaxEntry>
 {
     public static final int ITEMS_PER_PAGE = 7;

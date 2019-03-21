@@ -7,7 +7,7 @@
 
 package tbax.baxshops;
 
-@SuppressWarnings({"WeakerAccess", "unused"})
+@SuppressWarnings("unused")
 public final class MathUtil
 {
     private MathUtil()

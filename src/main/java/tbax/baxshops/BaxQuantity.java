@@ -13,6 +13,7 @@ import tbax.baxshops.errors.PrematureAbortException;
 
 import java.util.Arrays;
 
+@SuppressWarnings("unused")
 public class BaxQuantity
 {
     private String argument;

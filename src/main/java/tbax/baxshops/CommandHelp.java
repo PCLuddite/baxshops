@@ -10,7 +10,7 @@ package tbax.baxshops;
 import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
 
-@SuppressWarnings({"WeakerAccess", "unused"})
+@SuppressWarnings("unused")
 public final class CommandHelp
 {
     private String command;
