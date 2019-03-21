@@ -12,11 +12,11 @@ import tbax.baxshops.Resources;
 import tbax.baxshops.commands.ShopCmdActor;
 import tbax.baxshops.errors.PrematureAbortException;
 
-public abstract class Claimable implements Notification
+public interface Claimable extends Notification
 {
-    public abstract BaxEntry getEntry();
+    BaxEntry getEntry();
 
-    public boolean claim(ShopCmdActor actor)
+    default boolean claim(ShopCmdActor actor)
     {
         BaxEntry entry = getEntry();
         try {
