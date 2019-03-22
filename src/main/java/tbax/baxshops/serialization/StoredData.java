@@ -81,9 +81,6 @@ public final class StoredData
     {
         StoredData data = new StoredData(plugin);
 
-        ItemNames.loadDamageable(plugin);
-        ItemNames.loadEnchants(plugin);
-
         File stateLocation = new File(plugin.getDataFolder(), YAML_FILE_PATH);
         if (!stateLocation.exists()) {
             data.log.info("YAML file did not exist");

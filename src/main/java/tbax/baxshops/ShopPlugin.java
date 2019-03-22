@@ -20,6 +20,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import tbax.baxshops.commands.*;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.*;
+import tbax.baxshops.serialization.ItemNames;
 import tbax.baxshops.serialization.StoredData;
 import tbax.baxshops.serialization.StoredPlayer;
 
@@ -221,6 +222,9 @@ public final class ShopPlugin extends JavaPlugin
         }
         
         loadConfigurationSerializable();
+
+        ItemNames.loadDamageable(plugin);
+        ItemNames.loadEnchants(plugin);
 
         storedData = StoredData.load(this);
         
