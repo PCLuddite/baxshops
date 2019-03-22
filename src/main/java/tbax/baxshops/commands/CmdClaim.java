@@ -69,7 +69,7 @@ public class CmdClaim extends BaxShopCommand
     @Override
     public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException // tested OK 3-14-19
     {
-        Deque<Notification> notifications = StoredData.getNotifications(actor.getPlayer());
+        Deque<Notification> notifications = actor.getNotifications();
         if (notifications.isEmpty()) {
             actor.exitError(Resources.NOT_FOUND_NOTE);
         }

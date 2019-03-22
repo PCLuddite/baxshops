@@ -13,14 +13,14 @@ import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
 import tbax.baxshops.MathUtil;
+import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.SafeMap;
-import tbax.baxshops.serialization.StoredData;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings("unused")
 public final class BuyNotification implements Notification
 {
     private BaxEntry entry;
@@ -47,7 +47,7 @@ public final class BuyNotification implements Notification
 
     public OfflinePlayer getBuyer()
     {
-        return StoredData.getOfflinePlayer(buyer);
+        return ShopPlugin.getOfflinePlayer(buyer);
     }
 
     public BaxEntry getEntry()
@@ -57,7 +57,7 @@ public final class BuyNotification implements Notification
 
     public OfflinePlayer getSeller()
     {
-        return StoredData.getOfflinePlayer(seller);
+        return ShopPlugin.getOfflinePlayer(seller);
     }
 
     public UUID getShopId()

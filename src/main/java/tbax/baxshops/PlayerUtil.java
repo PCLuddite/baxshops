@@ -164,7 +164,7 @@ public final class PlayerUtil
      */
     public static void sellItem(@NotNull UUID shopId, @NotNull OfflinePlayer buyer, @NotNull OfflinePlayer seller, @NotNull BaxEntry entry) throws PrematureAbortException
     {
-        sellItem(StoredData.getShop(shopId), buyer, seller, entry);
+        sellItem(ShopPlugin.getShop(shopId), buyer, seller, entry);
     }
 
     /**
@@ -224,7 +224,7 @@ public final class PlayerUtil
      */
     public static void sellItem(@NotNull UUID shopId, @NotNull UUID buyer, @NotNull UUID seller, @NotNull BaxEntry entry) throws PrematureAbortException
     {
-        sellItem(shopId, StoredData.getOfflinePlayer(buyer), StoredData.getOfflinePlayer(seller), entry);
+        sellItem(shopId, ShopPlugin.getOfflinePlayer(buyer), ShopPlugin.getOfflinePlayer(seller), entry);
     }
 
     /**

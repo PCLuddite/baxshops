@@ -9,6 +9,7 @@ package tbax.baxshops.commands;
 
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.CommandHelp;
+import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.StoredData;
 
@@ -68,7 +69,7 @@ public final class CmdSave extends BaxShopCommand
     @Override
     public void onCommand(@NotNull ShopCmdActor actor)
     {
-        StoredData.saveAll();
+        ShopPlugin.getStoredData().saveAll();
         actor.getSender().sendMessage("Shops successfully saved");
     }
 }

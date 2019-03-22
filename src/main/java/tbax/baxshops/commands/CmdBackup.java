@@ -9,6 +9,7 @@ package tbax.baxshops.commands;
 
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.CommandHelp;
+import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.StoredData;
 
@@ -67,7 +68,7 @@ public final class CmdBackup extends BaxShopCommand
     @Override
     public void onCommand(@NotNull ShopCmdActor actor) // tested OK 3-14-19
     {
-        if (StoredData.backup()) {
+        if (ShopPlugin.getStoredData().backup()) {
             actor.sendMessage("Shops successfully backed up shops.yml");
         }
         else {

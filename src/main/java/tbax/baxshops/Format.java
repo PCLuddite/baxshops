@@ -7,11 +7,9 @@
 
 package tbax.baxshops;
 
-import net.milkbowl.vault.chat.Chat;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
-import tbax.baxshops.serialization.StoredData;
 
 import java.util.UUID;
 
@@ -87,12 +85,12 @@ public final class Format
     
     public static @NotNull String username(@NotNull UUID uuid)
     {
-        return username(StoredData.getOfflinePlayer(uuid).getName());
+        return username(ShopPlugin.getOfflinePlayer(uuid).getName());
     }
 
     public static @NotNull String username2(@NotNull UUID uuid)
     {
-        return username2(StoredData.getOfflinePlayer(uuid).getName());
+        return username2(ShopPlugin.getOfflinePlayer(uuid).getName());
     }
 
     public static @NotNull String username(@NotNull String name)

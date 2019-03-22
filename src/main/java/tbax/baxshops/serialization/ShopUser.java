@@ -7,6 +7,7 @@
 package tbax.baxshops.serialization;
 
 import org.bukkit.OfflinePlayer;
+import tbax.baxshops.ShopPlugin;
 
 import java.util.UUID;
 
@@ -24,16 +25,16 @@ public final class ShopUser
     public ShopUser(String name)
     {
         legacyName = name;
-        StoredData.getOfflinePlayer(name);
+        ShopPlugin.getOfflinePlayer(name);
     }
 
     public OfflinePlayer getOfflinePlayer()
     {
         if (uuid == null) {
-            return StoredData.getOfflinePlayer(legacyName).get(0);
+            return ShopPlugin.getOfflinePlayer(legacyName).get(0);
         }
         else {
-            return StoredData.getOfflinePlayer(uuid);
+            return ShopPlugin.getOfflinePlayer(uuid);
         }
     }
 }

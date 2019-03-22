@@ -33,7 +33,6 @@ import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.CommandWarningException;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.Notification;
-import tbax.baxshops.serialization.StoredData;
 import tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.Deque;
@@ -53,7 +52,7 @@ public class EventListener implements Listener
     public void onBlockBreak(BlockBreakEvent event)
     {
         try {
-            BaxShop shop = StoredData.getShop(event.getBlock().getLocation());
+            BaxShop shop = ShopPlugin.getShop(event.getBlock().getLocation());
             if (shop != null) {
                 if (shop.getOwner().equals(event.getPlayer()) || event.getPlayer().hasPermission("shops.admin")) {
                     if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
@@ -65,7 +64,7 @@ public class EventListener implements Listener
                     else {
                         event.setCancelled(true);
                         event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), shop.toItem(event.getBlock().getLocation()));
-                        StoredData.removeLocation(null, event.getBlock().getLocation()); // we don't need to tell the player if there's an error 12/5/15
+                        ShopPlugin.removeLocation(null, event.getBlock().getLocation()); // we don't need to tell the player if there's an error 12/5/15
                         ShopPlugin.clearSelection(event.getPlayer());
                         event.getBlock().setType(Material.AIR);
                     }
@@ -76,7 +75,7 @@ public class EventListener implements Listener
             }
             Location above = event.getBlock().getLocation();
             above.setY(above.getY() + 1);
-            if (StoredData.getShop(above) != null) {
+            if (ShopPlugin.getShop(above) != null) {
                 throw new CommandWarningException("You cannot break this block because there is a shop above it.");
             }
         }
@@ -96,10 +95,10 @@ public class EventListener implements Listener
             return;
         }
         
-        BaxShop shop = StoredData.getShop(b.getLocation());
+        BaxShop shop = ShopPlugin.getShop(b.getLocation());
         if (shop == null) {
             if (b.hasMetadata("shopid")) {
-                shop = StoredData.getShop(UUID.fromString(b.getMetadata("shopid").get(0).asString()));
+                shop = ShopPlugin.getShop(UUID.fromString(b.getMetadata("shopid").get(0).asString()));
                 if (shop == null) {
                     event.getPlayer().sendMessage("This shop has been closed.");
                     return;
@@ -153,12 +152,12 @@ public class EventListener implements Listener
     {
         for (Block b : event.blockList()) {
             Location loc = b.getLocation();
-            if (StoredData.getShop(loc) != null) {
+            if (ShopPlugin.getShop(loc) != null) {
                 event.setCancelled(true);
                 return;
             }
             loc.setY(loc.getY() + 1);
-            if (StoredData.getShop(loc) != null) {
+            if (ShopPlugin.getShop(loc) != null) {
                 event.setCancelled(true);
                 return;
             }
@@ -175,7 +174,7 @@ public class EventListener implements Listener
                 if (shop == null) {
                     throw new CommandWarningException("This shop has been closed and can't be placed.");
                 } else {
-                    StoredData.addLocation(event.getPlayer(), event.getBlockPlaced().getLocation(), shop);
+                    ShopPlugin.addLocation(event.getPlayer(), event.getBlockPlaced().getLocation(), shop);
                     shop.addLocation(event.getBlockPlaced().getLocation());
                     String[] lines = BaxShop.extractSignText(item);
                     if (lines.length > 0) {
@@ -205,7 +204,7 @@ public class EventListener implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onSignChange(SignChangeEvent event)
     {
-        BaxShop shop = StoredData.getShop(event.getBlock().getLocation());
+        BaxShop shop = ShopPlugin.getShop(event.getBlock().getLocation());
         if (shop != null) {
             for(String line : event.getLines()) {
                 if (!line.isEmpty()) {
@@ -219,8 +218,8 @@ public class EventListener implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event)
     {
-        StoredData.joinPlayer(event.getPlayer());
-        Deque<Notification> p = StoredData.getNotifications(event.getPlayer());
+        ShopPlugin.getStoredData().joinPlayer(event.getPlayer());
+        Deque<Notification> p = ShopPlugin.getStoredData().getNotifications(event.getPlayer());
         if (!p.isEmpty()) {
             event.getPlayer().sendMessage(ChatColor.WHITE + "You have new notifications. Use " + Format.command("/shop notifications") + ChatColor.WHITE + " to view them");
         }
@@ -273,7 +272,7 @@ public class EventListener implements Listener
                 ShopPlugin.getEconomy().withdrawPlayer(pl, death_tax);
                 pl.sendMessage(String.format("You were fined %s for dying.", Format.money(death_tax)));
                 if (!uuid.equals(StoredPlayer.DUMMY_UUID)) // do not deposit in dummy world account
-                    ShopPlugin.getEconomy().depositPlayer(StoredData.getOfflinePlayer(uuid), death_tax);
+                    ShopPlugin.getEconomy().depositPlayer(ShopPlugin.getOfflinePlayer(uuid), death_tax);
                 if (plugin.getConfig().getBoolean("LogNotes", false)) {
                     ShopPlugin.getInstance().getLogger().info(Format.toAnsiColor(String.format("%s was fined %s for dying.", Format.username(pl.getName()), Format.money(death_tax))));
                 }

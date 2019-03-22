@@ -21,7 +21,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@SuppressWarnings("WeakerAccess")
 public final class BuyRequest implements Request
 {
     private UUID buyer;
@@ -48,12 +47,12 @@ public final class BuyRequest implements Request
 
     public OfflinePlayer getBuyer()
     {
-        return StoredData.getOfflinePlayer(buyer);
+        return ShopPlugin.getOfflinePlayer(buyer);
     }
 
     public OfflinePlayer getSeller()
     {
-        return StoredData.getOfflinePlayer(seller);
+        return ShopPlugin.getOfflinePlayer(seller);
     }
 
     public UUID getShopId()
@@ -97,7 +96,7 @@ public final class BuyRequest implements Request
     @Override
     public boolean reject(ShopCmdActor rejectingActor)
     {
-        BaxShop shop = StoredData.getShop(shopId);
+        BaxShop shop = ShopPlugin.getShop(shopId);
         if (shop == null) {
             DeletedShopClaim shopDeleted = new DeletedShopClaim(buyer, entry);
             ShopPlugin.sendNotification(getBuyer(), shopDeleted);

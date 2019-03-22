@@ -13,14 +13,14 @@ import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
+import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.SafeMap;
-import tbax.baxshops.serialization.StoredData;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings("unused")
 public final class SaleRejection implements Claimable
 {
     private UUID seller;
@@ -47,7 +47,7 @@ public final class SaleRejection implements Claimable
 
     public SaleRejection(UUID shopId, UUID buyer, UUID seller, BaxEntry entry)
     {
-        this(shopId, StoredData.getOfflinePlayer(buyer), StoredData.getOfflinePlayer(seller), entry);
+        this(shopId, ShopPlugin.getOfflinePlayer(buyer), ShopPlugin.getOfflinePlayer(seller), entry);
     }
 
     public UUID getShopId()
@@ -57,17 +57,17 @@ public final class SaleRejection implements Claimable
 
     public BaxShop getShop()
     {
-        return StoredData.getShop(shopId);
+        return ShopPlugin.getShop(shopId);
     }
 
     public OfflinePlayer getBuyer()
     {
-        return StoredData.getOfflinePlayer(buyer);
+        return ShopPlugin.getOfflinePlayer(buyer);
     }
 
     public OfflinePlayer getSeller()
     {
-        return StoredData.getOfflinePlayer(seller);
+        return ShopPlugin.getOfflinePlayer(seller);
     }
 
     @Override

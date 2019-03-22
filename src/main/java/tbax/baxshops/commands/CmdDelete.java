@@ -72,12 +72,12 @@ public final class CmdDelete extends BaxShopCommand
                 actor.sendError("Please remove all inventory before deleting it.");
             }
             else {
-                StoredData.removeShop(actor.getPlayer(), actor.getShop());
+                ShopPlugin.removeShop(actor.getPlayer(), actor.getShop());
                 ShopPlugin.clearSelection(actor.getPlayer());
             }
         }
         else {
-            StoredData.removeLocation(actor.getPlayer(), actor.getSelection().getLocation());
+            ShopPlugin.removeLocation(actor.getPlayer(), actor.getSelection().getLocation());
             ShopPlugin.clearSelection(actor.getPlayer());
         }
     }

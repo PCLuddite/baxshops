@@ -8,8 +8,8 @@
 package tbax.baxshops.notification;
 
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.SafeMap;
-import tbax.baxshops.serialization.StoredData;
 
 import java.util.*;
 
@@ -56,7 +56,7 @@ public final class NoteSet implements ConfigurationSerializable
     public Map<String, Object> serialize()
     {
         Map<String, Object> args = new HashMap<>();
-        args.put("recipient", StoredData.getOfflinePlayer(recipient).getUniqueId().toString());
+        args.put("recipient", ShopPlugin.getOfflinePlayer(recipient).getUniqueId().toString());
         args.put("notes", new ArrayList<>(notes));
         return args;
     }

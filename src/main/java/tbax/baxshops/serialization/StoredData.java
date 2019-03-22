@@ -38,35 +38,37 @@ public final class StoredData
     /**
      * A map of locations to their shop ids, accessed by their location in the world
      */
-    private static Map<Location, UUID> locations = new HashMap<>();
+    private final Map<Location, UUID> locations = new HashMap<>();
     
     /**
      * A map of ids map to their shops
      */
-    private static Map<UUID, BaxShop> shops = new HashMap<>();
+    private final Map<UUID, BaxShop> shops = new HashMap<>();
     /**
      * A map containing each player's notifications
      */
-    private static Map<UUID, Deque<Notification>> pending = new HashMap<>();
+    private final Map<UUID, Deque<Notification>> pending = new HashMap<>();
 
     /**
      * A map containing each player's attributes for when they're offline
      */
-    private static PlayerMap players = new PlayerMap();
+    private final PlayerMap players = new PlayerMap();
 
-    private static ShopPlugin plugin;
-    private static Logger log;
+    private final ShopPlugin plugin;
+    private final Logger log;
 
-    private StoredData()
+    private StoredData(ShopPlugin plugin)
     {
+        this.plugin = plugin;
+        this.log = plugin.getLogger();
     }
 
-    public static BaxShop getShop(UUID uid)
+    public BaxShop getShop(UUID uid)
     {
         return shops.get(uid);
     }
     
-    public static BaxShop getShop(Location loc)
+    public BaxShop getShop(Location loc)
     {
         UUID uid = locations.get(loc);
         if (uid == null) {
@@ -75,27 +77,73 @@ public final class StoredData
         return shops.get(uid);
     }
     
-    public static void load(ShopPlugin plugin)
+    public static StoredData load(ShopPlugin plugin)
     {
-        StoredData.plugin = plugin;
-        log = plugin.getLogger();
+        StoredData data = new StoredData(plugin);
 
         ItemNames.loadDamageable(plugin);
         ItemNames.loadEnchants(plugin);
-        
-        loadState();
-        
-        if (shops == null) {
-            shops = new HashMap<>();
-            log.warning("BaxShops could not load saved data. This is expected upon installation. If this is not BaxShop's first run, try restarting with one of the backups.");
+
+        File stateLocation = new File(plugin.getDataFolder(), YAML_FILE_PATH);
+        if (!stateLocation.exists()) {
+            data.log.info("YAML file did not exist");
+            data.players.put(StoredPlayer.DUMMY);
+            return data;
         }
+
+        FileConfiguration state = YamlConfiguration.loadConfiguration(stateLocation);
+
+        if (state.isList("shops")) {
+            for (Object o : state.getList("shops")) {
+                if (o instanceof BaxShop) {
+                    BaxShop shop = (BaxShop) o;
+                    for (Location loc : shop.getLocations()) {
+                        data.locations.put(loc, shop.getId());
+                    }
+                    data.shops.put(shop.getId(), shop);
+                }
+                else {
+                    data.log.warning("Could not load BaxShop of type " + o.getClass());
+                }
+            }
+        }
+
+        if (state.isList("notes")) {
+            for (Object o : state.getList("notes")) {
+                if (o instanceof NoteSet) {
+                    NoteSet note = (NoteSet)o;
+                    data.pending.put(note.getRecipient(), note.getNotifications());
+                }
+                else {
+                    data.log.warning("Could not load NoteSet of type " + o.getClass());
+                }
+            }
+        }
+
+        if (state.isList("players")) {
+            boolean hasWorld = false;
+            for(Object o : state.getList("players")) {
+                if (o instanceof StoredPlayer) {
+                    StoredPlayer player = (StoredPlayer)o;
+                    if (player.equals(StoredPlayer.DUMMY))
+                        hasWorld = true;
+                    data.players.put(player.getUniqueId(), player);
+                }
+                else {
+                    data.log.warning("Could not load StoredPlayer of type " + o.getClass());
+                }
+            }
+            if (!hasWorld)
+                data.players.put(StoredPlayer.DUMMY_UUID, StoredPlayer.DUMMY);
+        }
+        return data;
     }
     
     /**
      * Attempts to back up the shops.yml save file.
      * @return a boolean indicating success
      */
-    public static boolean backup()
+    public boolean backup()
     {
         File stateLocation = new File(plugin.getDataFolder(), YAML_FILE_PATH);
         if (stateLocation.exists()) {
@@ -153,65 +201,7 @@ public final class StoredData
         return false;
     }
     
-    /*
-     * Loads all shops from shop.yml file
-     */
-    private static void loadState()
-    {
-        File stateLocation = new File(plugin.getDataFolder(), YAML_FILE_PATH);
-        if (!stateLocation.exists()) {
-            log.info("YAML file did not exist");
-            return;
-        }
-        
-        FileConfiguration state = YamlConfiguration.loadConfiguration(stateLocation);
-
-        if (state.isList("shops")) {
-            for (Object o : state.getList("shops")) {
-                if (o instanceof BaxShop) {
-                    BaxShop shop = (BaxShop) o;
-                    for (Location loc : shop.getLocations()) {
-                        locations.put(loc, shop.getId());
-                    }
-                    shops.put(shop.getId(), shop);
-                }
-                else {
-                    log.warning("Could not load BaxShop of type " + o.getClass());
-                }
-            }
-        }
-
-        if (state.isList("notes")) {
-            for (Object o : state.getList("notes")) {
-                if (o instanceof NoteSet) {
-                    NoteSet note = (NoteSet)o;
-                    pending.put(note.getRecipient(), note.getNotifications());
-                }
-                else {
-                    log.warning("Could not load NoteSet of type " + o.getClass());
-                }
-            }
-        }
-
-        if (state.isList("players")) {
-            boolean hasWorld = false;
-            for(Object o : state.getList("players")) {
-                if (o instanceof StoredPlayer) {
-                    StoredPlayer player = (StoredPlayer)o;
-                    if (player.equals(StoredPlayer.DUMMY))
-                        hasWorld = true;
-                    players.put(player.getUniqueId(), player);
-                }
-                else {
-                    log.warning("Could not load StoredPlayer of type " + o.getClass());
-                }
-            }
-            if (!hasWorld)
-                players.put(StoredPlayer.DUMMY_UUID, StoredPlayer.DUMMY);
-        }
-    }
-    
-    public static boolean addShop(Player player, BaxShop shop)
+    public boolean addShop(Player player, BaxShop shop)
     {
         for(Location loc : shop.getLocations()) {
             if (!addLocation(player, loc, shop)) {
@@ -222,7 +212,7 @@ public final class StoredData
         return true;
     }
     
-    public static boolean addLocation(Player player, Location loc, BaxShop shop)
+    public boolean addLocation(Player player, Location loc, BaxShop shop)
     {
         try {
             UUID otherUid = locations.get(loc);
@@ -240,7 +230,7 @@ public final class StoredData
         }
     }
     
-    public static void removeShop(CommandSender sender, BaxShop shop) throws PrematureAbortException
+    public void removeShop(CommandSender sender, BaxShop shop) throws PrematureAbortException
     {
         for(Location loc : (Location[])shop.getLocations().toArray()) {
             removeLocation(sender, loc);
@@ -248,7 +238,7 @@ public final class StoredData
         sender.sendMessage(String.format("%s's shop has been deleted.", Format.username(shop.getOwner().getName())));
     }
     
-    public static void removeLocation(CommandSender sender, Location loc) throws PrematureAbortException
+    public void removeLocation(CommandSender sender, Location loc) throws PrematureAbortException
     {
         UUID uid = locations.get(loc);
         if (uid != null) {
@@ -279,7 +269,7 @@ public final class StoredData
      * @param player the player
      * @return the player's notifications
      */
-    public static Deque<Notification> getNotifications(OfflinePlayer player)
+    public Deque<Notification> getNotifications(OfflinePlayer player)
     {
         Deque<Notification> n = pending.get(player.getUniqueId());
         if (n == null) {
@@ -292,7 +282,7 @@ public final class StoredData
     /**
      * Saves all shops
      */
-    public static void saveAll()
+    public void saveAll()
     {
         if (!backup()) {
             log.warning("Failed to back up BaxShops");
@@ -321,14 +311,14 @@ public final class StoredData
         }
     }
 
-    public static StoredPlayer getOfflinePlayer(UUID uuid)
+    public StoredPlayer getOfflinePlayer(UUID uuid)
     {
         StoredPlayer player = players.get(uuid);
         assert player != null;
         return player;
     }
 
-    public static StoredPlayer getOfflinePlayerSafe(UUID uuid)
+    public StoredPlayer getOfflinePlayerSafe(UUID uuid)
     {
         StoredPlayer player = players.get(uuid);
         if (player == null) {
@@ -338,12 +328,12 @@ public final class StoredData
         return player;
     }
 
-    public static List<StoredPlayer> getOfflinePlayer(String playerName)
+    public List<StoredPlayer> getOfflinePlayer(String playerName)
     {
         return players.get(playerName);
     }
 
-    public static void joinPlayer(Player player)
+    public void joinPlayer(Player player)
     {
         StoredPlayer storedPlayer = players.convertLegacy(player);
         if (storedPlayer == null) {

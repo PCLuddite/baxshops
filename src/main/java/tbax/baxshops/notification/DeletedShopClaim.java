@@ -12,8 +12,8 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
+import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.SafeMap;
-import tbax.baxshops.serialization.StoredData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,12 +40,12 @@ public final class DeletedShopClaim implements Claimable
 
     public DeletedShopClaim(UUID owner, BaxEntry entry)
     {
-        this(StoredData.getOfflinePlayer(owner), entry);
+        this(ShopPlugin.getOfflinePlayer(owner), entry);
     }
 
     public OfflinePlayer getOwner()
     {
-        return StoredData.getOfflinePlayer(owner);
+        return ShopPlugin.getOfflinePlayer(owner);
     }
 
     @Override

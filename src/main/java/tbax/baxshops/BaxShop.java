@@ -273,7 +273,7 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
     public static BaxShop fromItem(ItemStack item)
     {
         UUID uid = UUID.fromString(item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1).substring((ChatColor.GRAY + "ID: ").length()));
-        return StoredData.getShop(uid);
+        return ShopPlugin.getShop(uid);
     }
 
     public static String[] extractSignText(ItemStack item)

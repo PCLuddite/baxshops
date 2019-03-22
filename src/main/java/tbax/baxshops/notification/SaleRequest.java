@@ -14,13 +14,12 @@ import tbax.baxshops.*;
 import tbax.baxshops.commands.ShopCmdActor;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.SafeMap;
-import tbax.baxshops.serialization.StoredData;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@SuppressWarnings({"WeakerAccess", "unused"})
+@SuppressWarnings("unused")
 public final class SaleRequest implements Request
 {
     private UUID buyer;
@@ -52,17 +51,17 @@ public final class SaleRequest implements Request
 
     public BaxShop getShop()
     {
-        return StoredData.getShop(shopId);
+        return ShopPlugin.getShop(shopId);
     }
 
     public OfflinePlayer getBuyer()
     {
-        return StoredData.getOfflinePlayer(buyer);
+        return ShopPlugin.getOfflinePlayer(buyer);
     }
 
     public OfflinePlayer getSeller()
     {
-        return StoredData.getOfflinePlayer(seller);
+        return ShopPlugin.getOfflinePlayer(seller);
     }
 
     public BaxEntry getEntry()

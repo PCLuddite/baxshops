@@ -12,14 +12,14 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
+import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.SafeMap;
-import tbax.baxshops.serialization.StoredData;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@SuppressWarnings({"WeakerAccess", "unused"})
+@SuppressWarnings("unused")
 public final class BuyClaim implements Claimable
 {
     private BaxEntry entry;
@@ -46,12 +46,12 @@ public final class BuyClaim implements Claimable
 
     public BuyClaim(UUID shopId, UUID buyer, UUID seller, BaxEntry entry)
     {
-        this(shopId, StoredData.getOfflinePlayer(buyer), StoredData.getOfflinePlayer(seller), entry);
+        this(shopId, ShopPlugin.getOfflinePlayer(buyer), ShopPlugin.getOfflinePlayer(seller), entry);
     }
 
     public OfflinePlayer getSeller()
     {
-        return StoredData.getOfflinePlayer(seller);
+        return ShopPlugin.getOfflinePlayer(seller);
     }
 
     public UUID getShopId()
@@ -61,7 +61,7 @@ public final class BuyClaim implements Claimable
 
     public OfflinePlayer getBuyer()
     {
-        return StoredData.getOfflinePlayer(buyer);
+        return ShopPlugin.getOfflinePlayer(buyer);
     }
 
     @Override

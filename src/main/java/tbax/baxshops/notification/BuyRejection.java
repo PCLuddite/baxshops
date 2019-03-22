@@ -13,14 +13,13 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
+import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.SafeMap;
-import tbax.baxshops.serialization.StoredData;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@SuppressWarnings("WeakerAccess")
 public final class BuyRejection implements Notification
 {
     private UUID seller;
@@ -47,17 +46,17 @@ public final class BuyRejection implements Notification
 
     public BuyRejection(UUID shopId, UUID buyer, UUID seller, BaxEntry entry)
     {
-        this(shopId, StoredData.getOfflinePlayer(seller), StoredData.getOfflinePlayer(buyer), entry);
+        this(shopId, ShopPlugin.getOfflinePlayer(seller), ShopPlugin.getOfflinePlayer(buyer), entry);
     }
 
     public OfflinePlayer getBuyer()
     {
-        return StoredData.getOfflinePlayer(buyer);
+        return ShopPlugin.getOfflinePlayer(buyer);
     }
 
     public OfflinePlayer getSeller()
     {
-        return StoredData.getOfflinePlayer(seller);
+        return ShopPlugin.getOfflinePlayer(seller);
     }
 
     public BaxEntry getEntry()

@@ -116,7 +116,7 @@ public final class CmdCreate extends BaxShopCommand
             ""
         );
 
-        if (!StoredData.addShop(actor.getPlayer(), shop))
+        if (!ShopPlugin.addShop(actor.getPlayer(), shop))
             return;
 
         if (actor.isAdmin() && actor.getNumArgs() == 3) {

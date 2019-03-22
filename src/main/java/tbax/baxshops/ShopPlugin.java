@@ -9,6 +9,7 @@
 package tbax.baxshops;
 
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -37,6 +38,9 @@ public final class ShopPlugin extends JavaPlugin
 
     private static ShopPlugin plugin;
     private static Logger log;
+
+    private static StoredData storedData;
+
     /**
      * A map containing each player's currently selected shop and other
      * selection data
@@ -66,7 +70,7 @@ public final class ShopPlugin extends JavaPlugin
 
     public static void showNotificationCount(Player player)
     {
-        Deque<Notification> notifications = StoredData.getNotifications(player.getPlayer());
+        Deque<Notification> notifications = storedData.getNotifications(player.getPlayer());
         if (notifications.isEmpty()) {
             player.sendMessage("You have no notifications.");
         }
@@ -84,7 +88,7 @@ public final class ShopPlugin extends JavaPlugin
      */
     public static void showNotification(Player player, boolean showCount)
     {
-        Deque<Notification> notifications = StoredData.getNotifications(player.getPlayer());
+        Deque<Notification> notifications = storedData.getNotifications(player.getPlayer());
         if (showCount)
             showNotificationCount(player);
 
@@ -117,7 +121,7 @@ public final class ShopPlugin extends JavaPlugin
 
     public static void sendNotification(String playerName, Notification n)
     {
-        List<StoredPlayer> players = StoredData.getOfflinePlayer(playerName);
+        List<StoredPlayer> players = storedData.getOfflinePlayer(playerName);
         if (players == null || players.isEmpty())
             return;
         for(StoredPlayer player : players) {
@@ -134,7 +138,7 @@ public final class ShopPlugin extends JavaPlugin
      */
     public static void sendNotification(OfflinePlayer player, Notification n, boolean logNote)
     {
-        Deque<Notification> ns = StoredData.getNotifications(player);
+        Deque<Notification> ns = storedData.getNotifications(player);
         if (logNote) {
             log.info(Format.toAnsiColor(n.getMessage(null)));
         }
@@ -161,7 +165,47 @@ public final class ShopPlugin extends JavaPlugin
 
     public static void sendNotification(UUID playerId, Notification note)
     {
-        sendNotification(StoredData.getOfflinePlayer(playerId), note);
+        sendNotification(storedData.getOfflinePlayer(playerId), note);
+    }
+
+    public static boolean addShop(Player player, BaxShop shop)
+    {
+        return storedData.addShop(player, shop);
+    }
+
+    public static void removeShop(Player player, BaxShop shop) throws PrematureAbortException
+    {
+        storedData.removeShop(player, shop);
+    }
+
+    public static void removeLocation(Player player, Location location) throws PrematureAbortException
+    {
+        storedData.removeLocation(player, location);
+    }
+
+    public static OfflinePlayer getOfflinePlayer(UUID uuid)
+    {
+        return storedData.getOfflinePlayer(uuid);
+    }
+
+    public static BaxShop getShop(UUID shopId)
+    {
+        return storedData.getShop(shopId);
+    }
+
+    public static List<StoredPlayer> getOfflinePlayer(String playerName)
+    {
+        return storedData.getOfflinePlayer(playerName);
+    }
+
+    public static BaxShop getShop(Location location)
+    {
+        return storedData.getShop(location);
+    }
+
+    public static void addLocation(Player player, Location location, BaxShop shop)
+    {
+        storedData.addLocation(player, location, shop);
     }
 
     @Override
@@ -178,13 +222,13 @@ public final class ShopPlugin extends JavaPlugin
         
         loadConfigurationSerializable();
 
-        StoredData.load(this);
+        storedData = StoredData.load(this);
         
         saveDefaultConfig();
         
         // run an initial save 5 minutes after starting, then a recurring save
         // every 30 minutes after the first save
-        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, StoredData::saveAll, 6000L, 36000L);
+        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, storedData::saveAll, 6000L, 36000L);
         log.info("BaxShops has loaded successfully!");
     }
     
@@ -209,7 +253,7 @@ public final class ShopPlugin extends JavaPlugin
     @Override
     public void onDisable()
     {
-        StoredData.saveAll();
+        storedData.saveAll();
     }
 
     @SuppressWarnings("unchecked")
@@ -368,5 +412,10 @@ public final class ShopPlugin extends JavaPlugin
     public static ShopPlugin getInstance()
     {
         return plugin;
+    }
+
+    public static StoredData getStoredData()
+    {
+        return storedData;
     }
 }

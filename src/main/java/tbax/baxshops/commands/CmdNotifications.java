@@ -94,7 +94,7 @@ public final class CmdNotifications extends BaxShopCommand
         }
         else if (actor.getNumArgs() == 2) {
             if (actor.getArg(1).equalsIgnoreCase("clear")) {
-                Deque<Notification> notes = StoredData.getNotifications(actor.getPlayer());
+                Deque<Notification> notes = actor.getNotifications();
                 notes.clear();
                 actor.getPlayer().sendMessage("Your notifications have been cleared");
             }

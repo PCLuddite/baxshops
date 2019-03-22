@@ -19,10 +19,12 @@ import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.CommandMessageException;
 import tbax.baxshops.errors.CommandWarningException;
 import tbax.baxshops.errors.PrematureAbortException;
+import tbax.baxshops.notification.Notification;
 import tbax.baxshops.serialization.ItemNames;
 import tbax.baxshops.serialization.StoredData;
 import tbax.baxshops.serialization.StoredPlayer;
 
+import java.util.Deque;
 import java.util.List;
 import java.util.UUID;
 
@@ -442,10 +444,10 @@ public final class ShopCmdActor
     public StoredPlayer getArgPlayer(int index) throws PrematureAbortException
     {
         try {
-            return StoredData.getOfflinePlayerSafe(getArgUuid(index));
+            return ShopPlugin.getStoredData().getOfflinePlayerSafe(getArgUuid(index));
         }
         catch (PrematureAbortException e){
-            List<StoredPlayer> players = StoredData.getOfflinePlayer(args[index]);
+            List<StoredPlayer> players = ShopPlugin.getStoredData().getOfflinePlayer(args[index]);
             if (players.size() > 1)
                 exitError(Resources.TooManyPlayers(players));
             return players.get(0);
@@ -455,5 +457,10 @@ public final class ShopCmdActor
     public void setAction(String action)
     {
         this.action = action;
+    }
+
+    public Deque<Notification> getNotifications()
+    {
+        return ShopPlugin.getStoredData().getNotifications(player);
     }
 }

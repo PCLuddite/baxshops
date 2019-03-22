@@ -12,8 +12,8 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
+import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.SafeMap;
-import tbax.baxshops.serialization.StoredData;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -25,7 +25,6 @@ import java.util.UUID;
  * A LollipopNotification notifies a player that someone sent him/her a
  * lollipop.
  */
-@SuppressWarnings("WeakerAccess")
 public final class LollipopNotification implements ConfigurationSerializable, Notification
 {
     public static final double DEFAULT_TASTINESS = 40;
@@ -63,7 +62,7 @@ public final class LollipopNotification implements ConfigurationSerializable, No
 
     public OfflinePlayer getSender()
     {
-        return StoredData.getOfflinePlayer(sender);
+        return ShopPlugin.getOfflinePlayer(sender);
     }
 
     @Override
