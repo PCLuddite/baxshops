@@ -15,13 +15,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import tbax.baxshops.*;
+import tbax.baxshops.BaxShop;
+import tbax.baxshops.Format;
+import tbax.baxshops.Resources;
+import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.notification.Claimable;
 import tbax.baxshops.notification.NoteSet;
 import tbax.baxshops.notification.Notification;
-import tbax.baxshops.notification.Request;
 
 import java.io.*;
 import java.util.*;
@@ -155,7 +156,6 @@ public final class StoredData
     /*
      * Loads all shops from shop.yml file
      */
-    @SuppressWarnings("unchecked")
     private static void loadState()
     {
         File stateLocation = new File(plugin.getDataFolder(), YAML_FILE_PATH);
@@ -165,35 +165,50 @@ public final class StoredData
         }
         
         FileConfiguration state = YamlConfiguration.loadConfiguration(stateLocation);
-        
-        List<BaxShop> shoplist = (List)state.getList("shops");
-        for(BaxShop shop : shoplist) {
-            for (Location loc : shop.getLocations()) {
-                locations.put(loc, shop.getId());
-            }
-            shops.put(shop.getId(), shop);
-        }
 
-        List<NoteSet> notes = (List)state.getList("notes");
-        if (notes != null) {
-            for (NoteSet note : notes) {
-                pending.put(note.getRecipient(), note.getNotifications());
-            }
-        }
-
-        List<StoredPlayer> playerList = (List)state.getList("players");
-        boolean hasWorld = false;
-        if (playerList != null) {
-            for (StoredPlayer player : playerList) {
-                if (player.equals(StoredPlayer.DUMMY))
-                    hasWorld = true;
-                players.put(player.getUniqueId(), player);
+        if (state.isList("shops")) {
+            for (Object o : state.getList("shops")) {
+                if (o instanceof BaxShop) {
+                    BaxShop shop = (BaxShop) o;
+                    for (Location loc : shop.getLocations()) {
+                        locations.put(loc, shop.getId());
+                    }
+                    shops.put(shop.getId(), shop);
+                }
+                else {
+                    log.warning("Could not load BaxShop of type " + o.getClass());
+                }
             }
         }
 
-        if (!hasWorld)
-            players.put(StoredPlayer.DUMMY_UUID, StoredPlayer.DUMMY);
+        if (state.isList("notes")) {
+            for (Object o : state.getList("notes")) {
+                if (o instanceof NoteSet) {
+                    NoteSet note = (NoteSet)o;
+                    pending.put(note.getRecipient(), note.getNotifications());
+                }
+                else {
+                    log.warning("Could not load NoteSet of type " + o.getClass());
+                }
+            }
+        }
 
+        if (state.isList("players")) {
+            boolean hasWorld = false;
+            for(Object o : state.getList("players")) {
+                if (o instanceof StoredPlayer) {
+                    StoredPlayer player = (StoredPlayer)o;
+                    if (player.equals(StoredPlayer.DUMMY))
+                        hasWorld = true;
+                    players.put(player.getUniqueId(), player);
+                }
+                else {
+                    log.warning("Could not load StoredPlayer of type " + o.getClass());
+                }
+            }
+            if (!hasWorld)
+                players.put(StoredPlayer.DUMMY_UUID, StoredPlayer.DUMMY);
+        }
     }
     
     public static boolean addShop(Player player, BaxShop shop)
