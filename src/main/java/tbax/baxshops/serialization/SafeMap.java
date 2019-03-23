@@ -216,4 +216,24 @@ public class SafeMap implements Map<String, Object>
             return defaultValue;
         }
     }
+
+    public long getLong(String key)
+    {
+        return getLong(key, 0);
+    }
+
+    public long getLong(String key, long defaultValue)
+    {
+        try {
+            return (long)getOrDefault(key, defaultValue);
+        }
+        catch (ClassCastException e) {
+            try {
+                return (int)getOrDefault(key, defaultValue);
+            }
+            catch (ClassCastException e1) {
+                return defaultValue;
+            }
+        }
+    }
 }

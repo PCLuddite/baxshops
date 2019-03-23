@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import tbax.baxshops.Resources;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +21,10 @@ public class StoredPlayer implements OfflinePlayer
     public static final UUID DUMMY_UUID = UUID.fromString("326a36ea-b465-3192-a4f7-c313f347edc9");
     public static final String DUMMY_NAME = "world";
     public static final StoredPlayer DUMMY = new StoredPlayer(DUMMY_NAME, DUMMY_UUID);
+
+    public static final UUID ERROR_UUID = UUID.fromString("3d748006-ddc3-4f1b-a7c9-01fab68d0797");
+    public static final String ERROR_NAME = Resources.ERROR_INLINE;
+    public static final StoredPlayer ERROR = new StoredPlayer(ERROR_NAME, ERROR_UUID);
 
     private UUID uuid;
     private String lastSeenName;
@@ -189,5 +194,15 @@ public class StoredPlayer implements OfflinePlayer
     public String toString()
     {
         return getName();
+    }
+
+    public static StoredPlayer deserialize(Map<String, Object> args)
+    {
+        return new StoredPlayer(args);
+    }
+
+    public static StoredPlayer valueOf(Map<String, Object> args)
+    {
+        return deserialize(args);
     }
 }

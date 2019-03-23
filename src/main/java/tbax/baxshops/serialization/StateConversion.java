@@ -6,12 +6,19 @@
 **/
 package tbax.baxshops.serialization;
 
+import org.bukkit.configuration.file.FileConfiguration;
+import tbax.baxshops.BaxShop;
 import tbax.baxshops.BaxShopFlag;
+import tbax.baxshops.ShopPlugin;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public final class StateConversion
 {
+    private static final Map<Long, UUID> legacyIds = new HashMap<>();
+
     private StateConversion()
     {
     }
@@ -35,5 +42,15 @@ public final class StateConversion
             flags = BaxShopFlag.setFlag(flags, BaxShopFlag.SELL_TO_SHOP, args.getBoolean("sellToShop", false));
         }
         return flags;
+    }
+
+    public static StoredData load(StoredData storedData, FileConfiguration state, double ver)
+    {
+        return storedData;
+    }
+
+    public static BaxShop getShop(long legacyId)
+    {
+        return ShopPlugin.getShop(legacyIds.get(legacyId));
     }
 }

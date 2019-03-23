@@ -24,6 +24,9 @@ import java.util.*;
 public final class BaxShop implements ConfigurationSerializable, Collection<BaxEntry>
 {
     public static final int ITEMS_PER_PAGE = 7;
+
+    public static final UUID DUMMY_UUID = UUID.fromString("8f289a15-cf9f-4266-b368-429cb31780ae");
+    public static final BaxShop DUMMY_SHOP = new BaxShop(DUMMY_UUID);
     
     private UUID id;
     private ShopUser owner;
@@ -31,6 +34,12 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
     private final List<BaxEntry> inventory = new ArrayList<>();
 
     private int flags = BaxShopFlag.NOTIFY | BaxShopFlag.SELL_REQUESTS;
+
+    private BaxShop(UUID uuid)
+    {
+        id = uuid;
+        owner = new ShopUser(StoredPlayer.DUMMY_UUID);
+    }
 
     public BaxShop()
     {

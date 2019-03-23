@@ -61,6 +61,7 @@ public final class StoredData
     {
         this.plugin = plugin;
         this.log = plugin.getLogger();
+        players.put(StoredPlayer.DUMMY);
     }
 
     public BaxShop getShop(UUID uid)
@@ -79,16 +80,18 @@ public final class StoredData
     
     public static StoredData load(ShopPlugin plugin)
     {
-        StoredData data = new StoredData(plugin);
-
         File stateLocation = new File(plugin.getDataFolder(), YAML_FILE_PATH);
         if (!stateLocation.exists()) {
-            data.log.info("YAML file did not exist");
-            data.players.put(StoredPlayer.DUMMY);
-            return data;
+            plugin.getLogger().info("YAML file did not exist");
+            return new StoredData(plugin);
         }
 
+        StoredData data = new StoredData(plugin);
         FileConfiguration state = YamlConfiguration.loadConfiguration(stateLocation);
+
+        double ver = state.getDouble("version");
+        if (ver != STATE_VERSION)
+            return StateConversion.load(data, state, ver);
 
         if (state.isList("shops")) {
             for (Object o : state.getList("shops")) {
@@ -118,20 +121,15 @@ public final class StoredData
         }
 
         if (state.isList("players")) {
-            boolean hasWorld = false;
             for(Object o : state.getList("players")) {
                 if (o instanceof StoredPlayer) {
                     StoredPlayer player = (StoredPlayer)o;
-                    if (player.equals(StoredPlayer.DUMMY))
-                        hasWorld = true;
                     data.players.put(player.getUniqueId(), player);
                 }
                 else {
                     data.log.warning("Could not load StoredPlayer of type " + o.getClass());
                 }
             }
-            if (!hasWorld)
-                data.players.put(StoredPlayer.DUMMY_UUID, StoredPlayer.DUMMY);
         }
         return data;
     }
