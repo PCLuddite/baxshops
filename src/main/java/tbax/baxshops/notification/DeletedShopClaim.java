@@ -14,13 +14,14 @@ import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.SafeMap;
+import tbax.baxshops.serialization.StateConversion;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 @SuppressWarnings("WeakerAccess")
-public final class DeletedShopClaim implements Claimable
+public final class DeletedShopClaim implements UpgradeableNote, Claimable
 {
     private UUID owner;
     private BaxEntry entry;
@@ -28,8 +29,12 @@ public final class DeletedShopClaim implements Claimable
     public DeletedShopClaim(Map<String, Object> args)
     {
         SafeMap map = new SafeMap(args);
-        entry = map.getBaxEntry("entry");
-        owner = map.getUUID("owner");
+        if (isLegacy(map)) {
+            deserializeLegacy(map);
+        }
+        else {
+            deserialize(map);
+        }
     }
 
     public DeletedShopClaim(OfflinePlayer owner, BaxEntry entry)
@@ -41,6 +46,26 @@ public final class DeletedShopClaim implements Claimable
     public DeletedShopClaim(UUID owner, BaxEntry entry)
     {
         this(ShopPlugin.getOfflinePlayer(owner), entry);
+    }
+
+    @Override
+    public boolean isLegacy(@NotNull SafeMap map)
+    {
+        return map.getUUID("owner", null) == null;
+    }
+
+    @Override
+    public void deserializeLegacy(@NotNull SafeMap map)
+    {
+        entry = map.getBaxEntry("entry");
+        owner = StateConversion.getPlayerId(map.getString("owner"));
+    }
+
+    @Override
+    public void deserialize(@NotNull SafeMap map)
+    {
+        entry = map.getBaxEntry("entry");
+        owner = map.getUUID("owner");
     }
 
     public OfflinePlayer getOwner()

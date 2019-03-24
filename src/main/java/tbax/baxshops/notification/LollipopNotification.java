@@ -14,6 +14,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.SafeMap;
+import tbax.baxshops.serialization.StateConversion;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -25,7 +26,7 @@ import java.util.UUID;
  * A LollipopNotification notifies a player that someone sent him/her a
  * lollipop.
  */
-public final class LollipopNotification implements ConfigurationSerializable, Notification
+public final class LollipopNotification implements UpgradeableNote, ConfigurationSerializable
 {
     public static final double DEFAULT_TASTINESS = 40;
     private static final Map<Double, String> adjectives = new LinkedHashMap<>();
@@ -50,14 +51,38 @@ public final class LollipopNotification implements ConfigurationSerializable, No
     public LollipopNotification(Map<String, Object> args)
     {
         SafeMap map = new SafeMap(args);
-        sender = map.getUUID("sender");
-        tastiness = map.getDouble("tastiness");
+        if (isLegacy(map)) {
+            deserializeLegacy(map);
+        }
+        else {
+            deserialize(map);
+        }
     }
 
     public LollipopNotification(OfflinePlayer sender, double tastiness)
     {
         this.sender = sender.getUniqueId();
         this.tastiness = tastiness < 0 ? 0 : tastiness > 100 ? 100 : tastiness;
+    }
+
+    @Override
+    public boolean isLegacy(@NotNull SafeMap map)
+    {
+        return map.getUUID("sender", null) == null;
+    }
+
+    @Override
+    public void deserializeLegacy(@NotNull SafeMap map)
+    {
+        sender = StateConversion.getPlayerId(map.getString("sender"));
+        tastiness = map.getDouble("tastiness");
+    }
+
+    @Override
+    public void deserialize(@NotNull SafeMap map)
+    {
+        sender = map.getUUID("sender");
+        tastiness = map.getDouble("tastiness");
     }
 
     public OfflinePlayer getSender()

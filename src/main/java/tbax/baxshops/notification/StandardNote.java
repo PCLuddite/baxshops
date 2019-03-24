@@ -12,12 +12,13 @@ import tbax.baxshops.BaxEntry;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.StateConversion;
+import tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public abstract class StandardNote implements Notification
+public abstract class StandardNote implements UpgradeableNote
 {
     protected BaxEntry entry;
     protected UUID shopId;
@@ -51,20 +52,20 @@ public abstract class StandardNote implements Notification
         }
     }
 
-    protected boolean isLegacy(SafeMap map)
+    public boolean isLegacy(@NotNull SafeMap map)
     {
         return map.get("shopId") instanceof Number;
     }
 
-    protected void deserializeLegacy(SafeMap map)
+    public void deserializeLegacy(@NotNull SafeMap map)
     {
-        buyer = StateConversion.getPlayerId(map.getString("buyer"));
-        seller = StateConversion.getPlayerId(map.getString("seller"));
+        buyer = StateConversion.getPlayerId(map.getString("buyer", StoredPlayer.DUMMY_NAME));
+        seller = StateConversion.getPlayerId(map.getString("seller", StoredPlayer.DUMMY_NAME));
         shopId = StateConversion.getShopId(map.getLong("shopId"));
         entry = map.getBaxEntry("entry");
     }
 
-    protected void deserialize(SafeMap map)
+    public void deserialize(@NotNull SafeMap map)
     {
         entry = map.getBaxEntry("entry");
         buyer = map.getUUID("buyer");

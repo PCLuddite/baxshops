@@ -38,13 +38,13 @@ public final class BuyRejection extends StandardNote implements Notification
     }
 
     @Override
-    protected boolean isLegacy(SafeMap map)
+    public boolean isLegacy(@NotNull SafeMap map)
     {
         return !map.containsKey("shopId");
     }
 
     @Override
-    protected void deserializeLegacy(SafeMap map)
+    public void deserializeLegacy(@NotNull SafeMap map)
     {
         buyer = StateConversion.getPlayerId(map.getString("buyer"));
         seller = StateConversion.getPlayerId(map.getString("seller"));
