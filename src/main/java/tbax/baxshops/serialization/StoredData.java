@@ -38,24 +38,24 @@ public final class StoredData
     /**
      * A map of locations to their shop ids, accessed by their location in the world
      */
-    private final Map<Location, UUID> locations = new HashMap<>();
+    final Map<Location, UUID> locations = new HashMap<>();
     
     /**
      * A map of ids map to their shops
      */
-    private final Map<UUID, BaxShop> shops = new HashMap<>();
+    final Map<UUID, BaxShop> shops = new HashMap<>();
     /**
      * A map containing each player's notifications
      */
-    private final Map<UUID, Deque<Notification>> pending = new HashMap<>();
+    final Map<UUID, Deque<Notification>> pending = new HashMap<>();
 
     /**
      * A map containing each player's attributes for when they're offline
      */
-    private final PlayerMap players = new PlayerMap();
+    final PlayerMap players = new PlayerMap();
 
-    private final ShopPlugin plugin;
-    private final Logger log;
+    final ShopPlugin plugin;
+    final Logger log;
 
     private StoredData(ShopPlugin plugin)
     {

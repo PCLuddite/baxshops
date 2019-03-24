@@ -6,15 +6,16 @@
 **/
 package tbax.baxshops.serialization;
 
+import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.BaxShopFlag;
 import tbax.baxshops.ShopPlugin;
+import tbax.baxshops.notification.DeprecatedNote;
+import tbax.baxshops.notification.Notification;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public final class StateConversion
 {
@@ -47,6 +48,54 @@ public final class StateConversion
 
     public static StoredData load(StoredData storedData, FileConfiguration state, double ver)
     {
+        if (ver == 3.0) {
+            ShopPlugin.getInstance().getLogger().info("Converting state file version 3.0");
+            return load30(storedData, state);
+        }
+        ShopPlugin.getInstance().getLogger().warning("Unknown state file version. Starting from scratch...");
+        return storedData;
+    }
+
+    private static StoredData load30(StoredData storedData, FileConfiguration state)
+    {
+        if (state.isList("shops")) {
+            for (Object o : state.getList("shops")) {
+                if (o instanceof BaxShop) {
+                    BaxShop shop = (BaxShop) o;
+                    for (Location loc : shop.getLocations()) {
+                        storedData.locations.put(loc, shop.getId());
+                    }
+                    storedData.shops.put(shop.getId(), shop);
+                    legacyIds.put(shop.getLegacyId(), shop.getId());
+                }
+                else {
+                    storedData.log.warning("Could not load BaxShop of type " + o.getClass());
+                }
+            }
+        }
+        if (state.isConfigurationSection("notes")) {
+            for (Map.Entry entry : state.getConfigurationSection("notes").getValues(false).entrySet()) {
+                String playerName = entry.getKey().toString();
+                StoredPlayer player = storedData.players.get(playerName).get(0);
+                if (!(entry.getValue() instanceof List)) {
+                    storedData.log.warning("Could not load notifications of type " + entry.getValue().getClass());
+                }
+                List notes = (List)entry.getValue();
+                Deque<Notification> pending = new ArrayDeque<>();
+                for (Object o : notes) {
+                    if (o instanceof Notification) {
+                        pending.add((Notification)o);
+                    }
+                    else if (o instanceof DeprecatedNote) {
+                        pending.add(((DeprecatedNote)o).getNewNote());
+                    }
+                    else {
+                        storedData.log.warning("Could not load Notification of type " + entry.getValue().getClass());
+                    }
+                }
+                storedData.pending.put(player.getUniqueId(), pending);
+            }
+        }
         return storedData;
     }
 

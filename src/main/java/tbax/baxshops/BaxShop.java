@@ -27,8 +27,10 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
 
     public static final UUID DUMMY_UUID = UUID.fromString("8f289a15-cf9f-4266-b368-429cb31780ae");
     public static final BaxShop DUMMY_SHOP = new BaxShop(DUMMY_UUID);
+    private static final ShopUser DUMMY_USER = new ShopUser(DUMMY_UUID);
     
     private UUID id;
+    private long legacyId = Long.MIN_VALUE;
     private ShopUser owner;
     private final List<Location> locations = new ArrayList<>();
     private final List<BaxEntry> inventory = new ArrayList<>();
@@ -38,31 +40,29 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
     private BaxShop(UUID uuid)
     {
         id = uuid;
-        owner = new ShopUser(StoredPlayer.DUMMY_UUID);
+        owner = DUMMY_USER;
     }
 
     public BaxShop()
     {
+        id = UUID.randomUUID();
+        owner = DUMMY_USER;
     }
 
     public BaxShop(Map<String, Object> args)
     {
         SafeMap map = new SafeMap(args);
-        if (map.containsKey("flags")) {
+        if (map.get("id") instanceof Number) {
+            String name = map.getString("owner", StoredPlayer.DUMMY_NAME);
+            id = UUID.randomUUID();
+            legacyId = map.getLong("id");
+            owner = new ShopUser(name);
+            flags = StateConversion.flagMapToFlag(map);
+        }
+        else {
             id =  map.getUUID("id", UUID.randomUUID());
             owner = new ShopUser(map.getUUID("owner", StoredPlayer.DUMMY_UUID));
             flags = map.getInteger("flags");
-        }
-        else {
-            String name = map.getString("owner", StoredPlayer.DUMMY_NAME);
-            id = UUID.randomUUID();
-            if (StoredPlayer.DUMMY_NAME.equalsIgnoreCase(name)) {
-                owner = new ShopUser(StoredPlayer.DUMMY_UUID);
-            }
-            else {
-                owner = new ShopUser(name);
-            }
-            flags = StateConversion.flagMapToFlag(map);
         }
         inventory.addAll(map.getList("inventory"));
         locations.addAll(map.getList("locations"));
@@ -72,6 +72,7 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
     {
         id = shop.id;
         owner = shop.owner;
+        legacyId = shop.legacyId;
         locations.addAll(shop.locations);
         shop.stream().map(BaxEntry::new).forEach(inventory::add);
         flags = shop.flags;
@@ -82,9 +83,10 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
         return id;
     }
 
-    public void setId(UUID newId)
+    @Deprecated
+    public long getLegacyId()
     {
-        id = newId;
+        return legacyId;
     }
 
     public OfflinePlayer getOwner()

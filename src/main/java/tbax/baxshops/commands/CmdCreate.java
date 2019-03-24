@@ -106,7 +106,6 @@ public final class CmdCreate extends BaxShopCommand
         }
 
         BaxShop shop = new BaxShop();
-        shop.setId(UUID.randomUUID());
         shop.setOwner(owner);
 
         shop.buildShopSign(loc,

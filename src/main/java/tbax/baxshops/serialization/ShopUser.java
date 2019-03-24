@@ -24,8 +24,13 @@ public final class ShopUser
     @Deprecated
     public ShopUser(String name)
     {
-        legacyName = name;
-        ShopPlugin.getOfflinePlayer(name);
+        if (StoredPlayer.DUMMY_NAME.equalsIgnoreCase(name)) {
+            uuid = StoredPlayer.DUMMY_UUID;
+        }
+        else {
+            legacyName = name;
+            ShopPlugin.getOfflinePlayer(name);
+        }
     }
 
     public OfflinePlayer getOfflinePlayer()
