@@ -6,6 +6,7 @@
 **/
 package tbax.baxshops.serialization;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.BaxShopFlag;
@@ -51,6 +52,21 @@ public final class StateConversion
 
     public static BaxShop getShop(long legacyId)
     {
-        return ShopPlugin.getShop(legacyIds.get(legacyId));
+        return ShopPlugin.getShop(getShopId(legacyId));
+    }
+
+    public static UUID getShopId(long legacyId)
+    {
+        return legacyIds.get(legacyId);
+    }
+
+    public static OfflinePlayer getPlayer(String playerName)
+    {
+        return ShopPlugin.getOfflinePlayer(playerName).get(0);
+    }
+
+    public static UUID getPlayerId(String playerName)
+    {
+        return getPlayer(playerName).getUniqueId();
     }
 }

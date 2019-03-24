@@ -4,7 +4,6 @@
  *
  *  +++====+++
 **/
-
 package tbax.baxshops.notification;
 
 import org.bukkit.ChatColor;
@@ -13,55 +12,26 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
-import tbax.baxshops.ShopPlugin;
-import tbax.baxshops.serialization.SafeMap;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public final class BuyRejection implements Notification
+@SuppressWarnings("unused")
+public final class BuyRejection extends StandardNote implements Notification
 {
-    private UUID seller;
-    private UUID buyer;
-    private BaxEntry entry;
-    private UUID shopId;
-
     public BuyRejection(UUID shopId, OfflinePlayer buyer, OfflinePlayer seller, BaxEntry entry)
     {
-        this.shopId = shopId;
-        this.buyer = buyer.getUniqueId();
-        this.seller = seller.getUniqueId();
-        this.entry = new BaxEntry(entry);
-    }
-
-    public BuyRejection(Map<String, Object> args)
-    {
-        SafeMap map = new SafeMap(args);
-        shopId = map.getUUID("shopId");
-        buyer = map.getUUID("buyer");
-        seller = map.getUUID("seller");
-        entry = map.getBaxEntry("entry");
+        super(shopId, buyer, seller, entry);
     }
 
     public BuyRejection(UUID shopId, UUID buyer, UUID seller, BaxEntry entry)
     {
-        this(shopId, ShopPlugin.getOfflinePlayer(seller), ShopPlugin.getOfflinePlayer(buyer), entry);
+        super(shopId, buyer, seller, entry);
     }
 
-    public OfflinePlayer getBuyer()
+    public BuyRejection(Map<String, Object> args)
     {
-        return ShopPlugin.getOfflinePlayer(buyer);
-    }
-
-    public OfflinePlayer getSeller()
-    {
-        return ShopPlugin.getOfflinePlayer(seller);
-    }
-
-    public BaxEntry getEntry()
-    {
-        return entry;
+        super(args);
     }
 
     @Override
@@ -88,17 +58,6 @@ public final class BuyRejection implements Notification
             entry.getFormattedName(),
             entry.getFormattedBuyPrice()
         );
-    }
-
-    @Override
-    public Map<String, Object> serialize()
-    {
-        Map<String, Object> args = new HashMap<>();
-        args.put("shopId", shopId.toString());
-        args.put("buyer", getBuyer().getUniqueId().toString());
-        args.put("seller", getSeller().getUniqueId().toString());
-        args.put("entry", entry);
-        return args;
     }
 
     public static BuyRejection deserialize(Map<String, Object> args)

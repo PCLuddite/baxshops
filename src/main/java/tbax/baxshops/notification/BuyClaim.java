@@ -12,62 +12,26 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
-import tbax.baxshops.ShopPlugin;
-import tbax.baxshops.serialization.SafeMap;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 @SuppressWarnings("unused")
-public final class BuyClaim implements Claimable
+public final class BuyClaim extends StandardNote implements Claimable
 {
-    private BaxEntry entry;
-    private UUID buyer;
-    private UUID seller;
-    private UUID shopId;
-
     public BuyClaim(UUID shopId, OfflinePlayer buyer, OfflinePlayer seller, BaxEntry entry)
     {
-        this.shopId = shopId;
-        this.buyer = buyer.getUniqueId();
-        this.seller = seller.getUniqueId();
-        this.entry = new BaxEntry(entry);
-    }
-
-    public BuyClaim(Map<String, Object> args)
-    {
-        SafeMap map = new SafeMap(args);
-        shopId = map.getUUID("shopId");
-        buyer = map.getUUID("buyer");
-        seller = map.getUUID("seller");
-        entry = map.getBaxEntry("entry");
+        super(shopId, buyer, seller, entry);
     }
 
     public BuyClaim(UUID shopId, UUID buyer, UUID seller, BaxEntry entry)
     {
-        this(shopId, ShopPlugin.getOfflinePlayer(buyer), ShopPlugin.getOfflinePlayer(seller), entry);
+        super(shopId, buyer, seller, entry);
     }
 
-    public OfflinePlayer getSeller()
+    public BuyClaim(Map<String, Object> args)
     {
-        return ShopPlugin.getOfflinePlayer(seller);
-    }
-
-    public UUID getShopId()
-    {
-        return shopId;
-    }
-
-    public OfflinePlayer getBuyer()
-    {
-        return ShopPlugin.getOfflinePlayer(buyer);
-    }
-
-    @Override
-    public BaxEntry getEntry()
-    {
-        return entry;
+        super(args);
     }
 
     @Override
@@ -94,17 +58,6 @@ public final class BuyClaim implements Claimable
             entry.getFormattedName(),
             entry.getFormattedBuyPrice()
         );
-    }
-
-    @Override
-    public Map<String, Object> serialize()
-    {
-        Map<String, Object> args = new HashMap<>();
-        args.put("shopId", shopId.toString());
-        args.put("buyer", getBuyer().getUniqueId().toString());
-        args.put("seller", getSeller().getUniqueId().toString());
-        args.put("entry", entry);
-        return args;
     }
 
     public static BuyClaim deserialize(Map<String, Object> args)

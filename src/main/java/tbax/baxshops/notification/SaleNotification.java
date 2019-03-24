@@ -4,7 +4,6 @@
  *
  *  +++====+++
 **/
-
 package tbax.baxshops.notification;
 
 import org.bukkit.OfflinePlayer;
@@ -12,61 +11,26 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
-import tbax.baxshops.ShopPlugin;
-import tbax.baxshops.serialization.SafeMap;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 @SuppressWarnings("unused")
-public final class SaleNotification implements Notification
+public final class SaleNotification extends StandardNote
 {
-    private UUID shopId;
-    private UUID buyer;
-    private UUID seller;
-    private BaxEntry entry;
-
-    public SaleNotification(Map<String, Object> args)
-    {
-        SafeMap map = new SafeMap(args);
-        shopId = map.getUUID("shopId");
-        seller = map.getUUID("seller");
-        buyer = map.getUUID("buyer");
-        entry = map.getBaxEntry("entry");
-    }
-
     public SaleNotification(UUID shopId, OfflinePlayer buyer, OfflinePlayer seller, BaxEntry entry)
     {
-        this.shopId = shopId;
-        this.buyer = buyer.getUniqueId();
-        this.seller = seller.getUniqueId();
-        this.entry = new BaxEntry(entry);
+        super(shopId, buyer, seller, entry);
     }
 
     public SaleNotification(UUID shopId, UUID buyer, UUID seller, BaxEntry entry)
     {
-        this(shopId, ShopPlugin.getOfflinePlayer(buyer), ShopPlugin.getOfflinePlayer(seller), entry);
+        super(shopId, buyer, seller, entry);
     }
 
-    public UUID getShopId()
+    public SaleNotification(Map<String, Object> args)
     {
-        return shopId;
-    }
-
-    public OfflinePlayer getBuyer()
-    {
-        return ShopPlugin.getOfflinePlayer(buyer);
-    }
-
-    public OfflinePlayer getSeller()
-    {
-        return ShopPlugin.getOfflinePlayer(seller);
-    }
-
-    public BaxEntry getItem()
-    {
-        return entry;
+        super(args);
     }
 
     @Override
@@ -88,17 +52,6 @@ public final class SaleNotification implements Notification
         return String.format("%s accepted %s's request to sell %s for %s.",
             Format.username(buyer), Format.username2(seller), entry.getFormattedName(), entry.getFormattedSellPrice()
         );
-    }
-
-    @Override
-    public Map<String, Object> serialize()
-    {
-        Map<String, Object> args = new HashMap<>();
-        args.put("shopId", shopId.toString());
-        args.put("seller", getSeller().toString());
-        args.put("buyer", getBuyer().toString());
-        args.put("entry", entry);
-        return args;
     }
 
     public static SaleNotification deserialize(Map<String, Object> args)

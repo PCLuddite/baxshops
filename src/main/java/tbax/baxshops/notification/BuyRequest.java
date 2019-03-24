@@ -4,7 +4,6 @@
  *
  *  +++====+++
 **/
-
 package tbax.baxshops.notification;
 
 import net.milkbowl.vault.economy.Economy;
@@ -14,55 +13,26 @@ import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.*;
 import tbax.baxshops.commands.ShopCmdActor;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.serialization.SafeMap;
-import tbax.baxshops.serialization.StoredData;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public final class BuyRequest implements Request
+@SuppressWarnings("unused")
+public final class BuyRequest extends StandardNote implements Request
 {
-    private UUID buyer;
-    private UUID seller;
-    private UUID shopId;
-    private BaxEntry entry;
-
     public BuyRequest(UUID shopId, OfflinePlayer buyer, OfflinePlayer seller, BaxEntry entry)
     {
-        this.shopId = shopId;
-        this.buyer = buyer.getUniqueId();
-        this.seller = seller.getUniqueId();
-        this.entry = new BaxEntry(entry);
+        super(shopId, buyer, seller, entry);
+    }
+
+    public BuyRequest(UUID shopId, UUID buyer, UUID seller, BaxEntry entry)
+    {
+        super(shopId, buyer, seller, entry);
     }
 
     public BuyRequest(Map<String, Object> args)
     {
-        SafeMap map = new SafeMap(args);
-        shopId = map.getUUID("shopId");
-        buyer = map.getUUID("buyer");
-        seller = map.getUUID("seller");
-        entry = map.getBaxEntry("entry");
-    }
-
-    public OfflinePlayer getBuyer()
-    {
-        return ShopPlugin.getOfflinePlayer(buyer);
-    }
-
-    public OfflinePlayer getSeller()
-    {
-        return ShopPlugin.getOfflinePlayer(seller);
-    }
-
-    public UUID getShopId()
-    {
-        return shopId;
-    }
-
-    public BaxEntry getEntry()
-    {
-        return entry;
+        super(args);
     }
 
     @Override
@@ -137,18 +107,6 @@ public final class BuyRequest implements Request
             Format.username(buyer), entry.getFormattedName(), Format.username2(seller), entry.getFormattedBuyPrice()
         );
     }
-
-    @Override
-    public Map<String, Object> serialize()
-    {
-        Map<String, Object> args = new HashMap<>();
-        args.put("shopId", shopId.toString());
-        args.put("buyer", getBuyer().getUniqueId().toString());
-        args.put("seller", getSeller().getUniqueId().toString());
-        args.put("entry", entry);
-        return args;
-    }
-
     public static BuyRequest deserialize(Map<String, Object> args)
     {
         return new BuyRequest(args);
