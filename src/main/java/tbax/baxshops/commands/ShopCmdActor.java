@@ -7,6 +7,7 @@
 
 package tbax.baxshops.commands;
 
+import net.milkbowl.vault.chat.Chat;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -312,9 +313,19 @@ public final class ShopCmdActor
         throw new CommandErrorException(String.format(format, args));
     }
 
+    public void sendError(String msg)
+    {
+        getSender().sendMessage(ChatColor.RED + msg);
+    }
+
     public void sendError(String format, Object... args)
     {
         getSender().sendMessage(ChatColor.RED + String.format(format, args));
+    }
+
+    public void sendWarning(String msg)
+    {
+        getSender().sendMessage(ChatColor.GOLD + msg);
     }
 
     public void sendWarning(String format, Object... args)
@@ -325,6 +336,11 @@ public final class ShopCmdActor
     public void exitWarning(String format, Object... args) throws PrematureAbortException
     {
         throw new CommandWarningException(String.format(format, args));
+    }
+
+    public void sendMessage(String msg)
+    {
+        getSender().sendMessage(msg);
     }
 
     public void sendMessage(String format, Object... args)
