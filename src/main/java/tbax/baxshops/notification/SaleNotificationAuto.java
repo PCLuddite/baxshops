@@ -13,6 +13,7 @@ import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.SafeMap;
+import tbax.baxshops.serialization.StateConversion;
 import tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.Map;
@@ -62,12 +63,12 @@ public class SaleNotificationAuto implements DeprecatedNote
 
     public OfflinePlayer getBuyer()
     {
-        return buyer == null ? StoredPlayer.ERROR : ShopPlugin.getOfflinePlayer(buyer).get(0);
+        return buyer == null ? StoredPlayer.ERROR : StateConversion.getPlayer(buyer);
     }
 
     public OfflinePlayer getSeller()
     {
-        return seller == null ? StoredPlayer.ERROR : ShopPlugin.getOfflinePlayer(seller).get(0);
+        return seller == null ? StoredPlayer.ERROR : StateConversion.getPlayer(seller);
     }
 
     public BaxEntry getEntry()

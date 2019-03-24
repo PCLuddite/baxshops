@@ -27,11 +27,10 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
 
     public static final UUID DUMMY_UUID = UUID.fromString("8f289a15-cf9f-4266-b368-429cb31780ae");
     public static final BaxShop DUMMY_SHOP = new BaxShop(DUMMY_UUID);
-    private static final ShopUser DUMMY_USER = new ShopUser(DUMMY_UUID);
     
     private UUID id;
     private long legacyId = Long.MIN_VALUE;
-    private ShopUser owner;
+    private UUID owner;
     private final List<Location> locations = new ArrayList<>();
     private final List<BaxEntry> inventory = new ArrayList<>();
 
@@ -40,13 +39,13 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
     private BaxShop(UUID uuid)
     {
         id = uuid;
-        owner = DUMMY_USER;
+        owner = StoredPlayer.DUMMY_UUID;
     }
 
     public BaxShop()
     {
         id = UUID.randomUUID();
-        owner = DUMMY_USER;
+        owner = StoredPlayer.DUMMY_UUID;
     }
 
     public BaxShop(Map<String, Object> args)
@@ -56,12 +55,12 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
             String name = map.getString("owner", StoredPlayer.DUMMY_NAME);
             id = UUID.randomUUID();
             legacyId = map.getLong("id");
-            owner = new ShopUser(name);
+            owner = StateConversion.getPlayerId(name);
             flags = StateConversion.flagMapToFlag(map);
         }
         else {
             id =  map.getUUID("id", UUID.randomUUID());
-            owner = new ShopUser(map.getUUID("owner", StoredPlayer.DUMMY_UUID));
+            owner = map.getUUID("owner", StoredPlayer.ERROR_UUID);
             flags = map.getInteger("flags");
         }
         inventory.addAll(map.getList("inventory"));
@@ -91,12 +90,12 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
 
     public OfflinePlayer getOwner()
     {
-        return owner.getOfflinePlayer();
+        return ShopPlugin.getOfflinePlayer(owner);
     }
 
     public void setOwner(OfflinePlayer newOwner)
     {
-        owner = new ShopUser(newOwner.getUniqueId());
+        owner = newOwner.getUniqueId();
     }
     
     public int indexOf(BaxEntry entry)
@@ -398,9 +397,9 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
     @Override
     public Map<String, Object> serialize()
     {
-        HashMap<String, Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("id", id.toString());
-        map.put("owner", owner.getOfflinePlayer().getUniqueId().toString());
+        map.put("owner", getOwner().getUniqueId().toString());
         map.put("flags", flags);
         map.put("inventory", inventory);
         map.put("locations", locations);

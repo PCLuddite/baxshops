@@ -20,6 +20,7 @@ import java.util.*;
 public final class StateConversion
 {
     private static final Map<Long, UUID> legacyIds = new HashMap<>();
+    private static final PlayerMap players = new PlayerMap();
 
     private StateConversion()
     {
@@ -96,12 +97,10 @@ public final class StateConversion
                 storedData.pending.put(player.getUniqueId(), pending);
             }
         }
+        storedData.players.putAll(players);
+        players.clear();
+        legacyIds.clear();
         return storedData;
-    }
-
-    public static BaxShop getShop(long legacyId)
-    {
-        return ShopPlugin.getShop(getShopId(legacyId));
     }
 
     public static UUID getShopId(long legacyId)
@@ -111,11 +110,15 @@ public final class StateConversion
 
     public static OfflinePlayer getPlayer(String playerName)
     {
-        return ShopPlugin.getOfflinePlayer(playerName).get(0);
+        if (playerName == null)
+            return StoredPlayer.ERROR;
+        return players.get(playerName).get(0);
     }
 
     public static UUID getPlayerId(String playerName)
     {
-        return getPlayer(playerName).getUniqueId();
+        if (playerName == null)
+            return StoredPlayer.ERROR_UUID;
+        return players.get(playerName).get(0).getUniqueId();
     }
 }

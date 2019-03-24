@@ -249,8 +249,11 @@ public final class ShopPlugin extends JavaPlugin
         ConfigurationSerialization.registerClass(NoteSet.class);
         ConfigurationSerialization.registerClass(SaleClaim.class);
         ConfigurationSerialization.registerClass(SaleNotification.class);
+        ConfigurationSerialization.registerClass(SaleNotificationAuto.class);
+        ConfigurationSerialization.registerClass(SaleNotificationAutoClaim.class);
         ConfigurationSerialization.registerClass(SaleRejection.class);
         ConfigurationSerialization.registerClass(SaleRequest.class);
+        ConfigurationSerialization.registerClass(SellRequest.class);
         ConfigurationSerialization.registerClass(StoredPlayer.class);
     }
     

@@ -32,13 +32,14 @@ public class SellRequest implements DeprecatedNote
         seller = map.getString("seller");
         buyer = map.getString("buyer");
         shopId = map.getInteger("shop");
+        entry = map.getBaxEntry("entry");
         expirationDate = map.getLong("expires");
     }
 
     @Override
     public @NotNull SaleRequest getNewNote()
     {
-        return new SaleRequest(StateConversion.getShop(shopId).getId(),
+        return new SaleRequest(StateConversion.getShopId(shopId),
             getBuyer(),
             getSeller(),
             entry);
@@ -46,12 +47,12 @@ public class SellRequest implements DeprecatedNote
 
     public OfflinePlayer getBuyer()
     {
-        return buyer == null ? StoredPlayer.ERROR : ShopPlugin.getOfflinePlayer(buyer).get(0);
+        return buyer == null ? StoredPlayer.ERROR : StateConversion.getPlayer(buyer);
     }
 
     public OfflinePlayer getSeller()
     {
-        return seller == null ? StoredPlayer.ERROR : ShopPlugin.getOfflinePlayer(seller).get(0);
+        return seller == null ? StoredPlayer.ERROR : StateConversion.getPlayer(seller);
     }
 
     @Override
