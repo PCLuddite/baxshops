@@ -17,6 +17,12 @@ public class PlayerMap implements Map<UUID, StoredPlayer>
     private Map<String, List<UUID>> playerNames = new HashMap<>();
     private Map<UUID, UUID> survivorship = new HashMap<>();
 
+    public PlayerMap()
+    {
+        put(StoredPlayer.DUMMY);
+        put(StoredPlayer.ERROR);
+    }
+
     @Override
     public int size()
     {

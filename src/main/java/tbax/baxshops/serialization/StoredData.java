@@ -4,7 +4,6 @@
  *
  *  +++====+++
 **/
-
 package tbax.baxshops.serialization;
 
 import org.bukkit.Location;
@@ -62,6 +61,7 @@ public final class StoredData
         this.plugin = plugin;
         this.log = plugin.getLogger();
         players.put(StoredPlayer.DUMMY);
+        shops.put(BaxShop.DUMMY_UUID, BaxShop.DUMMY_SHOP);
     }
 
     public BaxShop getShop(UUID uid)

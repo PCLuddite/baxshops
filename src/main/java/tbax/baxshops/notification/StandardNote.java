@@ -9,6 +9,7 @@ package tbax.baxshops.notification;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxEntry;
+import tbax.baxshops.BaxShop;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.StateConversion;
@@ -100,7 +101,7 @@ public abstract class StandardNote implements UpgradeableNote
         args.put("entry", entry);
         args.put("buyer", getBuyer().getUniqueId().toString());
         args.put("seller", getSeller().getUniqueId().toString());
-        args.put("shopId", shopId.toString());
+        args.put("shopId", (shopId == null ? BaxShop.DUMMY_UUID : shopId).toString());
         return args;
     }
 }

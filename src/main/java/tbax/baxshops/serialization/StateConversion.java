@@ -76,8 +76,7 @@ public final class StateConversion
         }
         if (state.isConfigurationSection("notes")) {
             for (Map.Entry entry : state.getConfigurationSection("notes").getValues(false).entrySet()) {
-                String playerName = entry.getKey().toString();
-                StoredPlayer player = storedData.players.get(playerName).get(0);
+                OfflinePlayer player = getPlayer(entry.getKey().toString());
                 if (!(entry.getValue() instanceof List)) {
                     storedData.log.warning("Could not load notifications of type " + entry.getValue().getClass());
                 }
