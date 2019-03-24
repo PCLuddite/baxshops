@@ -25,18 +25,13 @@ import java.util.*;
 public final class ItemNames
 {
     /**
-     * A lookup table for aliases. Aliases are stored as
-     * <code>alias =&gt; (ID &lt;&lt; 16) | (damageValue)</code>
-     */
-    private static final HashMap<Long, String[]> aliases = new HashMap<>();
-    /**
      * An array of items that can be damaged
      */
-    private static final HashMap<Material, Short> damageable = new HashMap<>();
+    private static final Map<Material, Short> damageable = new HashMap<>();
     /**
      * A list of enchantment names
      */
-    private static final HashMap<Enchantment, Enchantable> enchants = new HashMap<>();
+    private static final Map<Enchantment, Enchantable> enchants = new HashMap<>();
 
     private ItemNames()
     {
@@ -44,83 +39,49 @@ public final class ItemNames
     
     public static BaxEntry getItemFromAlias(String input, BaxShop shop) throws PrematureAbortException
     {
-        String[] inputwords = getItemAlias(input);
-        HashMap<Double,ArrayList<BaxEntry>> match_percentages = new HashMap<>();
-        double highest = 0;
+        String[] words = input.toUpperCase().split("_");
+
+        int maxMatch = -1;
+        List<BaxEntry> entries = new ArrayList<>();
+
         for(BaxEntry entry : shop) {
-            Long id = getItemId(entry.getItemStack());
-            String[] alias = aliases.get(id);
-            if (alias == null) {
-                alias = getItemAlias(ItemNames.getName(entry.getItemStack()));
-                aliases.put(id, alias);
+            String[] entryWords = entry.getName().toUpperCase().split(" ");
+            int matches = getMatches(entryWords, words);
+            if (matches == maxMatch) {
+                entries.add(entry);
             }
-            int matches = getNumMatches(alias, inputwords);
-            double percent = (double)matches / (double)alias.length;
-            ArrayList<BaxEntry> entrylist = match_percentages.computeIfAbsent(percent, k -> new ArrayList<>());
-            entrylist.add(entry);
-            if (percent > highest) {
-                highest = percent;
+            else if (matches > maxMatch) {
+                entries.clear();
+                entries.add(entry);
+                maxMatch = matches;
             }
         }
-        if (highest > 0) {
-            ArrayList<BaxEntry> entries = match_percentages.get(highest);
-            if (entries.size() == 1) {
-                return entries.get(0);
+        if (entries.isEmpty()) {
+            throw new CommandErrorException("No item with that name could be found");
+        }
+        else if (entries.size() > 1) {
+            StringBuilder sb = new StringBuilder("There are multiple items that match that name:\n");
+            for (BaxEntry entry : entries) {
+                sb.append(entry.getName()).append('\n');
             }
-            else {
-                StringBuilder error = new StringBuilder();
-                error.append("The name '").append(input).append("' is ambiguous with the following items:\n");
-                for(BaxEntry entry : entries) {
-                    error.append(getName(entry)).append("\n");
-                }
-                error.append("BaxShops isn't sure what you want.");
-                throw new CommandErrorException(error.toString());
-            }
+            throw new CommandErrorException(sb.toString());
         }
         else {
-            throw new CommandErrorException("No items could be found with that name.");
+            return entries.get(0);
         }
     }
-    
-    private static String[] getItemAlias(String name)
+
+    private static int getMatches(String[] array1, String[] array2)
     {
-        StringBuilder alias = new StringBuilder();
-        for(int index = 0; index < name.length(); ++index) {
-            char c = name.charAt(index);
-            if (c == ' ' || c == '_') {
-                alias.append('_');
-            }
-            else if (Character.isAlphabetic(c)) {
-                alias.append(Character.toLowerCase(c));
-            }
-        }
-        return alias.toString().split("_");
-    }
-    
-    private static int getNumMatches(String[] first, String[] second)
-    {
-        HashMap<String, Integer> map = new HashMap<>();
-        for(String word : first) {
-            Integer last = map.putIfAbsent(word, 1);
-            if (last != null) {
-                map.put(word, last + 1); // increment count
-            }
-        }
         int matches = 0;
-        for(String word : second) {
-            int count = map.getOrDefault(word, 0);
-            if (count > 0) {
-                --count;
-                ++matches;
-                map.put(word, count);
+        for(String word1 : array1) {
+            for(String word2 : array2) {
+                if (word1.equals(word2)) {
+                    ++matches;
+                }
             }
         }
         return matches;
-    }
-    
-    private static Long getItemId(ItemStack item)
-    {
-        return (long) item.getTypeId() << 16 | item.getDurability();
     }
 
     /**
@@ -169,7 +130,7 @@ public final class ItemNames
      */
     public static boolean isDamageable(Material item)
     {
-        return damageable.get(item) != null;
+        return damageable.containsKey(item);
     }
     
     /**
