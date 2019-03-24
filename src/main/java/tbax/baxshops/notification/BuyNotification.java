@@ -11,8 +11,11 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxEntry;
+import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
 import tbax.baxshops.MathUtil;
+import tbax.baxshops.serialization.SafeMap;
+import tbax.baxshops.serialization.StateConversion;
 
 import java.util.Map;
 import java.util.UUID;
@@ -33,6 +36,21 @@ public final class BuyNotification extends StandardNote
     public BuyNotification(Map<String, Object> args)
     {
         super(args);
+    }
+
+    @Override
+    protected boolean isLegacy(SafeMap map)
+    {
+        return !map.containsKey("shopId");
+    }
+
+    @Override
+    protected void deserializeLegacy(SafeMap map)
+    {
+        buyer = StateConversion.getPlayerId(map.getString("buyer"));
+        seller = StateConversion.getPlayerId(map.getString("seller"));
+        shopId = BaxShop.DUMMY_UUID;
+        entry = map.getBaxEntry("entry");
     }
 
     @Override
