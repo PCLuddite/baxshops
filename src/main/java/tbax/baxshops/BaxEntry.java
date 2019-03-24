@@ -282,7 +282,7 @@ public final class BaxEntry implements ConfigurationSerializable
         }
 
         if (stack.getType() != Material.ENCHANTED_BOOK && EnchantMap.isEnchanted(stack)) {
-            name.append(" ").append(EnchantMap.abbreviatedListString(stack));
+            name.append(" ").append(Format.enchantments("(" + EnchantMap.abbreviatedListString(stack) + ")"));
         }
 
         name.append(" ").append(Format.retailPrice(retailPrice));
