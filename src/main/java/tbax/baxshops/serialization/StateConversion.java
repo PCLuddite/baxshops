@@ -12,10 +12,13 @@ import org.bukkit.configuration.file.FileConfiguration;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.BaxShopFlag;
 import tbax.baxshops.ShopPlugin;
+import tbax.baxshops.notification.Claimable;
 import tbax.baxshops.notification.DeprecatedNote;
 import tbax.baxshops.notification.Notification;
+import tbax.baxshops.notification.Request;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public final class StateConversion
 {
@@ -93,7 +96,23 @@ public final class StateConversion
                         storedData.log.warning("Could not load Notification of type " + entry.getValue().getClass());
                     }
                 }
-                storedData.pending.put(player.getUniqueId(), pending);
+                if (StoredPlayer.DUMMY.equals(player)) {
+                    Deque<Notification> errors = new ArrayDeque<>();
+                    while(!pending.isEmpty()) {
+                        Notification n = pending.remove();
+                        if (n instanceof Claimable || n instanceof Request) {
+                            errors.add(n);
+                        }
+                    }
+                    if (!errors.isEmpty()) {
+                        storedData.log.warning("There is one or more claim or request notification assigned to the dummy player. " +
+                            "These cannot be honored and will be assigned to an error user. The configuration file will need to be fixed manually.");
+                        storedData.pending.put(StoredPlayer.ERROR_UUID, errors);
+                    }
+                }
+                else {
+                    storedData.pending.put(player.getUniqueId(), pending);
+                }
             }
         }
         storedData.players.putAll(players);
