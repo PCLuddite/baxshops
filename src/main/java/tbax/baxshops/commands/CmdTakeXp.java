@@ -49,7 +49,7 @@ public final class CmdTakeXp extends BaxShopCommand
     @Override
     public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
     {
-        return false;
+        return ((actor.getNumArgs() == 3 && actor.isAdmin()) || actor.getNumArgs() == 2);
     }
 
     @Override
