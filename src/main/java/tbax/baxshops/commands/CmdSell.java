@@ -97,7 +97,9 @@ public final class CmdSell extends BaxShopCommand
             actor.appendArg(actor.getItemInHand().getAmount());
         }
 
+        BaxShop shop = actor.getShop();
         List<BaxEntry> items = actor.takeArgFromInventory(1);
+        assert shop != null;
 
         if (items.isEmpty()) {
             actor.exitWarning("You did not have anything to sell at this shop.");
@@ -116,7 +118,7 @@ public final class CmdSell extends BaxShopCommand
             actor.sendMessage("You earned %s.", Format.money(total));
             actor.sendMessage(Resources.CURRENT_BALANCE, Format.money2(ShopPlugin.getEconomy().getBalance(actor.getPlayer())));
         }
-        else if (total == 0) {
+        else if (shop.hasFlagSellRequests()) {
             actor.sendMessage("Your money will be deposited when the buyer accepts the sale.");
         }
     }
