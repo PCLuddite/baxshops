@@ -141,7 +141,7 @@ public final class CmdBuy extends BaxShopCommand
                 actor.sendMessage(Resources.SOME_ROOM + " " + Resources.CHARGED_MSG, amount.getQuantity() - overflow, itemName, Format.money(price));
             }
             else {
-                actor.sendMessage("You bought %s for %s.", Format.itemName(amount.getQuantity(), itemName), Format.money(price));
+                actor.sendMessage("You bought %s for %s.", Format.itemName(purchased.getAmount(), itemName), Format.money(price));
             }
             ShopPlugin.getEconomy().withdrawPlayer(actor.getPlayer(), price);
             if (!shop.hasFlagInfinite()) {

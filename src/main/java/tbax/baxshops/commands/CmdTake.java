@@ -113,8 +113,8 @@ public final class CmdTake extends BaxShopCommand
         else {
             actor.sendMessage("%s %s added to your inventory.",
                 Format.itemName(
-                    amt.getQuantity(),
-                    ItemNames.getName(entry)),
+                    stack.getAmount(),
+                    ItemNames.getName(stack)),
                 amt.getQuantity() == 1 ? "was" : "were"
             );
         }
