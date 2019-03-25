@@ -200,4 +200,17 @@ public final class ItemNames
             ShopPlugin.getInstance().getLogger().warning("Failed to load enchants: " + e.toString());
         }
     }
+
+    public static boolean hasEnchantLevels(Enchantment enchantment)
+    {
+        return getEnchantable(enchantment).hasLevels();
+    }
+
+    public static Enchantable getEnchantable(Enchantment enchantment)
+    {
+        Enchantable enchantable = enchants.get(enchantment);
+        if (enchantable == null)
+            return new Enchantable(Format.toFriendlyName(enchantment.toString()), true);
+        return enchantable;
+    }
 }

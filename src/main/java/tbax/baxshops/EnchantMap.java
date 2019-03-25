@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tbax.baxshops.serialization.ItemNames;
 
+import java.text.Normalizer;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -75,7 +76,7 @@ public final class EnchantMap implements Map<Enchantment, Integer>
     public static String fullListString(@NotNull Map<Enchantment, Integer> enchants)
     {
         List<String> names = enchants.entrySet().stream()
-            .map(e -> ItemNames.getEnchantName(e.getKey()))
+            .map(e -> ItemNames.getEnchantable(e.getKey()).toString(e.getValue()))
             .collect(Collectors.toList());
         return String.join(", ", names);
     }
