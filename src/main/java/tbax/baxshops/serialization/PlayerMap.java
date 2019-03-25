@@ -14,7 +14,7 @@ import java.util.*;
 public class PlayerMap implements Map<UUID, StoredPlayer>
 {
     private Map<UUID, StoredPlayer> players = new HashMap<>();
-    private Map<String, List<UUID>> playerNames = new HashMap<>();
+    private Map<String, Set<UUID>> playerNames = new HashMap<>();
     private Map<UUID, UUID> survivorship = new HashMap<>();
 
     public PlayerMap()
@@ -84,17 +84,18 @@ public class PlayerMap implements Map<UUID, StoredPlayer>
 
     public List<StoredPlayer> get(String playerName)
     {
-        List<UUID> uuids = playerNames.get(playerName);
+        Set<UUID> uuids = playerNames.get(playerName);
         if (uuids == null) {
             StoredPlayer player = new StoredPlayer(playerName);
-            uuids = new ArrayList<>();
+            uuids = new HashSet<>();
             uuids.add(player.getUniqueId());
             players.put(player.getUniqueId(), player);
             playerNames.put(player.getName(), uuids);
         }
         StoredPlayer[] ret = new StoredPlayer[uuids.size()];
-        for(int x = 0; x < ret.length; ++x) {
-            ret[x] = get(uuids.get(x));
+        int x = 0;
+        for (UUID uuid : uuids) {
+            ret[x++] = get(uuid);
         }
         return Arrays.asList(ret);
     }
@@ -103,9 +104,9 @@ public class PlayerMap implements Map<UUID, StoredPlayer>
     public StoredPlayer put(UUID key, StoredPlayer value)
     {
         StoredPlayer player = players.put(key, value);
-        List<UUID> uuids;
+        Set<UUID> uuids;
         if (player == null) {
-            uuids = new ArrayList<>();
+            uuids = new HashSet<>();
         }
         else {
             uuids = playerNames.remove(player.getName());
@@ -139,7 +140,7 @@ public class PlayerMap implements Map<UUID, StoredPlayer>
 
     public List<StoredPlayer> remove(String playerName)
     {
-        List<UUID> uuids = playerNames.remove(playerName);
+        Set<UUID> uuids = playerNames.remove(playerName);
         if (uuids == null)
             return null;
         StoredPlayer[] ret = new StoredPlayer[uuids.size()];
@@ -155,9 +156,9 @@ public class PlayerMap implements Map<UUID, StoredPlayer>
         players.putAll(m);
         playerNames.clear();
         for(StoredPlayer value : players.values()) {
-            List<UUID> uuids = playerNames.remove(value.getName());
+            Set<UUID> uuids = playerNames.remove(value.getName());
             if (uuids == null)
-                uuids = new ArrayList<>();
+                uuids = new HashSet<>();
             uuids.add(value.getUniqueId());
             playerNames.put(value.getName(), uuids);
         }
@@ -193,7 +194,7 @@ public class PlayerMap implements Map<UUID, StoredPlayer>
 
     public StoredPlayer convertLegacy(Player player)
     {
-        List<UUID> uuids = playerNames.get(player.getName());
+        Set<UUID> uuids = playerNames.get(player.getName());
         if (uuids == null || uuids.isEmpty())
             return null;
 
