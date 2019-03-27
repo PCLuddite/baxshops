@@ -7,7 +7,6 @@
 
 package tbax.baxshops.commands;
 
-import net.milkbowl.vault.chat.Chat;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -22,7 +21,6 @@ import tbax.baxshops.errors.CommandWarningException;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.Notification;
 import tbax.baxshops.serialization.ItemNames;
-import tbax.baxshops.serialization.StoredData;
 import tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.Deque;

@@ -12,7 +12,6 @@ import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.Claimable;
 import tbax.baxshops.notification.Notification;
-import tbax.baxshops.serialization.StoredData;
 
 import java.util.Deque;
 

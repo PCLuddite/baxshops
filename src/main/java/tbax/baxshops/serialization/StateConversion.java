@@ -6,19 +6,13 @@
 **/
 package tbax.baxshops.serialization;
 
-import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.configuration.file.FileConfiguration;
-import tbax.baxshops.BaxShop;
 import tbax.baxshops.BaxShopFlag;
-import tbax.baxshops.ShopPlugin;
-import tbax.baxshops.notification.Claimable;
-import tbax.baxshops.notification.DeprecatedNote;
-import tbax.baxshops.notification.Notification;
-import tbax.baxshops.notification.Request;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public final class StateConversion
 {
@@ -50,77 +44,6 @@ public final class StateConversion
         return flags;
     }
 
-    public static StoredData load(StoredData storedData, FileConfiguration state, double ver)
-    {
-        if (ver == 3.0) {
-            ShopPlugin.getInstance().getLogger().info("Converting state file version 3.0");
-            return load30(storedData, state);
-        }
-        ShopPlugin.getInstance().getLogger().warning("Unknown state file version. Starting from scratch...");
-        return storedData;
-    }
-
-    private static StoredData load30(StoredData storedData, FileConfiguration state)
-    {
-        if (state.isList("shops")) {
-            for (Object o : state.getList("shops")) {
-                if (o instanceof BaxShop) {
-                    BaxShop shop = (BaxShop) o;
-                    for (Location loc : shop.getLocations()) {
-                        storedData.locations.put(loc, shop.getId());
-                    }
-                    storedData.shops.put(shop.getId(), shop);
-                    legacyIds.put(shop.getLegacyId(), shop.getId());
-                }
-                else {
-                    storedData.log.warning("Could not load BaxShop of type " + o.getClass());
-                }
-            }
-        }
-        if (state.isConfigurationSection("notes")) {
-            for (Map.Entry entry : state.getConfigurationSection("notes").getValues(false).entrySet()) {
-                OfflinePlayer player = getPlayer(entry.getKey().toString());
-                if (!(entry.getValue() instanceof List)) {
-                    storedData.log.warning("Could not load notifications of type " + entry.getValue().getClass());
-                }
-                List notes = (List)entry.getValue();
-                Deque<Notification> pending = new ArrayDeque<>();
-                for (Object o : notes) {
-                    if (o instanceof Notification) {
-                        pending.add((Notification)o);
-                    }
-                    else if (o instanceof DeprecatedNote) {
-                        pending.add(((DeprecatedNote)o).getNewNote());
-                    }
-                    else {
-                        storedData.log.warning("Could not load Notification of type " + entry.getValue().getClass());
-                    }
-                }
-                if (StoredPlayer.DUMMY.equals(player)) {
-                    Deque<Notification> errors = new ArrayDeque<>();
-                    while(!pending.isEmpty()) {
-                        Notification n = pending.remove();
-                        if (n instanceof Claimable || n instanceof Request) {
-                            errors.add(n);
-                        }
-                    }
-                    if (!errors.isEmpty()) {
-                        storedData.log.warning("There is one or more claim or request notification assigned to the dummy player. " +
-                            "These cannot be honored and will be assigned to an error user. The configuration file will need to be fixed manually.");
-                        storedData.pending.put(StoredPlayer.ERROR_UUID, errors);
-                    }
-                }
-                else {
-                    storedData.pending.put(player.getUniqueId(), pending);
-                }
-            }
-        }
-        storedData.players.putAll(players);
-        players.clear();
-        legacyIds.clear();
-        return storedData;
-    }
-
     public static UUID getShopId(long legacyId)
     {
         return legacyIds.get(legacyId);
@@ -138,5 +61,21 @@ public final class StateConversion
         if (playerName == null)
             return StoredPlayer.ERROR_UUID;
         return players.get(playerName).get(0).getUniqueId();
+    }
+
+    public static Collection<StoredPlayer> getPlayers()
+    {
+        return players.values();
+    }
+
+    public static void addLegacyShop(long legacyId, UUID id)
+    {
+        legacyIds.put(legacyId, id);
+    }
+
+    public static void clearMaps()
+    {
+        legacyIds.clear();
+        players.clear();
     }
 }

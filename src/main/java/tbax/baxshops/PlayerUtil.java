@@ -20,7 +20,6 @@ import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.DeletedShopClaim;
 import tbax.baxshops.notification.SaleClaim;
 import tbax.baxshops.serialization.ItemNames;
-import tbax.baxshops.serialization.StoredData;
 import tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.ArrayList;

@@ -13,7 +13,6 @@ import tbax.baxshops.Resources;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.Notification;
-import tbax.baxshops.serialization.StoredData;
 
 import java.util.Deque;
 

@@ -10,7 +10,6 @@ package tbax.baxshops.commands;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.serialization.StoredData;
 
 public final class CmdDelete extends BaxShopCommand
 {

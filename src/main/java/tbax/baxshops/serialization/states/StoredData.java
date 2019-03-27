@@ -4,7 +4,7 @@
  *
  *  +++====+++
 **/
-package tbax.baxshops.serialization;
+package tbax.baxshops.serialization.states;
 
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -14,6 +14,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
 import tbax.baxshops.Resources;
@@ -22,14 +23,17 @@ import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.NoteSet;
 import tbax.baxshops.notification.Notification;
+import tbax.baxshops.serialization.PlayerMap;
+import tbax.baxshops.serialization.StoredPlayer;
 
 import java.io.*;
+import java.text.DecimalFormat;
 import java.util.*;
 import java.util.logging.Logger;
 
 public final class StoredData
 {
-    private static final String YAML_FILE_PATH = "shops.yml";
+    static final String YAML_FILE_PATH = "shops.yml";
     private static final String YAMLBAK_FILE_PATH = "backups/%d.yml";
     
     private static final double STATE_VERSION = 4.0; // state file format version
@@ -56,7 +60,7 @@ public final class StoredData
     final ShopPlugin plugin;
     final Logger log;
 
-    private StoredData(ShopPlugin plugin)
+    StoredData(ShopPlugin plugin)
     {
         this.plugin = plugin;
         this.log = plugin.getLogger();
@@ -85,53 +89,26 @@ public final class StoredData
             plugin.getLogger().info("YAML file did not exist");
             return new StoredData(plugin);
         }
+        FileConfiguration config = YamlConfiguration.loadConfiguration(stateLocation);
+        double ver = config.getDouble("version");
 
-        StoredData data = new StoredData(plugin);
-        FileConfiguration state = YamlConfiguration.loadConfiguration(stateLocation);
-
-        double ver = state.getDouble("version");
-        if (ver != STATE_VERSION)
-            return StateConversion.load(data, state, ver);
-
-        if (state.isList("shops")) {
-            for (Object o : state.getList("shops")) {
-                if (o instanceof BaxShop) {
-                    BaxShop shop = (BaxShop) o;
-                    for (Location loc : shop.getLocations()) {
-                        data.locations.put(loc, shop.getId());
-                    }
-                    data.shops.put(shop.getId(), shop);
-                }
-                else {
-                    data.log.warning("Could not load BaxShop of type " + o.getClass());
-                }
-            }
+        StateLoader loader;
+        if (ver == 4.0) {
+            loader = new State_40(plugin);
+        }
+        else if (ver == 3.0) {
+            loader = new State_30(plugin);
+        }
+        else {
+            plugin.getLogger().warning("Unknown state file version. Starting from scratch...");
+            return new StoredData(plugin);
         }
 
-        if (state.isList("notes")) {
-            for (Object o : state.getList("notes")) {
-                if (o instanceof NoteSet) {
-                    NoteSet note = (NoteSet)o;
-                    data.pending.put(note.getRecipient(), note.getNotifications());
-                }
-                else {
-                    data.log.warning("Could not load NoteSet of type " + o.getClass());
-                }
-            }
+        if (ver != STATE_VERSION) {
+            ShopPlugin.getInstance().getLogger().info("Converting state file version " + (new DecimalFormat("0.0")).format(ver));
         }
 
-        if (state.isList("players")) {
-            for(Object o : state.getList("players")) {
-                if (o instanceof StoredPlayer) {
-                    StoredPlayer player = (StoredPlayer)o;
-                    data.players.put(player.getUniqueId(), player);
-                }
-                else {
-                    data.log.warning("Could not load StoredPlayer of type " + o.getClass());
-                }
-            }
-        }
-        return data;
+        return loader.load(config);
     }
     
     /**
@@ -264,7 +241,7 @@ public final class StoredData
      * @param player the player
      * @return the player's notifications
      */
-    public Deque<Notification> getNotifications(OfflinePlayer player)
+    public @NotNull Deque<Notification> getNotifications(OfflinePlayer player)
     {
         Deque<Notification> n = pending.get(player.getUniqueId());
         if (n == null) {
