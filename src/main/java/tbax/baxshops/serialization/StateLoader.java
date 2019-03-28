@@ -4,7 +4,7 @@
  *
  *  +++====+++
 **/
-package tbax.baxshops.serialization.states;
+package tbax.baxshops.serialization;
 
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -12,9 +12,9 @@ import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.notification.NoteSet;
-import tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.Collection;
+import java.util.UUID;
 
 public interface StateLoader
 {
@@ -23,6 +23,19 @@ public interface StateLoader
     @NotNull Collection<NoteSet> buildNotifications(@NotNull FileConfiguration state);
 
     @NotNull ShopPlugin getPlugin();
+
+    default @NotNull Configuration loadConfig(@NotNull FileConfiguration config)
+    {
+        Configuration ret = new Configuration();
+        ret.setBackups(config.getInt("Backups", ret.getBackups()));
+        ret.setLogNotes(config.getBoolean("LogNotes", ret.isLogNotes()));
+        ret.setXpConvert(config.getDouble("XPConvert", ret.getXpConvert()));
+        ret.setDeathTaxEnabled(config.getBoolean("DeathTax.Enabled", ret.isDeathTaxEnabled()));
+        ret.setDeathTaxGoesTo(config.getString("DeathTax.GoesTo", ret.getDeathTaxGoesTo()));
+        ret.setDeathTaxPercentage(config.getDouble("DeathTax.Percentage", ret.getDeathTaxPercentage()));
+        ret.setDeathTaxMinimum(config.getDouble("DeathTax.Minimum", ret.getDeathTaxMinimum()));
+        return ret;
+    }
 
     default StoredData loadState(@NotNull FileConfiguration state)
     {

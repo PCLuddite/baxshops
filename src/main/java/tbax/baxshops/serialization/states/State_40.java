@@ -11,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.notification.NoteSet;
+import tbax.baxshops.serialization.StateLoader;
 import tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.List;
 
 public class State_40 implements StateLoader
 {
+    public static final double VERSION = 4.0;
     private ShopPlugin plugin;
 
     public State_40(@NotNull ShopPlugin plugin)

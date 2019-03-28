@@ -14,7 +14,8 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.SafeMap;
-import tbax.baxshops.serialization.StateConversion;
+import tbax.baxshops.serialization.StoredData;
+import tbax.baxshops.serialization.states.State_30;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -51,8 +52,8 @@ public final class LollipopNotification implements UpgradeableNote, Configuratio
     public LollipopNotification(Map<String, Object> args)
     {
         SafeMap map = new SafeMap(args);
-        if (isLegacy(map)) {
-            deserializeLegacy(map);
+        if (StoredData.getLoadedState() == State_30.VERSION) {
+            deserialize30(map);
         }
         else {
             deserialize(map);
@@ -66,15 +67,9 @@ public final class LollipopNotification implements UpgradeableNote, Configuratio
     }
 
     @Override
-    public boolean isLegacy(@NotNull SafeMap map)
+    public void deserialize30(@NotNull SafeMap map)
     {
-        return map.getUUID("sender", null) == null;
-    }
-
-    @Override
-    public void deserializeLegacy(@NotNull SafeMap map)
-    {
-        sender = StateConversion.getPlayerId(map.getString("sender"));
+        sender = State_30.getPlayerId(map.getString("sender"));
         tastiness = map.getDouble("tastiness");
     }
 

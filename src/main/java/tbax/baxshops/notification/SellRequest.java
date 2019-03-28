@@ -10,10 +10,9 @@ import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 import tbax.baxshops.BaxEntry;
-import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.SafeMap;
-import tbax.baxshops.serialization.StateConversion;
 import tbax.baxshops.serialization.StoredPlayer;
+import tbax.baxshops.serialization.states.State_30;
 
 import java.util.Map;
 
@@ -39,7 +38,7 @@ public class SellRequest implements DeprecatedNote
     @Override
     public @NotNull SaleRequest getNewNote()
     {
-        return new SaleRequest(StateConversion.getShopId(shopId),
+        return new SaleRequest(State_30.getShopId(shopId),
             getBuyer(),
             getSeller(),
             entry);
@@ -47,12 +46,12 @@ public class SellRequest implements DeprecatedNote
 
     public OfflinePlayer getBuyer()
     {
-        return buyer == null ? StoredPlayer.ERROR : StateConversion.getPlayer(buyer);
+        return buyer == null ? StoredPlayer.ERROR : State_30.getPlayer(buyer);
     }
 
     public OfflinePlayer getSeller()
     {
-        return seller == null ? StoredPlayer.ERROR : StateConversion.getPlayer(seller);
+        return seller == null ? StoredPlayer.ERROR : State_30.getPlayer(seller);
     }
 
     @Override

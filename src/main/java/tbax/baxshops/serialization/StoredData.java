@@ -4,7 +4,7 @@
  *
  *  +++====+++
 **/
-package tbax.baxshops.serialization.states;
+package tbax.baxshops.serialization;
 
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
@@ -23,8 +23,8 @@ import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.NoteSet;
 import tbax.baxshops.notification.Notification;
-import tbax.baxshops.serialization.PlayerMap;
-import tbax.baxshops.serialization.StoredPlayer;
+import tbax.baxshops.serialization.states.State_30;
+import tbax.baxshops.serialization.states.State_40;
 
 import java.io.*;
 import java.text.DecimalFormat;
@@ -37,6 +37,7 @@ public final class StoredData
     private static final String YAMLBAK_FILE_PATH = "backups/%d.yml";
     
     private static final double STATE_VERSION = 4.0; // state file format version
+    private static double loadedState;
 
     /**
      * A map of locations to their shop ids, accessed by their location in the world
@@ -60,12 +61,19 @@ public final class StoredData
     final ShopPlugin plugin;
     final Logger log;
 
+    private Configuration config;
+
     StoredData(ShopPlugin plugin)
     {
         this.plugin = plugin;
         this.log = plugin.getLogger();
         players.put(StoredPlayer.DUMMY);
         shops.put(BaxShop.DUMMY_UUID, BaxShop.DUMMY_SHOP);
+    }
+
+    public static double getLoadedState()
+    {
+        return loadedState;
     }
 
     public BaxShop getShop(UUID uid)
@@ -89,8 +97,8 @@ public final class StoredData
             plugin.getLogger().info("YAML file did not exist");
             return new StoredData(plugin);
         }
-        FileConfiguration config = YamlConfiguration.loadConfiguration(stateLocation);
-        double ver = config.getDouble("version");
+        double ver = plugin.getConfig().getDouble("version", 3.0);
+        loadedState = ver;
 
         StateLoader loader;
         if (ver == 4.0) {
@@ -108,7 +116,10 @@ public final class StoredData
             ShopPlugin.getInstance().getLogger().info("Converting state file version " + (new DecimalFormat("0.0")).format(ver));
         }
 
-        return loader.loadState(config);
+        FileConfiguration state = YamlConfiguration.loadConfiguration(stateLocation);
+        StoredData storedData = loader.loadState(state);
+        storedData.config = loader.loadConfig(plugin.getConfig());
+        return storedData;
     }
     
     /**
@@ -318,5 +329,10 @@ public final class StoredData
                 pending.put(storedPlayer.getUniqueId(), notes);
         }
         players.put(storedPlayer.getUniqueId(), storedPlayer);
+    }
+
+    public Configuration getConfig()
+    {
+        return config;
     }
 }

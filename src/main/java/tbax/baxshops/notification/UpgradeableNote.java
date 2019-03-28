@@ -11,7 +11,7 @@ import tbax.baxshops.serialization.SafeMap;
 
 public interface UpgradeableNote extends Notification
 {
-    boolean isLegacy(@NotNull SafeMap map);
-    void deserializeLegacy(@NotNull SafeMap map);
+    @Deprecated
+    void deserialize30(@NotNull SafeMap map);
     void deserialize(@NotNull SafeMap map);
 }

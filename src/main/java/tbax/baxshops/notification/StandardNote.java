@@ -12,8 +12,9 @@ import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.SafeMap;
-import tbax.baxshops.serialization.StateConversion;
+import tbax.baxshops.serialization.StoredData;
 import tbax.baxshops.serialization.StoredPlayer;
+import tbax.baxshops.serialization.states.State_30;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,24 +46,19 @@ public abstract class StandardNote implements UpgradeableNote
     public StandardNote(Map<String, Object> args)
     {
         SafeMap map = new SafeMap(args);
-        if (isLegacy(map)) {
-            deserializeLegacy(map);
+        if (StoredData.getLoadedState() == State_30.VERSION) {
+            deserialize30(map);
         }
         else {
             deserialize(map);
         }
     }
 
-    public boolean isLegacy(@NotNull SafeMap map)
+    public void deserialize30(@NotNull SafeMap map)
     {
-        return map.get("shopId") instanceof Number;
-    }
-
-    public void deserializeLegacy(@NotNull SafeMap map)
-    {
-        buyer = StateConversion.getPlayerId(map.getString("buyer", StoredPlayer.DUMMY_NAME));
-        seller = StateConversion.getPlayerId(map.getString("seller", StoredPlayer.DUMMY_NAME));
-        shopId = StateConversion.getShopId(map.getLong("shopId"));
+        buyer = State_30.getPlayerId(map.getString("buyer", StoredPlayer.DUMMY_NAME));
+        seller = State_30.getPlayerId(map.getString("seller", StoredPlayer.DUMMY_NAME));
+        shopId = State_30.getShopId(map.getLong("shopId"));
         entry = map.getBaxEntry("entry");
     }
 

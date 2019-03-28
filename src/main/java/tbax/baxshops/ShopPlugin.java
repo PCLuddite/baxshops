@@ -21,7 +21,7 @@ import tbax.baxshops.commands.*;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.*;
 import tbax.baxshops.serialization.ItemNames;
-import tbax.baxshops.serialization.states.StoredData;
+import tbax.baxshops.serialization.StoredData;
 import tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.*;

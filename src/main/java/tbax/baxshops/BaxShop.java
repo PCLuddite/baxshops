@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.*;
+import tbax.baxshops.serialization.states.State_30;
 
 import java.util.*;
 
@@ -51,12 +52,12 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
     public BaxShop(Map<String, Object> args)
     {
         SafeMap map = new SafeMap(args);
-        if (map.get("id") instanceof Number) {
+        if (StoredData.getLoadedState() == State_30.VERSION) {
             String name = map.getString("owner", StoredPlayer.DUMMY_NAME);
             id = UUID.randomUUID();
             legacyId = map.getLong("id");
-            owner = StateConversion.getPlayerId(name);
-            flags = StateConversion.flagMapToFlag(map);
+            owner = State_30.getPlayerId(name);
+            flags = State_30.flagMapToFlag(map);
         }
         else {
             id =  map.getUUID("id", UUID.randomUUID());

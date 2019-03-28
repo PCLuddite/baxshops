@@ -15,7 +15,7 @@ import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
 import tbax.baxshops.MathUtil;
 import tbax.baxshops.serialization.SafeMap;
-import tbax.baxshops.serialization.StateConversion;
+import tbax.baxshops.serialization.states.State_30;
 
 import java.util.Map;
 import java.util.UUID;
@@ -39,16 +39,10 @@ public final class BuyNotification extends StandardNote
     }
 
     @Override
-    public boolean isLegacy(@NotNull SafeMap map)
+    public void deserialize30(@NotNull SafeMap map)
     {
-        return !map.containsKey("shopId");
-    }
-
-    @Override
-    public void deserializeLegacy(@NotNull SafeMap map)
-    {
-        buyer = StateConversion.getPlayerId(map.getString("buyer"));
-        seller = StateConversion.getPlayerId(map.getString("seller"));
+        buyer = State_30.getPlayerId(map.getString("buyer"));
+        seller = State_30.getPlayerId(map.getString("seller"));
         shopId = BaxShop.DUMMY_UUID;
         entry = map.getBaxEntry("entry");
     }
