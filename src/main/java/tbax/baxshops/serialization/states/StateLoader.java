@@ -18,19 +18,19 @@ import java.util.Collection;
 
 public interface StateLoader
 {
-    @NotNull Collection<BaxShop> buildShopList(@NotNull FileConfiguration config);
-    @NotNull Collection<StoredPlayer> buildPlayerList(@NotNull FileConfiguration config);
-    @NotNull Collection<NoteSet> buildNotificationList(@NotNull FileConfiguration config);
+    @NotNull Collection<BaxShop> buildShops(@NotNull FileConfiguration state);
+    @NotNull Collection<StoredPlayer> buildPlayers(@NotNull FileConfiguration state);
+    @NotNull Collection<NoteSet> buildNotifications(@NotNull FileConfiguration state);
 
     @NotNull ShopPlugin getPlugin();
 
-    default StoredData load(@NotNull FileConfiguration config)
+    default StoredData loadState(@NotNull FileConfiguration state)
     {
         StoredData storedData = new StoredData(getPlugin());
 
-        Collection<BaxShop> shops = buildShopList(config);
-        Collection<StoredPlayer> players = buildPlayerList(config);
-        Collection<NoteSet> notes = buildNotificationList(config);
+        Collection<BaxShop> shops = buildShops(state);
+        Collection<StoredPlayer> players = buildPlayers(state);
+        Collection<NoteSet> notes = buildNotifications(state);
 
         for (StoredPlayer player : players) {
             storedData.players.put(player);

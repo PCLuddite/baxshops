@@ -108,7 +108,7 @@ public final class StoredData
             ShopPlugin.getInstance().getLogger().info("Converting state file version " + (new DecimalFormat("0.0")).format(ver));
         }
 
-        return loader.load(config);
+        return loader.loadState(config);
     }
     
     /**

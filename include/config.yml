@@ -1,10 +1,11 @@
-#################################################
-#      __   ____ _____ ___ ___ __  __ ____      #
-#     / _ \|  _ \_   _|_ _/ _ \| \ | / ___|     #
-#    | | | | |_) || |  | | | | |  \| \___ \     #
-#    | |_| |  __/ | |  | | |_| | |\  |___) |    #
-#     \___/|_|    |_| |___\___/|_| \_|____/     #
-#################################################
+#########################################################
+#  ____                ____   _                         #
+# | __ )   __ _ __  __/ ___| | |__    ___   _ __   ___  #
+# |  _ \  / _` |\ \/ /\___ \ | '_ \  / _ \ | '_ \ / __| #
+# | |_) || (_| | >  <  ___) || | | || (_) || |_) |\__ \ #
+# |____/  \__,_|/_/\_\|____/ |_| |_| \___/ | .__/ |___/ #
+#                                          |_|          #
+#########################################################
 
 # Number of backups to keep. Set this to -1 to never delete old backups
 # Please delete all your backups if you chose to modify this after creating many backups
@@ -16,11 +17,16 @@ LogNotes: false
 # How much 1 XP level costs.
 XPConvert: 4.00
 
-# Stupid deaths can be taxed by percentage and deposited into an account. 
-# Uncomment this structure to enable this feature. The default UUID
-# below is a dummy account. If used, funds will not be deposited into any account.
 #
-# DeathTax:
-#      GoesTo:     "326a36ea-b465-3192-a4f7-c313f347edc9"
-#      Percentage: 0.04
-#      Minimum:    100.00
+# Stupid deaths can be taxed by percentage and deposited into an account. 
+# Set Enabled to true to use this feature. The default UUID
+# below is a dummy account. If the dummy is used, funds will not be deposited into any account.
+#
+DeathTax:
+    Enabled:    false
+    GoesTo:     "326a36ea-b465-3192-a4f7-c313f347edc9"
+    Percentage: 0.04
+    Minimum:    100.00
+    
+# this should not be changed manually
+StateVersion: 4.0

@@ -27,13 +27,13 @@ public class State_40 implements StateLoader
     }
 
     @Override
-    public @NotNull Collection<BaxShop> buildShopList(@NotNull FileConfiguration config)
+    public @NotNull Collection<BaxShop> buildShops(@NotNull FileConfiguration state)
     {
         List<BaxShop> shops = new ArrayList<>();
-        if (!config.isList("shops")) {
+        if (!state.isList("shops")) {
             return shops;
         }
-        for (Object o : config.getList("shops")) {
+        for (Object o : state.getList("shops")) {
             if (o instanceof BaxShop) {
                 shops.add((BaxShop)o);
             }
@@ -45,13 +45,13 @@ public class State_40 implements StateLoader
     }
 
     @Override
-    public @NotNull Collection<StoredPlayer> buildPlayerList(@NotNull FileConfiguration config)
+    public @NotNull Collection<StoredPlayer> buildPlayers(@NotNull FileConfiguration state)
     {
         List<StoredPlayer> players = new ArrayList<>();
-        if (!config.isList("players")) {
+        if (!state.isList("players")) {
             return players;
         }
-        for(Object o : config.getList("players")) {
+        for(Object o : state.getList("players")) {
             if (o instanceof StoredPlayer) {
                 players.add((StoredPlayer)o);
             }
@@ -63,13 +63,13 @@ public class State_40 implements StateLoader
     }
 
     @Override
-    public @NotNull Collection<NoteSet> buildNotificationList(@NotNull FileConfiguration config)
+    public @NotNull Collection<NoteSet> buildNotifications(@NotNull FileConfiguration state)
     {
         List<NoteSet> notes = new ArrayList<>();
-        if (!config.isList("notes")) {
+        if (!state.isList("notes")) {
             return notes;
         }
-        for (Object o : config.getList("notes")) {
+        for (Object o : state.getList("notes")) {
             if (o instanceof NoteSet) {
                 notes.add((NoteSet)o);
             }

@@ -28,20 +28,20 @@ public class State_30 implements StateLoader
     }
 
     @Override
-    public StoredData load(@NotNull FileConfiguration config)
+    public StoredData loadState(@NotNull FileConfiguration state)
     {
         StateConversion.clearMaps();
-        return StateLoader.super.load(config);
+        return StateLoader.super.loadState(state);
     }
 
     @Override
-    public @NotNull Collection<BaxShop> buildShopList(@NotNull FileConfiguration config)
+    public @NotNull Collection<BaxShop> buildShops(@NotNull FileConfiguration state)
     {
         List<BaxShop> shops = new ArrayList<>();
-        if (!config.isList("shops")) {
+        if (!state.isList("shops")) {
             return shops;
         }
-        for (Object o : config.getList("shops")) {
+        for (Object o : state.getList("shops")) {
             if (o instanceof BaxShop) {
                 BaxShop shop = (BaxShop) o;
                 StateConversion.addLegacyShop(shop.getLegacyId(), shop.getId());
@@ -53,19 +53,19 @@ public class State_30 implements StateLoader
     }
 
     @Override
-    public @NotNull Collection<StoredPlayer> buildPlayerList(@NotNull FileConfiguration config)
+    public @NotNull Collection<StoredPlayer> buildPlayers(@NotNull FileConfiguration state)
     {
         return StateConversion.getPlayers();
     }
 
     @Override
-    public @NotNull Collection<NoteSet> buildNotificationList(@NotNull FileConfiguration config)
+    public @NotNull Collection<NoteSet> buildNotifications(@NotNull FileConfiguration state)
     {
         List<NoteSet> noteSets = new ArrayList<>();
-        if (!config.isConfigurationSection("notes")) {
+        if (!state.isConfigurationSection("notes")) {
             return noteSets;
         }
-        for (Map.Entry entry : config.getConfigurationSection("notes").getValues(false).entrySet()) {
+        for (Map.Entry entry : state.getConfigurationSection("notes").getValues(false).entrySet()) {
             OfflinePlayer player = StateConversion.getPlayer(entry.getKey().toString());
             if (!(entry.getValue() instanceof List)) {
                 plugin.getLogger().warning("Could not load notifications of type " + entry.getValue().getClass());
