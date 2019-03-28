@@ -262,6 +262,25 @@ public final class StoredData
         return n;
     }
 
+    private void resaveConfig()
+    {
+        File configFile = new File(plugin.getDataFolder(), "config.yml");
+        if (!configFile.renameTo(new File(plugin.getDataFolder(), "config.bak"))) {
+            plugin.getLogger().warning("Could not backup config. Configuration may be lost.");
+        }
+        else {
+            plugin.saveDefaultConfig();
+        }
+        plugin.getConfig().set("Backups", config.getBackups());
+        plugin.getConfig().set("LogNotes", config.isLogNotes());
+        plugin.getConfig().set("XPConvert", config.getXpConvert());
+        plugin.getConfig().set("DeathTax.Enabled", config.isDeathTaxEnabled());
+        plugin.getConfig().set("DeathTax.GoesTo", config.getDeathTaxGoesTo());
+        plugin.getConfig().set("DeathTax.Percentage", config.getDeathTaxPercentage());
+        plugin.getConfig().set("DeathTax.Minimum", config.getDeathTaxMinimum());
+        plugin.saveResource("config.yml", true);
+    }
+
     /**
      * Saves all shops
      */
@@ -271,8 +290,11 @@ public final class StoredData
             log.warning("Failed to back up BaxShops");
         }
 
+        if (loadedState != STATE_VERSION) {
+            resaveConfig();
+        }
+
         FileConfiguration state = new YamlConfiguration();
-        state.set("version", STATE_VERSION);
         state.set("shops", new ArrayList<>(shops.values()));
         state.set("players", new ArrayList<>(players.values()));
         List<NoteSet> notes = new ArrayList<>();
