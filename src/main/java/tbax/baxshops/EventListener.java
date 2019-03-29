@@ -266,9 +266,6 @@ public class EventListener implements Listener
                 ShopPlugin.getEconomy().depositPlayer(recipient, death_tax);
                 ShopPlugin.sendNotification(recipient, new DeathTaxReceivedNote(recipient, pl, event.getDeathMessage(), death_tax));
             }
-            if (config.isLogNotes()) {
-                ShopPlugin.getInstance().getLogger().info(Format.toAnsiColor(String.format("%s was fined %s for dying.", Format.username(pl.getName()), Format.money(death_tax))));
-            }
         }
     }
     
