@@ -118,7 +118,7 @@ public final class ShopPlugin extends JavaPlugin
      */
     public static void sendNotification(OfflinePlayer player, Notification n)
     {
-        sendNotification(player, n, getInstance().getConfig().getBoolean("LogNotes"));
+        sendNotification(player, n, getStoredData().getConfig().isLogNotes());
     }
 
     public static void sendNotification(String playerName, Notification n)
@@ -396,7 +396,7 @@ public final class ShopPlugin extends JavaPlugin
     public static void sendInfo(Player pl, String message)
     {
         if (pl != null) {
-            if (plugin.getConfig().getBoolean("LogNotes", false)) {
+            if (getStoredData().getConfig().isLogNotes()) {
                 pl.sendMessage(message);
                 logPlayerMessage(pl, message);
             }

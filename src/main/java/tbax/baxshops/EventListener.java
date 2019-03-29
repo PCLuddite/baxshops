@@ -8,13 +8,11 @@
 
 package tbax.baxshops;
 
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.SkeletonHorse;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -32,7 +30,9 @@ import org.bukkit.inventory.ItemStack;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.CommandWarningException;
 import tbax.baxshops.errors.PrematureAbortException;
+import tbax.baxshops.notification.DeathTaxReceivedNote;
 import tbax.baxshops.notification.Notification;
+import tbax.baxshops.serialization.Configuration;
 import tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.Deque;
@@ -251,35 +251,24 @@ public class EventListener implements Listener
         if (!isStupidDeath(event.getEntity().getLastDamageCause().getCause()))
             return;
 
-        try {
-            String stringId = plugin.getConfig().getString("DeathTax.GoesTo", null);
-            if (stringId == null)
-                return;
+        Configuration config = ShopPlugin.getStoredData().getConfig();
+        UUID uuid = config.getDeathTaxGoesToId();
 
-            UUID uuid;
-            try {
-                uuid = UUID.fromString(stringId);
+        Player pl = event.getEntity();
+        double minimum = config.getDeathTaxMinimum();
+        double percent = config.getDeathTaxPercentage();
+        if (ShopPlugin.getEconomy().has(pl, minimum)) {
+            double death_tax = MathUtil.multiply(ShopPlugin.getEconomy().getBalance(pl), percent);
+            ShopPlugin.getEconomy().withdrawPlayer(pl, death_tax);
+            pl.sendMessage(String.format("You were fined %s for dying.", Format.money(death_tax)));
+            if (!uuid.equals(StoredPlayer.DUMMY_UUID)) { // do not deposit in dummy world account
+                OfflinePlayer recipient = ShopPlugin.getOfflinePlayer(uuid);
+                ShopPlugin.getEconomy().depositPlayer(recipient, death_tax);
+                ShopPlugin.sendNotification(recipient, new DeathTaxReceivedNote(recipient, pl, event.getDeathMessage(), death_tax));
             }
-            catch (IllegalArgumentException e) {
-                throw new CommandWarningException("Cannot impose death tax because player id is invalid.");
+            if (config.isLogNotes()) {
+                ShopPlugin.getInstance().getLogger().info(Format.toAnsiColor(String.format("%s was fined %s for dying.", Format.username(pl.getName()), Format.money(death_tax))));
             }
-
-            Player pl = event.getEntity();
-            double minimum = plugin.getConfig().getDouble("DeathTax.Minimum", 100.0d);
-            double percent = plugin.getConfig().getDouble("DeathTax.Percentage", 0.04);
-            if (ShopPlugin.getEconomy().has(pl, minimum)) {
-                double death_tax = MathUtil.multiply(ShopPlugin.getEconomy().getBalance(pl), percent);
-                ShopPlugin.getEconomy().withdrawPlayer(pl, death_tax);
-                pl.sendMessage(String.format("You were fined %s for dying.", Format.money(death_tax)));
-                if (!uuid.equals(StoredPlayer.DUMMY_UUID)) // do not deposit in dummy world account
-                    ShopPlugin.getEconomy().depositPlayer(ShopPlugin.getOfflinePlayer(uuid), death_tax);
-                if (plugin.getConfig().getBoolean("LogNotes", false)) {
-                    ShopPlugin.getInstance().getLogger().info(Format.toAnsiColor(String.format("%s was fined %s for dying.", Format.username(pl.getName()), Format.money(death_tax))));
-                }
-            }
-        }
-        catch (PrematureAbortException e) {
-            plugin.getLogger().warning(e.getMessage());
         }
     }
     

@@ -29,10 +29,7 @@ public abstract class StandardNote implements UpgradeableNote
 
     public StandardNote(UUID shopId, OfflinePlayer buyer, OfflinePlayer seller, BaxEntry entry)
     {
-        this.shopId = shopId;
-        this.buyer = buyer.getUniqueId();
-        this.seller = seller.getUniqueId();
-        this.entry = new BaxEntry(entry);
+        this(shopId, buyer.getUniqueId(), seller.getUniqueId(), entry);
     }
 
     public StandardNote(UUID shopId, UUID buyer, UUID seller, BaxEntry entry)
