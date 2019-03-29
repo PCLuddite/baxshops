@@ -6,6 +6,7 @@
 **/
 package tbax.baxshops.serialization;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.UUID;
@@ -76,13 +77,13 @@ public class Configuration
         return deathTaxPercentage;
     }
 
-    public @Nullable UUID getDeathTaxGoesToId()
+    public @NotNull UUID getDeathTaxGoesToId()
     {
         try {
             return UUID.fromString(deathTaxGoesTo);
         }
         catch (IllegalArgumentException e) {
-            return null;
+            return StoredPlayer.DUMMY_UUID;
         }
     }
 

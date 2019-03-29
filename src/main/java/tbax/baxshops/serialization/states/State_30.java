@@ -20,8 +20,8 @@ import java.util.*;
 public class State_30 implements StateLoader
 {
     public static final double VERSION = 3.0;
-    private static final Map<Long, UUID> legacyIds = new HashMap<>();
-    private static final PlayerMap players = new PlayerMap();
+    private static Map<Long, UUID> legacyIds = new HashMap<>();
+    private static PlayerMap players = new PlayerMap();
     private ShopPlugin plugin;
 
     public State_30(@NotNull ShopPlugin plugin)
@@ -79,10 +79,12 @@ public class State_30 implements StateLoader
         legacyIds.put(legacyId, id);
     }
 
-    public static void clearMaps()
+    public static void invalidateMaps()
     {
         legacyIds.clear();
         players.clear();
+        legacyIds = null;
+        players = null;
     }
 
     @Override
@@ -94,14 +96,8 @@ public class State_30 implements StateLoader
             String goesTo = ret.getDeathTaxGoesTo();
             ret.setDeathTaxGoesTo(getPlayerId(goesTo).toString());
         }
+        invalidateMaps();
         return ret;
-    }
-
-    @Override
-    public StoredData loadState(@NotNull FileConfiguration state)
-    {
-        clearMaps();
-        return StateLoader.super.loadState(state);
     }
 
     @Override
@@ -115,6 +111,7 @@ public class State_30 implements StateLoader
             if (o instanceof BaxShop) {
                 BaxShop shop = (BaxShop) o;
                 addLegacyShop(shop.getLegacyId(), shop.getId());
+                shops.add(shop);
             } else {
                 plugin.getLogger().warning("Could not load BaxShop of type " + o.getClass());
             }

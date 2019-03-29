@@ -14,7 +14,6 @@ import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.notification.NoteSet;
 
 import java.util.Collection;
-import java.util.UUID;
 
 public interface StateLoader
 {
@@ -42,8 +41,8 @@ public interface StateLoader
         StoredData storedData = new StoredData(getPlugin());
 
         Collection<BaxShop> shops = buildShops(state);
-        Collection<StoredPlayer> players = buildPlayers(state);
         Collection<NoteSet> notes = buildNotifications(state);
+        Collection<StoredPlayer> players = buildPlayers(state);
 
         for (StoredPlayer player : players) {
             storedData.players.put(player);
@@ -60,6 +59,7 @@ public interface StateLoader
             storedData.pending.put(noteSet.getRecipient(), noteSet.getNotifications());
         }
 
+        storedData.config = loadConfig(getPlugin().getConfig());
         return storedData;
     }
 }

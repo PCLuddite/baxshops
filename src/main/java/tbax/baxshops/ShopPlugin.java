@@ -17,6 +17,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.commands.*;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.*;
@@ -184,7 +185,7 @@ public final class ShopPlugin extends JavaPlugin
         storedData.removeLocation(player, location);
     }
 
-    public static OfflinePlayer getOfflinePlayer(UUID uuid)
+    public static @NotNull OfflinePlayer getOfflinePlayer(UUID uuid)
     {
         return storedData.getOfflinePlayer(uuid);
     }
@@ -194,7 +195,7 @@ public final class ShopPlugin extends JavaPlugin
         return storedData.getShop(shopId);
     }
 
-    public static List<StoredPlayer> getOfflinePlayer(String playerName)
+    public static @NotNull List<StoredPlayer> getOfflinePlayer(String playerName)
     {
         return storedData.getOfflinePlayer(playerName);
     }

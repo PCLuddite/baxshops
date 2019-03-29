@@ -15,6 +15,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
 import tbax.baxshops.Resources;
@@ -61,9 +62,9 @@ public final class StoredData
     final ShopPlugin plugin;
     final Logger log;
 
-    private Configuration config;
+    Configuration config;
 
-    StoredData(ShopPlugin plugin)
+    StoredData(@NotNull ShopPlugin plugin)
     {
         this.plugin = plugin;
         this.log = plugin.getLogger();
@@ -76,12 +77,12 @@ public final class StoredData
         return loadedState;
     }
 
-    public BaxShop getShop(UUID uid)
+    public @Nullable BaxShop getShop(UUID uid)
     {
         return shops.get(uid);
     }
     
-    public BaxShop getShop(Location loc)
+    public @Nullable BaxShop getShop(Location loc)
     {
         UUID uid = locations.get(loc);
         if (uid == null) {
@@ -90,7 +91,7 @@ public final class StoredData
         return shops.get(uid);
     }
     
-    public static StoredData load(ShopPlugin plugin)
+    public static StoredData load(@NotNull ShopPlugin plugin)
     {
         File stateLocation = new File(plugin.getDataFolder(), YAML_FILE_PATH);
         if (!stateLocation.exists()) {
@@ -115,11 +116,7 @@ public final class StoredData
         if (ver != STATE_VERSION) {
             ShopPlugin.getInstance().getLogger().info("Converting state file version " + (new DecimalFormat("0.0")).format(ver));
         }
-
-        FileConfiguration state = YamlConfiguration.loadConfiguration(stateLocation);
-        StoredData storedData = loader.loadState(state);
-        storedData.config = loader.loadConfig(plugin.getConfig());
-        return storedData;
+        return loader.loadState(YamlConfiguration.loadConfiguration(stateLocation));
     }
     
     /**
@@ -268,17 +265,15 @@ public final class StoredData
         if (!configFile.renameTo(new File(plugin.getDataFolder(), "config.bak"))) {
             plugin.getLogger().warning("Could not backup config. Configuration may be lost.");
         }
-        else {
-            plugin.saveDefaultConfig();
-        }
         plugin.getConfig().set("Backups", config.getBackups());
         plugin.getConfig().set("LogNotes", config.isLogNotes());
         plugin.getConfig().set("XPConvert", config.getXpConvert());
         plugin.getConfig().set("DeathTax.Enabled", config.isDeathTaxEnabled());
-        plugin.getConfig().set("DeathTax.GoesTo", config.getDeathTaxGoesTo());
+        plugin.getConfig().set("DeathTax.GoesTo", config.getDeathTaxGoesToId().toString());
         plugin.getConfig().set("DeathTax.Percentage", config.getDeathTaxPercentage());
         plugin.getConfig().set("DeathTax.Minimum", config.getDeathTaxMinimum());
-        plugin.saveResource("config.yml", true);
+        plugin.getConfig().set("StateVersion", STATE_VERSION);
+        plugin.saveConfig();
     }
 
     /**
@@ -316,14 +311,14 @@ public final class StoredData
         }
     }
 
-    public StoredPlayer getOfflinePlayer(UUID uuid)
+    public @NotNull StoredPlayer getOfflinePlayer(UUID uuid)
     {
         StoredPlayer player = players.get(uuid);
         assert player != null;
         return player;
     }
 
-    public StoredPlayer getOfflinePlayerSafe(UUID uuid)
+    public @NotNull StoredPlayer getOfflinePlayerSafe(UUID uuid)
     {
         StoredPlayer player = players.get(uuid);
         if (player == null) {
