@@ -74,7 +74,7 @@ public final class CmdRestock extends BaxShopCommand
     @Override
     public boolean requiresItemInHand(@NotNull ShopCmdActor actor)
     {
-        return actor.getNumArgs() < 2 || actor.isArgQtyNotAny(1);
+        return actor.getNumArgs() < 2 || !BaxQuantity.isAny(actor.getArg(1));
     }
 
     @Override

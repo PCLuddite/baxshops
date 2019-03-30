@@ -107,15 +107,30 @@ public class BaxQuantity
 
     public boolean isAll()
     {
-        return "all".equalsIgnoreCase(argument);
+        return isAll(argument);
     }
 
     public boolean isAny()
     {
-        return "any".equalsIgnoreCase(argument);
+        return isAny(argument);
     }
 
     public boolean isMost()
+    {
+        return isMost(argument);
+    }
+
+    public static boolean isAll(String argument)
+    {
+        return "all".equalsIgnoreCase(argument);
+    }
+
+    public static boolean isAny(String argument)
+    {
+        return "any".equalsIgnoreCase(argument);
+    }
+
+    public static boolean isMost(String argument)
     {
         return "most".equalsIgnoreCase(argument);
     }
