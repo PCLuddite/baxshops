@@ -17,15 +17,22 @@ import tbax.baxshops.serialization.StoredPlayer;
 
 public final class CmdFlag extends BaxShopCommand
 {
-    @SuppressWarnings({"unchecked", "MismatchedQueryAndUpdateOfCollection"})
-    private static final CommandMap flagCmds = new CommandMap(
-        FlagCmdSellToShop.class,
-        FlagCmdInfinite.class,
-        FlagCmdSellRequests.class,
-        FlagCmdBuyRequests.class,
-        FlagCmdOwner.class,
-        FlagCmdList.class
-    );
+    private static final CommandMap flagCmds = new CommandMap();
+
+    static {
+        try {
+            flagCmds.add(FlagCmdBuyRequests.class);
+            flagCmds.add(FlagCmdInfinite.class);
+            flagCmds.add(FlagCmdList.class);
+            flagCmds.add(FlagCmdNotify.class);
+            flagCmds.add(FlagCmdOwner.class);
+            flagCmds.add(FlagCmdSellRequests.class);
+            flagCmds.add(FlagCmdSellToShop.class);
+        }
+        catch (InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public @NotNull String getName()

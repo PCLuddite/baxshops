@@ -28,10 +28,47 @@ import tbax.baxshops.serialization.StoredPlayer;
 import java.util.*;
 import java.util.logging.Logger;
 
-@SuppressWarnings("WeakerAccess")
 public final class ShopPlugin extends JavaPlugin
 {
-    private static final CommandMap commands = initCommands();
+    private static final CommandMap commands = new CommandMap();
+
+    static {
+        try {
+            commands.add(CmdAccept.class);
+            commands.add(CmdAdd.class);
+            commands.add(CmdBackup.class);
+            commands.add(CmdBuy.class);
+            commands.add(CmdClaim.class);
+            commands.add(CmdCopy.class);
+            commands.add(CmdCreate.class);
+            commands.add(CmdDelete.class);
+            commands.add(CmdFlag.class);
+            commands.add(CmdGiveXp.class);
+            commands.add(CmdHelp.class);
+            commands.add(CmdInfo.class);
+            commands.add(CmdList.class);
+            commands.add(CmdLollipop.class);
+            commands.add(CmdNotifications.class);
+            commands.add(CmdReject.class);
+            commands.add(CmdRemove.class);
+            commands.add(CmdRestock.class);
+            commands.add(CmdSave.class);
+            commands.add(CmdSell.class);
+            commands.add(CmdSet.class);
+            commands.add(CmdSetAmnt.class);
+            commands.add(CmdSetAngle.class);
+            commands.add(CmdSetDur.class);
+            commands.add(CmdSetIndex.class);
+            commands.add(CmdSign.class);
+            commands.add(CmdSkip.class);
+            commands.add(CmdTake.class);
+            commands.add(CmdTakeXp.class);
+            commands.add(CmdTeleport.class);
+        }
+        catch (IllegalAccessException | InstantiationException e) {
+            e.printStackTrace();
+        }
+    }
     
     /**
      * The Vault economy
@@ -59,17 +96,6 @@ public final class ShopPlugin extends JavaPlugin
         return commands;
     }
 
-    /**
-     * Shows a player his/her most recent notification. Also shows the
-     * notification count.
-     *
-     * @param player the player
-     */
-    public static void showNotification(Player player)
-    {
-        showNotification(player, true);
-    }
-
     public static void showNotificationCount(Player player)
     {
         Deque<Notification> notifications = storedData.getNotifications(player.getPlayer());
@@ -78,35 +104,39 @@ public final class ShopPlugin extends JavaPlugin
         }
         else {
             int size = notifications.size();
-            player.sendMessage(String.format("You have %s %s.", Format.number(size), size == 1 ? "notification" : "notifications"));
+            player.sendMessage(String.format("You have %s notification%s.", Format.number(size), size == 1 ? "" : "s"));
         }
     }
 
     /**
-     * Shows a player his/her most recent notification.
+     * Shows a player his/her most recent notification
      *
      * @param player the player
-     * @param showCount whether the notification count should be shown as well
      */
-    public static void showNotification(Player player, boolean showCount)
+    public static void showNotification(Player player)
     {
         Deque<Notification> notifications = storedData.getNotifications(player.getPlayer());
-        if (showCount)
+
+        if (notifications.isEmpty() || notifications.size() > 1) {
             showNotificationCount(player);
-
-        if (notifications.isEmpty())
-            return;
-
-        Notification n = notifications.getFirst();
-        player.sendMessage(n.getMessage(player.getPlayer()));
-        if (n instanceof Request) {
-            player.sendMessage(String.format("Use %s or %s to manage this request.", Format.command("/shop accept"), Format.command("/shop reject")));
-        }
-        else if (n instanceof Claimable) {
-            player.sendMessage(String.format("Use %s to claim and remove this notification.", Format.command("/shop claim")));
         }
         else {
-            notifications.removeFirst();
+            Notification n = notifications.getFirst();
+            sendInfo(player, n.getMessage(player.getPlayer()));
+            if (n instanceof Request) {
+                player.sendMessage(String.format("Use %s or %s to manage this request.",
+                    Format.command("/shop accept"),
+                    Format.command("/shop reject"))
+                );
+            }
+            else if (n instanceof Claimable) {
+                player.sendMessage(String.format("Use %s to claim and remove this notification.",
+                    Format.command("/shop claim"))
+                );
+            }
+            else {
+                notifications.removeFirst();
+            }
         }
     }
 
@@ -119,16 +149,6 @@ public final class ShopPlugin extends JavaPlugin
     public static void sendNotification(OfflinePlayer player, Notification n)
     {
         sendNotification(player, n, getStoredData().getConfig().isLogNotes());
-    }
-
-    public static void sendNotification(String playerName, Notification n)
-    {
-        List<StoredPlayer> players = storedData.getOfflinePlayer(playerName);
-        if (players == null || players.isEmpty())
-            return;
-        for(StoredPlayer player : players) {
-            sendNotification(player, n);
-        }
     }
 
     /**
@@ -146,7 +166,7 @@ public final class ShopPlugin extends JavaPlugin
         }
         ns.add(n);
         if (player.isOnline()) {
-            showNotification(player.getPlayer(), false);
+            showNotification(player.getPlayer());
         }
     }
 
@@ -264,43 +284,6 @@ public final class ShopPlugin extends JavaPlugin
         storedData.saveAll();
     }
 
-    @SuppressWarnings("unchecked")
-    private static CommandMap initCommands()
-    {
-		return new CommandMap(
-			CmdAccept.class,
-            CmdAdd.class,
-            CmdBackup.class,
-            CmdBuy.class,
-            CmdClaim.class,
-            CmdCopy.class,
-            CmdCreate.class,
-            CmdDelete.class,
-            CmdFlag.class,
-            CmdGiveXp.class,
-            CmdHelp.class,
-            CmdInfo.class,
-            CmdList.class,
-            CmdLollipop.class,
-            CmdNotifications.class,
-            CmdReject.class,
-            CmdRemove.class,
-            CmdRestock.class,
-            CmdSave.class,
-            CmdSell.class,
-            CmdSet.class,
-            CmdSetAmnt.class,
-            CmdSetAngle.class,
-            CmdSetDur.class,
-            CmdSetIndex.class,
-            CmdSign.class,
-            CmdSkip.class,
-            CmdTake.class,
-            CmdTakeXp.class,
-            CmdTeleport.class
-		);
-    }
-
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
@@ -393,13 +376,11 @@ public final class ShopPlugin extends JavaPlugin
         return econ != null;
     }
 
-    public static void sendInfo(Player pl, String message)
+    public static void sendInfo(@NotNull Player pl, String message)
     {
-        if (pl != null) {
-            if (getStoredData().getConfig().isLogNotes()) {
-                pl.sendMessage(message);
-                logPlayerMessage(pl, message);
-            }
+        pl.sendMessage(message);
+        if (getStoredData().getConfig().isLogNotes()) {
+            logPlayerMessage(pl, message);
         }
     }
     

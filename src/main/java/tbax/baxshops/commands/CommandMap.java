@@ -8,6 +8,7 @@
 package tbax.baxshops.commands;
 
 import org.jetbrains.annotations.NotNull;
+import tbax.baxshops.commands.flags.FlagCmdBuyRequests;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -23,18 +24,10 @@ public final class CommandMap implements Map<String, BaxShopCommand>
     {
     }
 
-    public CommandMap(@NotNull Class<? extends BaxShopCommand>... commands)
+    public CommandMap(@NotNull Collection<Class<? extends BaxShopCommand>> cmdClasses) throws InstantiationException, IllegalAccessException
     {
-        for (Class<? extends BaxShopCommand> command : commands) {
-            try {
-                BaxShopCommand cmd = command.newInstance();
-                for (String alias : cmd.getAliases()) {
-                    cmds.put(alias, cmd);
-                }
-            }
-            catch (InstantiationException | IllegalAccessException e) {
-                e.printStackTrace();
-            }
+        for (Class<? extends BaxShopCommand> command : cmdClasses) {
+            add(command);
         }
     }
 
@@ -128,5 +121,13 @@ public final class CommandMap implements Map<String, BaxShopCommand>
         return cmds.entrySet().stream()
             .filter(entry -> entry.getValue().requiresSelection(actor))
             .collect(Collectors.toMap(Entry::getKey, Entry::getValue, (a, b) -> b, CommandMap::new));
+    }
+
+    public void add(@NotNull Class<? extends BaxShopCommand> cmdClass) throws InstantiationException, IllegalAccessException
+    {
+        BaxShopCommand cmd = cmdClass.newInstance();
+        for (String alias : cmd.getAliases()) {
+            put(alias, cmd);
+        }
     }
 }
