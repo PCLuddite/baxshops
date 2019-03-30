@@ -98,7 +98,13 @@ public final class StoredData
             plugin.getLogger().info("YAML file did not exist");
             return new StoredData(plugin);
         }
-        double ver = plugin.getConfig().getDouble("version", 3.0);
+        double ver;
+        if (plugin.getConfig().contains("StateVersion")) {
+            ver = plugin.getConfig().getDouble("StateVersion", STATE_VERSION);
+        }
+        else {
+            ver = State_30.VERSION;
+        }
         loadedState = ver;
 
         StateLoader loader;
