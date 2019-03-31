@@ -458,10 +458,10 @@ public final class ShopCmdActor
     public StoredPlayer getArgPlayer(int index) throws PrematureAbortException
     {
         try {
-            return ShopPlugin.getStoredData().getOfflinePlayerSafe(getArgUuid(index));
+            return ShopPlugin.getSavedState().getOfflinePlayerSafe(getArgUuid(index));
         }
         catch (PrematureAbortException e){
-            List<StoredPlayer> players = ShopPlugin.getStoredData().getOfflinePlayer(args[index]);
+            List<StoredPlayer> players = ShopPlugin.getSavedState().getOfflinePlayer(args[index]);
             if (players.size() > 1)
                 exitError(Resources.TooManyPlayers(players));
             return players.get(0);
@@ -475,6 +475,6 @@ public final class ShopCmdActor
 
     public Deque<Notification> getNotifications()
     {
-        return ShopPlugin.getStoredData().getNotifications(player);
+        return ShopPlugin.getSavedState().getNotifications(player);
     }
 }

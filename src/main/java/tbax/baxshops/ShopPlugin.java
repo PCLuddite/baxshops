@@ -22,7 +22,7 @@ import tbax.baxshops.commands.*;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.*;
 import tbax.baxshops.serialization.ItemNames;
-import tbax.baxshops.serialization.StoredData;
+import tbax.baxshops.serialization.SavedState;
 import tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.*;
@@ -72,7 +72,7 @@ public final class ShopPlugin extends JavaPlugin
 
     private static Economy econ;
     private static Logger log;
-    private static StoredData storedData;
+    private static SavedState savedState;
 
     /**
      * A map containing each player's currently selected shop and other
@@ -87,7 +87,7 @@ public final class ShopPlugin extends JavaPlugin
 
     public static void showNotificationCount(Player player)
     {
-        Deque<Notification> notifications = storedData.getNotifications(player.getPlayer());
+        Deque<Notification> notifications = savedState.getNotifications(player.getPlayer());
         if (notifications.isEmpty()) {
             player.sendMessage("You have no notifications.");
         }
@@ -104,7 +104,7 @@ public final class ShopPlugin extends JavaPlugin
      */
     public static void showNotification(Player player)
     {
-        Deque<Notification> notifications = storedData.getNotifications(player.getPlayer());
+        Deque<Notification> notifications = savedState.getNotifications(player.getPlayer());
 
         if (notifications.isEmpty() || notifications.size() > 1) {
             showNotificationCount(player);
@@ -137,7 +137,7 @@ public final class ShopPlugin extends JavaPlugin
      */
     public static void sendNotification(OfflinePlayer player, Notification n)
     {
-        sendNotification(player, n, getStoredData().getConfig().isLogNotes());
+        sendNotification(player, n, getSavedState().getConfig().isLogNotes());
     }
 
     /**
@@ -149,7 +149,7 @@ public final class ShopPlugin extends JavaPlugin
      */
     public static void sendNotification(OfflinePlayer player, Notification n, boolean logNote)
     {
-        Deque<Notification> ns = storedData.getNotifications(player);
+        Deque<Notification> ns = savedState.getNotifications(player);
         if (logNote) {
             log.info(Format.toAnsiColor(n.getMessage(null)));
         }
@@ -176,47 +176,47 @@ public final class ShopPlugin extends JavaPlugin
 
     public static void sendNotification(UUID playerId, Notification note)
     {
-        sendNotification(storedData.getOfflinePlayer(playerId), note);
+        sendNotification(savedState.getOfflinePlayer(playerId), note);
     }
 
     public static boolean addShop(Player player, BaxShop shop)
     {
-        return storedData.addShop(player, shop);
+        return savedState.addShop(player, shop);
     }
 
     public static void removeShop(Player player, BaxShop shop) throws PrematureAbortException
     {
-        storedData.removeShop(player, shop);
+        savedState.removeShop(player, shop);
     }
 
     public static void removeLocation(Player player, Location location) throws PrematureAbortException
     {
-        storedData.removeLocation(player, location);
+        savedState.removeLocation(player, location);
     }
 
     public static @NotNull OfflinePlayer getOfflinePlayer(UUID uuid)
     {
-        return storedData.getOfflinePlayer(uuid);
+        return savedState.getOfflinePlayer(uuid);
     }
 
     public static BaxShop getShop(UUID shopId)
     {
-        return storedData.getShop(shopId);
+        return savedState.getShop(shopId);
     }
 
     public static @NotNull List<StoredPlayer> getOfflinePlayer(String playerName)
     {
-        return storedData.getOfflinePlayer(playerName);
+        return savedState.getOfflinePlayer(playerName);
     }
 
     public static BaxShop getShop(Location location)
     {
-        return storedData.getShop(location);
+        return savedState.getShop(location);
     }
 
     public static void addLocation(Player player, Location location, BaxShop shop)
     {
-        storedData.addLocation(player, location, shop);
+        savedState.addLocation(player, location, shop);
     }
 
     @Override
@@ -236,13 +236,13 @@ public final class ShopPlugin extends JavaPlugin
         ItemNames.loadDamageable(this);
         ItemNames.loadEnchants(this);
 
-        storedData = StoredData.load(this);
+        savedState = SavedState.load(this);
         
         saveDefaultConfig();
         
         // run an initial save 5 minutes after starting, then a recurring save
         // every 30 minutes after the first save
-        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, storedData::saveAll, 6000L, 36000L);
+        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, savedState::saveAll, 6000L, 36000L);
         log.info("BaxShops has loaded successfully!");
     }
     
@@ -270,7 +270,7 @@ public final class ShopPlugin extends JavaPlugin
     @Override
     public void onDisable()
     {
-        storedData.saveAll();
+        savedState.saveAll();
     }
 
     @Override
@@ -368,7 +368,7 @@ public final class ShopPlugin extends JavaPlugin
     public static void sendInfo(@NotNull Player pl, String message)
     {
         pl.sendMessage(message);
-        if (getStoredData().getConfig().isLogNotes()) {
+        if (getSavedState().getConfig().isLogNotes()) {
             logPlayerMessage(pl, message);
         }
     }
@@ -387,9 +387,9 @@ public final class ShopPlugin extends JavaPlugin
         log.info(sb.toString());
     }
 
-    public static StoredData getStoredData()
+    public static SavedState getSavedState()
     {
-        return storedData;
+        return savedState;
     }
 
     public static void logInfo(String msg)

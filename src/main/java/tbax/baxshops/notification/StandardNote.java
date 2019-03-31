@@ -12,7 +12,7 @@ import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.SafeMap;
-import tbax.baxshops.serialization.StoredData;
+import tbax.baxshops.serialization.SavedState;
 import tbax.baxshops.serialization.StoredPlayer;
 import tbax.baxshops.serialization.states.State_30;
 
@@ -43,7 +43,7 @@ public abstract class StandardNote implements UpgradeableNote
     public StandardNote(Map<String, Object> args)
     {
         SafeMap map = new SafeMap(args);
-        if (StoredData.getLoadedState() == State_30.VERSION) {
+        if (SavedState.getLoadedState() == State_30.VERSION) {
             deserialize30(map);
         }
         else {

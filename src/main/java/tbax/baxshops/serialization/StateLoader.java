@@ -36,30 +36,33 @@ public interface StateLoader
         return ret;
     }
 
-    default StoredData loadState(@NotNull FileConfiguration state)
+    default SavedState loadState(@NotNull FileConfiguration state)
     {
-        StoredData storedData = new StoredData(getPlugin());
+        SavedState savedState = new SavedState(getPlugin());
 
+        ShopPlugin.logInfo("Loading shop data...");
         Collection<BaxShop> shops = buildShops(state);
+        ShopPlugin.logInfo("Loading notifications...");
         Collection<NoteSet> notes = buildNotifications(state);
+        ShopPlugin.logInfo("Loading player data...");
         Collection<StoredPlayer> players = buildPlayers(state);
 
         for (StoredPlayer player : players) {
-            storedData.players.put(player);
+            savedState.players.put(player);
         }
 
         for (BaxShop shop : shops) {
-            storedData.shops.put(shop.getId(), shop);
+            savedState.shops.put(shop.getId(), shop);
             for(Location location : shop.getLocations()) {
-                storedData.locations.put(location, shop.getId());
+                savedState.locations.put(location, shop.getId());
             }
         }
 
         for (NoteSet noteSet : notes) {
-            storedData.pending.put(noteSet.getRecipient(), noteSet.getNotifications());
+            savedState.pending.put(noteSet.getRecipient(), noteSet.getNotifications());
         }
 
-        storedData.config = loadConfig(getPlugin().getConfig());
-        return storedData;
+        savedState.config = loadConfig(getPlugin().getConfig());
+        return savedState;
     }
 }

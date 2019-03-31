@@ -23,7 +23,6 @@ import tbax.baxshops.Resources;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.notification.NoteSet;
 import tbax.baxshops.notification.Notification;
 import tbax.baxshops.serialization.states.State_30;
 import tbax.baxshops.serialization.states.State_40;
@@ -34,7 +33,7 @@ import java.text.DecimalFormat;
 import java.util.*;
 import java.util.logging.Logger;
 
-public final class StoredData
+public final class SavedState
 {
     static final String YAML_FILE_PATH = "shops.yml";
     private static final String YAMLBAK_FILE_PATH = "backups/%d.yml";
@@ -66,7 +65,7 @@ public final class StoredData
 
     Configuration config;
 
-    StoredData(@NotNull ShopPlugin plugin)
+    SavedState(@NotNull ShopPlugin plugin)
     {
         this.plugin = plugin;
         this.log = plugin.getLogger();
@@ -93,12 +92,12 @@ public final class StoredData
         return shops.get(uid);
     }
     
-    public static StoredData load(@NotNull ShopPlugin plugin)
+    public static SavedState load(@NotNull ShopPlugin plugin)
     {
         File stateLocation = new File(plugin.getDataFolder(), YAML_FILE_PATH);
         if (!stateLocation.exists()) {
             plugin.getLogger().info("YAML file did not exist");
-            return new StoredData(plugin);
+            return new SavedState(plugin);
         }
         double ver;
         if (plugin.getConfig().contains("StateVersion")) {
@@ -121,7 +120,7 @@ public final class StoredData
         }
         else {
             plugin.getLogger().warning("Unknown state file version. Starting from scratch...");
-            return new StoredData(plugin);
+            return new SavedState(plugin);
         }
 
         if (ver != STATE_VERSION) {

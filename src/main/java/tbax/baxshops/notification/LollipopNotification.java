@@ -14,7 +14,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.SafeMap;
-import tbax.baxshops.serialization.StoredData;
+import tbax.baxshops.serialization.SavedState;
 import tbax.baxshops.serialization.StoredPlayer;
 import tbax.baxshops.serialization.states.State_30;
 import tbax.baxshops.serialization.states.State_40;
@@ -51,10 +51,10 @@ public final class LollipopNotification implements UpgradeableNote, Configuratio
     public LollipopNotification(Map<String, Object> args)
     {
         SafeMap map = new SafeMap(args);
-        if (StoredData.getLoadedState() == State_40.VERSION) {
+        if (SavedState.getLoadedState() == State_40.VERSION) {
             deserialize40(map);
         }
-        if (StoredData.getLoadedState() == State_30.VERSION) {
+        if (SavedState.getLoadedState() == State_30.VERSION) {
             deserialize30(map);
         }
         else {

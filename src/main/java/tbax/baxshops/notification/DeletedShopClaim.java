@@ -14,7 +14,7 @@ import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.SafeMap;
-import tbax.baxshops.serialization.StoredData;
+import tbax.baxshops.serialization.SavedState;
 import tbax.baxshops.serialization.states.State_30;
 
 import java.util.HashMap;
@@ -30,7 +30,7 @@ public final class DeletedShopClaim implements UpgradeableNote, Claimable
     public DeletedShopClaim(Map<String, Object> args)
     {
         SafeMap map = new SafeMap(args);
-        if (StoredData.getLoadedState() == State_30.VERSION) {
+        if (SavedState.getLoadedState() == State_30.VERSION) {
             deserialize30(map);
         }
         else {

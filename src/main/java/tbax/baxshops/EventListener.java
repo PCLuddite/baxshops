@@ -12,7 +12,6 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.SkeletonHorse;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -218,8 +217,8 @@ public class EventListener implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event)
     {
-        ShopPlugin.getStoredData().joinPlayer(event.getPlayer());
-        Deque<Notification> p = ShopPlugin.getStoredData().getNotifications(event.getPlayer());
+        ShopPlugin.getSavedState().joinPlayer(event.getPlayer());
+        Deque<Notification> p = ShopPlugin.getSavedState().getNotifications(event.getPlayer());
         if (!p.isEmpty()) {
             event.getPlayer().sendMessage(ChatColor.WHITE + "You have new notifications. Use " + Format.command("/shop notifications") + ChatColor.WHITE + " to view them");
         }
@@ -251,7 +250,7 @@ public class EventListener implements Listener
         if (!isStupidDeath(event.getEntity().getLastDamageCause().getCause()))
             return;
 
-        Configuration config = ShopPlugin.getStoredData().getConfig();
+        Configuration config = ShopPlugin.getSavedState().getConfig();
         UUID uuid = config.getDeathTaxGoesToId();
 
         Player pl = event.getEntity();
