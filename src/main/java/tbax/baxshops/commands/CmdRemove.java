@@ -75,7 +75,7 @@ public final class CmdRemove extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException // tested OK 3/30/19
     {
         BaxShop shop = actor.getShop();
         BaxEntry entry = actor.getArgEntry(1);
@@ -86,16 +86,23 @@ public final class CmdRemove extends BaxShopCommand
         assert shop != null;
         if (!shop.hasFlagInfinite() && entry.getAmount() > 0) {
             ItemStack stack = entry.toItemStack();
-            if (!actor.hasRoomForItem(stack)) {
-                actor.exitError(Resources.INVENTORY_IS_FULL);
+            int overflow = actor.giveItem(stack, false);
+            entry.subtract(stack.getAmount() - overflow);
+            if (overflow > 0) {
+                actor.sendMessage(Resources.SOME_ROOM, stack.getAmount(), entry.getName());
             }
-
-            actor.sendMessage("%s %s added to your inventory.",
-                Format.itemName(entry.getAmount(), ItemNames.getName(entry)),
-                entry.getAmount() == 1 ? "was" : "were");
+            else {
+                actor.sendMessage("%s %s added to your inventory.",
+                    Format.itemName(stack.getAmount(), ItemNames.getName(entry)),
+                    stack.getAmount() == 1 ? "was" : "were");
+            }
         }
-
-        shop.remove(entry);
-        actor.sendMessage("The shop entry was removed.");
+        if (entry.getAmount() > 0) {
+            actor.sendWarning("The shop entry was not removed");
+        }
+        else {
+            shop.remove(entry);
+            actor.sendMessage("The shop entry was removed.");
+        }
     }
 }
