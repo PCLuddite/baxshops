@@ -106,10 +106,10 @@ public final class CmdBuy extends BaxShopCommand
         BaxEntry entry = shop.getEntry(actor.getArg(1));
         BaxQuantity amount = actor.getArgShopQty(2, entry);
         if (amount.getQuantity() == 0) {
-            actor.exitError("You purchased nothing.");
+            actor.exitError("You purchased nothing");
         }
         else if (amount.getQuantity() < 0) {
-            actor.exitError(Resources.INVALID_DECIMAL, "buy amount");
+            actor.exitError(Resources.INVALID_DECIMAL, "amount to buy");
         }
         else if (entry.getAmount() < amount.getQuantity() && !shop.hasFlagInfinite()) {
             actor.exitError(Resources.NO_SUPPLIES);

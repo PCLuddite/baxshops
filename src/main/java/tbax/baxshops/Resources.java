@@ -47,7 +47,7 @@ public final class Resources
     public static final String CURRENT_BALANCE = "Your current balance is %s.";
     public static final String SOME_ROOM = "Only " + ChatColor.RED + "%d %s" + ChatColor.RESET + " could fit in your inventory.";
     public static final String CHARGED_MSG = "You were charged %s.";
-    public static final String NO_SUPPLIES = "There is not enough of this item in the shop.";
+    public static final String NO_SUPPLIES = "There is not enough of it in the shop.";
     public static final String NOT_FOUND_ALIAS = "The item alias could not be found.";
     public static final String NOT_FOUND_SIGN = "%s's shop is missing its sign.";
     public static final String NOT_FOUND_NOTE = "You have no notifications for this action.";

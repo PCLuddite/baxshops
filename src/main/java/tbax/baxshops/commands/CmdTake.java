@@ -96,13 +96,23 @@ public final class CmdTake extends BaxShopCommand
         entry = actor.getArgEntry(1);
         BaxQuantity amt = actor.getArgShopQty(2, entry);
 
-        if (!shop.hasFlagInfinite() && amt.getQuantity() > entry.getAmount()) {
-            actor.exitError(Resources.NO_SUPPLIES);
+        if (!shop.hasFlagInfinite()) {
+            if (amt.getQuantity() > entry.getAmount()) {
+                actor.exitError(Resources.NO_SUPPLIES);
+            }
+            else if (entry.getAmount() == 0) {
+                actor.exitError("There's no more %s in the shop", entry.getName());
+            }
+        }
+        if (amt.getQuantity() < 0) {
+            actor.exitError(Resources.INVALID_DECIMAL, "amount to take");
+        }
+        else if (amt.getQuantity() == 0) {
+            actor.exitError("You took nothing");
         }
 
         ItemStack stack = entry.toItemStack();
         stack.setAmount(amt.getQuantity());
-
         entry.subtract(amt.getQuantity());
 
         int overflow = actor.giveItem(stack);
