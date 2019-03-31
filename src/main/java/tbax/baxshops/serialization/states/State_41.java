@@ -39,7 +39,7 @@ public class State_41 implements StateLoader
                 shops.add((BaxShop)o);
             }
             else {
-                plugin.getLogger().warning("Could not load BaxShop of type " + o.getClass());
+                plugin.getLogger().warning("Could not readFromDisk BaxShop of type " + o.getClass());
             }
         }
         return shops;
@@ -57,7 +57,7 @@ public class State_41 implements StateLoader
                 players.add((StoredPlayer)o);
             }
             else {
-                plugin.getLogger().warning("Could not load StoredPlayer of type " + o.getClass());
+                plugin.getLogger().warning("Could not readFromDisk StoredPlayer of type " + o.getClass());
             }
         }
         return players;
@@ -89,7 +89,7 @@ public class State_41 implements StateLoader
                         pending.add((Notification) o);
                     }
                     else {
-                        ShopPlugin.logWarning("Could not load Notification of type " + entry.getValue().getClass());
+                        ShopPlugin.logWarning("Could not readFromDisk Notification of type " + entry.getValue().getClass());
                     }
                 }
                 if (playerId.equals(StoredPlayer.ERROR_UUID)) {
@@ -100,7 +100,7 @@ public class State_41 implements StateLoader
                 }
             }
             else {
-                ShopPlugin.logWarning("Could not load notification list for " + entry.getKey());
+                ShopPlugin.logWarning("Could not readFromDisk notification list for " + entry.getKey());
             }
         }
 

@@ -171,7 +171,7 @@ public final class ItemNames
             stream.close();
         }
         catch (IOException e) {
-            plugin.getLogger().warning("Failed to load damageable: " + e.toString());
+            plugin.getLogger().warning("Failed to readFromDisk damageable: " + e.toString());
         }
         catch (NoSuchElementException e) {
             plugin.getLogger().info("loadDamageable broke at line: " + i);
@@ -197,7 +197,7 @@ public final class ItemNames
             }
         }
         catch (IOException e) {
-            plugin.getLogger().warning("Failed to load enchants: " + e.toString());
+            plugin.getLogger().warning("Failed to readFromDisk enchants: " + e.toString());
         }
     }
 

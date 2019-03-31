@@ -92,7 +92,7 @@ public final class SavedState
         return shops.get(uid);
     }
     
-    public static SavedState load(@NotNull ShopPlugin plugin)
+    public static SavedState readFromDisk(@NotNull ShopPlugin plugin)
     {
         File stateLocation = new File(plugin.getDataFolder(), YAML_FILE_PATH);
         if (!stateLocation.exists()) {
@@ -128,7 +128,33 @@ public final class SavedState
         }
         return loader.loadState(YamlConfiguration.loadConfiguration(stateLocation));
     }
-    
+
+    private void deleteLatestBackup(File backupFolder)
+    {
+        File[] backups = backupFolder.listFiles((f, name) -> name.endsWith(".yml"));
+        int b = plugin.getConfig().getInt("Backups", 15);
+        if (backups != null && b > 0 && backups.length >= b) {
+            File delete = null;
+            long oldest = Long.MAX_VALUE;
+            for (File f : backups) {
+                String name = f.getName();
+                int i = name.indexOf('.');
+                try {
+                    long compare = Long.parseLong(name.substring(0, i));
+                    if (compare < oldest) {
+                        oldest = compare;
+                        delete = f;
+                    }
+                }
+                catch (NumberFormatException ignored) {
+                }
+            }
+            if (delete != null && !delete.delete()) {
+                log.warning("Unable to delete oldest backup");
+            }
+        }
+    }
+
     /**
      * Attempts to back up the shops.yml save file.
      * @return a boolean indicating success
@@ -136,59 +162,38 @@ public final class SavedState
     public boolean backup()
     {
         File stateLocation = new File(plugin.getDataFolder(), YAML_FILE_PATH);
-        if (stateLocation.exists()) {
-            long timestamp = new Date().getTime();
-            File backupFolder = new File(plugin.getDataFolder(), "backups");
-            if (!backupFolder.exists()) {
-                //noinspection ResultOfMethodCallIgnored
-                backupFolder.mkdirs();
-            }
+        if (!stateLocation.exists()) {
+            log.warning("Aborting backup: shops.yml not found");
+            return false;
+        }
 
-            File[] backups = backupFolder.listFiles((f, name) -> name.endsWith(".yml"));
-            int b = plugin.getConfig().getInt("Backups", 15);
-            if (backups != null && b > 0 && backups.length >= b) {
-                File delete = null;
-                long oldest = Long.MAX_VALUE;
-                for (File f : backups) {
-                    String name = f.getName();
-                    int i = name.indexOf('.');
-                    try {
-                        long compare = Long.parseLong(name.substring(0, i));
-                        if (compare < oldest) {
-                            oldest = compare;
-                            delete = f;
-                        }
-                    }
-                    catch (NumberFormatException ignored) {
-                    }
-                }
-                if (delete != null) {
-                    //noinspection ResultOfMethodCallIgnored
-                    delete.delete();
-                }
-            }
+        long timestamp = new Date().getTime();
+        File backupFolder = new File(plugin.getDataFolder(), "backups");
+        if (!backupFolder.exists() && !backupFolder.mkdirs()) {
+            log.severe("Unable to create backups folder!");
+            return false;
+        }
 
-            try {
-                File backup = new File(plugin.getDataFolder(), String.format(YAMLBAK_FILE_PATH, timestamp));
-                OutputStream out;
-                try (InputStream in = new FileInputStream(stateLocation)) {
-                    out = new FileOutputStream(backup);
+        deleteLatestBackup(backupFolder);
+
+        try {
+            File backup = new File(plugin.getDataFolder(), String.format(YAMLBAK_FILE_PATH, timestamp));
+            try (InputStream in = new FileInputStream(stateLocation)) {
+                try (OutputStream out = new FileOutputStream(backup)) {
                     byte[] buf = new byte[1024];
                     int i;
                     while ((i = in.read(buf)) > 0) {
                         out.write(buf, 0, i);
                     }
                 }
-                out.close();
-            } catch (IOException e) {
-                log.warning("Backup failed");
-                e.printStackTrace();
-                return false;
             }
-            return true;
         }
-        log.warning("Aborting backup: shops.yml not found");
-        return false;
+        catch (IOException e) {
+            log.severe("Backup failed!");
+            e.printStackTrace();
+            return false;
+        }
+        return true;
     }
     
     public boolean addShop(Player player, BaxShop shop)
@@ -289,8 +294,10 @@ public final class SavedState
     /**
      * Saves all shops
      */
-    public void saveAll()
+    public void writeToDisk()
     {
+        log.info("Saving BaxShops...");
+
         if (!backup()) {
             log.warning("Failed to back up BaxShops");
         }
@@ -303,21 +310,23 @@ public final class SavedState
         state.set("shops", new ArrayList<>(shops.values()));
 
         ConfigurationSection notes = state.createSection("notes");
-        for(Map.Entry<UUID, Deque<Notification>> entry : pending.entrySet()) {
+        for (Map.Entry<UUID, Deque<Notification>> entry : pending.entrySet()) {
             notes.set(entry.getKey().toString(), new ArrayList<>(entry.getValue()));
         }
 
         state.set("players", new ArrayList<>(players.values()));
-        
+
         try {
             File dir = plugin.getDataFolder();
-            if (!dir.exists()) {
-                //noinspection ResultOfMethodCallIgnored
-                dir.mkdirs();
+            if (!dir.exists() && !dir.mkdirs()) {
+                log.severe("Unable to make data folder!");
             }
-            state.save(new File(dir, YAML_FILE_PATH));
-        } catch (IOException e) {
-            log.warning("Save failed");
+            else {
+                state.save(new File(dir, YAML_FILE_PATH));
+            }
+        }
+        catch (IOException e) {
+            log.severe("Save failed");
             e.printStackTrace();
         }
     }

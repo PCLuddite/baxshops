@@ -226,7 +226,7 @@ public final class ShopPlugin extends JavaPlugin
         log = getLogger();
         
         if (!enableVault()) {
-            getLogger().warning("BaxShops could not use this server's economy! Make sure Vault is installed!");
+            log.warning("BaxShops could not use this server's economy! Make sure Vault is installed!");
             getPluginLoader().disablePlugin(this);
             return;
         }
@@ -236,13 +236,12 @@ public final class ShopPlugin extends JavaPlugin
         ItemNames.loadDamageable(this);
         ItemNames.loadEnchants(this);
 
-        savedState = SavedState.load(this);
-        
         saveDefaultConfig();
+        savedState = SavedState.readFromDisk(this);
         
         // run an initial save 5 minutes after starting, then a recurring save
         // every 30 minutes after the first save
-        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, savedState::saveAll, 6000L, 36000L);
+        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, savedState::writeToDisk, 6000L, 36000L);
         log.info("BaxShops has loaded successfully!");
     }
     
@@ -270,7 +269,7 @@ public final class ShopPlugin extends JavaPlugin
     @Override
     public void onDisable()
     {
-        savedState.saveAll();
+        savedState.writeToDisk();
     }
 
     @Override

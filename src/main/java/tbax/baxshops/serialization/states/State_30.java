@@ -113,7 +113,7 @@ public class State_30 implements StateLoader
                 addLegacyShop(shop.getLegacyId(), shop.getId());
                 shops.add(shop);
             } else {
-                plugin.getLogger().warning("Could not load BaxShop of type " + o.getClass());
+                plugin.getLogger().warning("Could not readFromDisk BaxShop of type " + o.getClass());
             }
         }
         return shops;
@@ -135,7 +135,7 @@ public class State_30 implements StateLoader
         for (Map.Entry entry : state.getConfigurationSection("notes").getValues(false).entrySet()) {
             OfflinePlayer player = getPlayer(entry.getKey().toString());
             if (!(entry.getValue() instanceof List)) {
-                plugin.getLogger().warning("Could not load notifications of type " + entry.getValue().getClass());
+                plugin.getLogger().warning("Could not readFromDisk notifications of type " + entry.getValue().getClass());
             }
             else {
                 Deque<Notification> pending = new ArrayDeque<>(((List) entry.getValue()).size());
@@ -147,7 +147,7 @@ public class State_30 implements StateLoader
                         pending.add(((DeprecatedNote) o).getNewNote());
                     }
                     else {
-                        plugin.getLogger().warning("Could not load Notification of type " + entry.getValue().getClass());
+                        plugin.getLogger().warning("Could not readFromDisk Notification of type " + entry.getValue().getClass());
                     }
                 }
                 if (StoredPlayer.DUMMY.equals(player)) {
