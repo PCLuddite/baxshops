@@ -12,7 +12,7 @@
 #   Percentage: 0.04                                            # Set Enabled to true to use this feature. The default UUID
 #   Enabled: false                                              # is a dummy account. If the dummy is used, funds will not be deposited into any account.
 #   Minimum: 100.0
-# StateVersion: 4.0                                             # this should not be changed manually
+# StateVersion: 4.1                                             # this should not be changed manually
 #
 Backups: 15
 LogNotes: true
@@ -22,4 +22,4 @@ DeathTax:
   Percentage: 0.04
   Enabled: false
   Minimum: 100.0
-StateVersion: 4.0
+StateVersion: 4.1

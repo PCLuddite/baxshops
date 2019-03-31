@@ -13,11 +13,15 @@ import tbax.baxshops.serialization.SafeMap;
 
 import java.util.*;
 
-@SuppressWarnings("WeakerAccess")
 public final class NoteSet implements ConfigurationSerializable
 {
     private UUID recipient;
     private Deque<Notification> notes = new ArrayDeque<>();
+
+    public NoteSet(UUID recipient)
+    {
+        this.recipient = recipient;
+    }
 
     public NoteSet(UUID recipient, Collection<? extends Notification> notes)
     {

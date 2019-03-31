@@ -11,6 +11,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -26,6 +27,7 @@ import tbax.baxshops.notification.NoteSet;
 import tbax.baxshops.notification.Notification;
 import tbax.baxshops.serialization.states.State_30;
 import tbax.baxshops.serialization.states.State_40;
+import tbax.baxshops.serialization.states.State_41;
 
 import java.io.*;
 import java.text.DecimalFormat;
@@ -37,7 +39,7 @@ public final class StoredData
     static final String YAML_FILE_PATH = "shops.yml";
     private static final String YAMLBAK_FILE_PATH = "backups/%d.yml";
     
-    private static final double STATE_VERSION = 4.0; // state file format version
+    private static final double STATE_VERSION = State_41.VERSION; // state file format version
     private static double loadedState;
 
     /**
@@ -108,10 +110,13 @@ public final class StoredData
         loadedState = ver;
 
         StateLoader loader;
-        if (ver == 4.0) {
+        if (ver == State_41.VERSION) {
+            loader = new State_41(plugin);
+        }
+        else if (ver == State_40.VERSION) {
             loader = new State_40(plugin);
         }
-        else if (ver == 3.0) {
+        else if (ver == State_30.VERSION) {
             loader = new State_30(plugin);
         }
         else {
@@ -297,12 +302,13 @@ public final class StoredData
 
         FileConfiguration state = new YamlConfiguration();
         state.set("shops", new ArrayList<>(shops.values()));
-        state.set("players", new ArrayList<>(players.values()));
-        List<NoteSet> notes = new ArrayList<>();
+
+        ConfigurationSection notes = state.createSection("notes");
         for(Map.Entry<UUID, Deque<Notification>> entry : pending.entrySet()) {
-            notes.add(new NoteSet(entry.getKey(), entry.getValue()));
+            notes.set(entry.getKey().toString(), new ArrayList<>(entry.getValue()));
         }
-        state.set("notes", notes);
+
+        state.set("players", new ArrayList<>(players.values()));
         
         try {
             File dir = plugin.getDataFolder();

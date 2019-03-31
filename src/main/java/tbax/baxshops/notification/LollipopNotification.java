@@ -17,6 +17,7 @@ import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.StoredData;
 import tbax.baxshops.serialization.StoredPlayer;
 import tbax.baxshops.serialization.states.State_30;
+import tbax.baxshops.serialization.states.State_40;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,6 +51,9 @@ public final class LollipopNotification implements UpgradeableNote, Configuratio
     public LollipopNotification(Map<String, Object> args)
     {
         SafeMap map = new SafeMap(args);
+        if (StoredData.getLoadedState() == State_40.VERSION) {
+            deserialize40(map);
+        }
         if (StoredData.getLoadedState() == State_30.VERSION) {
             deserialize30(map);
         }
@@ -69,6 +73,13 @@ public final class LollipopNotification implements UpgradeableNote, Configuratio
     {
         sender = State_30.getPlayerId(map.getString("sender"));
         recipient = StoredPlayer.ERROR_UUID;
+        tastiness = map.getDouble("tastiness");
+    }
+
+    @Override
+    public void deserialize40(@NotNull SafeMap map)
+    {
+        sender = map.getUUID("sender");
         tastiness = map.getDouble("tastiness");
     }
 
