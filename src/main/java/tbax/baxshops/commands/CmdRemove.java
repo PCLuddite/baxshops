@@ -89,7 +89,7 @@ public final class CmdRemove extends BaxShopCommand
             int overflow = actor.giveItem(stack, false);
             entry.subtract(stack.getAmount() - overflow);
             if (overflow > 0) {
-                actor.sendMessage(Resources.SOME_ROOM, stack.getAmount(), entry.getName());
+                actor.sendMessage(Resources.SOME_ROOM, stack.getAmount() - overflow, entry.getName());
             }
             else {
                 actor.sendMessage("%s %s added to your inventory.",
