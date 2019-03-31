@@ -56,7 +56,7 @@ public final class ItemNames
                 maxMatch = matches;
             }
         }
-        if (entries.isEmpty()) {
+        if (maxMatch == 0) {
             throw new CommandErrorException("No item with that name could be found");
         }
         else if (entries.size() > 1) {
