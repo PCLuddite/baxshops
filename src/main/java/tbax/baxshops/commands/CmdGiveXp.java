@@ -96,7 +96,7 @@ public final class CmdGiveXp extends BaxShopCommand
             p = actor.getPlayer();
         }
 
-        double money = levels * ShopPlugin.getInstance().getConfig().getDouble("XPConvert", 4d);
+        double money = levels * ShopPlugin.getStoredData().getConfig().getXpConvert();
         if (!ShopPlugin.getEconomy().has(p, money)) {
             actor.sendError("You do not have enough funds to make this exchange");
         }

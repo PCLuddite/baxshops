@@ -96,7 +96,7 @@ public final class CmdTakeXp extends BaxShopCommand
             p = actor.getPlayer();
         }
 
-        double money = levels * ShopPlugin.getInstance().getConfig().getDouble("XPConvert", 4d);
+        double money = levels * ShopPlugin.getStoredData().getConfig().getXpConvert();
 
         if (levels > p.getLevel()) {
             actor.exitError("You do not have enough experience for this exchange.");

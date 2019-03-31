@@ -69,7 +69,7 @@ public final class NMSUtils
                 return (String)msg.getClass().getMethod("getText").invoke(msg);
             }
         } catch (Exception e) {
-            ShopPlugin.getInstance().getLogger().warning("Could not get item name for " + stack.getType());
+            //ShopPlugin.getLogger().warning("Could not get item name for " + stack.getType());
             return stack.getType().toString();
         }
     }

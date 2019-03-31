@@ -69,15 +69,9 @@ public final class ShopPlugin extends JavaPlugin
             e.printStackTrace();
         }
     }
-    
-    /**
-     * The Vault economy
-     */
+
     private static Economy econ;
-
-    private static ShopPlugin plugin;
     private static Logger log;
-
     private static StoredData storedData;
 
     /**
@@ -85,11 +79,6 @@ public final class ShopPlugin extends JavaPlugin
      * selection data
      */
     private static Map<UUID, ShopSelection> selectedShops = new HashMap<>();
-
-    public ShopPlugin()
-    {
-        plugin = this; // gross
-    }
 
     public static Map<String, BaxShopCommand> getCommands()
     {
@@ -234,18 +223,18 @@ public final class ShopPlugin extends JavaPlugin
     public void onEnable()
     {
         getServer().getPluginManager().registerEvents(new EventListener(this), this);
-        log = this.getLogger();
+        log = getLogger();
         
         if (!enableVault()) {
-            log.warning("BaxShops could not use this server's economy! Make sure Vault is installed!");
-            this.getPluginLoader().disablePlugin(this);
+            getLogger().warning("BaxShops could not use this server's economy! Make sure Vault is installed!");
+            getPluginLoader().disablePlugin(this);
             return;
         }
         
         loadConfigurationSerializable();
 
-        ItemNames.loadDamageable(plugin);
-        ItemNames.loadEnchants(plugin);
+        ItemNames.loadDamageable(this);
+        ItemNames.loadEnchants(this);
 
         storedData = StoredData.load(this);
         
@@ -287,7 +276,7 @@ public final class ShopPlugin extends JavaPlugin
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
-        ShopCmdActor actor = new ShopCmdActor(sender, command, args);
+        ShopCmdActor actor = new ShopCmdActor( sender, command, args);
         
         if (actor.cmdIs("buy", "sell", "restock", "restockall")) {
             actor.insertAction(actor.getCmdName());
@@ -398,13 +387,23 @@ public final class ShopPlugin extends JavaPlugin
         log.info(sb.toString());
     }
 
-    public static ShopPlugin getInstance()
-    {
-        return plugin;
-    }
-
     public static StoredData getStoredData()
     {
         return storedData;
+    }
+
+    public static void logInfo(String msg)
+    {
+        log.info(msg);
+    }
+
+    public static void logWarning(String msg)
+    {
+        log.warning(msg);
+    }
+
+    public static void logSevere(String msg)
+    {
+        log.severe(msg);
     }
 }

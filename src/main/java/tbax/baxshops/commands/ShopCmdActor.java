@@ -27,7 +27,7 @@ import java.util.Deque;
 import java.util.List;
 import java.util.UUID;
 
-@SuppressWarnings({"WeakerAccess", "unused"})
+@SuppressWarnings("unused")
 public final class ShopCmdActor
 {
     private final CommandSender sender;
@@ -353,17 +353,17 @@ public final class ShopCmdActor
 
     public void logError(String format, Object... args)
     {
-        ShopPlugin.getInstance().getLogger().severe(String.format(format, args));
+        ShopPlugin.logSevere(String.format(format, args));
     }
 
     public void logWarning(String format, Object... args)
     {
-        ShopPlugin.getInstance().getLogger().warning(String.format(format, args));
+        ShopPlugin.logWarning(String.format(format, args));
     }
 
     public void logMessage(String format, Object... args)
     {
-        ShopPlugin.getInstance().getLogger().info(String.format(format, args));
+        ShopPlugin.logInfo(String.format(format, args));
     }
 
     public ItemStack getItemInHand()

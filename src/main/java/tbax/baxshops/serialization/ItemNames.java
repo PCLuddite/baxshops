@@ -171,10 +171,10 @@ public final class ItemNames
             stream.close();
         }
         catch (IOException e) {
-            ShopPlugin.getInstance().getLogger().warning("Failed to load damageable: " + e.toString());
+            plugin.getLogger().warning("Failed to load damageable: " + e.toString());
         }
         catch (NoSuchElementException e) {
-            ShopPlugin.getInstance().getLogger().info("loadDamageable broke at line: " + i);
+            plugin.getLogger().info("loadDamageable broke at line: " + i);
             e.printStackTrace();
         }
     }
@@ -197,7 +197,7 @@ public final class ItemNames
             }
         }
         catch (IOException e) {
-            ShopPlugin.getInstance().getLogger().warning("Failed to load enchants: " + e.toString());
+            plugin.getLogger().warning("Failed to load enchants: " + e.toString());
         }
     }
 
