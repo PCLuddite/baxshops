@@ -196,14 +196,13 @@ public final class Format
         for(int index = 0; index < name.length(); ++index) {
             char c = name.charAt(index);
             switch(c) {
+                case '(': // end of name
+                    return sb.toString();
                 case '_': // make this char a space
+                case ' ':
                     upper = true;
                     sb.append(' ');
                     break;
-                case '(': // end of name
-                    return sb.toString();
-                case ' ':
-                    upper = true;
                 default:
                     if (upper) {
                         sb.append(Character.toUpperCase(c));
