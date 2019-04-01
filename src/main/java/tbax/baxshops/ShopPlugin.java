@@ -223,11 +223,11 @@ public final class ShopPlugin extends JavaPlugin
     @Override
     public void onEnable()
     {
-        getServer().getPluginManager().registerEvents(new EventListener(this), this);
+        getServer().getPluginManager().registerEvents(new EventListener(), this);
         log = getLogger();
         
         if (!enableVault()) {
-            log.warning("BaxShops could not use this server's economy! Make sure Vault is installed!");
+            log.severe("BaxShops could not use this server's economy! Make sure Vault is installed!");
             getPluginLoader().disablePlugin(this);
             return;
         }

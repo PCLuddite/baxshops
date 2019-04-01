@@ -33,6 +33,7 @@ public interface StateLoader
         ret.setDeathTaxGoesTo(config.getString("DeathTax.GoesTo", ret.getDeathTaxGoesTo()));
         ret.setDeathTaxPercentage(config.getDouble("DeathTax.Percentage", ret.getDeathTaxPercentage()));
         ret.setDeathTaxMinimum(config.getDouble("DeathTax.Minimum", ret.getDeathTaxMinimum()));
+        ret.setDeathTaxMaximum(config.getDouble("DeathTax.Maximum", ret.getDeathTaxMaximum()));
         return ret;
     }
 

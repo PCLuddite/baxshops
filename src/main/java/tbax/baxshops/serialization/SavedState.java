@@ -287,6 +287,7 @@ public final class SavedState
         plugin.getConfig().set("DeathTax.GoesTo", config.getDeathTaxGoesToId().toString());
         plugin.getConfig().set("DeathTax.Percentage", config.getDeathTaxPercentage());
         plugin.getConfig().set("DeathTax.Minimum", config.getDeathTaxMinimum());
+        plugin.getConfig().set("DeathTax.Maximum", config.getDeathTaxMaximum());
         plugin.getConfig().set("StateVersion", STATE_VERSION);
         plugin.saveConfig();
     }

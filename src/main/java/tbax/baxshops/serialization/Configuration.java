@@ -20,6 +20,7 @@ public class Configuration
     private String deathTaxGoesTo = StoredPlayer.DUMMY_UUID.toString();
     private double deathTaxPercentage = 0.04;
     private double deathTaxMinimum = 100.00;
+    private double deathTaxMaximum = -1;
 
 
     public int getBackups()
@@ -100,5 +101,15 @@ public class Configuration
     public void setDeathTaxMinimum(double deathTaxMinimum)
     {
         this.deathTaxMinimum = deathTaxMinimum;
+    }
+
+    public double getDeathTaxMaximum()
+    {
+        return deathTaxMaximum;
+    }
+
+    public void setDeathTaxMaximum(double deathTaxMaximum)
+    {
+        this.deathTaxMaximum = deathTaxMaximum;
     }
 }

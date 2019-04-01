@@ -40,13 +40,6 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 public class EventListener implements Listener
 {
-    private final ShopPlugin plugin;
-    
-    public EventListener(ShopPlugin plugin)
-    {
-        this.plugin = plugin;
-    }
-    
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockBreak(BlockBreakEvent event)
     {
@@ -247,6 +240,8 @@ public class EventListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDeath(PlayerDeathEvent event)
     {
+        if (!ShopPlugin.getSavedState().getConfig().isDeathTaxEnabled())
+            return;
         if (!isStupidDeath(event.getEntity().getLastDamageCause().getCause()))
             return;
 
@@ -258,8 +253,11 @@ public class EventListener implements Listener
         double percent = config.getDeathTaxPercentage();
         if (ShopPlugin.getEconomy().has(pl, minimum)) {
             double death_tax = MathUtil.multiply(ShopPlugin.getEconomy().getBalance(pl), percent);
+            if (config.getDeathTaxMaximum() > 0) {
+                death_tax = Math.min(death_tax, config.getDeathTaxMaximum());
+            }
             ShopPlugin.getEconomy().withdrawPlayer(pl, death_tax);
-            pl.sendMessage(String.format("You were fined %s for dying.", Format.money(death_tax)));
+            ShopPlugin.sendInfo(pl, String.format("You were fined %s for dying.", Format.money(death_tax)));
             if (!uuid.equals(StoredPlayer.DUMMY_UUID)) { // do not deposit in dummy world account
                 OfflinePlayer recipient = ShopPlugin.getOfflinePlayer(uuid);
                 ShopPlugin.getEconomy().depositPlayer(recipient, death_tax);
