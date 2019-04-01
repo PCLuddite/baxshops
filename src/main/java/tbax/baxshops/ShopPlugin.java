@@ -50,6 +50,7 @@ public final class ShopPlugin extends JavaPlugin
             commands.add(CmdLollipop.class);
             commands.add(CmdNotifications.class);
             commands.add(CmdReject.class);
+            commands.add(CmdReload.class);
             commands.add(CmdRemove.class);
             commands.add(CmdRestock.class);
             commands.add(CmdSave.class);

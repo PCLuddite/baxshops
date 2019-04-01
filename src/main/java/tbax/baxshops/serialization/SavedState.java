@@ -44,21 +44,21 @@ public final class SavedState
     /**
      * A map of locations to their shop ids, accessed by their location in the world
      */
-    final Map<Location, UUID> locations = new HashMap<>();
+    Map<Location, UUID> locations = new HashMap<>();
     
     /**
      * A map of ids map to their shops
      */
-    final Map<UUID, BaxShop> shops = new HashMap<>();
+    Map<UUID, BaxShop> shops = new HashMap<>();
     /**
      * A map containing each player's notifications
      */
-    final Map<UUID, Deque<Notification>> pending = new HashMap<>();
+    Map<UUID, Deque<Notification>> pending = new HashMap<>();
 
     /**
      * A map containing each player's attributes for when they're offline
      */
-    final PlayerMap players = new PlayerMap();
+    PlayerMap players = new PlayerMap();
 
     final ShopPlugin plugin;
     final Logger log;
@@ -371,5 +371,26 @@ public final class SavedState
     public Configuration getConfig()
     {
         return config;
+    }
+
+    public void reload()
+    {
+        log.info("Reloading BaxShops...");
+        writeToDisk();
+        log.info("Clearing memory...");
+
+        locations.clear();
+        shops.clear();
+        players.clear();
+        pending.clear();
+
+        log.info("Loading BaxShops...");
+        SavedState savedState = readFromDisk(plugin);
+        shops = savedState.shops;
+        locations = savedState.locations;
+        players = savedState.players;
+        pending = savedState.pending;
+        config = savedState.config;
+        log.info("BaxShops has finished reloading");
     }
 }
