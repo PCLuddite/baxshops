@@ -87,7 +87,7 @@ public final class CmdTeleport extends BaxShopCommand
         }
 
         Location old = selection.getLocation();
-        selection.setLocation(selection.getShop().getLocations().get(loc - 1));
+        selection.setLocation((Location)selection.getShop().getLocations().toArray()[loc - 1]);
         if (actor.getPlayer().teleport(selection.getLocation())) {
             actor.sendMessage("Teleported you to %s", Format.location(selection.getLocation()));
         }

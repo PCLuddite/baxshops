@@ -32,7 +32,7 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
     private UUID id;
     private long legacyId = Long.MIN_VALUE;
     private UUID owner;
-    private final List<Location> locations = new ArrayList<>();
+    private final Set<Location> locations = new HashSet<>();
     private final List<BaxEntry> inventory = new ArrayList<>();
 
     private int flags = BaxShopFlag.NOTIFY | BaxShopFlag.SELL_REQUESTS;
@@ -109,29 +109,14 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
         return -1; // not found
     }
     
-    public List<Location> getLocations()
+    public Collection<Location> getLocations()
     {
-        return locations;
-    }
-    
-    private static boolean compareLoc(Location a, Location b)
-    {
-        return a.getBlockX() == b.getBlockX() &&
-               a.getBlockY() == b.getBlockY() &&
-               a.getBlockZ() == b.getBlockZ() &&
-               a.getWorld().equals(b.getWorld());
+        return Collections.unmodifiableCollection(locations);
     }
 
-    @SuppressWarnings("UnusedReturnValue")
-    public boolean removeLocation(Location loc)
+    public void removeLocation(Location loc)
     {
-        for(int i = 0; i < locations.size(); ++i) {
-            if (compareLoc(locations.get(i), loc)) {
-                locations.remove(i);
-                return true;
-            }
-        }
-        return false;
+        locations.remove(loc);
     }
     
     public void addLocation(Location loc)
@@ -347,11 +332,6 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
         return BaxShopFlag.hasFlag(flags, BaxShopFlag.INFINITE);
     }
 
-    public String getSignTextString(int index)
-    {
-        return getSignTextString(locations.get(index));
-    }
-
     public String getSignTextString(Location loc)
     {
         try {
@@ -434,41 +414,6 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
     public <T> T[] toArray(@NotNull T[] a)
     {
         return inventory.toArray(a);
-    }
-
-    @SuppressWarnings("UnusedReturnValue")
-    public @NotNull Block buildShopSign(@NotNull Location loc, @NotNull String... signLines) throws PrematureAbortException
-    {
-        Location locUnder = loc.clone();
-        locUnder.setY(locUnder.getY() - 1);
-
-        Block b = loc.getWorld().getBlockAt(loc);
-        Block blockUnder = locUnder.getWorld().getBlockAt(locUnder);
-        if (blockUnder.getType() == Material.AIR || blockUnder.getType() == Material.TNT){
-            throw new CommandErrorException("Sign does not have a block to place it on");
-        }
-
-        byte angle = (byte) ((((int) loc.getYaw() + 225) / 90) << 2);
-
-        b.setType(Material.SIGN_POST);
-        loc.setYaw(angle);
-
-        if (!b.getType().equals(Material.SIGN)) {
-            b.setType(Material.SIGN_POST);
-            if (!(b.getType().equals(Material.SIGN) || b.getType().equals(Material.SIGN_POST))) {
-                throw new CommandErrorException(String.format("Unable to place sign! Block type is %s.", b.getType().toString()));
-            }
-        }
-
-        addLocation(b.getLocation());
-
-        Sign sign = (Sign)b.getState();
-        for(int i = 0; i < signLines.length; ++i) {
-            sign.setLine(i, signLines[i]);
-        }
-        sign.update();
-
-        return b;
     }
 
     public boolean remove(BaxEntry entry)

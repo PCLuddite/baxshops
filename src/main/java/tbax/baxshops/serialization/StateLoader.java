@@ -54,9 +54,6 @@ public interface StateLoader
 
         for (BaxShop shop : shops) {
             savedState.shops.put(shop.getId(), shop);
-            for(Location location : shop.getLocations()) {
-                savedState.locations.put(location, shop.getId());
-            }
         }
 
         for (NoteSet noteSet : notes) {

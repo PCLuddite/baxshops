@@ -180,9 +180,9 @@ public final class ShopPlugin extends JavaPlugin
         sendNotification(savedState.getOfflinePlayer(playerId), note);
     }
 
-    public static boolean addShop(Player player, BaxShop shop)
+    public static void addShop(Player player, BaxShop shop)
     {
-        return savedState.addShop(player, shop);
+        savedState.addShop(player, shop);
     }
 
     public static void removeShop(Player player, BaxShop shop) throws PrematureAbortException

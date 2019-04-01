@@ -26,6 +26,7 @@ public final class Resources
      */
     public static final int SHOP_RANGE = 4 * 4;
 
+    public static final String SHOP_EXISTS = "You can't create a new shop here! Another shop already exists on this block!";
     public static final String NOT_FOUND_SELECTED = "You do not have any shop selected!\nYou must select a shop to perform this action!";
     public static final String[] SIGN_CLOSED = {"This shop has", "been closed by", "%s"};
     // Errors

@@ -8,6 +8,7 @@
 package tbax.baxshops.commands;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.Format;
 import tbax.baxshops.ShopSelection;
@@ -70,17 +71,16 @@ public final class CmdList extends BaxShopCommand
     public void onCommand(@NotNull ShopCmdActor actor)
     {
         ShopSelection selection = actor.getSelection();
-
         actor.sendMessage(Format.header("Shop Locations"));
         if (!selection.getShop().getLocations().isEmpty()) {
+            int index = 1;
             actor.sendMessage(" %-3s %-16s %-18s", ChatColor.GRAY + "#", ChatColor.WHITE + "Location", ChatColor.WHITE + "Sign Text");
-
-            for(int index = 0; index < selection.getShop().getLocations().size(); ++index) {
+            for(Location loc : selection.getShop().getLocations()) {
                 actor.sendMessage("%-3s %-16s %-18s %s",
-                                ChatColor.WHITE.toString() + (index + 1) + ".",
-                                Format.location(selection.getShop().getLocations().get(index)),
-                                ChatColor.LIGHT_PURPLE + selection.getShop().getSignTextString(index),
-                                (selection.getLocation().equals(selection.getShop().getLocations().get(index)) ? ChatColor.LIGHT_PURPLE + " (current)" : ""));
+                                ChatColor.WHITE.toString() + index + ".",
+                                Format.location(loc),
+                                ChatColor.LIGHT_PURPLE + selection.getShop().getSignTextString(loc),
+                                (selection.getLocation().equals(loc) ? ChatColor.LIGHT_PURPLE + " (current)" : ""));
             }
         }
         else {

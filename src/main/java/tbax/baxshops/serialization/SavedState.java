@@ -40,16 +40,11 @@ public final class SavedState
     
     private static final double STATE_VERSION = State_41.VERSION; // state file format version
     private static double loadedState;
-
-    /**
-     * A map of locations to their shop ids, accessed by their location in the world
-     */
-    Map<Location, UUID> locations = new HashMap<>();
     
     /**
      * A map of ids map to their shops
      */
-    Map<UUID, BaxShop> shops = new HashMap<>();
+    ShopMap shops = new ShopMap();
     /**
      * A map containing each player's notifications
      */
@@ -85,11 +80,7 @@ public final class SavedState
     
     public @Nullable BaxShop getShop(Location loc)
     {
-        UUID uid = locations.get(loc);
-        if (uid == null) {
-            return null;
-        }
-        return shops.get(uid);
+        return shops.getShopByLocation(loc);
     }
     
     public static SavedState readFromDisk(@NotNull ShopPlugin plugin)
@@ -196,32 +187,24 @@ public final class SavedState
         return true;
     }
     
-    public boolean addShop(Player player, BaxShop shop)
+    public void addShop(Player player, BaxShop shop)
     {
-        for(Location loc : shop.getLocations()) {
-            if (!addLocation(player, loc, shop)) {
-                return false;
-            }
-        }
         shops.put(shop.getId(), shop);
-        return true;
     }
     
-    public boolean addLocation(Player player, Location loc, BaxShop shop)
+    public void addLocation(Player player, Location loc, BaxShop shop)
     {
         try {
-            UUID otherUid = locations.get(loc);
-            if (otherUid == null) {
-                locations.put(loc, shop.getId());
+            BaxShop otherShop = shops.getShopByLocation(loc);
+            if (otherShop == null) {
+                shops.addLocation(shop.getId(), loc);
             }
-            else if (!otherUid.equals(shop.getId())) {
-                throw new CommandErrorException("You can't create a new shop here! Another shop already exists on this block!");
+            else {
+                throw new CommandErrorException(Resources.SHOP_EXISTS);
             }
-            return true;
         }
         catch (PrematureAbortException e) {
             player.sendMessage(e.getMessage());
-            return false;
         }
     }
     
@@ -235,9 +218,8 @@ public final class SavedState
     
     public void removeLocation(CommandSender sender, Location loc) throws PrematureAbortException
     {
-        UUID uid = locations.get(loc);
-        if (uid != null) {
-            BaxShop shop = shops.get(uid);
+        BaxShop shop = shops.getShopByLocation(loc);
+        if (shop != null) {
             try {
                 Block b = loc.getBlock();
                 Sign sign = (Sign) b.getState();
@@ -250,11 +232,7 @@ public final class SavedState
             catch(NullPointerException | ClassCastException e) {
                 throw new CommandErrorException("Unable to change the sign text at " + Format.location(loc));
             }
-            shop.removeLocation(loc);
-            locations.remove(loc);
-            if (shop.getLocations().isEmpty()) {
-               shops.remove(shop.getId());
-            }
+            shops.removeLocation(shop.getId(), loc);
         }
     }
 
@@ -380,7 +358,6 @@ public final class SavedState
         writeToDisk();
         log.info("Clearing memory...");
 
-        locations.clear();
         shops.clear();
         players.clear();
         pending.clear();
@@ -388,7 +365,6 @@ public final class SavedState
         log.info("Loading BaxShops...");
         SavedState savedState = readFromDisk(plugin);
         shops = savedState.shops;
-        locations = savedState.locations;
         players = savedState.players;
         pending = savedState.pending;
         config = savedState.config;
