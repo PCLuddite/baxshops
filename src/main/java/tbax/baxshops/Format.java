@@ -11,6 +11,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 /**
@@ -19,8 +21,15 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 public final class Format
 {   
+    public static final DateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+
     private Format()
     {
+    }
+
+    public static @NotNull String date(@NotNull Date dt)
+    {
+        return DATE_FORMAT.format(dt);
     }
 
     public static @NotNull String money(@NotNull String in)

@@ -122,7 +122,9 @@ public final class LollipopNotification implements UpgradeableNote, Configuratio
     {
         Map<String, Object> args = new HashMap<>();
         args.put("sender", getSender().getUniqueId().toString());
+        args.put("recipient", getRecipient().getUniqueId().toString());
         args.put("tastiness", tastiness);
+        args.put("date", Format.date(date));
         return args;
     }
 

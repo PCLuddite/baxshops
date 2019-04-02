@@ -10,12 +10,14 @@ import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
+import tbax.baxshops.Format;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.SavedState;
 import tbax.baxshops.serialization.StoredPlayer;
 import tbax.baxshops.serialization.states.State_30;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -26,6 +28,7 @@ public abstract class StandardNote implements UpgradeableNote
     protected UUID shopId;
     protected UUID buyer;
     protected UUID seller;
+    protected Date date;
 
     public StandardNote(UUID shopId, OfflinePlayer buyer, OfflinePlayer seller, BaxEntry entry)
     {
@@ -38,12 +41,16 @@ public abstract class StandardNote implements UpgradeableNote
         this.buyer = buyer;
         this.seller = seller;
         this.entry = new BaxEntry(entry);
+        this.date = new Date();
     }
 
     public StandardNote(Map<String, Object> args)
     {
         SafeMap map = new SafeMap(args);
-        if (SavedState.getLoadedState() == State_30.VERSION) {
+        if (SavedState.getLoadedState() == State_40.VERSION) {
+            deserialize40(map);
+        }
+        else if (SavedState.getLoadedState() == State_30.VERSION) {
             deserialize30(map);
         }
         else {
@@ -65,6 +72,13 @@ public abstract class StandardNote implements UpgradeableNote
         buyer = map.getUUID("buyer");
         seller = map.getUUID("seller");
         shopId = map.getUUID("shopId");
+        date = map.getDate("date");
+    }
+
+    @Override
+    public @Nullable Date getSentDate()
+    {
+        return date;
     }
 
     public @NotNull OfflinePlayer getBuyer()
@@ -95,6 +109,7 @@ public abstract class StandardNote implements UpgradeableNote
         args.put("buyer", getBuyer().getUniqueId().toString());
         args.put("seller", getSeller().getUniqueId().toString());
         args.put("shopId", (shopId == null ? BaxShop.DUMMY_UUID : shopId).toString());
+        args.put("date", Format.date(date));
         return args;
     }
 }

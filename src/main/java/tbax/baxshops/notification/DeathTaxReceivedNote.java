@@ -13,6 +13,7 @@ import tbax.baxshops.Format;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.SafeMap;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -24,6 +25,7 @@ public class DeathTaxReceivedNote implements Notification
     private UUID deadGuyId;
     private double deathTax;
     private String msg;
+    private Date date;
 
     public DeathTaxReceivedNote(OfflinePlayer recipient, OfflinePlayer deadGuy, String msg, double death_tax)
     {
@@ -35,7 +37,8 @@ public class DeathTaxReceivedNote implements Notification
         this.recipientId = recipientId;
         this.deadGuyId = deadGuyId;
         this.msg = msg;
-        deathTax = death_tax;
+        this.deathTax = death_tax;
+        this.date = new Date();
     }
 
     public DeathTaxReceivedNote(Map<String, Object> args)
@@ -45,6 +48,7 @@ public class DeathTaxReceivedNote implements Notification
         deadGuyId = map.getUUID("deceased");
         deathTax = map.getDouble("taxed");
         msg = map.getString("message");
+        date = map.getDate("date");
     }
 
     public OfflinePlayer getRecipient()
@@ -87,6 +91,7 @@ public class DeathTaxReceivedNote implements Notification
         args.put("deceased", getDeadGuy().getUniqueId().toString());
         args.put("taxed", deathTax);
         args.put("message", msg);
+        args.put("date", Format.date(date));
         return args;
     }
 

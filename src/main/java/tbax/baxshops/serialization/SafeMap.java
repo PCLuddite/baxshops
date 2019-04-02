@@ -9,8 +9,10 @@ package tbax.baxshops.serialization;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tbax.baxshops.Format;
 import tbax.baxshops.BaxEntry;
 
+import java.text.ParseException;
 import java.util.*;
 
 @SuppressWarnings("unused")
@@ -126,6 +128,21 @@ public class SafeMap implements Map<String, Object>
             return ItemStack.deserialize((Map)getOrDefault(key, defaultValue));
         }
         catch (ClassCastException e) {
+            return defaultValue;
+        }
+    }
+
+    public Date getDate(String key)
+    {
+        return getDate(key, null);
+    }
+
+    public Date getDate(String key, Date defaultValue)
+    {
+        try {
+            return Format.DATE_FORMAT.parse((String)get("key"));
+        }
+        catch (ClassCastException | ParseException e) {
             return defaultValue;
         }
     }

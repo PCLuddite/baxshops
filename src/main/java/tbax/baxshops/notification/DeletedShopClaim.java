@@ -93,6 +93,7 @@ public final class DeletedShopClaim implements UpgradeableNote, Claimable
         HashMap<String, Object> args = new HashMap<>();
         args.put("entry", entry);
         args.put("owner", getOwner().getUniqueId().toString());
+        args.put("date", Format.date(date));
         return args;
     }
 
