@@ -185,14 +185,14 @@ public final class ShopPlugin extends JavaPlugin
         savedState.addShop(player, shop);
     }
 
-    public static void removeShop(Player player, BaxShop shop) throws PrematureAbortException
+    public static void removeShop(UUID shopId)
     {
-        savedState.removeShop(player, shop);
+        savedState.removeShop(shopId);
     }
 
-    public static void removeLocation(Player player, Location location) throws PrematureAbortException
+    public static void removeLocation(UUID shopId, Location loc)
     {
-        savedState.removeLocation(player, location);
+        savedState.removeLocation(shopId, loc);
     }
 
     public static @NotNull OfflinePlayer getOfflinePlayer(UUID uuid)

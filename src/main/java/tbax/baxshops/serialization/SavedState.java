@@ -207,34 +207,6 @@ public final class SavedState
             player.sendMessage(e.getMessage());
         }
     }
-    
-    public void removeShop(CommandSender sender, BaxShop shop) throws PrematureAbortException
-    {
-        for(Location loc : (Location[])shop.getLocations().toArray()) {
-            removeLocation(sender, loc);
-        }
-        sender.sendMessage(String.format("%s's shop has been deleted.", Format.username(shop.getOwner().getName())));
-    }
-    
-    public void removeLocation(CommandSender sender, Location loc) throws PrematureAbortException
-    {
-        BaxShop shop = shops.getShopByLocation(loc);
-        if (shop != null) {
-            try {
-                Block b = loc.getBlock();
-                Sign sign = (Sign) b.getState();
-                sign.setLine(0, Resources.SIGN_CLOSED[0]);
-                sign.setLine(1, Resources.SIGN_CLOSED[1]);
-                sign.setLine(2, (shop.getOwner().equals(sender) ? "the owner" : "an admin") + ".");
-                sign.setLine(3, "");
-                sign.update();
-            }
-            catch(NullPointerException | ClassCastException e) {
-                throw new CommandErrorException("Unable to change the sign text at " + Format.location(loc));
-            }
-            shops.removeLocation(shop.getId(), loc);
-        }
-    }
 
     /**
      * Gets a list of notifications for a player.
@@ -369,5 +341,15 @@ public final class SavedState
         pending = savedState.pending;
         config = savedState.config;
         log.info("BaxShops has finished reloading");
+    }
+
+    public void removeLocation(UUID shopId, Location loc)
+    {
+        shops.removeLocation(shopId, loc);
+    }
+
+    public void removeShop(UUID shopId)
+    {
+        shops.remove(shopId);
     }
 }
