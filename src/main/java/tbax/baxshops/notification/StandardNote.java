@@ -8,6 +8,7 @@ package tbax.baxshops.notification;
 
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
@@ -16,6 +17,7 @@ import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.SavedState;
 import tbax.baxshops.serialization.StoredPlayer;
 import tbax.baxshops.serialization.states.State_30;
+import tbax.baxshops.serialization.states.State_40;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -58,6 +60,7 @@ public abstract class StandardNote implements UpgradeableNote
         }
     }
 
+    @Deprecated
     public void deserialize30(@NotNull SafeMap map)
     {
         buyer = State_30.getPlayerId(map.getString("buyer", StoredPlayer.DUMMY_NAME));
@@ -109,7 +112,7 @@ public abstract class StandardNote implements UpgradeableNote
         args.put("buyer", getBuyer().getUniqueId().toString());
         args.put("seller", getSeller().getUniqueId().toString());
         args.put("shopId", (shopId == null ? BaxShop.DUMMY_UUID : shopId).toString());
-        args.put("date", Format.date(date));
+        args.put("date", date == null ? null : Format.date(date));
         return args;
     }
 }

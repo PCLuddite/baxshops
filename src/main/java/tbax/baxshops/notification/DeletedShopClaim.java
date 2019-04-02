@@ -17,6 +17,7 @@ import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.SavedState;
 import tbax.baxshops.serialization.states.State_30;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -26,6 +27,7 @@ public final class DeletedShopClaim implements UpgradeableNote, Claimable
 {
     private UUID owner;
     private BaxEntry entry;
+    private Date date;
 
     public DeletedShopClaim(Map<String, Object> args)
     {
@@ -42,6 +44,7 @@ public final class DeletedShopClaim implements UpgradeableNote, Claimable
     {
         this.owner = owner.getUniqueId();
         this.entry = new BaxEntry(entry);
+        this.date = new Date();
     }
 
     public DeletedShopClaim(UUID owner, BaxEntry entry)
@@ -61,6 +64,7 @@ public final class DeletedShopClaim implements UpgradeableNote, Claimable
     {
         entry = map.getBaxEntry("entry");
         owner = map.getUUID("owner");
+        date = map.getDate("date");
     }
 
     public OfflinePlayer getOwner()
@@ -88,12 +92,18 @@ public final class DeletedShopClaim implements UpgradeableNote, Claimable
     }
 
     @Override
+    public Date getSentDate()
+    {
+        return date;
+    }
+
+    @Override
     public Map<String, Object> serialize()
     {
         HashMap<String, Object> args = new HashMap<>();
         args.put("entry", entry);
         args.put("owner", getOwner().getUniqueId().toString());
-        args.put("date", Format.date(date));
+        args.put("date", date == null ? null : Format.date(date));
         return args;
     }
 

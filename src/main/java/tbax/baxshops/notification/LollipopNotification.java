@@ -12,6 +12,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
+import tbax.baxshops.Format;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.SavedState;
@@ -19,6 +20,7 @@ import tbax.baxshops.serialization.StoredPlayer;
 import tbax.baxshops.serialization.states.State_30;
 import tbax.baxshops.serialization.states.State_40;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -47,6 +49,7 @@ public final class LollipopNotification implements UpgradeableNote, Configuratio
     private UUID sender;
     private UUID recipient;
     private double tastiness;
+    private Date date;
 
     public LollipopNotification(Map<String, Object> args)
     {
@@ -66,6 +69,7 @@ public final class LollipopNotification implements UpgradeableNote, Configuratio
     {
         this.sender = sender.getUniqueId();
         this.tastiness = tastiness < 0 ? 0 : tastiness > 100 ? 100 : tastiness;
+        this.date = new Date();
     }
 
     @Override
@@ -89,6 +93,7 @@ public final class LollipopNotification implements UpgradeableNote, Configuratio
         sender = map.getUUID("sender");
         recipient = map.getUUID("receiver");
         tastiness = map.getDouble("tastiness");
+        date = map.getDate("date");
     }
 
     public OfflinePlayer getSender()
@@ -118,13 +123,19 @@ public final class LollipopNotification implements UpgradeableNote, Configuratio
         return String.format("%s sent %s %s lollipop", getSender().getName(), getRecipient().getName(), getTastiness());
     }
 
+    @Override
+    public Date getSentDate()
+    {
+        return date;
+    }
+
     public Map<String, Object> serialize()
     {
         Map<String, Object> args = new HashMap<>();
         args.put("sender", getSender().getUniqueId().toString());
         args.put("recipient", getRecipient().getUniqueId().toString());
         args.put("tastiness", tastiness);
-        args.put("date", Format.date(date));
+        args.put("date", date == null ? null : Format.date(date));
         return args;
     }
 

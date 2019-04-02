@@ -84,6 +84,12 @@ public class DeathTaxReceivedNote implements Notification
     }
 
     @Override
+    public Date getSentDate()
+    {
+        return date;
+    }
+
+    @Override
     public Map<String, Object> serialize()
     {
         Map<String, Object> args = new HashMap<>();
@@ -91,7 +97,7 @@ public class DeathTaxReceivedNote implements Notification
         args.put("deceased", getDeadGuy().getUniqueId().toString());
         args.put("taxed", deathTax);
         args.put("message", msg);
-        args.put("date", Format.date(date));
+        args.put("date", date == null ? null : Format.date(date));
         return args;
     }
 
