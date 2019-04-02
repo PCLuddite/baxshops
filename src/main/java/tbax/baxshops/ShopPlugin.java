@@ -106,27 +106,21 @@ public final class ShopPlugin extends JavaPlugin
     public static void showNotification(Player player)
     {
         Deque<Notification> notifications = savedState.getNotifications(player.getPlayer());
-
-        if (notifications.isEmpty() || notifications.size() > 1) {
-            showNotificationCount(player);
+        Notification n = notifications.getFirst();
+        sendInfo(player, n.getMessage(player.getPlayer()));
+        if (n instanceof Request) {
+            player.sendMessage(String.format("Use %s or %s to manage this request.",
+                Format.command("/shop accept"),
+                Format.command("/shop reject"))
+            );
+        }
+        else if (n instanceof Claimable) {
+            player.sendMessage(String.format("Use %s to claim and remove this notification.",
+                Format.command("/shop claim"))
+            );
         }
         else {
-            Notification n = notifications.getFirst();
-            sendInfo(player, n.getMessage(player.getPlayer()));
-            if (n instanceof Request) {
-                player.sendMessage(String.format("Use %s or %s to manage this request.",
-                    Format.command("/shop accept"),
-                    Format.command("/shop reject"))
-                );
-            }
-            else if (n instanceof Claimable) {
-                player.sendMessage(String.format("Use %s to claim and remove this notification.",
-                    Format.command("/shop claim"))
-                );
-            }
-            else {
-                notifications.removeFirst();
-            }
+            notifications.removeFirst();
         }
     }
 
@@ -156,7 +150,12 @@ public final class ShopPlugin extends JavaPlugin
         }
         ns.add(n);
         if (player.isOnline()) {
-            showNotification(player.getPlayer());
+            if (ns.size() == 1) {
+                showNotification(player.getPlayer());
+            }
+            else {
+                showNotificationCount(player.getPlayer());
+            }
         }
     }
 
