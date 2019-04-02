@@ -383,7 +383,7 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
         map.put("owner", getOwner().getUniqueId().toString());
         map.put("flags", flags);
         map.put("inventory", inventory);
-        map.put("locations", locations);
+        map.put("locations", new ArrayList<>(locations));
         return map;
     }
     
