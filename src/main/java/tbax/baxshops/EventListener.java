@@ -55,10 +55,11 @@ public class EventListener implements Listener
                     }
                     else {
                         event.setCancelled(true);
-                        event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), shop.toItem(event.getBlock().getLocation()));
-                        ShopPlugin.removeLocation(null, event.getBlock().getLocation()); // we don't need to tell the player if there's an error 12/5/15
-                        ShopPlugin.clearSelection(event.getPlayer());
+                        ItemStack shopStack = shop.toItem(event.getBlock().getLocation());
                         event.getBlock().setType(Material.AIR);
+                        ShopPlugin.removeLocation(shop.getId(), event.getBlock().getLocation());
+                        ShopPlugin.clearSelection(event.getPlayer());
+                        event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), shopStack);
                     }
                 }
                 else {
