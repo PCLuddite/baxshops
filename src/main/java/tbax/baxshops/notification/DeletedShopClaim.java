@@ -18,11 +18,9 @@ import tbax.baxshops.serialization.SavedState;
 import tbax.baxshops.serialization.states.State_30;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@SuppressWarnings("WeakerAccess")
 public final class DeletedShopClaim implements UpgradeableNote, Claimable
 {
     private UUID owner;
@@ -100,10 +98,10 @@ public final class DeletedShopClaim implements UpgradeableNote, Claimable
     @Override
     public Map<String, Object> serialize()
     {
-        HashMap<String, Object> args = new HashMap<>();
+        SafeMap args = new SafeMap();
         args.put("entry", entry);
-        args.put("owner", getOwner().getUniqueId().toString());
-        args.put("date", date == null ? null : Format.date(date));
+        args.put("owner", getOwner());
+        args.put("date", date);
         return args;
     }
 

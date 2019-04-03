@@ -6,9 +6,11 @@
 **/
 package tbax.baxshops.serialization;
 
+import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
 import tbax.baxshops.BaxEntry;
 
@@ -18,11 +20,16 @@ import java.util.*;
 @SuppressWarnings("unused")
 public class SafeMap implements Map<String, Object>
 {
-    private Map<String, Object> argMap;
+    private final Map<String, Object> argMap;
 
     public SafeMap(Map<String, Object> map)
     {
         argMap = map;
+    }
+
+    public SafeMap()
+    {
+        argMap = new HashMap<>();
     }
 
     public boolean getBoolean(String key)
@@ -33,11 +40,16 @@ public class SafeMap implements Map<String, Object>
     public boolean getBoolean(String key, boolean defaultValue)
     {
         try {
-            return (boolean)getOrDefault(key, defaultValue);
+            return (boolean) getOrDefault(key, defaultValue);
         }
         catch (ClassCastException e) {
             return defaultValue;
         }
+    }
+
+    public Object put(String key, boolean value)
+    {
+        return argMap.put(key, value);
     }
 
     public int getInteger(String key)
@@ -48,11 +60,16 @@ public class SafeMap implements Map<String, Object>
     public int getInteger(String key, int defaultValue)
     {
         try {
-            return (int)getOrDefault(key, defaultValue);
+            return (int) getOrDefault(key, defaultValue);
         }
         catch (ClassCastException e) {
             return defaultValue;
         }
+    }
+
+    public Object put(String key, int value)
+    {
+        return argMap.put(key, value);
     }
 
     public String getString(String key)
@@ -63,7 +80,7 @@ public class SafeMap implements Map<String, Object>
     public String getString(String key, String defaultValue)
     {
         try {
-            return (String)getOrDefault(key, defaultValue);
+            return (String) getOrDefault(key, defaultValue);
         }
         catch (ClassCastException e) {
             return defaultValue;
@@ -78,11 +95,16 @@ public class SafeMap implements Map<String, Object>
     public double getDouble(String key, double defaultValue)
     {
         try {
-            return (double)getOrDefault(key, defaultValue);
+            return (double) getOrDefault(key, defaultValue);
         }
         catch (ClassCastException e) {
             return defaultValue;
         }
+    }
+
+    public Object put(String key, double value)
+    {
+        return argMap.put(key, value);
     }
 
     public UUID getUUID(String key)
@@ -97,6 +119,21 @@ public class SafeMap implements Map<String, Object>
         }
         catch (IllegalArgumentException e) {
             return defaultValue;
+        }
+    }
+
+    public Object put(String key, UUID value)
+    {
+        return argMap.put(key, value == null ? null : value.toString());
+    }
+
+    public Object put(String key, OfflinePlayer value)
+    {
+        if (value == null) {
+            return argMap.put(key, null);
+        }
+        else {
+            return put(key, value.getUniqueId());
         }
     }
 
@@ -116,6 +153,27 @@ public class SafeMap implements Map<String, Object>
         }
     }
 
+    public <E> Set<E> getSet(String key)
+    {
+        return getSet(key, new HashSet<>());
+    }
+
+    @SuppressWarnings("unchecked")
+    public <E> Set<E> getSet(String key, Set<E> defaultValue)
+    {
+        try {
+            return new HashSet<>((List<E>) getOrDefault(key, defaultValue));
+        }
+        catch (ClassCastException e) {
+            return defaultValue;
+        }
+    }
+
+    public <E> Object put(String key, Set<E> value)
+    {
+        return argMap.put(key, value == null ? new ArrayList<>() : new ArrayList<>(value));
+    }
+
     public ItemStack getItemStack(String key)
     {
         return getItemStack(key, null);
@@ -132,6 +190,11 @@ public class SafeMap implements Map<String, Object>
         }
     }
 
+    public Object put(String key, ItemStack value)
+    {
+        return argMap.put(key, value);
+    }
+
     public Date getDate(String key)
     {
         return getDate(key, null);
@@ -145,6 +208,11 @@ public class SafeMap implements Map<String, Object>
         catch (ClassCastException | ParseException e) {
             return defaultValue;
         }
+    }
+
+    public Object put(String key, Date value)
+    {
+        return argMap.put(key, value == null ? null : Format.date(value));
     }
 
     @Override
@@ -234,6 +302,11 @@ public class SafeMap implements Map<String, Object>
         }
     }
 
+    public Object put(String key, BaxShop value)
+    {
+        return argMap.put(key, value);
+    }
+
     public long getLong(String key)
     {
         return getLong(key, 0);
@@ -252,5 +325,10 @@ public class SafeMap implements Map<String, Object>
                 return defaultValue;
             }
         }
+    }
+
+    public Object put(String key, long value)
+    {
+        return argMap.put(key, value);
     }
 }

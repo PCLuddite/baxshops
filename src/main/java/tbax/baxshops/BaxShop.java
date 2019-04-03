@@ -378,12 +378,12 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
     @Override
     public Map<String, Object> serialize()
     {
-        Map<String, Object> map = new HashMap<>();
-        map.put("id", id.toString());
-        map.put("owner", getOwner().getUniqueId().toString());
+        SafeMap map = new SafeMap();
+        map.put("id", id);
+        map.put("owner", getOwner());
         map.put("flags", flags);
         map.put("inventory", inventory);
-        map.put("locations", new ArrayList<>(locations));
+        map.put("locations", locations);
         return map;
     }
     

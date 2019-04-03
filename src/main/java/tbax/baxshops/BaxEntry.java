@@ -303,7 +303,7 @@ public final class BaxEntry implements ConfigurationSerializable
     @Override
     public Map<String, Object> serialize()
     {
-        HashMap<String, Object> map = new HashMap<>();
+        SafeMap map = new SafeMap();
         map.put("retailPrice", retailPrice);
         map.put("refundPrice", refundPrice);
         map.put("stack", stack.serialize());

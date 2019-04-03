@@ -14,7 +14,6 @@ import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.SafeMap;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -92,12 +91,12 @@ public class DeathTaxReceivedNote implements Notification
     @Override
     public Map<String, Object> serialize()
     {
-        Map<String, Object> args = new HashMap<>();
-        args.put("recipient", getRecipient().getUniqueId().toString());
-        args.put("deceased", getDeadGuy().getUniqueId().toString());
+        SafeMap args = new SafeMap();
+        args.put("recipient", getRecipient());
+        args.put("deceased", getDeadGuy());
         args.put("taxed", deathTax);
         args.put("message", msg);
-        args.put("date", date == null ? null : Format.date(date));
+        args.put("date", date);
         return args;
     }
 

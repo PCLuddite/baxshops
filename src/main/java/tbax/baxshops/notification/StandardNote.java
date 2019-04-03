@@ -11,7 +11,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
-import tbax.baxshops.Format;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.SavedState;
@@ -20,7 +19,6 @@ import tbax.baxshops.serialization.states.State_30;
 import tbax.baxshops.serialization.states.State_40;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -107,12 +105,12 @@ public abstract class StandardNote implements UpgradeableNote
     @Override
     public Map<String, Object> serialize()
     {
-        Map<String, Object> args = new HashMap<>();
+        SafeMap args = new SafeMap();
         args.put("entry", entry);
-        args.put("buyer", getBuyer().getUniqueId().toString());
-        args.put("seller", getSeller().getUniqueId().toString());
-        args.put("shopId", (shopId == null ? BaxShop.DUMMY_UUID : shopId).toString());
-        args.put("date", date == null ? null : Format.date(date));
+        args.put("buyer", getBuyer());
+        args.put("seller", getSeller());
+        args.put("shopId", shopId == null ? BaxShop.DUMMY_UUID : shopId);
+        args.put("date", date);
         return args;
     }
 }

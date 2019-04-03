@@ -12,7 +12,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
-import tbax.baxshops.Format;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.SavedState;
@@ -21,7 +20,6 @@ import tbax.baxshops.serialization.states.State_30;
 import tbax.baxshops.serialization.states.State_40;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -131,11 +129,11 @@ public final class LollipopNotification implements UpgradeableNote, Configuratio
 
     public Map<String, Object> serialize()
     {
-        Map<String, Object> args = new HashMap<>();
-        args.put("sender", getSender().getUniqueId().toString());
-        args.put("recipient", getRecipient().getUniqueId().toString());
+        SafeMap args = new SafeMap();
+        args.put("sender", getSender());
+        args.put("recipient", getRecipient());
         args.put("tastiness", tastiness);
-        args.put("date", date == null ? null : Format.date(date));
+        args.put("date", date);
         return args;
     }
 
