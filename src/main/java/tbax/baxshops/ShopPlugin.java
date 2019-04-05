@@ -30,9 +30,11 @@ import java.util.logging.Logger;
 
 public final class ShopPlugin extends JavaPlugin
 {
-    private static final CommandMap commands = new CommandMap();
+    private static CommandMap commands;
 
-    static {
+    private static CommandMap initCommands()
+    {
+        CommandMap commands = new CommandMap();
         try {
             commands.add(CmdAccept.class);
             commands.add(CmdAdd.class);
@@ -65,9 +67,11 @@ public final class ShopPlugin extends JavaPlugin
             commands.add(CmdTake.class);
             commands.add(CmdTakeXp.class);
             commands.add(CmdTeleport.class);
+            return commands;
         }
         catch (IllegalAccessException | InstantiationException e) {
             e.printStackTrace();
+            return null;
         }
     }
 
@@ -227,6 +231,12 @@ public final class ShopPlugin extends JavaPlugin
         
         if (!enableVault()) {
             log.severe("BaxShops could not use this server's economy! Make sure Vault is installed!");
+            getPluginLoader().disablePlugin(this);
+            return;
+        }
+
+        if ((commands = initCommands()) == null) {
+            log.severe("BaxShops failed to initialize its commands");
             getPluginLoader().disablePlugin(this);
             return;
         }
