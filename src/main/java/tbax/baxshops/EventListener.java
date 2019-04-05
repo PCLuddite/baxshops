@@ -173,29 +173,30 @@ public class EventListener implements Listener
     {
         try {
             ItemStack item = event.getItemInHand();
-            if (BaxShop.isShop(item)) {
-                BaxShop shop = BaxShop.fromItem(item);
-                if (shop == null) {
-                    throw new CommandWarningException("This shop has been closed and can't be placed.");
+            if (!BaxShop.isShop(item))
+                return;
+            BaxShop shop = BaxShop.fromItem(item);
+            if (shop == null) {
+                throw new CommandErrorException("This shop has been closed and can't be placed.");
+            }
+            if (ShopPlugin.addLocation(event.getBlockPlaced().getLocation(), shop)){
+                throw new CommandErrorException(Resources.SHOP_EXISTS);
+            }
+            String[] lines = BaxShop.extractSignText(item);
+            if (lines.length > 0) {
+                Sign sign = (Sign) event.getBlockPlaced().getState();
+                if (lines.length < 3) {
+                    sign.setLine(0, "");
+                    sign.setLine(1, lines[0]);
+                    sign.setLine(2, lines.length > 1 ? lines[1] : "");
+                    sign.setLine(3, "");
                 } else {
-                    ShopPlugin.addLocation(event.getPlayer(), event.getBlockPlaced().getLocation(), shop);
-                    String[] lines = BaxShop.extractSignText(item);
-                    if (lines.length > 0) {
-                        Sign sign = (Sign) event.getBlockPlaced().getState();
-                        if (lines.length < 3) {
-                            sign.setLine(0, "");
-                            sign.setLine(1, lines[0]);
-                            sign.setLine(2, lines.length > 1 ? lines[1] : "");
-                            sign.setLine(3, "");
-                        } else {
-                            sign.setLine(0, lines[0]);
-                            sign.setLine(1, lines[1]);
-                            sign.setLine(2, lines[2]);
-                            sign.setLine(3, lines.length > 3 ? lines[3] : "");
-                        }
-                        sign.update();
-                    }
+                    sign.setLine(0, lines[0]);
+                    sign.setLine(1, lines[1]);
+                    sign.setLine(2, lines[2]);
+                    sign.setLine(3, lines.length > 3 ? lines[3] : "");
                 }
+                sign.update();
             }
         }
         catch (PrematureAbortException e) {

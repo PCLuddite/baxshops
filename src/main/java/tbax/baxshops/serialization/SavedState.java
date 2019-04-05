@@ -33,14 +33,11 @@ import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.Notification;
 import tbax.baxshops.serialization.states.State_00300;
-import tbax.baxshops.serialization.states.State_00400;
 import tbax.baxshops.serialization.states.State_00410;
 
 import java.io.*;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -194,25 +191,19 @@ public final class SavedState
         return true;
     }
     
-    public void addShop(Player player, BaxShop shop)
+    public void addShop(BaxShop shop)
     {
         shops.put(shop.getId(), shop);
     }
     
-    public void addLocation(Player player, Location loc, BaxShop shop)
+    public boolean addLocation(BaxShop shop, Location loc)
     {
-        try {
-            BaxShop otherShop = shops.getShopByLocation(loc);
-            if (otherShop == null) {
-                shops.addLocation(shop.getId(), loc);
-            }
-            else {
-                throw new CommandErrorException(Resources.SHOP_EXISTS);
-            }
+        BaxShop otherShop = shops.getShopByLocation(loc);
+        if (otherShop == null) {
+            shops.addLocation(shop.getId(), loc);
+            return true;
         }
-        catch (PrematureAbortException e) {
-            player.sendMessage(e.getMessage());
-        }
+        return false;
     }
 
     /**

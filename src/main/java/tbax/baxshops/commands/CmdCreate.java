@@ -127,7 +127,7 @@ public final class CmdCreate extends BaxShopCommand
             ""
         );
 
-        ShopPlugin.addShop(actor.getPlayer(), shop);
+        ShopPlugin.addShop(shop);
 
         if (actor.isAdmin() && actor.getNumArgs() == 3) {
             shop.setFlagInfinite(actor.getArgBoolean(2));

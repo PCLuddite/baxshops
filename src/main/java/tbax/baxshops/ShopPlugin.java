@@ -192,9 +192,9 @@ public final class ShopPlugin extends JavaPlugin
         sendNotification(savedState.getOfflinePlayer(playerId), note);
     }
 
-    public static void addShop(Player player, BaxShop shop)
+    public static void addShop(BaxShop shop)
     {
-        savedState.addShop(player, shop);
+        savedState.addShop(shop);
     }
 
     public static void removeShop(UUID shopId)
@@ -227,9 +227,9 @@ public final class ShopPlugin extends JavaPlugin
         return savedState.getShop(location);
     }
 
-    public static void addLocation(Player player, Location location, BaxShop shop)
+    public static boolean addLocation(Location location, BaxShop shop)
     {
-        savedState.addLocation(player, location, shop);
+        return savedState.addLocation(shop, location);
     }
 
     public static boolean runCommand(ShopCmdActor actor)
