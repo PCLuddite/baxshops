@@ -31,6 +31,14 @@ import java.util.logging.Logger;
 public final class ShopPlugin extends JavaPlugin
 {
     private static CommandMap commands;
+    private static Economy econ;
+    private static Logger log;
+    private static SavedState savedState;
+    /**
+     * A map containing each player's currently selected shop and other
+     * selection data
+     */
+    private static Map<UUID, ShopSelection> selectedShops = new HashMap<>();
 
     private static CommandMap initCommands()
     {
@@ -74,16 +82,6 @@ public final class ShopPlugin extends JavaPlugin
             return null;
         }
     }
-
-    private static Economy econ;
-    private static Logger log;
-    private static SavedState savedState;
-
-    /**
-     * A map containing each player's currently selected shop and other
-     * selection data
-     */
-    private static Map<UUID, ShopSelection> selectedShops = new HashMap<>();
 
     public static Map<String, BaxShopCommand> getCommands()
     {
@@ -223,78 +221,6 @@ public final class ShopPlugin extends JavaPlugin
         savedState.addLocation(player, location, shop);
     }
 
-    @Override
-    public void onEnable()
-    {
-        getServer().getPluginManager().registerEvents(new EventListener(), this);
-        log = getLogger();
-        
-        if (!enableVault()) {
-            log.severe("BaxShops could not use this server's economy! Make sure Vault is installed!");
-            getPluginLoader().disablePlugin(this);
-            return;
-        }
-
-        if ((commands = initCommands()) == null) {
-            log.severe("BaxShops failed to initialize its commands");
-            getPluginLoader().disablePlugin(this);
-            return;
-        }
-        
-        loadConfigurationSerializable();
-
-        ItemNames.loadDamageable(this);
-        ItemNames.loadEnchants(this);
-
-        saveDefaultConfig();
-        savedState = SavedState.readFromDisk(this);
-        
-        // run an initial save 5 minutes after starting, then a recurring save
-        // every 30 minutes after the first save
-        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, savedState::writeToDisk, 6000L, 36000L);
-        log.info("BaxShops has loaded successfully!");
-    }
-    
-    public void loadConfigurationSerializable()
-    {
-        ConfigurationSerialization.registerClass(BaxEntry.class);
-        ConfigurationSerialization.registerClass(BaxShop.class);
-        ConfigurationSerialization.registerClass(BuyClaim.class);
-        ConfigurationSerialization.registerClass(BuyNotification.class);
-        ConfigurationSerialization.registerClass(BuyRejection.class);
-        ConfigurationSerialization.registerClass(BuyRequest.class);
-        ConfigurationSerialization.registerClass(DeletedShopClaim.class);
-        ConfigurationSerialization.registerClass(LollipopNotification.class);
-        ConfigurationSerialization.registerClass(NoteSet.class);
-        ConfigurationSerialization.registerClass(SaleClaim.class);
-        ConfigurationSerialization.registerClass(SaleNotification.class);
-        ConfigurationSerialization.registerClass(SaleNotificationAuto.class);
-        ConfigurationSerialization.registerClass(SaleNotificationAutoClaim.class);
-        ConfigurationSerialization.registerClass(SaleRejection.class);
-        ConfigurationSerialization.registerClass(SaleRequest.class);
-        ConfigurationSerialization.registerClass(SellRequest.class);
-        ConfigurationSerialization.registerClass(StoredPlayer.class);
-    }
-    
-    @Override
-    public void onDisable()
-    {
-        savedState.writeToDisk();
-    }
-
-    @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
-    {
-        ShopCmdActor actor = new ShopCmdActor( sender, command, args);
-        
-        if (actor.cmdIs("buy", "sell", "restock", "restockall")) {
-            actor.insertAction(actor.getCmdName());
-            actor.setCmdName("shop");
-        }
-
-        return runCommand(actor);
-    }
-
     public static boolean runCommand(ShopCmdActor actor)
     {
         if (actor.getNumArgs() == 0) {
@@ -317,7 +243,7 @@ public final class ShopPlugin extends JavaPlugin
         }
         return runCommand(cmd, actor);
     }
-
+    
     public static boolean runCommand(BaxShopCommand cmd, ShopCmdActor actor)
     {
         try {
@@ -353,7 +279,121 @@ public final class ShopPlugin extends JavaPlugin
     {
         return econ;
     }
+
+    public static void sendInfo(@NotNull Player pl, String message)
+    {
+        pl.sendMessage(message);
+        if (getSavedState().getConfig().isLogNotes()) {
+            logPlayerMessage(pl, message);
+        }
+    }
+
+    public static void logPlayerMessage(Player pl, String message)
+    {
+        StringBuilder sb = new StringBuilder();
+        if (pl != null) {
+            sb.append((char)27).append("[0;35m");
+            sb.append("[");
+            sb.append(pl.getName()).append("] ");
+            sb.append((char)27);
+            sb.append("[0m");
+        }
+        sb.append(Format.toAnsiColor(message));
+        log.info(sb.toString());
+    }
+
+    public static SavedState getSavedState()
+    {
+        return savedState;
+    }
     
+    public static void logInfo(String msg)
+    {
+        log.info(msg);
+    }
+    
+    public static void logWarning(String msg)
+    {
+        log.warning(msg);
+    }
+
+    public static void logSevere(String msg)
+    {
+        log.severe(msg);
+    }
+    
+    @Override
+    public void onEnable()
+    {
+        getServer().getPluginManager().registerEvents(new EventListener(), this);
+        log = getLogger();
+
+        if (!enableVault()) {
+            log.severe("BaxShops could not use this server's economy! Make sure Vault is installed!");
+            getPluginLoader().disablePlugin(this);
+            return;
+        }
+
+        if ((commands = initCommands()) == null) {
+            log.severe("BaxShops failed to initialize its commands");
+            getPluginLoader().disablePlugin(this);
+            return;
+        }
+
+        loadConfigurationSerializable();
+
+        ItemNames.loadDamageable(this);
+        ItemNames.loadEnchants(this);
+
+        saveDefaultConfig();
+        savedState = SavedState.readFromDisk(this);
+
+        // run an initial save 5 minutes after starting, then a recurring save
+        // every 30 minutes after the first save
+        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, savedState::writeToDisk, 6000L, 36000L);
+        log.info("BaxShops has loaded successfully!");
+    }
+
+    public void loadConfigurationSerializable()
+    {
+        ConfigurationSerialization.registerClass(BaxEntry.class);
+        ConfigurationSerialization.registerClass(BaxShop.class);
+        ConfigurationSerialization.registerClass(BuyClaim.class);
+        ConfigurationSerialization.registerClass(BuyNotification.class);
+        ConfigurationSerialization.registerClass(BuyRejection.class);
+        ConfigurationSerialization.registerClass(BuyRequest.class);
+        ConfigurationSerialization.registerClass(DeletedShopClaim.class);
+        ConfigurationSerialization.registerClass(LollipopNotification.class);
+        ConfigurationSerialization.registerClass(NoteSet.class);
+        ConfigurationSerialization.registerClass(SaleClaim.class);
+        ConfigurationSerialization.registerClass(SaleNotification.class);
+        ConfigurationSerialization.registerClass(SaleNotificationAuto.class);
+        ConfigurationSerialization.registerClass(SaleNotificationAutoClaim.class);
+        ConfigurationSerialization.registerClass(SaleRejection.class);
+        ConfigurationSerialization.registerClass(SaleRequest.class);
+        ConfigurationSerialization.registerClass(SellRequest.class);
+        ConfigurationSerialization.registerClass(StoredPlayer.class);
+    }
+
+    @Override
+    public void onDisable()
+    {
+        savedState.writeToDisk();
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
+    {
+        ShopCmdActor actor = new ShopCmdActor( sender, command, args);
+
+        if (actor.cmdIs("buy", "sell", "restock", "restockall")) {
+            actor.insertAction(actor.getCmdName());
+            actor.setCmdName("shop");
+        }
+
+        return runCommand(actor);
+    }
+
     /**
      * Sets up Vault.
      *
@@ -372,47 +412,5 @@ public final class ShopPlugin extends JavaPlugin
 
         econ = rsp.getProvider();
         return econ != null;
-    }
-
-    public static void sendInfo(@NotNull Player pl, String message)
-    {
-        pl.sendMessage(message);
-        if (getSavedState().getConfig().isLogNotes()) {
-            logPlayerMessage(pl, message);
-        }
-    }
-    
-    public static void logPlayerMessage(Player pl, String message)
-    { 
-        StringBuilder sb = new StringBuilder();
-        if (pl != null) {
-            sb.append((char)27).append("[0;35m");
-            sb.append("[");
-            sb.append(pl.getName()).append("] ");
-            sb.append((char)27);
-            sb.append("[0m");
-        }
-        sb.append(Format.toAnsiColor(message));
-        log.info(sb.toString());
-    }
-
-    public static SavedState getSavedState()
-    {
-        return savedState;
-    }
-
-    public static void logInfo(String msg)
-    {
-        log.info(msg);
-    }
-
-    public static void logWarning(String msg)
-    {
-        log.warning(msg);
-    }
-
-    public static void logSevere(String msg)
-    {
-        log.severe(msg);
     }
 }
