@@ -32,9 +32,9 @@ import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.Notification;
-import tbax.baxshops.serialization.states.State_30;
-import tbax.baxshops.serialization.states.State_40;
-import tbax.baxshops.serialization.states.State_41;
+import tbax.baxshops.serialization.states.State_00300;
+import tbax.baxshops.serialization.states.State_00400;
+import tbax.baxshops.serialization.states.State_00410;
 
 import java.io.*;
 import java.text.DecimalFormat;
@@ -46,7 +46,7 @@ public final class SavedState
     static final String YAML_FILE_PATH = "shops.yml";
     private static final String YAMLBAK_FILE_PATH = "backups/%d.yml";
     
-    private static final double STATE_VERSION = State_41.VERSION; // state file format version
+    private static final double STATE_VERSION = State_00410.VERSION; // state file format version
     private static double loadedState;
     
     /**
@@ -103,19 +103,19 @@ public final class SavedState
             ver = plugin.getConfig().getDouble("StateVersion", STATE_VERSION);
         }
         else {
-            ver = State_30.VERSION;
+            ver = State_00300.VERSION;
         }
         loadedState = ver;
 
         StateLoader loader;
-        if (ver == State_41.VERSION) {
-            loader = new State_41(plugin);
+        if (ver == State_00410.VERSION) {
+            loader = new State_00410(plugin);
         }
-        else if (ver == State_40.VERSION) {
-            loader = new State_40(plugin);
+        else if (ver == State_00400.VERSION) {
+            loader = new State_00400(plugin);
         }
-        else if (ver == State_30.VERSION) {
-            loader = new State_30(plugin);
+        else if (ver == State_00300.VERSION) {
+            loader = new State_00300(plugin);
         }
         else {
             plugin.getLogger().warning("Unknown state file version. Starting from scratch...");

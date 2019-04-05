@@ -29,14 +29,14 @@ import tbax.baxshops.serialization.*;
 
 import java.util.*;
 
-public class State_30 implements StateLoader
+public class State_00300 implements StateLoader
 {
     public static final double VERSION = 3.0;
     private static Map<Long, UUID> legacyIds = new HashMap<>();
     private static PlayerMap players = new PlayerMap();
     private ShopPlugin plugin;
 
-    public State_30(@NotNull ShopPlugin plugin)
+    public State_00300(@NotNull ShopPlugin plugin)
     {
         this.plugin = plugin;
     }

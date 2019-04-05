@@ -34,7 +34,7 @@ import tbax.baxshops.serialization.ItemNames;
 import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.SavedState;
 import tbax.baxshops.serialization.StoredPlayer;
-import tbax.baxshops.serialization.states.State_30;
+import tbax.baxshops.serialization.states.State_00300;
 
 import java.util.*;
 
@@ -68,12 +68,12 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
     public BaxShop(Map<String, Object> args)
     {
         SafeMap map = new SafeMap(args);
-        if (SavedState.getLoadedState() == State_30.VERSION) {
+        if (SavedState.getLoadedState() == State_00300.VERSION) {
             String name = map.getString("owner", StoredPlayer.DUMMY_NAME);
             id = UUID.randomUUID();
             legacyId = map.getLong("id");
-            owner = State_30.getPlayerId(name);
-            flags = State_30.flagMapToFlag(map);
+            owner = State_00300.getPlayerId(name);
+            flags = State_00300.flagMapToFlag(map);
         }
         else {
             id =  map.getUUID("id", UUID.randomUUID());

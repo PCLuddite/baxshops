@@ -25,7 +25,7 @@ import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.StoredPlayer;
-import tbax.baxshops.serialization.states.State_30;
+import tbax.baxshops.serialization.states.State_00300;
 
 import java.util.Map;
 
@@ -74,12 +74,12 @@ public class SaleNotificationAuto implements DeprecatedNote
 
     public OfflinePlayer getBuyer()
     {
-        return buyer == null ? StoredPlayer.ERROR : State_30.getPlayer(buyer);
+        return buyer == null ? StoredPlayer.ERROR : State_00300.getPlayer(buyer);
     }
 
     public OfflinePlayer getSeller()
     {
-        return seller == null ? StoredPlayer.ERROR : State_30.getPlayer(seller);
+        return seller == null ? StoredPlayer.ERROR : State_00300.getPlayer(seller);
     }
 
     public BaxEntry getEntry()

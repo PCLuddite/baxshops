@@ -23,18 +23,19 @@ import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.notification.NoteSet;
-import tbax.baxshops.notification.Notification;
 import tbax.baxshops.serialization.StateLoader;
 import tbax.baxshops.serialization.StoredPlayer;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
-public class State_41 implements StateLoader
+public class State_00400 implements StateLoader
 {
-    public static final double VERSION = 4.1;
+    public static final double VERSION = 4.0;
     private ShopPlugin plugin;
 
-    public State_41(ShopPlugin plugin)
+    public State_00400(@NotNull ShopPlugin plugin)
     {
         this.plugin = plugin;
     }
@@ -79,47 +80,17 @@ public class State_41 implements StateLoader
     public @NotNull Collection<NoteSet> buildNotifications(@NotNull FileConfiguration state)
     {
         List<NoteSet> notes = new ArrayList<>();
-        if (!state.isConfigurationSection("notes")) {
+        if (!state.isList("notes")) {
             return notes;
         }
-
-        NoteSet errorNotes = new NoteSet(StoredPlayer.ERROR_UUID);
-
-        for (Map.Entry entry : state.getConfigurationSection("notes").getValues(false).entrySet()) {
-            UUID playerId;
-            try {
-                playerId = UUID.fromString(entry.getKey().toString());
-            }
-            catch (IllegalArgumentException e) {
-                playerId = StoredPlayer.ERROR_UUID;
-                ShopPlugin.logWarning("UUID " + entry.getKey() + " is invalid. Notes will be assigned to an error user.");
-            }
-            if (entry.getValue() instanceof List) {
-                Deque<Notification> pending = new ArrayDeque<>(((List) entry.getValue()).size());
-                for (Object o : (List) entry.getValue()) {
-                    if (o instanceof Notification) {
-                        pending.add((Notification) o);
-                    }
-                    else {
-                        ShopPlugin.logWarning("Could not readFromDisk Notification of type " + entry.getValue().getClass());
-                    }
-                }
-                if (playerId.equals(StoredPlayer.ERROR_UUID)) {
-                    errorNotes.getNotifications().addAll(pending);
-                }
-                else {
-                    notes.add(new NoteSet(playerId, pending));
-                }
+        for (Object o : state.getList("notes")) {
+            if (o instanceof NoteSet) {
+                notes.add((NoteSet)o);
             }
             else {
-                ShopPlugin.logWarning("Could not readFromDisk notification list for " + entry.getKey());
+                plugin.getLogger().warning("Could not readFromDisk NoteSet of type " + o.getClass());
             }
         }
-
-        if (!errorNotes.getNotifications().isEmpty()) {
-            notes.add(errorNotes);
-        }
-
         return notes;
     }
 
