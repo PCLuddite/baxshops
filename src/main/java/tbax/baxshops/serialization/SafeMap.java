@@ -217,7 +217,7 @@ public class SafeMap implements Map<String, Object>
         try {
             return Format.DATE_FORMAT.parse((String)get("key"));
         }
-        catch (ClassCastException | ParseException e) {
+        catch (ClassCastException | ParseException | NullPointerException e) {
             return defaultValue;
         }
     }

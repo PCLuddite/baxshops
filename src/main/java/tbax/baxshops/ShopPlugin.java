@@ -389,6 +389,7 @@ public final class ShopPlugin extends JavaPlugin
     @Override
     public void onDisable()
     {
+        log.info("Saving BaxShops...");
         savedState.writeToDisk();
     }
 

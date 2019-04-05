@@ -37,7 +37,10 @@ import tbax.baxshops.serialization.states.State_00400;
 import tbax.baxshops.serialization.states.State_00410;
 
 import java.io.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -103,21 +106,16 @@ public final class SavedState
             ver = plugin.getConfig().getDouble("StateVersion", STATE_VERSION);
         }
         else {
-            ver = State_00300.VERSION;
+            ver = State_00300.VERSION; // version 3.0 was the last version not to be in config.yml
         }
+
         loadedState = ver;
 
         StateLoader loader;
-        if (ver == State_00410.VERSION) {
-            loader = new State_00410(plugin);
+        try {
+            loader = getLoader(plugin, ver);
         }
-        else if (ver == State_00400.VERSION) {
-            loader = new State_00400(plugin);
-        }
-        else if (ver == State_00300.VERSION) {
-            loader = new State_00300(plugin);
-        }
-        else {
+        catch (ReflectiveOperationException e) {
             plugin.getLogger().warning("Unknown state file version. Starting from scratch...");
             return new SavedState(plugin);
         }
@@ -125,6 +123,7 @@ public final class SavedState
         if (ver != STATE_VERSION) {
             plugin.getLogger().info("Converting state file version " + (new DecimalFormat("0.0")).format(ver));
         }
+
         return loader.loadState(YamlConfiguration.loadConfiguration(stateLocation));
     }
 
@@ -255,8 +254,6 @@ public final class SavedState
      */
     public void writeToDisk()
     {
-        log.info("Saving BaxShops...");
-
         if (!backup()) {
             log.warning("Failed to back up BaxShops");
         }
@@ -359,5 +356,13 @@ public final class SavedState
     public void removeShop(UUID shopId)
     {
         shops.remove(shopId);
+    }
+
+    private static StateLoader getLoader(ShopPlugin plugin, double version) throws ReflectiveOperationException
+    {
+        String verStr = (new DecimalFormat("00000").format(version*100));
+        Class<?> stateClass = Class.forName("tbax.baxshops.serialization.states.State_" + verStr);
+        Constructor<?> c = stateClass.getConstructor(ShopPlugin.class);
+        return (StateLoader)c.newInstance(plugin);
     }
 }
