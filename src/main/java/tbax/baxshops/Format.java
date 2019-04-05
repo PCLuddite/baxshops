@@ -21,8 +21,10 @@ package tbax.baxshops;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -34,9 +36,20 @@ import java.util.UUID;
 public final class Format
 {   
     public static final DateFormat DATE_FORMAT = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+    public static final DateFormat FILE_DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
 
     private Format()
     {
+    }
+
+    public static @Nullable Date parseFileDate(String dateStr)
+    {
+        try {
+            return FILE_DATE_FORMAT.parse(dateStr);
+        }
+        catch (ParseException e) {
+            return null;
+        }
     }
 
     public static @NotNull String date(@NotNull Date dt)

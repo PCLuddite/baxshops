@@ -27,10 +27,8 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tbax.baxshops.BaxShop;
-import tbax.baxshops.Resources;
+import tbax.baxshops.Format;
 import tbax.baxshops.ShopPlugin;
-import tbax.baxshops.errors.CommandErrorException;
-import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.Notification;
 import tbax.baxshops.serialization.states.State_00300;
 import tbax.baxshops.serialization.states.State_00410;
@@ -40,11 +38,11 @@ import java.lang.reflect.Constructor;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public final class SavedState
 {
     static final String YAML_FILE_PATH = "shops.yml";
-    private static final String YAMLBAK_FILE_PATH = "backups/%d.yml";
     
     private static final double STATE_VERSION = State_00410.VERSION; // state file format version
     private static double loadedState;
@@ -127,25 +125,22 @@ public final class SavedState
     private void deleteLatestBackup(File backupFolder)
     {
         File[] backups = backupFolder.listFiles((f, name) -> name.endsWith(".yml"));
-        int b = plugin.getConfig().getInt("Backups", 15);
-        if (backups != null && b > 0 && backups.length >= b) {
-            File delete = null;
-            long oldest = Long.MAX_VALUE;
-            for (File f : backups) {
-                String name = f.getName();
-                int i = name.indexOf('.');
-                try {
-                    long compare = Long.parseLong(name.substring(0, i));
-                    if (compare < oldest) {
-                        oldest = compare;
-                        delete = f;
-                    }
-                }
-                catch (NumberFormatException ignored) {
-                }
-            }
-            if (delete != null && !delete.delete()) {
-                log.warning("Unable to delete oldest backup");
+        int nBaks = getConfig().getBackups();
+
+        if (backups == null || nBaks <= 0 || backups.length < nBaks) {
+            return;
+        }
+
+        List<String> names = Arrays.stream(backups)
+            .map(f -> f.getName().substring(0, f.getName().lastIndexOf('.')))
+            .filter(n -> Format.parseFileDate(n) != null)
+            .sorted(Comparator.comparing(Format::parseFileDate))
+            .collect(Collectors.toList());
+
+        while (names.size() >= nBaks) {
+            File delete = new File(backupFolder, names.remove(names.size() - 1) + ".yml");
+            if (!delete.delete()) {
+                log.warning(String.format("Unable to delete old backup %s", delete.getName()));
             }
         }
     }
@@ -162,7 +157,6 @@ public final class SavedState
             return false;
         }
 
-        long timestamp = new Date().getTime();
         File backupFolder = new File(plugin.getDataFolder(), "backups");
         if (!backupFolder.exists() && !backupFolder.mkdirs()) {
             log.severe("Unable to create backups folder!");
@@ -172,7 +166,8 @@ public final class SavedState
         deleteLatestBackup(backupFolder);
 
         try {
-            File backup = new File(plugin.getDataFolder(), String.format(YAMLBAK_FILE_PATH, timestamp));
+            String backupName = Format.FILE_DATE_FORMAT.format(new Date()) + ".yml";
+            File backup = new File(backupFolder, backupName);
             try (InputStream in = new FileInputStream(stateLocation)) {
                 try (OutputStream out = new FileOutputStream(backup)) {
                     byte[] buf = new byte[1024];
@@ -184,8 +179,8 @@ public final class SavedState
             }
         }
         catch (IOException e) {
-            log.severe("Backup failed!");
             e.printStackTrace();
+            log.severe("Backup failed!");
             return false;
         }
         return true;
@@ -317,6 +312,8 @@ public final class SavedState
 
     public Configuration getConfig()
     {
+        if (config == null)
+            config = new Configuration();
         return config;
     }
 
@@ -351,7 +348,7 @@ public final class SavedState
 
     private static StateLoader getLoader(ShopPlugin plugin, double version) throws ReflectiveOperationException
     {
-        String verStr = (new DecimalFormat("00000").format(version*100));
+        String verStr = (new DecimalFormat("000.00").format(version).replace(".", ""));
         Class<?> stateClass = Class.forName("tbax.baxshops.serialization.states.State_" + verStr);
         Constructor<?> c = stateClass.getConstructor(ShopPlugin.class);
         return (StateLoader)c.newInstance(plugin);
