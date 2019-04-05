@@ -1,15 +1,28 @@
-/** +++====+++
- *  
- *  Copyright (c) Timothy Baxendale
- *  Copyright (c) 2012 Nathan Dinsmore and Sam Lazarus
+/*
+ * Copyright (C) 2013-2019 Timothy Baxendale
+ * Portions derived from Shops Copyright (c) 2012 Nathan Dinsmore and Sam Lazarus.
  *
- *  +++====+++
-**/
-
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
+ * USA
+ */
 package tbax.baxshops;
 
-import org.bukkit.*;
-import org.bukkit.block.Block;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
@@ -17,7 +30,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.serialization.*;
+import tbax.baxshops.serialization.ItemNames;
+import tbax.baxshops.serialization.SafeMap;
+import tbax.baxshops.serialization.SavedState;
+import tbax.baxshops.serialization.StoredPlayer;
 import tbax.baxshops.serialization.states.State_30;
 
 import java.util.*;
