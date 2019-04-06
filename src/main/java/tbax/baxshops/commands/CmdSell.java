@@ -19,6 +19,7 @@
  */
 package tbax.baxshops.commands;
 
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
@@ -110,8 +111,10 @@ public final class CmdSell extends BaxShopCommand
         }
 
         BaxShop shop = actor.getShop();
-        List<BaxEntry> items = actor.takeArgFromInventory(1);
         assert shop != null;
+        if (requiresItemInHand(actor) && !shop.contains(actor.getItemInHand()))
+            actor.exitError(Resources.NOT_FOUND_SHOPITEM);
+        List<BaxEntry> items = actor.takeArgFromInventory(1);
 
         if (items.isEmpty()) {
             actor.exitWarning("You did not have anything to sell at this shop.");
