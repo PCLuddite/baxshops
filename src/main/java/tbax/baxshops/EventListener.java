@@ -179,7 +179,7 @@ public class EventListener implements Listener
             if (shop == null) {
                 throw new CommandErrorException("This shop has been closed and can't be placed.");
             }
-            if (ShopPlugin.addLocation(event.getBlockPlaced().getLocation(), shop)){
+            if (!ShopPlugin.addLocation(event.getBlockPlaced().getLocation(), shop)) {
                 throw new CommandErrorException(Resources.SHOP_EXISTS);
             }
             String[] lines = BaxShop.extractSignText(item);
