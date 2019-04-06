@@ -19,18 +19,30 @@
 package tbax.baxshops.notification;
 
 import org.jetbrains.annotations.NotNull;
+import tbax.baxshops.ShopPlugin;
+import tbax.baxshops.serialization.Reflector;
 import tbax.baxshops.serialization.SafeMap;
 
 public interface UpgradeableNote extends Notification
 {
     @Deprecated
-    void deserialize30(@NotNull SafeMap map);
+    void deserialize00300(@NotNull SafeMap map);
 
     @Deprecated
-    default void deserialize40(@NotNull SafeMap map)
+    void deserialize00400(@NotNull SafeMap map);
+
+    default void deserialize00410(@NotNull SafeMap map)
     {
-        deserialize(map);
+        deserialize00400(map);
     }
 
-    void deserialize(@NotNull SafeMap map);
+    default void deserialize(@NotNull SafeMap map)
+    {
+        try {
+            Reflector.getDeserializer(getClass()).invoke(this, map);
+        }
+        catch (ReflectiveOperationException e) {
+            e.printStackTrace();
+        }
+    }
 }

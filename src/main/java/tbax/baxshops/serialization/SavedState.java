@@ -108,7 +108,7 @@ public final class SavedState
 
         StateLoader loader;
         try {
-            loader = getLoader(plugin, ver);
+            loader = Reflector.getStateLoader(plugin, ver);
         }
         catch (ReflectiveOperationException e) {
             plugin.getLogger().warning("Unknown state file version. Starting from scratch...");
@@ -344,13 +344,5 @@ public final class SavedState
     public void removeShop(UUID shopId)
     {
         shops.remove(shopId);
-    }
-
-    private static StateLoader getLoader(ShopPlugin plugin, double version) throws ReflectiveOperationException
-    {
-        String verStr = (new DecimalFormat("000.00").format(version).replace(".", ""));
-        Class<?> stateClass = Class.forName("tbax.baxshops.serialization.states.State_" + verStr);
-        Constructor<?> c = stateClass.getConstructor(ShopPlugin.class);
-        return (StateLoader)c.newInstance(plugin);
     }
 }

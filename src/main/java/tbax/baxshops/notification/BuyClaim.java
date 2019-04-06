@@ -49,7 +49,7 @@ public final class BuyClaim extends StandardNote implements Claimable
     }
 
     @Override
-    public void deserialize30(@NotNull SafeMap map)
+    public void deserialize00300(@NotNull SafeMap map)
     {
         buyer = State_00300.getPlayerId(map.getString("buyer"));
         seller = State_00300.getPlayerId(map.getString("seller"));

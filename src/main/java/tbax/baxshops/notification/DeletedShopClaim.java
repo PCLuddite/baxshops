@@ -41,12 +41,7 @@ public final class DeletedShopClaim implements UpgradeableNote, Claimable
     public DeletedShopClaim(Map<String, Object> args)
     {
         SafeMap map = new SafeMap(args);
-        if (SavedState.getLoadedState() == State_00300.VERSION) {
-            deserialize30(map);
-        }
-        else {
-            deserialize(map);
-        }
+        deserialize(map);
     }
 
     public DeletedShopClaim(OfflinePlayer owner, BaxEntry entry)
@@ -62,14 +57,14 @@ public final class DeletedShopClaim implements UpgradeableNote, Claimable
     }
 
     @Override
-    public void deserialize30(@NotNull SafeMap map)
+    public void deserialize00300(@NotNull SafeMap map)
     {
         entry = map.getBaxEntry("entry");
         owner = State_00300.getPlayerId(map.getString("owner"));
     }
 
     @Override
-    public void deserialize(@NotNull SafeMap map)
+    public void deserialize00400(@NotNull SafeMap map)
     {
         entry = map.getBaxEntry("entry");
         owner = map.getUUID("owner");

@@ -63,15 +63,7 @@ public final class LollipopNotification implements UpgradeableNote, Configuratio
     public LollipopNotification(Map<String, Object> args)
     {
         SafeMap map = new SafeMap(args);
-        if (SavedState.getLoadedState() == State_00400.VERSION) {
-            deserialize40(map);
-        }
-        if (SavedState.getLoadedState() == State_00300.VERSION) {
-            deserialize30(map);
-        }
-        else {
-            deserialize(map);
-        }
+        deserialize(map);
     }
 
     public LollipopNotification(OfflinePlayer sender, double tastiness)
@@ -82,7 +74,7 @@ public final class LollipopNotification implements UpgradeableNote, Configuratio
     }
 
     @Override
-    public void deserialize30(@NotNull SafeMap map)
+    public void deserialize00300(@NotNull SafeMap map)
     {
         sender = State_00300.getPlayerId(map.getString("sender"));
         recipient = StoredPlayer.ERROR_UUID;
@@ -90,14 +82,14 @@ public final class LollipopNotification implements UpgradeableNote, Configuratio
     }
 
     @Override
-    public void deserialize40(@NotNull SafeMap map)
+    public void deserialize00400(@NotNull SafeMap map)
     {
         sender = map.getUUID("sender");
         tastiness = map.getDouble("tastiness");
     }
 
     @Override
-    public void deserialize(@NotNull SafeMap map)
+    public void deserialize00410(@NotNull SafeMap map)
     {
         sender = map.getUUID("sender");
         recipient = map.getUUID("receiver");

@@ -59,19 +59,11 @@ public abstract class StandardNote implements UpgradeableNote
     public StandardNote(Map<String, Object> args)
     {
         SafeMap map = new SafeMap(args);
-        if (SavedState.getLoadedState() == State_00400.VERSION) {
-            deserialize40(map);
-        }
-        else if (SavedState.getLoadedState() == State_00300.VERSION) {
-            deserialize30(map);
-        }
-        else {
-            deserialize(map);
-        }
+        deserialize(map);
     }
 
     @Deprecated
-    public void deserialize30(@NotNull SafeMap map)
+    public void deserialize00300(@NotNull SafeMap map)
     {
         buyer = State_00300.getPlayerId(map.getString("buyer", StoredPlayer.DUMMY_NAME));
         seller = State_00300.getPlayerId(map.getString("seller", StoredPlayer.DUMMY_NAME));
@@ -79,7 +71,8 @@ public abstract class StandardNote implements UpgradeableNote
         entry = map.getBaxEntry("entry");
     }
 
-    public void deserialize(@NotNull SafeMap map)
+    @Deprecated
+    public void deserialize00400(@NotNull SafeMap map)
     {
         entry = map.getBaxEntry("entry");
         buyer = map.getUUID("buyer");
