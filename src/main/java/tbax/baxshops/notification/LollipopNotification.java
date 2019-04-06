@@ -21,14 +21,12 @@ package tbax.baxshops.notification;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.SafeMap;
-import tbax.baxshops.serialization.SavedState;
 import tbax.baxshops.serialization.StoredPlayer;
+import tbax.baxshops.serialization.UpgradeableSerializable;
 import tbax.baxshops.serialization.states.State_00300;
-import tbax.baxshops.serialization.states.State_00400;
 
 import java.util.Date;
 import java.util.Map;
@@ -38,7 +36,7 @@ import java.util.UUID;
  * A LollipopNotification notifies a player that someone sent him/her a
  * lollipop.
  */
-public final class LollipopNotification implements UpgradeableNote, ConfigurationSerializable
+public final class LollipopNotification implements Notification, UpgradeableSerializable
 {
     public static final double DEFAULT_TASTINESS = 40;
     private static final String[] adjectives =  {

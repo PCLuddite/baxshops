@@ -25,14 +25,14 @@ import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.SafeMap;
-import tbax.baxshops.serialization.SavedState;
+import tbax.baxshops.serialization.UpgradeableSerializable;
 import tbax.baxshops.serialization.states.State_00300;
 
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
-public final class DeletedShopClaim implements UpgradeableNote, Claimable
+public final class DeletedShopClaim implements UpgradeableSerializable, Claimable
 {
     private UUID owner;
     private BaxEntry entry;

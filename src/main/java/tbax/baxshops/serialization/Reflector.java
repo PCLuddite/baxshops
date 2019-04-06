@@ -19,9 +19,7 @@
 package tbax.baxshops.serialization;
 
 import tbax.baxshops.ShopPlugin;
-import tbax.baxshops.notification.UpgradeableNote;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -51,7 +49,7 @@ public final class Reflector
         return (StateLoader)stateClass.getConstructor(ShopPlugin.class).newInstance(plugin);
     }
 
-    public static Method getDeserializer(Class<? extends UpgradeableNote> cls) throws ReflectiveOperationException
+    public static Method getDeserializer(Class<? extends UpgradeableSerializable> cls) throws ReflectiveOperationException
     {
         String verStr = getVersionString(SavedState.getLoadedState());
         return cls.getMethod("deserialize" + verStr, SafeMap.class);

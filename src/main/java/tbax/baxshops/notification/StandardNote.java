@@ -25,16 +25,15 @@ import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.SafeMap;
-import tbax.baxshops.serialization.SavedState;
 import tbax.baxshops.serialization.StoredPlayer;
+import tbax.baxshops.serialization.UpgradeableSerializable;
 import tbax.baxshops.serialization.states.State_00300;
-import tbax.baxshops.serialization.states.State_00400;
 
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
-public abstract class StandardNote implements UpgradeableNote
+public abstract class StandardNote implements Notification, UpgradeableSerializable
 {
     protected BaxEntry entry;
     protected UUID shopId;

@@ -16,14 +16,12 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
  * USA
  */
-package tbax.baxshops.notification;
+package tbax.baxshops.serialization;
 
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
-import tbax.baxshops.ShopPlugin;
-import tbax.baxshops.serialization.Reflector;
-import tbax.baxshops.serialization.SafeMap;
 
-public interface UpgradeableNote extends Notification
+public interface UpgradeableSerializable extends ConfigurationSerializable
 {
     @Deprecated
     void deserialize00300(@NotNull SafeMap map);
