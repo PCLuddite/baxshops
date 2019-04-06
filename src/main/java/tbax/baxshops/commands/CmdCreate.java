@@ -117,15 +117,15 @@ public final class CmdCreate extends BaxShopCommand
         if (ShopPlugin.getShop(loc) != null)
             actor.exitError(Resources.SHOP_EXISTS);
 
-        BaxShop shop = new BaxShop();
-        shop.setOwner(owner);
-
-        buildShopSign(loc,
+        Block b = buildShopSign(loc,
             "",
             (owner.getName().length() < 13 ? owner.getName() : owner.getName().substring(0, 12) + '…') + "'s",
             "shop",
             ""
         );
+
+        BaxShop shop = new BaxShop(b.getLocation());
+        shop.setOwner(owner);
 
         ShopPlugin.addShop(shop);
 

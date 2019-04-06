@@ -55,10 +55,16 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
         owner = StoredPlayer.DUMMY_UUID;
     }
 
-    public BaxShop()
+    public BaxShop(Collection<? extends Location> locations)
     {
         id = UUID.randomUUID();
         owner = StoredPlayer.DUMMY_UUID;
+        this.locations.addAll(locations);
+    }
+
+    public BaxShop(Location loc)
+    {
+        this(Collections.singleton(loc));
     }
 
     public BaxShop(Map<String, Object> args)
