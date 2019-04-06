@@ -24,21 +24,17 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Sign;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.serialization.ItemNames;
-import tbax.baxshops.serialization.SafeMap;
-import tbax.baxshops.serialization.SavedState;
-import tbax.baxshops.serialization.StoredPlayer;
+import tbax.baxshops.serialization.*;
 import tbax.baxshops.serialization.states.State_00300;
 
 import java.util.*;
 
-public final class BaxShop implements ConfigurationSerializable, Collection<BaxEntry>
+public final class BaxShop implements UpgradeableSerializable, Collection<BaxEntry>
 {
     public static final int ITEMS_PER_PAGE = 7;
 
@@ -67,21 +63,7 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
 
     public BaxShop(Map<String, Object> args)
     {
-        SafeMap map = new SafeMap(args);
-        if (SavedState.getLoadedState() == State_00300.VERSION) {
-            String name = map.getString("owner", StoredPlayer.DUMMY_NAME);
-            id = UUID.randomUUID();
-            legacyId = map.getLong("id");
-            owner = State_00300.getPlayerId(name);
-            flags = State_00300.flagMapToFlag(map);
-        }
-        else {
-            id =  map.getUUID("id", UUID.randomUUID());
-            owner = map.getUUID("owner", StoredPlayer.ERROR_UUID);
-            flags = map.getInteger("flags");
-        }
-        inventory.addAll(map.getList("inventory"));
-        locations.addAll(map.getList("locations"));
+        deserialize(new SafeMap(args));
     }
 
     public BaxShop(BaxShop shop)
@@ -92,6 +74,28 @@ public final class BaxShop implements ConfigurationSerializable, Collection<BaxE
         locations.addAll(shop.locations);
         shop.stream().map(BaxEntry::new).forEach(inventory::add);
         flags = shop.flags;
+    }
+
+    @Override
+    public void deserialize00300(@NotNull SafeMap map)
+    {
+        String name = map.getString("owner", StoredPlayer.DUMMY_NAME);
+        id = UUID.randomUUID();
+        legacyId = map.getLong("id");
+        owner = State_00300.getPlayerId(name);
+        flags = State_00300.flagMapToFlag(map);
+        inventory.addAll(map.getList("inventory"));
+        locations.addAll(map.getList("locations"));
+    }
+
+    @Override
+    public void deserialize00400(@NotNull SafeMap map)
+    {
+        id =  map.getUUID("id", UUID.randomUUID());
+        owner = map.getUUID("owner", StoredPlayer.ERROR_UUID);
+        flags = map.getInteger("flags");
+        inventory.addAll(map.getList("inventory"));
+        locations.addAll(map.getList("locations"));
     }
 
     public UUID getId()

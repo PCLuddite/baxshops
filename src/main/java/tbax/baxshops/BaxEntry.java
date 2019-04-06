@@ -30,12 +30,13 @@ import org.bukkit.potion.PotionData;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.serialization.ItemNames;
 import tbax.baxshops.serialization.SafeMap;
+import tbax.baxshops.serialization.UpgradeableSerializable;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("unused")
-public final class BaxEntry implements ConfigurationSerializable
+public final class BaxEntry implements UpgradeableSerializable
 {
     private ItemStack stack;
     private double retailPrice = -1;
@@ -55,20 +56,42 @@ public final class BaxEntry implements ConfigurationSerializable
         stack = other.stack.clone();
     }
 
-    public BaxEntry(Map<String, Object> args)
-    {
-        SafeMap map = new SafeMap(args);
-        retailPrice = map.getDouble("retailPrice", 10000);
-        refundPrice = map.getDouble("refundPrice");
-        stack = map.getItemStack("stack", new ItemStack(Material.AIR));
-        quantity = map.getInteger("quantity");
-    }
-    
     public BaxEntry(@NotNull ItemStack item)
     {
         setItem(item);
     }
 
+    public BaxEntry(Map<String, Object> args)
+    {
+        deserialize(new SafeMap(args));
+    }
+
+    @Override
+    public void deserialize(@NotNull SafeMap map)
+    {
+        retailPrice = map.getDouble("retailPrice", 10000);
+        refundPrice = map.getDouble("refundPrice");
+        stack = map.getItemStack("stack", new ItemStack(Material.AIR));
+        quantity = map.getInteger("quantity");
+    }
+
+    @Override
+    public void deserialize00300(@NotNull SafeMap map)
+    {
+        deserialize(map);
+    }
+
+    @Override
+    public void deserialize00400(@NotNull SafeMap map)
+    {
+        deserialize(map);
+    }
+
+    @Override
+    public void deserialize00410(@NotNull SafeMap map)
+    {
+        deserialize(map);
+    }
 
     public double getRetailPrice()
     {
