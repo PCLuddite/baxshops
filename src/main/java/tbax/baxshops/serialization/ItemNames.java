@@ -19,7 +19,6 @@
 
 package tbax.baxshops.serialization;
 
-import javafx.fxml.FXMLLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -51,7 +50,7 @@ public final class ItemNames
         Method nmsCpyMthd = null;
         Method getNmMthd = null;
         try {
-            Class<?> itemStackCls = Class.forName("org.bukkit.craftbukkit.ItemStack");
+            Class<?> itemStackCls = Class.forName("net.minecraft.server." + MINECRAFT_VERSION + ".ItemStack");
             nmsCpyMthd = Class.forName("org.bukkit.craftbukkit." + MINECRAFT_VERSION + ".inventory.CraftItemStack")
                 .getMethod("asNMSCopy", ItemStack.class);
             getNmMthd = itemStackCls.getMethod("getName");
