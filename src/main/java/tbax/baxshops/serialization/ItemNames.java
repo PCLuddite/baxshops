@@ -19,8 +19,9 @@
 
 package tbax.baxshops.serialization;
 
+import javafx.fxml.FXMLLoader;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -29,12 +30,39 @@ import tbax.baxshops.*;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.reflect.Method;
 import java.util.*;
 
 @SuppressWarnings("JavaDoc")
 public final class ItemNames
 {
+    private static final String MINECRAFT_VERSION;
+    private static final Method AS_NMS_COPY;
+    private static final Method GET_NAME;
+
+    static {
+        String name = Bukkit.getServer().getClass().getPackage().getName();
+        MINECRAFT_VERSION = name.substring(name.lastIndexOf('.') + 1);
+
+        Method nmsCpyMthd = null;
+        Method getNmMthd = null;
+        try {
+            Class<?> itemStackCls = Class.forName("org.bukkit.craftbukkit.ItemStack");
+            nmsCpyMthd = Class.forName("org.bukkit.craftbukkit." + MINECRAFT_VERSION + ".inventory.CraftItemStack")
+                .getMethod("asNMSCopy", ItemStack.class);
+            getNmMthd = itemStackCls.getMethod("getName");
+        }
+        catch (ReflectiveOperationException e) {
+            e.printStackTrace();
+        }
+        AS_NMS_COPY = nmsCpyMthd;
+        GET_NAME = getNmMthd;
+    }
+
     /**
      * An array of items that can be damaged
      */
@@ -119,11 +147,25 @@ public final class ItemNames
             if (enchants != null)
                 return EnchantMap.fullListString(enchants);
         }
+
         item = item.clone();
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(null);
         item.setItemMeta(meta);
-        return NMSUtils.getItemName(item);
+        try {
+            Object nmsCopy = AS_NMS_COPY.invoke(null, item);
+            Object txtObj = GET_NAME.invoke(nmsCopy);
+            try {
+                return (String) txtObj;
+            }
+            catch (ClassCastException e) {
+                return (String)txtObj.getClass().getMethod("getText").invoke(txtObj);
+            }
+        }
+        catch (ReflectiveOperationException | ClassCastException e) {
+            ShopPlugin.logWarning("Could not get item name for " + item.getType());
+            return item.getType().toString();
+        }
     }
     
     public static String getEnchantName(Enchantment enchant)
