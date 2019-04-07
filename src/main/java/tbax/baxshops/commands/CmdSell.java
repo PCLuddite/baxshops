@@ -125,7 +125,7 @@ public final class CmdSell extends BaxShopCommand
             if (entry.getAmount() > 0) {
                 double price = sell(actor, entry);
                 if (price >= 0.0) {
-                    total += price;
+                    total = MathUtil.add(total, price);
                 }
             }
         }
@@ -142,14 +142,9 @@ public final class CmdSell extends BaxShopCommand
     {
         BaxShop shop = actor.getShop();
         assert shop != null;
-        if (entry == null || entry.getRefundPrice() < 0) {
-            actor.exitError(Resources.NOT_FOUND_SHOPITEM);
-        }
 
         String name = ItemNames.getName(entry.getItemStack());
-
         double price = MathUtil.multiply(entry.getAmount(), entry.getRefundPrice());
-
         if (shop.hasFlagSellRequests()) {
             SaleRequest request = new SaleRequest(shop.getId(), shop.getOwner(), actor.getPlayer(), entry);
             ShopPlugin.sendNotification(shop.getOwner(), request);
