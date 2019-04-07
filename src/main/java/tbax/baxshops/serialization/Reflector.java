@@ -18,11 +18,13 @@
  */
 package tbax.baxshops.serialization;
 
+import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.ShopPlugin;
 
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Map;
 
 public final class Reflector
 {
@@ -53,5 +55,20 @@ public final class Reflector
     {
         String verStr = getVersionString(SavedState.getLoadedState());
         return cls.getMethod("deserialize" + verStr, SafeMap.class);
+    }
+
+    public static void deserialize(@NotNull UpgradeableSerializable obj, @NotNull Map<String, Object> args)
+    {
+        deserialize(obj, new SafeMap(args));
+    }
+
+    public static void deserialize(@NotNull UpgradeableSerializable obj, @NotNull SafeMap map)
+    {
+        try {
+            getDeserializer(obj.getClass()).invoke(obj, map);
+        }
+        catch (ReflectiveOperationException e) {
+            throw new SerializationException(e.getMessage(), e.getCause());
+        }
     }
 }

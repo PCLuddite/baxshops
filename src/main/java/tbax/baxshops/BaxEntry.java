@@ -21,7 +21,6 @@ package tbax.baxshops;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -29,10 +28,10 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.serialization.ItemNames;
+import tbax.baxshops.serialization.Reflector;
 import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.UpgradeableSerializable;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @SuppressWarnings("unused")
@@ -63,34 +62,16 @@ public final class BaxEntry implements UpgradeableSerializable
 
     public BaxEntry(Map<String, Object> args)
     {
-        deserialize(new SafeMap(args));
-    }
-
-    @Override
-    public void deserialize(@NotNull SafeMap map)
-    {
-        retailPrice = map.getDouble("retailPrice", 10000);
-        refundPrice = map.getDouble("refundPrice");
-        stack = map.getItemStack("stack", new ItemStack(Material.AIR));
-        quantity = map.getInteger("quantity");
+        Reflector.deserialize(this, args);
     }
 
     @Override
     public void deserialize00300(@NotNull SafeMap map)
     {
-        deserialize(map);
-    }
-
-    @Override
-    public void deserialize00400(@NotNull SafeMap map)
-    {
-        deserialize(map);
-    }
-
-    @Override
-    public void deserialize00410(@NotNull SafeMap map)
-    {
-        deserialize(map);
+        retailPrice = map.getDouble("retailPrice", 10000);
+        refundPrice = map.getDouble("refundPrice");
+        stack = map.getItemStack("stack", new ItemStack(Material.AIR));
+        quantity = map.getInteger("quantity");
     }
 
     public double getRetailPrice()

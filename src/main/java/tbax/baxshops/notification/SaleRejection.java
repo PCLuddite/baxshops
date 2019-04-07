@@ -42,6 +42,7 @@ public final class SaleRejection extends StandardNote implements Claimable
     {
         super(shopId, buyer, seller, entry);
     }
+
     public SaleRejection(Map<String, Object> args)
     {
         super(args);

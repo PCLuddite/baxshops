@@ -18,13 +18,16 @@
  */
 package tbax.baxshops.notification;
 
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
+import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.ShopPlugin;
+import tbax.baxshops.serialization.Reflector;
 import tbax.baxshops.serialization.SafeMap;
+import tbax.baxshops.serialization.SerializationException;
+import tbax.baxshops.serialization.UpgradeableSerializable;
 
 import java.util.*;
 
-public final class NoteSet implements ConfigurationSerializable
+public final class NoteSet implements UpgradeableSerializable
 {
     private UUID recipient;
     private Deque<Notification> notes = new ArrayDeque<>();
@@ -42,11 +45,22 @@ public final class NoteSet implements ConfigurationSerializable
 
     public NoteSet(Map<String, Object> args)
     {
-        SafeMap map = new SafeMap(args);
+        Reflector.deserialize(this, args);
+    }
+
+    @Override
+    public void deserialize00400(@NotNull SafeMap map)
+    {
         recipient = map.getUUID("recipient");
         notes.addAll(map.getList("notes"));
     }
-    
+
+    @Override
+    public void deserialize00410(@NotNull SafeMap map)
+    {
+        SerializationException.throwVersionException();
+    }
+
     public UUID getRecipient()
     {
         return recipient;

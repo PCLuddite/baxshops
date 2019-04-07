@@ -23,6 +23,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.ShopPlugin;
+import tbax.baxshops.serialization.Reflector;
 import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.StoredPlayer;
 import tbax.baxshops.serialization.UpgradeableSerializable;
@@ -60,8 +61,7 @@ public final class LollipopNotification implements Notification, UpgradeableSeri
 
     public LollipopNotification(Map<String, Object> args)
     {
-        SafeMap map = new SafeMap(args);
-        deserialize(map);
+        Reflector.deserialize(this, args);
     }
 
     public LollipopNotification(OfflinePlayer sender, double tastiness)
@@ -83,6 +83,7 @@ public final class LollipopNotification implements Notification, UpgradeableSeri
     public void deserialize00400(@NotNull SafeMap map)
     {
         sender = map.getUUID("sender");
+        recipient = StoredPlayer.ERROR_UUID;
         tastiness = map.getDouble("tastiness");
     }
 

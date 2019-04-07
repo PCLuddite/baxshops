@@ -18,25 +18,26 @@
  */
 package tbax.baxshops.serialization;
 
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
-import org.jetbrains.annotations.NotNull;
-
-public interface UpgradeableSerializable extends ConfigurationSerializable
+public class SerializationException extends RuntimeException
 {
-    @Deprecated
-    default void deserialize00300(@NotNull SafeMap map)
-    {
-        SerializationException.throwVersionException();
+    public SerializationException() {
+        super();
     }
 
-    @Deprecated
-    default void deserialize00400(@NotNull SafeMap map)
-    {
-        deserialize00300(map);
+    public SerializationException(String message) {
+        super(message);
     }
 
-    default void deserialize00410(@NotNull SafeMap map)
+    public SerializationException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public SerializationException(Throwable cause) {
+        super(cause);
+    }
+
+    public static void throwVersionException()
     {
-        deserialize00400(map);
+        throw new SerializationException("State version is not supported for deserialization");
     }
 }

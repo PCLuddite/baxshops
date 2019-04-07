@@ -22,13 +22,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.Resources;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class StoredPlayer implements OfflinePlayer
+public class StoredPlayer implements OfflinePlayer, UpgradeableSerializable
 {
     public static final UUID DUMMY_UUID = UUID.fromString("326a36ea-b465-3192-a4f7-c313f347edc9");
     public static final String DUMMY_NAME = "world";
@@ -65,7 +66,12 @@ public class StoredPlayer implements OfflinePlayer
     @SuppressWarnings("unused")
     public StoredPlayer(Map<String, Object> args)
     {
-        SafeMap map = new SafeMap(args);
+        Reflector.deserialize(this, args);
+    }
+
+    @Override
+    public void deserialize00400(@NotNull SafeMap map)
+    {
         uuid = map.getUUID("uuid", UUID.randomUUID());
         lastSeenName = map.getString("name", uuid.toString());
         legacyPlayer = map.getBoolean("legacy", true);

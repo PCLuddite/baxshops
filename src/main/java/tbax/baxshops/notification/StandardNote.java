@@ -24,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.ShopPlugin;
+import tbax.baxshops.serialization.Reflector;
 import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.StoredPlayer;
 import tbax.baxshops.serialization.UpgradeableSerializable;
@@ -57,8 +58,7 @@ public abstract class StandardNote implements Notification, UpgradeableSerializa
 
     public StandardNote(Map<String, Object> args)
     {
-        SafeMap map = new SafeMap(args);
-        deserialize(map);
+        Reflector.deserialize(this, args);
     }
 
     @Deprecated
