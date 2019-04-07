@@ -24,7 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.Format;
 import tbax.baxshops.ShopPlugin;
-import tbax.baxshops.serialization.Reflector;
+import tbax.baxshops.serialization.UpgradeableSerialization;
 import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.UpgradeableSerializable;
 import tbax.baxshops.serialization.states.State_00300;
@@ -41,7 +41,7 @@ public final class DeletedShopClaim implements UpgradeableSerializable, Claimabl
 
     public DeletedShopClaim(Map<String, Object> args)
     {
-        Reflector.deserialize(this, args);
+        UpgradeableSerialization.deserialize(this, args);
     }
 
     public DeletedShopClaim(OfflinePlayer owner, BaxEntry entry)

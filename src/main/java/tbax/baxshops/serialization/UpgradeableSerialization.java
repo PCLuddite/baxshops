@@ -26,11 +26,11 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Map;
 
-public final class Reflector
+public final class UpgradeableSerialization
 {
     private static final NumberFormat verFormat = new DecimalFormat("000.00");
 
-    private Reflector()
+    private UpgradeableSerialization()
     {
     }
 

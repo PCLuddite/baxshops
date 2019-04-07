@@ -34,7 +34,6 @@ import tbax.baxshops.serialization.states.State_00300;
 import tbax.baxshops.serialization.states.State_00410;
 
 import java.io.*;
-import java.lang.reflect.Constructor;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.logging.Logger;
@@ -108,7 +107,7 @@ public final class SavedState
 
         StateLoader loader;
         try {
-            loader = Reflector.getStateLoader(plugin, ver);
+            loader = UpgradeableSerialization.getStateLoader(plugin, ver);
         }
         catch (ReflectiveOperationException e) {
             plugin.getLogger().warning("Unknown state file version. Starting from scratch...");

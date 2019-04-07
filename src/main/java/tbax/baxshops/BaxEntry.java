@@ -28,7 +28,7 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.serialization.ItemNames;
-import tbax.baxshops.serialization.Reflector;
+import tbax.baxshops.serialization.UpgradeableSerialization;
 import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.UpgradeableSerializable;
 
@@ -62,7 +62,7 @@ public final class BaxEntry implements UpgradeableSerializable
 
     public BaxEntry(Map<String, Object> args)
     {
-        Reflector.deserialize(this, args);
+        UpgradeableSerialization.deserialize(this, args);
     }
 
     @Override

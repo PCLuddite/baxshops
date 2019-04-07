@@ -69,7 +69,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
 
     public BaxShop(Map<String, Object> args)
     {
-        Reflector.deserialize(this, args);
+        UpgradeableSerialization.deserialize(this, args);
     }
 
     public BaxShop(BaxShop shop)

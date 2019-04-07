@@ -20,7 +20,7 @@ package tbax.baxshops.notification;
 
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.ShopPlugin;
-import tbax.baxshops.serialization.Reflector;
+import tbax.baxshops.serialization.UpgradeableSerialization;
 import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.SerializationException;
 import tbax.baxshops.serialization.UpgradeableSerializable;
@@ -45,7 +45,7 @@ public final class NoteSet implements UpgradeableSerializable
 
     public NoteSet(Map<String, Object> args)
     {
-        Reflector.deserialize(this, args);
+        UpgradeableSerialization.deserialize(this, args);
     }
 
     @Override

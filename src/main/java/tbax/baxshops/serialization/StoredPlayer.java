@@ -66,7 +66,7 @@ public class StoredPlayer implements OfflinePlayer, UpgradeableSerializable
     @SuppressWarnings("unused")
     public StoredPlayer(Map<String, Object> args)
     {
-        Reflector.deserialize(this, args);
+        UpgradeableSerialization.deserialize(this, args);
     }
 
     @Override
