@@ -160,7 +160,7 @@ public final class CmdCreate extends BaxShopCommand
         b.setType(Material.SIGN);
         loc.setYaw(angle);
 
-        if (!b.getType().equals(Material.SIGN)) {
+        if (!BaxShop.isSign(b.getType())) {
             throw new CommandErrorException(String.format("Unable to place sign! Block type is %s.", b.getType().toString()));
         }
 

@@ -23,11 +23,8 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.jetbrains.annotations.NotNull;
-import tbax.baxshops.CommandHelpArgument;
-import tbax.baxshops.Resources;
-import tbax.baxshops.ShopPlugin;
+import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.CommandHelp;
 
 public final class CmdSign extends BaxShopCommand
 {
@@ -89,7 +86,7 @@ public final class CmdSign extends BaxShopCommand
     {
         assert actor.getShop() != null;
         Block b = actor.getSelection().getLocation().getBlock();
-        if (!b.getType().equals(Material.SIGN)) {
+        if (!BaxShop.isSign(b.getType())) {
             actor.logWarning(String.format(Resources.NOT_FOUND_SIGN, actor.getShop().getOwner()));
             actor.exitWarning("This shop is missing its sign.");
         }

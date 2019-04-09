@@ -124,7 +124,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     {
         owner = newOwner.getUniqueId();
     }
-    
+
     public int indexOf(BaxEntry entry)
     {
         for(int index = 0; index < inventory.size(); index++) {
@@ -134,7 +134,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
         }
         return -1; // not found
     }
-    
+
     public Collection<Location> getLocations()
     {
         return Collections.unmodifiableCollection(locations);
@@ -144,7 +144,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     {
         locations.remove(loc);
     }
-    
+
     public void addLocation(Location loc)
     {
         locations.add(loc);
@@ -286,10 +286,22 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
 
     public static boolean isShop(ItemStack item)
     {
-        return item.getType() == Material.SIGN &&
+        return isSign(item)&&
                item.hasItemMeta() &&
                item.getItemMeta().hasLore() &&
                item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1).startsWith(ChatColor.GRAY + "ID: ");
+    }
+
+    public static boolean isSign(ItemStack item)
+    {
+        return item != null && isSign(item.getType());
+    }
+
+    public static boolean isSign(Material type)
+    {
+        return type == Material.SIGN || type == Material.WALL_SIGN
+            || type == Material.LEGACY_SIGN || type == Material.LEGACY_WALL_SIGN
+            || type == Material.LEGACY_SIGN_POST;
     }
 
     public static BaxShop fromItem(ItemStack item)
