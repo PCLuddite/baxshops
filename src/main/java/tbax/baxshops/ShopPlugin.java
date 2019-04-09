@@ -100,7 +100,7 @@ public final class ShopPlugin extends JavaPlugin
 
     public static void showNotificationCount(Player player)
     {
-        Deque<Notification> notifications = savedState.getNotifications(player.getPlayer());
+        Deque<Notification> notifications = savedState.getNotifications(player);
         if (notifications.isEmpty()) {
             player.sendMessage("You have no notifications.");
         }
@@ -117,7 +117,7 @@ public final class ShopPlugin extends JavaPlugin
      */
     public static void showNotification(Player player)
     {
-        Deque<Notification> notifications = savedState.getNotifications(player.getPlayer());
+        Deque<Notification> notifications = savedState.getNotifications(player);
         Notification n = notifications.getFirst();
         sendInfo(player, n.getMessage(player.getPlayer()));
         if (n instanceof Request) {
@@ -393,7 +393,8 @@ public final class ShopPlugin extends JavaPlugin
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command,
+                             @NotNull String label, @NotNull String[] args)
     {
         ShopCmdActor actor = new ShopCmdActor( sender, command, args);
 
@@ -422,6 +423,6 @@ public final class ShopPlugin extends JavaPlugin
         }
 
         econ = rsp.getProvider();
-        return econ != null;
+        return true;
     }
 }
