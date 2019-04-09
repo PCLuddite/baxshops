@@ -157,14 +157,11 @@ public final class CmdCreate extends BaxShopCommand
 
         byte angle = (byte) ((((int) loc.getYaw() + 225) / 90) << 2);
 
-        b.setType(Material.SIGN_POST);
+        b.setType(Material.SIGN);
         loc.setYaw(angle);
 
         if (!b.getType().equals(Material.SIGN)) {
-            b.setType(Material.SIGN_POST);
-            if (!(b.getType().equals(Material.SIGN) || b.getType().equals(Material.SIGN_POST))) {
-                throw new CommandErrorException(String.format("Unable to place sign! Block type is %s.", b.getType().toString()));
-            }
+            throw new CommandErrorException(String.format("Unable to place sign! Block type is %s.", b.getType().toString()));
         }
 
         Sign sign = (Sign)b.getState();

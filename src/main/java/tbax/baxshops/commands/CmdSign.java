@@ -89,7 +89,7 @@ public final class CmdSign extends BaxShopCommand
     {
         assert actor.getShop() != null;
         Block b = actor.getSelection().getLocation().getBlock();
-        if (!b.getType().equals(Material.SIGN) && !b.getType().equals(Material.SIGN_POST)) {
+        if (!b.getType().equals(Material.SIGN)) {
             actor.logWarning(String.format(Resources.NOT_FOUND_SIGN, actor.getShop().getOwner()));
             actor.exitWarning("This shop is missing its sign.");
         }
