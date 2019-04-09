@@ -20,15 +20,13 @@ package tbax.baxshops.commands;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public final class CommandMap implements Map<String, BaxShopCommand>
 {
     private final Map<String, BaxShopCommand> cmds = new HashMap<>();
+    private final Set<String> names = new HashSet<>();
 
     public CommandMap()
     {
@@ -74,6 +72,7 @@ public final class CommandMap implements Map<String, BaxShopCommand>
     @Override
     public BaxShopCommand put(String key, BaxShopCommand value)
     {
+        names.add(value.getName());
         return cmds.put(key, value);
     }
 
@@ -93,6 +92,7 @@ public final class CommandMap implements Map<String, BaxShopCommand>
     public void clear()
     {
         cmds.clear();
+        names.clear();
     }
 
     @Override
@@ -139,5 +139,10 @@ public final class CommandMap implements Map<String, BaxShopCommand>
         for (String alias : cmd.getAliases()) {
             put(alias, cmd);
         }
+    }
+
+    public Set<String> getNames()
+    {
+        return names;
     }
 }

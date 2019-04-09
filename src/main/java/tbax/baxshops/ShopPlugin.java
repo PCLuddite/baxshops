@@ -38,6 +38,7 @@ import tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 public final class ShopPlugin extends JavaPlugin
 {
@@ -45,6 +46,8 @@ public final class ShopPlugin extends JavaPlugin
     private static Economy econ;
     private static Logger log;
     private static SavedState savedState;
+    private static String[] RAW_COMMANDS = { "buy", "sell", "restock", "restockall" };
+
     /**
      * A map containing each player's currently selected shop and other
      * selection data
@@ -254,7 +257,7 @@ public final class ShopPlugin extends JavaPlugin
         }
         return runCommand(cmd, actor);
     }
-    
+
     public static boolean runCommand(BaxShopCommand cmd, ShopCmdActor actor)
     {
         try {
@@ -285,7 +288,7 @@ public final class ShopPlugin extends JavaPlugin
         }
         return true;
     }
-    
+
     public static Economy getEconomy()
     {
         return econ;
@@ -317,12 +320,12 @@ public final class ShopPlugin extends JavaPlugin
     {
         return savedState;
     }
-    
+
     public static void logInfo(String msg)
     {
         log.info(msg);
     }
-    
+
     public static void logWarning(String msg)
     {
         log.warning(msg);
@@ -332,7 +335,7 @@ public final class ShopPlugin extends JavaPlugin
     {
         log.severe(msg);
     }
-    
+
     @Override
     public void onEnable()
     {
@@ -396,14 +399,41 @@ public final class ShopPlugin extends JavaPlugin
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
-        ShopCmdActor actor = new ShopCmdActor( sender, command, args);
+        ShopCmdActor actor = new ShopCmdActor(sender, command, args);
 
-        if (actor.cmdIs("buy", "sell", "restock", "restockall")) {
+        if (actor.cmdIs(RAW_COMMANDS)) {
             actor.insertAction(actor.getCmdName());
             actor.setCmdName("shop");
         }
 
         return runCommand(actor);
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    {
+        ShopCmdActor actor = new ShopCmdActor(sender, command, args);
+
+        if (actor.cmdIs(RAW_COMMANDS)) {
+            actor.insertAction(actor.getCmdName());
+            actor.setCmdName("shop");
+        }
+
+        if (args.length == 1) {
+            return commands.entrySet().stream()
+                .filter(c -> c.getKey().equals(c.getValue().getName())
+                        && c.getValue().hasPermission(actor)
+                        && c.getKey().startsWith(args[0]))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+        }
+        else if (args.length > 1) {
+            BaxShopCommand cmd = commands.get(args[0]);
+            if (cmd != null) {
+                return cmd.onTabComplete(sender, command, alias, args);
+            }
+        }
+        return super.onTabComplete(sender, command, alias, args);
     }
 
     /**
