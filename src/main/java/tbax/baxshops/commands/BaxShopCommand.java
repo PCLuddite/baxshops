@@ -19,11 +19,17 @@
 
 package tbax.baxshops.commands;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.CommandHelp;
 import tbax.baxshops.errors.PrematureAbortException;
 
-public abstract class BaxShopCommand
+import java.util.Arrays;
+import java.util.List;
+
+public abstract class BaxShopCommand implements TabCompleter
 {
     public abstract @NotNull String getName();
     public abstract String getPermission();
@@ -66,5 +72,11 @@ public abstract class BaxShopCommand
     public final boolean requiresAdmin()
     {
         return "shops.admin".equalsIgnoreCase(getPermission());
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    {
+        return null;
     }
 }
