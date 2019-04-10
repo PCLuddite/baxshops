@@ -438,7 +438,7 @@ public final class ShopPlugin extends JavaPlugin
                 return cmd.onTabComplete(sender, command, alias, args);
             }
         }
-        return super.onTabComplete(sender, command, alias, args);
+        return Collections.emptyList();
     }
 
     /**

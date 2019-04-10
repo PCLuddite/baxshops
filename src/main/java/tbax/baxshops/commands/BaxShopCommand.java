@@ -27,6 +27,7 @@ import tbax.baxshops.CommandHelp;
 import tbax.baxshops.errors.PrematureAbortException;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class BaxShopCommand implements TabCompleter
@@ -77,6 +78,6 @@ public abstract class BaxShopCommand implements TabCompleter
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
     {
-        return null;
+        return Collections.emptyList();
     }
 }
