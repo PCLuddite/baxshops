@@ -61,6 +61,11 @@ public final class ShopCmdActor
             player = (Player)sender;
         }
     }
+
+    public String[] getArgs()
+    {
+        return args;
+    }
     
     public CommandSender getSender()
     {

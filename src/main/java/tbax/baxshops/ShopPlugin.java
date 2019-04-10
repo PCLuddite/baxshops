@@ -422,6 +422,7 @@ public final class ShopPlugin extends JavaPlugin
         if (actor.cmdIs(RAW_COMMANDS)) {
             actor.insertAction(actor.getCmdName());
             actor.setCmdName("shop");
+            args = actor.getArgs();
         }
 
         if (args.length == 1) {
