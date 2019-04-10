@@ -344,4 +344,9 @@ public final class SavedState
     {
         shops.remove(shopId);
     }
+
+    public Collection<StoredPlayer> getRegisteredPlayers()
+    {
+        return players.values();
+    }
 }

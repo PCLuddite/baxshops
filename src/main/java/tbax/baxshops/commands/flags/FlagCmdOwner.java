@@ -18,11 +18,18 @@
  */
 package tbax.baxshops.commands.flags;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
+import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.commands.ShopCmdActor;
 import tbax.baxshops.errors.PrematureAbortException;
+import tbax.baxshops.serialization.StoredPlayer;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public final class FlagCmdOwner extends FlagCmd
 {
@@ -48,5 +55,14 @@ public final class FlagCmdOwner extends FlagCmd
         if (actor.isOwner()) {
             actor.sendMessage("You will still be able to edit this shop until you leave or reselect it.");
         }
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    {
+        return ShopPlugin.getRegisteredPlayers().stream()
+            .map(StoredPlayer::getName)
+            .filter(n -> n != null && n.toLowerCase().startsWith(args[2].toLowerCase()))
+            .collect(Collectors.toList());
     }
 }

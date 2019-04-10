@@ -18,9 +18,14 @@
  */
 package tbax.baxshops.commands.flags;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.commands.BaxShopCommand;
 import tbax.baxshops.commands.ShopCmdActor;
+
+import java.util.Arrays;
+import java.util.List;
 
 public abstract class FlagCmd extends BaxShopCommand
 {
@@ -74,4 +79,10 @@ public abstract class FlagCmd extends BaxShopCommand
     }
 
     public abstract boolean requiresRealOwner(@NotNull ShopCmdActor actor);
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    {
+        return Arrays.asList("true", "false");
+    }
 }

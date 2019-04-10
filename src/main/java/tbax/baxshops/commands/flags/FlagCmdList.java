@@ -18,11 +18,16 @@
  */
 package tbax.baxshops.commands.flags;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
 import tbax.baxshops.commands.ShopCmdActor;
 import tbax.baxshops.errors.PrematureAbortException;
+
+import java.util.Collections;
+import java.util.List;
 
 public final class FlagCmdList extends FlagCmd
 {
@@ -55,5 +60,11 @@ public final class FlagCmdList extends FlagCmd
         actor.sendMessage("%s: %s", Format.flag("Sell to Shop"), Format.keyword(shop.hasFlagSellToShop() ? "Yes" : "No"));
         actor.sendMessage("%s: %s", Format.flag("Sell Requests"), Format.keyword(shop.hasFlagSellRequests() ? "Yes" : "No"));
         actor.sendMessage("%s: %s", Format.flag("Buy Requests"), Format.keyword(shop.hasFlagBuyRequests() ? "Yes" : "No"));
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    {
+        return Collections.emptyList();
     }
 }

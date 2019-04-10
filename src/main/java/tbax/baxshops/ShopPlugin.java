@@ -335,6 +335,11 @@ public final class ShopPlugin extends JavaPlugin
         log.severe(msg);
     }
 
+    public static Collection<StoredPlayer> getRegisteredPlayers()
+    {
+        return savedState.getRegisteredPlayers();
+    }
+
     @Override
     public void onEnable()
     {

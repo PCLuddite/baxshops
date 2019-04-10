@@ -18,6 +18,8 @@
  */
 package tbax.baxshops.commands;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.CommandHelp;
 import tbax.baxshops.CommandHelpArgument;
@@ -25,6 +27,10 @@ import tbax.baxshops.Resources;
 import tbax.baxshops.commands.flags.*;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.StoredPlayer;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public final class CmdFlag extends BaxShopCommand
 {
@@ -122,5 +128,26 @@ public final class CmdFlag extends BaxShopCommand
 		    actor.exitError(Resources.PLAYER_NO_NOTES, actor.getShop().getOwner());
         }
 		flagCmd.onCommand(actor);
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    {
+        ShopCmdActor actor = new ShopCmdActor(sender, command, args);
+        if (args.length == 2) {
+            return flagCmds.entrySet().stream()
+                .filter(c -> c.getKey().equals(c.getValue().getName())
+                    && c.getValue().hasPermission(actor)
+                    && c.getKey().startsWith(actor.getArg(1)))
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+        }
+        else if (args.length > 2) {
+            FlagCmd flagCmd = (FlagCmd)flagCmds.get(actor.getArg(1));
+            if (flagCmd != null) {
+                return flagCmd.onTabComplete(sender, command, alias, args);
+            }
+        }
+        return super.onTabComplete(sender, command, alias, args);
     }
 }
