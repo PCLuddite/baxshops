@@ -21,11 +21,18 @@ package tbax.baxshops.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.permissions.PermissionAttachmentInfo;
+import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.CommandMessageException;
@@ -37,10 +44,11 @@ import tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.Deque;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 @SuppressWarnings("unused")
-public final class ShopCmdActor
+public final class ShopCmdActor implements CommandSender
 {
     private final CommandSender sender;
     private final Command command;
@@ -87,13 +95,73 @@ public final class ShopCmdActor
         return getShop() != null && getShop().getOwner().equals(sender);
     }
 
-    public boolean hasPermission(String perm)
+    @Override
+    public boolean isPermissionSet(@NotNull String permission)
     {
-        if (perm == null)
-            return true;
-        return sender.hasPermission(perm);
+        return getSender().isPermissionSet(permission);
     }
-    
+
+    @Override
+    public boolean isPermissionSet(@NotNull Permission permission)
+    {
+        return getSender().isPermissionSet(permission);
+    }
+
+    public boolean hasPermission(@NotNull String permission)
+    {
+        if (permission == null)
+            return true;
+        return sender.hasPermission(permission);
+    }
+
+    @Override
+    public boolean hasPermission(@NotNull Permission permission)
+    {
+        return getSender().hasPermission(permission);
+    }
+
+    @Override
+    public @NotNull PermissionAttachment addAttachment(@NotNull Plugin plugin, @NotNull String s, boolean b)
+    {
+        return getSender().addAttachment(plugin, s, b);
+    }
+
+    @Override
+    public @NotNull PermissionAttachment addAttachment(@NotNull Plugin plugin)
+    {
+        return getSender().addAttachment(plugin);
+    }
+
+    @Override
+    public @Nullable PermissionAttachment addAttachment(@NotNull Plugin plugin, @NotNull String s, boolean b, int i)
+    {
+        return getSender().addAttachment(plugin, s, b, i);
+    }
+
+    @Override
+    public @Nullable PermissionAttachment addAttachment(@NotNull Plugin plugin, int i)
+    {
+        return getSender().addAttachment(plugin, i);
+    }
+
+    @Override
+    public void removeAttachment(@NotNull PermissionAttachment permissionAttachment)
+    {
+        getSender().removeAttachment(permissionAttachment);
+    }
+
+    @Override
+    public void recalculatePermissions()
+    {
+        getSender().recalculatePermissions();
+    }
+
+    @Override
+    public @NotNull Set<PermissionAttachmentInfo> getEffectivePermissions()
+    {
+        return getSender().getEffectivePermissions();
+    }
+
     public boolean cmdIs(String... names)
     {
         for (String name : names) {
@@ -348,9 +416,27 @@ public final class ShopCmdActor
         throw new CommandWarningException(String.format(format, args));
     }
 
-    public void sendMessage(String msg)
+    public void sendMessage(@NotNull String msg)
     {
         getSender().sendMessage(msg);
+    }
+
+    @Override
+    public void sendMessage(@NotNull String[] strings)
+    {
+        getSender().sendMessage(strings);
+    }
+
+    @Override
+    public @NotNull Server getServer()
+    {
+        return getSender().getServer();
+    }
+
+    @Override
+    public @NotNull String getName()
+    {
+        return getSender().getName();
     }
 
     public void sendMessage(String format, Object... args)
@@ -488,5 +574,17 @@ public final class ShopCmdActor
     public Deque<Notification> getNotifications()
     {
         return ShopPlugin.getSavedState().getNotifications(player);
+    }
+
+    @Override
+    public boolean isOp()
+    {
+        return getSender().isOp();
+    }
+
+    @Override
+    public void setOp(boolean b)
+    {
+        getSender().setOp(b);
     }
 }
