@@ -69,6 +69,11 @@ public final class ShopCmdActor implements CommandSender
             player = (Player)sender;
         }
     }
+
+    public String[] getArgs()
+    {
+        return args;
+    }
     
     public CommandSender getSender()
     {
