@@ -136,9 +136,7 @@ public final class CmdFlag extends BaxShopCommand
         ShopCmdActor actor = (ShopCmdActor)sender;
         if (args.length == 2) {
             return flagCmds.entrySet().stream()
-                .filter(c -> c.getKey().equals(c.getValue().getName())
-                    && c.getValue().hasPermission(actor)
-                    && c.getKey().startsWith(actor.getArg(1)))
+                .filter(c -> c.getKey().equals(c.getValue().getName()) && c.getValue().hasPermission(actor))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
         }

@@ -37,13 +37,13 @@ public final class CmdNotifications extends BaxShopCommand
     @Override
     public @NotNull String getName()
     {
-        return "pending";
+        return "notifications";
     }
 
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[]{"pending","p","notifications","n"};
+        return new String[]{"notifications","pending","p","n"};
     }
 
     @Override

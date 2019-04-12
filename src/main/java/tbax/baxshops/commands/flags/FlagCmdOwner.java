@@ -62,7 +62,6 @@ public final class FlagCmdOwner extends FlagCmd
     {
         return ShopPlugin.getRegisteredPlayers().stream()
             .map(StoredPlayer::getName)
-            .filter(n -> n != null && n.toLowerCase().startsWith(args[2].toLowerCase()))
             .collect(Collectors.toList());
     }
 }

@@ -415,7 +415,8 @@ public final class ShopPlugin extends JavaPlugin
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias,
+                                      @NotNull String[] args)
     {
         ShopCmdActor actor = new ShopCmdActor(sender, command, args);
 
@@ -436,7 +437,10 @@ public final class ShopPlugin extends JavaPlugin
         else if (actor.getNumArgs() > 1) {
             BaxShopCommand cmd = commands.get(actor.getArg(0));
             if (cmd != null) {
-                return cmd.onTabComplete(actor, command, alias, args);
+                String arg = actor.getArg(actor.getNumArgs() - 1).toLowerCase();
+                return cmd.onTabComplete(actor, command, alias, args).stream()
+                    .filter(s -> s != null && s.toLowerCase().startsWith(arg))
+                    .collect(Collectors.toList());
             }
         }
         return Collections.emptyList();

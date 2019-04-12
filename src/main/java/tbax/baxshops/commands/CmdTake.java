@@ -153,9 +153,7 @@ public final class CmdTake extends BaxShopCommand
         ShopCmdActor actor = (ShopCmdActor)sender;
         if (actor.getShop() != null) {
             if (args.length == 2) {
-                return actor.getShop().getAllItemAliases().stream()
-                    .filter(n -> n.startsWith(actor.getArg(1).toLowerCase()))
-                    .collect(Collectors.toList());
+                return actor.getShop().getAllItemAliases();
             }
             else if (args.length == 3) {
                 return Arrays.asList("all", "any", "most");

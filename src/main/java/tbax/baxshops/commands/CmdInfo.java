@@ -96,9 +96,7 @@ public final class CmdInfo extends BaxShopCommand
     {
         ShopCmdActor actor = (ShopCmdActor)sender;
         if (args.length == 2 && actor.getShop() != null) {
-            return actor.getShop().getAllItemAliases().stream()
-                .filter(n -> n.startsWith(actor.getArg(1).toLowerCase()))
-                .collect(Collectors.toList());
+            return actor.getShop().getAllItemAliases();
         }
         else {
             return super.onTabComplete(sender, command, alias, args);

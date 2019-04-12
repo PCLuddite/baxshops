@@ -116,7 +116,6 @@ public final class CmdLollipop extends BaxShopCommand
         if (actor.getNumArgs() == 2) {
             return ShopPlugin.getRegisteredPlayers().stream()
                 .map(StoredPlayer::getName)
-                .filter(n -> n != null && n.toLowerCase().startsWith(actor.getArg(1).toLowerCase()))
                 .collect(Collectors.toList());
         }
         else if (actor.getNumArgs() == 3) {

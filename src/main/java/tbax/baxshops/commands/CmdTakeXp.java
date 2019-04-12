@@ -132,7 +132,6 @@ public final class CmdTakeXp extends BaxShopCommand
         if (actor.isAdmin() && actor.getNumArgs() == 3) {
             return ShopPlugin.getRegisteredPlayers().stream()
                 .map(StoredPlayer::getName)
-                .filter(n -> n != null && n.toLowerCase().startsWith(actor.getArg(2).toLowerCase()))
                 .collect(Collectors.toList());
         }
         return super.onTabComplete(sender, command, alias, args);
