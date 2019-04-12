@@ -156,7 +156,7 @@ public final class CmdTake extends BaxShopCommand
                 return actor.getShop().getAllItemAliases();
             }
             else if (args.length == 3) {
-                return Arrays.asList("all", "any", "most");
+                return Arrays.asList("all", "most");
             }
         }
         return super.onTabComplete(sender, command, alias, args);
