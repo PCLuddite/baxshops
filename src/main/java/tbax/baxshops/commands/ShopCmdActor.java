@@ -200,7 +200,7 @@ public final class ShopCmdActor implements CommandSender
     {
         if (getShop() == null)
             throw new CommandErrorException(Resources.NOT_FOUND_SELECTED);
-        return new BaxQuantity(args[index], entry.getItemStack(), getShop().getItemStackInventory());
+        return new BaxQuantity(args[index], entry.toItemStack(), getShop().getItemStackInventory());
     }
 
     public boolean isArgQty(int index)
