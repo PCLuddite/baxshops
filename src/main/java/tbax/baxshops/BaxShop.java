@@ -33,6 +33,7 @@ import tbax.baxshops.serialization.*;
 import tbax.baxshops.serialization.states.State_00300;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public final class BaxShop implements UpgradeableSerializable, Collection<BaxEntry>
 {
@@ -492,5 +493,14 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     public boolean isWorldShop()
     {
         return StoredPlayer.DUMMY.equals(getOwner());
+    }
+
+    public List<String> getAllItemAliases()
+    {
+        return inventory.stream()
+            .map(BaxEntry::getAlias)
+            .distinct()
+            .sorted()
+            .collect(Collectors.toList());
     }
 }

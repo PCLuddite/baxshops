@@ -425,18 +425,18 @@ public final class ShopPlugin extends JavaPlugin
             args = actor.getArgs();
         }
 
-        if (args.length == 1) {
+        if (actor.getNumArgs() == 1) {
             return commands.entrySet().stream()
                 .filter(c -> c.getKey().equals(c.getValue().getName())
                         && c.getValue().hasPermission(actor)
-                        && c.getKey().startsWith(args[0]))
+                        && c.getKey().startsWith(actor.getArg(0)))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
         }
-        else if (args.length > 1) {
-            BaxShopCommand cmd = commands.get(args[0]);
+        else if (actor.getNumArgs() > 1) {
+            BaxShopCommand cmd = commands.get(actor.getArg(0));
             if (cmd != null) {
-                return cmd.onTabComplete(sender, command, alias, args);
+                return cmd.onTabComplete(actor, command, alias, args);
             }
         }
         return Collections.emptyList();

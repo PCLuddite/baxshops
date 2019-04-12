@@ -19,6 +19,8 @@
  */
 package tbax.baxshops.commands;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
@@ -26,6 +28,8 @@ import tbax.baxshops.CommandHelp;
 import tbax.baxshops.notification.BuyNotification;
 import tbax.baxshops.notification.BuyRequest;
 import tbax.baxshops.serialization.ItemNames;
+
+import java.util.List;
 
 public final class CmdBuy extends BaxShopCommand
 {
@@ -168,6 +172,18 @@ public final class CmdBuy extends BaxShopCommand
             if (shop.hasFlagNotify()) {
                 ShopPlugin.sendNotification(shop.getOwner(), new BuyNotification(shop.getId(), actor.getPlayer(), shop.getOwner(), purchased));
             }
+        }
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    {
+        ShopCmdActor actor = (ShopCmdActor)sender;
+        if (args.length == 2 && actor.getShop() != null) {
+            return actor.getShop().getAllItemAliases();
+        }
+        else {
+            return super.onTabComplete(sender, command, alias, args);
         }
     }
 }

@@ -375,4 +375,10 @@ public final class BaxEntry implements UpgradeableSerializable
             return false;
         return this.stack.isSimilar(stack) && stack.getAmount() == quantity;
     }
+
+    public String getAlias()
+    {
+        String name = ItemNames.getName(this).toUpperCase();
+        return name.replace(' ', '_');
+    }
 }
