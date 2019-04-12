@@ -19,13 +19,18 @@
  */
 package tbax.baxshops.commands;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
 import tbax.baxshops.notification.Notification;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Deque;
+import java.util.List;
 
 public final class CmdNotifications extends BaxShopCommand
 {
@@ -113,5 +118,15 @@ public final class CmdNotifications extends BaxShopCommand
                 actor.exitError("Unknown notification action %s", actor.getArg(2));
             }
         }
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    {
+        ShopCmdActor actor = (ShopCmdActor)sender;
+        if (actor.isAdmin() && actor.getNumArgs() == 2) {
+            return Collections.singletonList("clear");
+        }
+        return super.onTabComplete(sender, command, alias, args);
     }
 }

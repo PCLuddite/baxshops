@@ -29,7 +29,9 @@ import tbax.baxshops.notification.BuyNotification;
 import tbax.baxshops.notification.BuyRequest;
 import tbax.baxshops.serialization.ItemNames;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class CmdBuy extends BaxShopCommand
 {
@@ -179,11 +181,16 @@ public final class CmdBuy extends BaxShopCommand
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
     {
         ShopCmdActor actor = (ShopCmdActor)sender;
-        if (args.length == 2 && actor.getShop() != null) {
-            return actor.getShop().getAllItemAliases();
+        if (actor.getShop() != null) {
+            if (args.length == 2) {
+                return actor.getShop().getAllItemAliases().stream()
+                    .filter(n -> n.startsWith(actor.getArg(1).toLowerCase()))
+                    .collect(Collectors.toList());
+            }
+            else if (args.length == 3) {
+                return Arrays.asList("all", "any", "most");
+            }
         }
-        else {
-            return super.onTabComplete(sender, command, alias, args);
-        }
+        return super.onTabComplete(sender, command, alias, args);
     }
 }

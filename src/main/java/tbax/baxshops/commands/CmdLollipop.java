@@ -20,12 +20,19 @@
 package tbax.baxshops.commands;
 
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.CommandHelpArgument;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
 import tbax.baxshops.notification.LollipopNotification;
+import tbax.baxshops.serialization.StoredPlayer;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public final class CmdLollipop extends BaxShopCommand
 {
@@ -100,5 +107,23 @@ public final class CmdLollipop extends BaxShopCommand
         OfflinePlayer recipient = actor.getArgPlayer(1);
         ShopPlugin.sendNotification(recipient, lol);
         actor.sendMessage("Sent a %s lollipop to %s", lol.getTastiness(), recipient.getName());
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    {
+        ShopCmdActor actor = (ShopCmdActor)sender;
+        if (actor.getNumArgs() == 2) {
+            return ShopPlugin.getRegisteredPlayers().stream()
+                .map(StoredPlayer::getName)
+                .filter(n -> n != null && n.toLowerCase().startsWith(actor.getArg(1).toLowerCase()))
+                .collect(Collectors.toList());
+        }
+        else if (actor.getNumArgs() == 3) {
+            return Arrays.asList("0", "10", "20", "30", "40", "50", "55", "60", "70", "80", "90", "100");
+        }
+        else {
+            return super.onTabComplete(sender, command, alias, args);
+        }
     }
 }

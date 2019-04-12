@@ -24,11 +24,18 @@ import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
+import tbax.baxshops.serialization.StoredPlayer;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public final class CmdCreate extends BaxShopCommand
 {
@@ -171,5 +178,23 @@ public final class CmdCreate extends BaxShopCommand
         sign.update();
 
         return b;
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    {
+        ShopCmdActor actor = (ShopCmdActor)sender;
+        if (actor.isAdmin()) {
+            if (actor.getNumArgs() == 2) {
+                return ShopPlugin.getRegisteredPlayers().stream()
+                    .map(StoredPlayer::getName)
+                    .filter(n -> n != null && n.toLowerCase().startsWith(actor.getArg(1).toLowerCase()))
+                    .collect(Collectors.toList());
+            }
+            else if (actor.getNumArgs() == 3) {
+                return Arrays.asList("true", "false");
+            }
+        }
+        return super.onTabComplete(sender, command, alias, args);
     }
 }

@@ -378,7 +378,7 @@ public final class BaxEntry implements UpgradeableSerializable
 
     public String getAlias()
     {
-        String name = ItemNames.getName(this).toUpperCase();
+        String name = ItemNames.getName(this).toLowerCase();
         return name.replace(' ', '_');
     }
 }

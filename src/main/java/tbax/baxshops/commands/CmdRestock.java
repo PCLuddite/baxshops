@@ -20,12 +20,15 @@
 package tbax.baxshops.commands;
 
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.ItemNames;
 
+import java.util.Arrays;
 import java.util.List;
 
 public final class CmdRestock extends BaxShopCommand
@@ -140,5 +143,15 @@ public final class CmdRestock extends BaxShopCommand
                 }
             }
         }
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    {
+        ShopCmdActor actor = (ShopCmdActor)sender;
+        if (actor.getNumArgs() == 2) {
+            return Arrays.asList("all", "any", "most");
+        }
+        return super.onTabComplete(sender, command, alias, args);
     }
 }

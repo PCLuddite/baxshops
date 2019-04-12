@@ -19,12 +19,17 @@
 package tbax.baxshops.commands;
 
 import org.bukkit.Location;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.CommandHelpArgument;
 import tbax.baxshops.Format;
 import tbax.baxshops.ShopSelection;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
+
+import java.util.Arrays;
+import java.util.List;
 
 public final class CmdTeleport extends BaxShopCommand
 {
@@ -106,5 +111,19 @@ public final class CmdTeleport extends BaxShopCommand
             selection.setLocation(old);
             actor.exitError("Unable to teleport you to that location.");
         }
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    {
+        ShopCmdActor actor = (ShopCmdActor)sender;
+        if (actor.isAdmin() && actor.getNumArgs() == 2 && actor.getShop() != null) {
+            String[] nums = new String[actor.getShop().getLocations().size()];
+            for(int i = 0; i < nums.length; ++i) {
+                nums[i] = String.valueOf(i + 1);
+            }
+            return Arrays.asList(nums);
+        }
+        return super.onTabComplete(sender, command, alias, args);
     }
 }

@@ -19,10 +19,16 @@
 package tbax.baxshops.commands;
 
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
+import tbax.baxshops.serialization.StoredPlayer;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public final class CmdGiveXp extends BaxShopCommand
 {
@@ -60,7 +66,7 @@ public final class CmdGiveXp extends BaxShopCommand
     @Override
     public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
     {
-        return ((actor.getNumArgs() == 3 && actor.isAdmin()) || actor.getNumArgs() == 2);
+        return (actor.getNumArgs() == 3 && actor.isAdmin()) || actor.getNumArgs() == 2;
     }
 
     @Override
@@ -115,5 +121,18 @@ public final class CmdGiveXp extends BaxShopCommand
         p.setLevel(p.getLevel() + levels);
 
         p.sendMessage(String.format("You have been charged %s for %s levels", Format.money(money), Format.enchantments(levels + " XP")));
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    {
+        ShopCmdActor actor = (ShopCmdActor)sender;
+        if (actor.isAdmin() && actor.getNumArgs() == 3) {
+            return ShopPlugin.getRegisteredPlayers().stream()
+                .map(StoredPlayer::getName)
+                .filter(n -> n != null && n.toLowerCase().startsWith(actor.getArg(2).toLowerCase()))
+                .collect(Collectors.toList());
+        }
+        return super.onTabComplete(sender, command, alias, args);
     }
 }

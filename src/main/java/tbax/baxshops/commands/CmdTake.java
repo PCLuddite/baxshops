@@ -18,12 +18,18 @@
  */
 package tbax.baxshops.commands;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
 import tbax.baxshops.serialization.ItemNames;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public final class CmdTake extends BaxShopCommand
 {
@@ -139,5 +145,22 @@ public final class CmdTake extends BaxShopCommand
                 amt.getQuantity() == 1 ? "was" : "were"
             );
         }
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    {
+        ShopCmdActor actor = (ShopCmdActor)sender;
+        if (actor.getShop() != null) {
+            if (args.length == 2) {
+                return actor.getShop().getAllItemAliases().stream()
+                    .filter(n -> n.startsWith(actor.getArg(1).toLowerCase()))
+                    .collect(Collectors.toList());
+            }
+            else if (args.length == 3) {
+                return Arrays.asList("all", "any", "most");
+            }
+        }
+        return super.onTabComplete(sender, command, alias, args);
     }
 }

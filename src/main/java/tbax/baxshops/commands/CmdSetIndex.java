@@ -18,12 +18,17 @@
  */
 package tbax.baxshops.commands;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxEntry;
 import tbax.baxshops.CommandHelpArgument;
 import tbax.baxshops.Resources;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public final class CmdSetIndex extends BaxShopCommand
 {
@@ -110,5 +115,19 @@ public final class CmdSetIndex extends BaxShopCommand
             actor.getShop().addEntry(newIndex - 1, entry);
         }
         actor.sendMessage("The index for this item was successfully changed.");
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    {
+        ShopCmdActor actor = (ShopCmdActor)sender;
+        if (args.length == 2 && actor.getShop() != null) {
+            return actor.getShop().getAllItemAliases().stream()
+                .filter(n -> n.startsWith(actor.getArg(1).toLowerCase()))
+                .collect(Collectors.toList());
+        }
+        else {
+            return super.onTabComplete(sender, command, alias, args);
+        }
     }
 }

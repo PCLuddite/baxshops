@@ -19,10 +19,16 @@
 package tbax.baxshops.commands;
 
 import org.bukkit.OfflinePlayer;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
+import tbax.baxshops.serialization.StoredPlayer;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public final class CmdTakeXp extends BaxShopCommand
 {
@@ -117,5 +123,18 @@ public final class CmdTakeXp extends BaxShopCommand
 
             p.sendMessage(String.format("You have exchanged %s levels for %s", Format.enchantments(levels + " XP"), Format.money(money)));
         }
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    {
+        ShopCmdActor actor = (ShopCmdActor)sender;
+        if (actor.isAdmin() && actor.getNumArgs() == 3) {
+            return ShopPlugin.getRegisteredPlayers().stream()
+                .map(StoredPlayer::getName)
+                .filter(n -> n != null && n.toLowerCase().startsWith(actor.getArg(2).toLowerCase()))
+                .collect(Collectors.toList());
+        }
+        return super.onTabComplete(sender, command, alias, args);
     }
 }

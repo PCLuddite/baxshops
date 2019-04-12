@@ -19,10 +19,15 @@
  */
 package tbax.baxshops.commands;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.ItemNames;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public final class CmdSet extends BaxShopCommand
 {
@@ -122,6 +127,20 @@ public final class CmdSet extends BaxShopCommand
         }
         else {
             actor.sendMessage("The price for %s was set.", Format.itemName(entry.getAmount(), ItemNames.getName(entry)));
+        }
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    {
+        ShopCmdActor actor = (ShopCmdActor)sender;
+        if (args.length == 2 && actor.getShop() != null) {
+            return actor.getShop().getAllItemAliases().stream()
+                .filter(n -> n.startsWith(actor.getArg(1).toLowerCase()))
+                .collect(Collectors.toList());
+        }
+        else {
+            return super.onTabComplete(sender, command, alias, args);
         }
     }
 }

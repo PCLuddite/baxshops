@@ -18,9 +18,14 @@
  */
 package tbax.baxshops.commands;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public final class CmdSetAmnt extends BaxShopCommand
 {
@@ -93,5 +98,19 @@ public final class CmdSetAmnt extends BaxShopCommand
         entry.setAmount(amnt);
 
         actor.sendMessage("The amount has been set.");
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    {
+        ShopCmdActor actor = (ShopCmdActor)sender;
+        if (args.length == 2 && actor.getShop() != null) {
+            return actor.getShop().getAllItemAliases().stream()
+                .filter(n -> n.startsWith(actor.getArg(1).toLowerCase()))
+                .collect(Collectors.toList());
+        }
+        else {
+            return super.onTabComplete(sender, command, alias, args);
+        }
     }
 }

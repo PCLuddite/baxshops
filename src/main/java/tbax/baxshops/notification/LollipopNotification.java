@@ -155,7 +155,7 @@ public final class LollipopNotification implements Notification, UpgradeableSeri
             return "a better-than-average";
         String adjective = "a";
         for (int i = 0; i < adjectives.length; ++i) {
-            if (tastiness >= (i * 100)) {
+            if (tastiness >= (i * 10)) {
                 adjective = adjectives[i];
             }
         }
