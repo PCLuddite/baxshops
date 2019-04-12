@@ -133,7 +133,7 @@ public final class CmdFlag extends BaxShopCommand
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
     {
-        ShopCmdActor actor = new ShopCmdActor(sender, command, args);
+        ShopCmdActor actor = (ShopCmdActor)sender;
         if (args.length == 2) {
             return flagCmds.entrySet().stream()
                 .filter(c -> c.getKey().equals(c.getValue().getName())
@@ -145,9 +145,9 @@ public final class CmdFlag extends BaxShopCommand
         else if (args.length > 2) {
             FlagCmd flagCmd = (FlagCmd)flagCmds.get(actor.getArg(1));
             if (flagCmd != null) {
-                return flagCmd.onTabComplete(sender, command, alias, args);
+                return flagCmd.onTabComplete(actor, command, alias, args);
             }
         }
-        return super.onTabComplete(sender, command, alias, args);
+        return super.onTabComplete(actor, command, alias, args);
     }
 }
