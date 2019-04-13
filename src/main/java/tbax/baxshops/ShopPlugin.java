@@ -430,7 +430,7 @@ public final class ShopPlugin extends JavaPlugin
             return commands.entrySet().stream()
                 .filter(c -> c.getKey().equals(c.getValue().getName())
                         && c.getValue().hasPermission(actor)
-                        && c.getKey().startsWith(actor.getArg(0)))
+                        && c.getKey().contains(actor.getArg(0)))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
         }
@@ -439,7 +439,7 @@ public final class ShopPlugin extends JavaPlugin
             if (cmd != null) {
                 String arg = actor.getArg(actor.getNumArgs() - 1).toLowerCase();
                 return cmd.onTabComplete(actor, command, alias, args).stream()
-                    .filter(s -> s != null && s.toLowerCase().startsWith(arg))
+                    .filter(s -> s != null && s.toLowerCase().contains(arg))
                     .collect(Collectors.toList());
             }
         }
