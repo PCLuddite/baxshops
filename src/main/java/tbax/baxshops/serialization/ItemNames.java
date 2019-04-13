@@ -78,20 +78,27 @@ public final class ItemNames
     public static BaxEntry getItemFromAlias(String input, BaxShop shop) throws PrematureAbortException
     {
         String[] words = input.toUpperCase().split("_");
+        String normalizedInput = input.replace('_', ' ').toUpperCase();
 
         int maxMatch = -1;
         List<BaxEntry> entries = new ArrayList<>();
 
         for(BaxEntry entry : shop) {
-            String[] entryWords = entry.getName().toUpperCase().split(" ");
-            int matches = getMatches(entryWords, words);
-            if (matches == maxMatch) {
-                entries.add(entry);
+            String entryName = entry.getName().toUpperCase();
+            if (Objects.equals(entryName, normalizedInput)) {
+                return entry; // 100% match
             }
-            else if (matches > maxMatch) {
-                entries.clear();
-                entries.add(entry);
-                maxMatch = matches;
+            else {
+                String[] entryWords = entryName.split(" ");
+                int matches = getMatches(entryWords, words);
+                if (matches == maxMatch) {
+                    entries.add(entry);
+                }
+                else if (matches > maxMatch) {
+                    entries.clear();
+                    entries.add(entry);
+                    maxMatch = matches;
+                }
             }
         }
         if (maxMatch == 0) {
