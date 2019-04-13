@@ -111,10 +111,10 @@ public final class CmdRestock extends BaxShopCommand
         }
         assert entry != null;
 
+        BaxQuantity qty = actor.getArgPlayerQty(1);
         List<BaxEntry> taken = actor.takeArgFromInventory(1);
 
         if (requiresItemInHand(actor)) {
-            BaxQuantity qty = actor.getArgPlayerQty(1);
             BaxEntry takenItem = taken.get(0);
             entry.add(takenItem.getAmount());
             if (!(qty.isAll() || qty.isMost()) && takenItem.getAmount() < qty.getQuantity()) {
@@ -150,7 +150,7 @@ public final class CmdRestock extends BaxShopCommand
     {
         ShopCmdActor actor = (ShopCmdActor)sender;
         if (actor.getNumArgs() == 2) {
-            return Arrays.asList("all", "any", "most");
+            return Arrays.asList("all", "any", "most", "stack");
         }
         return super.onTabComplete(sender, command, alias, args);
     }

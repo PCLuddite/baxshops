@@ -173,7 +173,7 @@ public final class CmdSell extends BaxShopCommand
     {
         ShopCmdActor actor = (ShopCmdActor)sender;
         if (actor.getNumArgs() == 2) {
-            return Arrays.asList("all", "any", "most");
+            return Arrays.asList("all", "any", "most", "stack");
         }
         return super.onTabComplete(sender, command, alias, args);
     }

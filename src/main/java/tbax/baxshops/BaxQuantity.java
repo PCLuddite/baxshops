@@ -76,6 +76,9 @@ public class BaxQuantity
             else if (isMost()) {
                 return stack.getAmount() - 1;
             }
+            else if (isStack()) {
+                return stack.getMaxStackSize();
+            }
             throw new CommandErrorException(e, "'" + argument + "' is not a valid quantity");
         }
     }
@@ -92,18 +95,12 @@ public class BaxQuantity
 
     public static boolean isQuantityNotAny(String qty)
     {
-        try {
-            Integer.parseInt(qty);
-            return true;
-        }
-        catch (NumberFormatException e) {
-            return "all".equalsIgnoreCase(qty) || "most".equalsIgnoreCase(qty);
-        }
+        return isFiniteQty(qty) || isAbstractQtyNotAny(qty);
     }
 
     public static boolean isQuantity(String qty)
     {
-        return isQuantityNotAny(qty) || "any".equalsIgnoreCase(qty);
+        return isQuantityNotAny(qty) || isAny(qty);
     }
 
     private int getAmountInInventory()
@@ -132,6 +129,26 @@ public class BaxQuantity
         return isMost(argument);
     }
 
+    public boolean isStack()
+    {
+        return isStack(argument);
+    }
+
+    public boolean isAbstractQtyNotAny()
+    {
+        return isAbstractQtyNotAny(argument);
+    }
+
+    public boolean isAbstractQty()
+    {
+        return isAbstractQty(argument);
+    }
+
+    public boolean isFiniteQty()
+    {
+        return isFiniteQty(argument);
+    }
+
     public static boolean isAll(String argument)
     {
         return "all".equalsIgnoreCase(argument);
@@ -145,5 +162,31 @@ public class BaxQuantity
     public static boolean isMost(String argument)
     {
         return "most".equalsIgnoreCase(argument);
+    }
+
+    public static boolean isStack(String argument)
+    {
+        return "stack".equalsIgnoreCase(argument);
+    }
+
+    public static boolean isAbstractQtyNotAny(String argument)
+    {
+        return isAll(argument) || isMost(argument) || isStack(argument);
+    }
+
+    public static boolean isAbstractQty(String argument)
+    {
+        return isAbstractQtyNotAny(argument) || isAny(argument);
+    }
+
+    public static boolean isFiniteQty(String argument)
+    {
+        try {
+            Integer.parseInt(argument);
+            return true;
+        }
+        catch (NumberFormatException e) {
+            return false;
+        }
     }
 }
