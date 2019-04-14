@@ -135,7 +135,7 @@ public final class CmdTake extends BaxShopCommand
         int overflow = actor.giveItem(stack);
         if (overflow > 0) {
             entry.add(overflow);
-            actor.sendMessage(Resources.SOME_ROOM, amt.getQuantity() - overflow, ItemNames.getName(stack));
+            actor.sendMessage(Resources.SOME_ROOM, stack.getAmount() - overflow, ItemNames.getName(stack));
         }
         else {
             actor.sendMessage("%s %s added to your inventory.",
