@@ -81,10 +81,12 @@ public final class PlayerUtil
         item.setAmount(Math.min(item.getAmount(), space));
 
         fullStacks = item.getAmount() / item.getMaxStackSize();
-        item.setAmount(item.getAmount() - fullStacks * item.getMaxStackSize());
+        int leftover = item.getAmount() - fullStacks * item.getMaxStackSize();
 
-        if (item.getAmount() > 0)
+        if (leftover > 0) {
+            item.setAmount(leftover);
             player.getInventory().addItem(item);
+        }
 
         while(fullStacks-- > 0) {
             ItemStack stack = item.clone();
