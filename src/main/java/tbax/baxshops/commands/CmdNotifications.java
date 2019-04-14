@@ -106,7 +106,9 @@ public final class CmdNotifications extends BaxShopCommand
     public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         if (actor.getNumArgs() == 1) {
-            ShopPlugin.showNotification(actor.getPlayer());
+            if (ShopPlugin.showNotificationCount(actor.getPlayer()) > 0) {
+                ShopPlugin.showNotification(actor.getPlayer());
+            }
         }
         else if (actor.getNumArgs() == 2) {
             if (actor.getArg(1).equalsIgnoreCase("clear")) {
