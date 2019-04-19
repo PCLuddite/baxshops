@@ -313,22 +313,20 @@ public final class ShopCmdActor implements CommandSender
 
     public BaxEntry getArgEntry(int index, String errMsg) throws PrematureAbortException
     {
-        BaxEntry entry = null;
-        assert getShop() != null;
-        if (isArgInt(index)) {
-            index = getArgInt(1) - 1;
-            if (index < getShop().size() && index >= 0) {
-                entry = getShop().getEntry(index);
-            }
-        }
-        else {
-            entry = ItemNames.getItemFromAlias(getArg(1), getShop());
-        }
-
-        if (entry == null) {
+        BaxEntry entry = getShop().getEntry(getArg(1));
+        if (entry == null)
             exitError(errMsg);
-        }
         return entry;
+    }
+
+    public int getArgEntryIndex(int index) throws PrematureAbortException
+    {
+        return getArgEntryIndex(index, Resources.NOT_FOUND_SHOPITEM);
+    }
+
+    public int getArgEntryIndex(int index, String errMsg) throws PrematureAbortException
+    {
+        return getShop().indexOf(getArgEntry(index, errMsg));
     }
     
     public BaxShop getShop()
