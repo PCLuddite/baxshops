@@ -286,7 +286,7 @@ public final class ShopPlugin extends JavaPlugin
             }
         }
         catch(PrematureAbortException e) {
-            actor.getSender().sendMessage(e.getMessage());
+            sendInfo(actor.getSender(), e.getMessage());
         }
         return true;
     }
@@ -296,11 +296,18 @@ public final class ShopPlugin extends JavaPlugin
         return econ;
     }
 
-    public static void sendInfo(@NotNull Player pl, String message)
+    public static void sendInfo(@NotNull CommandSender sender, String message)
     {
-        pl.sendMessage(message);
-        if (getSavedState().getConfig().isLogNotes()) {
-            logPlayerMessage(pl, message);
+        sender.sendMessage(message);
+        if (getSavedState().getConfig().isLogNotes() && sender instanceof Player) {
+            logPlayerMessage((Player)sender, message);
+        }
+    }
+    public static void sendInfo(@NotNull CommandSender sender, String[] message)
+    {
+        sender.sendMessage(message);
+        if (getSavedState().getConfig().isLogNotes() && sender instanceof Player) {
+            logPlayerMessage((Player)sender, String.join("\n", message));
         }
     }
 

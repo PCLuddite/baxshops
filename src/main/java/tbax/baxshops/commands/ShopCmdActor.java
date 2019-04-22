@@ -396,22 +396,22 @@ public final class ShopCmdActor implements CommandSender
 
     public void sendError(String msg)
     {
-        getSender().sendMessage(ChatColor.RED + msg);
+        ShopPlugin.sendInfo(getSender(), ChatColor.RED + msg);
     }
 
     public void sendError(String format, Object... args)
     {
-        getSender().sendMessage(ChatColor.RED + String.format(format, args));
+        ShopPlugin.sendInfo(getSender(), ChatColor.RED + String.format(format, args));
     }
 
     public void sendWarning(String msg)
     {
-        getSender().sendMessage(ChatColor.GOLD + msg);
+        ShopPlugin.sendInfo(getSender(), ChatColor.GOLD + msg);
     }
 
     public void sendWarning(String format, Object... args)
     {
-        getSender().sendMessage(ChatColor.GOLD + String.format(format, args));
+        ShopPlugin.sendInfo(getSender(), ChatColor.GOLD + String.format(format, args));
     }
 
     public void exitWarning(String format, Object... args) throws PrematureAbortException
@@ -419,15 +419,16 @@ public final class ShopCmdActor implements CommandSender
         throw new CommandWarningException(String.format(format, args));
     }
 
+    @Override
     public void sendMessage(@NotNull String msg)
     {
-        getSender().sendMessage(msg);
+        ShopPlugin.sendInfo(getSender(), msg);
     }
 
     @Override
     public void sendMessage(@NotNull String[] strings)
     {
-        getSender().sendMessage(strings);
+        ShopPlugin.sendInfo(getSender(), strings);
     }
 
     @Override
