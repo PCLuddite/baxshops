@@ -200,6 +200,8 @@ public final class ShopCmdActor implements CommandSender
     {
         if (getShop() == null)
             throw new CommandErrorException(Resources.NOT_FOUND_SELECTED);
+        if (getShop().hasFlagInfinite() && (BaxQuantity.isAll(args[index]) || BaxQuantity.isMost(args[index])))
+            throw new CommandErrorException("This shop has infinite supplies. You cannot take " + args[index].toLowerCase());
         return new BaxQuantity(args[index], entry.toItemStack(), getShop().getItemStackInventory());
     }
 
