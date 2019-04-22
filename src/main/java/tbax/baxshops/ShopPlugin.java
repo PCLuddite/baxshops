@@ -125,7 +125,6 @@ public final class ShopPlugin extends JavaPlugin
     {
         Deque<Notification> notifications = savedState.getNotifications(player);
         Notification n = notifications.getFirst();
-        sendInfo(player, n.getMessage(player.getPlayer()));
         if (n instanceof Request) {
             player.sendMessage(String.format("Use %s or %s to manage this request.",
                 Format.command("/shop accept"),

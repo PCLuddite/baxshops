@@ -114,7 +114,6 @@ public final class CmdAccept extends BaxShopCommand
             else {
                 actor.exitError("Your current notification is not a request");
             }
-            actor.sendMessage("Last notification was accepted");
         }
         ShopPlugin.showNotificationCount(actor.getPlayer());
     }
