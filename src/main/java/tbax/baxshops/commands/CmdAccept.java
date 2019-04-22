@@ -104,11 +104,15 @@ public final class CmdAccept extends BaxShopCommand
                 if (r.accept(actor)) {
                     notifications.removeFirst();
                 }
-            } else if (n instanceof Claimable) {
+            }
+            else if (n instanceof Claimable) {
                 Claimable c = (Claimable) n;
                 if (c.claim(actor)) {
                     notifications.removeFirst();
                 }
+            }
+            else {
+                actor.exitError("Your current notification is not a request");
             }
             actor.sendMessage("Last notification was accepted");
         }

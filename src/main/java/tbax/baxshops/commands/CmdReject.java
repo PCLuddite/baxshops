@@ -101,10 +101,10 @@ public final class CmdReject extends BaxShopCommand
                 if (r.reject(actor)) {
                     notifications.removeFirst();
                 }
-                ShopPlugin.showNotification(actor.getPlayer());
+                ShopPlugin.showNotificationCount(actor.getPlayer());
             }
             else {
-                actor.sendError("Your current notification is not a request.");
+                actor.sendError("Your current notification is not a request");
             }
         }
     }

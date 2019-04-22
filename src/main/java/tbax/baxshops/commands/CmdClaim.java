@@ -79,7 +79,7 @@ public class CmdClaim extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException // tested OK 3-14-19
+    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException // tested OK 4-21-19
     {
         Deque<Notification> notifications = actor.getNotifications();
         if (notifications.isEmpty()) {
@@ -91,14 +91,11 @@ public class CmdClaim extends BaxShopCommand
                 Claimable c = (Claimable) n;
                 if (c.claim(actor)) {
                     notifications.removeFirst();
-                    ShopPlugin.showNotification(actor.getPlayer());
                 }
-                else {
-                    ShopPlugin.showNotificationCount(actor.getPlayer());
-                }
+                ShopPlugin.showNotificationCount(actor.getPlayer());
             }
             else {
-                actor.sendError("Your current notification is not a claim.");
+                actor.sendError("Your current notification is not a claim");
             }
         }
     }
