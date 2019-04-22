@@ -106,12 +106,12 @@ public final class ShopPlugin extends JavaPlugin
     {
         Deque<Notification> notifications = savedState.getNotifications(player);
         if (notifications.isEmpty()) {
-            player.sendMessage("You have no notifications.");
+            player.sendMessage("You have no new notifications");
             return 0;
         }
         else {
             int size = notifications.size();
-            player.sendMessage(String.format("You have %s notification%s.", Format.number(size), size == 1 ? "" : "s"));
+            player.sendMessage(String.format("You have %s notification%s", Format.number(size), size == 1 ? "" : "s"));
             return size;
         }
     }

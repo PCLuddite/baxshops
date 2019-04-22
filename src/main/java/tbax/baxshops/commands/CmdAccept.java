@@ -110,7 +110,8 @@ public final class CmdAccept extends BaxShopCommand
                     notifications.removeFirst();
                 }
             }
+            actor.sendMessage("Last notification was accepted");
         }
-        ShopPlugin.showNotification(actor.getPlayer());
+        ShopPlugin.showNotificationCount(actor.getPlayer());
     }
 }
