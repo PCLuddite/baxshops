@@ -75,7 +75,7 @@ public final class ItemNames
     {
     }
     
-    public static BaxEntry getItemFromAlias(String input, BaxShop shop) throws PrematureAbortException
+    public static List<BaxEntry> getItemFromAlias(String input, BaxShop shop)
     {
         String[] words = input.toUpperCase().split("_");
         String normalizedInput = input.replace('_', ' ').toUpperCase();
@@ -86,7 +86,7 @@ public final class ItemNames
         for(BaxEntry entry : shop) {
             String entryName = entry.getName().toUpperCase();
             if (Objects.equals(entryName, normalizedInput)) {
-                return entry; // 100% match
+                return Collections.singletonList(entry); // 100% match
             }
             else {
                 String[] entryWords = entryName.split(" ");
@@ -101,19 +101,7 @@ public final class ItemNames
                 }
             }
         }
-        if (maxMatch == 0) {
-            throw new CommandErrorException("No item with that name could be found");
-        }
-        else if (entries.size() > 1) {
-            StringBuilder sb = new StringBuilder("There are multiple items that match that name:\n");
-            for (BaxEntry entry : entries) {
-                sb.append(entry.getName()).append('\n');
-            }
-            throw new CommandErrorException(sb.toString());
-        }
-        else {
-            return entries.get(0);
-        }
+        return entries;
     }
 
     private static int getMatches(String[] array1, String[] array2)

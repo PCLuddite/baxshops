@@ -315,9 +315,32 @@ public final class ShopCmdActor implements CommandSender
 
     public BaxEntry getArgEntry(int index, String errMsg) throws PrematureAbortException
     {
-        BaxEntry entry = getShop().getEntry(getArg(1));
-        if (entry == null)
-            exitError(errMsg);
+        BaxEntry entry;
+        try {
+            entry = getShop().getEntry(Integer.parseInt(args[index]) - 1);
+        }
+        catch (NumberFormatException e) {
+            List<BaxEntry> entries = ItemNames.getItemFromAlias(args[index], getShop());
+            if (entries.size() == 0) {
+                throw new CommandErrorException("No item with that name could be found");
+            }
+            else if (entries.size() > 1) {
+                StringBuilder sb = new StringBuilder("There are multiple items that match that name:\n");
+                for (BaxEntry baxEntry : entries) {
+                    sb.append(baxEntry.getName()).append('\n');
+                }
+                throw new CommandErrorException(sb.toString());
+            }
+            else {
+                return entries.get(0);
+            }
+        }
+        catch (IndexOutOfBoundsException e) {
+            throw new CommandErrorException(e, errMsg);
+        }
+        if (entry == null) {
+            throw new CommandErrorException(errMsg);
+        }
         return entry;
     }
 

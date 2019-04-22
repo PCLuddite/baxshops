@@ -178,19 +178,6 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
         return false;
     }
 
-    public BaxEntry getEntry(String arg) throws PrematureAbortException
-    {
-        try {
-            return getEntry(Integer.parseInt(arg) - 1);
-        }
-        catch (NumberFormatException e) {
-            return ItemNames.getItemFromAlias(arg, this);
-        }
-        catch (IndexOutOfBoundsException e) {
-            throw new CommandErrorException(e, Resources.NOT_FOUND_SHOPITEM);
-        }
-    }
-
     public BaxEntry getEntry(int index)
     {
         return inventory.get(index);

@@ -96,25 +96,12 @@ public final class CmdSet extends BaxShopCommand
     public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         BaxShop shop = actor.getShop();
-        BaxEntry entry = null;
         assert shop != null;
         if (actor.getNumArgs() == 3) {
             actor.appendArg(-1);
         }
 
-        if (actor.isArgInt(1)) {
-            int index = actor.getArgInt(1) - 1;
-            if (index < shop.size() && index >= 0) {
-                entry = shop.getEntry(index);
-            }
-        }
-        else {
-            entry = ItemNames.getItemFromAlias(actor.getArg(1), shop);
-        }
-
-        if (entry == null) {
-            actor.exitError(Resources.NOT_FOUND_SHOPITEM);
-        }
+        BaxEntry entry = actor.getArgEntry(1);
 
         double retailAmount = actor.getArgRoundedDouble(2, String.format(Resources.INVALID_DECIMAL, "buy price")),
                 refundAmount = actor.getArgRoundedDouble(3, String.format(Resources.INVALID_DECIMAL, "sell price"));
