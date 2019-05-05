@@ -19,6 +19,7 @@
  */
 package tbax.baxshops;
 
+import com.google.common.base.Objects;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -51,13 +52,13 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 public class EventListener implements Listener
 {
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreak(BlockBreakEvent event)
     {
         try {
             BaxShop shop = ShopPlugin.getShop(event.getBlock().getLocation());
             if (shop != null) {
-                if (shop.getOwner().equals(event.getPlayer()) || event.getPlayer().hasPermission("shops.admin")) {
+                if (Objects.equal(event.getPlayer(), shop.getOwner()) || event.getPlayer().hasPermission("shops.admin")) {
                     if (event.getPlayer().getGameMode() == GameMode.CREATIVE) {
                         event.setCancelled(true);
                     }
@@ -68,9 +69,20 @@ public class EventListener implements Listener
                         event.setCancelled(true);
                         ItemStack shopStack = shop.toItem(event.getBlock().getLocation());
                         event.getBlock().setType(Material.AIR);
+                        if (PlayerUtil.hasRoomForItem(event.getPlayer(), shopStack)) {
+                            PlayerUtil.giveItem(event.getPlayer(), shopStack);
+                            ShopPlugin.sendInfo(event.getPlayer(),
+                                String.format("%s shop has been added to your inventory",
+                                    Objects.equal(event.getPlayer(), shop.getOwner()) ? Format.username("Your")
+                                        : Format.username(shop.getOwner().getName()) + "'s"
+                                )
+                            );
+                        }
+                        else {
+                            event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), shopStack);
+                        }
                         ShopPlugin.removeLocation(shop.getId(), event.getBlock().getLocation());
                         ShopPlugin.clearSelection(event.getPlayer());
-                        event.getBlock().getWorld().dropItem(event.getBlock().getLocation(), shopStack);
                     }
                 }
                 else {
@@ -168,7 +180,7 @@ public class EventListener implements Listener
         }
     }
     
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockPlace(BlockPlaceEvent event)
     {
         try {
