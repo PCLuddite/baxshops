@@ -42,10 +42,7 @@ import tbax.baxshops.notification.Notification;
 import tbax.baxshops.serialization.ItemNames;
 import tbax.baxshops.serialization.StoredPlayer;
 
-import java.util.Deque;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @SuppressWarnings("unused")
 public final class ShopCmdActor implements CommandSender
@@ -54,6 +51,7 @@ public final class ShopCmdActor implements CommandSender
     private final Command command;
     private String name;
     private String action;
+    private String excluded;
     
     private String[] args;
     
@@ -67,8 +65,24 @@ public final class ShopCmdActor implements CommandSender
 
     public void setArgs(String[] args)
     {
-        this.args = new String[args.length];
-        System.arraycopy(args, 0, this.args, 0, args.length);
+        List<String> argList = new ArrayList<>(args.length);
+        for (int idx = 0; idx < args.length - 1; ++idx) {
+            String arg = args[idx];
+            if (Arrays.asList("-e", "--exclude", "--except").contains(arg)) {
+                excluded = args[++idx];
+            }
+            else {
+                argList.add(arg);
+            }
+        }
+        this.args = (String[])argList.toArray();
+    }
+
+    public @Nullable BaxEntry getExcluded() throws PrematureAbortException
+    {
+        if (excluded == null)
+            return null;
+        return getEntryFromString(excluded, "Excluded item not found in shop");
     }
 
     public String[] getArgs()
@@ -321,12 +335,17 @@ public final class ShopCmdActor implements CommandSender
 
     public BaxEntry getArgEntry(int index, String errMsg) throws PrematureAbortException
     {
+        return getEntryFromString(args[index], errMsg);
+    }
+
+    private BaxEntry getEntryFromString(String arg, String errMsg) throws PrematureAbortException
+    {
         BaxEntry entry;
         try {
-            entry = getShop().getEntry(Integer.parseInt(args[index]) - 1);
+            entry = getShop().getEntry(Integer.parseInt(arg) - 1);
         }
         catch (NumberFormatException e) {
-            List<BaxEntry> entries = ItemNames.getItemFromAlias(args[index], getShop());
+            List<BaxEntry> entries = ItemNames.getItemFromAlias(arg, getShop());
             if (entries.size() == 0) {
                 throw new CommandErrorException("No item with that name could be found");
             }

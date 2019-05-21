@@ -60,10 +60,11 @@ public abstract class BaxShopCommand implements TabCompleter
         return actor.hasPermission(getPermission());
     }
 
-    public boolean hasAlternative(ShopCmdActor actor)
+    public boolean useAlternative(ShopCmdActor actor)
     {
         return false;
     }
+    public boolean allowsExclusion(ShopCmdActor actor) { return false; }
 
     public @NotNull Class<? extends BaxShopCommand> getAlternative()
     {

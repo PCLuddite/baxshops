@@ -94,7 +94,7 @@ public final class CmdSell extends BaxShopCommand
     }
 
     @Override
-    public boolean hasAlternative(ShopCmdActor actor)
+    public boolean useAlternative(ShopCmdActor actor)
     {
         return actor.isOwner();
     }
@@ -103,6 +103,12 @@ public final class CmdSell extends BaxShopCommand
     public @NotNull Class<? extends BaxShopCommand> getAlternative()
     {
         return CmdRestock.class;
+    }
+
+    @Override
+    public boolean allowsExclusion(ShopCmdActor actor)
+    {
+        return actor.getNumArgs() == 2 && BaxQuantity.isAny(actor.getArg(1));
     }
 
     @Override

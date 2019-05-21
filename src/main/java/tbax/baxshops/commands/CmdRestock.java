@@ -93,6 +93,12 @@ public final class CmdRestock extends BaxShopCommand
     }
 
     @Override
+    public boolean allowsExclusion(ShopCmdActor actor)
+    {
+        return actor.getNumArgs() == 2 && BaxQuantity.isAny(actor.getArg(1));
+    }
+
+    @Override
     public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException // tested OK 3/16/19
     {
         assert actor.getShop() != null;

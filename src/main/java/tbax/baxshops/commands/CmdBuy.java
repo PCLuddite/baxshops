@@ -98,7 +98,7 @@ public final class CmdBuy extends BaxShopCommand
     }
 
     @Override
-    public boolean hasAlternative(ShopCmdActor actor)
+    public boolean useAlternative(ShopCmdActor actor)
     {
         return actor.isOwner();
     }

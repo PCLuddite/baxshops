@@ -247,7 +247,7 @@ public final class ShopPlugin extends JavaPlugin
             actor.sendError(Resources.INVALID_SHOP_ACTION, actor.getAction());
             return true;
         }
-        else if (cmd.hasAlternative(actor)) {
+        else if (cmd.useAlternative(actor)) {
             try {
                 cmd = cmd.getAlternative().newInstance();
                 actor.setAction(cmd.getName());
@@ -273,6 +273,9 @@ public final class ShopPlugin extends JavaPlugin
             }
             else if(cmd.requiresSelection(actor) && actor.getShop() == null) {
                 actor.sendError(Resources.NOT_FOUND_SELECTED);
+            }
+            else if (!cmd.allowsExclusion(actor) && actor.getExcluded() != null) {
+                actor.sendError("You cannot exclude anything");
             }
             else if(cmd.requiresOwner(actor) && !(actor.isOwner() || actor.isAdmin())) {
                 actor.sendError("You must be the owner of the shop to use /shop %s", actor.getAction());
