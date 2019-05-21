@@ -52,7 +52,6 @@ public final class ShopCmdActor implements CommandSender
 {
     private final CommandSender sender;
     private final Command command;
-    private Player player;
     private String name;
     private String action;
     
@@ -62,12 +61,14 @@ public final class ShopCmdActor implements CommandSender
     {
         this.sender = sender;
         this.command = command;
+        this.name = command.getName();
+        setArgs(args);
+    }
+
+    public void setArgs(String[] args)
+    {
         this.args = new String[args.length];
         System.arraycopy(args, 0, this.args, 0, args.length);
-        this.name = command.getName();
-        if (sender instanceof Player) {
-            player = (Player)sender;
-        }
     }
 
     public String[] getArgs()
@@ -87,7 +88,12 @@ public final class ShopCmdActor implements CommandSender
 
     public Player getPlayer()
     {
-        return player;
+        try {
+            return (Player) sender;
+        }
+        catch (ClassCastException e) {
+            return null;
+        }
     }
 
     public boolean isAdmin()
@@ -178,7 +184,7 @@ public final class ShopCmdActor implements CommandSender
 
     public ShopSelection getSelection()
     {
-        return ShopPlugin.getSelection(player);
+        return ShopPlugin.getSelection(getPlayer());
     }
     
     public int getNumArgs()
@@ -193,7 +199,7 @@ public final class ShopCmdActor implements CommandSender
 
     public BaxQuantity getArgPlayerQty(int index)
     {
-        return new BaxQuantity(args[index], getItemInHand(), player.getInventory());
+        return new BaxQuantity(args[index], getItemInHand(), getPlayer().getInventory());
     }
 
     public BaxQuantity getArgShopQty(int index, BaxEntry entry) throws PrematureAbortException
@@ -470,7 +476,7 @@ public final class ShopCmdActor implements CommandSender
 
     public void sendMessage(String format, Object... args)
     {
-        getSender().sendMessage(String.format(format, args));
+        sendMessage(String.format(format, args));
     }
 
     public void exitMessage(String format, Object... args) throws PrematureAbortException
@@ -495,9 +501,9 @@ public final class ShopCmdActor implements CommandSender
 
     public ItemStack getItemInHand()
     {
-        if (player == null)
+        if (getPlayer() == null)
             return null;
-        ItemStack item = player.getInventory().getItemInMainHand();
+        ItemStack item = getPlayer().getInventory().getItemInMainHand();
         if (item == null || item.getType() == Material.AIR)
             return null;
         return item;
@@ -508,10 +514,11 @@ public final class ShopCmdActor implements CommandSender
         return PlayerUtil.takeQtyFromInventory(getArgPlayerQty(index), getShop());
     }
 
-    public PlayerInventory getInventory() {
-        if (player == null)
+    public PlayerInventory getInventory()
+    {
+        if (getPlayer() == null)
             return null;
-        return player.getInventory();
+        return getPlayer().getInventory();
     }
 
     @Override
@@ -532,27 +539,27 @@ public final class ShopCmdActor implements CommandSender
 
     public int giveItem(ItemStack item) throws PrematureAbortException
     {
-        return PlayerUtil.giveItem(player, item);
+        return PlayerUtil.giveItem(getPlayer(), item);
     }
 
     public int giveItem(ItemStack item, boolean allOrNothing) throws PrematureAbortException
     {
-        return PlayerUtil.giveItem(player, item, allOrNothing);
+        return PlayerUtil.giveItem(getPlayer(), item, allOrNothing);
     }
 
     public int getSpaceForItem(ItemStack stack)
     {
-        return PlayerUtil.getSpaceForItem(player, stack);
+        return PlayerUtil.getSpaceForItem(getPlayer(), stack);
     }
 
     public boolean hasRoomForItem(ItemStack stack)
     {
-        return PlayerUtil.hasRoomForItem(player, stack);
+        return PlayerUtil.hasRoomForItem(getPlayer(), stack);
     }
 
     public boolean tryGiveItem(ItemStack stack)
     {
-        return PlayerUtil.tryGiveItem(player, stack);
+        return PlayerUtil.tryGiveItem(getPlayer(), stack);
     }
 
     @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -589,8 +596,14 @@ public final class ShopCmdActor implements CommandSender
         }
         catch (PrematureAbortException e){
             List<StoredPlayer> players = ShopPlugin.getSavedState().getOfflinePlayer(args[index]);
-            if (players.size() > 1)
-                exitError(Resources.TooManyPlayers(players));
+            if (players.size() > 1) {
+                StringBuilder sb = new StringBuilder();
+                sb.append("There are multiple players with that name. Please specify the UUID instead.\n");
+                for (StoredPlayer player : players) {
+                    sb.append(Format.keyword(player.getUniqueId().toString())).append('\n');
+                }
+                exitError(sb.toString());
+            }
             return players.get(0);
         }
     }
@@ -602,7 +615,7 @@ public final class ShopCmdActor implements CommandSender
 
     public Deque<Notification> getNotifications()
     {
-        return ShopPlugin.getSavedState().getNotifications(player);
+        return ShopPlugin.getSavedState().getNotifications(getPlayer());
     }
 
     @Override
