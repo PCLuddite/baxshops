@@ -209,17 +209,15 @@ public final class Format
     {
         StringBuilder sb = new StringBuilder();
         int numeralIdx = 0;
-        while (true) {
-            for (int i = 0; i < (n / NUMBERS[numeralIdx]); ++i) {
+        do {
+            int x = n / NUMBERS[numeralIdx];
+            for (int i = 0; i < x; ++i) {
                 sb.append(NUMERALS[numeralIdx]);
             }
-            if (++numeralIdx < NUMERALS.length) {
-                n = n - (n / NUMBERS[numeralIdx]);
-            }
-            else {
-                return sb.toString();
-            }
+            n -= x;
         }
+        while (++numeralIdx < NUMERALS.length);
+        return sb.toString();
     }
     
     public static String toFriendlyName(String name)
