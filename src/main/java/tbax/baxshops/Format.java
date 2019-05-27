@@ -196,6 +196,9 @@ public final class Format
     {
         return format + ChatColor.RESET;
     }
+
+    private static final String[] NUMERALS = { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
+    private static final int[] NUMBERS = { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 1 };
     
     /**
      * Converts a number to a Roman numeral
@@ -204,22 +207,18 @@ public final class Format
      */
     public static String toNumeral(int n)
     {
-        return toNumeral(new StringBuilder(), n, 0);
-    }
-
-    private static final String[] NUMERALS = { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
-    private static final int[] NUMBERS = { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 1 };
-
-    private static String toNumeral(StringBuilder sb, int n, int numeralIdx)
-    {
-        for(int i = 0; i < (n / NUMBERS[numeralIdx]); ++i) {
-            sb.append(NUMERALS[numeralIdx]);
-        }
-        if (++numeralIdx < NUMERALS.length) {
-            return toNumeral(sb, n - (n / NUMBERS[numeralIdx]), numeralIdx);
-        }
-        else {
-            return sb.toString();
+        StringBuilder sb = new StringBuilder();
+        int numeralIdx = 0;
+        while (true) {
+            for (int i = 0; i < (n / NUMBERS[numeralIdx]); ++i) {
+                sb.append(NUMERALS[numeralIdx]);
+            }
+            if (++numeralIdx < NUMERALS.length) {
+                n = n - (n / NUMBERS[numeralIdx]);
+            }
+            else {
+                return sb.toString();
+            }
         }
     }
     
