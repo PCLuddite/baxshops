@@ -198,26 +198,29 @@ public final class Format
     }
     
     /**
-     * Converts a number 1-5 to a Roman numeral
-     * @param n the number (1-5) to convert to a numeral
+     * Converts a number to a Roman numeral
+     * @param n the number to convert to a numeral
      * @return a string of the roman numeral
      */
     public static String toNumeral(int n)
     {
-        assert n > 0 && n < 6;
-        switch(n) {
-            case 1:
-                return "I";
-            case 2:
-                return "II";
-            case 3:
-                return "III";
-            case 4:
-                return "IV";
-            case 5:
-                return "V";
+        return toNumeral(new StringBuilder(), n, 0);
+    }
+
+    private static final String[] NUMERALS = { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
+    private static final int[] NUMBERS = { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 1 };
+
+    private static String toNumeral(StringBuilder sb, int n, int numeralIdx)
+    {
+        for(int i = 0; i < (n / NUMBERS[numeralIdx]); ++i) {
+            sb.append(NUMERALS[numeralIdx]);
         }
-        return null;
+        if (++numeralIdx < NUMERALS.length) {
+            return toNumeral(sb, n - (n / NUMBERS[numeralIdx]), numeralIdx);
+        }
+        else {
+            return sb.toString();
+        }
     }
     
     public static String toFriendlyName(String name)
