@@ -18,13 +18,19 @@
  */
 package tbax.baxshops.commands;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.ItemNames;
 
-public class CmdEmpty extends BaxShopCommand
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+public final class CmdEmpty extends BaxShopCommand
 {
     @Override
     public @NotNull String getName()
@@ -106,5 +112,17 @@ public class CmdEmpty extends BaxShopCommand
                     Format.itemName(stack.getAmount(), entry.getName()));
             }
         }
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    {
+        ShopCmdActor actor = (ShopCmdActor)sender;
+        if (actor.getShop() != null && args.length == 2) {
+            return IntStream.range(1, actor.getShop().size() + 1)
+                .mapToObj(String::valueOf)
+                .collect(Collectors.toList());
+        }
+        return super.onTabComplete(sender, command, alias, args);
     }
 }
