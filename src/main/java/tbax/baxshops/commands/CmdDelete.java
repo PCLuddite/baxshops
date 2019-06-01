@@ -25,7 +25,6 @@ import org.bukkit.block.Sign;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.Format;
-import tbax.baxshops.Resources;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.errors.PrematureAbortException;
 
@@ -111,15 +110,15 @@ public final class CmdDelete extends BaxShopCommand
         ShopPlugin.removeShop(shop.getId());
     }
 
-    private void changeSignText(ShopCmdActor actor, Location loc) throws PrematureAbortException
+    private void changeSignText(ShopCmdActor actor, Location loc)
     {
         BaxShop shop = actor.getShop();
         assert shop != null;
         try {
             Block b = loc.getBlock();
             Sign sign = (Sign) b.getState();
-            sign.setLine(0, Resources.SIGN_CLOSED[0]);
-            sign.setLine(1, Resources.SIGN_CLOSED[1]);
+            sign.setLine(0, "This shop has");
+            sign.setLine(1, "been closed by");
             sign.setLine(2, (shop.getOwner().equals(actor.getPlayer()) ? "the owner" : "an admin") + ".");
             sign.setLine(3, "");
             sign.update();

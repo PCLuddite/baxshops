@@ -125,7 +125,7 @@ public final class CmdFlag extends BaxShopCommand
     {
 		FlagCmd flagCmd = (FlagCmd)flagCmds.get(actor.getArg(1));
 		if (flagCmd.requiresRealOwner(actor) && actor.getShop() != null && StoredPlayer.DUMMY.equals(actor.getShop().getOwner())) {
-		    actor.exitError(Resources.PLAYER_NO_NOTES, actor.getShop().getOwner());
+		    actor.exitError("%s is not a real player and cannot receive notifications.\nThe value of this flag cannot be changed.", actor.getShop().getOwner());
         }
 		flagCmd.onCommand(actor);
     }

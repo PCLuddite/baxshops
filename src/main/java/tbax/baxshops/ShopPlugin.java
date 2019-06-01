@@ -266,7 +266,7 @@ public final class ShopPlugin extends JavaPlugin
                 actor.sendMessage(cmd.getHelp(actor).toString());
             }
             else if(!cmd.hasPermission(actor)) {
-                actor.sendError(Resources.NO_PERMISSION);
+                actor.sendError("You do not have permission to use this command");
             }
             else if(cmd.requiresPlayer(actor) && actor.getPlayer() == null) {
                 actor.sendError("You must be a player to use this command.");
@@ -281,7 +281,7 @@ public final class ShopPlugin extends JavaPlugin
                 actor.sendError("You must be the owner of the shop to use /shop %s", actor.getAction());
             }
             else if(cmd.requiresItemInHand(actor) && actor.getItemInHand() == null) {
-                actor.sendError(Resources.NOT_FOUND_HELDITEM);
+                actor.sendError("You need to be holding an item to perform this action");
             }
             else {
                 cmd.onCommand(actor);

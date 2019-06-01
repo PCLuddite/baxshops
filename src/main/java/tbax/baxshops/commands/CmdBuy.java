@@ -24,14 +24,12 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.CommandHelp;
 import tbax.baxshops.notification.BuyNotification;
 import tbax.baxshops.notification.BuyRequest;
 import tbax.baxshops.serialization.ItemNames;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public final class CmdBuy extends BaxShopCommand
 {
@@ -137,7 +135,7 @@ public final class CmdBuy extends BaxShopCommand
         double price = MathUtil.multiply(amount.getQuantity(), entry.getRetailPrice());
 
         if (!ShopPlugin.getEconomy().has(actor.getPlayer(), price)) {
-            actor.exitError(Resources.NO_MONEY_BUYER);
+            actor.exitError("You do not have enough money");
         }
 
         BaxEntry purchased = new BaxEntry(entry);
@@ -156,7 +154,7 @@ public final class CmdBuy extends BaxShopCommand
             int overflow = actor.giveItem(purchased.toItemStack());
             if (overflow > 0) {
                 price = MathUtil.multiply((amount.getQuantity() - overflow), entry.getRetailPrice());
-                actor.sendMessage(Resources.SOME_ROOM + " " + Resources.CHARGED_MSG, amount.getQuantity() - overflow, itemName, Format.money(price));
+                actor.sendMessage(Resources.SOME_ROOM + ". You were charged %s.", amount.getQuantity() - overflow, itemName, Format.money(price));
             }
             else {
                 actor.sendMessage("You bought %s for %s.", Format.itemName(purchased.getAmount(), itemName), Format.money(price));

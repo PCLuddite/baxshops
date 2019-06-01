@@ -22,9 +22,8 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
-import tbax.baxshops.Resources;
-import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
+import tbax.baxshops.errors.PrematureAbortException;
 
 public final class CmdCopy extends BaxShopCommand
 {
@@ -92,7 +91,7 @@ public final class CmdCopy extends BaxShopCommand
 
         int i = actor.giveItem(actor.getSelection().toItem());
         if (i > 0) {
-            actor.sendMessage(Resources.INVENTORY_IS_FULL);
+            actor.sendMessage("Your inventory is full");
             if (!actor.isAdmin()) {
                 actor.getPlayer().getInventory().addItem(new ItemStack(Material.SIGN, 1));
             }

@@ -379,7 +379,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
             }
         }
         catch(Exception ex){
-            return ChatColor.RED + Resources.ERROR_INLINE;
+            return Resources.ERROR_INLINE;
         }
     }
 
