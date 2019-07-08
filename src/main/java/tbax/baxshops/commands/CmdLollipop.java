@@ -24,13 +24,17 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.CommandHelpArgument;
+import tbax.baxshops.Format;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
 import tbax.baxshops.notification.LollipopNotification;
+import tbax.baxshops.notification.Notification;
+import tbax.baxshops.serialization.SavedState;
 import tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.Arrays;
+import java.util.Deque;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -103,10 +107,26 @@ public final class CmdLollipop extends BaxShopCommand
         if (actor.getNumArgs() == 3) {
             tastiness = actor.getArgDouble(2, "Invalid tastiness");
         }
+        OfflinePlayer sender = actor.getPlayer();
         OfflinePlayer recipient = actor.getArgPlayer(1);
-        LollipopNotification lol = new LollipopNotification(actor.getPlayer(), recipient, tastiness);
-        ShopPlugin.sendNotification(recipient, lol);
-        actor.sendMessage("Sent %s lollipop to %s", lol.getTastiness(), recipient.getName());
+
+        List<LollipopNotification> otherPops = ShopPlugin.getSavedState().getNotifications(recipient).stream()
+            .filter(n -> n instanceof LollipopNotification)
+            .map(n -> (LollipopNotification)n)
+            .filter(n -> n.getSender().equals(sender))
+            .collect(Collectors.toList());
+
+        if (otherPops.isEmpty()) {
+            LollipopNotification lol = new LollipopNotification(actor.getPlayer(), recipient, tastiness);
+            ShopPlugin.sendNotification(recipient, lol);
+            actor.sendMessage("You sent %s lollipop to %s", lol.getTastiness(), Format.username2(recipient.getName()));
+        }
+        else {
+            actor.sendError("%s has to eat your %s lollipop before you can send another",
+                recipient.getName(),
+                "".equals(otherPops.get(0).getUnadornedTastiness()) ? "other" : otherPops.get(0).getUnadornedTastiness()
+            );
+        }
     }
 
     @Override

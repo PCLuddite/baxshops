@@ -162,4 +162,15 @@ public final class LollipopNotification implements Notification, UpgradeableSeri
         }
         return adjective;
     }
+
+    public String getUnadornedTastiness()
+    {
+        String tastiness = getTastiness();
+        if ("a".equals(tastiness))
+            return "";
+        int start = tastiness.indexOf(' ') + 1;
+        if (start == 0)
+            return tastiness;
+        return tastiness.substring(start);
+    }
 }
