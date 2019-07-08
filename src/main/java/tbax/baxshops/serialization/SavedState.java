@@ -275,7 +275,8 @@ public final class SavedState
     public @NotNull StoredPlayer getOfflinePlayer(UUID uuid)
     {
         StoredPlayer player = players.get(uuid);
-        assert player != null;
+        if (player == null)
+            return StoredPlayer.ERROR;
         return player;
     }
 
