@@ -46,8 +46,7 @@ import tbax.baxshops.notification.Notification;
 import tbax.baxshops.serialization.Configuration;
 import tbax.baxshops.serialization.StoredPlayer;
 
-import java.util.Deque;
-import java.util.UUID;
+import java.util.*;
 
 @SuppressWarnings("unused")
 public class EventListener implements Listener
@@ -266,7 +265,7 @@ public class EventListener implements Listener
     {
         if (!ShopPlugin.getSavedState().getConfig().isDeathTaxEnabled())
             return;
-        if (!isStupidDeath(event.getEntity().getLastDamageCause().getCause()))
+        if (!isStupidDeath(event.getEntity().getPlayer().getFoodLevel(), event.getEntity().getLastDamageCause().getCause()))
             return;
 
         Configuration config = ShopPlugin.getSavedState().getConfig();
@@ -290,11 +289,12 @@ public class EventListener implements Listener
         }
     }
     
-    private static boolean isStupidDeath(DamageCause death)
+    private static boolean isStupidDeath(int foodLevel, DamageCause death)
     {
-        return death == DamageCause.FALL || death == DamageCause.DROWNING ||
-               death == DamageCause.LAVA || death == DamageCause.CONTACT ||
-               death == DamageCause.FIRE || death == DamageCause.FIRE_TICK ||
-               death == DamageCause.SUFFOCATION;
+        return foodLevel < 10 || Arrays.asList(
+                DamageCause.FALL, DamageCause.DROWNING, DamageCause.LAVA,
+                DamageCause.CONTACT, DamageCause.FIRE, DamageCause.FIRE_TICK,
+                DamageCause.SUFFOCATION
+        ).contains(death);
     }
 }
