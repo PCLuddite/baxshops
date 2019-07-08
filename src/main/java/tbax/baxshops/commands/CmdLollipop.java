@@ -103,10 +103,10 @@ public final class CmdLollipop extends BaxShopCommand
         if (actor.getNumArgs() == 3) {
             tastiness = actor.getArgDouble(2, "Invalid tastiness");
         }
-        LollipopNotification lol = new LollipopNotification(actor.getPlayer(), tastiness);
         OfflinePlayer recipient = actor.getArgPlayer(1);
+        LollipopNotification lol = new LollipopNotification(actor.getPlayer(), recipient, tastiness);
         ShopPlugin.sendNotification(recipient, lol);
-        actor.sendMessage("Sent a %s lollipop to %s", lol.getTastiness(), recipient.getName());
+        actor.sendMessage("Sent %s lollipop to %s", lol.getTastiness(), recipient.getName());
     }
 
     @Override

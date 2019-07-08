@@ -64,9 +64,10 @@ public final class LollipopNotification implements Notification, UpgradeableSeri
         UpgradeableSerialization.deserialize(this, args);
     }
 
-    public LollipopNotification(OfflinePlayer sender, double tastiness)
+    public LollipopNotification(OfflinePlayer sender, OfflinePlayer recipient, double tastiness)
     {
         this.sender = sender.getUniqueId();
+        this.recipient = recipient.getUniqueId();
         this.tastiness = tastiness < 0 ? 0 : tastiness > 100 ? 100 : tastiness;
         this.date = new Date();
     }
