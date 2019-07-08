@@ -291,7 +291,7 @@ public class EventListener implements Listener
     
     private static boolean isStupidDeath(int foodLevel, DamageCause death)
     {
-        return foodLevel < 10 || Arrays.asList(
+        return foodLevel < 8 || Arrays.asList(
                 DamageCause.FALL, DamageCause.DROWNING, DamageCause.LAVA,
                 DamageCause.CONTACT, DamageCause.FIRE, DamageCause.FIRE_TICK,
                 DamageCause.SUFFOCATION
