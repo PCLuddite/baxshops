@@ -66,7 +66,8 @@ public final class ShopCmdActor implements CommandSender
     public void setArgs(String[] args)
     {
         List<String> argList = new ArrayList<>(args.length);
-        for (int idx = 0; idx < args.length - 1; ++idx) {
+        int idx = 0;
+        for (; idx < args.length - 1; ++idx) {
             String arg = args[idx];
             if (Arrays.asList("-e", "--exclude", "--except").contains(arg)) {
                 excluded = args[++idx];
@@ -75,7 +76,9 @@ public final class ShopCmdActor implements CommandSender
                 argList.add(arg);
             }
         }
-        this.args = (String[])argList.toArray();
+        if (idx < args.length)
+            argList.add(args[idx]);
+        this.args = argList.toArray(new String[0]);
     }
 
     public @Nullable BaxEntry getExcluded() throws PrematureAbortException
