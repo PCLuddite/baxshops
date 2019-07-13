@@ -134,6 +134,7 @@ public final class SavedState
             .map(f -> f.getName().substring(0, f.getName().lastIndexOf('.')))
             .filter(n -> Format.parseFileDate(n) != null)
             .sorted(Comparator.comparing(Format::parseFileDate))
+            .sorted(Comparator.reverseOrder())
             .collect(Collectors.toList());
 
         while (names.size() >= nBaks) {
