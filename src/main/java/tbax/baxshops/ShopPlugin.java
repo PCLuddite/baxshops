@@ -125,7 +125,8 @@ public final class ShopPlugin extends JavaPlugin
     public static void showNotification(Player player)
     {
         Deque<Notification> notifications = savedState.getNotifications(player);
-        Notification n = notifications.getFirst();
+        Notification n = notifications.removeFirst();
+        sendInfo(player, n.getMessage(player));
         if (n instanceof Request) {
             player.sendMessage(String.format("Use %s or %s to manage this request.",
                 Format.command("/shop accept"),
@@ -136,9 +137,6 @@ public final class ShopPlugin extends JavaPlugin
             player.sendMessage(String.format("Use %s to claim and remove this notification.",
                 Format.command("/shop claim"))
             );
-        }
-        else {
-            notifications.removeFirst();
         }
     }
 
