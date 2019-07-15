@@ -22,6 +22,7 @@ package tbax.baxshops.notification;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+import tbax.baxshops.Format;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.UpgradeableSerialization;
 import tbax.baxshops.serialization.SafeMap;
@@ -29,6 +30,7 @@ import tbax.baxshops.serialization.StoredPlayer;
 import tbax.baxshops.serialization.UpgradeableSerializable;
 import tbax.baxshops.serialization.states.State_00300;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
@@ -39,24 +41,23 @@ import java.util.UUID;
  */
 public final class LollipopNotification implements Notification, UpgradeableSerializable
 {
-    public static final double DEFAULT_TASTINESS = 40;
-    private static final String[] adjectives =  {
-        "a disgusting",
-        "a bad",
-        "an icky",
-        "a bland",
-        "a",
-        "an OK",
-        "a good",
-        "a great",
-        "a tasty",
-        "a delicious",
-        "a wonderful"
+    public static final String DEFAULT_TASTINESS = "";
+    public static final String[] STOCK_ADJECTIVES =  {
+        "disgusting",
+        "bad",
+        "icky",
+        "bland",
+        "OK",
+        "good",
+        "great",
+        "tasty",
+        "delicious",
+        "wonderful"
     };
 
     private UUID sender;
     private UUID recipient;
-    private double tastiness;
+    private String tastiness;
     private Date date;
 
     public LollipopNotification(Map<String, Object> args)
@@ -64,11 +65,11 @@ public final class LollipopNotification implements Notification, UpgradeableSeri
         UpgradeableSerialization.deserialize(this, args);
     }
 
-    public LollipopNotification(OfflinePlayer sender, OfflinePlayer recipient, double tastiness)
+    public LollipopNotification(OfflinePlayer sender, OfflinePlayer recipient, String tastiness)
     {
         this.sender = sender.getUniqueId();
         this.recipient = recipient.getUniqueId();
-        this.tastiness = tastiness < 0 ? 0 : tastiness > 100 ? 100 : tastiness;
+        this.tastiness = tastiness;
         this.date = new Date();
     }
 
@@ -77,7 +78,7 @@ public final class LollipopNotification implements Notification, UpgradeableSeri
     {
         sender = State_00300.getPlayerId(map.getString("sender"));
         recipient = StoredPlayer.ERROR_UUID;
-        tastiness = map.getDouble("tastiness");
+        tastiness = getStockAdjective(map.getDouble("tastiness"));
     }
 
     @Override
@@ -85,7 +86,7 @@ public final class LollipopNotification implements Notification, UpgradeableSeri
     {
         sender = map.getUUID("sender");
         recipient = StoredPlayer.ERROR_UUID;
-        tastiness = map.getDouble("tastiness");
+        tastiness = getStockAdjective(map.getDouble("tastiness"));
     }
 
     @Override
@@ -93,7 +94,16 @@ public final class LollipopNotification implements Notification, UpgradeableSeri
     {
         sender = map.getUUID("sender");
         recipient = map.getUUID("receiver");
-        tastiness = map.getDouble("tastiness");
+        tastiness = getStockAdjective(map.getDouble("tastiness"));
+        date = map.getDate("date");
+    }
+
+    @Override
+    public void deserialize00411(@NotNull SafeMap map)
+    {
+        sender = map.getUUID("sender");
+        recipient = map.getUUID("receiver");
+        tastiness = map.getString("tastiness");
         date = map.getDate("date");
     }
 
@@ -106,7 +116,10 @@ public final class LollipopNotification implements Notification, UpgradeableSeri
     public @NotNull String getMessage(CommandSender sender)
     {
         if (getRecipient().equals(sender)) {
-            return getSender().getName() + " sent you " + getTastiness() + " lollipop";
+            return String.format("%s sent you %s lollipop",
+                    Format.username2(getSender().getName()),
+                    Format.keyword(getAdornedTastiness())
+            );
         }
         else {
             return getMessage();
@@ -121,7 +134,11 @@ public final class LollipopNotification implements Notification, UpgradeableSeri
     @Override
     public @NotNull String getMessage()
     {
-        return String.format("%s sent %s %s lollipop", getSender().getName(), getRecipient().getName(), getTastiness());
+        return String.format("%s sent %s %s lollipop",
+                Format.username(getSender().getName()),
+                Format.username2(getRecipient().getName()),
+                getAdornedTastiness()
+        );
     }
 
     @Override
@@ -130,7 +147,7 @@ public final class LollipopNotification implements Notification, UpgradeableSeri
         return date;
     }
 
-    public Map<String, Object> serialize()
+    public @NotNull Map<String, Object> serialize()
     {
         SafeMap args = new SafeMap();
         args.put("sender", getSender());
@@ -150,27 +167,37 @@ public final class LollipopNotification implements Notification, UpgradeableSeri
         return deserialize(args);
     }
 
-    public String getTastiness()
+    public static String getStockAdjective(double tastiness)
     {
+        tastiness = Math.max(tastiness, 0) % 101;
         if (tastiness >= 55.0 && tastiness < 60.0)
-            return "a better-than-average";
-        String adjective = "a";
-        for (int i = 0; i < adjectives.length; ++i) {
-            if (tastiness >= (i * 10)) {
-                adjective = adjectives[i];
+            return "better-than-average";
+        if (tastiness >= 40 && tastiness < 50)
+            return "";
+        String adjective = "";
+        for (int i = 0; i < STOCK_ADJECTIVES.length; ++i) {
+            int j = i > 3 ? i + 1 : i; // skip 4
+            if (tastiness >= (j * 10)) {
+                adjective = STOCK_ADJECTIVES[i];
             }
         }
         return adjective;
     }
 
-    public String getUnadornedTastiness()
+    public String getTastiness()
     {
-        String tastiness = getTastiness();
-        if ("a".equals(tastiness))
-            return "";
-        int start = tastiness.indexOf(' ') + 1;
-        if (start == 0)
-            return tastiness;
-        return tastiness.substring(start);
+        return tastiness;
+    }
+
+    public String getAdornedTastiness()
+    {
+        if (tastiness == null || "".equals(tastiness))
+            return "a";
+        if (Arrays.asList('a', 'e', 'i', 'o', 'u').contains(Character.toLowerCase(tastiness.charAt(0)))) {
+            return "an " + tastiness;
+        }
+        else {
+            return "a " + tastiness;
+        }
     }
 }

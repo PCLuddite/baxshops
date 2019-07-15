@@ -62,10 +62,10 @@ public final class CmdLollipop extends BaxShopCommand
     public CommandHelp getHelp(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         CommandHelp help = super.getHelp(actor);
-        help.setDescription("Hand out lollipop");
+        help.setDescription("Hand out a lollipop");
         help.setArgs(
             new CommandHelpArgument("player", "player to send lollipop", true),
-            new CommandHelpArgument("tastiness", "the tastiness (0-100)", true)
+            new CommandHelpArgument("tastiness", "the tastiness", true)
         );
         return help;
     }
@@ -103,10 +103,19 @@ public final class CmdLollipop extends BaxShopCommand
     @Override
     public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException // tested OK 3-14-19
     {
-        double tastiness = LollipopNotification.DEFAULT_TASTINESS;
+        String tastiness = LollipopNotification.DEFAULT_TASTINESS;
         if (actor.getNumArgs() == 3) {
-            tastiness = actor.getArgDouble(2, "Invalid tastiness");
+            if (actor.isArgDouble(2)) {
+                tastiness = LollipopNotification.getStockAdjective(actor.getArgDouble(2));
+            }
+            else {
+                tastiness = actor.getArg(2);
+            }
         }
+
+        if (tastiness.length() > 30)
+            actor.exitError("Your adjective is too long");
+
         OfflinePlayer sender = actor.getPlayer();
         OfflinePlayer recipient = actor.getArgPlayer(1);
 
@@ -119,12 +128,12 @@ public final class CmdLollipop extends BaxShopCommand
         if (otherPops.isEmpty()) {
             LollipopNotification lol = new LollipopNotification(actor.getPlayer(), recipient, tastiness);
             ShopPlugin.sendNotification(recipient, lol);
-            actor.sendMessage("You sent %s lollipop to %s", lol.getTastiness(), Format.username2(recipient.getName()));
+            actor.sendMessage("You sent %s lollipop to %s", lol.getAdornedTastiness(), Format.username2(recipient.getName()));
         }
         else {
             actor.sendError("%s has to eat your %s lollipop before you can send another",
                 recipient.getName(),
-                "".equals(otherPops.get(0).getUnadornedTastiness()) ? "other" : otherPops.get(0).getUnadornedTastiness()
+                "".equals(otherPops.get(0).getTastiness()) ? "other" : otherPops.get(0).getTastiness()
             );
         }
     }
@@ -139,7 +148,7 @@ public final class CmdLollipop extends BaxShopCommand
                 .collect(Collectors.toList());
         }
         else if (actor.getNumArgs() == 3) {
-            return Arrays.asList("0", "10", "20", "30", "40", "50", "55", "60", "70", "80", "90", "100");
+            return Arrays.asList(LollipopNotification.STOCK_ADJECTIVES);
         }
         else {
             return super.onTabComplete(sender, command, alias, args);

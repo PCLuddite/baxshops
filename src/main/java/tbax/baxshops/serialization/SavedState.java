@@ -31,7 +31,7 @@ import tbax.baxshops.Format;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.notification.Notification;
 import tbax.baxshops.serialization.states.State_00300;
-import tbax.baxshops.serialization.states.State_00410;
+import tbax.baxshops.serialization.states.State_00411;
 
 import java.io.*;
 import java.text.DecimalFormat;
@@ -43,7 +43,7 @@ public final class SavedState
 {
     static final String YAML_FILE_PATH = "shops.yml";
     
-    private static final double STATE_VERSION = State_00410.VERSION; // state file format version
+    private static final double STATE_VERSION = State_00411.VERSION; // state file format version
     private static double loadedState;
     
     /**
