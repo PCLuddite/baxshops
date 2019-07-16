@@ -349,6 +349,8 @@ public final class SavedState
 
     public Collection<StoredPlayer> getRegisteredPlayers()
     {
-        return players.values();
+        return players.values().stream()
+                .filter(n -> !StoredPlayer.ERROR.equals(n))
+                .collect(Collectors.toList());
     }
 }
