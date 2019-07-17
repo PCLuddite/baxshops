@@ -161,10 +161,12 @@ public final class ShopPlugin extends JavaPlugin
     public static void sendNotification(OfflinePlayer player, Notification n, boolean logNote)
     {
         Deque<Notification> ns = savedState.getNotifications(player);
-        if (logNote) {
+        if (logNote)
             log.info(Format.toAnsiColor(n.getMessage(null)));
-        }
-        ns.add(n);
+
+        if (!StoredPlayer.DUMMY.equals(player))
+            ns.add(n);
+
         if (player.isOnline()) {
             if (ns.size() == 1) {
                 showNotification(player.getPlayer());
