@@ -142,6 +142,9 @@ public class EventListener implements Listener
             player.sendMessage("");
         }
         else {
+            if (ShopPlugin.getSavedState().getConfig().isLogNotes()) {
+                ShopPlugin.logInfo(String.format("%s selected shop %s", player.getName(), shop.getId().toString()));
+            }
             selection.setIsOwner(isOwner);
             selection.setShop(shop);
             selection.setPage(0);
@@ -249,6 +252,9 @@ public class EventListener implements Listener
             Location shopLoc = s.getLocation();
             Location pLoc = event.getTo();
             if (shopLoc.getWorld() != pl.getWorld() || shopLoc.distanceSquared(pLoc) > Resources.SHOP_RANGE) {
+                if (ShopPlugin.getSavedState().getConfig().isLogNotes()) {
+                    ShopPlugin.logInfo(String.format("%s left shop %s", pl.getName(), s.getShop().getId().toString()));
+                }
                 if (s.isOwner()) {
                     pl.sendMessage("[Left " + Format.username("your") + " shop]");
                 }
