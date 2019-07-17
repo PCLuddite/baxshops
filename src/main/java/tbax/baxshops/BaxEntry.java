@@ -23,6 +23,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
@@ -125,9 +126,10 @@ public final class BaxEntry implements UpgradeableSerializable
         stack = new ItemStack(type, getAmount());
     }
     
-    public void setItem(Material type, short damage)
+    public void setItem(Material type, int damage)
     {
-        stack = new ItemStack(type, getAmount(), damage);
+        stack = new ItemStack(type, getAmount());
+        setDurability(damage);
     }
         
     /**
@@ -179,20 +181,35 @@ public final class BaxEntry implements UpgradeableSerializable
         return quantity;
     }
     
-    public short getDurability()
+    public int getDurability()
     {
-        return stack.getDurability();
+        if (stack.getItemMeta() instanceof Damageable) {
+            Damageable damage = (Damageable) stack.getItemMeta();
+            return damage.getDamage();
+        }
+        return 0;
+    }
+
+    public void setDurability(int durability)
+    {
+        if (stack.getItemMeta() instanceof Damageable) {
+            Damageable damage = (Damageable) stack.getItemMeta();
+            damage.setDamage(durability);
+            stack.setItemMeta((ItemMeta)damage);
+        }
     }
     
-    public short getDamagePercent()
+    public int getDamagePercent()
     {
-        return (short)Math.round((stack.getDurability() * 100.0f) / ItemNames.getMaxDamage(stack.getType()));
+        return (int)Math.round((getDurability() * 100d) / ItemNames.getMaxDamage(stack.getType()));
     }
     
-    public void setDamagePercent(short pct)
+    public void setDamagePercent(int pct)
     {
-        float damage = (pct / 100f) * ItemNames.getMaxDamage(stack.getType());
-        stack.setDurability((short)damage);
+        double damage = (pct / 100d) * ItemNames.getMaxDamage(stack.getType());
+        if (stack.getItemMeta() instanceof Damageable) {
+            ((Damageable) stack.getItemMeta()).setDamage((int)damage);
+        }
     }
 
     public @NotNull String getName()
@@ -289,7 +306,7 @@ public final class BaxEntry implements UpgradeableSerializable
             name.append(" ").append(potionInfo);
         }
         
-        if (ItemNames.isDamageable(stack.getType()) && stack.getDurability() > 0) {
+        if (ItemNames.isDamageable(stack.getType()) && getDurability() > 0) {
             if (infinite || getAmount() > 0) {
                 name.append(ChatColor.YELLOW);
             }
