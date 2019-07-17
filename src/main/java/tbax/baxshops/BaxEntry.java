@@ -208,7 +208,7 @@ public final class BaxEntry implements UpgradeableSerializable
     {
         double damage = (pct / 100d) * ItemNames.getMaxDamage(stack.getType());
         if (stack.getItemMeta() instanceof Damageable) {
-            ((Damageable) stack.getItemMeta()).setDamage((int)damage);
+            setDurability((int)damage);
         }
     }
 
