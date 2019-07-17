@@ -50,9 +50,6 @@ public class State_00300 implements StateLoader
         if (args.containsKey("infinite")) {
             flags = BaxShopFlag.setFlag(flags, BaxShopFlag.INFINITE, args.getBoolean("infinite", false));
         }
-        if (args.containsKey("notify")) {
-            flags = BaxShopFlag.setFlag(flags, BaxShopFlag.NOTIFY, args.getBoolean("notify", true));
-        }
         if (args.containsKey("sellRequests")) {
             flags = BaxShopFlag.setFlag(flags, BaxShopFlag.SELL_REQUESTS, args.getBoolean("sellRequests", true));
         }

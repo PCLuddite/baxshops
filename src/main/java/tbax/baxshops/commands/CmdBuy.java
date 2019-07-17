@@ -169,9 +169,7 @@ public final class CmdBuy extends BaxShopCommand
             purchased.subtract(overflow);
 
             actor.sendMessage(Resources.CURRENT_BALANCE, Format.money2(ShopPlugin.getEconomy().getBalance(actor.getPlayer())));
-            if (shop.hasFlagNotify()) {
-                ShopPlugin.sendNotification(shop.getOwner(), new BuyNotification(shop.getId(), actor.getPlayer(), shop.getOwner(), purchased));
-            }
+            ShopPlugin.sendNotification(shop.getOwner(), new BuyNotification(shop.getId(), actor.getPlayer(), shop.getOwner(), purchased));
         }
     }
 

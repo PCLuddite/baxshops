@@ -41,7 +41,6 @@ public final class CmdFlag extends BaxShopCommand
             flagCmds.add(FlagCmdBuyRequests.class);
             flagCmds.add(FlagCmdInfinite.class);
             flagCmds.add(FlagCmdList.class);
-            flagCmds.add(FlagCmdNotify.class);
             flagCmds.add(FlagCmdOwner.class);
             flagCmds.add(FlagCmdSellRequests.class);
             flagCmds.add(FlagCmdSellToShop.class);

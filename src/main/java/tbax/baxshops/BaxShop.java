@@ -31,6 +31,7 @@ import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.*;
 import tbax.baxshops.serialization.states.State_00300;
+import tbax.baxshops.serialization.states.State_00420;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -48,7 +49,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     private final Set<Location> locations = new HashSet<>();
     private final List<BaxEntry> inventory = new ArrayList<>();
 
-    private int flags = BaxShopFlag.NOTIFY | BaxShopFlag.SELL_REQUESTS;
+    private int flags = BaxShopFlag.SELL_REQUESTS;
 
     private BaxShop(UUID uuid)
     {
@@ -97,6 +98,16 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
 
     @Override
     public void deserialize00400(@NotNull SafeMap map)
+    {
+        id =  map.getUUID("id", UUID.randomUUID());
+        owner = map.getUUID("owner", StoredPlayer.ERROR_UUID);
+        flags = State_00420.convertFlag(map.getInteger("flags"));
+        inventory.addAll(map.getList("inventory"));
+        locations.addAll(map.getList("locations"));
+    }
+
+    @Override
+    public void deserialize00420(@NotNull SafeMap map)
     {
         id =  map.getUUID("id", UUID.randomUUID());
         owner = map.getUUID("owner", StoredPlayer.ERROR_UUID);
@@ -328,16 +339,6 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
         return !isWorldShop() && BaxShopFlag.hasFlag(flags, BaxShopFlag.SELL_REQUESTS);
     }
 
-    public void setFlagNotify(boolean value)
-    {
-        flags = BaxShopFlag.setFlag(flags, BaxShopFlag.NOTIFY, value);
-    }
-
-    public boolean hasFlagNotify()
-    {
-        return !isWorldShop() && BaxShopFlag.hasFlag(flags, BaxShopFlag.NOTIFY);
-    }
-
     public void setFlagSellToShop(boolean value)
     {
         flags = BaxShopFlag.setFlag(flags, BaxShopFlag.SELL_TO_SHOP, value);
@@ -402,7 +403,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     }
 
     @Override
-    public Map<String, Object> serialize()
+    public @NotNull Map<String, Object> serialize()
     {
         SafeMap map = new SafeMap();
         map.put("id", id);
