@@ -88,7 +88,7 @@ public final class CmdInfo extends BaxShopCommand
     public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         BaxEntry entry = actor.getArgEntry(1);
-        actor.sendMessage(entry.toString());
+        actor.getSender().sendMessage(entry.toString());
     }
 
     @Override
