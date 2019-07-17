@@ -54,11 +54,11 @@ public final class FlagCmdList extends FlagCmd
     {
         BaxShop shop = actor.getShop();
         assert shop != null;
-        actor.sendMessage("\nFlags currently applied to this shop:");
-        actor.sendMessage("%s: %s", Format.flag("Infinite"), Format.keyword(shop.hasFlagInfinite() ? "Yes" : "No"));
-        actor.sendMessage("%s: %s", Format.flag("Sell to Shop"), Format.keyword(shop.hasFlagSellToShop() ? "Yes" : "No"));
-        actor.sendMessage("%s: %s", Format.flag("Sell Requests"), Format.keyword(shop.hasFlagSellRequests() ? "Yes" : "No"));
-        actor.sendMessage("%s: %s", Format.flag("Buy Requests"), Format.keyword(shop.hasFlagBuyRequests() ? "Yes" : "No"));
+        actor.getSender().sendMessage("\nFlags currently applied to this shop:");
+        actor.getSender().sendMessage(String.format("%s: %s", Format.flag("Infinite"), Format.keyword(shop.hasFlagInfinite() ? "Yes" : "No")));
+        actor.getSender().sendMessage(String.format("%s: %s", Format.flag("Sell to Shop"), Format.keyword(shop.hasFlagSellToShop() ? "Yes" : "No")));
+        actor.getSender().sendMessage(String.format("%s: %s", Format.flag("Sell Requests"), Format.keyword(shop.hasFlagSellRequests() ? "Yes" : "No")));
+        actor.getSender().sendMessage(String.format("%s: %s", Format.flag("Buy Requests"), Format.keyword(shop.hasFlagBuyRequests() ? "Yes" : "No")));
     }
 
     @Override
