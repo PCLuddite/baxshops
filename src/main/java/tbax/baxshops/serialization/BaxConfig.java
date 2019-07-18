@@ -25,10 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.ShopPlugin;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public final class BaxConfig
@@ -192,6 +189,19 @@ public final class BaxConfig
         }
 
         return configFile.renameTo(backupFile);
+    }
+
+    public boolean saveDefaults()
+    {
+        boolean changed = false;
+        Set<String> keys = getFileConfig().getDefaults().getKeys(true);
+        for (String key : keys) {
+            if (!getFileConfig().contains(key, true)) {
+                getFileConfig().set(key, getFileConfig().getDefaults().get(key));
+                changed = true;
+            }
+        }
+        return changed;
     }
 
     public void save()

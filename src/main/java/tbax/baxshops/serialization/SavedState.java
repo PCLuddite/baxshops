@@ -234,7 +234,7 @@ public final class SavedState
             log.warning("Failed to back up BaxShops");
         }
 
-        if (loadedState != STATE_VERSION) {
+        if (loadedState != STATE_VERSION || config.saveDefaults()) {
             resaveConfig();
         }
 
