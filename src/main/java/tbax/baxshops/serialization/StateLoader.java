@@ -24,6 +24,7 @@ import tbax.baxshops.BaxShop;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.notification.NoteSet;
 
+import java.lang.reflect.Field;
 import java.util.Collection;
 
 public interface StateLoader
@@ -64,5 +65,24 @@ public interface StateLoader
 
         savedState.config = loadConfig(getPlugin().getConfig());
         return savedState;
+    }
+
+    default double getVersion()
+    {
+        Field f = null;
+        try {
+            f = getClass().getField("VERSION");
+        }
+        catch (NoSuchFieldException e) {
+            SerializationException.throwStateLoaderException(e);
+        }
+        double ver = 0d;
+        try {
+            f.get(null);
+        }
+        catch (IllegalAccessException | IllegalArgumentException e) {
+            SerializationException.throwStateLoaderException(e);
+        }
+        return ver;
     }
 }

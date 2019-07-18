@@ -40,4 +40,9 @@ public class SerializationException extends RuntimeException
     {
         throw new SerializationException("State version is not supported for deserialization");
     }
+
+    public static void throwStateLoaderException(Throwable cause)
+    {
+        throw new SerializationException("StateLoader class is poorly formed or is missing fields", cause);
+    }
 }
