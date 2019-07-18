@@ -269,14 +269,13 @@ public class EventListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDeath(PlayerDeathEvent event)
     {
-        if (!ShopPlugin.getSavedState().getConfig().isDeathTaxEnabled())
-            return;
-        if (!isStupidDeath(event.getEntity().getPlayer().getFoodLevel(), event.getEntity().getLastDamageCause().getCause()))
-            return;
-
         BaxConfig config = ShopPlugin.getSavedState().getConfig();
-        UUID uuid = config.getDeathTaxGoesTo();
+        if (!config.isDeathTaxEnabled())
+            return;
+        if (!config.isStupidDeath(event))
+            return;
 
+        UUID uuid = config.getDeathTaxGoesTo();
         Player pl = event.getEntity();
         double minimum = config.getDeathTaxMinimum();
         double percent = config.getDeathTaxPercentage();
@@ -293,14 +292,5 @@ public class EventListener implements Listener
                 ShopPlugin.sendNotification(recipient, new DeathTaxReceivedNote(recipient, pl, event.getDeathMessage(), death_tax));
             }
         }
-    }
-    
-    private static boolean isStupidDeath(int foodLevel, DamageCause death)
-    {
-        return foodLevel < 8 || Arrays.asList(
-                DamageCause.FALL, DamageCause.DROWNING, DamageCause.LAVA,
-                DamageCause.CONTACT, DamageCause.FIRE, DamageCause.FIRE_TICK,
-                DamageCause.SUFFOCATION
-        ).contains(death);
     }
 }

@@ -19,13 +19,18 @@
 package tbax.baxshops.serialization;
 
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.ShopPlugin;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
-@SuppressWarnings("FieldCanBeLocal")
+@SuppressWarnings({"FieldCanBeLocal", "unused"})
 public final class BaxConfig
 {
     private final int DEFAULT_BACKUPS = 15;
@@ -36,6 +41,8 @@ public final class BaxConfig
     private final double DEFAULT_DEATH_TAX_PERCENT = 0.04;
     private final double DEFAULT_DEATH_TAX_MINIMUM = 100.00;
     private final double DEFAULT_DEATH_TAX_MAXIMUM = -1;
+    private final String[] DEFAULT_DEATH_TAX_DEATHS = new String[] { "FALL", "DROWNING", "LAVA", "CONTACT", "FIRE", "FIRE_TICK", "SUFFOCATION" };
+    private final int DEFAULT_DEATH_TAX_FOOD_LEVEL = 8;
 
     private final ShopPlugin plugin;
 
@@ -132,6 +139,43 @@ public final class BaxConfig
     public void setDeathTaxMaximum(double deathTaxMaximum)
     {
         getFileConfig().set("DeathTax.Maximum", deathTaxMaximum);
+    }
+
+    public List<EntityDamageEvent.DamageCause> getStupidDeaths()
+    {
+        List<?> deaths = getFileConfig().getList("DeathTax.Deaths", Arrays.asList(DEFAULT_DEATH_TAX_DEATHS));
+        List<EntityDamageEvent.DamageCause> causes = new ArrayList<>(deaths.size());
+        for (Object death : deaths) {
+            if (!(death instanceof String)) {
+                plugin.getLogger().warning(death + " cannot be converted to a damage cause");
+            }
+            else {
+                try {
+                    causes.add(EntityDamageEvent.DamageCause.valueOf((String) death));
+                }
+                catch (IllegalArgumentException e) {
+                    plugin.getLogger().warning(death + " is not a damage cause");
+                }
+            }
+        }
+        return causes;
+    }
+
+    public int getStupidMinimumFoodLevel()
+    {
+        return getFileConfig().getInt("DeathTax.FoodLevel", DEFAULT_DEATH_TAX_FOOD_LEVEL);
+    }
+
+    public void setStupidMinimumFoodLevel(int foodLevel)
+    {
+        getFileConfig().set("DeathTax.FoodLevel", foodLevel);
+    }
+
+    public boolean isStupidDeath(PlayerDeathEvent e)
+    {
+        if (getStupidMinimumFoodLevel() > -1 && e.getEntity().getFoodLevel() <= getStupidMinimumFoodLevel())
+            return true;
+        return getStupidDeaths().contains(e.getEntity().getLastDamageCause().getCause());
     }
 
     public boolean backup()

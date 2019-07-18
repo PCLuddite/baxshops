@@ -5,18 +5,27 @@
 # |____/  \__,_|/_/\_\|____/ |_| |_| \___/ | .__/ |___/
 #                                          |_|
 # Backups: 15                                                   # Number of backups to keep. Set this to -1 to never delete old backups
-# LogNotes: true                                                # Show all notifications in log
+# LogNotes: false                                                # Show all notifications in log
 # XPConvert: 4.0                                                # How much 1 XP level costs.
 # DeathTax:
 #   GoesTo: 326a36ea-b465-3192-a4f7-c313f347edc9                # Stupid deaths can be taxed by percentage and deposited into an account. 
 #   Percentage: 0.04                                            # Set Enabled to true to use this feature. The default UUID
 #   Enabled: false                                              # is a dummy account. If the dummy is used, funds will not be deposited into any account.
 #   Minimum: 100.0                                              # No tax is imposed if the player has less cash than the minimum.
-#   Maximum: -1                                                 # You can set a maximum amount of money that can be charged. < 0 is no maximum.
-# StateVersion: 4.1                                             # SateVersion should not be changed manually.
+#   Maximum: -1                                                 # You can set a maximum amount of money that can be charged. -1 is no maximum.
+#  FoodLevel: 8                                                 # The minimum food level to be charged the tax. Set to -1 for no minimum.
+#  Deaths:                                                      # The damage causes that are considered for the death tax
+#    - FALL
+#    - DROWNING
+#    - LAVA
+#    - CONTACT
+#    - FIRE
+#    - FIRE_TICK
+#    - SUFFOCATION
+# StateVersion: 4.2                                             # SateVersion should not be changed manually.
 #
 Backups: 15
-LogNotes: true
+LogNotes: false
 XPConvert: 4.0
 DeathTax:
   GoesTo: 326a36ea-b465-3192-a4f7-c313f347edc9
@@ -24,4 +33,13 @@ DeathTax:
   Enabled: false
   Maximum: -1
   Minimum: 100.0
-StateVersion: 4.1
+  FoodLevel: 8
+  Deaths:
+    - FALL
+    - DROWNING
+    - LAVA
+    - CONTACT
+    - FIRE
+    - FIRE_TICK
+    - SUFFOCATION
+StateVersion: 4.2
