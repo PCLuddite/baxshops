@@ -34,9 +34,9 @@ public interface StateLoader
 
     @NotNull ShopPlugin getPlugin();
 
-    default @NotNull Configuration loadConfig(@NotNull FileConfiguration config)
+    default @NotNull BaxConfig loadConfig(@NotNull FileConfiguration config)
     {
-        Configuration ret = new Configuration();
+        BaxConfig ret = new BaxConfig();
         ret.setBackups(config.getInt("Backups", ret.getBackups()));
         ret.setLogNotes(config.getBoolean("LogNotes", ret.isLogNotes()));
         ret.setXpConvert(config.getDouble("XPConvert", ret.getXpConvert()));

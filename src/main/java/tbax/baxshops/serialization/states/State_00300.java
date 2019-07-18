@@ -97,9 +97,9 @@ public class State_00300 implements StateLoader
     }
 
     @Override
-    public @NotNull Configuration loadConfig(@NotNull FileConfiguration config)
+    public @NotNull BaxConfig loadConfig(@NotNull FileConfiguration config)
     {
-        Configuration ret = StateLoader.super.loadConfig(config);
+        BaxConfig ret = StateLoader.super.loadConfig(config);
         ret.setDeathTaxEnabled(config.contains("DeathTax"));
         if (ret.isDeathTaxEnabled()) {
             String goesTo = ret.getDeathTaxGoesTo();

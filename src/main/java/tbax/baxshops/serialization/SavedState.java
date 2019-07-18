@@ -63,7 +63,7 @@ public final class SavedState
     final ShopPlugin plugin;
     final Logger log;
 
-    Configuration config;
+    BaxConfig config;
 
     SavedState(@NotNull ShopPlugin plugin)
     {
@@ -311,10 +311,10 @@ public final class SavedState
         players.put(storedPlayer.getUniqueId(), storedPlayer);
     }
 
-    public Configuration getConfig()
+    public BaxConfig getConfig()
     {
         if (config == null)
-            config = new Configuration();
+            config = new BaxConfig();
         return config;
     }
 

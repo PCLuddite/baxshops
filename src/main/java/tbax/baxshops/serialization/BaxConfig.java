@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class Configuration
+public class BaxConfig
 {
     private int backups = 15;
     private boolean logNotes = false;

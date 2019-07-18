@@ -43,7 +43,7 @@ import tbax.baxshops.errors.CommandWarningException;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.DeathTaxReceivedNote;
 import tbax.baxshops.notification.Notification;
-import tbax.baxshops.serialization.Configuration;
+import tbax.baxshops.serialization.BaxConfig;
 import tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.*;
@@ -274,7 +274,7 @@ public class EventListener implements Listener
         if (!isStupidDeath(event.getEntity().getPlayer().getFoodLevel(), event.getEntity().getLastDamageCause().getCause()))
             return;
 
-        Configuration config = ShopPlugin.getSavedState().getConfig();
+        BaxConfig config = ShopPlugin.getSavedState().getConfig();
         UUID uuid = config.getDeathTaxGoesToId();
 
         Player pl = event.getEntity();
