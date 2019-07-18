@@ -69,18 +69,12 @@ public interface StateLoader
 
     default double getVersion()
     {
-        Field f = null;
-        try {
-            f = getClass().getField("VERSION");
-        }
-        catch (NoSuchFieldException e) {
-            SerializationException.throwStateLoaderException(e);
-        }
         double ver = 0d;
         try {
-            f.get(null);
+            Field f = getClass().getField("VERSION");
+            ver = (double)f.get(null);
         }
-        catch (IllegalAccessException | IllegalArgumentException e) {
+        catch (NoSuchFieldException | IllegalAccessException | IllegalArgumentException | ClassCastException e) {
             SerializationException.throwStateLoaderException(e);
         }
         return ver;
