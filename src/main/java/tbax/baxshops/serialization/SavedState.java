@@ -219,8 +219,7 @@ public final class SavedState
 
     private void resaveConfig()
     {
-        File configFile = new File(plugin.getDataFolder(), "config.yml");
-        if (!configFile.renameTo(new File(plugin.getDataFolder(), "config.bak"))) {
+        if (!config.backup()) {
             plugin.getLogger().warning("Could not backup config. Configuration may be lost.");
         }
         config.save();

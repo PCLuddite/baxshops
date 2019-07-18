@@ -22,6 +22,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.ShopPlugin;
 
+import java.io.File;
 import java.util.UUID;
 
 @SuppressWarnings("FieldCanBeLocal")
@@ -131,6 +132,22 @@ public final class BaxConfig
     public void setDeathTaxMaximum(double deathTaxMaximum)
     {
         getFileConfig().set("DeathTax.Maximum", deathTaxMaximum);
+    }
+
+    public boolean backup()
+    {
+        File configFile = new File(plugin.getDataFolder(), "config.yml");
+        File backupFile = new File(plugin.getDataFolder(), "CONFIG.BAK");
+
+        if (backupFile.exists()) {
+            int i = 0;
+            do {
+                backupFile = new File(plugin.getDataFolder(), backupFile.getName() + i++);
+            }
+            while(backupFile.exists());
+        }
+
+        return configFile.renameTo(backupFile);
     }
 
     public void save()
