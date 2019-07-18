@@ -18,109 +18,123 @@
  */
 package tbax.baxshops.serialization;
 
+import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
+import tbax.baxshops.ShopPlugin;
 
 import java.util.UUID;
 
-public class BaxConfig
+@SuppressWarnings("FieldCanBeLocal")
+public final class BaxConfig
 {
-    private int backups = 15;
-    private boolean logNotes = false;
-    private double xpConvert = 4.00;
-    private boolean deathTaxEnabled = false;
-    private String deathTaxGoesTo = StoredPlayer.DUMMY_UUID.toString();
-    private double deathTaxPercentage = 0.04;
-    private double deathTaxMinimum = 100.00;
-    private double deathTaxMaximum = -1;
+    private final int DEFAULT_BACKUPS = 15;
+    private final boolean DEFAULT_LOG_NOTES = false;
+    private final double DEFAULT_XP_CONVERT = 4.00;
+    private final boolean DEFAULT_DEATH_TAX_ENABLED = false;
+    private final String DEFAULT_DEATH_TAX_GOES_TO = StoredPlayer.DUMMY_UUID.toString();
+    private final double DEFAULT_DEATH_TAX_PERCENT = 0.04;
+    private final double DEFAULT_DEATH_TAX_MINIMUM = 100.00;
+    private final double DEFAULT_DEATH_TAX_MAXIMUM = -1;
 
+    private final ShopPlugin plugin;
+
+    public BaxConfig(ShopPlugin plugin)
+    {
+        this.plugin = plugin;
+    }
+
+    public FileConfiguration getFileConfig()
+    {
+        return plugin.getConfig();
+    }
 
     public int getBackups()
     {
-        return backups;
+        return getFileConfig().getInt("Backups", DEFAULT_BACKUPS);
     }
 
     public void setBackups(int backups)
     {
-        this.backups = backups;
+        getFileConfig().set("Backups", backups);
     }
 
     public boolean isLogNotes()
     {
-        return logNotes;
+        return getFileConfig().getBoolean("LogNotes", DEFAULT_LOG_NOTES);
     }
 
     public void setLogNotes(boolean logNotes)
     {
-        this.logNotes = logNotes;
+        getFileConfig().set("LogNotes", logNotes);
     }
 
     public double getXpConvert()
     {
-        return xpConvert;
+        return getFileConfig().getDouble("XPConvert", DEFAULT_XP_CONVERT);
     }
 
     public void setXpConvert(double xpConvert)
     {
-        this.xpConvert = xpConvert;
+        getFileConfig().set("XPConvert", xpConvert);
     }
 
     public boolean isDeathTaxEnabled()
     {
-        return deathTaxEnabled;
+        return getFileConfig().getBoolean("DeathTax.Enabled", DEFAULT_DEATH_TAX_ENABLED);
     }
 
     public void setDeathTaxEnabled(boolean deathTaxEnabled)
     {
-        this.deathTaxEnabled = deathTaxEnabled;
+        getFileConfig().set("DeathTax.Enabled", deathTaxEnabled);
     }
 
-    public String getDeathTaxGoesTo()
+    public UUID getDeathTaxGoesTo()
     {
-        return deathTaxGoesTo;
+        try {
+            return UUID.fromString(getFileConfig().getString("DeathTax.GoesTo", DEFAULT_DEATH_TAX_GOES_TO));
+        }
+        catch (IllegalArgumentException e) {
+            return UUID.fromString(DEFAULT_DEATH_TAX_GOES_TO);
+        }
     }
 
-    public void setDeathTaxGoesTo(String deathTaxGoesTo)
+    public void setDeathTaxGoesTo(@NotNull UUID deathTaxGoesTo)
     {
-        this.deathTaxGoesTo = deathTaxGoesTo;
+        getFileConfig().set("DeathTax.GoesTo", deathTaxGoesTo.toString());
     }
 
     public double getDeathTaxPercentage()
     {
-        return deathTaxPercentage;
-    }
-
-    public @NotNull UUID getDeathTaxGoesToId()
-    {
-        try {
-            return UUID.fromString(deathTaxGoesTo);
-        }
-        catch (IllegalArgumentException e) {
-            return StoredPlayer.DUMMY_UUID;
-        }
+        return getFileConfig().getDouble("DeathTax.Percentage", DEFAULT_DEATH_TAX_PERCENT);
     }
 
     public void setDeathTaxPercentage(double deathTaxPercentage)
     {
-        this.deathTaxPercentage = deathTaxPercentage;
+        getFileConfig().set("DeathTax.Percentage", deathTaxPercentage);
     }
 
     public double getDeathTaxMinimum()
     {
-        return deathTaxMinimum;
+        return getFileConfig().getDouble("DeathTax.Minimum", DEFAULT_DEATH_TAX_MINIMUM);
     }
 
     public void setDeathTaxMinimum(double deathTaxMinimum)
     {
-        this.deathTaxMinimum = deathTaxMinimum;
+        getFileConfig().set("DeathTax.Minimum", deathTaxMinimum);
     }
 
     public double getDeathTaxMaximum()
     {
-        return deathTaxMaximum;
+        return getFileConfig().getDouble("DeathTax.Maximum", DEFAULT_DEATH_TAX_MAXIMUM);
     }
 
     public void setDeathTaxMaximum(double deathTaxMaximum)
     {
-        this.deathTaxMaximum = deathTaxMaximum;
+        getFileConfig().set("DeathTax.Maximum", deathTaxMaximum);
+    }
+
+    public void save()
+    {
+        plugin.saveConfig();
     }
 }

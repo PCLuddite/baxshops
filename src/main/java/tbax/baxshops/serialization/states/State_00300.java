@@ -102,8 +102,8 @@ public class State_00300 implements StateLoader
         BaxConfig ret = StateLoader.super.loadConfig(config);
         ret.setDeathTaxEnabled(config.contains("DeathTax"));
         if (ret.isDeathTaxEnabled()) {
-            String goesTo = ret.getDeathTaxGoesTo();
-            ret.setDeathTaxGoesTo(getPlayerId(goesTo).toString());
+            String goesTo = ret.getFileConfig().getString("DeathTax.GoesTo");
+            ret.setDeathTaxGoesTo(getPlayerId(goesTo));
         }
         invalidateMaps();
         return ret;

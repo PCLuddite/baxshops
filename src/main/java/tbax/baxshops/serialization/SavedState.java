@@ -223,16 +223,7 @@ public final class SavedState
         if (!configFile.renameTo(new File(plugin.getDataFolder(), "config.bak"))) {
             plugin.getLogger().warning("Could not backup config. Configuration may be lost.");
         }
-        plugin.getConfig().set("Backups", config.getBackups());
-        plugin.getConfig().set("LogNotes", config.isLogNotes());
-        plugin.getConfig().set("XPConvert", config.getXpConvert());
-        plugin.getConfig().set("DeathTax.Enabled", config.isDeathTaxEnabled());
-        plugin.getConfig().set("DeathTax.GoesTo", config.getDeathTaxGoesToId().toString());
-        plugin.getConfig().set("DeathTax.Percentage", config.getDeathTaxPercentage());
-        plugin.getConfig().set("DeathTax.Minimum", config.getDeathTaxMinimum());
-        plugin.getConfig().set("DeathTax.Maximum", config.getDeathTaxMaximum());
-        plugin.getConfig().set("StateVersion", STATE_VERSION);
-        plugin.saveConfig();
+        config.save();
     }
 
     /**
@@ -314,7 +305,7 @@ public final class SavedState
     public BaxConfig getConfig()
     {
         if (config == null)
-            config = new BaxConfig();
+            config = new BaxConfig(plugin);
         return config;
     }
 

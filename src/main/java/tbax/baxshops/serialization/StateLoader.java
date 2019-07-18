@@ -36,16 +36,7 @@ public interface StateLoader
 
     default @NotNull BaxConfig loadConfig(@NotNull FileConfiguration config)
     {
-        BaxConfig ret = new BaxConfig();
-        ret.setBackups(config.getInt("Backups", ret.getBackups()));
-        ret.setLogNotes(config.getBoolean("LogNotes", ret.isLogNotes()));
-        ret.setXpConvert(config.getDouble("XPConvert", ret.getXpConvert()));
-        ret.setDeathTaxEnabled(config.getBoolean("DeathTax.Enabled", ret.isDeathTaxEnabled()));
-        ret.setDeathTaxGoesTo(config.getString("DeathTax.GoesTo", ret.getDeathTaxGoesTo()));
-        ret.setDeathTaxPercentage(config.getDouble("DeathTax.Percentage", ret.getDeathTaxPercentage()));
-        ret.setDeathTaxMinimum(config.getDouble("DeathTax.Minimum", ret.getDeathTaxMinimum()));
-        ret.setDeathTaxMaximum(config.getDouble("DeathTax.Maximum", ret.getDeathTaxMaximum()));
-        return ret;
+        return new BaxConfig(getPlugin());
     }
 
     default SavedState loadState(@NotNull FileConfiguration state)

@@ -275,7 +275,7 @@ public class EventListener implements Listener
             return;
 
         BaxConfig config = ShopPlugin.getSavedState().getConfig();
-        UUID uuid = config.getDeathTaxGoesToId();
+        UUID uuid = config.getDeathTaxGoesTo();
 
         Player pl = event.getEntity();
         double minimum = config.getDeathTaxMinimum();
