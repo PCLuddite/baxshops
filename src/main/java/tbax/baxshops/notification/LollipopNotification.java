@@ -93,7 +93,7 @@ public final class LollipopNotification implements Notification, UpgradeableSeri
     public void deserialize00410(@NotNull SafeMap map)
     {
         sender = map.getUUID("sender");
-        recipient = map.getUUID("receiver");
+        recipient = map.getUUID("recipient");
         tastiness = getStockAdjective(map.getDouble("tastiness"));
         date = map.getDate("date");
     }
@@ -102,7 +102,7 @@ public final class LollipopNotification implements Notification, UpgradeableSeri
     public void deserialize00411(@NotNull SafeMap map)
     {
         sender = map.getUUID("sender");
-        recipient = map.getUUID("receiver");
+        recipient = map.getUUID("recipient");
         tastiness = map.getString("tastiness");
         date = map.getDate("date");
     }
