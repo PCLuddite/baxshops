@@ -116,7 +116,7 @@ public final class CmdLollipop extends BaxShopCommand
         if (tastiness.length() > 30)
             actor.exitError("Your adjective is too long");
 
-        OfflinePlayer sender = actor.getPlayer();
+        OfflinePlayer sender = actor.getPlayer() == null ? StoredPlayer.DUMMY : actor.getPlayer();
         OfflinePlayer recipient = actor.getArgPlayer(1);
 
         List<LollipopNotification> otherPops = ShopPlugin.getSavedState().getNotifications(recipient).stream()
@@ -126,7 +126,7 @@ public final class CmdLollipop extends BaxShopCommand
             .collect(Collectors.toList());
 
         if (otherPops.isEmpty()) {
-            LollipopNotification lol = new LollipopNotification(actor.getPlayer(), recipient, tastiness);
+            LollipopNotification lol = new LollipopNotification(sender, recipient, tastiness);
             ShopPlugin.sendNotification(recipient, lol);
             actor.sendMessage("You sent %s lollipop to %s", lol.getAdornedTastiness(), Format.username2(recipient.getName()));
         }
