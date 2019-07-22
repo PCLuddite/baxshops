@@ -47,8 +47,14 @@ public interface UpgradeableSerializable extends ConfigurationSerializable
         deserialize00410(map);
     }
 
+    @Deprecated
     default void deserialize00420(@NotNull SafeMap map)
     {
         deserialize00411(map);
+    }
+
+    default void deserialize00421(@NotNull SafeMap map)
+    {
+        deserialize00420(map);
     }
 }

@@ -100,6 +100,7 @@ public class ShopMap implements Map<UUID, BaxShop>
         for (Location location : value.getLocations()) {
             locations.put(location, key);
         }
+        shortIds.put(getShortId(value), value.getId());
         return shops.put(key, value);
     }
 
@@ -169,5 +170,18 @@ public class ShopMap implements Map<UUID, BaxShop>
         if (shop.getLocations().isEmpty()) {
             remove(shop.getId());
         }
+    }
+
+    private String getShortId(BaxShop shop)
+    {
+        String id = shop.getShortId();
+        while (shortIds.containsKey(id)) {
+            id = UUID.randomUUID().toString();
+            int n = id.lastIndexOf('-') + 1;
+            if (n < id.length())
+                shop.setShortId(id);
+            id = shop.getShortId();
+        }
+        return id;
     }
 }

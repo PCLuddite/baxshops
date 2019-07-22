@@ -222,6 +222,11 @@ public final class ShopPlugin extends JavaPlugin
         return savedState.getShop(shopId);
     }
 
+    public static BaxShop getShop(String shortId)
+    {
+        return savedState.getShop(shortId);
+    }
+
     public static @NotNull List<StoredPlayer> getOfflinePlayer(String playerName)
     {
         return savedState.getOfflinePlayer(playerName);

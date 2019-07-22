@@ -31,7 +31,7 @@ import tbax.baxshops.Format;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.notification.Notification;
 import tbax.baxshops.serialization.states.State_00300;
-import tbax.baxshops.serialization.states.State_00420;
+import tbax.baxshops.serialization.states.State_00421;
 
 import java.io.*;
 import java.text.DecimalFormat;
@@ -43,9 +43,9 @@ public final class SavedState
 {
     static final String YAML_FILE_PATH = "shops.yml";
     
-    private static final double STATE_VERSION = State_00420.VERSION; // state file format version
+    private static final double STATE_VERSION = State_00421.VERSION; // state file format version
     private static double loadedState;
-    
+
     /**
      * A map of ids map to their shops
      */
@@ -82,12 +82,12 @@ public final class SavedState
     {
         return shops.get(uid);
     }
-    
+
     public @Nullable BaxShop getShop(Location loc)
     {
         return shops.getShopByLocation(loc);
     }
-    
+
     public static SavedState readFromDisk(@NotNull ShopPlugin plugin)
     {
         File stateLocation = new File(plugin.getDataFolder(), YAML_FILE_PATH);
@@ -185,12 +185,12 @@ public final class SavedState
         }
         return true;
     }
-    
+
     public void addShop(BaxShop shop)
     {
         shops.put(shop.getId(), shop);
     }
-    
+
     public boolean addLocation(BaxShop shop, Location loc)
     {
         BaxShop otherShop = shops.getShopByLocation(loc);
@@ -342,5 +342,10 @@ public final class SavedState
         return players.values().stream()
                 .filter(n -> !StoredPlayer.ERROR.equals(n))
                 .collect(Collectors.toList());
+    }
+
+    public BaxShop getShop(String shortId)
+    {
+        return shops.getShopByAbbreviatedId(shortId);
     }
 }
