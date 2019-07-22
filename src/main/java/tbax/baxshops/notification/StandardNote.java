@@ -47,7 +47,7 @@ public abstract class StandardNote implements Notification, UpgradeableSerializa
     @SerializeMethod("getSeller")
     protected UUID seller;
 
-    @DoNotSerialize
+    @SerializeMethod("getShopId")
     protected UUID shopId;
 
     public StandardNote(UUID shopId, OfflinePlayer buyer, OfflinePlayer seller, BaxEntry entry)
@@ -111,14 +111,8 @@ public abstract class StandardNote implements Notification, UpgradeableSerializa
 
     public @NotNull UUID getShopId()
     {
+        if (shopId == null)
+            return shopId = BaxShop.DUMMY_UUID;
         return shopId;
-    }
-
-    @Override
-    public @NotNull Map<String, Object> serialize()
-    {
-        Map<String, Object> args = UpgradeableSerializable.super.serialize();
-        args.put("shopId", (shopId == null ? BaxShop.DUMMY_UUID : shopId).toString());
-        return args;
     }
 }
