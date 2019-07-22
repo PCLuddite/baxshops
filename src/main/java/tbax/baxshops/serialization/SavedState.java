@@ -222,6 +222,8 @@ public final class SavedState
         if (!config.backup()) {
             plugin.getLogger().warning("Could not backup config. Configuration may be lost.");
         }
+        if (loadedState != STATE_VERSION)
+            config.getFileConfig().set("StateVersion", STATE_VERSION);
         config.save();
     }
 
