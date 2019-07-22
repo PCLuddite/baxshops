@@ -95,7 +95,7 @@ public final class UpgradeableSerialization
                     name = as.value();
                 }
                 if (m != null) {
-                    Method method = obj.getClass().getDeclaredMethod(m.value());
+                    Method method = getGetter(obj.getClass(), m.value());
                     method.setAccessible(true);
                     type = method.getReturnType();
                     value = method.invoke(obj);
@@ -110,6 +110,21 @@ public final class UpgradeableSerialization
             }
         }
         return map;
+    }
+
+    private static Method getGetter(Class<?> clazz, String name)
+            throws NoSuchMethodException
+    {
+        do {
+            try {
+                return clazz.getDeclaredMethod(name);
+            }
+            catch (NoSuchMethodException e) {
+                clazz = clazz.getSuperclass();
+            }
+        }
+        while(clazz != null && !Object.class.equals(clazz));
+        throw new NoSuchMethodException();
     }
 
     private static Method getMapPutter(Class<?> clazz)
