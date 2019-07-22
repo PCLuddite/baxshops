@@ -28,6 +28,7 @@ import tbax.baxshops.serialization.UpgradeableSerialization;
 import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.StoredPlayer;
 import tbax.baxshops.serialization.UpgradeableSerializable;
+import tbax.baxshops.serialization.annotations.SerializeMethod;
 import tbax.baxshops.serialization.states.State_00300;
 
 import java.util.Arrays;
@@ -55,8 +56,12 @@ public final class LollipopNotification implements Notification, UpgradeableSeri
         "wonderful"
     };
 
+    @SerializeMethod("getSender")
     private UUID sender;
+
+    @SerializeMethod("getRecipient")
     private UUID recipient;
+
     private String tastiness;
     private Date date;
 
@@ -145,16 +150,6 @@ public final class LollipopNotification implements Notification, UpgradeableSeri
     public Date getSentDate()
     {
         return date;
-    }
-
-    public @NotNull Map<String, Object> serialize()
-    {
-        SafeMap args = new SafeMap();
-        args.put("sender", getSender());
-        args.put("recipient", getRecipient());
-        args.put("tastiness", tastiness);
-        args.put("date", date);
-        return args;
     }
 
     public static LollipopNotification deserialize(Map<String, Object> args)

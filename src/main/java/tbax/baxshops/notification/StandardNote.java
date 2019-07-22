@@ -28,6 +28,8 @@ import tbax.baxshops.serialization.UpgradeableSerialization;
 import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.StoredPlayer;
 import tbax.baxshops.serialization.UpgradeableSerializable;
+import tbax.baxshops.serialization.annotations.DoNotSerialize;
+import tbax.baxshops.serialization.annotations.SerializeMethod;
 import tbax.baxshops.serialization.states.State_00300;
 
 import java.util.Date;
@@ -37,10 +39,16 @@ import java.util.UUID;
 public abstract class StandardNote implements Notification, UpgradeableSerializable
 {
     protected BaxEntry entry;
-    protected UUID shopId;
-    protected UUID buyer;
-    protected UUID seller;
     protected Date date;
+
+    @SerializeMethod("getBuyer")
+    protected UUID buyer;
+
+    @SerializeMethod("getSeller")
+    protected UUID seller;
+
+    @DoNotSerialize
+    protected UUID shopId;
 
     public StandardNote(UUID shopId, OfflinePlayer buyer, OfflinePlayer seller, BaxEntry entry)
     {
@@ -107,14 +115,10 @@ public abstract class StandardNote implements Notification, UpgradeableSerializa
     }
 
     @Override
-    public Map<String, Object> serialize()
+    public @NotNull Map<String, Object> serialize()
     {
-        SafeMap args = new SafeMap();
-        args.put("entry", entry);
-        args.put("buyer", getBuyer());
-        args.put("seller", getSeller());
-        args.put("shopId", shopId == null ? BaxShop.DUMMY_UUID : shopId);
-        args.put("date", date);
+        Map<String, Object> args = UpgradeableSerializable.super.serialize();
+        args.put("shopId", (shopId == null ? BaxShop.DUMMY_UUID : shopId).toString());
         return args;
     }
 }

@@ -24,6 +24,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.Resources;
+import tbax.baxshops.serialization.annotations.SerializedAs;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,8 +41,12 @@ public class StoredPlayer implements OfflinePlayer, UpgradeableSerializable
     public static final StoredPlayer ERROR = new StoredPlayer(ERROR_NAME, ERROR_UUID);
 
     private UUID uuid;
-    private String lastSeenName;
+
+    @SerializedAs("legacy")
     private boolean legacyPlayer;
+
+    @SerializedAs("name")
+    private String lastSeenName;
 
     public StoredPlayer(String name, UUID uuid)
     {
@@ -196,16 +201,6 @@ public class StoredPlayer implements OfflinePlayer, UpgradeableSerializable
         if (player == null)
             return false;
         return uuid.equals(player.getUniqueId());
-    }
-
-    @Override
-    public Map<String, Object> serialize()
-    {
-        Map<String, Object> args = new HashMap<>();
-        args.put("uuid", uuid.toString());
-        args.put("name", lastSeenName);
-        args.put("legacy", legacyPlayer);
-        return args;
     }
 
     @Override

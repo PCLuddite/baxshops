@@ -331,17 +331,6 @@ public final class BaxEntry implements UpgradeableSerializable
             return String.format("%d. " + ChatColor.GRAY + "(%d) %s", index, getAmount(), name.toString());
         }
     }
-
-    @Override
-    public Map<String, Object> serialize()
-    {
-        SafeMap map = new SafeMap();
-        map.put("retailPrice", retailPrice);
-        map.put("refundPrice", refundPrice);
-        map.put("stack", stack.serialize());
-        map.put("quantity", quantity);
-        return map;
-    }
     
     public static BaxEntry deserialize(Map<String, Object> args)
     {

@@ -27,10 +27,10 @@ import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
-import tbax.baxshops.serialization.SafeMap;
-import tbax.baxshops.serialization.StoredPlayer;
-import tbax.baxshops.serialization.UpgradeableSerializable;
-import tbax.baxshops.serialization.UpgradeableSerialization;
+import tbax.baxshops.serialization.*;
+import tbax.baxshops.serialization.annotations.DoNotSerialize;
+import tbax.baxshops.serialization.annotations.SerializeMethod;
+import tbax.baxshops.serialization.annotations.SerializedAs;
 import tbax.baxshops.serialization.states.State_00300;
 import tbax.baxshops.serialization.states.State_00420;
 
@@ -46,12 +46,16 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     
     private UUID id;
     private String shortId;
-    private long legacyId = Long.MIN_VALUE;
+
+    @SerializeMethod("getOwner")
     private UUID owner;
+
     private final Set<Location> locations = new HashSet<>();
     private final List<BaxEntry> inventory = new ArrayList<>();
-
     private int flags = BaxShopFlag.SELL_REQUESTS;
+
+    @DoNotSerialize
+    private long legacyId = Long.MIN_VALUE;
 
     private BaxShop(UUID uuid)
     {
@@ -447,19 +451,6 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
         catch (ClassCastException e) {
             return new String[0];
         }
-    }
-
-    @Override
-    public @NotNull Map<String, Object> serialize()
-    {
-        SafeMap map = new SafeMap();
-        map.put("id", id);
-        map.put("owner", getOwner());
-        map.put("flags", flags);
-        map.put("inventory", inventory);
-        map.put("locations", locations);
-        map.put("shortId", shortId);
-        return map;
     }
     
     public static BaxShop deserialize(Map<String, Object> args)

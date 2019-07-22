@@ -21,6 +21,8 @@ package tbax.baxshops.serialization;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Map;
+
 public interface UpgradeableSerializable extends ConfigurationSerializable
 {
     @Deprecated
@@ -56,5 +58,11 @@ public interface UpgradeableSerializable extends ConfigurationSerializable
     default void deserialize00421(@NotNull SafeMap map)
     {
         deserialize00420(map);
+    }
+
+    @Override
+    default @NotNull Map<String, Object> serialize()
+    {
+        return UpgradeableSerialization.serialize(this);
     }
 }

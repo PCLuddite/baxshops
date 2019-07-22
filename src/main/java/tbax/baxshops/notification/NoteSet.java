@@ -82,7 +82,7 @@ public final class NoteSet implements UpgradeableSerializable
     }
 
     @Override
-    public Map<String, Object> serialize()
+    public @NotNull Map<String, Object> serialize()
     {
         Map<String, Object> args = new HashMap<>();
         args.put("recipient", ShopPlugin.getOfflinePlayer(recipient).getUniqueId().toString());

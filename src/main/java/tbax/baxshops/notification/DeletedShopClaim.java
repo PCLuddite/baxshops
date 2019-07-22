@@ -27,6 +27,7 @@ import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.UpgradeableSerialization;
 import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.UpgradeableSerializable;
+import tbax.baxshops.serialization.annotations.SerializeMethod;
 import tbax.baxshops.serialization.states.State_00300;
 
 import java.util.Date;
@@ -35,6 +36,7 @@ import java.util.UUID;
 
 public final class DeletedShopClaim implements UpgradeableSerializable, Claimable
 {
+    @SerializeMethod("getOwner")
     private UUID owner;
     private BaxEntry entry;
     private Date date;
@@ -99,16 +101,6 @@ public final class DeletedShopClaim implements UpgradeableSerializable, Claimabl
     public Date getSentDate()
     {
         return date;
-    }
-
-    @Override
-    public Map<String, Object> serialize()
-    {
-        SafeMap args = new SafeMap();
-        args.put("entry", entry);
-        args.put("owner", getOwner());
-        args.put("date", date);
-        return args;
     }
 
     public static DeletedShopClaim deserialize(Map<String, Object> args)
