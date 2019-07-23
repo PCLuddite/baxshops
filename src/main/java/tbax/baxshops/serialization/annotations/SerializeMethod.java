@@ -28,5 +28,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface SerializeMethod
 {
-    String value();
+    String getter();
 }

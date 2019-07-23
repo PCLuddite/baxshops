@@ -28,7 +28,6 @@ import tbax.baxshops.serialization.UpgradeableSerialization;
 import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.StoredPlayer;
 import tbax.baxshops.serialization.UpgradeableSerializable;
-import tbax.baxshops.serialization.annotations.DoNotSerialize;
 import tbax.baxshops.serialization.annotations.SerializeMethod;
 import tbax.baxshops.serialization.states.State_00300;
 
@@ -41,13 +40,13 @@ public abstract class StandardNote implements Notification, UpgradeableSerializa
     protected BaxEntry entry;
     protected Date date;
 
-    @SerializeMethod("getBuyer")
+    @SerializeMethod(getter = "getBuyer")
     protected UUID buyer;
 
-    @SerializeMethod("getSeller")
+    @SerializeMethod(getter = "getSeller")
     protected UUID seller;
 
-    @SerializeMethod("getShopId")
+    @SerializeMethod(getter = "getShopId")
     protected UUID shopId;
 
     public StandardNote(UUID shopId, OfflinePlayer buyer, OfflinePlayer seller, BaxEntry entry)

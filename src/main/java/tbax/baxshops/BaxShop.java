@@ -30,7 +30,6 @@ import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.serialization.*;
 import tbax.baxshops.serialization.annotations.DoNotSerialize;
 import tbax.baxshops.serialization.annotations.SerializeMethod;
-import tbax.baxshops.serialization.annotations.SerializedAs;
 import tbax.baxshops.serialization.states.State_00300;
 import tbax.baxshops.serialization.states.State_00420;
 
@@ -47,7 +46,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     private UUID id;
     private String shortId;
 
-    @SerializeMethod("getOwner")
+    @SerializeMethod(getter = "getOwner")
     private UUID owner;
 
     private final Set<Location> locations = new HashSet<>();

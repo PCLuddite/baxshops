@@ -36,7 +36,7 @@ import java.util.UUID;
 
 public final class DeletedShopClaim implements UpgradeableSerializable, Claimable
 {
-    @SerializeMethod("getOwner")
+    @SerializeMethod(getter = "getOwner")
     private UUID owner;
     private BaxEntry entry;
     private Date date;
