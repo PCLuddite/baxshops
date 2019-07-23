@@ -23,6 +23,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.ShopPlugin;
+import tbax.baxshops.serialization.states.State_00300;
 
 import java.io.File;
 import java.util.*;
@@ -175,6 +176,11 @@ public final class BaxConfig
         return getStupidDeaths().contains(e.getEntity().getLastDamageCause().getCause());
     }
 
+    public double getStateVersion()
+    {
+        return getFileConfig().getDouble("StateVersion", State_00300.VERSION); // 3.0 was the last version not to have version in config
+    }
+
     public boolean backup()
     {
         File configFile = new File(plugin.getDataFolder(), "config.yml");
@@ -183,7 +189,7 @@ public final class BaxConfig
         if (backupFile.exists()) {
             int i = 0;
             do {
-                backupFile = new File(plugin.getDataFolder(), backupFile.getName() + i++);
+                backupFile = new File(plugin.getDataFolder(), "CONFIG.BAK" + i++);
             }
             while(backupFile.exists());
         }
