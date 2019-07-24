@@ -28,5 +28,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface SerializeMethod
 {
-    String getter();
+    String getter() default "";
+    String setter() default "";
 }

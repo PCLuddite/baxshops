@@ -39,9 +39,8 @@ public class SerialField
     public String name()
     {
         SerializedAs as = field.getAnnotation(SerializedAs.class);
-        if (as != null) {
+        if (as != null)
             return as.value();
-        }
         return field.getName();
     }
 
@@ -51,6 +50,18 @@ public class SerialField
         if (getter == null)
             return field.get(obj);
         return getter.invoke(obj);
+    }
+
+    public <E extends UpgradeableSerializable> void set(E obj, Object value)
+            throws ReflectiveOperationException
+    {
+        Method setter = getSetter();
+        if (setter == null) {
+            field.set(obj, value);
+        }
+        else {
+            setter.invoke(obj, value);
+        }
     }
 
     public Class<?> getType() throws ReflectiveOperationException
@@ -64,12 +75,32 @@ public class SerialField
     public Method getGetter() throws NoSuchMethodException
     {
         SerializeMethod m = field.getAnnotation(SerializeMethod.class);
-        if (m == null)
+        if (m == null || m.getter() == null || "".equals(m.getter()))
             return null;
         Class<?> current = clazz;
         do {
             try {
                 Method method = current.getDeclaredMethod(m.getter());
+                method.setAccessible(true);
+                return method;
+            }
+            catch (NoSuchMethodException e) {
+                current = clazz.getSuperclass();
+            }
+        }
+        while (current != null && !Object.class.equals(current));
+        throw new NoSuchMethodException();
+    }
+
+    public Method getSetter() throws NoSuchMethodException
+    {
+        SerializeMethod m = field.getAnnotation(SerializeMethod.class);
+        if (m == null || m.setter() == null || "".equals(m.setter()))
+            return null;
+        Class<?> current = clazz;
+        do {
+            try {
+                Method method = current.getDeclaredMethod(m.setter());
                 method.setAccessible(true);
                 return method;
             }
@@ -91,8 +122,25 @@ public class SerialField
         }
     }
 
+    public Method getMapGetter() throws ReflectiveOperationException
+    {
+        try {
+            String type = getType().getSimpleName().toLowerCase();
+            type = Character.toUpperCase(type.charAt(0)) + type.substring(1);
+            return SafeMap.class.getDeclaredMethod("get" + type, String.class);
+        }
+        catch (NoSuchMethodException e) {
+            return SafeMap.class.getDeclaredMethod("get", Object.class);
+        }
+    }
+
     public Object putMap(SafeMap map, UpgradeableSerializable obj) throws ReflectiveOperationException
     {
         return getMapPutter().invoke(map, name(), get(obj));
+    }
+
+    public void getMap(SafeMap map, UpgradeableSerializable obj) throws ReflectiveOperationException
+    {
+        set(obj, getMapGetter().invoke(map, name()));
     }
 }

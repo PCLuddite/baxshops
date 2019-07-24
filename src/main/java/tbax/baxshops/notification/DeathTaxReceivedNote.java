@@ -24,18 +24,32 @@ import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.Format;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.SafeMap;
+import tbax.baxshops.serialization.UpgradeableSerializable;
+import tbax.baxshops.serialization.UpgradeableSerialization;
+import tbax.baxshops.serialization.annotations.SerializeMethod;
+import tbax.baxshops.serialization.annotations.SerializedAs;
 
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
 @SuppressWarnings("unused")
-public class DeathTaxReceivedNote implements Notification
+public class DeathTaxReceivedNote implements Notification, UpgradeableSerializable
 {
+    @SerializedAs("recipient")
+    @SerializeMethod(getter = "getRecipient")
     private UUID recipientId;
+
+    @SerializedAs("deceased")
+    @SerializeMethod(getter = "getDeadGuy")
     private UUID deadGuyId;
+
+    @SerializedAs("taxed")
     private double deathTax;
+
+    @SerializedAs("message")
     private String msg;
+
     private Date date;
 
     public DeathTaxReceivedNote(OfflinePlayer recipient, OfflinePlayer deadGuy, String msg, double death_tax)
@@ -54,12 +68,7 @@ public class DeathTaxReceivedNote implements Notification
 
     public DeathTaxReceivedNote(Map<String, Object> args)
     {
-        SafeMap map = new SafeMap(args);
-        recipientId = map.getUUID("recipient");
-        deadGuyId = map.getUUID("deceased");
-        deathTax = map.getDouble("taxed");
-        msg = map.getString("message");
-        date = map.getDate("date");
+        UpgradeableSerialization.upgrade(this, args);
     }
 
     public OfflinePlayer getRecipient()
@@ -98,18 +107,6 @@ public class DeathTaxReceivedNote implements Notification
     public Date getSentDate()
     {
         return date;
-    }
-
-    @Override
-    public Map<String, Object> serialize()
-    {
-        SafeMap args = new SafeMap();
-        args.put("recipient", getRecipient());
-        args.put("deceased", getDeadGuy());
-        args.put("taxed", deathTax);
-        args.put("message", msg);
-        args.put("date", date);
-        return args;
     }
 
     public OfflinePlayer getDeadGuy()

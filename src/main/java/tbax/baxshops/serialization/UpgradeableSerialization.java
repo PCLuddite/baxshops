@@ -105,4 +105,18 @@ public final class UpgradeableSerialization
         while((clazz = clazz.getSuperclass()) != null && !Object.class.equals(clazz));
         return allFields;
     }
+
+    public static void deserialize(UpgradeableSerializable obj, Map<String, Object> args)
+    {
+        SafeMap map = new SafeMap(args);
+        for (Field field : getFields(obj.getClass())) {
+            SerialField serialField = new SerialField(obj.getClass(), field);
+            try {
+                serialField.getMap(map, obj);
+            }
+            catch (ReflectiveOperationException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 }
