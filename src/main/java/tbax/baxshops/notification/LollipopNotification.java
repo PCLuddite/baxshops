@@ -67,7 +67,7 @@ public final class LollipopNotification implements Notification, UpgradeableSeri
 
     public LollipopNotification(Map<String, Object> args)
     {
-        UpgradeableSerialization.deserialize(this, args);
+        UpgradeableSerialization.upgrade(this, args);
     }
 
     public LollipopNotification(OfflinePlayer sender, OfflinePlayer recipient, String tastiness)
@@ -79,7 +79,7 @@ public final class LollipopNotification implements Notification, UpgradeableSeri
     }
 
     @Override
-    public void deserialize00300(@NotNull SafeMap map)
+    public void upgrade00300(@NotNull SafeMap map)
     {
         sender = State_00300.getPlayerId(map.getString("sender"));
         recipient = StoredPlayer.ERROR_UUID;
@@ -87,7 +87,7 @@ public final class LollipopNotification implements Notification, UpgradeableSeri
     }
 
     @Override
-    public void deserialize00400(@NotNull SafeMap map)
+    public void upgrade00400(@NotNull SafeMap map)
     {
         sender = map.getUUID("sender");
         recipient = StoredPlayer.ERROR_UUID;
@@ -95,7 +95,7 @@ public final class LollipopNotification implements Notification, UpgradeableSeri
     }
 
     @Override
-    public void deserialize00410(@NotNull SafeMap map)
+    public void upgrade00410(@NotNull SafeMap map)
     {
         sender = map.getUUID("sender");
         recipient = map.getUUID("recipient");
@@ -104,7 +104,7 @@ public final class LollipopNotification implements Notification, UpgradeableSeri
     }
 
     @Override
-    public void deserialize00411(@NotNull SafeMap map)
+    public void upgrade00411(@NotNull SafeMap map)
     {
         sender = map.getUUID("sender");
         recipient = map.getUUID("recipient");

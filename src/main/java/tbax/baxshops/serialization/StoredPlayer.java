@@ -26,7 +26,6 @@ import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.Resources;
 import tbax.baxshops.serialization.annotations.SerializedAs;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -71,11 +70,11 @@ public class StoredPlayer implements OfflinePlayer, UpgradeableSerializable
     @SuppressWarnings("unused")
     public StoredPlayer(Map<String, Object> args)
     {
-        UpgradeableSerialization.deserialize(this, args);
+        UpgradeableSerialization.upgrade(this, args);
     }
 
     @Override
-    public void deserialize00400(@NotNull SafeMap map)
+    public void upgrade00400(@NotNull SafeMap map)
     {
         uuid = map.getUUID("uuid", UUID.randomUUID());
         lastSeenName = map.getString("name", uuid.toString());

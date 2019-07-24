@@ -65,11 +65,11 @@ public abstract class StandardNote implements Notification, UpgradeableSerializa
 
     public StandardNote(Map<String, Object> args)
     {
-        UpgradeableSerialization.deserialize(this, args);
+        UpgradeableSerialization.upgrade(this, args);
     }
 
     @Deprecated
-    public void deserialize00300(@NotNull SafeMap map)
+    public void upgrade00300(@NotNull SafeMap map)
     {
         buyer = State_00300.getPlayerId(map.getString("buyer", StoredPlayer.DUMMY_NAME));
         seller = State_00300.getPlayerId(map.getString("seller", StoredPlayer.DUMMY_NAME));
@@ -78,7 +78,7 @@ public abstract class StandardNote implements Notification, UpgradeableSerializa
     }
 
     @Deprecated
-    public void deserialize00400(@NotNull SafeMap map)
+    public void upgrade00400(@NotNull SafeMap map)
     {
         entry = map.getBaxEntry("entry");
         buyer = map.getUUID("buyer");

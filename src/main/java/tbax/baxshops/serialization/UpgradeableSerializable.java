@@ -26,38 +26,38 @@ import java.util.Map;
 public interface UpgradeableSerializable extends ConfigurationSerializable
 {
     @Deprecated
-    default void deserialize00300(@NotNull SafeMap map)
+    default void upgrade00300(@NotNull SafeMap map)
     {
         SerializationException.throwVersionException();
     }
 
     @Deprecated
-    default void deserialize00400(@NotNull SafeMap map)
+    default void upgrade00400(@NotNull SafeMap map)
     {
-        deserialize00300(map);
+        upgrade00300(map);
     }
 
     @Deprecated
-    default void deserialize00410(@NotNull SafeMap map)
+    default void upgrade00410(@NotNull SafeMap map)
     {
-        deserialize00400(map);
+        upgrade00400(map);
     }
 
     @Deprecated
-    default void deserialize00411(@NotNull SafeMap map)
+    default void upgrade00411(@NotNull SafeMap map)
     {
-        deserialize00410(map);
+        upgrade00410(map);
     }
 
     @Deprecated
-    default void deserialize00420(@NotNull SafeMap map)
+    default void upgrade00420(@NotNull SafeMap map)
     {
-        deserialize00411(map);
+        upgrade00411(map);
     }
 
-    default void deserialize00421(@NotNull SafeMap map)
+    default void upgrade00421(@NotNull SafeMap map)
     {
-        deserialize00420(map);
+        upgrade00420(map);
     }
 
     @Override

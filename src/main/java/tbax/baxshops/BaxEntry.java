@@ -63,11 +63,11 @@ public final class BaxEntry implements UpgradeableSerializable
 
     public BaxEntry(Map<String, Object> args)
     {
-        UpgradeableSerialization.deserialize(this, args);
+        UpgradeableSerialization.upgrade(this, args);
     }
 
     @Override
-    public void deserialize00300(@NotNull SafeMap map)
+    public void upgrade00300(@NotNull SafeMap map)
     {
         retailPrice = map.getDouble("retailPrice", 10000);
         refundPrice = map.getDouble("refundPrice");

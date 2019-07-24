@@ -51,7 +51,7 @@ public final class BuyNotification extends StandardNote
     }
 
     @Override
-    public void deserialize00300(@NotNull SafeMap map)
+    public void upgrade00300(@NotNull SafeMap map)
     {
         buyer = State_00300.getPlayerId(map.getString("buyer"));
         seller = State_00300.getPlayerId(map.getString("seller"));

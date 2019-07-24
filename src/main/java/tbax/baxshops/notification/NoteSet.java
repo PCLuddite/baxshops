@@ -45,18 +45,18 @@ public final class NoteSet implements UpgradeableSerializable
 
     public NoteSet(Map<String, Object> args)
     {
-        UpgradeableSerialization.deserialize(this, args);
+        UpgradeableSerialization.upgrade(this, args);
     }
 
     @Override
-    public void deserialize00400(@NotNull SafeMap map)
+    public void upgrade00400(@NotNull SafeMap map)
     {
         recipient = map.getUUID("recipient");
         notes.addAll(map.getList("notes"));
     }
 
     @Override
-    public void deserialize00410(@NotNull SafeMap map)
+    public void upgrade00410(@NotNull SafeMap map)
     {
         SerializationException.throwVersionException();
     }

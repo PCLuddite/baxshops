@@ -78,7 +78,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
 
     public BaxShop(Map<String, Object> args)
     {
-        UpgradeableSerialization.deserialize(this, args);
+        UpgradeableSerialization.upgrade(this, args);
     }
 
     public BaxShop(BaxShop shop)
@@ -93,7 +93,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     }
 
     @Override
-    public void deserialize00300(@NotNull SafeMap map)
+    public void upgrade00300(@NotNull SafeMap map)
     {
         String name = map.getString("owner", StoredPlayer.DUMMY_NAME);
         id = UUID.randomUUID();
@@ -106,7 +106,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     }
 
     @Override
-    public void deserialize00400(@NotNull SafeMap map)
+    public void upgrade00400(@NotNull SafeMap map)
     {
         id =  map.getUUID("id", UUID.randomUUID());
         shortId = createShortId();
@@ -117,7 +117,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     }
 
     @Override
-    public void deserialize00420(@NotNull SafeMap map)
+    public void upgrade00420(@NotNull SafeMap map)
     {
         id =  map.getUUID("id", UUID.randomUUID());
         shortId = createShortId();
@@ -128,7 +128,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     }
 
     @Override
-    public void deserialize00421(@NotNull SafeMap map)
+    public void upgrade00421(@NotNull SafeMap map)
     {
         id =  map.getUUID("id", UUID.randomUUID());
         shortId = map.getString("shortId", null);

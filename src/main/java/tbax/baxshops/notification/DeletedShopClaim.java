@@ -43,7 +43,7 @@ public final class DeletedShopClaim implements UpgradeableSerializable, Claimabl
 
     public DeletedShopClaim(Map<String, Object> args)
     {
-        UpgradeableSerialization.deserialize(this, args);
+        UpgradeableSerialization.upgrade(this, args);
     }
 
     public DeletedShopClaim(OfflinePlayer owner, BaxEntry entry)
@@ -59,14 +59,14 @@ public final class DeletedShopClaim implements UpgradeableSerializable, Claimabl
     }
 
     @Override
-    public void deserialize00300(@NotNull SafeMap map)
+    public void upgrade00300(@NotNull SafeMap map)
     {
         entry = map.getBaxEntry("entry");
         owner = State_00300.getPlayerId(map.getString("owner"));
     }
 
     @Override
-    public void deserialize00400(@NotNull SafeMap map)
+    public void upgrade00400(@NotNull SafeMap map)
     {
         entry = map.getBaxEntry("entry");
         owner = map.getUUID("owner");

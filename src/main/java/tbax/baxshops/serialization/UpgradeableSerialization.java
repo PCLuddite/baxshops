@@ -57,21 +57,21 @@ public final class UpgradeableSerialization
         return (StateLoader)stateClass.getConstructor(ShopPlugin.class).newInstance(plugin);
     }
 
-    public static Method getDeserializer(Class<? extends UpgradeableSerializable> cls) throws ReflectiveOperationException
+    public static Method getUpgrader(Class<? extends UpgradeableSerializable> cls) throws ReflectiveOperationException
     {
         String verStr = getVersionString(SavedState.getLoadedState());
-        return cls.getMethod("deserialize" + verStr, SafeMap.class);
+        return cls.getMethod("upgrade" + verStr, SafeMap.class);
     }
 
-    public static void deserialize(@NotNull UpgradeableSerializable obj, @NotNull Map<String, Object> args)
+    public static void upgrade(@NotNull UpgradeableSerializable obj, @NotNull Map<String, Object> args)
     {
-        deserialize(obj, new SafeMap(args));
+        upgrade(obj, new SafeMap(args));
     }
 
-    public static void deserialize(@NotNull UpgradeableSerializable obj, @NotNull SafeMap map)
+    public static void upgrade(@NotNull UpgradeableSerializable obj, @NotNull SafeMap map)
     {
         try {
-            getDeserializer(obj.getClass()).invoke(obj, map);
+            getUpgrader(obj.getClass()).invoke(obj, map);
         }
         catch (ReflectiveOperationException e) {
             throw new SerializationException(e.getMessage(), e.getCause());
