@@ -210,19 +210,16 @@ public final class SavedState
     public @NotNull Deque<Notification> getNotifications(OfflinePlayer player)
     {
         Deque<Notification> n = pending.get(player.getUniqueId());
-        if (n == null) {
-            n = new ArrayDeque<>();
-            pending.put(player.getUniqueId(), n);
-        }
+        if (n == null)
+            pending.put(player.getUniqueId(), n = new ArrayDeque<>());
         return n;
     }
 
     private void resaveConfig()
     {
-        if (!config.backup()) {
+        if (!config.backup())
             plugin.getLogger().warning("Could not backup config. Configuration may be lost.");
-        }
-        if (loadedState != STATE_VERSION)
+        if (config.getStateVersion() != STATE_VERSION)
             config.getFileConfig().set("StateVersion", STATE_VERSION);
         config.save();
     }
