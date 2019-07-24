@@ -47,16 +47,18 @@ public class SerialField
 
     public <E extends UpgradeableSerializable> Object get(E obj) throws ReflectiveOperationException
     {
-        if (getGetter() == null)
+        Method getter = getGetter();
+        if (getter == null)
             return field.get(obj);
-        return getGetter().invoke(obj);
+        return getter.invoke(obj);
     }
 
     public Class<?> getType() throws ReflectiveOperationException
     {
-        if (getGetter() == null)
+        Method getter = getGetter();
+        if (getter == null)
             return field.getType();
-        return getGetter().getReturnType();
+        return getter.getReturnType();
     }
 
     public Method getGetter() throws NoSuchMethodException
