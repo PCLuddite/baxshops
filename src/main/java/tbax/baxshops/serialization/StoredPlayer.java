@@ -39,7 +39,7 @@ public class StoredPlayer implements OfflinePlayer, UpgradeableSerializable
     public static final String ERROR_NAME = Resources.ERROR_INLINE;
     public static final StoredPlayer ERROR = new StoredPlayer(ERROR_NAME, ERROR_UUID);
 
-    private UUID uuid;
+    private UUID uuid = UUID.randomUUID();
 
     @SerializedAs("legacy")
     private boolean legacyPlayer;
@@ -63,11 +63,9 @@ public class StoredPlayer implements OfflinePlayer, UpgradeableSerializable
     public StoredPlayer(String name)
     {
         legacyPlayer = true;
-        uuid = UUID.randomUUID();
         lastSeenName = name;
     }
 
-    @SuppressWarnings("unused")
     public StoredPlayer(Map<String, Object> args)
     {
         UpgradeableSerialization.upgrade(this, args);
@@ -115,13 +113,17 @@ public class StoredPlayer implements OfflinePlayer, UpgradeableSerializable
             return lastSeenName = getOfflinePlayer().getPlayer().getName();
         }
         else {
+            if (lastSeenName == null)
+                lastSeenName = ERROR_NAME;
             return lastSeenName;
         }
     }
 
     @Override
-    public UUID getUniqueId()
+    public @NotNull UUID getUniqueId()
     {
+        if (uuid == null)
+            uuid = ERROR_UUID;
         return uuid;
     }
 

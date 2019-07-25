@@ -23,7 +23,6 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.Format;
 import tbax.baxshops.ShopPlugin;
-import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.UpgradeableSerializable;
 import tbax.baxshops.serialization.UpgradeableSerialization;
 import tbax.baxshops.serialization.annotations.SerializeMethod;
@@ -116,6 +115,8 @@ public class DeathTaxReceivedNote implements Notification, UpgradeableSerializab
 
     public String getDeathMessage()
     {
+        if (msg == null)
+            msg = "";
         return msg;
     }
 

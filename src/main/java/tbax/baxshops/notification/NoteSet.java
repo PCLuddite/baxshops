@@ -61,6 +61,11 @@ public final class NoteSet implements UpgradeableSerializable
         SerializationException.throwVersionException();
     }
 
+    public void upgrade00421(@NotNull SafeMap map)
+    {
+        SerializationException.throwVersionException();
+    }
+
     public UUID getRecipient()
     {
         return recipient;

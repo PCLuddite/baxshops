@@ -191,11 +191,10 @@ public class SafeMap implements Map<String, Object>
         return getItemStack(key, null);
     }
 
-    @SuppressWarnings("unchecked")
     public ItemStack getItemStack(String key, ItemStack defaultValue)
     {
         try {
-            return ItemStack.deserialize((Map)getOrDefault(key, defaultValue));
+            return (ItemStack)getOrDefault(key, defaultValue);
         }
         catch (ClassCastException e) {
             return defaultValue;
@@ -254,7 +253,14 @@ public class SafeMap implements Map<String, Object>
     @Override
     public Object get(Object key)
     {
-        return argMap.get(key);
+        return get((String)key, null);
+    }
+
+    public Object get(String key, Object defaultValue)
+    {
+        if (argMap.containsKey(key))
+            return argMap.get(key);
+        return defaultValue;
     }
 
     @Override

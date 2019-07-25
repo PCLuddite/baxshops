@@ -43,8 +43,8 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     public static final UUID DUMMY_UUID = UUID.fromString("8f289a15-cf9f-4266-b368-429cb31780ae");
     public static final BaxShop DUMMY_SHOP = new BaxShop(DUMMY_UUID);
     
-    private UUID id;
-    private String shortId;
+    private UUID id = UUID.randomUUID();
+    private String shortId = null;
 
     @SerializeMethod(getter = "getOwner")
     private UUID owner;
@@ -127,17 +127,6 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
         locations.addAll(map.getList("locations"));
     }
 
-    @Override
-    public void upgrade00421(@NotNull SafeMap map)
-    {
-        id =  map.getUUID("id", UUID.randomUUID());
-        shortId = map.getString("shortId", null);
-        owner = map.getUUID("owner", StoredPlayer.ERROR_UUID);
-        flags = map.getInteger("flags");
-        inventory.addAll(map.getList("inventory"));
-        locations.addAll(map.getList("locations"));
-    }
-
     public UUID getId()
     {
         return id;
@@ -170,6 +159,8 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
 
     public OfflinePlayer getOwner()
     {
+        if (owner == null)
+            owner = StoredPlayer.ERROR_UUID;
         return ShopPlugin.getOfflinePlayer(owner);
     }
 

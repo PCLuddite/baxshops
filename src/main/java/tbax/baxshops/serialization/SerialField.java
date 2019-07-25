@@ -21,6 +21,7 @@ package tbax.baxshops.serialization;
 import tbax.baxshops.serialization.annotations.SerializeMethod;
 import tbax.baxshops.serialization.annotations.SerializedAs;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -125,12 +126,17 @@ public class SerialField
     public Method getMapGetter() throws ReflectiveOperationException
     {
         try {
-            String type = getType().getSimpleName().toLowerCase();
-            type = Character.toUpperCase(type.charAt(0)) + type.substring(1);
-            return SafeMap.class.getDeclaredMethod("get" + type, String.class);
+            String type;
+            if (field.getType().isPrimitive()) {
+                type = Array.get(Array.newInstance(field.getType(),1),0).getClass().getSimpleName();
+            }
+            else {
+                type = field.getType().getSimpleName();
+            }
+            return SafeMap.class.getDeclaredMethod("get" + type, String.class, field.getType());
         }
         catch (NoSuchMethodException e) {
-            return SafeMap.class.getDeclaredMethod("get", Object.class);
+            return SafeMap.class.getDeclaredMethod("get", String.class, Object.class);
         }
     }
 
@@ -141,6 +147,6 @@ public class SerialField
 
     public void getMap(SafeMap map, UpgradeableSerializable obj) throws ReflectiveOperationException
     {
-        set(obj, getMapGetter().invoke(map, name()));
+        set(obj, getMapGetter().invoke(map, name(), field.get(obj)));
     }
 }

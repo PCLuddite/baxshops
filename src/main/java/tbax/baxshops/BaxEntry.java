@@ -38,14 +38,13 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public final class BaxEntry implements UpgradeableSerializable
 {
-    private ItemStack stack;
-    private double retailPrice = -1;
+    private ItemStack stack = new ItemStack(Material.AIR);
+    private double retailPrice = Integer.MAX_VALUE;
     private double refundPrice = -1;
     private int quantity = 0;
     
     public BaxEntry()
     {
-        stack = new ItemStack(Material.AIR);
     }
 
     public BaxEntry(@NotNull BaxEntry other)
