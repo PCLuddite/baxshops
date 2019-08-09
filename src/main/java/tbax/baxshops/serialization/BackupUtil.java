@@ -75,7 +75,7 @@ class BackupUtil
         }
 
         while (backups.size() >= nBaks) {
-            File delete = new File(backupFolder, backups.remove(backups.size() - 1) .getName() + ".yml");
+            File delete = new File(backupFolder, backups.remove(backups.size() - 1) .getName());
             if (!delete.delete()) {
                 savedState.log.warning(String.format("Unable to delete old backup %s", delete.getName()));
             }
