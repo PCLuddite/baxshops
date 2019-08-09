@@ -115,7 +115,7 @@ public final class SavedState
         }
 
         if (ver != STATE_VERSION) {
-            plugin.getLogger().info("Converting state file version " + (new DecimalFormat("0.0")).format(ver));
+            plugin.getLogger().info("Converting state file version " + (new DecimalFormat("0.0#")).format(ver));
         }
 
         return loader.loadState(YamlConfiguration.loadConfiguration(stateLocation));
