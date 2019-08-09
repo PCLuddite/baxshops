@@ -121,69 +121,13 @@ public final class SavedState
         return loader.loadState(YamlConfiguration.loadConfiguration(stateLocation));
     }
 
-    private void deleteLatestBackup(File backupFolder)
-    {
-        File[] backups = backupFolder.listFiles((f, name) -> name.endsWith(".yml"));
-        int nBaks = getConfig().getBackups();
-
-        if (backups == null || nBaks <= 0 || backups.length < nBaks) {
-            return;
-        }
-
-        List<String> names = Arrays.stream(backups)
-            .map(f -> f.getName().substring(0, f.getName().lastIndexOf('.')))
-            .filter(n -> Format.parseFileDate(n) != null)
-            .sorted(Comparator.comparing(Format::parseFileDate))
-            .sorted(Comparator.reverseOrder())
-            .collect(Collectors.toList());
-
-        while (names.size() >= nBaks) {
-            File delete = new File(backupFolder, names.remove(names.size() - 1) + ".yml");
-            if (!delete.delete()) {
-                log.warning(String.format("Unable to delete old backup %s", delete.getName()));
-            }
-        }
-    }
-
     /**
      * Attempts to back up the shops.yml save file.
      * @return a boolean indicating success
      */
     public boolean backup()
     {
-        File stateLocation = new File(plugin.getDataFolder(), YAML_FILE_PATH);
-        if (!stateLocation.exists()) {
-            log.warning("Aborting backup: shops.yml not found");
-            return false;
-        }
-
-        File backupFolder = new File(plugin.getDataFolder(), "backups");
-        if (!backupFolder.exists() && !backupFolder.mkdirs()) {
-            log.severe("Unable to create backups folder!");
-            return false;
-        }
-
-        deleteLatestBackup(backupFolder);
-
-        try {
-            String backupName = Format.FILE_DATE_FORMAT.format(new Date()) + ".yml";
-            File backup = new File(backupFolder, backupName);
-            try (InputStream in = new FileInputStream(stateLocation)) {
-                try (OutputStream out = new FileOutputStream(backup)) {
-                    byte[] buf = new byte[1024];
-                    int i;
-                    while ((i = in.read(buf)) > 0) {
-                        out.write(buf, 0, i);
-                    }
-                }
-            }
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-            log.severe("Backup failed!");
-            return false;
-        }
-        return true;
+        return BackupUtil.backup(this);
     }
 
     public void addShop(BaxShop shop)
@@ -254,6 +198,13 @@ public final class SavedState
             }
             else {
                 state.save(new File(dir, YAML_FILE_PATH));
+            }
+
+            if (BackupUtil.hasStateChanged(this)) {
+                BackupUtil.deleteOldestBackup(this);
+            }
+            else {
+                BackupUtil.deleteLatestBackup(this);
             }
         }
         catch (IOException e) {
@@ -346,5 +297,15 @@ public final class SavedState
     public BaxShop getShop(String shortId)
     {
         return shops.getShopByAbbreviatedId(shortId);
+    }
+
+    public File getFile()
+    {
+        return new File(plugin.getDataFolder(), SavedState.YAML_FILE_PATH);
+    }
+
+    public File getBackupFile()
+    {
+        return new File(plugin.getDataFolder(), "backups");
     }
 }
