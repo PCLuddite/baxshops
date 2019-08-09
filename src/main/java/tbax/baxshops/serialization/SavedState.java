@@ -27,13 +27,13 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tbax.baxshops.BaxShop;
-import tbax.baxshops.Format;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.notification.Notification;
 import tbax.baxshops.serialization.states.State_00300;
-import tbax.baxshops.serialization.states.State_00421;
+import tbax.baxshops.serialization.states.State_00422;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.logging.Logger;
@@ -43,7 +43,7 @@ public final class SavedState
 {
     static final String YAML_FILE_PATH = "shops.yml";
     
-    private static final double STATE_VERSION = State_00421.VERSION; // state file format version
+    private static final double STATE_VERSION = State_00422.VERSION; // state file format version
     private static double loadedState;
 
     /**

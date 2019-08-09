@@ -74,6 +74,16 @@ public final class BaxEntry implements UpgradeableSerializable
         quantity = map.getInteger("quantity");
     }
 
+    @SuppressWarnings("unchecked")
+    @Override
+    public void upgrade00421(@NotNull SafeMap map)
+    {
+        UpgradeableSerializable.super.upgrade00421(map);
+        if (map.get("stack") instanceof Map) {
+            stack = ItemStack.deserialize((Map) map.get("stack"));
+        }
+    }
+
     public double getRetailPrice()
     {
         return retailPrice;
