@@ -236,19 +236,20 @@ public final class SavedState
         return players.get(playerName);
     }
 
+    /**
+     * Makes sure an online player is in the player map and update the last seen name and ID
+     * @param player the player
+     */
     public void joinPlayer(Player player)
     {
-        StoredPlayer storedPlayer = players.convertLegacy(player);
-        if (storedPlayer == null) {
-            storedPlayer = new StoredPlayer(player);
+        UUID oldId = players.convertLegacy(player);
+        if (oldId == null) {
+            players.put(player.getUniqueId(), new StoredPlayer(player));
         }
         else {
-            Deque<Notification> notes = pending.remove(storedPlayer.getUniqueId());
-            players.remove(storedPlayer.getUniqueId());
-            if (notes != null)
-                pending.put(storedPlayer.getUniqueId(), notes);
+            Deque<Notification> notes = pending.remove(oldId);
+            if (notes != null) pending.put(player.getUniqueId(), notes);
         }
-        players.put(storedPlayer.getUniqueId(), storedPlayer);
     }
 
     public BaxConfig getConfig()

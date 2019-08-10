@@ -204,20 +204,25 @@ public class PlayerMap implements Map<UUID, StoredPlayer>
         return players.entrySet();
     }
 
-    public StoredPlayer convertLegacy(Player player)
+    /**
+     * Find and convert any legacy players and return the old UUID
+     * @param player the online player
+     * @return the former UUID of the player
+     */
+    public UUID convertLegacy(Player player)
     {
         Set<UUID> uuids = playerNames.get(player.getName());
         if (uuids == null || uuids.isEmpty())
             return null;
 
-        for (UUID id : uuids) {
-            StoredPlayer storedPlayer = get(id);
+        for (UUID legacyId : uuids) {
+            StoredPlayer storedPlayer = get(legacyId);
             if (storedPlayer != null && storedPlayer.isLegacyPlayer()) {
-                players.remove(id);
+                players.remove(legacyId);
                 storedPlayer.convertLegacy(player);
                 put(storedPlayer);
-                survivorship.put(id, storedPlayer.getUniqueId());
-                return storedPlayer;
+                survivorship.put(legacyId, storedPlayer.getUniqueId());
+                return legacyId;
             }
         }        
         return null;
