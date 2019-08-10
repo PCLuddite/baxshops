@@ -192,7 +192,7 @@ public class SafeMap implements Map<String, Object>
     }
 
     @SuppressWarnings("unchecked")
-    private <E> Deque<E> getDeque(String key, ArrayDeque<E> defaultValue)
+    public <E> Deque<E> getDeque(String key, Deque<E> defaultValue)
     {
         try {
             return new ArrayDeque<>((List<E>) getOrDefault(key, defaultValue));
