@@ -85,6 +85,12 @@ public final class BaxEntry implements UpgradeableSerializable
         }
     }
 
+    @Override
+    public void upgrade00450(@NotNull SafeMap map)
+    {
+        UpgradeableSerializable.super.upgrade00421(map);
+    }
+
     public double getRetailPrice()
     {
         return retailPrice;

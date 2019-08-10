@@ -61,9 +61,15 @@ public interface UpgradeableSerializable extends ConfigurationSerializable
         deserializeMap(map);
     }
 
+    @Deprecated
     default void upgrade00422(@NotNull SafeMap map)
     {
         upgrade00421(map);
+    }
+
+    default void upgrade00450(@NotNull SafeMap map)
+    {
+        upgrade00422(map);
     }
 
     default void deserializeMap(@NotNull Map<String, Object> args)
