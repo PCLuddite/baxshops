@@ -105,7 +105,8 @@ public final class ShopPlugin extends JavaPlugin
 
     public static int showNotificationCount(Player player)
     {
-        Deque<Notification> notifications = savedState.getNotifications(player);
+        StoredPlayer storedPlayer = savedState.getOfflinePlayer(player.getUniqueId());
+        Collection<Notification> notifications = storedPlayer.getNotifications();
         if (notifications.isEmpty()) {
             player.sendMessage("You have no new notifications");
             return 0;
@@ -124,8 +125,8 @@ public final class ShopPlugin extends JavaPlugin
      */
     public static void showNotification(Player player)
     {
-        Deque<Notification> notifications = savedState.getNotifications(player);
-        Notification n = notifications.removeFirst();
+        StoredPlayer storedPlayer = savedState.getOfflinePlayer(player.getUniqueId());
+        Notification n = storedPlayer.dequeueNote();
         sendInfo(player, n.getMessage(player));
         if (n instanceof Request) {
             player.sendMessage(String.format("Use %s or %s to manage this request.",
@@ -160,15 +161,15 @@ public final class ShopPlugin extends JavaPlugin
      */
     public static void sendNotification(OfflinePlayer player, Notification n, boolean logNote)
     {
-        Deque<Notification> ns = savedState.getNotifications(player);
+        StoredPlayer storedPlayer = savedState.getOfflinePlayer(player.getUniqueId());
         if (logNote)
             log.info(Format.toAnsiColor(n.getMessage(null)));
 
         if (!StoredPlayer.DUMMY.equals(player))
-            ns.add(n);
+            storedPlayer.queueNote(n);
 
         if (player.isOnline()) {
-            if (ns.size() == 1) {
+            if (storedPlayer.getNotificationCount() == 1) {
                 showNotification(player.getPlayer());
             }
             else {

@@ -31,7 +31,12 @@ public interface StateLoader
 {
     @NotNull Collection<BaxShop> buildShops(@NotNull FileConfiguration state);
     @NotNull Collection<StoredPlayer> buildPlayers(@NotNull FileConfiguration state);
-    @NotNull Collection<NoteSet> buildNotifications(@NotNull FileConfiguration state);
+
+    @Deprecated
+    default @NotNull Collection<NoteSet> buildNotifications(@NotNull FileConfiguration state)
+    {
+        throw new UnsupportedOperationException();
+    }
 
     @NotNull ShopPlugin getPlugin();
 
@@ -46,8 +51,6 @@ public interface StateLoader
 
         ShopPlugin.logInfo("Loading shop data...");
         Collection<BaxShop> shops = buildShops(state);
-        ShopPlugin.logInfo("Loading notifications...");
-        Collection<NoteSet> notes = buildNotifications(state);
         ShopPlugin.logInfo("Loading player data...");
         Collection<StoredPlayer> players = buildPlayers(state);
 
@@ -57,10 +60,6 @@ public interface StateLoader
 
         for (BaxShop shop : shops) {
             savedState.shops.put(shop.getId(), shop);
-        }
-
-        for (NoteSet noteSet : notes) {
-            savedState.pending.put(noteSet.getRecipient(), noteSet.getNotifications());
         }
 
         savedState.config = loadConfig(getPlugin().getConfig());
@@ -78,5 +77,20 @@ public interface StateLoader
             SerializationException.throwStateLoaderException(e);
         }
         return ver;
+    }
+
+    default void setConfig(SavedState savedState, BaxConfig baxConfig)
+    {
+        savedState.config = baxConfig;
+    }
+
+    default void addPlayer(SavedState savedState, StoredPlayer storedPlayer)
+    {
+        savedState.players.put(storedPlayer);
+    }
+
+    default void addShop(SavedState savedState, BaxShop shop)
+    {
+        savedState.shops.put(shop.getId(), shop);
     }
 }

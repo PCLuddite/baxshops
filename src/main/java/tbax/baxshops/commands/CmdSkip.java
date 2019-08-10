@@ -24,9 +24,7 @@ import tbax.baxshops.CommandHelp;
 import tbax.baxshops.Resources;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.notification.Notification;
-
-import java.util.Deque;
+import tbax.baxshops.serialization.StoredPlayer;
 
 public final class CmdSkip extends BaxShopCommand
 {
@@ -89,12 +87,12 @@ public final class CmdSkip extends BaxShopCommand
     @Override
     public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
-        Deque<Notification> notifications = actor.getNotifications();
-        if (notifications.isEmpty()) {
+        StoredPlayer player = actor.getStoredPlayer();
+        if (!player.hasNotes()) {
             actor.exitError(Resources.NOT_FOUND_NOTE);
         }
         else {
-            notifications.add(notifications.removeFirst());
+            player.queueNote(player.dequeueNote());
             ShopPlugin.showNotification(actor.getPlayer());
         }
     }

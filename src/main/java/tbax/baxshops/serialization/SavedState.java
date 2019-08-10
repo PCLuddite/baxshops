@@ -19,8 +19,6 @@
 package tbax.baxshops.serialization;
 
 import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -28,14 +26,16 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.ShopPlugin;
-import tbax.baxshops.notification.Notification;
 import tbax.baxshops.serialization.states.State_00300;
-import tbax.baxshops.serialization.states.State_00422;
+import tbax.baxshops.serialization.states.State_00450;
 
 import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -43,17 +43,13 @@ public final class SavedState
 {
     static final String YAML_FILE_PATH = "shops.yml";
     
-    private static final double STATE_VERSION = State_00422.VERSION; // state file format version
+    private static final double STATE_VERSION = State_00450.VERSION; // state file format version
     private static double loadedState;
 
     /**
      * A map of ids map to their shops
      */
     ShopMap shops = new ShopMap();
-    /**
-     * A map containing each player's notifications
-     */
-    Map<UUID, Deque<Notification>> pending = new HashMap<>();
 
     /**
      * A map containing each player's attributes for when they're offline
@@ -65,7 +61,7 @@ public final class SavedState
 
     BaxConfig config;
 
-    SavedState(@NotNull ShopPlugin plugin)
+    public SavedState(@NotNull ShopPlugin plugin)
     {
         this.plugin = plugin;
         this.log = plugin.getLogger();
@@ -145,20 +141,6 @@ public final class SavedState
         return false;
     }
 
-    /**
-     * Gets a list of notifications for a player.
-     *
-     * @param player the player
-     * @return the player's notifications
-     */
-    public @NotNull Deque<Notification> getNotifications(OfflinePlayer player)
-    {
-        Deque<Notification> n = pending.get(player.getUniqueId());
-        if (n == null)
-            pending.put(player.getUniqueId(), n = new ArrayDeque<>());
-        return n;
-    }
-
     private void resaveConfig()
     {
         if (!config.backup())
@@ -183,12 +165,6 @@ public final class SavedState
 
         FileConfiguration state = new YamlConfiguration();
         state.set("shops", new ArrayList<>(shops.values()));
-
-        ConfigurationSection notes = state.createSection("notes");
-        for (Map.Entry<UUID, Deque<Notification>> entry : pending.entrySet()) {
-            notes.set(entry.getKey().toString(), new ArrayList<>(entry.getValue()));
-        }
-
         state.set("players", new ArrayList<>(players.values()));
 
         try {
@@ -240,16 +216,15 @@ public final class SavedState
      * Makes sure an online player is in the player map and update the last seen name and ID
      * @param player the player
      */
-    public void joinPlayer(Player player)
+    public StoredPlayer joinPlayer(Player player)
     {
         UUID oldId = players.convertLegacy(player);
         if (oldId == null) {
-            players.put(player.getUniqueId(), new StoredPlayer(player));
+            StoredPlayer storedPlayer = new StoredPlayer(player);
+            players.put(player.getUniqueId(), storedPlayer);
+            return storedPlayer;
         }
-        else {
-            Deque<Notification> notes = pending.remove(oldId);
-            if (notes != null) pending.put(player.getUniqueId(), notes);
-        }
+        return players.get(player.getUniqueId());
     }
 
     public BaxConfig getConfig()
@@ -267,13 +242,11 @@ public final class SavedState
 
         shops.clear();
         players.clear();
-        pending.clear();
 
-        log.info("Loading BaxShops...");
+        log.info("Reloading BaxShops...");
         SavedState savedState = readFromDisk(plugin);
         shops = savedState.shops;
         players = savedState.players;
-        pending = savedState.pending;
         config = savedState.config;
         log.info("BaxShops has finished reloading");
     }

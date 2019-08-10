@@ -186,6 +186,27 @@ public class SafeMap implements Map<String, Object>
         return argMap.put(key, value == null ? new ArrayList<>() : new ArrayList<>(value));
     }
 
+    public <E> Deque<E> getDeque(String key)
+    {
+        return getDeque(key, new ArrayDeque<>());
+    }
+
+    @SuppressWarnings("unchecked")
+    private <E> Deque<E> getDeque(String key, ArrayDeque<E> defaultValue)
+    {
+        try {
+            return new ArrayDeque<>((List<E>) getOrDefault(key, defaultValue));
+        }
+        catch (ClassCastException e) {
+            return defaultValue;
+        }
+    }
+
+    public <E> Object put(String key, Deque<E> value)
+    {
+        return argMap.put(key, value == null ? new ArrayList<>() : new ArrayList<>(value));
+    }
+
     public ItemStack getItemStack(String key)
     {
         return getItemStack(key, null);

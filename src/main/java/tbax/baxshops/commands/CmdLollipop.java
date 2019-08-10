@@ -23,18 +23,15 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+import tbax.baxshops.CommandHelp;
 import tbax.baxshops.CommandHelpArgument;
 import tbax.baxshops.Format;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.CommandHelp;
 import tbax.baxshops.notification.LollipopNotification;
-import tbax.baxshops.notification.Notification;
-import tbax.baxshops.serialization.SavedState;
 import tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.Arrays;
-import java.util.Deque;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -117,9 +114,9 @@ public final class CmdLollipop extends BaxShopCommand
             actor.exitError("Your adjective is too long");
 
         OfflinePlayer sender = actor.getPlayer() == null ? StoredPlayer.DUMMY : actor.getPlayer();
-        OfflinePlayer recipient = actor.getArgPlayer(1);
+        StoredPlayer recipient = actor.getArgPlayer(1);
 
-        List<LollipopNotification> otherPops = ShopPlugin.getSavedState().getNotifications(recipient).stream()
+        List<LollipopNotification> otherPops = recipient.getNotifications().stream()
             .filter(n -> n instanceof LollipopNotification)
             .map(n -> (LollipopNotification)n)
             .filter(n -> n.getSender().equals(sender))

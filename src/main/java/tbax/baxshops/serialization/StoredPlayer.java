@@ -24,10 +24,10 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.Resources;
+import tbax.baxshops.notification.Notification;
 import tbax.baxshops.serialization.annotations.SerializedAs;
 
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class StoredPlayer implements OfflinePlayer, UpgradeableSerializable
 {
@@ -40,6 +40,7 @@ public class StoredPlayer implements OfflinePlayer, UpgradeableSerializable
     public static final StoredPlayer ERROR = new StoredPlayer(ERROR_NAME, ERROR_UUID);
 
     private UUID uuid = UUID.randomUUID();
+    private Deque<Notification> notifications = new ArrayDeque<>();
 
     @SerializedAs("legacy")
     private boolean legacyPlayer;
@@ -125,6 +126,41 @@ public class StoredPlayer implements OfflinePlayer, UpgradeableSerializable
         if (uuid == null)
             uuid = ERROR_UUID;
         return uuid;
+    }
+
+    public Collection<Notification> getNotifications()
+    {
+        return Collections.unmodifiableCollection(notifications);
+    }
+
+    public void queueNote(Notification notification)
+    {
+        notifications.add(notification);
+    }
+
+    public Notification dequeueNote()
+    {
+        return notifications.removeFirst();
+    }
+
+    public Notification peekNote()
+    {
+        return notifications.peekFirst();
+    }
+
+    public int getNotificationCount()
+    {
+        return notifications.size();
+    }
+
+    public boolean hasNotes()
+    {
+        return !notifications.isEmpty();
+    }
+
+    public void clearNotes()
+    {
+        notifications.clear();
     }
 
     @Override

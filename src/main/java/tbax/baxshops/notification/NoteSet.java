@@ -27,6 +27,7 @@ import tbax.baxshops.serialization.UpgradeableSerializable;
 
 import java.util.*;
 
+@Deprecated
 public final class NoteSet implements UpgradeableSerializable
 {
     private UUID recipient;

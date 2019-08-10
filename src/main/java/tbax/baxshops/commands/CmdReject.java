@@ -20,14 +20,13 @@
 package tbax.baxshops.commands;
 
 import org.jetbrains.annotations.NotNull;
+import tbax.baxshops.CommandHelp;
 import tbax.baxshops.Resources;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.CommandHelp;
 import tbax.baxshops.notification.Notification;
 import tbax.baxshops.notification.Request;
-
-import java.util.Deque;
+import tbax.baxshops.serialization.StoredPlayer;
 
 public final class CmdReject extends BaxShopCommand
 {
@@ -90,16 +89,16 @@ public final class CmdReject extends BaxShopCommand
     @Override
     public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
-        Deque<Notification> notifications = actor.getNotifications();
-        if (notifications.isEmpty()) {
+        StoredPlayer storedPlayer = actor.getStoredPlayer();
+        if (!storedPlayer.hasNotes()) {
             actor.exitError(Resources.NOT_FOUND_NOTE);
         }
         else {
-            Notification n = notifications.getFirst();
+            Notification n = storedPlayer.peekNote();
             if (n instanceof Request) {
                 Request r = (Request) n;
                 if (r.reject(actor)) {
-                    notifications.removeFirst();
+                    storedPlayer.dequeueNote();
                 }
                 ShopPlugin.showNotificationCount(actor.getPlayer());
             }

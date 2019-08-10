@@ -26,10 +26,12 @@ import tbax.baxshops.BaxShopFlag;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.notification.*;
 import tbax.baxshops.serialization.*;
+import tbax.baxshops.serialization.oldloaders.StateLoader_00100;
 
 import java.util.*;
 
-public class State_00300 implements StateLoader
+@Deprecated
+public class State_00300 extends StateLoader_00100
 {
     public static final double VERSION = 3.0;
     private static Map<Long, UUID> legacyIds = new HashMap<>();
@@ -99,7 +101,7 @@ public class State_00300 implements StateLoader
     @Override
     public @NotNull BaxConfig loadConfig(@NotNull FileConfiguration config)
     {
-        BaxConfig ret = StateLoader.super.loadConfig(config);
+        BaxConfig ret = super.loadConfig(config);
         ret.setDeathTaxEnabled(config.contains("DeathTax"));
         if (ret.isDeathTaxEnabled()) {
             String goesTo = ret.getFileConfig().getString("DeathTax.GoesTo");

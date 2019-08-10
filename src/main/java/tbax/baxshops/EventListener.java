@@ -31,7 +31,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.SignChangeEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -42,11 +41,10 @@ import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.CommandWarningException;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.DeathTaxReceivedNote;
-import tbax.baxshops.notification.Notification;
 import tbax.baxshops.serialization.BaxConfig;
 import tbax.baxshops.serialization.StoredPlayer;
 
-import java.util.*;
+import java.util.UUID;
 
 @SuppressWarnings("unused")
 public class EventListener implements Listener
@@ -236,9 +234,8 @@ public class EventListener implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event)
     {
-        ShopPlugin.getSavedState().joinPlayer(event.getPlayer());
-        Deque<Notification> p = ShopPlugin.getSavedState().getNotifications(event.getPlayer());
-        if (!p.isEmpty()) {
+        StoredPlayer player = ShopPlugin.getSavedState().joinPlayer(event.getPlayer());
+        if (!player.getNotifications().isEmpty()) {
             event.getPlayer().sendMessage(ChatColor.WHITE + "You have new notifications. Use " + Format.command("/shop notifications") + ChatColor.WHITE + " to view them");
         }
     }

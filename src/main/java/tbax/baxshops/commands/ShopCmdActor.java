@@ -38,7 +38,6 @@ import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.CommandMessageException;
 import tbax.baxshops.errors.CommandWarningException;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.notification.Notification;
 import tbax.baxshops.serialization.ItemNames;
 import tbax.baxshops.serialization.StoredPlayer;
 
@@ -635,11 +634,6 @@ public final class ShopCmdActor implements CommandSender
         this.action = action;
     }
 
-    public Deque<Notification> getNotifications()
-    {
-        return ShopPlugin.getSavedState().getNotifications(getPlayer());
-    }
-
     @Override
     public boolean isOp()
     {
@@ -650,5 +644,10 @@ public final class ShopCmdActor implements CommandSender
     public void setOp(boolean b)
     {
         getSender().setOp(b);
+    }
+
+    public StoredPlayer getStoredPlayer()
+    {
+        return ShopPlugin.getSavedState().getOfflinePlayer(getPlayer().getUniqueId());
     }
 }

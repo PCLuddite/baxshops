@@ -25,13 +25,13 @@ import tbax.baxshops.BaxShopFlag;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.notification.NoteSet;
 import tbax.baxshops.notification.Notification;
-import tbax.baxshops.serialization.SafeMap;
-import tbax.baxshops.serialization.StateLoader;
 import tbax.baxshops.serialization.StoredPlayer;
+import tbax.baxshops.serialization.oldloaders.StateLoader_00100;
 
 import java.util.*;
 
-public class State_00420 implements StateLoader
+@Deprecated
+public class State_00420 extends StateLoader_00100
 {
     public static final double VERSION = 4.2;
     private ShopPlugin plugin;

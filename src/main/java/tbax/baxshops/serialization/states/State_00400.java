@@ -23,14 +23,15 @@ import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.notification.NoteSet;
-import tbax.baxshops.serialization.StateLoader;
 import tbax.baxshops.serialization.StoredPlayer;
+import tbax.baxshops.serialization.oldloaders.StateLoader_00100;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class State_00400 implements StateLoader
+@Deprecated
+public class State_00400 extends StateLoader_00100
 {
     public static final double VERSION = 4.0;
     private ShopPlugin plugin;

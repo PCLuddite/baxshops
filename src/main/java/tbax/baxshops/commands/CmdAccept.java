@@ -27,8 +27,7 @@ import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.Claimable;
 import tbax.baxshops.notification.Notification;
 import tbax.baxshops.notification.Request;
-
-import java.util.Deque;
+import tbax.baxshops.serialization.StoredPlayer;
 
 public final class CmdAccept extends BaxShopCommand
 {
@@ -93,22 +92,22 @@ public final class CmdAccept extends BaxShopCommand
     @Override
     public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
-        Deque<Notification> notifications = actor.getNotifications();
-        if (notifications.isEmpty()) {
+        StoredPlayer player = actor.getStoredPlayer();
+        if (!player.hasNotes()) {
             actor.exitError(Resources.NOT_FOUND_NOTE);
         }
         else {
-            Notification n = notifications.getFirst();
+            Notification n = player.peekNote();
             if (n instanceof Request) {
                 Request r = (Request) n;
                 if (r.accept(actor)) {
-                    notifications.removeFirst();
+                    player.dequeueNote();
                 }
             }
             else if (n instanceof Claimable) {
                 Claimable c = (Claimable) n;
                 if (c.claim(actor)) {
-                    notifications.removeFirst();
+                    player.dequeueNote();
                 }
             }
             else {

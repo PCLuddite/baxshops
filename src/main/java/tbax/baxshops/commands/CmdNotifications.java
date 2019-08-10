@@ -22,14 +22,11 @@ package tbax.baxshops.commands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+import tbax.baxshops.CommandHelp;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.CommandHelp;
-import tbax.baxshops.notification.Notification;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Deque;
 import java.util.List;
 
 public final class CmdNotifications extends BaxShopCommand
@@ -112,8 +109,7 @@ public final class CmdNotifications extends BaxShopCommand
         }
         else if (actor.getNumArgs() == 2) {
             if (actor.getArg(1).equalsIgnoreCase("clear")) {
-                Deque<Notification> notes = actor.getNotifications();
-                notes.clear();
+                actor.getStoredPlayer().clearNotes();
                 actor.getPlayer().sendMessage("Your notifications have been cleared");
             }
             else {
