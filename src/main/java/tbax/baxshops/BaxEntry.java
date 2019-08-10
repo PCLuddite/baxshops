@@ -65,17 +65,18 @@ public final class BaxEntry implements UpgradeableSerializable
         UpgradeableSerialization.upgrade(this, args);
     }
 
-    @Override
+    @Override @SuppressWarnings("unchecked")
     public void upgrade00300(@NotNull SafeMap map)
     {
         retailPrice = map.getDouble("retailPrice", 10000);
         refundPrice = map.getDouble("refundPrice");
-        stack = map.getItemStack("stack", new ItemStack(Material.AIR));
+        if (map.get("stack") instanceof Map) {
+            stack = ItemStack.deserialize((Map) map.get("stack"));
+        }
         quantity = map.getInteger("quantity");
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
+    @Override @SuppressWarnings("unchecked")
     public void upgrade00421(@NotNull SafeMap map)
     {
         UpgradeableSerializable.super.upgrade00421(map);
