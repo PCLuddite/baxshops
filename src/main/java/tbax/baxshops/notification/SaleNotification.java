@@ -79,6 +79,18 @@ public final class SaleNotification extends StandardNote
         );
     }
 
+    @Override
+    public @NotNull OfflinePlayer getRecipient()
+    {
+        return getSeller();
+    }
+
+    @Override
+    public void setRecipient(@NotNull OfflinePlayer player)
+    {
+        seller = player.getUniqueId();
+    }
+
     public static SaleNotification deserialize(Map<String, Object> args)
     {
         return new SaleNotification(args);

@@ -131,9 +131,15 @@ public final class LollipopNotification implements Notification, UpgradeableSeri
         }
     }
 
-    private OfflinePlayer getRecipient()
+    public @NotNull OfflinePlayer getRecipient()
     {
         return ShopPlugin.getOfflinePlayer(recipient);
+    }
+
+    @Override
+    public void setRecipient(@NotNull OfflinePlayer player)
+    {
+        recipient = player.getUniqueId();
     }
 
     @Override

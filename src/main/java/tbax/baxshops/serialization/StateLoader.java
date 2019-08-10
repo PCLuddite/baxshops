@@ -23,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.notification.NoteSet;
+import tbax.baxshops.notification.Notification;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -56,6 +57,9 @@ public interface StateLoader
 
         for (StoredPlayer player : players) {
             savedState.players.put(player);
+            for (Notification n : player.getNotifications()) {
+                n.setRecipient(player);
+            }
         }
 
         for (BaxShop shop : shops) {

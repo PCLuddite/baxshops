@@ -85,6 +85,18 @@ public final class BuyRejection extends StandardNote implements Notification
         );
     }
 
+    @Override
+    public @NotNull OfflinePlayer getRecipient()
+    {
+        return getSeller();
+    }
+
+    @Override
+    public void setRecipient(@NotNull OfflinePlayer player)
+    {
+        seller = player.getUniqueId();
+    }
+
     public static BuyRejection deserialize(Map<String, Object> args)
     {
         return new BuyRejection(args);

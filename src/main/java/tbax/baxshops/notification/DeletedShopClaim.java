@@ -98,6 +98,18 @@ public final class DeletedShopClaim implements UpgradeableSerializable, Claimabl
     }
 
     @Override
+    public @NotNull OfflinePlayer getRecipient()
+    {
+        return getOwner();
+    }
+
+    @Override
+    public void setRecipient(@NotNull OfflinePlayer player)
+    {
+        owner = player.getUniqueId();
+    }
+
+    @Override
     public Date getSentDate()
     {
         return date;

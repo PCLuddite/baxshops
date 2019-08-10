@@ -78,6 +78,18 @@ public final class SaleRejection extends StandardNote implements Claimable
         );
     }
 
+    @Override
+    public @NotNull OfflinePlayer getRecipient()
+    {
+        return getSeller();
+    }
+
+    @Override
+    public void setRecipient(@NotNull OfflinePlayer player)
+    {
+        seller = player.getUniqueId();
+    }
+
     public static SaleRejection deserialize(Map<String, Object> args)
     {
         return new SaleRejection(args);

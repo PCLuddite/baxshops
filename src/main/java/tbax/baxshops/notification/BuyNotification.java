@@ -85,6 +85,18 @@ public final class BuyNotification extends StandardNote
         );
     }
 
+    @Override
+    public @NotNull OfflinePlayer getRecipient()
+    {
+        return getSeller();
+    }
+
+    @Override
+    public void setRecipient(@NotNull OfflinePlayer player)
+    {
+        seller = player.getUniqueId();
+    }
+
     public static BuyNotification deserialize(Map<String, Object> args)
     {
         return new BuyNotification(args);

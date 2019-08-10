@@ -135,6 +135,7 @@ public class StoredPlayer implements OfflinePlayer, UpgradeableSerializable
 
     public void queueNote(Notification notification)
     {
+        notification.setRecipient(this);
         notifications.add(notification);
     }
 

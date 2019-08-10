@@ -119,6 +119,19 @@ public final class BuyRequest extends StandardNote implements Request
             Format.username(buyer), entry.getFormattedName(), Format.username2(seller), entry.getFormattedBuyPrice()
         );
     }
+
+    @Override
+    public @NotNull OfflinePlayer getRecipient()
+    {
+        return getSeller();
+    }
+
+    @Override
+    public void setRecipient(@NotNull OfflinePlayer player)
+    {
+        seller = player.getUniqueId();
+    }
+
     public static BuyRequest deserialize(Map<String, Object> args)
     {
         return new BuyRequest(args);

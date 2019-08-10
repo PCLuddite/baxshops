@@ -83,6 +83,18 @@ public final class BuyClaim extends StandardNote implements Claimable
         );
     }
 
+    @Override
+    public @NotNull OfflinePlayer getRecipient()
+    {
+        return getBuyer();
+    }
+
+    @Override
+    public void setRecipient(@NotNull OfflinePlayer player)
+    {
+        buyer = player.getUniqueId();
+    }
+
     public static BuyClaim deserialize(Map<String, Object> args)
     {
         return new BuyClaim(args);

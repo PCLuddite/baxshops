@@ -94,6 +94,18 @@ public final class SaleRequest extends StandardNote implements Request
         );
     }
 
+    @Override
+    public @NotNull OfflinePlayer getRecipient()
+    {
+        return getBuyer();
+    }
+
+    @Override
+    public void setRecipient(@NotNull OfflinePlayer player)
+    {
+        buyer = player.getUniqueId();
+    }
+
     public static SaleRequest deserialize(Map<String, Object> args)
     {
         return new SaleRequest(args);
