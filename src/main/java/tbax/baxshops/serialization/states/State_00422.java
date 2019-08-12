@@ -25,12 +25,11 @@ import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.notification.NoteSet;
 import tbax.baxshops.notification.Notification;
 import tbax.baxshops.serialization.StoredPlayer;
-import tbax.baxshops.serialization.oldloaders.StateLoader_00100;
 
 import java.util.*;
 
 @Deprecated
-public class State_00422 extends StateLoader_00100
+public class State_00422 extends StateWithNotes
 {
     public static final double VERSION = 4.22;
     private ShopPlugin plugin;

@@ -24,14 +24,13 @@ import tbax.baxshops.BaxShop;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.notification.NoteSet;
 import tbax.baxshops.serialization.StoredPlayer;
-import tbax.baxshops.serialization.oldloaders.StateLoader_00100;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 @Deprecated
-public class State_00400 extends StateLoader_00100
+public class State_00400 extends StateWithNotes
 {
     public static final double VERSION = 4.0;
     private ShopPlugin plugin;

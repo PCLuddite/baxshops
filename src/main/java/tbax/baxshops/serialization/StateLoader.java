@@ -33,12 +33,6 @@ public interface StateLoader
     @NotNull Collection<BaxShop> buildShops(@NotNull FileConfiguration state);
     @NotNull Collection<StoredPlayer> buildPlayers(@NotNull FileConfiguration state);
 
-    @Deprecated
-    default @NotNull Collection<NoteSet> buildNotifications(@NotNull FileConfiguration state)
-    {
-        throw new UnsupportedOperationException();
-    }
-
     @NotNull ShopPlugin getPlugin();
 
     default @NotNull BaxConfig loadConfig(@NotNull FileConfiguration config)

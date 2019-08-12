@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
  * USA
  */
-package tbax.baxshops.serialization.oldloaders;
+package tbax.baxshops.serialization.states;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
@@ -32,8 +32,10 @@ import java.util.Collection;
 import java.util.Deque;
 
 @Deprecated
-public abstract class StateLoader_00100 implements StateLoader
+public abstract class StateWithNotes implements StateLoader
 {
+    public abstract  @NotNull Collection<NoteSet> buildNotifications(@NotNull FileConfiguration state);
+
     @Override
     public SavedState loadState(@NotNull FileConfiguration state)
     {

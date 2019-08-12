@@ -26,12 +26,11 @@ import tbax.baxshops.BaxShopFlag;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.notification.*;
 import tbax.baxshops.serialization.*;
-import tbax.baxshops.serialization.oldloaders.StateLoader_00100;
 
 import java.util.*;
 
 @Deprecated
-public class State_00300 extends StateLoader_00100
+public class State_00300 extends StateWithNotes
 {
     public static final double VERSION = 3.0;
     private static Map<Long, UUID> legacyIds = new HashMap<>();
