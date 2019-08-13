@@ -98,16 +98,14 @@ public class State_00300 extends StateWithNotes
     }
 
     @Override
-    public @NotNull BaxConfig loadConfig(@NotNull FileConfiguration config)
+    public void loadConfig(@NotNull BaxConfig config)
     {
-        BaxConfig ret = super.loadConfig(config);
-        ret.setDeathTaxEnabled(config.contains("DeathTax"));
-        if (ret.isDeathTaxEnabled()) {
-            String goesTo = ret.getFileConfig().getString("DeathTax.GoesTo");
-            ret.setDeathTaxGoesTo(getPlayerId(goesTo));
+        config.setDeathTaxEnabled(config.getFileConfig().contains("DeathTax"));
+        if (config.isDeathTaxEnabled()) {
+            String goesTo = config.getFileConfig().getString("DeathTax.GoesTo");
+            config.setDeathTaxGoesTo(getPlayerId(goesTo));
         }
         invalidateMaps();
-        return ret;
     }
 
     @Override

@@ -18,28 +18,87 @@
  */
 package tbax.baxshops.serialization;
 
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.plugin.java.JavaPlugin;
 import tbax.baxshops.Format;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
-class BackupUtil
+public final class StateFile
 {
-    public static boolean backup(SavedState savedState)
+    public static final String YAML_FILE_PATH = "shops.yml";
+
+    private JavaPlugin plugin;
+    private BaxConfig config;
+
+    public StateFile(JavaPlugin plugin)
     {
-        File stateLocation = savedState.getFile();
+        this.plugin = plugin;
+    }
+
+    /**
+     * Saves all shops
+     */
+    public void writeToDisk(SavedState savedState)
+    {
+        if (!backup()) {
+            plugin.getLogger().warning("Failed to back up BaxShops");
+        }
+
+        if (config.getStateVersion() != SavedState.STATE_VERSION || config.saveDefaults()) {
+            resaveConfig();
+        }
+
+        FileConfiguration state = new YamlConfiguration();
+        state.set("shops", new ArrayList<>(savedState.shops.values()));
+        state.set("players", new ArrayList<>(savedState.players.values()));
+
+        try {
+            File dir = plugin.getDataFolder();
+            if (!dir.exists() && !dir.mkdirs()) {
+                plugin.getLogger().severe("Unable to make data folder!");
+            }
+            else {
+                state.save(new File(dir, YAML_FILE_PATH));
+            }
+
+            if (hasStateChanged()) {
+                deleteOldestBackup(savedState);
+            }
+            else {
+                deleteLatestBackup();
+            }
+        }
+        catch (IOException e) {
+            plugin.getLogger().severe("Save failed");
+            e.printStackTrace();
+        }
+    }
+
+    private void resaveConfig()
+    {
+        if (!config.backup())
+            plugin.getLogger().warning("Could not backup config. Configuration may be lost.");
+        if (config.getStateVersion() != SavedState.STATE_VERSION)
+            config.getFileConfig().set("StateVersion", SavedState.STATE_VERSION);
+        config.save();
+    }
+
+
+    public boolean backup()
+    {
+        File stateLocation = getFile();
         if (!stateLocation.exists()) {
-            savedState.log.warning("Aborting backup: shops.yml not found");
+            plugin.getLogger().warning("Aborting backup: shops.yml not found");
             return false;
         }
 
-        File backupFolder = savedState.getBackupFile();
+        File backupFolder = getBackupFile();
         if (!backupFolder.exists() && !backupFolder.mkdirs()) {
-            savedState.log.severe("Unable to create backups folder!");
+            plugin.getLogger().severe("Unable to create backups folder!");
             return false;
         }
 
@@ -58,17 +117,17 @@ class BackupUtil
         }
         catch (IOException e) {
             e.printStackTrace();
-            savedState.log.severe("Backup failed!");
+            plugin.getLogger().severe("Backup failed!");
             return false;
         }
         return true;
     }
 
-    public static void deleteOldestBackup(SavedState savedState)
+    public void deleteOldestBackup(SavedState savedState)
     {
-        File backupFolder = savedState.getBackupFile();
-        List<File> backups = getBackupFiles(backupFolder);
-        int nBaks = savedState.getConfig().getBackups();
+        File backupFolder = getBackupFile();
+        List<File> backups = getBackupFiles();
+        int nBaks = getConfig().getBackups();
 
         if (backups == null || nBaks <= 0 || backups.size() < nBaks) {
             return;
@@ -82,8 +141,9 @@ class BackupUtil
         }
     }
 
-    public static List<File> getBackupFiles(File backupFolder)
+    public List<File> getBackupFiles()
     {
+        File backupFolder = getBackupFile();
         return Arrays.stream(backupFolder.listFiles((f, name) -> name.endsWith(".yml")))
                 .map(f -> f.getName().substring(0, f.getName().lastIndexOf('.')))
                 .filter(n -> Format.parseFileDate(n) != null)
@@ -93,22 +153,22 @@ class BackupUtil
                 .collect(Collectors.toList());
     }
 
-    public static boolean deleteLatestBackup(SavedState savedState)
+    public boolean deleteLatestBackup()
     {
-        List<File> backups = getBackupFiles(savedState.getBackupFile());
+        List<File> backups = getBackupFiles();
         if (backups.isEmpty())
             return false;
         return backups.get(0).delete();
     }
 
-    public static boolean hasStateChanged(SavedState savedState)
+    public boolean hasStateChanged()
     {
-        List<File> backups = getBackupFiles(savedState.getBackupFile());
+        List<File> backups = getBackupFiles();
         if (backups.isEmpty())
             return true;
 
         File latest = backups.get(0);
-        File state = savedState.getFile();
+        File state = getFile();
 
         if (latest.length() != state.length())
             return true;
@@ -128,5 +188,22 @@ class BackupUtil
         catch (IOException e) {
             return true;
         }
+    }
+
+    public BaxConfig getConfig()
+    {
+        if (config == null)
+            config = new BaxConfig(plugin);
+        return config;
+    }
+
+    public File getFile()
+    {
+        return new File(plugin.getDataFolder(), YAML_FILE_PATH);
+    }
+
+    public File getBackupFile()
+    {
+        return new File(plugin.getDataFolder(), "backups");
     }
 }

@@ -140,7 +140,7 @@ public class EventListener implements Listener
             player.sendMessage("");
         }
         else {
-            if (ShopPlugin.getSavedState().getConfig().isLogNotes()) {
+            if (ShopPlugin.getStateFile().getConfig().isLogNotes()) {
                 ShopPlugin.logInfo(String.format("%s selected shop %s", player.getName(), shop.getId().toString()));
             }
             selection.setIsOwner(isOwner);
@@ -249,7 +249,7 @@ public class EventListener implements Listener
             Location shopLoc = s.getLocation();
             Location pLoc = event.getTo();
             if (shopLoc.getWorld() != pl.getWorld() || shopLoc.distanceSquared(pLoc) > Resources.SHOP_RANGE) {
-                if (ShopPlugin.getSavedState().getConfig().isLogNotes()) {
+                if (ShopPlugin.getStateFile().getConfig().isLogNotes()) {
                     ShopPlugin.logInfo(String.format("%s left shop %s", pl.getName(), s.getShop().getId().toString()));
                 }
                 if (s.isOwner()) {
@@ -266,7 +266,7 @@ public class EventListener implements Listener
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerDeath(PlayerDeathEvent event)
     {
-        BaxConfig config = ShopPlugin.getSavedState().getConfig();
+        BaxConfig config = ShopPlugin.getStateFile().getConfig();
         if (!config.isDeathTaxEnabled())
             return;
         if (!config.isStupidDeath(event))

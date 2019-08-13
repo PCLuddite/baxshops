@@ -80,7 +80,7 @@ public final class CmdSave extends BaxShopCommand
     @Override
     public void onCommand(@NotNull ShopCmdActor actor)
     {
-        ShopPlugin.getSavedState().writeToDisk();
+        ShopPlugin.getStateFile().writeToDisk(ShopPlugin.getSavedState());
         actor.getSender().sendMessage("Shops successfully saved");
     }
 }

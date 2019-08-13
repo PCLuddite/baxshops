@@ -19,7 +19,6 @@
 package tbax.baxshops.serialization;
 
 import org.bukkit.Location;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -30,9 +29,7 @@ import tbax.baxshops.serialization.states.State_00300;
 import tbax.baxshops.serialization.states.State_00450;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -41,10 +38,10 @@ import java.util.stream.Collectors;
 
 public final class SavedState
 {
-    static final String YAML_FILE_PATH = "shops.yml";
-    
-    private static final double STATE_VERSION = State_00450.VERSION; // state file format version
+    static final double STATE_VERSION = State_00450.VERSION; // state file format version
+
     private static double loadedState;
+    private final StateFile stateFile;
 
     /**
      * A map of ids map to their shops
@@ -59,10 +56,9 @@ public final class SavedState
     final ShopPlugin plugin;
     final Logger log;
 
-    BaxConfig config;
-
     public SavedState(@NotNull ShopPlugin plugin)
     {
+        stateFile = new StateFile(plugin);
         this.plugin = plugin;
         this.log = plugin.getLogger();
         players.put(StoredPlayer.DUMMY);
@@ -86,7 +82,7 @@ public final class SavedState
 
     public static SavedState readFromDisk(@NotNull ShopPlugin plugin)
     {
-        File stateLocation = new File(plugin.getDataFolder(), YAML_FILE_PATH);
+        File stateLocation = ShopPlugin.getStateFile().getFile();
         if (!stateLocation.exists()) {
             plugin.getLogger().info("YAML file did not exist");
             return new SavedState(plugin);
@@ -117,15 +113,6 @@ public final class SavedState
         return loader.loadState(YamlConfiguration.loadConfiguration(stateLocation));
     }
 
-    /**
-     * Attempts to back up the shops.yml save file.
-     * @return a boolean indicating success
-     */
-    public boolean backup()
-    {
-        return BackupUtil.backup(this);
-    }
-
     public void addShop(BaxShop shop)
     {
         shops.put(shop.getId(), shop);
@@ -139,54 +126,6 @@ public final class SavedState
             return true;
         }
         return false;
-    }
-
-    private void resaveConfig()
-    {
-        if (!config.backup())
-            plugin.getLogger().warning("Could not backup config. Configuration may be lost.");
-        if (config.getStateVersion() != STATE_VERSION)
-            config.getFileConfig().set("StateVersion", STATE_VERSION);
-        config.save();
-    }
-
-    /**
-     * Saves all shops
-     */
-    public void writeToDisk()
-    {
-        if (!backup()) {
-            log.warning("Failed to back up BaxShops");
-        }
-
-        if (config.getStateVersion() != STATE_VERSION || config.saveDefaults()) {
-            resaveConfig();
-        }
-
-        FileConfiguration state = new YamlConfiguration();
-        state.set("shops", new ArrayList<>(shops.values()));
-        state.set("players", new ArrayList<>(players.values()));
-
-        try {
-            File dir = plugin.getDataFolder();
-            if (!dir.exists() && !dir.mkdirs()) {
-                log.severe("Unable to make data folder!");
-            }
-            else {
-                state.save(new File(dir, YAML_FILE_PATH));
-            }
-
-            if (BackupUtil.hasStateChanged(this)) {
-                BackupUtil.deleteOldestBackup(this);
-            }
-            else {
-                BackupUtil.deleteLatestBackup(this);
-            }
-        }
-        catch (IOException e) {
-            log.severe("Save failed");
-            e.printStackTrace();
-        }
     }
 
     public @NotNull StoredPlayer getOfflinePlayer(UUID uuid)
@@ -227,17 +166,10 @@ public final class SavedState
         return players.get(player.getUniqueId());
     }
 
-    public BaxConfig getConfig()
-    {
-        if (config == null)
-            config = new BaxConfig(plugin);
-        return config;
-    }
-
     public void reload()
     {
         log.info("Reloading BaxShops...");
-        writeToDisk();
+        stateFile.writeToDisk(this);
         log.info("Clearing memory...");
 
         shops.clear();
@@ -247,7 +179,6 @@ public final class SavedState
         SavedState savedState = readFromDisk(plugin);
         shops = savedState.shops;
         players = savedState.players;
-        config = savedState.config;
         log.info("BaxShops has finished reloading");
     }
 
@@ -271,15 +202,5 @@ public final class SavedState
     public BaxShop getShop(String shortId)
     {
         return shops.getShopByAbbreviatedId(shortId);
-    }
-
-    public File getFile()
-    {
-        return new File(plugin.getDataFolder(), SavedState.YAML_FILE_PATH);
-    }
-
-    public File getBackupFile()
-    {
-        return new File(plugin.getDataFolder(), "backups");
     }
 }

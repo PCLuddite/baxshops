@@ -34,6 +34,7 @@ import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.*;
 import tbax.baxshops.serialization.ItemNames;
 import tbax.baxshops.serialization.SavedState;
+import tbax.baxshops.serialization.StateFile;
 import tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.*;
@@ -47,6 +48,7 @@ public final class ShopPlugin extends JavaPlugin
     private static Logger log;
     private static SavedState savedState;
     private static String[] RAW_COMMANDS = { "buy", "sell", "restock", "restockall" };
+    private static StateFile stateFile;
 
     /**
      * A map containing each player's currently selected shop and other
@@ -149,7 +151,7 @@ public final class ShopPlugin extends JavaPlugin
      */
     public static void sendNotification(OfflinePlayer player, Notification n)
     {
-        sendNotification(player, n, getSavedState().getConfig().isLogNotes());
+        sendNotification(player, n, stateFile.getConfig().isLogNotes());
     }
 
     /**
@@ -308,14 +310,14 @@ public final class ShopPlugin extends JavaPlugin
     public static void sendInfo(@NotNull CommandSender sender, String message)
     {
         sender.sendMessage(message);
-        if (getSavedState().getConfig().isLogNotes() && sender instanceof Player) {
+        if (stateFile.getConfig().isLogNotes() && sender instanceof Player) {
             logPlayerMessage((Player)sender, message);
         }
     }
     public static void sendInfo(@NotNull CommandSender sender, String[] message)
     {
         sender.sendMessage(message);
-        if (getSavedState().getConfig().isLogNotes() && sender instanceof Player) {
+        if (stateFile.getConfig().isLogNotes() && sender instanceof Player) {
             logPlayerMessage((Player)sender, String.join("\n", message));
         }
     }
@@ -364,6 +366,7 @@ public final class ShopPlugin extends JavaPlugin
     {
         getServer().getPluginManager().registerEvents(new EventListener(), this);
         log = getLogger();
+        stateFile = new StateFile(this);
 
         if (!enableVault()) {
             log.severe("BaxShops could not use this server's economy! Make sure Vault is installed!");
@@ -387,7 +390,11 @@ public final class ShopPlugin extends JavaPlugin
 
         // run an initial save 5 minutes after starting, then a recurring save
         // every 30 minutes after the first save
-        this.getServer().getScheduler().scheduleSyncRepeatingTask(this, savedState::writeToDisk, 6000L, 36000L);
+        this.getServer().getScheduler().scheduleSyncRepeatingTask(this,
+                () -> stateFile.writeToDisk(savedState),
+                6000L,
+                36000L
+        );
         log.info("BaxShops has loaded successfully!");
     }
 
@@ -416,7 +423,7 @@ public final class ShopPlugin extends JavaPlugin
     public void onDisable()
     {
         log.info("Saving BaxShops...");
-        savedState.writeToDisk();
+        stateFile.writeToDisk(savedState);
     }
 
     @Override
@@ -483,5 +490,10 @@ public final class ShopPlugin extends JavaPlugin
 
         econ = rsp.getProvider();
         return true;
+    }
+
+    public static StateFile getStateFile()
+    {
+        return stateFile;
     }
 }

@@ -79,7 +79,7 @@ public final class CmdBackup extends BaxShopCommand
     @Override
     public void onCommand(@NotNull ShopCmdActor actor) // tested OK 3-14-19
     {
-        if (ShopPlugin.getSavedState().backup()) {
+        if (ShopPlugin.getStateFile().backup()) {
             actor.sendMessage("Shops successfully backed up shops.yml");
         }
         else {

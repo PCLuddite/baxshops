@@ -21,6 +21,7 @@ package tbax.baxshops.serialization;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.serialization.states.State_00300;
@@ -42,9 +43,9 @@ public final class BaxConfig
     private final String[] DEFAULT_DEATH_TAX_DEATHS = new String[] { "FALL", "DROWNING", "LAVA", "CONTACT", "FIRE", "FIRE_TICK", "SUFFOCATION" };
     private final int DEFAULT_DEATH_TAX_FOOD_LEVEL = 8;
 
-    private final ShopPlugin plugin;
+    private final JavaPlugin plugin;
 
-    public BaxConfig(ShopPlugin plugin)
+    public BaxConfig(JavaPlugin plugin)
     {
         this.plugin = plugin;
     }

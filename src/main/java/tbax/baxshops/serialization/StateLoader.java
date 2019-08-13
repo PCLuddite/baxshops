@@ -22,7 +22,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.BaxShop;
 import tbax.baxshops.ShopPlugin;
-import tbax.baxshops.notification.NoteSet;
 import tbax.baxshops.notification.Notification;
 
 import java.lang.reflect.Field;
@@ -34,11 +33,6 @@ public interface StateLoader
     @NotNull Collection<StoredPlayer> buildPlayers(@NotNull FileConfiguration state);
 
     @NotNull ShopPlugin getPlugin();
-
-    default @NotNull BaxConfig loadConfig(@NotNull FileConfiguration config)
-    {
-        return new BaxConfig(getPlugin());
-    }
 
     default SavedState loadState(@NotNull FileConfiguration state)
     {
@@ -60,7 +54,6 @@ public interface StateLoader
             savedState.shops.put(shop.getId(), shop);
         }
 
-        savedState.config = loadConfig(getPlugin().getConfig());
         return savedState;
     }
 
@@ -75,11 +68,6 @@ public interface StateLoader
             SerializationException.throwStateLoaderException(e);
         }
         return ver;
-    }
-
-    default void setConfig(SavedState savedState, BaxConfig baxConfig)
-    {
-        savedState.config = baxConfig;
     }
 
     default void addPlayer(SavedState savedState, StoredPlayer storedPlayer)

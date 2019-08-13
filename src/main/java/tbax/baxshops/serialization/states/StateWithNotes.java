@@ -24,6 +24,7 @@ import tbax.baxshops.BaxShop;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.notification.NoteSet;
 import tbax.baxshops.notification.Notification;
+import tbax.baxshops.serialization.BaxConfig;
 import tbax.baxshops.serialization.SavedState;
 import tbax.baxshops.serialization.StateLoader;
 import tbax.baxshops.serialization.StoredPlayer;
@@ -34,6 +35,10 @@ import java.util.Deque;
 @Deprecated
 public abstract class StateWithNotes implements StateLoader
 {
+    public void loadConfig(@NotNull BaxConfig config)
+    {
+    }
+
     public abstract  @NotNull Collection<NoteSet> buildNotifications(@NotNull FileConfiguration state);
 
     @Override
@@ -64,7 +69,7 @@ public abstract class StateWithNotes implements StateLoader
             }
         }
 
-        setConfig(savedState, loadConfig(getPlugin().getConfig()));
+        loadConfig(ShopPlugin.getStateFile().getConfig());
         return savedState;
     }
 }
