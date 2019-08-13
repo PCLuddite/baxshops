@@ -48,7 +48,7 @@ public final class StateFile
             plugin.getLogger().warning("Failed to back up BaxShops");
         }
 
-        if (config.getStateVersion() != SavedState.STATE_VERSION || config.saveDefaults()) {
+        if (getConfig().getStateVersion() != SavedState.STATE_VERSION || getConfig().saveDefaults()) {
             resaveConfig();
         }
 
