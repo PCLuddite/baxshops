@@ -20,8 +20,17 @@
                     <source>8</source>
                     <target>8</target>
                 </configuration>
-             </plugin>
+            </plugin>
         </plugins>
+        <resources>
+            <resource>
+               <directory>include</directory>
+               <includes>
+                   <include>**/*.yml</include>
+                   <include>**/*.txt</include>
+               </includes>
+            </resource>
+        </resources>
     </build>
     <repositories>
         <repository>
