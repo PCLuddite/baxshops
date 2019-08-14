@@ -30,7 +30,7 @@ import tbax.baxshops.serialization.*;
 import java.util.*;
 
 @Deprecated
-public class State_00300 extends StateWithNotes
+public class State_00300 extends LegacyState
 {
     public static final double VERSION = 3.0;
     private static Map<Long, UUID> legacyIds = new HashMap<>();

@@ -33,7 +33,7 @@ import java.util.Collection;
 import java.util.Deque;
 
 @Deprecated
-public abstract class StateWithNotes implements StateLoader
+public abstract class LegacyState implements StateLoader
 {
     public void loadConfig(@NotNull BaxConfig config)
     {

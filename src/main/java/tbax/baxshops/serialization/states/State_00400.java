@@ -30,7 +30,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Deprecated
-public class State_00400 extends StateWithNotes
+public class State_00400 extends LegacyState
 {
     public static final double VERSION = 4.0;
     private ShopPlugin plugin;

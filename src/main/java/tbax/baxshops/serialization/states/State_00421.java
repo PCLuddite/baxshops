@@ -29,7 +29,7 @@ import tbax.baxshops.serialization.StoredPlayer;
 import java.util.*;
 
 @Deprecated
-public class State_00421 extends StateWithNotes
+public class State_00421 extends LegacyState
 {
     public static final double VERSION = 4.21;
     private ShopPlugin plugin;
