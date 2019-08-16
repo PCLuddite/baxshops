@@ -86,10 +86,10 @@ public class EventListener implements Listener
                     throw new CommandErrorException("You don't have permission to remove this shop.");
                 }
             }
-            Location above = event.getBlock().getLocation();
-            above.setY(above.getY() + 1);
-            if (ShopPlugin.getShop(above) != null) {
-                throw new CommandWarningException("You cannot break this block because there is a shop above it.");
+            for (Block block : BaxShop.getSignOnBlock(event.getBlock())) {
+                if (ShopPlugin.getShop(block.getLocation()) != null) {
+                    throw new CommandErrorException("You cannot break this block because there is a shop on it.");
+                }
             }
         }
         catch (PrematureAbortException e) {
@@ -166,16 +166,18 @@ public class EventListener implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onExplosion(EntityExplodeEvent event)
     {
-        for (Block b : event.blockList()) {
-            Location loc = b.getLocation();
-            if (ShopPlugin.getShop(loc) != null) {
-                event.setCancelled(true);
-                return;
+        for (int i = event.blockList().size() - 1; i >= 0; --i) {
+            Block b = event.blockList().get(i);
+            if (ShopPlugin.getShop(b.getLocation()) != null) {
+                event.blockList().remove(b);
             }
-            loc.setY(loc.getY() + 1);
-            if (ShopPlugin.getShop(loc) != null) {
-                event.setCancelled(true);
-                return;
+            else {
+                for (Block block : BaxShop.getSignOnBlock(b)) {
+                    if (ShopPlugin.getShop(block.getLocation()) != null) {
+                        event.blockList().remove(b);
+                        break;
+                    }
+                }
             }
         }
     }
