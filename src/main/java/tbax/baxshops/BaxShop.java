@@ -25,6 +25,9 @@ import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.Attachable;
+import org.bukkit.block.data.Rotatable;
+import org.bukkit.block.data.type.WallSign;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
@@ -529,11 +532,20 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
             for (int y = -1; y <= 1; ++y) {
                 for(int z = -1; z <= 1; ++z) {
                     Location l = block.getLocation().add(x, y, z);
-                    if (isSign(l.getBlock().getType())) {
-                        org.bukkit.material.Sign sign = (org.bukkit.material.Sign)l.getBlock().getState().getData();
-                        Block face = l.getBlock().getRelative(sign.getAttachedFace());
-                        if (face.getLocation().equals(block.getLocation())) {
-                            signs.add(l.getBlock());
+                    Block curr = l.getBlock();
+                    if (isSign(curr.getType())) {
+                        if (curr.getBlockData() instanceof WallSign) {
+                            WallSign sign = (WallSign)curr.getBlockData();
+                            Block attached = curr.getRelative(sign.getFacing().getOppositeFace());
+                            if (attached.getLocation().equals(block.getLocation())) {
+                                signs.add(curr);
+                            }
+                        }
+                        else {
+                            Location below = l.subtract(0, 1, 0);
+                            if (below.equals(block.getLocation())) {
+                                signs.add(curr);
+                            }
                         }
                     }
                 }
