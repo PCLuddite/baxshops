@@ -29,6 +29,7 @@ public class ShopMap implements Map<UUID, BaxShop>
 {
     private final Map<UUID, BaxShop> shops = new HashMap<>();
     private final Map<Location, UUID> locations = new HashMap<>();
+    private final Map<String, UUID> shortId2s = new HashMap<>();
     private final Map<String, UUID> shortIds = new HashMap<>();
 
     public ShopMap()
@@ -50,9 +51,18 @@ public class ShopMap implements Map<UUID, BaxShop>
         return shops.get(id);
     }
 
-    public @Nullable BaxShop getShopByAbbreviatedId(@NotNull String abbreviatedId)
+    @Deprecated
+    public @Nullable BaxShop getShopByShortId(@NotNull String shortId)
     {
-        UUID id = shortIds.get(abbreviatedId);
+        UUID id = shortIds.get(shortId);
+        if (id == null)
+            return null;
+        return shops.get(id);
+    }
+
+    public @Nullable BaxShop getShopByShortId2(@NotNull String shortId2)
+    {
+        UUID id = shortId2s.get(shortId2);
         if (id == null)
             return null;
         return shops.get(id);
@@ -100,7 +110,10 @@ public class ShopMap implements Map<UUID, BaxShop>
         for (Location location : value.getLocations()) {
             locations.put(location, key);
         }
-        shortIds.put(getShortId(value), value.getId());
+        shortId2s.put(getShortId(value), value.getId());
+        if (value.getShortId() != null) {
+            shortIds.put(value.getShortId(), value.getId());
+        }
         return shops.put(key, value);
     }
 
@@ -174,13 +187,14 @@ public class ShopMap implements Map<UUID, BaxShop>
 
     private String getShortId(BaxShop shop)
     {
-        String id = shop.getShortId();
-        while (shortIds.containsKey(id)) {
+        UUID longId;
+        String id = shop.getShortId2();
+        while ((longId = shortId2s.get(id)) != null && !longId.equals(shop.getId())) {
             id = UUID.randomUUID().toString();
             int n = id.lastIndexOf('-') + 1;
             if (n < id.length())
-                shop.setShortId(id);
-            id = shop.getShortId();
+                shop.setShortId2(id.substring(n));
+            id = shop.getShortId2();
         }
         return id;
     }

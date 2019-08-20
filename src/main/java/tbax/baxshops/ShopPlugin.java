@@ -32,10 +32,7 @@ import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.commands.*;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.*;
-import tbax.baxshops.serialization.ItemNames;
-import tbax.baxshops.serialization.SavedState;
-import tbax.baxshops.serialization.StateFile;
-import tbax.baxshops.serialization.StoredPlayer;
+import tbax.baxshops.serialization.*;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -225,9 +222,15 @@ public final class ShopPlugin extends JavaPlugin
         return savedState.getShop(shopId);
     }
 
-    public static BaxShop getShop(String shortId)
+    public static BaxShop getShopByShortId2(String shortId2)
     {
-        return savedState.getShop(shortId);
+        return savedState.getShopByShortId2(shortId2);
+    }
+
+    @Deprecated
+    public static BaxShop getShopByShortId(String shortId)
+    {
+        return savedState.getShopByShortId(shortId);
     }
 
     public static @NotNull List<StoredPlayer> getOfflinePlayer(String playerName)

@@ -108,7 +108,13 @@ public final class UpgradeableSerialization
 
     public static void deserialize(UpgradeableSerializable obj, Map<String, Object> args)
     {
-        SafeMap map = new SafeMap(args);
+        SafeMap map;
+        if (args instanceof SafeMap) {
+            map = (SafeMap)args;
+        }
+        else {
+            map = new SafeMap(args);
+        }
         for (Field field : getFields(obj.getClass())) {
             SerialField serialField = new SerialField(obj.getClass(), field);
             try {

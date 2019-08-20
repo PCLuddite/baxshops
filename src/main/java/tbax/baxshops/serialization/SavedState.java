@@ -199,8 +199,14 @@ public final class SavedState
                 .collect(Collectors.toList());
     }
 
-    public BaxShop getShop(String shortId)
+    @Deprecated
+    public BaxShop getShopByShortId(String shortId)
     {
-        return shops.getShopByAbbreviatedId(shortId);
+        return shops.getShopByShortId(shortId);
+    }
+
+    public BaxShop getShopByShortId2(String shortId2)
+    {
+        return shops.getShopByShortId2(shortId2);
     }
 }

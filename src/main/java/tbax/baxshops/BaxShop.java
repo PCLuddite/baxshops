@@ -25,13 +25,14 @@ import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
-import org.bukkit.block.data.Attachable;
-import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
-import tbax.baxshops.serialization.*;
+import tbax.baxshops.serialization.SafeMap;
+import tbax.baxshops.serialization.StoredPlayer;
+import tbax.baxshops.serialization.UpgradeableSerializable;
+import tbax.baxshops.serialization.UpgradeableSerialization;
 import tbax.baxshops.serialization.annotations.DoNotSerialize;
 import tbax.baxshops.serialization.annotations.SerializeMethod;
 import tbax.baxshops.serialization.states.State_00300;
@@ -48,7 +49,10 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     public static final BaxShop DUMMY_SHOP = new BaxShop(DUMMY_UUID);
     
     private UUID id = UUID.randomUUID();
+
+    @Deprecated
     private String shortId = null;
+    private String shortId2 = null;
 
     @SerializeMethod(getter = "getOwner")
     private UUID owner;
@@ -63,14 +67,12 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     private BaxShop(UUID uuid)
     {
         id = uuid;
-        shortId = createShortId();
         owner = StoredPlayer.DUMMY_UUID;
     }
 
     public BaxShop(Collection<? extends Location> locations)
     {
         id = UUID.randomUUID();
-        shortId = createShortId();
         owner = StoredPlayer.DUMMY_UUID;
         this.locations.addAll(locations);
     }
@@ -89,6 +91,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     {
         id = shop.id;
         shortId = shop.shortId;
+        shortId2 = shop.shortId2;
         owner = shop.owner;
         legacyId = shop.legacyId;
         locations.addAll(shop.locations);
@@ -102,7 +105,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
         String name = map.getString("owner", StoredPlayer.DUMMY_NAME);
         id = UUID.randomUUID();
         legacyId = map.getLong("id");
-        shortId = createShortId();
+        shortId2 = createShortId();
         owner = State_00300.getPlayerId(name);
         flags = State_00300.flagMapToFlag(map);
         inventory.addAll(map.getList("inventory"));
@@ -113,7 +116,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     public void upgrade00400(@NotNull SafeMap map)
     {
         id =  map.getUUID("id", UUID.randomUUID());
-        shortId = createShortId();
+        shortId2 = createShortId();
         owner = map.getUUID("owner", StoredPlayer.ERROR_UUID);
         flags = State_00420.convertFlag(map.getInteger("flags"));
         inventory.addAll(map.getList("inventory"));
@@ -124,11 +127,17 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     public void upgrade00420(@NotNull SafeMap map)
     {
         id =  map.getUUID("id", UUID.randomUUID());
-        shortId = createShortId();
+        shortId2 = createShortId();
         owner = map.getUUID("owner", StoredPlayer.ERROR_UUID);
         flags = map.getInteger("flags");
         inventory.addAll(map.getList("inventory"));
         locations.addAll(map.getList("locations"));
+    }
+
+    @Override
+    public void upgrade00450(@NotNull SafeMap map)
+    {
+        UpgradeableSerialization.deserialize(this, map);
     }
 
     public UUID getId()
@@ -142,14 +151,22 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
         return legacyId;
     }
 
+    @Deprecated
     public String getShortId()
     {
         return shortId;
     }
 
-    public void setShortId(String shortId)
+    public String getShortId2()
     {
-        this.shortId = shortId;
+        if (shortId2 == null)
+            shortId2 = createShortId();
+        return shortId2;
+    }
+
+    public void setShortId2(String shortId2)
+    {
+        this.shortId2 = shortId2;
     }
 
     private String createShortId()
@@ -311,7 +328,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
         for(String line : getSignText(loc)) {
             lore.add(ChatColor.BLUE + line);
         }
-        lore.add(ChatColor.GRAY + "ID: " + getShortId());
+        lore.add(ChatColor.GRAY + "ID: " + getShortId2());
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.WHITE + getOwner().getName() + "'s shop");
         meta.setLore(lore);
@@ -341,14 +358,17 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
 
     public static BaxShop fromItem(ItemStack item)
     {
-        String shortId = item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1).substring((ChatColor.GRAY + "ID: ").length());
-        BaxShop shop = ShopPlugin.getShop(shortId);
+        String id = item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1).substring((ChatColor.GRAY + "ID: ").length());
+        BaxShop shop = ShopPlugin.getShopByShortId2(id); // try short id2
         if (shop == null) {
-            try {
-                return ShopPlugin.getShop(UUID.fromString(shortId));
-            }
-            catch (IllegalArgumentException e) {
-                return  null;
+            shop = ShopPlugin.getShopByShortId(id); // try short id
+            if (shop == null) {
+                try {
+                    return ShopPlugin.getShop(UUID.fromString(id)); // finally try full id
+                }
+                catch (IllegalArgumentException e) {
+                    return null;
+                }
             }
         }
         return shop;
