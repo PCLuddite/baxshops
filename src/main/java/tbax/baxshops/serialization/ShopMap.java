@@ -144,6 +144,7 @@ public class ShopMap implements Map<UUID, BaxShop>
         shops.clear();
         locations.clear();
         shortIds.clear();
+        shortId2s.clear();
     }
 
     @Override
