@@ -126,6 +126,12 @@ public class ShopMap implements Map<UUID, BaxShop>
             for (Location location : shop.getLocations()) {
                 locations.remove(location);
             }
+            if (shop.getShortId2() != null) {
+                shortId2s.remove(shop.getShortId2());
+            }
+            if (shop.getShortId() != null) {
+                shortIds.remove(shop.getShortId());
+            }
         }
         return shop;
     }
