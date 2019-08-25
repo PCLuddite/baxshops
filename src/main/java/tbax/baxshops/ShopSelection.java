@@ -29,6 +29,8 @@ import org.bukkit.command.CommandSender;
  */
 public final class ShopSelection
 {
+    public static final int ITEMS_PER_PAGE = 7;
+    
     /**
      * The selected shop
      */
@@ -97,7 +99,7 @@ public final class ShopSelection
             sender.sendMessage(Format.header("Empty"));
             sender.sendMessage("");
             sender.sendMessage("This shop has no items");
-            int stop = BaxShop.ITEMS_PER_PAGE - 2;
+            int stop = ITEMS_PER_PAGE - 2;
             if (owner) {
                 sender.sendMessage("Use /shop add to add items");
                 stop--;
@@ -108,8 +110,8 @@ public final class ShopSelection
             return;
         }
         sender.sendMessage(Format.header(String.format("Showing page %d of %d", page + 1, pages)));
-        int i = page * BaxShop.ITEMS_PER_PAGE,
-                stop = (page + 1) * BaxShop.ITEMS_PER_PAGE,
+        int i = page * ITEMS_PER_PAGE,
+                stop = (page + 1) * ITEMS_PER_PAGE,
                 max = Math.min(stop, shop.size());
         for (; i < max; i++) {
             sender.sendMessage(shop.getEntry(i).toString(i + 1, shop.hasFlagInfinite()));

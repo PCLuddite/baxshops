@@ -43,8 +43,6 @@ import java.util.stream.Collectors;
 
 public final class BaxShop implements UpgradeableSerializable, Collection<BaxEntry>
 {
-    public static final int ITEMS_PER_PAGE = 7;
-
     public static final UUID DUMMY_UUID = UUID.fromString("8f289a15-cf9f-4266-b368-429cb31780ae");
     public static final BaxShop DUMMY_SHOP = new BaxShop(DUMMY_UUID);
     
@@ -217,7 +215,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
 
     public int getPages()
     {
-        return (int)Math.ceil((double) inventory.size() / ITEMS_PER_PAGE);
+        return (int)Math.ceil((double) inventory.size() / ShopSelection.ITEMS_PER_PAGE);
     }
 
     @Override
