@@ -20,14 +20,18 @@
 package tbax.baxshops.serialization;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.block.banner.Pattern;
+import org.bukkit.block.banner.PatternType;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.*;
-import tbax.baxshops.errors.CommandErrorException;
-import tbax.baxshops.errors.PrematureAbortException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -141,6 +145,9 @@ public final class ItemNames
             if (enchants != null)
                 return EnchantMap.fullListString(enchants);
         }
+        else if (isOminousBanner(item)) {
+            return ChatColor.GOLD + "Ominous Banner";
+        }
 
         item = item.clone();
         ItemMeta meta = item.getItemMeta();
@@ -160,6 +167,28 @@ public final class ItemNames
             ShopPlugin.logWarning("Could not get item name for " + item.getType());
             return item.getType().toString();
         }
+    }
+
+    public static boolean isOminousBanner(@NotNull ItemStack stack)
+    {
+        if (stack.getType() != Material.WHITE_BANNER)
+            return false;
+        BannerMeta bannerMeta = (BannerMeta)stack.getItemMeta();
+        return bannerMeta.getPatterns().containsAll(ominousPatterns());
+    }
+
+    private static List<Pattern> ominousPatterns()
+    {
+        Pattern[] patterns = new Pattern[8];
+        patterns[0] = new Pattern(DyeColor.CYAN, PatternType.RHOMBUS_MIDDLE);
+        patterns[1] = new Pattern(DyeColor.LIGHT_GRAY, PatternType.STRIPE_BOTTOM);
+        patterns[2] = new Pattern(DyeColor.GRAY, PatternType.STRIPE_CENTER);
+        patterns[3] = new Pattern(DyeColor.LIGHT_GRAY, PatternType.BORDER);
+        patterns[4] = new Pattern(DyeColor.BLACK, PatternType.STRIPE_MIDDLE);
+        patterns[5] = new Pattern(DyeColor.LIGHT_GRAY, PatternType.HALF_HORIZONTAL);
+        patterns[6] = new Pattern(DyeColor.LIGHT_GRAY, PatternType.CIRCLE_MIDDLE);
+        patterns[7] = new Pattern(DyeColor.BLACK, PatternType.BORDER);
+        return Arrays.asList(patterns);
     }
     
     public static String getEnchantName(Enchantment enchant)
