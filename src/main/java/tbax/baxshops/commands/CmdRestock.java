@@ -26,7 +26,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.items.ItemNames;
+import tbax.baxshops.items.ItemUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -125,12 +125,12 @@ public final class CmdRestock extends BaxShopCommand
             entry.add(takenItem.getAmount());
             if (!(qty.isAll() || qty.isMost()) && takenItem.getAmount() < qty.getQuantity()) {
                 actor.sendMessage("Could only restock with " + ChatColor.RED + "%d %s" + ChatColor.RESET + ". The shop now has %s.",
-                                    takenItem.getAmount(), ItemNames.getName(takenItem), Format.number(entry.getAmount())
+                                    takenItem.getAmount(), ItemUtil.getName(takenItem), Format.number(entry.getAmount())
                 );
             }
             else {
                 actor.sendMessage("Restocked with %s in inventory. The shop now has %s.",
-                                Format.itemName(takenItem.getAmount(), ItemNames.getName(entry)), Format.number(entry.getAmount())
+                                Format.itemName(takenItem.getAmount(), ItemUtil.getName(entry)), Format.number(entry.getAmount())
                 );
             }
         }
@@ -144,7 +144,7 @@ public final class CmdRestock extends BaxShopCommand
                         BaxEntry shopEntry = actor.getShop().find(takenEntry);
                         assert shopEntry != null;
                         shopEntry.add(takenEntry.getAmount());
-                        actor.sendMessage("Restocked %s.", Format.itemName(takenEntry.getAmount(), ItemNames.getName(takenEntry)));
+                        actor.sendMessage("Restocked %s.", Format.itemName(takenEntry.getAmount(), ItemUtil.getName(takenEntry)));
                     }
                 }
             }

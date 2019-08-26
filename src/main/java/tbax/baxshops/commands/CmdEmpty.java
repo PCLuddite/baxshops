@@ -24,7 +24,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.items.ItemNames;
+import tbax.baxshops.items.ItemUtil;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -101,10 +101,10 @@ public final class CmdEmpty extends BaxShopCommand
             entry.subtract(stack.getAmount() - overflow);
             if (overflow > 0) {
                 if (stack.getAmount() > overflow) {
-                    actor.exitMessage(Resources.SOME_ROOM, stack.getAmount() - overflow, ItemNames.getName(stack));
+                    actor.exitMessage(Resources.SOME_ROOM, stack.getAmount() - overflow, ItemUtil.getName(stack));
                 }
                 else {
-                    actor.exitError(Resources.NO_ROOM_FOR_ITEM, stack.getAmount(), ItemNames.getName(stack));
+                    actor.exitError(Resources.NO_ROOM_FOR_ITEM, stack.getAmount(), ItemUtil.getName(stack));
                 }
             }
             else {

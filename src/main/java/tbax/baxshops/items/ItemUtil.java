@@ -41,7 +41,7 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 @SuppressWarnings("JavaDoc")
-public final class ItemNames
+public final class ItemUtil
 {
     private static final String MINECRAFT_VERSION;
     private static final Method AS_NMS_COPY;
@@ -75,7 +75,7 @@ public final class ItemNames
      */
     private static final Map<Enchantment, Enchantable> enchants = new HashMap<>();
 
-    private ItemNames()
+    private ItemUtil()
     {
     }
     
@@ -129,7 +129,7 @@ public final class ItemNames
      */
     public static String getName(BaxEntry entry)
     {
-        return ItemNames.getName(entry.getItemStack());
+        return ItemUtil.getName(entry.getItemStack());
     }
 
     /**

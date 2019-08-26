@@ -26,7 +26,7 @@ import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
 import tbax.baxshops.notification.SaleRequest;
-import tbax.baxshops.items.ItemNames;
+import tbax.baxshops.items.ItemUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -151,7 +151,7 @@ public final class CmdSell extends BaxShopCommand
         BaxShop shop = actor.getShop();
         assert shop != null;
 
-        String name = ItemNames.getName(entry.getItemStack());
+        String name = ItemUtil.getName(entry.getItemStack());
         double price = MathUtil.multiply(entry.getAmount(), entry.getRefundPrice());
         if (shop.hasFlagSellRequests()) {
             SaleRequest request = new SaleRequest(shop.getId(), shop.getOwner(), actor.getPlayer(), entry);

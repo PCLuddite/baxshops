@@ -31,7 +31,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.commands.*;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.items.ItemNames;
+import tbax.baxshops.items.ItemUtil;
 import tbax.baxshops.notification.*;
 import tbax.baxshops.serialization.*;
 
@@ -386,8 +386,8 @@ public final class ShopPlugin extends JavaPlugin
 
         loadConfigurationSerializable();
 
-        ItemNames.loadDamageable(this);
-        ItemNames.loadEnchants(this);
+        ItemUtil.loadDamageable(this);
+        ItemUtil.loadEnchants(this);
 
         saveDefaultConfig();
         savedState = SavedState.readFromDisk(this);

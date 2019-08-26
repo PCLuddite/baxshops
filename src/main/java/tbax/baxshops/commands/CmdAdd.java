@@ -23,7 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.items.ItemNames;
+import tbax.baxshops.items.ItemUtil;
 
 public final class CmdAdd extends BaxShopCommand
 {
@@ -114,7 +114,7 @@ public final class CmdAdd extends BaxShopCommand
         newEntry.setRetailPrice(retailAmount);
         newEntry.setRefundPrice(refundAmount);
         actor.getShop().add(newEntry);
-        actor.sendMessage("A new entry for %s was added to the shop.", Format.itemName(newEntry.getAmount(), ItemNames.getName(newEntry)));
+        actor.sendMessage("A new entry for %s was added to the shop.", Format.itemName(newEntry.getAmount(), ItemUtil.getName(newEntry)));
         if (!actor.getShop().hasFlagInfinite()) {
             actor.getPlayer().getInventory().setItemInMainHand(null);
         }

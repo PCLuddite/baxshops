@@ -30,7 +30,7 @@ import tbax.baxshops.errors.CommandWarningException;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.DeletedShopClaim;
 import tbax.baxshops.notification.SaleClaim;
-import tbax.baxshops.items.ItemNames;
+import tbax.baxshops.items.ItemUtil;
 import tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.ArrayList;
@@ -72,7 +72,7 @@ public final class PlayerUtil
     {
         int space = getSpaceForItem(player, item);
         if (space == 0 || (allOrNothing && space < item.getAmount())) {
-            throw new CommandErrorException(String.format(Resources.NO_ROOM_FOR_ITEM, item.getAmount(), ItemNames.getName(item)));
+            throw new CommandErrorException(String.format(Resources.NO_ROOM_FOR_ITEM, item.getAmount(), ItemUtil.getName(item)));
         }
 
         int overflow = Math.max(item.getAmount() - space, 0);

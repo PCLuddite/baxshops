@@ -25,7 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
-import tbax.baxshops.items.ItemNames;
+import tbax.baxshops.items.ItemUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -134,13 +134,13 @@ public final class CmdTake extends BaxShopCommand
         int overflow = actor.giveItem(stack);
         if (overflow > 0) {
             entry.add(overflow);
-            actor.sendMessage(Resources.SOME_ROOM, stack.getAmount() - overflow, ItemNames.getName(stack));
+            actor.sendMessage(Resources.SOME_ROOM, stack.getAmount() - overflow, ItemUtil.getName(stack));
         }
         else {
             actor.sendMessage("%s %s added to your inventory.",
                 Format.itemName(
                     stack.getAmount(),
-                    ItemNames.getName(stack)),
+                    ItemUtil.getName(stack)),
                 amt.getQuantity() == 1 ? "was" : "were"
             );
         }

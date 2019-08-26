@@ -24,7 +24,7 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.items.ItemNames;
+import tbax.baxshops.items.ItemUtil;
 
 import java.util.List;
 
@@ -109,10 +109,10 @@ public final class CmdSet extends BaxShopCommand
         entry.setRefundPrice(refundAmount);
 
         if (shop.hasFlagInfinite()) {
-            actor.sendMessage("The price for %s was set.", Format.itemName(ItemNames.getName(entry)));
+            actor.sendMessage("The price for %s was set.", Format.itemName(ItemUtil.getName(entry)));
         }
         else {
-            actor.sendMessage("The price for %s was set.", Format.itemName(entry.getAmount(), ItemNames.getName(entry)));
+            actor.sendMessage("The price for %s was set.", Format.itemName(entry.getAmount(), ItemUtil.getName(entry)));
         }
     }
 

@@ -38,7 +38,7 @@ import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.CommandMessageException;
 import tbax.baxshops.errors.CommandWarningException;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.items.ItemNames;
+import tbax.baxshops.items.ItemUtil;
 import tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.*;
@@ -347,7 +347,7 @@ public final class ShopCmdActor implements CommandSender
             entry = getShop().getEntry(Integer.parseInt(arg) - 1);
         }
         catch (NumberFormatException e) {
-            List<BaxEntry> entries = ItemNames.getItemFromAlias(arg, getShop());
+            List<BaxEntry> entries = ItemUtil.getItemFromAlias(arg, getShop());
             if (entries.size() == 0) {
                 throw new CommandErrorException("No item with that name could be found");
             }

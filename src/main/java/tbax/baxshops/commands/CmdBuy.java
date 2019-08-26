@@ -26,7 +26,7 @@ import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.BuyNotification;
 import tbax.baxshops.notification.BuyRequest;
-import tbax.baxshops.items.ItemNames;
+import tbax.baxshops.items.ItemUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -131,7 +131,7 @@ public final class CmdBuy extends BaxShopCommand
             actor.exitError(Resources.NO_SUPPLIES);
         }
 
-        String itemName = ItemNames.getName(entry);
+        String itemName = ItemUtil.getName(entry);
         double price = MathUtil.multiply(amount.getQuantity(), entry.getRetailPrice());
 
         if (!ShopPlugin.getEconomy().has(actor.getPlayer(), price)) {

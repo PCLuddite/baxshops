@@ -28,7 +28,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
 import org.jetbrains.annotations.NotNull;
-import tbax.baxshops.items.ItemNames;
+import tbax.baxshops.items.ItemUtil;
 import tbax.baxshops.serialization.UpgradeableSerialization;
 import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.UpgradeableSerializable;
@@ -217,12 +217,12 @@ public final class BaxEntry implements UpgradeableSerializable
     
     public int getDamagePercent()
     {
-        return (int)Math.round((getDurability() * 100d) / ItemNames.getMaxDamage(stack.getType()));
+        return (int)Math.round((getDurability() * 100d) / ItemUtil.getMaxDamage(stack.getType()));
     }
     
     public void setDamagePercent(int pct)
     {
-        double damage = (pct / 100d) * ItemNames.getMaxDamage(stack.getType());
+        double damage = (pct / 100d) * ItemUtil.getMaxDamage(stack.getType());
         if (stack.getItemMeta() instanceof Damageable) {
             setDurability((int)damage);
         }
@@ -230,7 +230,7 @@ public final class BaxEntry implements UpgradeableSerializable
 
     public @NotNull String getName()
     {
-        return ItemNames.getName(this);
+        return ItemUtil.getName(this);
     }
 
     public @NotNull String getFormattedName()
@@ -278,9 +278,9 @@ public final class BaxEntry implements UpgradeableSerializable
         StringBuilder info = new StringBuilder();
         info.append(Format.header("BaxEntry Information"));
         info.append('\n');
-        info.append("Name: ").append(Format.itemName(ItemNames.getName(this))).append('\n');
+        info.append("Name: ").append(Format.itemName(ItemUtil.getName(this))).append('\n');
         info.append("Material: ").append(Format.command(stack.getType().toString())).append('\n');
-        if (ItemNames.isDamageable(stack.getType())) {
+        if (ItemUtil.isDamageable(stack.getType())) {
             info.append("Damage: ").append(ChatColor.YELLOW).append(getDamagePercent()).append('%').append(ChatColor.RESET).append('\n');
         }
         if (stack.hasItemMeta()) {
@@ -312,17 +312,17 @@ public final class BaxEntry implements UpgradeableSerializable
     {
         StringBuilder name;
         if(stack.getType() == Material.ENCHANTED_BOOK && EnchantMap.isEnchanted(stack)) {
-            name = new StringBuilder(Format.enchantments(ItemNames.getName(this)));
+            name = new StringBuilder(Format.enchantments(ItemUtil.getName(this)));
         }
         else {
-            name = new StringBuilder(Format.listname(ItemNames.getName(this)));
+            name = new StringBuilder(Format.listname(ItemUtil.getName(this)));
         }
         String potionInfo = getPotionInfo(stack);
         if (!potionInfo.equals("")) {
             name.append(" ").append(potionInfo);
         }
         
-        if (ItemNames.isDamageable(stack.getType()) && getDurability() > 0) {
+        if (ItemUtil.isDamageable(stack.getType()) && getDurability() > 0) {
             if (infinite || getAmount() > 0) {
                 name.append(ChatColor.YELLOW);
             }
@@ -400,7 +400,7 @@ public final class BaxEntry implements UpgradeableSerializable
 
     public String getAlias()
     {
-        String name = ItemNames.getName(this).toLowerCase();
+        String name = ItemUtil.getName(this).toLowerCase();
         return name.replace(' ', '_');
     }
 }

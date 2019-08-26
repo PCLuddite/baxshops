@@ -23,7 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tbax.baxshops.items.ItemNames;
+import tbax.baxshops.items.ItemUtil;
 
 import java.util.Collection;
 import java.util.List;
@@ -73,7 +73,7 @@ public final class EnchantMap implements Map<Enchantment, Integer>
     public static @NotNull String abbreviatedListString(@NotNull Map<Enchantment, Integer> enchants)
     {
         List<String> names = enchants.entrySet().stream()
-            .map(e -> ItemNames.getEnchantName(e.getKey()).substring(0, 4).toUpperCase() + e.getValue())
+            .map(e -> ItemUtil.getEnchantName(e.getKey()).substring(0, 4).toUpperCase() + e.getValue())
             .collect(Collectors.toList());
         return String.join(",", names);
     }
@@ -90,7 +90,7 @@ public final class EnchantMap implements Map<Enchantment, Integer>
     public static String fullListString(@NotNull Map<Enchantment, Integer> enchants)
     {
         List<String> names = enchants.entrySet().stream()
-            .map(e -> ItemNames.getEnchantable(e.getKey()).toString(e.getValue()))
+            .map(e -> ItemUtil.getEnchantable(e.getKey()).toString(e.getValue()))
             .collect(Collectors.toList());
         return String.join(", ", names);
     }

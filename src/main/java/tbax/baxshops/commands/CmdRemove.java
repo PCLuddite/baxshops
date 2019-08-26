@@ -25,7 +25,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.items.ItemNames;
+import tbax.baxshops.items.ItemUtil;
 
 import java.util.List;
 
@@ -109,7 +109,7 @@ public final class CmdRemove extends BaxShopCommand
             }
             else {
                 actor.sendMessage("%s %s added to your inventory.",
-                    Format.itemName(stack.getAmount(), ItemNames.getName(entry)),
+                    Format.itemName(stack.getAmount(), ItemUtil.getName(entry)),
                     stack.getAmount() == 1 ? "was" : "were");
             }
         }
