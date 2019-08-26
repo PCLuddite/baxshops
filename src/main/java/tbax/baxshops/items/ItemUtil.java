@@ -195,7 +195,7 @@ public final class ItemUtil
     {
         Enchantable enchantable = enchants.get(enchant);
         if (enchantable == null)
-            return Format.toFriendlyName(enchant.getName());
+            return Format.toFriendlyName(enchant.toString());
         return enchantable.getName();
     }
     
