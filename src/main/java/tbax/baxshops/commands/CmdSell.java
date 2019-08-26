@@ -21,13 +21,12 @@ package tbax.baxshops.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.CommandHelp;
 import tbax.baxshops.notification.SaleRequest;
-import tbax.baxshops.serialization.ItemNames;
+import tbax.baxshops.items.ItemNames;
 
 import java.util.Arrays;
 import java.util.List;

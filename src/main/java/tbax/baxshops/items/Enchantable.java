@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
  * USA
  */
-package tbax.baxshops.serialization;
+package tbax.baxshops.items;
 
 import tbax.baxshops.Format;
 

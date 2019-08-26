@@ -26,7 +26,7 @@ import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.notification.BuyNotification;
 import tbax.baxshops.notification.BuyRequest;
-import tbax.baxshops.serialization.ItemNames;
+import tbax.baxshops.items.ItemNames;
 
 import java.util.Arrays;
 import java.util.List;

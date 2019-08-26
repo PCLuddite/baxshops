@@ -31,6 +31,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.commands.*;
 import tbax.baxshops.errors.PrematureAbortException;
+import tbax.baxshops.items.ItemNames;
 import tbax.baxshops.notification.*;
 import tbax.baxshops.serialization.*;
 

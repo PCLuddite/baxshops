@@ -24,7 +24,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.*;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.serialization.ItemNames;
+import tbax.baxshops.items.ItemNames;
 
 import java.util.List;
 import java.util.stream.Collectors;

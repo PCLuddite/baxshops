@@ -17,7 +17,7 @@
  * USA
  */
 
-package tbax.baxshops.serialization;
+package tbax.baxshops.items;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

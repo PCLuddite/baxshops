@@ -38,7 +38,7 @@ import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.CommandMessageException;
 import tbax.baxshops.errors.CommandWarningException;
 import tbax.baxshops.errors.PrematureAbortException;
-import tbax.baxshops.serialization.ItemNames;
+import tbax.baxshops.items.ItemNames;
 import tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.*;
