@@ -289,4 +289,25 @@ public final class ItemUtil
             return new Enchantable(Format.toFriendlyName(enchantment.toString()), true);
         return enchantable;
     }
+
+    public static boolean isSameBanner(ItemStack stack1, ItemStack stack2)
+    {
+        BannerMeta bannerMeta1, bannerMeta2;
+        if (stack1.getItemMeta() instanceof BannerMeta) {
+            bannerMeta1 = (BannerMeta)stack1.getItemMeta();
+        }
+        else {
+            return false;
+        }
+        if (stack2.getItemMeta() instanceof BannerMeta) {
+            bannerMeta2 = (BannerMeta)stack2.getItemMeta();
+        }
+        else {
+            return false;
+        }
+        if (bannerMeta1.numberOfPatterns() != bannerMeta2.numberOfPatterns()) {
+            return false;
+        }
+        return bannerMeta1.getPatterns().containsAll(bannerMeta2.getPatterns());
+    }
 }
