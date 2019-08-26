@@ -23,7 +23,6 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.CommandHelp;
 import tbax.baxshops.CommandHelpArgument;
-import tbax.baxshops.Resources;
 import tbax.baxshops.commands.flags.*;
 import tbax.baxshops.errors.PrematureAbortException;
 import tbax.baxshops.serialization.StoredPlayer;
@@ -44,6 +43,7 @@ public final class CmdFlag extends BaxShopCommand
             flagCmds.add(FlagCmdOwner.class);
             flagCmds.add(FlagCmdSellRequests.class);
             flagCmds.add(FlagCmdSellToShop.class);
+            flagCmds.add(FlagCmdSmartStack.class);
         }
         catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();

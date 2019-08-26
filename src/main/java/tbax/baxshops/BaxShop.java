@@ -422,6 +422,16 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
         return BaxShopFlag.hasFlag(flags, BaxShopFlag.INFINITE);
     }
 
+    public void setFlagSmartStack(boolean value)
+    {
+        flags = BaxShopFlag.setFlag(flags, BaxShopFlag.SMART_STACK, value);
+    }
+
+    public boolean hasFlagSmartStack()
+    {
+        return BaxShopFlag.hasFlag(flags, BaxShopFlag.SMART_STACK);
+    }
+
     public String getSignTextString(Location loc)
     {
         try {

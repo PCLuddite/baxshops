@@ -25,6 +25,7 @@ public final class BaxShopFlag
     public static final int SELL_TO_SHOP = 1<<1;   // 000010
     public static final int BUY_REQUESTS = 1<<2;   // 000100
     public static final int SELL_REQUESTS = 1<<3;  // 001000
+    public static final int SMART_STACK = 1<<4;    // 010000
 
     private BaxShopFlag()
     {

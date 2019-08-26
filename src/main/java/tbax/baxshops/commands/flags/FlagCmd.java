@@ -49,10 +49,7 @@ public abstract class FlagCmd extends BaxShopCommand
 
     @NotNull
     @Override
-    public String[] getAliases()
-    {
-        return null;
-    }
+    public abstract String[] getAliases();
 
     @Override
     public boolean requiresSelection(@NotNull ShopCmdActor actor)
