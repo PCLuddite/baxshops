@@ -29,6 +29,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.*;
@@ -317,13 +318,38 @@ public final class ItemUtil
         return true;
     }
 
+    public static boolean isSameBook(ItemStack stack1, ItemStack stack2)
+    {
+        EnchantmentStorageMeta enchantmentMeta1, enchantmentMeta2;
+        if (stack1.getType() != Material.ENCHANTED_BOOK || stack2.getType() != Material.ENCHANTED_BOOK) {
+            return false;
+        }
+
+        enchantmentMeta1 = (EnchantmentStorageMeta)stack1.getItemMeta();
+        enchantmentMeta2 = (EnchantmentStorageMeta)stack2.getItemMeta();
+
+        if (enchantmentMeta1.getStoredEnchants().size() != enchantmentMeta2.getStoredEnchants().size()) {
+            return false;
+        }
+
+        for (Map.Entry<Enchantment, Integer> enchants : enchantmentMeta1.getStoredEnchants().entrySet()) {
+            if (!Objects.equals(enchantmentMeta2.getStoredEnchants().get(enchants.getKey()), enchants.getValue())) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public static boolean isSimilar(ItemStack stack1, ItemStack stack2, boolean smartStack)
     {
         if (stack1 == stack2) return true;
         if (stack1 == null || stack2 == null) return false;
         if (!smartStack) return stack1.isSimilar(stack2);
         if (!stack1.isSimilar(stack2)) {
-            return stack1.getType() == stack2.getType() && isSameBanner(stack1, stack2);
+            return stack1.getType() == stack2.getType() &&
+                    (isSameBook(stack1, stack2)
+                    || isSameBanner(stack1, stack2));
         }
         return true;
     }
