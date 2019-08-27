@@ -581,4 +581,8 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
         }
         return signs;
     }
+
+    public void sort(Comparator<? super BaxEntry> comparator) {
+        inventory.sort(comparator);
+    }
 }

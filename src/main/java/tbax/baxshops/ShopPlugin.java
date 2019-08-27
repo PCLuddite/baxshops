@@ -60,6 +60,7 @@ public final class ShopPlugin extends JavaPlugin
         try {
             commands.add(CmdAccept.class);
             commands.add(CmdAdd.class);
+            commands.add(CmdAlphabetize.class);
             commands.add(CmdBackup.class);
             commands.add(CmdBuy.class);
             commands.add(CmdClaim.class);
