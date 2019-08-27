@@ -30,6 +30,7 @@ import tbax.baxshops.items.ItemUtil;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class CmdSell extends BaxShopCommand
 {
@@ -122,7 +123,9 @@ public final class CmdSell extends BaxShopCommand
         assert shop != null;
         if (requiresItemInHand(actor) && !shop.contains(actor.getItemInHand()))
             actor.exitError(Resources.NOT_FOUND_SHOPITEM);
-        List<BaxEntry> items = actor.takeArgFromInventory(1);
+        List<BaxEntry> items = actor.peekArgFromInventory(1).stream()
+                .filter(entry -> entry.getRefundPrice() >= 0d)
+                .collect(Collectors.toList());
 
         if (items.isEmpty()) {
             actor.exitWarning("You did not have anything to sell at this shop.");
@@ -163,6 +166,7 @@ public final class CmdSell extends BaxShopCommand
         }
         else {
             PlayerUtil.sellItem(shop, shop.getOwner(), actor.getPlayer(), entry);
+            PlayerUtil.takeFromInventory(actor.getPlayer().getInventory(), entry.getItemStack(), entry.getAmount(), actor.getShop().hasFlagSmartStack());
             actor.sendMessage(
                 "You have sold %s for %s to %s.",
                 Format.itemName(entry.getAmount(), name),

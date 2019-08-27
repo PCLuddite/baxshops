@@ -258,7 +258,7 @@ public final class PlayerUtil
      * @return a list of BaxEntries with the removed items
      * @throws PrematureAbortException thrown when any is specified and shop is null or inv is null
      */
-    public static List<BaxEntry> takeQtyFromInventory(@NotNull BaxQuantity qty, BaxShop shop) throws PrematureAbortException
+    public static @NotNull List<BaxEntry> takeQtyFromInventory(@NotNull BaxQuantity qty, BaxShop shop) throws PrematureAbortException
     {
         if (qty.isAny()) {
             if (!(qty.getInventory() instanceof PlayerInventory))
@@ -282,6 +282,37 @@ public final class PlayerUtil
         return Collections.singletonList(clone);
     }
 
+    /**
+     * Gets the list of items that <i>would</i> be removed if takeQtyFromInventory() was run
+     * @param qty the BaxQuantity to remove
+     * @param shop the shop to use if 'any' is specified, or for the returned BaxEntry
+     * @return a list of BaxEntries with the removed items
+     * @throws PrematureAbortException thrown when any is specified and shop is null or inv is null
+     */
+    public static List<BaxEntry> peekQtyFromInventory(@NotNull BaxQuantity qty, BaxShop shop) throws PrematureAbortException
+    {
+        if (qty.isAny()) {
+            if (!(qty.getInventory() instanceof PlayerInventory))
+                throw new CommandErrorException("'any' cannot be used for this action");
+            return peekAnyFromInventory(shop, (PlayerInventory)qty.getInventory());
+        }
+
+        BaxEntry clone = null;
+        boolean smartStack = false;
+        if (shop != null) {
+            clone = shop.find(qty.getItem());
+            smartStack = shop.hasFlagSmartStack();
+        }
+        if (clone == null) {
+            clone = new BaxEntry(qty.getItem());
+        }
+        else {
+            clone = new BaxEntry(clone);
+        }
+        clone.setAmount(peekFromInventory(qty.getInventory(), clone.getItemStack(), qty.getQuantity(), smartStack));
+        return Collections.singletonList(clone);
+    }
+
     private static @NotNull List<BaxEntry> takeAnyFromInventory(@NotNull BaxShop shop, @NotNull PlayerInventory inv)
     {
         ArrayList<BaxEntry> list = new ArrayList<>();
@@ -291,9 +322,30 @@ public final class PlayerUtil
             curr.setAmount(0);
             for (int x = 0; x < inv.getSize(); ++x) {
                 ItemStack item = inv.getItem(x);
-                if (curr.isSimilar(item, shop.hasFlagSmartStack())) {
+                if (item != null && curr.isSimilar(item, shop.hasFlagSmartStack())) {
                     curr.add(item.getAmount());
                     inv.setItem(x, null);
+                }
+            }
+            if (curr.getAmount() > 0) {
+                list.add(curr);
+            }
+        }
+
+        return list;
+    }
+
+    private static @NotNull List<BaxEntry> peekAnyFromInventory(@NotNull BaxShop shop, @NotNull PlayerInventory inv)
+    {
+        ArrayList<BaxEntry> list = new ArrayList<>();
+
+        for (BaxEntry entry : shop) {
+            BaxEntry curr = new BaxEntry(entry);
+            curr.setAmount(0);
+            for (int x = 0; x < inv.getSize(); ++x) {
+                ItemStack item = inv.getItem(x);
+                if (item != null && curr.isSimilar(item, shop.hasFlagSmartStack())) {
+                    curr.add(item.getAmount());
                 }
             }
             if (curr.getAmount() > 0) {
@@ -320,11 +372,12 @@ public final class PlayerUtil
             Inventory inv = (Inventory)inventory;
             if (inv instanceof PlayerInventory) {
                 ItemStack hand = ((PlayerInventory)inv).getItemInMainHand();
-                if (hand != null && ItemUtil.isSimilar(hand, item, smartStack)) {
+                if (ItemUtil.isSimilar(hand, item, smartStack)) {
                     if (amt < hand.getAmount()) {
                         hand.setAmount(hand.getAmount() - amt);
                         qty += amt;
-                    } else {
+                    }
+                    else {
                         qty += hand.getAmount();
                         ((PlayerInventory)inv).setItemInMainHand(null);
                     }
@@ -360,6 +413,30 @@ public final class PlayerUtil
             }
         }
 
+        return qty;
+    }
+
+    /**
+     * Performs the same function as takeFromInventory() without removing any items
+     * @param inventory the Iterable containing the ItemStack inventory
+     * @param item the item
+     * @param amt the amount to remove
+     * @return the actual quantity removed
+     */
+    public static int peekFromInventory(@NotNull Iterable<ItemStack> inventory, @NotNull ItemStack item,
+                                        int amt, boolean smartStack)
+    {
+        int qty = 0;
+        for(ItemStack invItem : inventory) {
+            if (ItemUtil.isSimilar(invItem, item, smartStack)) {
+                if (amt - qty < invItem.getAmount()) {
+                    qty = amt;
+                }
+                else {
+                    qty += invItem.getAmount();
+                }
+            }
+        }
         return qty;
     }
 }

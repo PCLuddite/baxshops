@@ -535,6 +535,11 @@ public final class ShopCmdActor implements CommandSender
         return PlayerUtil.takeQtyFromInventory(getArgPlayerQty(index), getShop());
     }
 
+    public List<BaxEntry> peekArgFromInventory(int index) throws PrematureAbortException
+    {
+        return PlayerUtil.peekQtyFromInventory(getArgPlayerQty(index), getShop());
+    }
+
     public PlayerInventory getInventory()
     {
         if (getPlayer() == null)
