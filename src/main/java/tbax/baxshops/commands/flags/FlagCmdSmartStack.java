@@ -39,6 +39,12 @@ public final class FlagCmdSmartStack extends FlagCmd
     }
 
     @Override
+    public String getPermission()
+    {
+        return "shops.admin";
+    }
+
+    @Override
     public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         BaxShop shop = actor.getShop();
