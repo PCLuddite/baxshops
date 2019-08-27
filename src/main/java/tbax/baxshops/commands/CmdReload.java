@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.ShopPlugin;
 import tbax.baxshops.errors.PrematureAbortException;
 
-public class CmdReload extends BaxShopCommand
+public final class CmdReload extends BaxShopCommand
 {
     @Override
     public @NotNull String getName()

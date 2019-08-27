@@ -27,7 +27,7 @@ import tbax.baxshops.notification.Claimable;
 import tbax.baxshops.notification.Notification;
 import tbax.baxshops.serialization.StoredPlayer;
 
-public class CmdClaim extends BaxShopCommand
+public final class CmdClaim extends BaxShopCommand
 {
     @Override
     public @NotNull String getName()

@@ -21,7 +21,7 @@ package tbax.baxshops.commands;
 import org.jetbrains.annotations.NotNull;
 import tbax.baxshops.errors.PrematureAbortException;
 
-public class CmdSetFoodLevel extends BaxShopCommand
+public final class CmdSetFoodLevel extends BaxShopCommand
 {
     @Override
     public @NotNull String getName()
