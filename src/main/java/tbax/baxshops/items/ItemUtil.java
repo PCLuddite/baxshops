@@ -305,9 +305,10 @@ public final class ItemUtil
         else {
             return false;
         }
-        if (bannerMeta1.numberOfPatterns() != bannerMeta2.numberOfPatterns()) {
+        if (stack1.getType() != stack2.getType())
             return false;
-        }
+        if (bannerMeta1.numberOfPatterns() != bannerMeta2.numberOfPatterns())
+            return false;
         return bannerMeta1.getPatterns().containsAll(bannerMeta2.getPatterns());
     }
 }
