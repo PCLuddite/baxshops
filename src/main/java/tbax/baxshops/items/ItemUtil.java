@@ -311,4 +311,15 @@ public final class ItemUtil
             return false;
         return bannerMeta1.getPatterns().containsAll(bannerMeta2.getPatterns());
     }
+
+    public static boolean isSimilar(ItemStack stack1, ItemStack stack2, boolean smartStack)
+    {
+        if (stack1 == stack2) return true;
+        if (stack1 == null || stack2 == null) return false;
+        if (!smartStack) return stack1.isSimilar(stack2);
+        if (!stack1.isSimilar(stack2)) {
+            return stack1.getType() == stack2.getType() && isSameBanner(stack1, stack2);
+        }
+        return true;
+    }
 }

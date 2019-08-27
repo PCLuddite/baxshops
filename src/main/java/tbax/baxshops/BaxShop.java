@@ -191,7 +191,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     public int indexOf(BaxEntry entry)
     {
         for(int index = 0; index < inventory.size(); index++) {
-            if (inventory.get(index).equals(entry)) {
+            if (inventory.get(index).equals(entry, hasFlagSmartStack())) {
                 return index;
             }
         }
@@ -302,7 +302,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     public BaxEntry find(ItemStack stack)
     {
         for (BaxEntry e : inventory) {
-            if (e.isSimilar(stack)) {
+            if (e.isSimilar(stack, hasFlagSmartStack())) {
                 return e;
             }
         }
@@ -312,7 +312,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     public BaxEntry find(BaxEntry entry)
     {
         for (BaxEntry e : inventory) {
-            if (e.isSimilar(entry)) {
+            if (e.isSimilar(entry, hasFlagSmartStack())) {
                 return e;
             }
         }

@@ -112,7 +112,8 @@ public final class PlayerUtil
         for (ItemStack content : contents) {
             if (content == null || content.getType() == Material.AIR) {
                 space += max;
-            } else if (content.isSimilar(item)) {
+            }
+            else if (content.isSimilar(item)) {
                 space += max - content.getAmount();
             }
         }
@@ -266,8 +267,10 @@ public final class PlayerUtil
         }
 
         BaxEntry clone = null;
+        boolean smartStack = false;
         if (shop != null) {
             clone = shop.find(qty.getItem());
+            smartStack = shop.hasFlagSmartStack();
         }
         if (clone == null) {
             clone = new BaxEntry(qty.getItem());
@@ -275,7 +278,7 @@ public final class PlayerUtil
         else {
             clone = new BaxEntry(clone);
         }
-        clone.setAmount(takeFromInventory(qty.getInventory(), clone.getItemStack(), qty.getQuantity()));
+        clone.setAmount(takeFromInventory(qty.getInventory(), clone.getItemStack(), qty.getQuantity(), smartStack));
         return Collections.singletonList(clone);
     }
 
@@ -288,7 +291,7 @@ public final class PlayerUtil
             curr.setAmount(0);
             for (int x = 0; x < inv.getSize(); ++x) {
                 ItemStack item = inv.getItem(x);
-                if (curr.isSimilar(item)) {
+                if (curr.isSimilar(item, shop.hasFlagSmartStack())) {
                     curr.add(item.getAmount());
                     inv.setItem(x, null);
                 }
@@ -309,14 +312,15 @@ public final class PlayerUtil
      * @param amt the amount to remove
      * @return the actual quantity removed
      */
-    public static int takeFromInventory(@NotNull Iterable<ItemStack> inventory, @NotNull ItemStack item, int amt)
+    public static int takeFromInventory(@NotNull Iterable<ItemStack> inventory, @NotNull ItemStack item,
+                                        int amt, boolean smartStack)
     {
         int qty = 0;
         if (inventory instanceof Inventory) {
             Inventory inv = (Inventory)inventory;
             if (inv instanceof PlayerInventory) {
                 ItemStack hand = ((PlayerInventory)inv).getItemInMainHand();
-                if (hand != null && hand.isSimilar(item)) {
+                if (hand != null && ItemUtil.isSimilar(hand, item, smartStack)) {
                     if (amt < hand.getAmount()) {
                         hand.setAmount(hand.getAmount() - amt);
                         qty += amt;
@@ -329,7 +333,7 @@ public final class PlayerUtil
 
             for (int x = 0; x < inv.getSize() && qty < amt; ++x) {
                 ItemStack other = inv.getItem(x);
-                if (other != null && other.isSimilar(item)) {
+                if (other != null && ItemUtil.isSimilar(other, item, smartStack)) {
                     if (amt - qty < other.getAmount()) {
                         other.setAmount(other.getAmount() - (amt - qty));
                         qty = amt;
@@ -343,7 +347,7 @@ public final class PlayerUtil
         }
         else {
             for(ItemStack invItem : inventory) {
-                if (invItem.isSimilar(item)) {
+                if (ItemUtil.isSimilar(invItem, item, smartStack)) {
                     if (amt - qty < invItem.getAmount()) {
                         invItem.setAmount(invItem.getAmount() - (amt - qty));
                         qty = amt;

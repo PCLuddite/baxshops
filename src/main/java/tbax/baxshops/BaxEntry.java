@@ -34,6 +34,7 @@ import tbax.baxshops.serialization.SafeMap;
 import tbax.baxshops.serialization.UpgradeableSerializable;
 
 import java.util.Map;
+import java.util.Objects;
 
 @SuppressWarnings("unused")
 public final class BaxEntry implements UpgradeableSerializable
@@ -365,11 +366,29 @@ public final class BaxEntry implements UpgradeableSerializable
         return stack.isSimilar(item);
     }
 
+    public boolean isSimilar(ItemStack item, boolean smartStack)
+    {
+        return ItemUtil.isSimilar(item, stack, smartStack);
+    }
+
     public boolean isSimilar(BaxEntry entry)
     {
         if (entry == null)
             return false;
+        if (Double.compare(entry.retailPrice, retailPrice) != 0) return false;
+        if (Double.compare(entry.refundPrice, refundPrice) != 0) return false;
         return stack.isSimilar(entry.stack);
+    }
+
+    public boolean isSimilar(BaxEntry entry, boolean smartStack)
+    {
+        return ItemUtil.isSimilar(entry.stack, stack, smartStack);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(retailPrice, refundPrice, quantity);
     }
 
     @Override
@@ -388,7 +407,20 @@ public final class BaxEntry implements UpgradeableSerializable
     {
         if (entry == null)
             return false;
-        return stack.isSimilar(entry.getItemStack()) && quantity == entry.quantity;
+        if (Double.compare(entry.retailPrice, retailPrice) != 0) return false;
+        if (Double.compare(entry.refundPrice, refundPrice) != 0) return false;
+        return stack.isSimilar(entry.stack) && quantity == entry.quantity;
+    }
+
+    public boolean equals(BaxEntry entry, boolean smartStack)
+    {
+        if (!smartStack) return equals(entry);
+        if (!equals(entry)) {
+            return entry.getType() == getType()
+                    && entry.getAmount() == quantity
+                    && ItemUtil.isSameBanner(entry.stack, stack);
+        }
+        return true;
     }
 
     public boolean equals(ItemStack stack)
