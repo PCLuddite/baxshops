@@ -44,7 +44,7 @@ public final class FlagCmdSmartStack extends FlagCmd
         BaxShop shop = actor.getShop();
         boolean value = actor.getArgBoolean(2, "Usage:\n/shop flag buyrequests [true|false]");
         assert shop != null;
-        shop.setFlagBuyRequests(value);
+        shop.setFlagSmartStack(value);
         actor.sendMessage(Format.flag("Smart stacking") + " for this shop is " + Format.keyword(value ? "enabled" : "disabled"));
     }
 }
