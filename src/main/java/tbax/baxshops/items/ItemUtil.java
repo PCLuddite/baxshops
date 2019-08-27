@@ -309,7 +309,12 @@ public final class ItemUtil
             return false;
         if (bannerMeta1.numberOfPatterns() != bannerMeta2.numberOfPatterns())
             return false;
-        return bannerMeta1.getPatterns().containsAll(bannerMeta2.getPatterns());
+        for (int i = 0; i < bannerMeta1.numberOfPatterns(); ++i) {
+            if (!bannerMeta1.getPattern(i).equals(bannerMeta2.getPattern(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public static boolean isSimilar(ItemStack stack1, ItemStack stack2, boolean smartStack)
