@@ -28,6 +28,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
 import org.jetbrains.annotations.NotNull;
+import tbax.baxshops.items.EnchantMap;
 import tbax.baxshops.items.ItemUtil;
 import tbax.baxshops.serialization.UpgradeableSerialization;
 import tbax.baxshops.serialization.SafeMap;
