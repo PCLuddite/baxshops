@@ -29,7 +29,7 @@ public final class FlagCmdSmartStack extends FlagCmd
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[] { "smartstack" };
+        return new String[] { "smartstack", "smart_stack" };
     }
 
     @Override
@@ -48,7 +48,7 @@ public final class FlagCmdSmartStack extends FlagCmd
     public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         BaxShop shop = actor.getShop();
-        boolean value = actor.getArgBoolean(2, "Usage:\n/shop flag buyrequests [true|false]");
+        boolean value = actor.getArgBoolean(2, "Usage:\n/shop flag smartstack [true|false]");
         assert shop != null;
         shop.setFlagSmartStack(value);
         actor.sendMessage(Format.flag("Smart stacking") + " for this shop is " + Format.keyword(value ? "enabled" : "disabled"));
