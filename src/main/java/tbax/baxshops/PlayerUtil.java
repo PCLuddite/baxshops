@@ -25,6 +25,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import tbax.baxshops.errors.CommandErrorException;
 import tbax.baxshops.errors.CommandWarningException;
 import tbax.baxshops.errors.PrematureAbortException;
@@ -33,10 +34,7 @@ import tbax.baxshops.notification.SaleClaim;
 import tbax.baxshops.items.ItemUtil;
 import tbax.baxshops.serialization.StoredPlayer;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Methods for dealing with interactions with players
@@ -248,7 +246,7 @@ public final class PlayerUtil
      */
     public static @NotNull List<BaxEntry> takeQtyFromInventory(@NotNull BaxQuantity qty) throws PrematureAbortException
     {
-        return takeQtyFromInventory(qty, null);
+        return takeQtyFromInventory(qty, null, Collections.emptyList());
     }
 
     /**
@@ -258,12 +256,13 @@ public final class PlayerUtil
      * @return a list of BaxEntries with the removed items
      * @throws PrematureAbortException thrown when any is specified and shop is null or inv is null
      */
-    public static @NotNull List<BaxEntry> takeQtyFromInventory(@NotNull BaxQuantity qty, BaxShop shop) throws PrematureAbortException
+    public static @NotNull List<BaxEntry> takeQtyFromInventory(@NotNull BaxQuantity qty, @Nullable BaxShop shop,
+                                                               @Nullable List<BaxEntry> exclude) throws PrematureAbortException
     {
         if (qty.isAny()) {
             if (!(qty.getInventory() instanceof PlayerInventory))
                 throw new CommandErrorException("'any' cannot be used for this action");
-            return takeAnyFromInventory(shop, (PlayerInventory)qty.getInventory());
+            return takeAnyFromInventory(shop, (PlayerInventory)qty.getInventory(), exclude);
         }
 
         BaxEntry clone = null;
@@ -289,12 +288,13 @@ public final class PlayerUtil
      * @return a list of BaxEntries with the removed items
      * @throws PrematureAbortException thrown when any is specified and shop is null or inv is null
      */
-    public static List<BaxEntry> peekQtyFromInventory(@NotNull BaxQuantity qty, BaxShop shop) throws PrematureAbortException
+    public static List<BaxEntry> peekQtyFromInventory(@NotNull BaxQuantity qty, BaxShop shop, @Nullable List<BaxEntry> exclude)
+            throws PrematureAbortException
     {
         if (qty.isAny()) {
             if (!(qty.getInventory() instanceof PlayerInventory))
                 throw new CommandErrorException("'any' cannot be used for this action");
-            return peekAnyFromInventory(shop, (PlayerInventory)qty.getInventory());
+            return peekAnyFromInventory(shop, (PlayerInventory)qty.getInventory(), exclude);
         }
 
         BaxEntry clone = null;
@@ -313,11 +313,19 @@ public final class PlayerUtil
         return Collections.singletonList(clone);
     }
 
-    private static @NotNull List<BaxEntry> takeAnyFromInventory(@NotNull BaxShop shop, @NotNull PlayerInventory inv)
+    private static @NotNull List<BaxEntry> takeAnyFromInventory(@NotNull BaxShop shop, @NotNull PlayerInventory inv,
+                                                                @Nullable List<BaxEntry> exclude)
     {
         ArrayList<BaxEntry> list = new ArrayList<>();
 
+        if (exclude == null)
+            exclude = Collections.emptyList();
+
         for (BaxEntry entry : shop) {
+
+            if (exclude.contains(entry))
+                continue;
+
             BaxEntry curr = new BaxEntry(entry);
             curr.setAmount(0);
             for (int x = 0; x < inv.getSize(); ++x) {
@@ -335,11 +343,19 @@ public final class PlayerUtil
         return list;
     }
 
-    private static @NotNull List<BaxEntry> peekAnyFromInventory(@NotNull BaxShop shop, @NotNull PlayerInventory inv)
+    private static @NotNull List<BaxEntry> peekAnyFromInventory(@NotNull BaxShop shop, @NotNull PlayerInventory inv,
+                                                                @Nullable List<BaxEntry> exclude)
     {
-        ArrayList<BaxEntry> list = new ArrayList<>();
+        List<BaxEntry> list = new ArrayList<>();
+
+        if (exclude == null)
+            exclude = Collections.emptyList();
 
         for (BaxEntry entry : shop) {
+
+            if (exclude.contains(entry))
+                continue;
+
             BaxEntry curr = new BaxEntry(entry);
             curr.setAmount(0);
             for (int x = 0; x < inv.getSize(); ++x) {

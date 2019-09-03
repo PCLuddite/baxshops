@@ -80,11 +80,11 @@ public final class ShopCmdActor implements CommandSender
         this.args = argList.toArray(new String[0]);
     }
 
-    public @Nullable BaxEntry getExcluded() throws PrematureAbortException
+    public @Nullable List<BaxEntry> getExcluded() throws PrematureAbortException
     {
         if (excluded == null)
             return null;
-        return getEntryFromString(excluded, "Excluded item not found in shop");
+        return Collections.singletonList(getEntryFromString(excluded, "Excluded item not found in shop"));
     }
 
     public String[] getArgs()
@@ -532,12 +532,12 @@ public final class ShopCmdActor implements CommandSender
 
     public List<BaxEntry> takeArgFromInventory(int index) throws PrematureAbortException
     {
-        return PlayerUtil.takeQtyFromInventory(getArgPlayerQty(index), getShop());
+        return PlayerUtil.takeQtyFromInventory(getArgPlayerQty(index), getShop(), getExcluded());
     }
 
     public List<BaxEntry> peekArgFromInventory(int index) throws PrematureAbortException
     {
-        return PlayerUtil.peekQtyFromInventory(getArgPlayerQty(index), getShop());
+        return PlayerUtil.peekQtyFromInventory(getArgPlayerQty(index), getShop(), getExcluded());
     }
 
     public PlayerInventory getInventory()
