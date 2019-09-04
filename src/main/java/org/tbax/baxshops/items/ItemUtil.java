@@ -199,7 +199,7 @@ public final class ItemUtil
     {
         Enchantable enchantable = enchants.get(enchant);
         if (enchantable == null)
-            return Format.toFriendlyName(enchant.toString());
+            return Format.toFriendlyName(enchant.getKey().getKey());
         return enchantable.getName();
     }
     
@@ -290,7 +290,7 @@ public final class ItemUtil
     {
         Enchantable enchantable = enchants.get(enchantment);
         if (enchantable == null)
-            return new Enchantable(Format.toFriendlyName(enchantment.toString()), true);
+            return new Enchantable(Format.toFriendlyName(enchantment.getKey().getKey()), true);
         return enchantable;
     }
 
