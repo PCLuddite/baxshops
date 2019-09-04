@@ -75,7 +75,7 @@ public interface UpgradeableSerializable extends ConfigurationSerializable
 
     default void upgrade00451(@NotNull SafeMap map)
     {
-
+        UpgradeableSerialization.deserialize(this, map);
     }
 
     @Override
