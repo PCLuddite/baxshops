@@ -42,7 +42,9 @@ public final class BaxEntry implements UpgradeableSerializable
 {
     private ItemStack stack = new ItemStack(Material.AIR);
     private double retailPrice = Integer.MAX_VALUE;
-    private double refundPrice = -1;
+    private double refundPrice = 0;
+    private boolean canBuy = true;
+    private boolean canSell = false;
     private int quantity = 0;
     
     public BaxEntry()
@@ -54,6 +56,8 @@ public final class BaxEntry implements UpgradeableSerializable
         quantity = other.quantity;
         refundPrice = other.refundPrice;
         retailPrice = other.retailPrice;
+        canBuy = other.canBuy;
+        canSell = other.canSell;
         stack = other.stack.clone();
     }
 
@@ -71,7 +75,7 @@ public final class BaxEntry implements UpgradeableSerializable
     public void upgrade00300(@NotNull SafeMap map)
     {
         retailPrice = map.getDouble("retailPrice", 10000);
-        refundPrice = map.getDouble("refundPrice");
+        refundPrice = map.getDouble("refundPrice", -1);
         if (map.get("stack") instanceof Map) {
             stack = ItemStack.deserialize((Map) map.get("stack"));
         }
@@ -90,7 +94,12 @@ public final class BaxEntry implements UpgradeableSerializable
     @Override
     public void upgrade00450(@NotNull SafeMap map)
     {
-        UpgradeableSerializable.super.upgrade00421(map);
+        stack = map.getItemStack("stack", stack);
+        retailPrice = map.getDouble("retailPrice", retailPrice);
+        refundPrice = map.getDouble("refundPrice", -1);
+        quantity = map.getInteger("quantity", 0);
+        canBuy = true;
+        canSell = refundPrice >= 0;
     }
 
     public double getRetailPrice()
