@@ -407,23 +407,23 @@ public final class ShopPlugin extends JavaPlugin
 
     public void loadConfigurationSerializable()
     {
-        ConfigurationSerialization.registerClass(BaxEntry.class);
-        ConfigurationSerialization.registerClass(BaxShop.class);
-        ConfigurationSerialization.registerClass(BuyClaim.class);
-        ConfigurationSerialization.registerClass(BuyNotification.class);
-        ConfigurationSerialization.registerClass(BuyRejection.class);
-        ConfigurationSerialization.registerClass(BuyRequest.class);
-        ConfigurationSerialization.registerClass(DeletedShopClaim.class);
-        ConfigurationSerialization.registerClass(LollipopNotification.class);
-        ConfigurationSerialization.registerClass(NoteSet.class);
-        ConfigurationSerialization.registerClass(SaleClaim.class);
-        ConfigurationSerialization.registerClass(SaleNotification.class);
-        ConfigurationSerialization.registerClass(SaleNotificationAuto.class);
-        ConfigurationSerialization.registerClass(SaleNotificationAutoClaim.class);
-        ConfigurationSerialization.registerClass(SaleRejection.class);
-        ConfigurationSerialization.registerClass(SaleRequest.class);
-        ConfigurationSerialization.registerClass(SellRequest.class);
-        ConfigurationSerialization.registerClass(StoredPlayer.class);
+        ConfigurationSerialization.registerClass(BaxEntry.class, "tbax.baxshops.BaxEntry");
+        ConfigurationSerialization.registerClass(BaxShop.class, "tbax.baxshops.BaxShop");
+        ConfigurationSerialization.registerClass(BuyClaim.class, "tbax.baxshops.notification.BuyClaim");
+        ConfigurationSerialization.registerClass(BuyNotification.class, "tbax.baxshops.notification.BuyNotification");
+        ConfigurationSerialization.registerClass(BuyRejection.class, "tbax.baxshops.notification.BuyRejection");
+        ConfigurationSerialization.registerClass(BuyRequest.class, "tbax.baxshops.notification.BuyRequest");
+        ConfigurationSerialization.registerClass(DeletedShopClaim.class, "tbax.baxshops.notification.DeletedShopClaim");
+        ConfigurationSerialization.registerClass(LollipopNotification.class, "tbax.baxshops.notification.LollipopNotification");
+        ConfigurationSerialization.registerClass(NoteSet.class, "tbax.baxshops.notifications.NoteSet");
+        ConfigurationSerialization.registerClass(SaleClaim.class, "tbax.baxshops.notification.SaleClaim");
+        ConfigurationSerialization.registerClass(SaleNotification.class, "tbax.baxshops.notification.SaleNotification");
+        ConfigurationSerialization.registerClass(SaleNotificationAuto.class, "tbax.baxshops.notification.SaleNotificationAuto");
+        ConfigurationSerialization.registerClass(SaleNotificationAutoClaim.class, "tbax.baxshops.notification.SaleNotificationAutoClaim");
+        ConfigurationSerialization.registerClass(SaleRejection.class, "tbax.baxshops.notification.SaleRejection");
+        ConfigurationSerialization.registerClass(SaleRequest.class, "tbax.baxshops.notification.SaleRequest");
+        ConfigurationSerialization.registerClass(SellRequest.class, "tbax.baxshops.notification.SellRequest");
+        ConfigurationSerialization.registerClass(StoredPlayer.class, "tbax.baxshops.serialization.StoredPlayer");
     }
 
     @Override
