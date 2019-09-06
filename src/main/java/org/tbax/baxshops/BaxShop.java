@@ -132,12 +132,6 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
         locations.addAll(map.getList("locations"));
     }
 
-    @Override
-    public void upgrade00450(@NotNull SafeMap map)
-    {
-        UpgradeableSerialization.deserialize(this, map);
-    }
-
     public UUID getId()
     {
         return id;

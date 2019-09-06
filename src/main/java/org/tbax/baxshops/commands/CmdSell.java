@@ -121,13 +121,18 @@ public final class CmdSell extends BaxShopCommand
         BaxShop shop = actor.getShop();
         assert shop != null;
         if (requiresItemInHand(actor) && !shop.contains(actor.getItemInHand()))
-            actor.exitError(Resources.NOT_FOUND_SHOPITEM);
+            actor.exitError("The owner of the shop isn't buying %s", ItemUtil.getName(actor.getItemInHand()));
         List<BaxEntry> items = actor.peekArgFromInventory(1).stream()
-                .filter(entry -> entry.getRefundPrice() >= 0d)
+                .filter(BaxEntry::canSell)
                 .collect(Collectors.toList());
 
         if (items.isEmpty()) {
-            actor.exitWarning("You did not have anything to sell at this shop.");
+            if (requiresItemInHand(actor)) {
+                actor.exitError("The owner of the shop isn't buying %s", ItemUtil.getName(actor.getItemInHand()));
+            }
+            else {
+                actor.exitWarning("You did not have anything to sell at this shop.");
+            }
         }
 
         double total = 0.0;

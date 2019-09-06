@@ -120,6 +120,9 @@ public final class CmdBuy extends BaxShopCommand
         BaxShop shop = actor.getShop();
         assert shop != null;
         BaxEntry entry = actor.getArgEntry(1);
+        if (!entry.canBuy())
+            actor.exitError("%s is not for sale", entry.getName());
+
         BaxQuantity amount = actor.getArgShopQty(2, entry);
         if (amount.getQuantity() == 0) {
             actor.exitError("You purchased nothing");

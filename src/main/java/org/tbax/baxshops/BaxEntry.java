@@ -365,13 +365,14 @@ public final class BaxEntry implements UpgradeableSerializable
             name.append(" (Damage: ").append(getDamagePercent()).append("%)");
         }
 
-        if (stack.getType() != Material.ENCHANTED_BOOK && EnchantMap.isEnchanted(stack)) {
-            name.append(" ").append(Format.enchantments("(" + EnchantMap.abbreviatedListString(stack) + ")"));
-        }
+        if (canBuy())
+            name.append(" ").append(Format.retailPrice(retailPrice));
 
-        name.append(" ").append(Format.retailPrice(retailPrice));
-        if (refundPrice >= 0)
+        if (canSell())
             name.append(" ").append(Format.refundPrice(refundPrice));
+
+        if (!(canBuy() || canBuy()))
+            name.append(" ").append(ChatColor.DARK_RED).append("(Not for sale)");
 
         if (infinite) {
             return String.format("%s. %s", Format.bullet(index), Format.listname(name.toString()));
