@@ -89,3 +89,6 @@ enchants:
 - enchantment: BINDING_CURSE
   name: Binding Curse
   levels: false
+- enchantment: RIPTIDE
+  name: Riptide
+  levels: false
