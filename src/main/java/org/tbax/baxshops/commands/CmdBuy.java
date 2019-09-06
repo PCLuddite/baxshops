@@ -56,7 +56,7 @@ public final class CmdBuy extends BaxShopCommand
         CommandHelp help = super.getHelp(actor);
         help.setDescription("buy an item from this shop");
         help.setArgs(
-            new CommandHelpArgument("item", "the name of the item or an entry number in the shop.    §LNote:§R enchanted items must be bought with an entry number", true),
+            new CommandHelpArgument("item", "the name of the item or an entry number in the shop", true),
             new CommandHelpArgument("quantity", "the quantity you wish to buy", false, 1)
         );
         return help;
