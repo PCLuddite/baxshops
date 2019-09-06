@@ -62,7 +62,32 @@ public final class NoteSet implements UpgradeableSerializable
         SerializationException.throwVersionException();
     }
 
+    @Override
     public void upgrade00421(@NotNull SafeMap map)
+    {
+        SerializationException.throwVersionException();
+    }
+
+    @Override
+    public void upgrade00422(@NotNull SafeMap map)
+    {
+        SerializationException.throwVersionException();
+    }
+
+    @Override
+    public void upgrade00450(@NotNull SafeMap map)
+    {
+        SerializationException.throwVersionException();
+    }
+
+    @Override
+    public void upgrade00451(@NotNull SafeMap map)
+    {
+        SerializationException.throwVersionException();
+    }
+
+    @Override
+    public void upgrade00452(@NotNull SafeMap map)
     {
         SerializationException.throwVersionException();
     }

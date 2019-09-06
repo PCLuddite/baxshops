@@ -20,7 +20,6 @@ package org.tbax.baxshops.notification;
 
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Map;
 
@@ -47,9 +46,9 @@ public class SaleNotificationAutoClaim implements DeprecatedNote
     }
 
     @Override
-    public Map<String, Object> serialize()
+    public @NotNull Map<String, Object> serialize()
     {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     public static SaleNotificationAutoClaim deserialize(Map<String, Object> args)

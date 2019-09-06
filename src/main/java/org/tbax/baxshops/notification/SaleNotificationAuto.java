@@ -25,7 +25,6 @@ import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.serialization.SafeMap;
 import org.tbax.baxshops.serialization.StoredPlayer;
 import org.tbax.baxshops.serialization.states.State_00300;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.util.Map;
 
@@ -57,9 +56,9 @@ public class SaleNotificationAuto implements DeprecatedNote
     }
 
     @Override
-    public Map<String, Object> serialize()
+    public @NotNull Map<String, Object> serialize()
     {
-        throw new NotImplementedException();
+        throw new UnsupportedOperationException();
     }
 
     public static SaleNotificationAuto deserialize(Map<String, Object> args)
