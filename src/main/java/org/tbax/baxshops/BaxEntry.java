@@ -40,11 +40,13 @@ import java.util.Objects;
 @SuppressWarnings("unused")
 public final class BaxEntry implements UpgradeableSerializable
 {
+    private static final int CAN_BUY = 1;
+    private static final int CAN_SELL = 2;
+
     private ItemStack stack = new ItemStack(Material.AIR);
     private double retailPrice = Integer.MAX_VALUE;
     private double refundPrice = 0;
-    private boolean canBuy = true;
-    private boolean canSell = false;
+    private int buySell = CAN_BUY;
     private int quantity = 0;
     
     public BaxEntry()
@@ -56,8 +58,7 @@ public final class BaxEntry implements UpgradeableSerializable
         quantity = other.quantity;
         refundPrice = other.refundPrice;
         retailPrice = other.retailPrice;
-        canBuy = other.canBuy;
-        canSell = other.canSell;
+        buySell = other.buySell;
         stack = other.stack.clone();
     }
 
@@ -75,20 +76,24 @@ public final class BaxEntry implements UpgradeableSerializable
     public void upgrade00300(@NotNull SafeMap map)
     {
         retailPrice = map.getDouble("retailPrice", 10000);
-        refundPrice = map.getDouble("refundPrice", -1);
+        refundPrice = map.getDouble("refundPrice", 0);
         if (map.get("stack") instanceof Map) {
             stack = ItemStack.deserialize((Map) map.get("stack"));
         }
         quantity = map.getInteger("quantity");
+        buySell = CAN_BUY;
     }
 
     @Override @SuppressWarnings("unchecked")
     public void upgrade00421(@NotNull SafeMap map)
     {
-        UpgradeableSerializable.super.upgrade00421(map);
+        retailPrice = map.getDouble("retailPrice", retailPrice);
+        refundPrice = map.getDouble("refundPrice", 0);
+        quantity = map.getInteger("quantity", 0);
         if (map.get("stack") instanceof Map) {
             stack = ItemStack.deserialize((Map) map.get("stack"));
         }
+        buySell = CAN_BUY;
     }
 
     @Override
@@ -96,10 +101,30 @@ public final class BaxEntry implements UpgradeableSerializable
     {
         stack = map.getItemStack("stack", stack);
         retailPrice = map.getDouble("retailPrice", retailPrice);
-        refundPrice = map.getDouble("refundPrice", -1);
+        refundPrice = map.getDouble("refundPrice", 0);
         quantity = map.getInteger("quantity", 0);
-        canBuy = true;
-        canSell = refundPrice >= 0;
+        buySell = CAN_BUY | (refundPrice >= 0 ? CAN_SELL : 0);
+    }
+
+    @Override
+    public void upgrade00451(@NotNull SafeMap map)
+    {
+        stack = map.getItemStack("stack", stack);
+        retailPrice = map.getDouble("retailPrice", retailPrice);
+        refundPrice = Math.max(map.getDouble("refundPrice", refundPrice), 0);
+        quantity = map.getInteger("quantity", 0);
+        buySell = map.getBoolean("canBuy", true) ? CAN_BUY : 0;
+        buySell = buySell | (map.getBoolean("canSell", false) ? CAN_SELL : 0);
+    }
+
+    public boolean canBuy()
+    {
+        return (buySell & CAN_BUY) == CAN_BUY;
+    }
+
+    public boolean canSell()
+    {
+        return (buySell & CAN_SELL) == CAN_SELL;
     }
 
     public double getRetailPrice()
