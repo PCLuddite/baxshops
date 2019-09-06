@@ -19,10 +19,7 @@
 
 package org.tbax.baxshops.items;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.DyeColor;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -155,8 +152,10 @@ public final class ItemUtil
 
         item = item.clone();
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(null);
-        item.setItemMeta(meta);
+        if (meta != null) {
+            meta.setDisplayName(null);
+            item.setItemMeta(meta);
+        }
         try {
             Object nmsCopy = AS_NMS_COPY.invoke(null, item);
             Object txtObj = GET_NAME.invoke(nmsCopy);
@@ -270,7 +269,7 @@ public final class ItemUtil
             List<Map<?, ?>> section = enchantConfig.getMapList("enchants");
 
             for (Map<?, ?> enchantMap : section) {
-                Enchantment enchantment = Enchantment.getByName((String) enchantMap.get("enchantment"));
+                Enchantment enchantment = Enchantment.getByKey(new NamespacedKey(plugin, (String)enchantMap.get("enchantment")));
                 String name = (String) enchantMap.get("name");
                 boolean levels = (Boolean) enchantMap.get("levels");
                 enchants.put(enchantment, new Enchantable(name, levels));
