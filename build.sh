@@ -6,5 +6,6 @@ if [ "$JAVA_HOME" = "" ]; then
     export JAVA_HOME=${JAVA_HOME%/*}
 fi
 echo "JAVA_HOME=$JAVA_HOME"
-mvn install clean
-mvn package
+if mvn install clean; then
+    mvn package
+fi
