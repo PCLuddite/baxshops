@@ -33,7 +33,6 @@ public final class BaxConfig
 {
     private final int DEFAULT_BACKUPS = 15;
     private final boolean DEFAULT_LOG_NOTES = false;
-    private final double DEFAULT_XP_CONVERT = 4.00;
     private final boolean DEFAULT_DEATH_TAX_ENABLED = false;
     private final String DEFAULT_DEATH_TAX_GOES_TO = StoredPlayer.DUMMY_UUID.toString();
     private final double DEFAULT_DEATH_TAX_PERCENT = 0.04;
@@ -72,16 +71,6 @@ public final class BaxConfig
     public void setLogNotes(boolean logNotes)
     {
         getFileConfig().set("LogNotes", logNotes);
-    }
-
-    public double getXpConvert()
-    {
-        return getFileConfig().getDouble("XPConvert", DEFAULT_XP_CONVERT);
-    }
-
-    public void setXpConvert(double xpConvert)
-    {
-        getFileConfig().set("XPConvert", xpConvert);
     }
 
     public boolean isDeathTaxEnabled()

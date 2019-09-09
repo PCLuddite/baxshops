@@ -71,7 +71,6 @@ public final class ShopPlugin extends JavaPlugin
             commands.add(CmdDelete.class);
             commands.add(CmdEmpty.class);
             commands.add(CmdFlag.class);
-            commands.add(CmdGiveXp.class);
             commands.add(CmdHelp.class);
             commands.add(CmdInfo.class);
             commands.add(CmdList.class);
@@ -91,7 +90,6 @@ public final class ShopPlugin extends JavaPlugin
             commands.add(CmdSign.class);
             commands.add(CmdSkip.class);
             commands.add(CmdTake.class);
-            commands.add(CmdTakeXp.class);
             commands.add(CmdTeleport.class);
             return commands;
         }

@@ -6,7 +6,6 @@
 #                                          |_|
 # Backups: 15                                                   # Number of backups to keep. Set this to -1 to never delete old backups
 # LogNotes: false                                                # Show all notifications in log
-# XPConvert: 4.0                                                # How much 1 XP level costs.
 # DeathTax:
 #   GoesTo: 326a36ea-b465-3192-a4f7-c313f347edc9                # Stupid deaths can be taxed by percentage and deposited into an account. 
 #   Percentage: 0.04                                            # Set Enabled to true to use this feature. The default UUID
@@ -26,7 +25,6 @@
 #
 Backups: 15
 LogNotes: false
-XPConvert: 4.0
 DeathTax:
   GoesTo: 326a36ea-b465-3192-a4f7-c313f347edc9
   Percentage: 0.04
