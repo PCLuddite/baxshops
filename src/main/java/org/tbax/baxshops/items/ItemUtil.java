@@ -49,7 +49,13 @@ public final class ItemUtil
     private static final String MINECRAFT_VERSION;
     private static final Method AS_NMS_COPY;
     private static final Method GET_NAME;
-    private static final List<Material> SIGN_TYPES = Arrays.asList(Material.SIGN, Material.WALL_SIGN, Material.LEGACY_SIGN, Material.LEGACY_WALL_SIGN, Material.LEGACY_SIGN_POST);
+    private static final List<Material> SIGN_TYPES = Arrays.asList(Material.SPRUCE_SIGN, Material.SPRUCE_WALL_SIGN,
+            Material.ACACIA_SIGN, Material.ACACIA_WALL_SIGN,
+            Material.BIRCH_SIGN, Material.BIRCH_WALL_SIGN,
+            Material.DARK_OAK_SIGN, Material.DARK_OAK_WALL_SIGN,
+            Material.JUNGLE_SIGN, Material.JUNGLE_WALL_SIGN,
+            Material.OAK_SIGN, Material.OAK_WALL_SIGN,
+            Material.LEGACY_SIGN, Material.LEGACY_WALL_SIGN, Material.LEGACY_SIGN_POST);
 
     static {
         String name = Bukkit.getServer().getClass().getPackage().getName();
@@ -412,7 +418,7 @@ public final class ItemUtil
 
     public static ItemStack newDefaultSign()
     {
-        return new ItemStack(Material.SIGN, 1);
+        return new ItemStack(Material.OAK_SIGN, 1);
     }
 
     public static Map<Integer, ? extends ItemStack> all(Inventory inventory, List<Material> materials)

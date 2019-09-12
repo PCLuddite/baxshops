@@ -1,4 +1,4 @@
 BaxShops
 =========
 
-BaxShops is a shops plugin for Bukkit 1.13
+BaxShops is a shops plugin for Bukkit 1.14
