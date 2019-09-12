@@ -45,7 +45,9 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
 {
     public static final UUID DUMMY_UUID = UUID.fromString("8f289a15-cf9f-4266-b368-429cb31780ae");
     public static final BaxShop DUMMY_SHOP = new BaxShop(DUMMY_UUID);
-    
+
+    private static final List<Material> SIGN_TYPES = Arrays.asList(Material.SIGN, Material.WALL_SIGN, Material.LEGACY_SIGN, Material.LEGACY_WALL_SIGN, Material.LEGACY_SIGN_POST);
+
     private UUID id = UUID.randomUUID();
 
     @Deprecated
@@ -343,9 +345,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
 
     public static boolean isSign(Material type)
     {
-        return type == Material.SIGN || type == Material.WALL_SIGN
-            || type == Material.LEGACY_SIGN || type == Material.LEGACY_WALL_SIGN
-            || type == Material.LEGACY_SIGN_POST;
+        return type != null && SIGN_TYPES.contains(type);
     }
 
     public static BaxShop fromItem(ItemStack item)
