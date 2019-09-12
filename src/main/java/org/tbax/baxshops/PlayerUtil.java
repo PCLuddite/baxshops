@@ -462,7 +462,7 @@ public final class PlayerUtil
             return player.getInventory().getItemInMainHand();
         }
 
-        Map<Integer, ? extends ItemStack> signs = player.getInventory().all(Material.SIGN);
+        Map<Integer, ? extends ItemStack> signs = ItemUtil.all(player.getInventory(), ItemUtil.getSignTypes());
         if (signs.isEmpty()) {
             return null;
         }
@@ -472,7 +472,7 @@ public final class PlayerUtil
 
         ItemStack sign = signs.values().stream().findAny().get();
         for(ItemStack stack : signs.values()) {
-            if (sign.getType() == stack.getType() && !sign.isSimilar(stack)) {
+            if (!sign.isSimilar(stack)) {
                 throw new CommandErrorException("There are multiple types of signs in your inventory. Please hold the sign that you want to use.");
             }
         }

@@ -24,6 +24,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.errors.PrematureAbortException;
+import org.tbax.baxshops.items.ItemUtil;
 
 public final class CmdCopy extends BaxShopCommand
 {
@@ -82,7 +83,7 @@ public final class CmdCopy extends BaxShopCommand
     {
         if (!actor.isAdmin()) {
             PlayerInventory inv = actor.getPlayer().getInventory();
-            ItemStack sign = new ItemStack(Material.SIGN, 1);
+            ItemStack sign = ItemUtil.newDefaultSign();
             if (!inv.containsAtLeast(sign, 1)) {
                 actor.exitError("You need a sign to copy a shop.");
             }
@@ -93,7 +94,7 @@ public final class CmdCopy extends BaxShopCommand
         if (i > 0) {
             actor.sendMessage("Your inventory is full");
             if (!actor.isAdmin()) {
-                actor.getPlayer().getInventory().addItem(new ItemStack(Material.SIGN, 1));
+                actor.getPlayer().getInventory().addItem(ItemUtil.newDefaultSign());
             }
         }
     }

@@ -128,7 +128,7 @@ public final class CmdCreate extends BaxShopCommand
             actor.exitError(Resources.SHOP_EXISTS);
 
         if (sign == null)
-            sign = new ItemStack(Material.SIGN);
+            sign = ItemUtil.newDefaultSign();
 
         Block b = buildShopSign(loc, sign,
             "",
@@ -150,7 +150,7 @@ public final class CmdCreate extends BaxShopCommand
         shop.setFlagBuyRequests(false);
 
         if (!actor.isAdmin()) {
-            actor.getInventory().remove(Material.SIGN);
+            actor.getInventory().remove(sign.getType());
         }
         actor.sendMessage(Format.username(shop.getOwner().getName()) + "'s shop has been created.");
         actor.sendMessage(Format.flag("Buy requests") + " for this shop are " + Format.keyword(shop.hasFlagBuyRequests() ? "on" : "off"));

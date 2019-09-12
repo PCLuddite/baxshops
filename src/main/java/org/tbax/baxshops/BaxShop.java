@@ -316,7 +316,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
 
     public ItemStack toItem(Location loc)
     {
-        ItemStack item = new ItemStack(Material.SIGN, 1);
+        ItemStack item = ItemUtil.newDefaultSign();
         ArrayList<String> lore = new ArrayList<>();
         for(String line : getSignText(loc)) {
             lore.add(ChatColor.BLUE + line);

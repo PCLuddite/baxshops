@@ -24,7 +24,9 @@ import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -401,5 +403,26 @@ public final class ItemUtil
             lines[i] = ChatColor.stripColor(lore.get(i));
         }
         return lines;
+    }
+
+    public static List<Material> getSignTypes()
+    {
+        return SIGN_TYPES;
+    }
+
+    public static ItemStack newDefaultSign()
+    {
+        return new ItemStack(Material.SIGN, 1);
+    }
+
+    public static Map<Integer, ? extends ItemStack> all(Inventory inventory, List<Material> materials)
+    {
+        Map<Integer, ItemStack> all = new HashMap<>();
+        for (Material material : materials) {
+            for(Map.Entry<? extends Integer, ? extends ItemStack> entry : inventory.all(material).entrySet()) {
+                all.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return all;
     }
 }
