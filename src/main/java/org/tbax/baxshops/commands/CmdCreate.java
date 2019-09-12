@@ -117,14 +117,19 @@ public final class CmdCreate extends BaxShopCommand
         Location loc = actor.getPlayer().getLocation();
         loc = loc.getWorld().getBlockAt(loc).getLocation();
         assert actor.getInventory() != null;
-        if (!actor.isAdmin() && !actor.getInventory().containsAtLeast(new ItemStack(Material.SIGN), 1)) {
+
+        ItemStack sign = PlayerUtil.findSign(actor.getPlayer());
+        if (!actor.isAdmin() && sign == null) {
             actor.exitError("You need a sign to set up a shop.");
         }
 
         if (ShopPlugin.getShop(loc) != null)
             actor.exitError(Resources.SHOP_EXISTS);
 
-        Block b = buildShopSign(loc,
+        if (sign == null)
+            sign = new ItemStack(Material.SIGN);
+
+        Block b = buildShopSign(loc, sign,
             "",
             (owner.getName().length() < 13 ? owner.getName() : owner.getName().substring(0, 12) + '…') + "'s",
             "shop",
@@ -151,7 +156,7 @@ public final class CmdCreate extends BaxShopCommand
         actor.sendMessage(Format.flag("Sell requests") + " for this shop are " + Format.keyword(shop.hasFlagSellRequests() ? "on" : "off"));
     }
 
-    private static @NotNull Block buildShopSign(@NotNull Location loc, @NotNull String... signLines) throws PrematureAbortException
+    private static @NotNull Block buildShopSign(@NotNull Location loc, @NotNull ItemStack sign, @NotNull String... signLines) throws PrematureAbortException
     {
         Location locUnder = loc.clone();
         locUnder.setY(locUnder.getY() - 1);
@@ -164,18 +169,18 @@ public final class CmdCreate extends BaxShopCommand
 
         byte angle = (byte) ((((int) loc.getYaw() + 225) / 90) << 2);
 
-        b.setType(Material.SIGN);
+        b.setType(sign.getType());
         loc.setYaw(angle);
 
         if (!BaxShop.isSign(b.getType())) {
             throw new CommandErrorException(String.format("Unable to place sign! Block type is %s.", b.getType().toString()));
         }
 
-        Sign sign = (Sign)b.getState();
+        Sign signBlock = (Sign)b.getState();
         for(int i = 0; i < signLines.length; ++i) {
-            sign.setLine(i, signLines[i]);
+            signBlock.setLine(i, signLines[i]);
         }
-        sign.update();
+        signBlock.update();
 
         return b;
     }

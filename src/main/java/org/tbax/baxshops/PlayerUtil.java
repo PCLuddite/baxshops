@@ -455,4 +455,27 @@ public final class PlayerUtil
         }
         return qty;
     }
+
+    public static ItemStack findSign(@NotNull Player player) throws PrematureAbortException
+    {
+        if (BaxShop.isSign(player.getInventory().getItemInMainHand())) {
+            return player.getInventory().getItemInMainHand();
+        }
+
+        Map<Integer, ? extends ItemStack> signs = player.getInventory().all(Material.SIGN);
+        if (signs.isEmpty()) {
+            return null;
+        }
+        else if (signs.size() == 1) {
+            return signs.values().stream().findAny().get();
+        }
+
+        ItemStack sign = signs.values().stream().findAny().get();
+        for(ItemStack stack : signs.values()) {
+            if (sign.getType() == stack.getType() && !sign.isSimilar(stack)) {
+                throw new CommandErrorException("There are multiple types of signs in your inventory. Please hold the sign that you want to use.");
+            }
+        }
+        return sign;
+    }
 }
