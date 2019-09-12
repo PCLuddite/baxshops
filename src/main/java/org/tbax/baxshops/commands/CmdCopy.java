@@ -23,6 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
+import org.tbax.baxshops.PlayerUtil;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.items.ItemUtil;
 
@@ -83,11 +84,11 @@ public final class CmdCopy extends BaxShopCommand
     {
         if (!actor.isAdmin()) {
             PlayerInventory inv = actor.getPlayer().getInventory();
-            ItemStack sign = ItemUtil.newDefaultSign();
-            if (!inv.containsAtLeast(sign, 1)) {
+            ItemStack sign = PlayerUtil.findSign(actor.getPlayer());
+            if (sign == null) {
                 actor.exitError("You need a sign to copy a shop.");
             }
-            inv.removeItem(sign);
+            inv.remove(sign.getType());
         }
 
         int i = actor.giveItem(actor.getSelection().toItem());
