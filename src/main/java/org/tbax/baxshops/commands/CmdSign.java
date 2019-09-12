@@ -22,10 +22,10 @@ package org.tbax.baxshops.commands;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.CommandHelpArgument;
 import org.tbax.baxshops.errors.PrematureAbortException;
+import org.tbax.baxshops.items.ItemUtil;
 
 public final class CmdSign extends BaxShopCommand
 {
@@ -87,7 +87,7 @@ public final class CmdSign extends BaxShopCommand
     {
         assert actor.getShop() != null;
         Block b = actor.getSelection().getLocation().getBlock();
-        if (!BaxShop.isSign(b.getType())) {
+        if (!ItemUtil.isSign(b.getType())) {
             actor.logWarning(String.format("%s's shop is missing its sign", actor.getShop().getOwner()));
             actor.exitError("This shop is missing its sign.");
         }

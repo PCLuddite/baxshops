@@ -458,7 +458,7 @@ public final class PlayerUtil
 
     public static ItemStack findSign(@NotNull Player player) throws PrematureAbortException
     {
-        if (BaxShop.isSign(player.getInventory().getItemInMainHand())) {
+        if (ItemUtil.isSign(player.getInventory().getItemInMainHand())) {
             return player.getInventory().getItemInMainHand();
         }
 

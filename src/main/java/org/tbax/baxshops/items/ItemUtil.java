@@ -47,6 +47,7 @@ public final class ItemUtil
     private static final String MINECRAFT_VERSION;
     private static final Method AS_NMS_COPY;
     private static final Method GET_NAME;
+    private static final List<Material> SIGN_TYPES = Arrays.asList(Material.SIGN, Material.WALL_SIGN, Material.LEGACY_SIGN, Material.LEGACY_WALL_SIGN, Material.LEGACY_SIGN_POST);
 
     static {
         String name = Bukkit.getServer().getClass().getPackage().getName();
@@ -354,5 +355,51 @@ public final class ItemUtil
                     || isSameBanner(stack1, stack2));
         }
         return true;
+    }
+
+    public static boolean isShop(ItemStack item)
+    {
+        return isSign(item)&&
+               item.hasItemMeta() &&
+               item.getItemMeta().hasLore() &&
+               item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1).startsWith(ChatColor.GRAY + "ID: ");
+    }
+
+    public static boolean isSign(ItemStack item)
+    {
+        return item != null && isSign(item.getType());
+    }
+
+    public static boolean isSign(Material type)
+    {
+        return type != null && SIGN_TYPES.contains(type);
+    }
+
+    public static BaxShop fromItem(ItemStack item)
+    {
+        String id = item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1).substring((ChatColor.GRAY + "ID: ").length());
+        BaxShop shop = ShopPlugin.getShopByShortId2(id); // try short id2
+        if (shop == null) {
+            shop = ShopPlugin.getShopByShortId(id); // try short id
+            if (shop == null) {
+                try {
+                    return ShopPlugin.getShop(UUID.fromString(id)); // finally try full id
+                }
+                catch (IllegalArgumentException e) {
+                    return null;
+                }
+            }
+        }
+        return shop;
+    }
+
+    public static String[] extractSignText(ItemStack item)
+    {
+        List<String> lore = item.getItemMeta().getLore().subList(0, item.getItemMeta().getLore().size() - 1);
+        String[] lines = new String[lore.size()];
+        for(int i = 0; i < lines.length; ++i) {
+            lines[i] = ChatColor.stripColor(lore.get(i));
+        }
+        return lines;
     }
 }

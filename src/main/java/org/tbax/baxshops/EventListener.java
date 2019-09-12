@@ -40,6 +40,7 @@ import org.bukkit.inventory.ItemStack;
 import org.tbax.baxshops.errors.CommandErrorException;
 import org.tbax.baxshops.errors.CommandWarningException;
 import org.tbax.baxshops.errors.PrematureAbortException;
+import org.tbax.baxshops.items.ItemUtil;
 import org.tbax.baxshops.notification.DeathTaxReceivedNote;
 import org.tbax.baxshops.serialization.BaxConfig;
 import org.tbax.baxshops.serialization.StoredPlayer;
@@ -187,16 +188,16 @@ public class EventListener implements Listener
     {
         try {
             ItemStack item = event.getItemInHand();
-            if (!BaxShop.isShop(item))
+            if (!ItemUtil.isShop(item))
                 return;
-            BaxShop shop = BaxShop.fromItem(item);
+            BaxShop shop = ItemUtil.fromItem(item);
             if (shop == null) {
                 throw new CommandErrorException("This shop has been closed and can't be placed.");
             }
             if (!ShopPlugin.addLocation(event.getBlockPlaced().getLocation(), shop)) {
                 throw new CommandErrorException(Resources.SHOP_EXISTS);
             }
-            String[] lines = BaxShop.extractSignText(item);
+            String[] lines = ItemUtil.extractSignText(item);
             if (lines.length > 0) {
                 Sign sign = (Sign) event.getBlockPlaced().getState();
                 if (lines.length < 3) {

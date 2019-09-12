@@ -31,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.*;
 import org.tbax.baxshops.errors.CommandErrorException;
 import org.tbax.baxshops.errors.PrematureAbortException;
+import org.tbax.baxshops.items.ItemUtil;
 import org.tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.Arrays;
@@ -172,7 +173,7 @@ public final class CmdCreate extends BaxShopCommand
         b.setType(sign.getType());
         loc.setYaw(angle);
 
-        if (!BaxShop.isSign(b.getType())) {
+        if (!ItemUtil.isSign(b.getType())) {
             throw new CommandErrorException(String.format("Unable to place sign! Block type is %s.", b.getType().toString()));
         }
 

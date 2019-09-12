@@ -29,6 +29,7 @@ import org.bukkit.block.data.type.WallSign;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.tbax.baxshops.items.ItemUtil;
 import org.tbax.baxshops.serialization.SafeMap;
 import org.tbax.baxshops.serialization.StoredPlayer;
 import org.tbax.baxshops.serialization.UpgradeableSerializable;
@@ -45,8 +46,6 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
 {
     public static final UUID DUMMY_UUID = UUID.fromString("8f289a15-cf9f-4266-b368-429cb31780ae");
     public static final BaxShop DUMMY_SHOP = new BaxShop(DUMMY_UUID);
-
-    private static final List<Material> SIGN_TYPES = Arrays.asList(Material.SIGN, Material.WALL_SIGN, Material.LEGACY_SIGN, Material.LEGACY_WALL_SIGN, Material.LEGACY_SIGN_POST);
 
     private UUID id = UUID.randomUUID();
 
@@ -330,52 +329,6 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
         return item;
     }
 
-    public static boolean isShop(ItemStack item)
-    {
-        return isSign(item)&&
-               item.hasItemMeta() &&
-               item.getItemMeta().hasLore() &&
-               item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1).startsWith(ChatColor.GRAY + "ID: ");
-    }
-
-    public static boolean isSign(ItemStack item)
-    {
-        return item != null && isSign(item.getType());
-    }
-
-    public static boolean isSign(Material type)
-    {
-        return type != null && SIGN_TYPES.contains(type);
-    }
-
-    public static BaxShop fromItem(ItemStack item)
-    {
-        String id = item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1).substring((ChatColor.GRAY + "ID: ").length());
-        BaxShop shop = ShopPlugin.getShopByShortId2(id); // try short id2
-        if (shop == null) {
-            shop = ShopPlugin.getShopByShortId(id); // try short id
-            if (shop == null) {
-                try {
-                    return ShopPlugin.getShop(UUID.fromString(id)); // finally try full id
-                }
-                catch (IllegalArgumentException e) {
-                    return null;
-                }
-            }
-        }
-        return shop;
-    }
-
-    public static String[] extractSignText(ItemStack item)
-    {
-        List<String> lore = item.getItemMeta().getLore().subList(0, item.getItemMeta().getLore().size() - 1);
-        String[] lines = new String[lore.size()];
-        for(int i = 0; i < lines.length; ++i) {
-            lines[i] = ChatColor.stripColor(lore.get(i));
-        }
-        return lines;
-    }
-
     public void setFlagBuyRequests(boolean value)
     {
         flags = BaxShopFlag.setFlag(flags, BaxShopFlag.BUY_REQUESTS, value);
@@ -555,7 +508,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
                 for(int z = -1; z <= 1; ++z) {
                     Location l = block.getLocation().add(x, y, z);
                     Block curr = l.getBlock();
-                    if (isSign(curr.getType())) {
+                    if (ItemUtil.isSign(curr.getType())) {
                         if (curr.getBlockData() instanceof WallSign) {
                             WallSign sign = (WallSign)curr.getBlockData();
                             Block attached = curr.getRelative(sign.getFacing().getOppositeFace());
