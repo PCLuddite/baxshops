@@ -127,7 +127,7 @@ public final class ShopPlugin extends JavaPlugin
     public static void showNotification(Player player)
     {
         StoredPlayer storedPlayer = savedState.getOfflinePlayer(player.getUniqueId());
-        Notification n = storedPlayer.dequeueNote();
+        Notification n = storedPlayer.peekNote();
         sendInfo(player, n.getMessage(player));
         if (n instanceof Request) {
             player.sendMessage(String.format("Use %s or %s to manage this request.",
@@ -139,6 +139,9 @@ public final class ShopPlugin extends JavaPlugin
             player.sendMessage(String.format("Use %s to claim and remove this notification.",
                 Format.command("/shop claim"))
             );
+        }
+        else {
+            storedPlayer.dequeueNote();
         }
     }
 
@@ -348,17 +351,17 @@ public final class ShopPlugin extends JavaPlugin
 
     public static void logInfo(String msg)
     {
-        log.info(msg);
+        log.info(Format.toAnsiColor(msg));
     }
 
     public static void logWarning(String msg)
     {
-        log.warning(msg);
+        log.warning(Format.toAnsiColor(msg));
     }
 
     public static void logSevere(String msg)
     {
-        log.severe(msg);
+        log.severe(Format.toAnsiColor(msg));
     }
 
     public static Collection<StoredPlayer> getRegisteredPlayers()

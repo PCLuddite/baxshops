@@ -157,13 +157,12 @@ public final class SavedState
      */
     public StoredPlayer joinPlayer(Player player)
     {
-        UUID oldId = players.convertLegacy(player);
-        if (oldId == null) {
-            StoredPlayer storedPlayer = new StoredPlayer(player);
-            players.put(player.getUniqueId(), storedPlayer);
-            return storedPlayer;
+        StoredPlayer storedPlayer = players.get(player.getUniqueId());
+        if (storedPlayer == null && (storedPlayer = players.get(players.convertLegacy(player))) == null) {
+            storedPlayer = new StoredPlayer(player);
+            players.put(storedPlayer);
         }
-        return players.get(player.getUniqueId());
+        return storedPlayer;
     }
 
     public void reload()
