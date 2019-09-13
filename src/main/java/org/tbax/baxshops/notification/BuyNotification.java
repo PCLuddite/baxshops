@@ -86,9 +86,9 @@ public final class BuyNotification extends StandardNote
     }
 
     @Override
-    public @NotNull OfflinePlayer getRecipient()
+    public @NotNull UUID getRecipientId()
     {
-        return getSeller();
+        return seller;
     }
 
     @Override

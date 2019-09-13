@@ -79,9 +79,9 @@ public final class SaleRejection extends StandardNote implements Claimable
     }
 
     @Override
-    public @NotNull OfflinePlayer getRecipient()
+    public @NotNull UUID getRecipientId()
     {
-        return getSeller();
+        return seller;
     }
 
     @Override

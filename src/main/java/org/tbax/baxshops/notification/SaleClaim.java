@@ -68,9 +68,9 @@ public final class SaleClaim extends StandardNote implements Claimable
     }
 
     @Override
-    public @NotNull OfflinePlayer getRecipient()
+    public @NotNull UUID getRecipientId()
     {
-        return getBuyer();
+        return buyer;
     }
 
     @Override

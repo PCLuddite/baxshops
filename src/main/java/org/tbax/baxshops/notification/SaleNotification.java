@@ -80,9 +80,9 @@ public final class SaleNotification extends StandardNote
     }
 
     @Override
-    public @NotNull OfflinePlayer getRecipient()
+    public @NotNull UUID getRecipientId()
     {
-        return getSeller();
+        return seller;
     }
 
     @Override

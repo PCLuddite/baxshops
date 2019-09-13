@@ -86,9 +86,9 @@ public final class BuyRejection extends StandardNote implements Notification
     }
 
     @Override
-    public @NotNull OfflinePlayer getRecipient()
+    public @NotNull UUID getRecipientId()
     {
-        return getSeller();
+        return seller;
     }
 
     @Override

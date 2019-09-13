@@ -70,9 +70,10 @@ public class DeathTaxReceivedNote implements Notification, UpgradeableSerializab
         UpgradeableSerialization.upgrade(this, args);
     }
 
-    public @NotNull OfflinePlayer getRecipient()
+    @Override
+    public @NotNull UUID getRecipientId()
     {
-        return ShopPlugin.getOfflinePlayer(recipientId);
+        return recipientId;
     }
 
     @Override

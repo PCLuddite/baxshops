@@ -95,9 +95,9 @@ public final class SaleRequest extends StandardNote implements Request
     }
 
     @Override
-    public @NotNull OfflinePlayer getRecipient()
+    public @NotNull UUID getRecipientId()
     {
-        return getBuyer();
+        return buyer;
     }
 
     @Override

@@ -98,9 +98,9 @@ public final class DeletedShopClaim implements UpgradeableSerializable, Claimabl
     }
 
     @Override
-    public @NotNull OfflinePlayer getRecipient()
+    public @NotNull UUID getRecipientId()
     {
-        return getOwner();
+        return owner;
     }
 
     @Override
