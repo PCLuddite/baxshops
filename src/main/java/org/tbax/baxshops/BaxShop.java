@@ -173,9 +173,20 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
 
     public OfflinePlayer getOwner()
     {
+        return ShopPlugin.getOfflinePlayer(getOwnerId());
+    }
+
+    public UUID getOwnerId()
+    {
         if (owner == null)
             owner = StoredPlayer.ERROR_UUID;
-        return ShopPlugin.getOfflinePlayer(owner);
+        return owner;
+    }
+
+    public String getAbbreviatedOwnerName()
+    {
+        OfflinePlayer owner = getOwner();
+        return owner.getName().length() < 13 ? owner.getName() : owner.getName().substring(0, 12) + '…';
     }
 
     public void setOwner(OfflinePlayer newOwner)
@@ -316,11 +327,52 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
 
     public ItemStack toItem(Location loc)
     {
-        ItemStack item = ItemUtil.newDefaultSign();
-        ArrayList<String> lore = new ArrayList<>();
-        for(String line : getSignText(loc)) {
-            lore.add(ChatColor.BLUE + line);
+        String[] lines = getSignText(loc);
+        if (lines.length == 1) {
+            return toItem(lines[0]);
         }
+        else if (lines.length == 2) {
+            return toItem(lines[0], lines[1]);
+        }
+        else if (lines.length == 3) {
+            return toItem(lines[0], lines[1], lines[2]);
+        }
+        else if (lines.length >= 4) {
+            return toItem(lines[0], lines[1], lines[2], lines[3]);
+        }
+        else {
+            return toItem("");
+        }
+    }
+
+    public ItemStack toItem()
+    {
+        return toItem(getAbbreviatedOwnerName() + "'s", "shop");
+    }
+
+    public ItemStack toItem(String line1)
+    {
+        return toItem(line1, "");
+    }
+
+    public ItemStack toItem(String line1, String line2)
+    {
+        return toItem(line1, line2, "");
+    }
+
+    public ItemStack toItem(String line1, String line2, String line3)
+    {
+        return toItem(line1, line2, line3, "");
+    }
+
+    public ItemStack toItem(String line1, String line2, String line3, String line4)
+    {
+        ItemStack item = ItemUtil.newDefaultSign();
+        List<String> lore = new ArrayList<>();
+        lore.add(ChatColor.BLUE + line1);
+        if (line2 == null || "".equals(line2)) lore.add(ChatColor.BLUE + line2);
+        if (line3 == null || "".equals(line3)) lore.add(ChatColor.BLUE + line3);
+        if (line4 == null || "".equals(line4)) lore.add(ChatColor.BLUE + line4);
         lore.add(ChatColor.GRAY + "ID: " + getShortId2());
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.WHITE + getOwner().getName() + "'s shop");
