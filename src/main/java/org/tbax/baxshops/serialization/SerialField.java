@@ -90,7 +90,7 @@ public class SerialField
             }
         }
         while (current != null && !Object.class.equals(current));
-        throw new NoSuchMethodException();
+        throw new NoSuchMethodException(m.getter());
     }
 
     public Method getSetter() throws NoSuchMethodException
@@ -110,7 +110,7 @@ public class SerialField
             }
         }
         while (current != null && !Object.class.equals(current));
-        throw new NoSuchMethodException();
+        throw new NoSuchMethodException(m.setter());
     }
 
     public Method getMapPutter() throws ReflectiveOperationException

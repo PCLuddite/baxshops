@@ -87,7 +87,7 @@ public final class UpgradeableSerialization
                 serialField.putMap(map, obj);
             }
             catch (ReflectiveOperationException e) {
-                throw new RuntimeException(e);
+                throw new RuntimeException(obj.getClass().getCanonicalName() + " caused a serialization error", e);
             }
         }
         return map;
