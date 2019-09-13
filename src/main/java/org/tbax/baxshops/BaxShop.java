@@ -370,9 +370,9 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
         ItemStack item = ItemUtil.newDefaultSign();
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.BLUE + line1);
-        if (line2 == null || "".equals(line2)) lore.add(ChatColor.BLUE + line2);
-        if (line3 == null || "".equals(line3)) lore.add(ChatColor.BLUE + line3);
-        if (line4 == null || "".equals(line4)) lore.add(ChatColor.BLUE + line4);
+        if (line2 != null && !"".equals(line2)) lore.add(ChatColor.BLUE + line2);
+        if (line3 != null && !"".equals(line3)) lore.add(ChatColor.BLUE + line3);
+        if (line4 != null && !"".equals(line4)) lore.add(ChatColor.BLUE + line4);
         lore.add(ChatColor.GRAY + "ID: " + getShortId2());
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(ChatColor.WHITE + getOwner().getName() + "'s shop");
