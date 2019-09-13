@@ -340,6 +340,20 @@ public class SafeMap implements Map<String, Object>
             return defaultValue;
         }
     }
+    public BaxShop getBaxShop(String key)
+    {
+        return getBaxShop(key, null);
+    }
+
+    public BaxShop getBaxShop(String key, BaxShop defaultValue)
+    {
+        try {
+            return (BaxShop)getOrDefault(key, defaultValue);
+        }
+        catch (ClassCastException e) {
+            return defaultValue;
+        }
+    }
 
     public Object put(String key, BaxShop value)
     {

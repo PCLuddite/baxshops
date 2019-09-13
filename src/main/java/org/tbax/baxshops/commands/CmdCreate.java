@@ -130,15 +130,16 @@ public final class CmdCreate extends BaxShopCommand
         if (sign == null)
             sign = ItemUtil.newDefaultSign();
 
-        Block b = buildShopSign(loc, sign,
+        Block b = loc.getBlock();
+        BaxShop shop = new BaxShop(b.getLocation());
+        shop.setOwner(owner);
+
+        buildShopSign(loc, sign,
             "",
-            (owner.getName().length() < 13 ? owner.getName() : owner.getName().substring(0, 12) + '…') + "'s",
+            shop.getAbbreviatedOwnerName() + "'s",
             "shop",
             ""
         );
-
-        BaxShop shop = new BaxShop(b.getLocation());
-        shop.setOwner(owner);
 
         ShopPlugin.addShop(shop);
 
@@ -157,7 +158,7 @@ public final class CmdCreate extends BaxShopCommand
         actor.sendMessage(Format.flag("Sell requests") + " for this shop are " + Format.keyword(shop.hasFlagSellRequests() ? "on" : "off"));
     }
 
-    private static @NotNull Block buildShopSign(@NotNull Location loc, @NotNull ItemStack sign, @NotNull String... signLines) throws PrematureAbortException
+    private static void buildShopSign(@NotNull Location loc, @NotNull ItemStack sign, @NotNull String... signLines) throws PrematureAbortException
     {
         Location locUnder = loc.clone();
         locUnder.setY(locUnder.getY() - 1);
@@ -183,7 +184,6 @@ public final class CmdCreate extends BaxShopCommand
         }
         signBlock.update();
 
-        return b;
     }
 
     @Override

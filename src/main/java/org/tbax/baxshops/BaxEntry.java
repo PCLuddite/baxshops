@@ -65,6 +65,7 @@ public final class BaxEntry implements UpgradeableSerializable
     public BaxEntry(@NotNull ItemStack item)
     {
         setItem(item);
+        quantity = item.getAmount();
     }
 
     public BaxEntry(Map<String, Object> args)

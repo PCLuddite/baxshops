@@ -238,7 +238,7 @@ public class EventListener implements Listener
     public void onPlayerJoin(PlayerJoinEvent event)
     {
         StoredPlayer player = ShopPlugin.getSavedState().joinPlayer(event.getPlayer());
-        if (!player.getNotifications().isEmpty()) {
+        if (player.hasNotes()) {
             event.getPlayer().sendMessage(ChatColor.WHITE + "You have new notifications. Use " + Format.command("/shop notifications") + ChatColor.WHITE + " to view them");
         }
     }

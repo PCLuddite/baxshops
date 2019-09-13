@@ -59,7 +59,7 @@ public final class LollipopNotification implements Notification, UpgradeableSeri
     @SerializeMethod(getter = "getSender")
     private UUID sender;
 
-    @SerializeMethod(getter = "getRecipient")
+    @SerializeMethod(getter = "getRecipientId")
     private UUID recipient;
 
     private String tastiness;
