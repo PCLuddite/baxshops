@@ -87,12 +87,14 @@ public final class SavedState
             plugin.getLogger().info("YAML file did not exist. Starting fresh.");
             return new SavedState(plugin);
         }
-        double ver;
-        if (plugin.getConfig().contains("StateVersion")) {
-            ver = plugin.getConfig().getDouble("StateVersion", STATE_VERSION);
-        }
-        else if ((ver = StateFile.readVersion(stateLocation)) == 0d) {
-            ver = State_00300.VERSION; // version 3.0 was the last version not to be in config.yml
+        double ver = StateFile.readVersion(stateLocation);
+        if (ver == 0d) {
+            if (plugin.getConfig().contains("StateVersion")) {
+                ver = plugin.getConfig().getDouble("StateVersion", STATE_VERSION);
+            }
+            else {
+                ver = State_00300.VERSION; // version 3.0 was the last version not to be in config.yml
+            }
         }
 
         loadedState = ver;
