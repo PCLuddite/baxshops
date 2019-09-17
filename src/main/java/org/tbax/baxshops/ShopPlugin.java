@@ -280,7 +280,8 @@ public final class ShopPlugin extends JavaPlugin
     {
         try {
             if (!cmd.hasValidArgCount(actor)) {
-                actor.sendMessage(cmd.getHelp(actor).toString());
+                actor.getSender().sendMessage(cmd.getHelp(actor).toString());
+                logPlayerMessage(actor.getPlayer(), "Command help was sent to player");
             }
             else if(!cmd.hasPermission(actor)) {
                 actor.sendError("You do not have permission to use this command");
@@ -465,7 +466,7 @@ public final class ShopPlugin extends JavaPlugin
             return commands.entrySet().stream()
                 .filter(c -> c.getKey().equals(c.getValue().getName())
                         && c.getValue().hasPermission(actor)
-                        && c.getKey().contains(actor.getArg(0)))
+                        && c.getKey().startsWith(actor.getArg(0)))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
         }
@@ -474,7 +475,7 @@ public final class ShopPlugin extends JavaPlugin
             if (cmd != null) {
                 String arg = actor.getArg(actor.getNumArgs() - 1).toLowerCase();
                 return cmd.onTabComplete(actor, command, alias, args).stream()
-                    .filter(s -> s != null && s.toLowerCase().contains(arg))
+                    .filter(s -> s != null && s.toLowerCase().startsWith(arg))
                     .collect(Collectors.toList());
             }
         }
