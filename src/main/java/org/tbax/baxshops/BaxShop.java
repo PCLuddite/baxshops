@@ -21,7 +21,6 @@ package org.tbax.baxshops;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -583,5 +582,20 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
 
     public void sort(Comparator<? super BaxEntry> comparator) {
         inventory.sort(comparator);
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BaxShop that = (BaxShop) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(id);
     }
 }
