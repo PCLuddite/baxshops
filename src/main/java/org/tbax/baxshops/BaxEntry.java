@@ -442,10 +442,11 @@ public final class BaxEntry implements UpgradeableSerializable
 
     public boolean equals(BaxEntry entry)
     {
-        if (entry == null)
-            return false;
+        if (entry == null) return false;
+        if (this == entry) return true;
         if (Double.compare(entry.retailPrice, retailPrice) != 0) return false;
         if (Double.compare(entry.refundPrice, refundPrice) != 0) return false;
+        if (buySell != entry.buySell) return false;
         return stack.isSimilar(entry.stack) && quantity == entry.quantity;
     }
 
@@ -455,7 +456,11 @@ public final class BaxEntry implements UpgradeableSerializable
         if (!equals(entry)) {
             return entry.getType() == getType()
                     && entry.getAmount() == quantity
-                    && ItemUtil.isSameBanner(entry.stack, stack);
+                    && buySell == entry.buySell
+                    && retailPrice == entry.retailPrice
+                    && refundPrice == entry.refundPrice
+                    && (ItemUtil.isSameBanner(entry.stack, stack)
+                        || ItemUtil.isSameBook(entry.stack, stack));
         }
         return true;
     }
