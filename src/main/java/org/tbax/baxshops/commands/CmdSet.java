@@ -96,11 +96,17 @@ public final class CmdSet extends BaxShopCommand
     {
         BaxShop shop = actor.getShop();
         assert shop != null;
-        if (actor.getNumArgs() == 3) {
-            actor.appendArg(-1);
-        }
 
         BaxEntry entry = actor.getArgEntry(1);
+        entry.canBuy(true);
+
+        if (actor.getNumArgs() == 3) {
+            actor.appendArg(0);
+            entry.canSell(false);
+        }
+        else {
+            entry.canSell(true);
+        }
 
         double retailAmount = actor.getArgRoundedDouble(2, String.format(Resources.INVALID_DECIMAL, "buy price")),
                 refundAmount = actor.getArgRoundedDouble(3, String.format(Resources.INVALID_DECIMAL, "sell price"));

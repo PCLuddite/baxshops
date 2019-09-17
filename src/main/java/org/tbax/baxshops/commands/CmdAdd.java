@@ -90,11 +90,16 @@ public final class CmdAdd extends BaxShopCommand
     @Override
     public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException // tested OK 3-13-19
     {
+        BaxEntry newEntry = new BaxEntry();
         double retailAmount = actor.getArgRoundedDouble(1, String.format(Resources.INVALID_DECIMAL, "buy price")),
-                refundAmount = -1;
+                refundAmount = 0d;
 
         if (actor.getNumArgs() == 3) {
             refundAmount = actor.getArgRoundedDouble(2, String.format(Resources.INVALID_DECIMAL, "sell price"));
+            newEntry.canSell(true);
+        }
+        else {
+            newEntry.canSell(false);
         }
 
         ItemStack stack = actor.getItemInHand();
@@ -109,7 +114,7 @@ public final class CmdAdd extends BaxShopCommand
             );
         }
 
-        BaxEntry newEntry = new BaxEntry();
+        newEntry.canBuy(true);
         newEntry.setItem(stack, stack.getAmount());
         newEntry.setRetailPrice(retailAmount);
         newEntry.setRefundPrice(refundAmount);

@@ -123,9 +123,29 @@ public final class BaxEntry implements UpgradeableSerializable
         return (buySell & CAN_BUY) == CAN_BUY;
     }
 
+    public void canBuy(boolean value)
+    {
+        if (value) {
+            buySell = buySell | CAN_BUY;
+        }
+        else {
+            buySell = buySell & ~CAN_BUY;
+        }
+    }
+
     public boolean canSell()
     {
         return (buySell & CAN_SELL) == CAN_SELL;
+    }
+
+    public void canSell(boolean value)
+    {
+        if (value) {
+            buySell = buySell | CAN_SELL;
+        }
+        else {
+            buySell = buySell & ~CAN_SELL;
+        }
     }
 
     public double getRetailPrice()
