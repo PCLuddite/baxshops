@@ -33,6 +33,7 @@ import org.tbax.baxshops.serialization.states.State_00300;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 public abstract class StandardNote implements Notification, UpgradeableSerializable
@@ -113,5 +114,23 @@ public abstract class StandardNote implements Notification, UpgradeableSerializa
         if (shopId == null)
             return shopId = BaxShop.DUMMY_UUID;
         return shopId;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        StandardNote that = (StandardNote) o;
+        return Objects.equals(entry, that.entry) &&
+                Objects.equals(buyer, that.buyer) &&
+                Objects.equals(seller, that.seller) &&
+                Objects.equals(shopId, that.shopId);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(entry, buyer, seller, shopId);
     }
 }

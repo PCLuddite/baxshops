@@ -31,10 +31,7 @@ import org.tbax.baxshops.serialization.UpgradeableSerialization;
 import org.tbax.baxshops.serialization.annotations.SerializeMethod;
 import org.tbax.baxshops.serialization.states.State_00300;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * A LollipopNotification notifies a player that someone sent him/her a
@@ -201,5 +198,22 @@ public final class LollipopNotification implements Notification, UpgradeableSeri
         else {
             return "a " + tastiness;
         }
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LollipopNotification that = (LollipopNotification) o;
+        return Objects.equals(sender, that.sender) &&
+                Objects.equals(recipient, that.recipient) &&
+                Objects.equals(tastiness, that.tastiness);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(sender, recipient, tastiness);
     }
 }

@@ -30,6 +30,7 @@ import org.tbax.baxshops.serialization.annotations.SerializedAs;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 @SuppressWarnings("unused")
@@ -135,5 +136,23 @@ public class DeathTaxReceivedNote implements Notification, UpgradeableSerializab
     public static DeathTaxReceivedNote valueOf(Map<String, Object> args)
     {
         return deserialize(args);
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DeathTaxReceivedNote that = (DeathTaxReceivedNote) o;
+        return Double.compare(that.deathTax, deathTax) == 0 &&
+                Objects.equals(recipientId, that.recipientId) &&
+                Objects.equals(deadGuyId, that.deadGuyId) &&
+                Objects.equals(msg, that.msg);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(recipientId, deadGuyId, deathTax, msg);
     }
 }

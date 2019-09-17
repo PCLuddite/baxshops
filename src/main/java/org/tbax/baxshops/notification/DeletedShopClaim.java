@@ -32,6 +32,7 @@ import org.tbax.baxshops.serialization.states.State_00300;
 
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 public final class DeletedShopClaim implements UpgradeableSerializable, Claimable
@@ -129,5 +130,21 @@ public final class DeletedShopClaim implements UpgradeableSerializable, Claimabl
     public BaxEntry getEntry()
     {
         return entry;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DeletedShopClaim that = (DeletedShopClaim) o;
+        return Objects.equals(owner, that.owner) &&
+                Objects.equals(entry, that.entry);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return Objects.hash(owner, entry);
     }
 }
