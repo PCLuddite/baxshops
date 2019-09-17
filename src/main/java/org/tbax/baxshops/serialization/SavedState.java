@@ -26,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.ShopPlugin;
 import org.tbax.baxshops.serialization.states.State_00300;
-import org.tbax.baxshops.serialization.states.State_00452;
+import org.tbax.baxshops.serialization.states.State_00460;
 
 import java.io.File;
 import java.text.DecimalFormat;
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 
 public final class SavedState
 {
-    static final double STATE_VERSION = State_00452.VERSION; // state file format version
+    static final double STATE_VERSION = State_00460.VERSION; // state file format version
 
     private static double loadedState;
     private final StateFile stateFile;

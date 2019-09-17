@@ -47,10 +47,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     public static final BaxShop DUMMY_SHOP = new BaxShop(DUMMY_UUID);
 
     private UUID id = UUID.randomUUID();
-
-    @Deprecated
-    private String shortId = null;
-    private String shortId2 = null;
+    private String[] shortId = null;
 
     @SerializeMethod(getter = "getOwner")
     private UUID owner;
@@ -88,8 +85,9 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     public BaxShop(BaxShop shop)
     {
         id = shop.id;
-        shortId = shop.shortId;
-        shortId2 = shop.shortId2;
+        if (shop.shortId != null) {
+            shortId = Arrays.copyOf(shop.shortId, shop.shortId.length);
+        }
         owner = shop.owner;
         legacyId = shop.legacyId;
         locations.addAll(shop.locations);
@@ -103,7 +101,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
         String name = map.getString("owner", StoredPlayer.DUMMY_NAME);
         id = UUID.randomUUID();
         legacyId = map.getLong("id");
-        shortId2 = createShortId();
+        shortId = new String[] { createShortId() };
         owner = State_00300.getPlayerId(name);
         flags = State_00300.flagMapToFlag(map);
         inventory.addAll(map.getList("inventory"));
@@ -114,7 +112,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     public void upgrade00400(@NotNull SafeMap map)
     {
         id =  map.getUUID("id", UUID.randomUUID());
-        shortId2 = createShortId();
+        shortId = new String[] { createShortId() };
         owner = map.getUUID("owner", StoredPlayer.ERROR_UUID);
         flags = State_00420.convertFlag(map.getInteger("flags"));
         inventory.addAll(map.getList("inventory"));
@@ -125,7 +123,35 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     public void upgrade00420(@NotNull SafeMap map)
     {
         id =  map.getUUID("id", UUID.randomUUID());
-        shortId2 = createShortId();
+        shortId = new String[] { createShortId() };
+        owner = map.getUUID("owner", StoredPlayer.ERROR_UUID);
+        flags = map.getInteger("flags");
+        inventory.addAll(map.getList("inventory"));
+        locations.addAll(map.getList("locations"));
+    }
+
+    @Override
+    public void upgrade00452(@NotNull SafeMap map)
+    {
+        String shortId = map.getString("shortId");
+        String shortId2 = map.getString("shortId2");
+        if (shortId2 == null) {
+            if (shortId == null) {
+                this.shortId = new String[] { createShortId() };
+            }
+            else {
+                this.shortId = new String[] { createShortId(), shortId };
+            }
+        }
+        else {
+            if (shortId == null) {
+                this.shortId = new String[] { shortId2 };
+            }
+            else {
+                this.shortId = new String[] { shortId2, shortId };
+            }
+        }
+        id =  map.getUUID("id", UUID.randomUUID());
         owner = map.getUUID("owner", StoredPlayer.ERROR_UUID);
         flags = map.getInteger("flags");
         inventory.addAll(map.getList("inventory"));
@@ -146,19 +172,26 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     @Deprecated
     public String getShortId()
     {
-        return shortId;
+        if (shortId == null || shortId.length < 2)
+            return null;
+        return shortId[1];
     }
 
     public String getShortId2()
     {
-        if (shortId2 == null)
-            shortId2 = createShortId();
-        return shortId2;
+        if (shortId == null || shortId.length < 1)
+            shortId = new String[] { createShortId() };
+        return shortId[0];
     }
 
     public void setShortId2(String shortId2)
     {
-        this.shortId2 = shortId2;
+        if (shortId == null || shortId.length < 1) {
+            shortId = new String[]{shortId2};
+        }
+        else {
+            shortId[0] = shortId2;
+        }
     }
 
     private String createShortId()

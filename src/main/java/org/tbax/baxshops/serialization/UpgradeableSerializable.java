@@ -79,7 +79,13 @@ public interface UpgradeableSerializable extends ConfigurationSerializable
         UpgradeableSerialization.deserialize(this, map);
     }
 
+    @Deprecated
     default void upgrade00452(@NotNull SafeMap map)
+    {
+        UpgradeableSerialization.deserialize(this, map);
+    }
+
+    default void upgrade00460(@NotNull SafeMap map)
     {
         UpgradeableSerialization.deserialize(this, map);
     }
