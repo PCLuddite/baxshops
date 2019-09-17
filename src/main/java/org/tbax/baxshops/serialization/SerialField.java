@@ -24,6 +24,7 @@ import org.tbax.baxshops.serialization.annotations.SerializedAs;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.List;
 
 public class SerialField
 {
@@ -58,7 +59,17 @@ public class SerialField
     {
         Method setter = getSetter();
         if (setter == null) {
-            field.set(obj, value);
+            if (field.getType().isArray() && value != null) {
+                List list = (List)value;
+                Object arr = Array.newInstance(field.getType().getComponentType(), list.size());
+                for(int x = 0; x < list.size(); ++x) {
+                    Array.set(arr, x, list.get(x));
+                }
+                field.set(obj, arr);
+            }
+            else {
+                field.set(obj, value);
+            }
         }
         else {
             setter.invoke(obj, value);
