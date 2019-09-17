@@ -21,7 +21,7 @@
 #    - FIRE
 #    - FIRE_TICK
 #    - SUFFOCATION
-# StateVersion: 4.5                                             # SateVersion should not be changed manually.
+# StateVersion: 4.52                                             # SateVersion should not be changed manually.
 #
 Backups: 15
 LogNotes: false
@@ -40,4 +40,4 @@ DeathTax:
     - FIRE
     - FIRE_TICK
     - SUFFOCATION
-StateVersion: 4.5
+StateVersion: 4.52
