@@ -48,7 +48,7 @@ public final class StateFile
             plugin.getLogger().warning("Failed to back up BaxShops");
         }
 
-        if (getConfig().getStateVersion() != SavedState.STATE_VERSION || getConfig().saveDefaults()) {
+        if (getConfig().saveDefaults()) {
             resaveConfig();
         }
 
@@ -58,11 +58,17 @@ public final class StateFile
 
         try {
             File dir = plugin.getDataFolder();
+            File stateFile = new File(dir, YAML_FILE_PATH);
             if (!dir.exists() && !dir.mkdirs()) {
                 plugin.getLogger().severe("Unable to make data folder!");
             }
             else {
-                state.save(new File(dir, YAML_FILE_PATH));
+                String yaml = state.saveToString();
+                try (BufferedWriter writer = new BufferedWriter(new FileWriter(stateFile))) {
+                    writer.write("VERSION " + SavedState.STATE_VERSION);
+                    writer.newLine();
+                    writer.write(yaml);
+                }
             }
 
             if (hasStateChanged()) {
@@ -82,8 +88,8 @@ public final class StateFile
     {
         if (!config.backup())
             plugin.getLogger().warning("Could not backup config. Configuration may be lost.");
-        if (config.getStateVersion() != SavedState.STATE_VERSION)
-            config.getFileConfig().set("StateVersion", SavedState.STATE_VERSION);
+        if (config.getFileConfig().contains("StateVersion"))
+            config.getFileConfig().set("StateVersion", null);
         config.save();
     }
 
@@ -205,5 +211,23 @@ public final class StateFile
     public File getBackupFile()
     {
         return new File(plugin.getDataFolder(), "backups");
+    }
+
+    public static double readVersion(File file)
+    {
+        try {
+            try (Scanner scanner = new Scanner(file)) {
+                try {
+                    if (!scanner.next().equals("VERSION")) return 0d;
+                    return scanner.nextDouble();
+                }
+                catch (NoSuchElementException e) {
+                    return 0d;
+                }
+            }
+        }
+        catch (IOException e) {
+            return 0d;
+        }
     }
 }

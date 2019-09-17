@@ -26,9 +26,9 @@ import org.jetbrains.annotations.Nullable;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.ShopPlugin;
 import org.tbax.baxshops.serialization.states.State_00300;
-import org.tbax.baxshops.serialization.states.State_00460;
+import org.tbax.baxshops.serialization.states.State_00470;
 
-import java.io.File;
+import java.io.*;
 import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.List;
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 
 public final class SavedState
 {
-    static final double STATE_VERSION = State_00460.VERSION; // state file format version
+    static final double STATE_VERSION = State_00470.VERSION; // state file format version
 
     private static double loadedState;
     private final StateFile stateFile;
@@ -80,18 +80,18 @@ public final class SavedState
         return shops.getShopByLocation(loc);
     }
 
-    public static SavedState readFromDisk(@NotNull ShopPlugin plugin)
+    public static SavedState readFromDisk(@NotNull ShopPlugin plugin) throws IOException
     {
         File stateLocation = ShopPlugin.getStateFile().getFile();
         if (!stateLocation.exists()) {
-            plugin.getLogger().info("YAML file did not exist");
+            plugin.getLogger().info("YAML file did not exist. Starting fresh.");
             return new SavedState(plugin);
         }
         double ver;
         if (plugin.getConfig().contains("StateVersion")) {
             ver = plugin.getConfig().getDouble("StateVersion", STATE_VERSION);
         }
-        else {
+        else if ((ver = StateFile.readVersion(stateLocation)) == 0d) {
             ver = State_00300.VERSION; // version 3.0 was the last version not to be in config.yml
         }
 
@@ -110,7 +110,15 @@ public final class SavedState
             plugin.getLogger().info("Converting state file version " + (new DecimalFormat("0.0#")).format(ver));
         }
 
-        return loader.loadState(YamlConfiguration.loadConfiguration(stateLocation));
+        if (ver >= State_00470.VERSION) {
+            try (BufferedReader reader = new BufferedReader(new FileReader(stateLocation))) {
+                reader.readLine();
+                return loader.loadState(YamlConfiguration.loadConfiguration(reader));
+            }
+        }
+        else {
+            return loader.loadState(YamlConfiguration.loadConfiguration(stateLocation));
+        }
     }
 
     public void addShop(BaxShop shop)
@@ -165,7 +173,7 @@ public final class SavedState
         return storedPlayer;
     }
 
-    public void reload()
+    public void reload() throws IOException
     {
         log.info("Reloading BaxShops...");
         stateFile.writeToDisk(this);

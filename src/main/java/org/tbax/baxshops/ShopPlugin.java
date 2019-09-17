@@ -37,6 +37,7 @@ import org.tbax.baxshops.serialization.SavedState;
 import org.tbax.baxshops.serialization.StateFile;
 import org.tbax.baxshops.serialization.StoredPlayer;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -395,7 +396,15 @@ public final class ShopPlugin extends JavaPlugin
         ItemUtil.loadEnchants(this);
 
         saveDefaultConfig();
-        savedState = SavedState.readFromDisk(this);
+        try {
+            savedState = SavedState.readFromDisk(this);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            log.severe("An IO exception occurred trying to read saved data. BaxShops cannot load.");
+            getPluginLoader().disablePlugin(this);
+            return;
+        }
 
         // run an initial save 5 minutes after starting, then a recurring save
         // every 30 minutes after the first save

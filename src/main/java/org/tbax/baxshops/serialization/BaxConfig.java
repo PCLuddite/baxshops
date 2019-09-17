@@ -165,11 +165,6 @@ public final class BaxConfig
         return getStupidDeaths().contains(e.getEntity().getLastDamageCause().getCause());
     }
 
-    public double getStateVersion()
-    {
-        return getFileConfig().getDouble("StateVersion", State_00300.VERSION); // 3.0 was the last version not to have version in config
-    }
-
     public boolean backup()
     {
         File configFile = new File(plugin.getDataFolder(), "config.yml");

@@ -22,6 +22,8 @@ import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.ShopPlugin;
 import org.tbax.baxshops.errors.PrematureAbortException;
 
+import java.io.IOException;
+
 public final class CmdReload extends BaxShopCommand
 {
     @Override
@@ -70,6 +72,12 @@ public final class CmdReload extends BaxShopCommand
     public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         actor.sendMessage("Initiating reload. See log for details.");
-        ShopPlugin.getSavedState().reload();
+        try {
+            ShopPlugin.getSavedState().reload();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            actor.sendError("An IO exception occoured. See log for details.");
+        }
     }
 }

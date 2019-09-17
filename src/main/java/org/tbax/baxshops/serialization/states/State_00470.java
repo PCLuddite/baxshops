@@ -22,6 +22,8 @@ import org.tbax.baxshops.ShopPlugin;
 
 public class State_00470 extends State_00460
 {
+    public static final double VERSION = 4.7;
+
     public State_00470(ShopPlugin plugin)
     {
         super(plugin);
