@@ -27,10 +27,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -179,6 +176,18 @@ public class EventListener implements Listener
                         break;
                     }
                 }
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onBlockPhysicsEvent(BlockPhysicsEvent e)
+    {
+        for (Block block : BaxShop.getSignOnBlock(e.getSourceBlock())) {
+            if (ShopPlugin.getShop(block.getLocation()) != null) {
+                e.getSourceBlock().setType(Material.STONE);
+                e.setCancelled(true);
+                break;
             }
         }
     }
