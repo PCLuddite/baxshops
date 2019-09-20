@@ -125,7 +125,7 @@ public final class CmdBuy extends BaxShopCommand
 
         BaxQuantity amount = actor.getArgShopQty(2, entry);
         if (amount.getQuantity() == 0) {
-            actor.exitError("You purchased nothing");
+            actor.exitWarning("You purchased nothing");
         }
         else if (amount.getQuantity() < 0) {
             actor.exitError(Resources.INVALID_DECIMAL, "amount to buy");
@@ -185,7 +185,7 @@ public final class CmdBuy extends BaxShopCommand
                 return actor.getShop().getAllItemAliases();
             }
             else if (args.length == 3) {
-                return Arrays.asList("all", "most", "stack");
+                return Arrays.asList("all", "fill", "most", "stack");
             }
         }
         return super.onTabComplete(sender, command, alias, args);

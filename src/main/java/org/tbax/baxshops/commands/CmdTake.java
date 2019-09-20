@@ -123,7 +123,7 @@ public final class CmdTake extends BaxShopCommand
             actor.exitError(Resources.INVALID_DECIMAL, "amount to take");
         }
         else if (amt.getQuantity() == 0) {
-            actor.exitError("You took nothing");
+            actor.exitWarning("You took nothing");
         }
 
         ItemStack stack = entry.toItemStack();
@@ -154,7 +154,7 @@ public final class CmdTake extends BaxShopCommand
                 return actor.getShop().getAllItemAliases();
             }
             else if (args.length == 3) {
-                return Arrays.asList("all", "most", "stack");
+                return Arrays.asList("all", "fill", "most", "stack");
             }
         }
         return super.onTabComplete(sender, command, alias, args);

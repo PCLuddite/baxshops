@@ -79,6 +79,9 @@ public class BaxQuantity
             else if (isStack()) {
                 return stack.getMaxStackSize();
             }
+            else if (isFill()) {
+                return stack.getMaxStackSize() - stack.getAmount();
+            }
             throw new CommandErrorException(e, "'" + argument + "' is not a valid quantity");
         }
     }
@@ -134,6 +137,11 @@ public class BaxQuantity
         return isStack(argument);
     }
 
+    public boolean isFill()
+    {
+        return isFill(argument);
+    }
+
     public boolean isAbstractQtyNotAny()
     {
         return isAbstractQtyNotAny(argument);
@@ -169,9 +177,14 @@ public class BaxQuantity
         return "stack".equalsIgnoreCase(argument);
     }
 
+    public static boolean isFill(String argument)
+    {
+        return "fill".equals(argument);
+    }
+
     public static boolean isAbstractQtyNotAny(String argument)
     {
-        return isAll(argument) || isMost(argument) || isStack(argument);
+        return isAll(argument) || isFill(argument) || isMost(argument) || isStack(argument);
     }
 
     public static boolean isAbstractQty(String argument)
