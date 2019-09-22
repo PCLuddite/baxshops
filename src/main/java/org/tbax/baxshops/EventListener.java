@@ -50,6 +50,7 @@ public class EventListener implements Listener
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreak(BlockBreakEvent event)
     {
+        if (event.isCancelled()) return;
         try {
             BaxShop shop = ShopPlugin.getShop(event.getBlock().getLocation());
             if (shop != null) {
@@ -183,11 +184,15 @@ public class EventListener implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockPhysicsEvent(BlockPhysicsEvent e)
     {
-        for (Block block : BaxShop.getSignOnBlock(e.getSourceBlock())) {
-            if (ShopPlugin.getShop(block.getLocation()) != null) {
-                e.getSourceBlock().setType(Material.STONE);
-                e.setCancelled(true);
-                break;
+        if (e.getSourceBlock().getType() == Material.GRAVEL || e.getSourceBlock().getType() == Material.SAND
+            || e.getSourceBlock().getType() == Material.ANVIL || e.getSourceBlock().getType() == Material.CHIPPED_ANVIL
+            || e.getSourceBlock().getType() == Material.DAMAGED_ANVIL) {
+            for (Block block : BaxShop.getSignOnBlock(e.getSourceBlock())) {
+                if (ShopPlugin.getShop(block.getLocation()) != null) {
+                    e.getSourceBlock().setType(Material.STONE);
+                    e.setCancelled(true);
+                    break;
+                }
             }
         }
     }
@@ -197,7 +202,7 @@ public class EventListener implements Listener
     {
         try {
             ItemStack item = event.getItemInHand();
-            if (!ItemUtil.isShop(item))
+            if (!ItemUtil.isShop(item) || event.isCancelled())
                 return;
             BaxShop shop = ItemUtil.fromItem(item);
             if (shop == null) {
