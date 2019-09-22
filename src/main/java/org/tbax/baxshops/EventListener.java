@@ -184,15 +184,10 @@ public class EventListener implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockPhysicsEvent(BlockPhysicsEvent e)
     {
-        if (e.getSourceBlock().getType() == Material.GRAVEL || e.getSourceBlock().getType() == Material.SAND
-            || e.getSourceBlock().getType() == Material.ANVIL || e.getSourceBlock().getType() == Material.CHIPPED_ANVIL
-            || e.getSourceBlock().getType() == Material.DAMAGED_ANVIL) {
-            for (Block block : BaxShop.getSignOnBlock(e.getSourceBlock())) {
-                if (ShopPlugin.getShop(block.getLocation()) != null) {
-                    e.getSourceBlock().setType(Material.STONE);
-                    e.setCancelled(true);
-                    break;
-                }
+        for (Block block : BaxShop.getSignOnBlock(e.getBlock())) {
+            if (ShopPlugin.getShop(block.getLocation()) != null) {
+                e.setCancelled(true);
+                break;
             }
         }
     }
