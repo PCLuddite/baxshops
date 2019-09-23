@@ -118,8 +118,8 @@ public class PlayerMap implements Map<UUID, StoredPlayer>
         if(key != null && value != null && !key.equals(value.getUniqueId()))
             throw new UnsupportedOperationException();
         StoredPlayer player = players.put(key, value);
-        Set<UUID> uuids = playerNames.remove(player.getName());
-        if (player == null) {
+        Set<UUID> uuids = playerNames.remove(value.getName());
+        if (uuids == null) {
             uuids = new HashSet<>();
         }
         uuids.add(value.getUniqueId());
