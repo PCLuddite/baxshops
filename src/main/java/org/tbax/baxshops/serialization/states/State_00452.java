@@ -53,16 +53,16 @@ public class State_00452 extends State_00451
             BaxShop shop = shops.get(x);
             for (Location location : new ArrayList<>(shop.getLocations())) {
                 if (!ItemUtil.isSign(location.getBlock().getType())) {
-                    ShopPlugin.logWarning(String.format("Shop %s at location %s is not a sign. This location will be removed.",
+                    ShopPlugin.logWarning(String.format("Shop %s at %s is not a sign. This location will be removed.",
                         shop.getId().toString(), Format.location(location)
                     ));
                     shop.removeLocation(location);
                 }
             }
-            if (shop.getLocations().isEmpty()) {
+            if (shop.getLocations().isEmpty() && !BaxShop.DUMMY_UUID.equals(shop.getId())) {
                 if (shop.isEmpty()) {
                     ShopPlugin.logInfo(String.format("Shop %s has no locations and no inventory. This shop will be removed.", shop.getId().toString()));
-                    shops.remove(x);
+                    shops.remove(shop);
                 }
                 else {
                     ShopPlugin.logWarning(String.format("Shop %s has no locations but still has inventory. A claim will be sent to the owner.", shop.getId().toString()));
