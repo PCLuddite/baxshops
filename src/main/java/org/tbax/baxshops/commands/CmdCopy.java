@@ -82,20 +82,30 @@ public final class CmdCopy extends BaxShopCommand
     @Override
     public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException // tested OK 3-14-19
     {
-        if (!actor.isAdmin()) {
+        Material signType;
+        if (actor.isAdmin()) {
+            if (ItemUtil.isSign(actor.getItemInHand())) {
+                signType = actor.getItemInHand().getType();
+            }
+            else {
+                signType = ItemUtil.getDefaultSignType();
+            }
+        }
+        else {
             PlayerInventory inv = actor.getPlayer().getInventory();
             ItemStack sign = PlayerUtil.findSign(actor.getPlayer());
             if (sign == null) {
                 actor.exitError("You need a sign to copy a shop.");
             }
-            inv.remove(sign.getType());
+            signType = sign.getType();
+            inv.remove(new ItemStack(sign.getType(), 1));
         }
 
-        int i = actor.giveItem(actor.getSelection().toItem());
-        if (i > 0) {
+        int overflow = actor.giveItem(actor.getSelection().toItem(signType));
+        if (overflow > 0) {
             actor.sendMessage("Your inventory is full");
             if (!actor.isAdmin()) {
-                actor.getPlayer().getInventory().addItem(ItemUtil.newDefaultSign());
+                actor.getPlayer().getInventory().addItem(new ItemStack(signType, 1));
             }
         }
     }

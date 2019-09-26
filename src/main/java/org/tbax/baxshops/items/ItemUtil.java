@@ -418,7 +418,12 @@ public final class ItemUtil
 
     public static ItemStack newDefaultSign()
     {
-        return new ItemStack(Material.OAK_SIGN, 1);
+        return new ItemStack(getDefaultSignType(), 1);
+    }
+
+    public static Material getDefaultSignType()
+    {
+        return Material.OAK_SIGN;
     }
 
     public static Map<Integer, ? extends ItemStack> all(Inventory inventory, List<Material> materials)

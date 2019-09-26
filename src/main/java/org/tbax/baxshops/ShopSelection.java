@@ -19,6 +19,7 @@
  */
 package org.tbax.baxshops;
 
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -121,8 +122,8 @@ public final class ShopSelection
         }
     }
 
-    public ItemStack toItem()
+    public ItemStack toItem(Material signType)
     {
-        return shop.toItem(location);
+        return shop.toItem(location, signType);
     }
 }

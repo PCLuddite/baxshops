@@ -21,6 +21,7 @@ package org.tbax.baxshops;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -359,47 +360,59 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
 
     public ItemStack toItem(Location loc)
     {
+        return toItem(loc, loc.getBlock().getType());
+    }
+
+    public ItemStack toItem(Location loc, Material signType)
+    {
         String[] lines = getSignText(loc);
         if (lines.length == 1) {
-            return toItem(lines[0]);
+            return toItem(signType, lines[0]);
         }
         else if (lines.length == 2) {
-            return toItem(lines[0], lines[1]);
+            return toItem(signType, lines[0], lines[1]);
         }
         else if (lines.length == 3) {
-            return toItem(lines[0], lines[1], lines[2]);
+            return toItem(signType, lines[0], lines[1], lines[2]);
         }
         else if (lines.length >= 4) {
-            return toItem(lines[0], lines[1], lines[2], lines[3]);
+            return toItem(signType, lines[0], lines[1], lines[2], lines[3]);
         }
         else {
-            return toItem("");
+            return toItem(signType, "");
         }
     }
 
     public ItemStack toItem()
     {
-        return toItem(getAbbreviatedOwnerName() + "'s", "shop");
+        return toItem(ItemUtil.getDefaultSignType());
     }
 
-    public ItemStack toItem(String line1)
+    public ItemStack toItem(Material signType)
     {
-        return toItem(line1, "");
+        return toItem(signType, getAbbreviatedOwnerName() + "'s", "shop");
     }
 
-    public ItemStack toItem(String line1, String line2)
+    public ItemStack toItem(Material signType, String line1)
     {
-        return toItem(line1, line2, "");
+        return toItem(signType, line1, "");
     }
 
-    public ItemStack toItem(String line1, String line2, String line3)
+    public ItemStack toItem(Material signType, String line1, String line2)
     {
-        return toItem(line1, line2, line3, "");
+        return toItem(signType, line1, line2, "");
     }
 
-    public ItemStack toItem(String line1, String line2, String line3, String line4)
+    public ItemStack toItem(Material signType, String line1, String line2, String line3)
     {
-        ItemStack item = ItemUtil.newDefaultSign();
+        return toItem(signType, line1, line2, line3, "");
+    }
+
+    public ItemStack toItem(Material signType, String line1, String line2, String line3, String line4)
+    {
+        if (!ItemUtil.isSign(signType))
+            throw new ClassCastException();
+        ItemStack item = new ItemStack(signType, 1);
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.BLUE + line1);
         if (line2 != null && !"".equals(line2)) lore.add(ChatColor.BLUE + line2);
