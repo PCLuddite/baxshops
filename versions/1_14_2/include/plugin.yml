@@ -1,0 +1,53 @@
+name: BaxShops
+main: org.tbax.baxshops.ShopPlugin
+description: Create and manage shops with a Vault economy
+api-version: '1.14'
+version: '0.3'
+commands:
+    shop:
+        description: manage shops
+        usage: |
+          /shop <action> <arguments...>
+          §6Help: §f/shop help
+        aliases: s
+    buy:
+        description: buy from a shop
+        usage: |
+            /buy <item> [amt]
+    sell:
+        description: sell to a shop
+        usage: |
+            /sell <amt>
+    restock:
+        description: restocks an item that is already in a shop with an item in hand
+        usage: |
+            /restock <amt>
+permissions:
+    shops.*:
+        description: All Shops permissions
+        default: op
+        children:
+            shops.admin: true
+            shops.trader: true
+    shops.trader:
+        description: Allows you to buy and sell from shops
+        default: true
+        children:
+            shops.buy: true
+            shops.sell: true
+    shops.admin:
+        description: Allows you to create and remove shops
+        default: op
+        children:
+            shops.owner: true
+    shops.owner:
+        description: Allows you to create shops for yourself
+        default: true
+        children:
+            shops.trader: true
+    shops.buy:
+        description: Allows you to buy from shops
+        default: true
+    shops.sell:
+        description: Allows you to sell to shops
+        default: true
