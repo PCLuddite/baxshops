@@ -57,7 +57,7 @@ compile() {
             if [[ ! -d './bin' ]]; then
                 mkdir './bin'
             fi
-            cp -v './target/baxshops-3.0-SNAPSHOT.jar' "./bin/baxshops-3.0-bukkit$VERSION.jar"
+            cp -v "./target/baxshops-3.0-bukkit$VERSION.jar" "./bin/baxshops-3.0-bukkit$VERSION.jar"
         fi
     fi
     
