@@ -1,3 +1,21 @@
+#
+#  Copyright (C) Timothy Baxendale
+# 
+#  This library is free software; you can redistribute it and/or
+#  modify it under the terms of the GNU Lesser General Public
+#  License as published by the Free Software Foundation; either
+#  version 2.1 of the License, or (at your option) any later version.
+# 
+#  This library is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#  Lesser General Public License for more details.
+# 
+#  You should have received a copy of the GNU Lesser General Public
+#  License along with this library; if not, write to the Free Software
+#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
+#  USA
+#
 #!/bin/bash
 
 if [ "$JAVA_HOME" = "" ]; then
@@ -48,7 +66,15 @@ compile() {
     echo "Done."
 }
 
-if [[ "$1" != "" ]]; then
+if [[ "$1" = "trunk" ]]; then
+    mvn install clean
+    STATUS=$?
+    if [[ $STATUS = 0 ]]; then
+        mvn package
+        cp -v './target/baxshops-3.0-SNAPSHOT.jar' './bin/baxshops-3.0-SNAPSHOT.jar'
+    fi
+    exit $STATUS
+elif [[ "$1" != "" ]]; then
     VERSION="$1"
     if [[ ! -d "versions/$VERSION" ]]; then
         echo "No version $VERSION to build"
