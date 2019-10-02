@@ -411,7 +411,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     {
         if (!ItemUtil.isSign(signType))
             throw new ClassCastException();
-        ItemStack item = new ItemStack(signType, 1);
+        ItemStack item = new ItemStack(ItemUtil.toInventorySign(signType), 1);
         List<String> lore = new ArrayList<>();
         lore.add(ChatColor.BLUE + line1);
         if (line2 != null && !"".equals(line2)) lore.add(ChatColor.BLUE + line2);

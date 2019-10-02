@@ -49,6 +49,8 @@ public final class ItemUtil
     private static final Method GET_NAME;
     private static final List<Material> SIGN_TYPES = Arrays.asList(Material.SIGN, Material.WALL_SIGN);
 
+    private static final Map<Material, Material> SIGN_TO_SIGN = new HashMap<>();
+
     static {
         String name = Bukkit.getServer().getClass().getPackage().getName();
         MINECRAFT_VERSION = name.substring(name.lastIndexOf('.') + 1);
@@ -66,6 +68,8 @@ public final class ItemUtil
         }
         AS_NMS_COPY = nmsCpyMthd;
         GET_NAME = getNmMthd;
+
+        SIGN_TO_SIGN.put(Material.WALL_SIGN, Material.SIGN);
     }
 
     /**
@@ -391,6 +395,12 @@ public final class ItemUtil
     public static Material getDefaultSignType()
     {
         return Material.SIGN;
+    }
+
+    public static Material toInventorySign(Material sign)
+    {
+        Material m = SIGN_TO_SIGN.get(sign);
+        return m == null ? sign : m;
     }
 
     public static Map<Integer, ? extends ItemStack> all(Inventory inventory, List<Material> materials)

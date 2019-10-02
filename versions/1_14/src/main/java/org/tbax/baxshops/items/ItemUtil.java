@@ -26,7 +26,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -49,6 +48,9 @@ public final class ItemUtil
     private static final String MINECRAFT_VERSION;
     private static final Method AS_NMS_COPY;
     private static final Method GET_NAME;
+
+    private static final Map<Material, Material> SIGN_TO_SIGN = new HashMap<>();
+
     private static final List<Material> SIGN_TYPES = Arrays.asList(Material.SPRUCE_SIGN, Material.SPRUCE_WALL_SIGN,
             Material.ACACIA_SIGN, Material.ACACIA_WALL_SIGN,
             Material.BIRCH_SIGN, Material.BIRCH_WALL_SIGN,
@@ -66,7 +68,7 @@ public final class ItemUtil
         try {
             Class<?> itemStackCls = Class.forName("net.minecraft.server." + MINECRAFT_VERSION + ".ItemStack");
             nmsCpyMthd = Class.forName("org.bukkit.craftbukkit." + MINECRAFT_VERSION + ".inventory.CraftItemStack")
-                .getMethod("asNMSCopy", ItemStack.class);
+                    .getMethod("asNMSCopy", ItemStack.class);
             getNmMthd = itemStackCls.getMethod("getName");
         }
         catch (ReflectiveOperationException e) {
@@ -74,6 +76,15 @@ public final class ItemUtil
         }
         AS_NMS_COPY = nmsCpyMthd;
         GET_NAME = getNmMthd;
+
+        SIGN_TO_SIGN.put(Material.OAK_WALL_SIGN, Material.OAK_SIGN);
+        SIGN_TO_SIGN.put(Material.ACACIA_WALL_SIGN, Material.ACACIA_SIGN);
+        SIGN_TO_SIGN.put(Material.BIRCH_WALL_SIGN, Material.BIRCH_SIGN);
+        SIGN_TO_SIGN.put(Material.DARK_OAK_WALL_SIGN, Material.DARK_OAK_SIGN);
+        SIGN_TO_SIGN.put(Material.SPRUCE_WALL_SIGN, Material.SPRUCE_SIGN);
+        SIGN_TO_SIGN.put(Material.JUNGLE_WALL_SIGN, Material.JUNGLE_SIGN);
+        SIGN_TO_SIGN.put(Material.LEGACY_WALL_SIGN, Material.LEGACY_SIGN);
+        SIGN_TO_SIGN.put(Material.LEGACY_SIGN_POST, Material.LEGACY_SIGN);
     }
 
     /**
@@ -88,7 +99,7 @@ public final class ItemUtil
     private ItemUtil()
     {
     }
-    
+
     public static List<BaxEntry> getItemFromAlias(String input, BaxShop shop)
     {
         String[] words = input.toUpperCase().split("_");
@@ -202,7 +213,7 @@ public final class ItemUtil
         patterns[7] = new Pattern(DyeColor.BLACK, PatternType.BORDER);
         return Arrays.asList(patterns);
     }
-    
+
     public static String getEnchantName(Enchantment enchant)
     {
         Enchantable enchantable = enchants.get(enchant);
@@ -210,28 +221,28 @@ public final class ItemUtil
             return Format.toFriendlyName(enchant.getKey().getKey());
         return enchantable.getName();
     }
-    
+
     /**
      * Determines if a material can be damaged
      * @param item
-     * @return 
+     * @return
      */
     public static boolean isDamageable(Material item)
     {
         return damageable.containsKey(item);
     }
-    
+
     /**
      * Gets the maximum damage for an item. This assumes damageability
      * has been confirmed with isDamageable()
      * @param item
-     * @return 
+     * @return
      */
     public static short getMaxDamage(Material item)
     {
         return damageable.get(item);
     }
-    
+
     /**
      * Loads the damageable items list from the damageable.txt resource.
      * @param plugin
@@ -266,7 +277,7 @@ public final class ItemUtil
             e.printStackTrace();
         }
     }
-    
+
     /**
      * Loads the enchantment names in enchants.txt
      * @param plugin
@@ -360,7 +371,7 @@ public final class ItemUtil
         if (!stack1.isSimilar(stack2)) {
             return stack1.getType() == stack2.getType() &&
                     (isSameBook(stack1, stack2)
-                    || isSameBanner(stack1, stack2));
+                            || isSameBanner(stack1, stack2));
         }
         return true;
     }
@@ -368,9 +379,9 @@ public final class ItemUtil
     public static boolean isShop(ItemStack item)
     {
         return isSign(item)&&
-               item.hasItemMeta() &&
-               item.getItemMeta().hasLore() &&
-               item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1).startsWith(ChatColor.GRAY + "ID: ");
+                item.hasItemMeta() &&
+                item.getItemMeta().hasLore() &&
+                item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1).startsWith(ChatColor.GRAY + "ID: ");
     }
 
     public static boolean isSign(ItemStack item)
@@ -424,6 +435,12 @@ public final class ItemUtil
     public static Material getDefaultSignType()
     {
         return Material.OAK_SIGN;
+    }
+
+    public static Material toInventorySign(Material sign)
+    {
+        Material m = SIGN_TO_SIGN.get(sign);
+        return m == null ? sign : m;
     }
 
     public static Map<Integer, ? extends ItemStack> all(Inventory inventory, List<Material> materials)
