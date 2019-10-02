@@ -26,7 +26,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -49,6 +48,9 @@ public final class ItemUtil
     private static final String MINECRAFT_VERSION;
     private static final Method AS_NMS_COPY;
     private static final Method GET_NAME;
+
+    private static final Map<Material, Material> SIGN_TO_SIGN = new HashMap<>();
+
     private static final List<Material> SIGN_TYPES = Arrays.asList(Material.SPRUCE_SIGN, Material.SPRUCE_WALL_SIGN,
             Material.ACACIA_SIGN, Material.ACACIA_WALL_SIGN,
             Material.BIRCH_SIGN, Material.BIRCH_WALL_SIGN,
@@ -74,6 +76,15 @@ public final class ItemUtil
         }
         AS_NMS_COPY = nmsCpyMthd;
         GET_NAME = getNmMthd;
+
+        SIGN_TO_SIGN.put(Material.OAK_WALL_SIGN, Material.OAK_SIGN);
+        SIGN_TO_SIGN.put(Material.ACACIA_WALL_SIGN, Material.ACACIA_SIGN);
+        SIGN_TO_SIGN.put(Material.BIRCH_WALL_SIGN, Material.BIRCH_SIGN);
+        SIGN_TO_SIGN.put(Material.DARK_OAK_WALL_SIGN, Material.DARK_OAK_SIGN);
+        SIGN_TO_SIGN.put(Material.SPRUCE_WALL_SIGN, Material.SPRUCE_SIGN);
+        SIGN_TO_SIGN.put(Material.JUNGLE_WALL_SIGN, Material.JUNGLE_SIGN);
+        SIGN_TO_SIGN.put(Material.LEGACY_WALL_SIGN, Material.LEGACY_SIGN);
+        SIGN_TO_SIGN.put(Material.LEGACY_SIGN_POST, Material.LEGACY_SIGN);
     }
 
     /**
@@ -424,6 +435,12 @@ public final class ItemUtil
     public static Material getDefaultSignType()
     {
         return Material.OAK_SIGN;
+    }
+
+    public static Material toInventorySign(Material sign)
+    {
+        Material m = SIGN_TO_SIGN.get(sign);
+        return m == null ? sign : m;
     }
 
     public static Map<Integer, ? extends ItemStack> all(Inventory inventory, List<Material> materials)
