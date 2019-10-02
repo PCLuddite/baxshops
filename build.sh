@@ -23,23 +23,23 @@ if [ "$JAVA_HOME" = "" ]; then
     export JAVA_HOME=${JAVA_HOME%/*}
     export JAVA_HOME=${JAVA_HOME%/*}
 fi
-TMP="baxshops$RANDOM"
+TMP=".tmp$RANDOM"
 echo "JAVA_HOME=$JAVA_HOME"
 echo "TMP=$TMP"
 
 stash() {
     local VERSION=$1
-    if [[ ! -d "/tmp/$TMP/$VERSION" ]]; then
-        mkdir -p "/tmp/$TMP/$VERSION"
+    if [[ ! -d "./$TMP/$VERSION" ]]; then
+        mkdir -p "./$TMP/$VERSION"
     fi
     for FILE in $(find "versions/$VERSION/." -type f); do
-        cp --parents -v "${FILE#versions/$VERSION/}" "/tmp/$TMP/$VERSION/"
+        cp --parents -v "${FILE#versions/$VERSION/}" "./$TMP/$VERSION/"
     done
 }
 
 unstash() {
     local VERSION=$1
-    cp -vr /tmp/$TMP/$VERSION/* .
+    cp -vr ./$TMP/$VERSION/* .
 }
 
 compile() {
@@ -89,4 +89,4 @@ else
     done
 fi
 
-rm -r /tmp/$TMP
+rm -r ./$TMP
