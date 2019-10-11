@@ -1,7 +1,7 @@
 BaxShops
 =========
 
-BaxShops is a shop plugin for Bukkit, based on nathan/shops, updated for Bukkit 1.8+
+BaxShops is a shop plugin for Bukkit, based on nathan/shops, updated for Bukkit 1.12 and 1.13
 
 **FEATURES**
 * /buy, /sell, /restock are now commands
