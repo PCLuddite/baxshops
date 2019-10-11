@@ -481,12 +481,15 @@ public final class ShopPlugin extends JavaPlugin
         }
         else if (actor.getNumArgs() > 1) {
             BaxShopCommand cmd = commands.get(actor.getArg(0));
-            if (cmd != null) {
-                String arg = actor.getArg(actor.getNumArgs() - 1).toLowerCase();
-                return cmd.onTabComplete(actor, command, alias, args).stream()
-                    .filter(s -> s != null && s.toLowerCase().startsWith(arg))
-                    .collect(Collectors.toList());
+            if (cmd == null) return Collections.emptyList();
+            String arg = actor.getArg(actor.getNumArgs() - 1).toLowerCase();
+            List<String> suggestions = cmd.onTabComplete(actor, command, alias, args);
+            for(int idx = suggestions.size() - 1; idx >= 0; --idx) {
+                if (Arrays.stream(suggestions.get(idx).split("_")).noneMatch(word -> word.startsWith(arg))) {
+                    suggestions.remove(idx);
+                }
             }
+            return suggestions;
         }
         return Collections.emptyList();
     }
