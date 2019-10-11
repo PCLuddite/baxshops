@@ -24,11 +24,13 @@ if [ "$JAVA_HOME" = "" ]; then
     export JAVA_HOME=${JAVA_HOME%/*}
 fi
 TMP=".tmp$RANDOM"
+SHOPS_VER="0.1.2"
 echo "JAVA_HOME=$JAVA_HOME"
+echo "SHOPS_VER=$SHOPS_VER"
 echo "TMP=$TMP"
 
 stash() {
-    local VERSION=$1
+    local VERSION="$1"
     if [[ ! -d "./$TMP/$VERSION" ]]; then
         mkdir -p "./$TMP/$VERSION"
     fi
@@ -38,12 +40,12 @@ stash() {
 }
 
 unstash() {
-    local VERSION=$1
+    local VERSION="$1"
     cp -vr ./$TMP/$VERSION/* .
 }
 
 compile() {
-    local VERSION=$1
+    local VERSION="$1"
     
     echo "Building version $VERSION..."
     
@@ -57,7 +59,7 @@ compile() {
             if [[ ! -d './bin' ]]; then
                 mkdir './bin'
             fi
-            cp -v "./target/baxshops-3.0-bukkit$VERSION.jar" "./bin/baxshops-3.0-bukkit$VERSION.jar"
+            cp -v "./target/baxshops-${SHOPS_VER}-bukkit$VERSION-RELEASE.jar" "./bin/baxshops-$SHOPS_VER-bukkit$VERSION-RELEASE.jar"
         fi
     fi
     
@@ -71,7 +73,7 @@ if [[ "$1" = "trunk" ]]; then
     STATUS=$?
     if [[ $STATUS = 0 ]]; then
         mvn package
-        cp -v './target/baxshops-3.0-SNAPSHOT.jar' './bin/baxshops-3.0-SNAPSHOT.jar'
+        cp -v "./target/baxshops-${SHOPS_VER}-SNAPSHOT.jar" "./bin/baxshops-${SHOPS_VER}-SNAPSHOT.jar"
     fi
     exit $STATUS
 elif [[ "$1" != "" ]]; then
