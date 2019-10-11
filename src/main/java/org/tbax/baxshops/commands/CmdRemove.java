@@ -113,7 +113,7 @@ public final class CmdRemove extends BaxShopCommand
                     stack.getAmount() == 1 ? "was" : "were");
             }
         }
-        if (entry.getAmount() > 0) {
+        if (!shop.hasFlagInfinite() && entry.getAmount() > 0) {
             actor.sendWarning("The shop entry was not removed");
         }
         else {
