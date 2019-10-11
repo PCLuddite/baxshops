@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.tbax.shops</groupId>
     <artifactId>baxshops</artifactId>
-    <version>0.1.2-bukkit1_13-RELEASE</version>
+    <version>1.0b2-bukkit1_13-RELEASE</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
