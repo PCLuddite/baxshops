@@ -484,12 +484,13 @@ public final class ShopPlugin extends JavaPlugin
             if (cmd == null) return Collections.emptyList();
             String arg = actor.getArg(actor.getNumArgs() - 1).toLowerCase();
             List<String> suggestions = cmd.onTabComplete(actor, command, alias, args);
-            for(int idx = suggestions.size() - 1; idx >= 0; --idx) {
-                if (Arrays.stream(suggestions.get(idx).split("_")).noneMatch(word -> word.startsWith(arg))) {
-                    suggestions.remove(idx);
+            List<String> filtered = new ArrayList<>(suggestions.size());
+            for(String suggestion : suggestions) {
+                if (Arrays.stream(suggestion.split("_")).anyMatch(word -> word.startsWith(arg))) {
+                    filtered.add(suggestion);
                 }
             }
-            return suggestions;
+            return filtered;
         }
         return Collections.emptyList();
     }
