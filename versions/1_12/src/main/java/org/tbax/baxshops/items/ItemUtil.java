@@ -104,7 +104,7 @@ public final class ItemUtil
                 if (matches == maxMatch) {
                     entries.add(entry);
                 }
-                else if (matches > maxMatch) {
+                else if (matches > maxMatch && matches > 0) {
                     entries.clear();
                     entries.add(entry);
                     maxMatch = matches;
