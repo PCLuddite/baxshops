@@ -22,6 +22,7 @@ package org.tbax.baxshops.items;
 import org.bukkit.*;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Inventory;
@@ -29,6 +30,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.BaxShop;
@@ -48,6 +50,8 @@ public final class ItemUtil
     private static final String MINECRAFT_VERSION;
     private static final Method AS_NMS_COPY;
     private static final Method GET_NAME;
+
+    private static Map<Integer, List<ItemStack>> legacyItems = null;
 
     private static final Map<Material, Material> SIGN_TO_SIGN = new HashMap<>();
 
@@ -452,5 +456,37 @@ public final class ItemUtil
             }
         }
         return all;
+    }
+
+    @Deprecated
+    public static ItemStack fromItemId(int id)
+    {
+        return fromItemId(id, (short)0);
+    }
+
+    @Deprecated
+    public static ItemStack fromItemId(int id, short damage)
+    {
+        Material type = legacyItems.get(id).get(0).getType();
+        return new ItemStack(type, 1, damage);
+    }
+
+    @Deprecated
+    public static Map<Integer, List<ItemStack>> getLegacyItems()
+    {
+        return legacyItems;
+    }
+
+    @Deprecated
+    public static Map<Integer, List<ItemStack>> loadLegacyItems(JavaPlugin plugin) throws IOException
+    {
+        try (InputStream stream = plugin.getResource("legacy_items.yml")) {
+            FileConfiguration itemYml = YamlConfiguration.loadConfiguration(new InputStreamReader(stream));
+            Map<?, ?> items = (Map<?, ?>)itemYml.get("items");
+            for(Map.Entry<?, ?> entry : items.entrySet()) {
+                legacyItems.put(Integer.parseInt((String)entry.getKey()), (List)entry.getValue());
+            }
+        }
+        return legacyItems;
     }
 }

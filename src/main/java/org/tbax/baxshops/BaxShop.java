@@ -36,6 +36,7 @@ import org.tbax.baxshops.serialization.UpgradeableSerializable;
 import org.tbax.baxshops.serialization.UpgradeableSerialization;
 import org.tbax.baxshops.serialization.annotations.DoNotSerialize;
 import org.tbax.baxshops.serialization.annotations.SerializeMethod;
+import org.tbax.baxshops.serialization.qs.NathanConverter;
 import org.tbax.baxshops.serialization.states.State_00300;
 import org.tbax.baxshops.serialization.states.State_00420;
 
@@ -643,5 +644,17 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     public int hashCode()
     {
         return Objects.hash(id);
+    }
+
+    public static BaxShop fromNathan(qs.shops.Shop shop)
+    {
+        BaxShop baxShop = new BaxShop(UUID.randomUUID());
+        baxShop.setFlagInfinite(shop.isInfinite);
+        baxShop.addLocation(shop.location);
+        baxShop.setOwner(NathanConverter.registerPlayer(shop.owner));
+        for(qs.shops.ShopEntry entry : shop.inventory) {
+            baxShop.add(BaxEntry.fromNathan(entry));
+        }
+        return baxShop;
     }
 }

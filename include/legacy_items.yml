@@ -1,0 +1,1390 @@
+items:
+  0:
+  - ==: org.bukkit.inventory.ItemStack
+    type: AIR
+  1:
+  - ==: org.bukkit.inventory.ItemStack
+    type: STONE
+  2:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GRASS
+  3:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DIRT
+  4:
+  - ==: org.bukkit.inventory.ItemStack
+    type: COBBLESTONE
+  5:
+  - ==: org.bukkit.inventory.ItemStack
+    type: WOOD
+  6:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SAPLING
+  7:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BEDROCK
+  8:
+  - ==: org.bukkit.inventory.ItemStack
+    type: WATER
+  9:
+  - ==: org.bukkit.inventory.ItemStack
+    type: STATIONARY_WATER
+  10:
+  - ==: org.bukkit.inventory.ItemStack
+    type: LAVA
+  11:
+  - ==: org.bukkit.inventory.ItemStack
+    type: STATIONARY_LAVA
+  12:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SAND
+  13:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GRAVEL
+  14:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GOLD_ORE
+  15:
+  - ==: org.bukkit.inventory.ItemStack
+    type: IRON_ORE
+  16:
+  - ==: org.bukkit.inventory.ItemStack
+    type: COAL_ORE
+  17:
+  - ==: org.bukkit.inventory.ItemStack
+    type: LOG
+  18:
+  - ==: org.bukkit.inventory.ItemStack
+    type: LEAVES
+  19:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SPONGE
+  20:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GLASS
+  21:
+  - ==: org.bukkit.inventory.ItemStack
+    type: LAPIS_ORE
+  22:
+  - ==: org.bukkit.inventory.ItemStack
+    type: LAPIS_BLOCK
+  23:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DISPENSER
+  24:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SANDSTONE
+  25:
+  - ==: org.bukkit.inventory.ItemStack
+    type: NOTE_BLOCK
+  26:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BED_BLOCK
+  27:
+  - ==: org.bukkit.inventory.ItemStack
+    type: POWERED_RAIL
+  28:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DETECTOR_RAIL
+  29:
+  - ==: org.bukkit.inventory.ItemStack
+    type: PISTON_STICKY_BASE
+  30:
+  - ==: org.bukkit.inventory.ItemStack
+    type: WEB
+  31:
+  - ==: org.bukkit.inventory.ItemStack
+    type: LONG_GRASS
+  32:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DEAD_BUSH
+  33:
+  - ==: org.bukkit.inventory.ItemStack
+    type: PISTON_BASE
+  34:
+  - ==: org.bukkit.inventory.ItemStack
+    type: PISTON_EXTENSION
+  35:
+  - ==: org.bukkit.inventory.ItemStack
+    type: WOOL
+  36:
+  - ==: org.bukkit.inventory.ItemStack
+    type: PISTON_MOVING_PIECE
+  37:
+  - ==: org.bukkit.inventory.ItemStack
+    type: YELLOW_FLOWER
+  38:
+  - ==: org.bukkit.inventory.ItemStack
+    type: RED_ROSE
+  39:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BROWN_MUSHROOM
+  40:
+  - ==: org.bukkit.inventory.ItemStack
+    type: RED_MUSHROOM
+  41:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GOLD_BLOCK
+  42:
+  - ==: org.bukkit.inventory.ItemStack
+    type: IRON_BLOCK
+  43:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DOUBLE_STEP
+  44:
+  - ==: org.bukkit.inventory.ItemStack
+    type: STEP
+  45:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BRICK
+  46:
+  - ==: org.bukkit.inventory.ItemStack
+    type: TNT
+  47:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BOOKSHELF
+  48:
+  - ==: org.bukkit.inventory.ItemStack
+    type: MOSSY_COBBLESTONE
+  49:
+  - ==: org.bukkit.inventory.ItemStack
+    type: OBSIDIAN
+  50:
+  - ==: org.bukkit.inventory.ItemStack
+    type: TORCH
+  51:
+  - ==: org.bukkit.inventory.ItemStack
+    type: FIRE
+  52:
+  - ==: org.bukkit.inventory.ItemStack
+    type: MOB_SPAWNER
+  53:
+  - ==: org.bukkit.inventory.ItemStack
+    type: WOOD_STAIRS
+  54:
+  - ==: org.bukkit.inventory.ItemStack
+    type: CHEST
+  55:
+  - ==: org.bukkit.inventory.ItemStack
+    type: REDSTONE_WIRE
+  56:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DIAMOND_ORE
+  57:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DIAMOND_BLOCK
+  58:
+  - ==: org.bukkit.inventory.ItemStack
+    type: WORKBENCH
+  59:
+  - ==: org.bukkit.inventory.ItemStack
+    type: CROPS
+  60:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SOIL
+  61:
+  - ==: org.bukkit.inventory.ItemStack
+    type: FURNACE
+  62:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BURNING_FURNACE
+  63:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SIGN_POST
+  64:
+  - ==: org.bukkit.inventory.ItemStack
+    type: WOODEN_DOOR
+  65:
+  - ==: org.bukkit.inventory.ItemStack
+    type: LADDER
+  66:
+  - ==: org.bukkit.inventory.ItemStack
+    type: RAILS
+  67:
+  - ==: org.bukkit.inventory.ItemStack
+    type: COBBLESTONE_STAIRS
+  68:
+  - ==: org.bukkit.inventory.ItemStack
+    type: WALL_SIGN
+  69:
+  - ==: org.bukkit.inventory.ItemStack
+    type: LEVER
+  70:
+  - ==: org.bukkit.inventory.ItemStack
+    type: STONE_PLATE
+  71:
+  - ==: org.bukkit.inventory.ItemStack
+    type: IRON_DOOR_BLOCK
+  72:
+  - ==: org.bukkit.inventory.ItemStack
+    type: WOOD_PLATE
+  73:
+  - ==: org.bukkit.inventory.ItemStack
+    type: REDSTONE_ORE
+  74:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GLOWING_REDSTONE_ORE
+  75:
+  - ==: org.bukkit.inventory.ItemStack
+    type: REDSTONE_TORCH_OFF
+  76:
+  - ==: org.bukkit.inventory.ItemStack
+    type: REDSTONE_TORCH_ON
+  77:
+  - ==: org.bukkit.inventory.ItemStack
+    type: STONE_BUTTON
+  78:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SNOW
+  79:
+  - ==: org.bukkit.inventory.ItemStack
+    type: ICE
+  80:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SNOW_BLOCK
+  81:
+  - ==: org.bukkit.inventory.ItemStack
+    type: CACTUS
+  82:
+  - ==: org.bukkit.inventory.ItemStack
+    type: CLAY
+  83:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SUGAR_CANE_BLOCK
+  84:
+  - ==: org.bukkit.inventory.ItemStack
+    type: JUKEBOX
+  85:
+  - ==: org.bukkit.inventory.ItemStack
+    type: FENCE
+  86:
+  - ==: org.bukkit.inventory.ItemStack
+    type: PUMPKIN
+  87:
+  - ==: org.bukkit.inventory.ItemStack
+    type: NETHERRACK
+  88:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SOUL_SAND
+  89:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GLOWSTONE
+  90:
+  - ==: org.bukkit.inventory.ItemStack
+    type: PORTAL
+  91:
+  - ==: org.bukkit.inventory.ItemStack
+    type: JACK_O_LANTERN
+  92:
+  - ==: org.bukkit.inventory.ItemStack
+    type: CAKE_BLOCK
+  93:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DIODE_BLOCK_OFF
+  94:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DIODE_BLOCK_ON
+  95:
+  - ==: org.bukkit.inventory.ItemStack
+    type: STAINED_GLASS
+  96:
+  - ==: org.bukkit.inventory.ItemStack
+    type: TRAP_DOOR
+  97:
+  - ==: org.bukkit.inventory.ItemStack
+    type: MONSTER_EGGS
+  98:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SMOOTH_BRICK
+  99:
+  - ==: org.bukkit.inventory.ItemStack
+    type: HUGE_MUSHROOM_1
+  100:
+  - ==: org.bukkit.inventory.ItemStack
+    type: HUGE_MUSHROOM_2
+  101:
+  - ==: org.bukkit.inventory.ItemStack
+    type: IRON_FENCE
+  102:
+  - ==: org.bukkit.inventory.ItemStack
+    type: THIN_GLASS
+  103:
+  - ==: org.bukkit.inventory.ItemStack
+    type: MELON_BLOCK
+  104:
+  - ==: org.bukkit.inventory.ItemStack
+    type: PUMPKIN_STEM
+  105:
+  - ==: org.bukkit.inventory.ItemStack
+    type: MELON_STEM
+  106:
+  - ==: org.bukkit.inventory.ItemStack
+    type: VINE
+  107:
+  - ==: org.bukkit.inventory.ItemStack
+    type: FENCE_GATE
+  108:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BRICK_STAIRS
+  109:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SMOOTH_STAIRS
+  110:
+  - ==: org.bukkit.inventory.ItemStack
+    type: MYCEL
+  111:
+  - ==: org.bukkit.inventory.ItemStack
+    type: WATER_LILY
+  112:
+  - ==: org.bukkit.inventory.ItemStack
+    type: NETHER_BRICK
+  113:
+  - ==: org.bukkit.inventory.ItemStack
+    type: NETHER_FENCE
+  114:
+  - ==: org.bukkit.inventory.ItemStack
+    type: NETHER_BRICK_STAIRS
+  115:
+  - ==: org.bukkit.inventory.ItemStack
+    type: NETHER_WARTS
+  116:
+  - ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTMENT_TABLE
+  117:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BREWING_STAND
+  118:
+  - ==: org.bukkit.inventory.ItemStack
+    type: CAULDRON
+  119:
+  - ==: org.bukkit.inventory.ItemStack
+    type: ENDER_PORTAL
+  120:
+  - ==: org.bukkit.inventory.ItemStack
+    type: ENDER_PORTAL_FRAME
+  121:
+  - ==: org.bukkit.inventory.ItemStack
+    type: ENDER_STONE
+  122:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DRAGON_EGG
+  123:
+  - ==: org.bukkit.inventory.ItemStack
+    type: REDSTONE_LAMP_OFF
+  124:
+  - ==: org.bukkit.inventory.ItemStack
+    type: REDSTONE_LAMP_ON
+  125:
+  - ==: org.bukkit.inventory.ItemStack
+    type: WOOD_DOUBLE_STEP
+  126:
+  - ==: org.bukkit.inventory.ItemStack
+    type: WOOD_STEP
+  127:
+  - ==: org.bukkit.inventory.ItemStack
+    type: COCOA
+  128:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SANDSTONE_STAIRS
+  129:
+  - ==: org.bukkit.inventory.ItemStack
+    type: EMERALD_ORE
+  130:
+  - ==: org.bukkit.inventory.ItemStack
+    type: ENDER_CHEST
+  131:
+  - ==: org.bukkit.inventory.ItemStack
+    type: TRIPWIRE_HOOK
+  132:
+  - ==: org.bukkit.inventory.ItemStack
+    type: TRIPWIRE
+  133:
+  - ==: org.bukkit.inventory.ItemStack
+    type: EMERALD_BLOCK
+  134:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SPRUCE_WOOD_STAIRS
+  135:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BIRCH_WOOD_STAIRS
+  136:
+  - ==: org.bukkit.inventory.ItemStack
+    type: JUNGLE_WOOD_STAIRS
+  137:
+  - ==: org.bukkit.inventory.ItemStack
+    type: COMMAND
+  138:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BEACON
+  139:
+  - ==: org.bukkit.inventory.ItemStack
+    type: COBBLE_WALL
+  140:
+  - ==: org.bukkit.inventory.ItemStack
+    type: FLOWER_POT
+  141:
+  - ==: org.bukkit.inventory.ItemStack
+    type: CARROT
+  142:
+  - ==: org.bukkit.inventory.ItemStack
+    type: POTATO
+  143:
+  - ==: org.bukkit.inventory.ItemStack
+    type: WOOD_BUTTON
+  144:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SKULL
+  145:
+  - ==: org.bukkit.inventory.ItemStack
+    type: ANVIL
+  146:
+  - ==: org.bukkit.inventory.ItemStack
+    type: TRAPPED_CHEST
+  147:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GOLD_PLATE
+  148:
+  - ==: org.bukkit.inventory.ItemStack
+    type: IRON_PLATE
+  149:
+  - ==: org.bukkit.inventory.ItemStack
+    type: REDSTONE_COMPARATOR_OFF
+  150:
+  - ==: org.bukkit.inventory.ItemStack
+    type: REDSTONE_COMPARATOR_ON
+  151:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DAYLIGHT_DETECTOR
+  152:
+  - ==: org.bukkit.inventory.ItemStack
+    type: REDSTONE_BLOCK
+  153:
+  - ==: org.bukkit.inventory.ItemStack
+    type: QUARTZ_ORE
+  154:
+  - ==: org.bukkit.inventory.ItemStack
+    type: HOPPER
+  155:
+  - ==: org.bukkit.inventory.ItemStack
+    type: QUARTZ_BLOCK
+  156:
+  - ==: org.bukkit.inventory.ItemStack
+    type: QUARTZ_STAIRS
+  157:
+  - ==: org.bukkit.inventory.ItemStack
+    type: ACTIVATOR_RAIL
+  158:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DROPPER
+  159:
+  - ==: org.bukkit.inventory.ItemStack
+    type: STAINED_CLAY
+  160:
+  - ==: org.bukkit.inventory.ItemStack
+    type: STAINED_GLASS_PANE
+  161:
+  - ==: org.bukkit.inventory.ItemStack
+    type: LEAVES_2
+  162:
+  - ==: org.bukkit.inventory.ItemStack
+    type: LOG_2
+  163:
+  - ==: org.bukkit.inventory.ItemStack
+    type: ACACIA_STAIRS
+  164:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DARK_OAK_STAIRS
+  165:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SLIME_BLOCK
+  166:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BARRIER
+  167:
+  - ==: org.bukkit.inventory.ItemStack
+    type: IRON_TRAPDOOR
+  168:
+  - ==: org.bukkit.inventory.ItemStack
+    type: PRISMARINE
+  169:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SEA_LANTERN
+  170:
+  - ==: org.bukkit.inventory.ItemStack
+    type: HAY_BLOCK
+  171:
+  - ==: org.bukkit.inventory.ItemStack
+    type: CARPET
+  172:
+  - ==: org.bukkit.inventory.ItemStack
+    type: HARD_CLAY
+  173:
+  - ==: org.bukkit.inventory.ItemStack
+    type: COAL_BLOCK
+  174:
+  - ==: org.bukkit.inventory.ItemStack
+    type: PACKED_ICE
+  175:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DOUBLE_PLANT
+  176:
+  - ==: org.bukkit.inventory.ItemStack
+    type: STANDING_BANNER
+  177:
+  - ==: org.bukkit.inventory.ItemStack
+    type: WALL_BANNER
+  178:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DAYLIGHT_DETECTOR_INVERTED
+  179:
+  - ==: org.bukkit.inventory.ItemStack
+    type: RED_SANDSTONE
+  180:
+  - ==: org.bukkit.inventory.ItemStack
+    type: RED_SANDSTONE_STAIRS
+  181:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DOUBLE_STONE_SLAB2
+  182:
+  - ==: org.bukkit.inventory.ItemStack
+    type: STONE_SLAB2
+  183:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SPRUCE_FENCE_GATE
+  184:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BIRCH_FENCE_GATE
+  185:
+  - ==: org.bukkit.inventory.ItemStack
+    type: JUNGLE_FENCE_GATE
+  186:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DARK_OAK_FENCE_GATE
+  187:
+  - ==: org.bukkit.inventory.ItemStack
+    type: ACACIA_FENCE_GATE
+  188:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SPRUCE_FENCE
+  189:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BIRCH_FENCE
+  190:
+  - ==: org.bukkit.inventory.ItemStack
+    type: JUNGLE_FENCE
+  191:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DARK_OAK_FENCE
+  192:
+  - ==: org.bukkit.inventory.ItemStack
+    type: ACACIA_FENCE
+  193:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SPRUCE_DOOR
+  194:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BIRCH_DOOR
+  195:
+  - ==: org.bukkit.inventory.ItemStack
+    type: JUNGLE_DOOR
+  196:
+  - ==: org.bukkit.inventory.ItemStack
+    type: ACACIA_DOOR
+  197:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DARK_OAK_DOOR
+  198:
+  - ==: org.bukkit.inventory.ItemStack
+    type: END_ROD
+  199:
+  - ==: org.bukkit.inventory.ItemStack
+    type: CHORUS_PLANT
+  200:
+  - ==: org.bukkit.inventory.ItemStack
+    type: CHORUS_FLOWER
+  201:
+  - ==: org.bukkit.inventory.ItemStack
+    type: PURPUR_BLOCK
+  202:
+  - ==: org.bukkit.inventory.ItemStack
+    type: PURPUR_PILLAR
+  203:
+  - ==: org.bukkit.inventory.ItemStack
+    type: PURPUR_STAIRS
+  204:
+  - ==: org.bukkit.inventory.ItemStack
+    type: PURPUR_DOUBLE_SLAB
+  205:
+  - ==: org.bukkit.inventory.ItemStack
+    type: PURPUR_SLAB
+  206:
+  - ==: org.bukkit.inventory.ItemStack
+    type: END_BRICKS
+  207:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BEETROOT_BLOCK
+  2256:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GOLD_RECORD
+  208:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GRASS_PATH
+  2257:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GREEN_RECORD
+  209:
+  - ==: org.bukkit.inventory.ItemStack
+    type: END_GATEWAY
+  2258:
+  - ==: org.bukkit.inventory.ItemStack
+    type: RECORD_3
+  210:
+  - ==: org.bukkit.inventory.ItemStack
+    type: COMMAND_REPEATING
+  2259:
+  - ==: org.bukkit.inventory.ItemStack
+    type: RECORD_4
+  211:
+  - ==: org.bukkit.inventory.ItemStack
+    type: COMMAND_CHAIN
+  2260:
+  - ==: org.bukkit.inventory.ItemStack
+    type: RECORD_5
+  212:
+  - ==: org.bukkit.inventory.ItemStack
+    type: FROSTED_ICE
+  2261:
+  - ==: org.bukkit.inventory.ItemStack
+    type: RECORD_6
+  213:
+  - ==: org.bukkit.inventory.ItemStack
+    type: MAGMA
+  2262:
+  - ==: org.bukkit.inventory.ItemStack
+    type: RECORD_7
+  214:
+  - ==: org.bukkit.inventory.ItemStack
+    type: NETHER_WART_BLOCK
+  2263:
+  - ==: org.bukkit.inventory.ItemStack
+    type: RECORD_8
+  215:
+  - ==: org.bukkit.inventory.ItemStack
+    type: RED_NETHER_BRICK
+  2264:
+  - ==: org.bukkit.inventory.ItemStack
+    type: RECORD_9
+  216:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BONE_BLOCK
+  2265:
+  - ==: org.bukkit.inventory.ItemStack
+    type: RECORD_10
+  217:
+  - ==: org.bukkit.inventory.ItemStack
+    type: STRUCTURE_VOID
+  2266:
+  - ==: org.bukkit.inventory.ItemStack
+    type: RECORD_11
+  218:
+  - ==: org.bukkit.inventory.ItemStack
+    type: OBSERVER
+  2267:
+  - ==: org.bukkit.inventory.ItemStack
+    type: RECORD_12
+  219:
+  - ==: org.bukkit.inventory.ItemStack
+    type: WHITE_SHULKER_BOX
+  220:
+  - ==: org.bukkit.inventory.ItemStack
+    type: ORANGE_SHULKER_BOX
+  221:
+  - ==: org.bukkit.inventory.ItemStack
+    type: MAGENTA_SHULKER_BOX
+  222:
+  - ==: org.bukkit.inventory.ItemStack
+    type: LIGHT_BLUE_SHULKER_BOX
+  223:
+  - ==: org.bukkit.inventory.ItemStack
+    type: YELLOW_SHULKER_BOX
+  224:
+  - ==: org.bukkit.inventory.ItemStack
+    type: LIME_SHULKER_BOX
+  225:
+  - ==: org.bukkit.inventory.ItemStack
+    type: PINK_SHULKER_BOX
+  226:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GRAY_SHULKER_BOX
+  227:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SILVER_SHULKER_BOX
+  228:
+  - ==: org.bukkit.inventory.ItemStack
+    type: CYAN_SHULKER_BOX
+  229:
+  - ==: org.bukkit.inventory.ItemStack
+    type: PURPLE_SHULKER_BOX
+  230:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BLUE_SHULKER_BOX
+  231:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BROWN_SHULKER_BOX
+  232:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GREEN_SHULKER_BOX
+  233:
+  - ==: org.bukkit.inventory.ItemStack
+    type: RED_SHULKER_BOX
+  234:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BLACK_SHULKER_BOX
+  235:
+  - ==: org.bukkit.inventory.ItemStack
+    type: WHITE_GLAZED_TERRACOTTA
+  236:
+  - ==: org.bukkit.inventory.ItemStack
+    type: ORANGE_GLAZED_TERRACOTTA
+  237:
+  - ==: org.bukkit.inventory.ItemStack
+    type: MAGENTA_GLAZED_TERRACOTTA
+  238:
+  - ==: org.bukkit.inventory.ItemStack
+    type: LIGHT_BLUE_GLAZED_TERRACOTTA
+  239:
+  - ==: org.bukkit.inventory.ItemStack
+    type: YELLOW_GLAZED_TERRACOTTA
+  240:
+  - ==: org.bukkit.inventory.ItemStack
+    type: LIME_GLAZED_TERRACOTTA
+  241:
+  - ==: org.bukkit.inventory.ItemStack
+    type: PINK_GLAZED_TERRACOTTA
+  242:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GRAY_GLAZED_TERRACOTTA
+  243:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SILVER_GLAZED_TERRACOTTA
+  244:
+  - ==: org.bukkit.inventory.ItemStack
+    type: CYAN_GLAZED_TERRACOTTA
+  245:
+  - ==: org.bukkit.inventory.ItemStack
+    type: PURPLE_GLAZED_TERRACOTTA
+  246:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BLUE_GLAZED_TERRACOTTA
+  247:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BROWN_GLAZED_TERRACOTTA
+  248:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GREEN_GLAZED_TERRACOTTA
+  249:
+  - ==: org.bukkit.inventory.ItemStack
+    type: RED_GLAZED_TERRACOTTA
+  250:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BLACK_GLAZED_TERRACOTTA
+  251:
+  - ==: org.bukkit.inventory.ItemStack
+    type: CONCRETE
+  252:
+  - ==: org.bukkit.inventory.ItemStack
+    type: CONCRETE_POWDER
+  255:
+  - ==: org.bukkit.inventory.ItemStack
+    type: STRUCTURE_BLOCK
+  256:
+  - ==: org.bukkit.inventory.ItemStack
+    type: IRON_SPADE
+  257:
+  - ==: org.bukkit.inventory.ItemStack
+    type: IRON_PICKAXE
+  258:
+  - ==: org.bukkit.inventory.ItemStack
+    type: IRON_AXE
+  259:
+  - ==: org.bukkit.inventory.ItemStack
+    type: FLINT_AND_STEEL
+  260:
+  - ==: org.bukkit.inventory.ItemStack
+    type: APPLE
+  261:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BOW
+  262:
+  - ==: org.bukkit.inventory.ItemStack
+    type: ARROW
+  263:
+  - ==: org.bukkit.inventory.ItemStack
+    type: COAL
+  264:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DIAMOND
+  265:
+  - ==: org.bukkit.inventory.ItemStack
+    type: IRON_INGOT
+  266:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GOLD_INGOT
+  267:
+  - ==: org.bukkit.inventory.ItemStack
+    type: IRON_SWORD
+  268:
+  - ==: org.bukkit.inventory.ItemStack
+    type: WOOD_SWORD
+  269:
+  - ==: org.bukkit.inventory.ItemStack
+    type: WOOD_SPADE
+  270:
+  - ==: org.bukkit.inventory.ItemStack
+    type: WOOD_PICKAXE
+  271:
+  - ==: org.bukkit.inventory.ItemStack
+    type: WOOD_AXE
+  272:
+  - ==: org.bukkit.inventory.ItemStack
+    type: STONE_SWORD
+  273:
+  - ==: org.bukkit.inventory.ItemStack
+    type: STONE_SPADE
+  274:
+  - ==: org.bukkit.inventory.ItemStack
+    type: STONE_PICKAXE
+  275:
+  - ==: org.bukkit.inventory.ItemStack
+    type: STONE_AXE
+  276:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DIAMOND_SWORD
+  277:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DIAMOND_SPADE
+  278:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DIAMOND_PICKAXE
+  279:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DIAMOND_AXE
+  280:
+  - ==: org.bukkit.inventory.ItemStack
+    type: STICK
+  281:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BOWL
+  282:
+  - ==: org.bukkit.inventory.ItemStack
+    type: MUSHROOM_SOUP
+  283:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GOLD_SWORD
+  284:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GOLD_SPADE
+  285:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GOLD_PICKAXE
+  286:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GOLD_AXE
+  287:
+  - ==: org.bukkit.inventory.ItemStack
+    type: STRING
+  288:
+  - ==: org.bukkit.inventory.ItemStack
+    type: FEATHER
+  289:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SULPHUR
+  290:
+  - ==: org.bukkit.inventory.ItemStack
+    type: WOOD_HOE
+  291:
+  - ==: org.bukkit.inventory.ItemStack
+    type: STONE_HOE
+  292:
+  - ==: org.bukkit.inventory.ItemStack
+    type: IRON_HOE
+  293:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DIAMOND_HOE
+  294:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GOLD_HOE
+  295:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SEEDS
+  296:
+  - ==: org.bukkit.inventory.ItemStack
+    type: WHEAT
+  297:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BREAD
+  298:
+  - ==: org.bukkit.inventory.ItemStack
+    type: LEATHER_HELMET
+  299:
+  - ==: org.bukkit.inventory.ItemStack
+    type: LEATHER_CHESTPLATE
+  300:
+  - ==: org.bukkit.inventory.ItemStack
+    type: LEATHER_LEGGINGS
+  301:
+  - ==: org.bukkit.inventory.ItemStack
+    type: LEATHER_BOOTS
+  302:
+  - ==: org.bukkit.inventory.ItemStack
+    type: CHAINMAIL_HELMET
+  303:
+  - ==: org.bukkit.inventory.ItemStack
+    type: CHAINMAIL_CHESTPLATE
+  304:
+  - ==: org.bukkit.inventory.ItemStack
+    type: CHAINMAIL_LEGGINGS
+  305:
+  - ==: org.bukkit.inventory.ItemStack
+    type: CHAINMAIL_BOOTS
+  306:
+  - ==: org.bukkit.inventory.ItemStack
+    type: IRON_HELMET
+  307:
+  - ==: org.bukkit.inventory.ItemStack
+    type: IRON_CHESTPLATE
+  308:
+  - ==: org.bukkit.inventory.ItemStack
+    type: IRON_LEGGINGS
+  309:
+  - ==: org.bukkit.inventory.ItemStack
+    type: IRON_BOOTS
+  310:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DIAMOND_HELMET
+  311:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DIAMOND_CHESTPLATE
+  312:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DIAMOND_LEGGINGS
+  313:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DIAMOND_BOOTS
+  314:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GOLD_HELMET
+  315:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GOLD_CHESTPLATE
+  316:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GOLD_LEGGINGS
+  317:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GOLD_BOOTS
+  318:
+  - ==: org.bukkit.inventory.ItemStack
+    type: FLINT
+  319:
+  - ==: org.bukkit.inventory.ItemStack
+    type: PORK
+  320:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GRILLED_PORK
+  321:
+  - ==: org.bukkit.inventory.ItemStack
+    type: PAINTING
+  322:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GOLDEN_APPLE
+  323:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SIGN
+  324:
+  - ==: org.bukkit.inventory.ItemStack
+    type: WOOD_DOOR
+  325:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BUCKET
+  326:
+  - ==: org.bukkit.inventory.ItemStack
+    type: WATER_BUCKET
+  327:
+  - ==: org.bukkit.inventory.ItemStack
+    type: LAVA_BUCKET
+  328:
+  - ==: org.bukkit.inventory.ItemStack
+    type: MINECART
+  329:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SADDLE
+  330:
+  - ==: org.bukkit.inventory.ItemStack
+    type: IRON_DOOR
+  331:
+  - ==: org.bukkit.inventory.ItemStack
+    type: REDSTONE
+  332:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SNOW_BALL
+  333:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BOAT
+  334:
+  - ==: org.bukkit.inventory.ItemStack
+    type: LEATHER
+  335:
+  - ==: org.bukkit.inventory.ItemStack
+    type: MILK_BUCKET
+  336:
+  - ==: org.bukkit.inventory.ItemStack
+    type: CLAY_BRICK
+  337:
+  - ==: org.bukkit.inventory.ItemStack
+    type: CLAY_BALL
+  338:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SUGAR_CANE
+  339:
+  - ==: org.bukkit.inventory.ItemStack
+    type: PAPER
+  340:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BOOK
+  341:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SLIME_BALL
+  342:
+  - ==: org.bukkit.inventory.ItemStack
+    type: STORAGE_MINECART
+  343:
+  - ==: org.bukkit.inventory.ItemStack
+    type: POWERED_MINECART
+  344:
+  - ==: org.bukkit.inventory.ItemStack
+    type: EGG
+  345:
+  - ==: org.bukkit.inventory.ItemStack
+    type: COMPASS
+  346:
+  - ==: org.bukkit.inventory.ItemStack
+    type: FISHING_ROD
+  347:
+  - ==: org.bukkit.inventory.ItemStack
+    type: WATCH
+  348:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GLOWSTONE_DUST
+  349:
+  - ==: org.bukkit.inventory.ItemStack
+    type: RAW_FISH
+  350:
+  - ==: org.bukkit.inventory.ItemStack
+    type: COOKED_FISH
+  351:
+  - ==: org.bukkit.inventory.ItemStack
+    type: INK_SACK
+  352:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BONE
+  353:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SUGAR
+  354:
+  - ==: org.bukkit.inventory.ItemStack
+    type: CAKE
+  355:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BED
+  356:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DIODE
+  357:
+  - ==: org.bukkit.inventory.ItemStack
+    type: COOKIE
+  358:
+  - ==: org.bukkit.inventory.ItemStack
+    type: MAP
+  359:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SHEARS
+  360:
+  - ==: org.bukkit.inventory.ItemStack
+    type: MELON
+  361:
+  - ==: org.bukkit.inventory.ItemStack
+    type: PUMPKIN_SEEDS
+  362:
+  - ==: org.bukkit.inventory.ItemStack
+    type: MELON_SEEDS
+  363:
+  - ==: org.bukkit.inventory.ItemStack
+    type: RAW_BEEF
+  364:
+  - ==: org.bukkit.inventory.ItemStack
+    type: COOKED_BEEF
+  365:
+  - ==: org.bukkit.inventory.ItemStack
+    type: RAW_CHICKEN
+  366:
+  - ==: org.bukkit.inventory.ItemStack
+    type: COOKED_CHICKEN
+  367:
+  - ==: org.bukkit.inventory.ItemStack
+    type: ROTTEN_FLESH
+  368:
+  - ==: org.bukkit.inventory.ItemStack
+    type: ENDER_PEARL
+  369:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BLAZE_ROD
+  370:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GHAST_TEAR
+  371:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GOLD_NUGGET
+  372:
+  - ==: org.bukkit.inventory.ItemStack
+    type: NETHER_STALK
+  373:
+  - ==: org.bukkit.inventory.ItemStack
+    type: POTION
+  374:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GLASS_BOTTLE
+  375:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SPIDER_EYE
+  376:
+  - ==: org.bukkit.inventory.ItemStack
+    type: FERMENTED_SPIDER_EYE
+  377:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BLAZE_POWDER
+  378:
+  - ==: org.bukkit.inventory.ItemStack
+    type: MAGMA_CREAM
+  379:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BREWING_STAND_ITEM
+  380:
+  - ==: org.bukkit.inventory.ItemStack
+    type: CAULDRON_ITEM
+  381:
+  - ==: org.bukkit.inventory.ItemStack
+    type: EYE_OF_ENDER
+  382:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SPECKLED_MELON
+  383:
+  - ==: org.bukkit.inventory.ItemStack
+    type: MONSTER_EGG
+  384:
+  - ==: org.bukkit.inventory.ItemStack
+    type: EXP_BOTTLE
+  385:
+  - ==: org.bukkit.inventory.ItemStack
+    type: FIREBALL
+  386:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BOOK_AND_QUILL
+  387:
+  - ==: org.bukkit.inventory.ItemStack
+    type: WRITTEN_BOOK
+  388:
+  - ==: org.bukkit.inventory.ItemStack
+    type: EMERALD
+  389:
+  - ==: org.bukkit.inventory.ItemStack
+    type: ITEM_FRAME
+  390:
+  - ==: org.bukkit.inventory.ItemStack
+    type: FLOWER_POT_ITEM
+  391:
+  - ==: org.bukkit.inventory.ItemStack
+    type: CARROT_ITEM
+  392:
+  - ==: org.bukkit.inventory.ItemStack
+    type: POTATO_ITEM
+  393:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BAKED_POTATO
+  394:
+  - ==: org.bukkit.inventory.ItemStack
+    type: POISONOUS_POTATO
+  395:
+  - ==: org.bukkit.inventory.ItemStack
+    type: EMPTY_MAP
+  396:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GOLDEN_CARROT
+  397:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SKULL_ITEM
+  398:
+  - ==: org.bukkit.inventory.ItemStack
+    type: CARROT_STICK
+  399:
+  - ==: org.bukkit.inventory.ItemStack
+    type: NETHER_STAR
+  400:
+  - ==: org.bukkit.inventory.ItemStack
+    type: PUMPKIN_PIE
+  401:
+  - ==: org.bukkit.inventory.ItemStack
+    type: FIREWORK
+  402:
+  - ==: org.bukkit.inventory.ItemStack
+    type: FIREWORK_CHARGE
+  403:
+  - ==: org.bukkit.inventory.ItemStack
+    type: ENCHANTED_BOOK
+  404:
+  - ==: org.bukkit.inventory.ItemStack
+    type: REDSTONE_COMPARATOR
+  405:
+  - ==: org.bukkit.inventory.ItemStack
+    type: NETHER_BRICK_ITEM
+  406:
+  - ==: org.bukkit.inventory.ItemStack
+    type: QUARTZ
+  407:
+  - ==: org.bukkit.inventory.ItemStack
+    type: EXPLOSIVE_MINECART
+  408:
+  - ==: org.bukkit.inventory.ItemStack
+    type: HOPPER_MINECART
+  409:
+  - ==: org.bukkit.inventory.ItemStack
+    type: PRISMARINE_SHARD
+  410:
+  - ==: org.bukkit.inventory.ItemStack
+    type: PRISMARINE_CRYSTALS
+  411:
+  - ==: org.bukkit.inventory.ItemStack
+    type: RABBIT
+  412:
+  - ==: org.bukkit.inventory.ItemStack
+    type: COOKED_RABBIT
+  413:
+  - ==: org.bukkit.inventory.ItemStack
+    type: RABBIT_STEW
+  414:
+  - ==: org.bukkit.inventory.ItemStack
+    type: RABBIT_FOOT
+  415:
+  - ==: org.bukkit.inventory.ItemStack
+    type: RABBIT_HIDE
+  416:
+  - ==: org.bukkit.inventory.ItemStack
+    type: ARMOR_STAND
+  417:
+  - ==: org.bukkit.inventory.ItemStack
+    type: IRON_BARDING
+  418:
+  - ==: org.bukkit.inventory.ItemStack
+    type: GOLD_BARDING
+  419:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DIAMOND_BARDING
+  420:
+  - ==: org.bukkit.inventory.ItemStack
+    type: LEASH
+  421:
+  - ==: org.bukkit.inventory.ItemStack
+    type: NAME_TAG
+  422:
+  - ==: org.bukkit.inventory.ItemStack
+    type: COMMAND_MINECART
+  423:
+  - ==: org.bukkit.inventory.ItemStack
+    type: MUTTON
+  424:
+  - ==: org.bukkit.inventory.ItemStack
+    type: COOKED_MUTTON
+  425:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BANNER
+  426:
+  - ==: org.bukkit.inventory.ItemStack
+    type: END_CRYSTAL
+  427:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SPRUCE_DOOR_ITEM
+  428:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BIRCH_DOOR_ITEM
+  429:
+  - ==: org.bukkit.inventory.ItemStack
+    type: JUNGLE_DOOR_ITEM
+  430:
+  - ==: org.bukkit.inventory.ItemStack
+    type: ACACIA_DOOR_ITEM
+  431:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DARK_OAK_DOOR_ITEM
+  432:
+  - ==: org.bukkit.inventory.ItemStack
+    type: CHORUS_FRUIT
+  433:
+  - ==: org.bukkit.inventory.ItemStack
+    type: CHORUS_FRUIT_POPPED
+  434:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BEETROOT
+  435:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BEETROOT_SEEDS
+  436:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BEETROOT_SOUP
+  437:
+  - ==: org.bukkit.inventory.ItemStack
+    type: DRAGONS_BREATH
+  438:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SPLASH_POTION
+  439:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SPECTRAL_ARROW
+  440:
+  - ==: org.bukkit.inventory.ItemStack
+    type: TIPPED_ARROW
+  441:
+  - ==: org.bukkit.inventory.ItemStack
+    type: LINGERING_POTION
+  442:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SHIELD
+  443:
+  - ==: org.bukkit.inventory.ItemStack
+    type: ELYTRA
+  444:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BOAT_SPRUCE
+  445:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BOAT_BIRCH
+  446:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BOAT_JUNGLE
+  447:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BOAT_ACACIA
+  448:
+  - ==: org.bukkit.inventory.ItemStack
+    type: BOAT_DARK_OAK
+  449:
+  - ==: org.bukkit.inventory.ItemStack
+    type: TOTEM
+  450:
+  - ==: org.bukkit.inventory.ItemStack
+    type: SHULKER_SHELL
+  452:
+  - ==: org.bukkit.inventory.ItemStack
+    type: IRON_NUGGET
+  453:
+  - ==: org.bukkit.inventory.ItemStack
+    type: KNOWLEDGE_BOOK
