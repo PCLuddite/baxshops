@@ -18,12 +18,12 @@
  */
 package org.tbax.baxshops.notification;
 
-import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
+import org.tbax.baxshops.serialization.StateLoader;
 
 @Deprecated
-public interface DeprecatedNote extends ConfigurationSerializable
+public interface DeprecatedNote
 {
-    @NotNull Notification getNewNote();
+    @NotNull Notification getNewNote(StateLoader stateLoader);
     @NotNull Class<? extends Notification> getNewNoteClass();
 }

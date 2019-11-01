@@ -2,7 +2,9 @@ package qs.shops.notification;
 
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.tbax.baxshops.serialization.StateLoader;
 import org.tbax.baxshops.serialization.StoredPlayer;
+import org.tbax.baxshops.serialization.states.State_00000;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -60,7 +62,7 @@ public class LollipopNotification implements Notification {
 	}
 
 	@Override
-	public @NotNull org.tbax.baxshops.notification.Notification getNewNote()
+	public @NotNull org.tbax.baxshops.notification.Notification getNewNote(StateLoader stateLoader)
 	{
 		String adjective = "";
 		for (Entry<Double, String> entry : adjectives.entrySet()) {
@@ -69,7 +71,7 @@ public class LollipopNotification implements Notification {
 			}
 		}
 		return new org.tbax.baxshops.notification.LollipopNotification(
-				new StoredPlayer(sender),
+				((State_00000)stateLoader).registerPlayer(sender),
 				StoredPlayer.ERROR,
 				adjective
 		);

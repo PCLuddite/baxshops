@@ -3,7 +3,7 @@ package qs.shops.notification;
 import java.io.Serializable;
 
 import org.bukkit.entity.Player;
-import org.tbax.baxshops.serialization.qs.NathanNote;
+import org.tbax.baxshops.notification.DeprecatedNote;
 
 /**
  * The notification interface is used to represent shop-related
@@ -16,7 +16,7 @@ import org.tbax.baxshops.serialization.qs.NathanNote;
  * A Notification is regarded as a message and will be deleted
  * once viewed, unless the notification is a Request or Claimable
  */
-public interface Notification extends NathanNote, Serializable {
+public interface Notification extends DeprecatedNote, Serializable {
 	/**
 	 * Gets a short message suitable for this notification.
 	 * @param player the player to which the message will be sent (may be null)

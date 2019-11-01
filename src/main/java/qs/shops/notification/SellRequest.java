@@ -5,7 +5,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxEntry;
-import org.tbax.baxshops.serialization.qs.NathanConverter;
+import org.tbax.baxshops.serialization.StateLoader;
+import org.tbax.baxshops.serialization.states.State_00000;
 import qs.shops.Main;
 import qs.shops.Shop;
 import qs.shops.ShopEntry;
@@ -106,12 +107,12 @@ public class SellRequest implements Request, TimedNotification {
 	}
 
 	@Override
-	public @NotNull org.tbax.baxshops.notification.Notification getNewNote()
+	public @NotNull org.tbax.baxshops.notification.Notification getNewNote(StateLoader stateLoader)
 	{
 		return new org.tbax.baxshops.notification.SaleRejection(
-				NathanConverter.registerShop(shop),
-				NathanConverter.registerPlayer(shop.owner),
-				NathanConverter.registerPlayer(seller),
+				((State_00000)stateLoader).registerShop(shop),
+				((State_00000)stateLoader).registerPlayer(shop.owner),
+				((State_00000)stateLoader).registerPlayer(seller),
 				BaxEntry.fromNathan(entry)
 		);
 	}

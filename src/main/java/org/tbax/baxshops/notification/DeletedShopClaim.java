@@ -27,8 +27,8 @@ import org.tbax.baxshops.ShopPlugin;
 import org.tbax.baxshops.serialization.SafeMap;
 import org.tbax.baxshops.serialization.UpgradeableSerializable;
 import org.tbax.baxshops.serialization.UpgradeableSerialization;
+import org.tbax.baxshops.serialization.annotations.DoNotSerialize;
 import org.tbax.baxshops.serialization.annotations.SerializeMethod;
-import org.tbax.baxshops.serialization.states.State_00300;
 
 import java.util.Date;
 import java.util.Map;
@@ -41,6 +41,10 @@ public final class DeletedShopClaim implements UpgradeableSerializable, Claimabl
     private UUID owner;
     private BaxEntry entry;
     private Date date;
+
+    @Deprecated
+    @DoNotSerialize
+    private String legacyOwner = null;
 
     public DeletedShopClaim(Map<String, Object> args)
     {
@@ -63,7 +67,7 @@ public final class DeletedShopClaim implements UpgradeableSerializable, Claimabl
     public void upgrade00300(@NotNull SafeMap map)
     {
         entry = map.getBaxEntry("entry");
-        owner = State_00300.getPlayerId(map.getString("owner"));
+        legacyOwner = map.getString("owner");
     }
 
     @Override
@@ -88,6 +92,12 @@ public final class DeletedShopClaim implements UpgradeableSerializable, Claimabl
         else {
             return getMessage();
         }
+    }
+
+    @Deprecated
+    public String getLegacyOwner()
+    {
+        return legacyOwner;
     }
 
     @Override
@@ -146,5 +156,10 @@ public final class DeletedShopClaim implements UpgradeableSerializable, Claimabl
     public int hashCode()
     {
         return Objects.hash(owner, entry);
+    }
+
+    public void setOwner(@NotNull OfflinePlayer player)
+    {
+        owner = player.getUniqueId();
     }
 }

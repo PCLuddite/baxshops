@@ -36,8 +36,8 @@ import java.util.*;
 public class State_00300 extends LegacyState
 {
     public static final double VERSION = 3.0;
-    private static Map<Long, UUID> legacyIds = new HashMap<>();
-    private static PlayerMap players = new PlayerMap();
+    private Map<Long, UUID> legacyIds = new HashMap<>();
+    private PlayerMap players = new PlayerMap();
     private ShopPlugin plugin;
 
     public State_00300(@NotNull ShopPlugin plugin)
@@ -63,36 +63,36 @@ public class State_00300 extends LegacyState
         return flags;
     }
 
-    public static UUID getShopId(long legacyId)
+    public UUID getShopId(long legacyId)
     {
         return legacyIds.get(legacyId);
     }
 
-    public static OfflinePlayer getPlayer(String playerName)
+    public OfflinePlayer getPlayer(String playerName)
     {
         if (playerName == null)
             return StoredPlayer.ERROR;
         return players.get(playerName).get(0);
     }
 
-    public static UUID getPlayerId(String playerName)
+    public UUID getPlayerId(String playerName)
     {
         if (playerName == null)
             return StoredPlayer.ERROR_UUID;
         return players.get(playerName).get(0).getUniqueId();
     }
 
-    public static Collection<StoredPlayer> getPlayers()
+    public Collection<StoredPlayer> getPlayers()
     {
         return players.values();
     }
 
-    public static void addLegacyShop(long legacyId, UUID id)
+    public void addLegacyShop(long legacyId, UUID id)
     {
         legacyIds.put(legacyId, id);
     }
 
-    public static void invalidateMaps()
+    public void invalidateMaps()
     {
         legacyIds.clear();
         players.clear();
@@ -122,6 +122,7 @@ public class State_00300 extends LegacyState
             if (o instanceof BaxShop) {
                 BaxShop shop = (BaxShop) o;
                 addLegacyShop(shop.getLegacyId(), shop.getId());
+                shop.setOwner(getPlayer(shop.getLegacyOwner()));
                 shops.add(shop);
             } else {
                 plugin.getLogger().warning("Could not load BaxShop of type " + o.getClass());
@@ -150,15 +151,21 @@ public class State_00300 extends LegacyState
             }
             else {
                 Deque<Notification> pending = new ArrayDeque<>(((List) entry.getValue()).size());
-                for (Object o : (List) entry.getValue()) {
+                for (Object o : (List)entry.getValue()) {
+                    Notification n = null;
                     if (o instanceof Notification) {
-                        pending.add((Notification) o);
+                        n = (Notification) o;
+                        pending.add(n);
                     }
                     else if (o instanceof DeprecatedNote) {
-                        pending.add(((DeprecatedNote) o).getNewNote());
+                        n = ((DeprecatedNote)o).getNewNote(this);
+                        pending.add(n);
                     }
                     else {
                         plugin.getLogger().warning("Could not readFromDisk Notification of type " + entry.getValue().getClass());
+                    }
+                    if (n != null) {
+                        convertLegacyPlayers(n);
                     }
                 }
                 if (StoredPlayer.DUMMY.equals(player)) {
@@ -181,6 +188,24 @@ public class State_00300 extends LegacyState
             }
         }
         return noteSets;
+    }
+
+    private void convertLegacyPlayers(Notification n)
+    {
+        if (n instanceof StandardNote) {
+            StandardNote standardNote = (StandardNote)n;
+            standardNote.setBuyer(getPlayer(standardNote.getLegacyBuyer()));
+            standardNote.setSeller(getPlayer(standardNote.getLegacySeller()));
+            standardNote.setShop(getShopId(standardNote.getLegacyShopId()));
+        }
+        else if (n instanceof DeletedShopClaim) {
+            DeletedShopClaim deletedShopClaim = (DeletedShopClaim)n;
+            deletedShopClaim.setOwner(getPlayer(deletedShopClaim.getLegacyOwner()));
+        }
+        else if (n instanceof LollipopNotification) {
+            LollipopNotification lollipopNotification = (LollipopNotification)n;
+            lollipopNotification.setSender(getPlayer(lollipopNotification.getLegacySender()));
+        }
     }
 
     @Override

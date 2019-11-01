@@ -18,17 +18,17 @@
  */
 package org.tbax.baxshops.notification;
 
-import org.bukkit.OfflinePlayer;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.serialization.SafeMap;
-import org.tbax.baxshops.serialization.StoredPlayer;
+import org.tbax.baxshops.serialization.StateLoader;
 import org.tbax.baxshops.serialization.states.State_00300;
 
 import java.util.Map;
 
 @Deprecated
-public class SellRequest implements DeprecatedNote
+public class SellRequest implements DeprecatedNote, ConfigurationSerializable
 {
     private String seller;
     private String buyer;
@@ -47,22 +47,22 @@ public class SellRequest implements DeprecatedNote
     }
 
     @Override
-    public @NotNull SaleRequest getNewNote()
+    public @NotNull SaleRequest getNewNote(StateLoader stateLoader)
     {
-        return new SaleRequest(State_00300.getShopId(shopId),
-            getBuyer(),
-            getSeller(),
+        return new SaleRequest(((State_00300)stateLoader).getShopId(shopId),
+            ((State_00300)stateLoader).getPlayer(buyer),
+            ((State_00300)stateLoader).getPlayer(seller),
             entry);
     }
 
-    public OfflinePlayer getBuyer()
+    public String getBuyer()
     {
-        return buyer == null ? StoredPlayer.ERROR : State_00300.getPlayer(buyer);
+        return buyer;
     }
 
-    public OfflinePlayer getSeller()
+    public String getSeller()
     {
-        return seller == null ? StoredPlayer.ERROR : State_00300.getPlayer(seller);
+        return seller;
     }
 
     @Override

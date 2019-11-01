@@ -18,18 +18,18 @@
  */
 package org.tbax.baxshops.notification;
 
-import org.bukkit.OfflinePlayer;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.serialization.SafeMap;
-import org.tbax.baxshops.serialization.StoredPlayer;
+import org.tbax.baxshops.serialization.StateLoader;
 import org.tbax.baxshops.serialization.states.State_00300;
 
 import java.util.Map;
 
 @Deprecated
-public class SaleNotificationAuto implements DeprecatedNote
+public class SaleNotificationAuto implements DeprecatedNote, ConfigurationSerializable
 {
     private String buyer;
     private String seller;
@@ -44,9 +44,12 @@ public class SaleNotificationAuto implements DeprecatedNote
     }
 
     @Override
-    public @NotNull SaleNotification getNewNote()
+    public @NotNull SaleNotification getNewNote(StateLoader stateLoader)
     {
-        return new SaleNotification(BaxShop.DUMMY_UUID, getBuyer(), getSeller(), entry);
+        return new SaleNotification(BaxShop.DUMMY_UUID,
+                ((State_00300)stateLoader).getPlayer(buyer),
+                ((State_00300)stateLoader).getPlayer(seller),
+                entry);
     }
 
     @Override
@@ -71,14 +74,14 @@ public class SaleNotificationAuto implements DeprecatedNote
         return deserialize(args);
     }
 
-    public OfflinePlayer getBuyer()
+    public String getBuyer()
     {
-        return buyer == null ? StoredPlayer.ERROR : State_00300.getPlayer(buyer);
+        return buyer;
     }
 
-    public OfflinePlayer getSeller()
+    public String getSeller()
     {
-        return seller == null ? StoredPlayer.ERROR : State_00300.getPlayer(seller);
+        return seller;
     }
 
     public BaxEntry getEntry()

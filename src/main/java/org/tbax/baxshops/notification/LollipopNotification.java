@@ -28,6 +28,7 @@ import org.tbax.baxshops.serialization.SafeMap;
 import org.tbax.baxshops.serialization.StoredPlayer;
 import org.tbax.baxshops.serialization.UpgradeableSerializable;
 import org.tbax.baxshops.serialization.UpgradeableSerialization;
+import org.tbax.baxshops.serialization.annotations.DoNotSerialize;
 import org.tbax.baxshops.serialization.annotations.SerializeMethod;
 import org.tbax.baxshops.serialization.states.State_00300;
 
@@ -62,6 +63,10 @@ public final class LollipopNotification implements Notification, UpgradeableSeri
     private String tastiness;
     private Date date;
 
+    @Deprecated
+    @DoNotSerialize
+    private String legacySender = null;
+
     public LollipopNotification(Map<String, Object> args)
     {
         UpgradeableSerialization.upgrade(this, args);
@@ -78,7 +83,7 @@ public final class LollipopNotification implements Notification, UpgradeableSeri
     @Override
     public void upgrade00300(@NotNull SafeMap map)
     {
-        sender = State_00300.getPlayerId(map.getString("sender"));
+        legacySender = map.getString("sender");
         recipient = StoredPlayer.ERROR_UUID;
         tastiness = getStockAdjective(map.getDouble("tastiness"));
     }
@@ -150,6 +155,12 @@ public final class LollipopNotification implements Notification, UpgradeableSeri
         );
     }
 
+    @Deprecated
+    public String getLegacySender()
+    {
+        return legacySender;
+    }
+
     @Override
     public Date getSentDate()
     {
@@ -215,5 +226,10 @@ public final class LollipopNotification implements Notification, UpgradeableSeri
     public int hashCode()
     {
         return Objects.hash(sender, recipient, tastiness);
+    }
+
+    public void setSender(@NotNull OfflinePlayer player)
+    {
+        sender = player.getUniqueId();
     }
 }

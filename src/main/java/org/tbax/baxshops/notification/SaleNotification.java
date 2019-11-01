@@ -26,7 +26,6 @@ import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.Format;
 import org.tbax.baxshops.serialization.SafeMap;
-import org.tbax.baxshops.serialization.states.State_00300;
 
 import java.util.Map;
 import java.util.UUID;
@@ -52,8 +51,8 @@ public final class SaleNotification extends StandardNote
     @Override
     public void upgrade00300(@NotNull SafeMap map)
     {
-        buyer = State_00300.getPlayerId(map.getString("buyer"));
-        seller = State_00300.getPlayerId(map.getString("seller"));
+        legacyBuyer = map.getString("buyer");
+        legacySeller = map.getString("seller");
         shopId = BaxShop.DUMMY_UUID;
         entry = map.getBaxEntry("entry");
     }

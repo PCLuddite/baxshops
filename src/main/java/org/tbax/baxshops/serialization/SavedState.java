@@ -25,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.ShopPlugin;
+import org.tbax.baxshops.serialization.states.State_00000;
 import org.tbax.baxshops.serialization.states.State_00300;
 import org.tbax.baxshops.serialization.states.State_00470;
 
@@ -82,8 +83,14 @@ public final class SavedState
     {
         File stateLocation = ShopPlugin.getStateFile().getFile();
         if (!stateLocation.exists()) {
-            plugin.getLogger().info("YAML file did not exist. Starting fresh.");
-            return new SavedState(plugin);
+            if (State_00000.getNathanFile(plugin).exists()) {
+                plugin.getLogger().info("Beginning conversion from nathan/shops");
+                return new State_00000(plugin).loadState(new YamlConfiguration());
+            }
+            else {
+                plugin.getLogger().info("YAML file did not exist. Starting fresh.");
+                return new SavedState(plugin);
+            }
         }
         double ver = StateFile.readVersion(stateLocation);
         if (ver == 0d) {

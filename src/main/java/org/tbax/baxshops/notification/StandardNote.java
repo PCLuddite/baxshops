@@ -28,8 +28,8 @@ import org.tbax.baxshops.serialization.SafeMap;
 import org.tbax.baxshops.serialization.StoredPlayer;
 import org.tbax.baxshops.serialization.UpgradeableSerializable;
 import org.tbax.baxshops.serialization.UpgradeableSerialization;
+import org.tbax.baxshops.serialization.annotations.DoNotSerialize;
 import org.tbax.baxshops.serialization.annotations.SerializeMethod;
-import org.tbax.baxshops.serialization.states.State_00300;
 
 import java.util.Date;
 import java.util.Map;
@@ -49,6 +49,18 @@ public abstract class StandardNote implements Notification, UpgradeableSerializa
 
     @SerializeMethod(getter = "getShopId")
     protected UUID shopId;
+
+    @DoNotSerialize
+    @Deprecated
+    protected String legacyBuyer = null;
+
+    @DoNotSerialize
+    @Deprecated
+    protected String legacySeller = null;
+
+    @DoNotSerialize
+    @Deprecated
+    protected long legacyShopId = 0;
 
     public StandardNote(UUID shopId, OfflinePlayer buyer, OfflinePlayer seller, BaxEntry entry)
     {
@@ -72,9 +84,9 @@ public abstract class StandardNote implements Notification, UpgradeableSerializa
     @Deprecated
     public void upgrade00300(@NotNull SafeMap map)
     {
-        buyer = State_00300.getPlayerId(map.getString("buyer", StoredPlayer.DUMMY_NAME));
-        seller = State_00300.getPlayerId(map.getString("seller", StoredPlayer.DUMMY_NAME));
-        shopId = State_00300.getShopId(map.getLong("shopId"));
+        legacyBuyer = map.getString("buyer", StoredPlayer.DUMMY_NAME);
+        legacySeller = map.getString("seller", StoredPlayer.DUMMY_NAME);
+        legacyShopId = map.getLong("shopId");
         entry = map.getBaxEntry("entry");
     }
 
@@ -116,6 +128,24 @@ public abstract class StandardNote implements Notification, UpgradeableSerializa
         return shopId;
     }
 
+    @Deprecated
+    public long getLegacyShopId()
+    {
+        return legacyShopId;
+    }
+
+    @Deprecated
+    public String getLegacyBuyer()
+    {
+        return legacyBuyer;
+    }
+
+    @Deprecated
+    public String getLegacySeller()
+    {
+        return legacySeller;
+    }
+
     @Override
     public boolean equals(Object o)
     {
@@ -132,5 +162,20 @@ public abstract class StandardNote implements Notification, UpgradeableSerializa
     public int hashCode()
     {
         return Objects.hash(entry, buyer, seller, shopId);
+    }
+
+    public void setBuyer(@NotNull OfflinePlayer player)
+    {
+        buyer = player.getUniqueId();
+    }
+
+    public void setSeller(@NotNull OfflinePlayer player)
+    {
+        seller = player.getUniqueId();
+    }
+
+    public void setShop(@NotNull UUID shopId)
+    {
+        this.shopId = shopId;
     }
 }
