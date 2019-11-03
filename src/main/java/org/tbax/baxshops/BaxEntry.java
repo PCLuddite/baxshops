@@ -501,8 +501,8 @@ public final class BaxEntry implements UpgradeableSerializable
     public static BaxEntry fromNathan(qs.shops.ShopEntry entry)
     {
         BaxEntry baxEntry = new BaxEntry();
-        baxEntry.refundPrice = entry.refundPrice;
-        baxEntry.retailPrice = entry.retailPrice;
+        baxEntry.refundPrice = MathUtil.roundedDouble(entry.refundPrice);
+        baxEntry.retailPrice = MathUtil.roundedDouble(entry.retailPrice);
         baxEntry.quantity = entry.quantity;
         baxEntry.stack = ItemUtil.fromItemId(entry.itemID, (short)entry.itemDamage);
         return baxEntry;
