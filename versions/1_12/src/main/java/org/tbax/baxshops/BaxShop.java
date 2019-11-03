@@ -35,6 +35,7 @@ import org.tbax.baxshops.serialization.UpgradeableSerializable;
 import org.tbax.baxshops.serialization.UpgradeableSerialization;
 import org.tbax.baxshops.serialization.annotations.DoNotSerialize;
 import org.tbax.baxshops.serialization.annotations.SerializeMethod;
+import org.tbax.baxshops.serialization.states.State_00000;
 import org.tbax.baxshops.serialization.states.State_00300;
 import org.tbax.baxshops.serialization.states.State_00420;
 
@@ -58,6 +59,9 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
 
     @DoNotSerialize
     private long legacyId = Long.MIN_VALUE;
+
+    @DoNotSerialize
+    private String legacyOwner = null;
 
     private BaxShop(UUID uuid)
     {
@@ -98,11 +102,10 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     @Override
     public void upgrade00300(@NotNull SafeMap map)
     {
-        String name = map.getString("owner", StoredPlayer.DUMMY_NAME);
+        legacyOwner = map.getString("owner", StoredPlayer.DUMMY_NAME);
         id = UUID.randomUUID();
         legacyId = map.getLong("id");
         shortId = new String[] { createShortId() };
-        owner = State_00300.getPlayerId(name);
         flags = State_00300.flagMapToFlag(map);
         inventory.addAll(map.getList("inventory"));
         locations.addAll(map.getList("locations"));
@@ -167,6 +170,12 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     public long getLegacyId()
     {
         return legacyId;
+    }
+
+    @Deprecated
+    public String getLegacyOwner()
+    {
+        return legacyOwner;
     }
 
     @Deprecated
@@ -644,5 +653,17 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     public int hashCode()
     {
         return Objects.hash(id);
+    }
+
+    public static BaxShop fromNathan(qs.shops.Shop shop, State_00000 state00000)
+    {
+        BaxShop baxShop = new BaxShop(UUID.randomUUID());
+        baxShop.setFlagInfinite(shop.isInfinite);
+        baxShop.addLocation(shop.location);
+        baxShop.setOwner(state00000.registerPlayer(shop.owner));
+        for(qs.shops.ShopEntry entry : shop.inventory) {
+            baxShop.add(BaxEntry.fromNathan(entry));
+        }
+        return baxShop;
     }
 }

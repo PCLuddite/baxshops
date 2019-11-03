@@ -26,10 +26,10 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.BaxShop;
@@ -49,6 +49,8 @@ public final class ItemUtil
     private static final String MINECRAFT_VERSION;
     private static final Method AS_NMS_COPY;
     private static final Method GET_NAME;
+
+    private static Map<Integer, Material> legacyItems = null;
 
     private static final Map<Material, Material> SIGN_TO_SIGN = new HashMap<>();
 
@@ -443,5 +445,40 @@ public final class ItemUtil
             }
         }
         return all;
+    }
+
+    @Deprecated
+    public static ItemStack fromItemId(int id)
+    {
+        return fromItemId(id, (short)0);
+    }
+
+    @Deprecated
+    public static ItemStack fromItemId(int id, short damage)
+    {
+        Material type = legacyItems.get(id);
+        if (type == null) return null;
+        return new ItemStack(type, 1, damage);
+    }
+
+    @Deprecated
+    public static Map<Integer, Material> getLegacyItems()
+    {
+        return legacyItems;
+    }
+
+    @Deprecated
+    public static Map<Integer, Material> loadLegacyItems(JavaPlugin plugin) throws IOException
+    {
+        try (Scanner scanner = new Scanner(plugin.getResource("legacy_items.txt"))) {
+            String line;
+            while((line = scanner.nextLine()) != null) {
+                int idx = line.indexOf(' ');
+                int id = Integer.parseInt(line.substring(0, idx - 1));
+                Material material = Material.getMaterial(line.substring(idx).trim(), true);
+                legacyItems.put(id, material);
+            }
+        }
+        return legacyItems;
     }
 }

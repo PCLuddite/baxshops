@@ -29,6 +29,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.BaxShop;
@@ -49,6 +50,8 @@ public final class ItemUtil
     private static final Method AS_NMS_COPY;
     private static final Method GET_NAME;
 
+    private static Map<Integer, Material> legacyItems = null;
+
     private static final Map<Material, Material> SIGN_TO_SIGN = new HashMap<>();
 
     private static final List<Material> SIGN_TYPES = Arrays.asList(Material.SPRUCE_SIGN, Material.SPRUCE_WALL_SIGN,
@@ -68,7 +71,7 @@ public final class ItemUtil
         try {
             Class<?> itemStackCls = Class.forName("net.minecraft.server." + MINECRAFT_VERSION + ".ItemStack");
             nmsCpyMthd = Class.forName("org.bukkit.craftbukkit." + MINECRAFT_VERSION + ".inventory.CraftItemStack")
-                    .getMethod("asNMSCopy", ItemStack.class);
+                .getMethod("asNMSCopy", ItemStack.class);
             getNmMthd = itemStackCls.getMethod("getName");
         }
         catch (ReflectiveOperationException e) {
@@ -99,7 +102,7 @@ public final class ItemUtil
     private ItemUtil()
     {
     }
-
+    
     public static List<BaxEntry> getItemFromAlias(String input, BaxShop shop)
     {
         String[] words = input.toUpperCase().split("_");
@@ -213,7 +216,7 @@ public final class ItemUtil
         patterns[7] = new Pattern(DyeColor.BLACK, PatternType.BORDER);
         return Arrays.asList(patterns);
     }
-
+    
     public static String getEnchantName(Enchantment enchant)
     {
         Enchantable enchantable = enchants.get(enchant);
@@ -221,28 +224,28 @@ public final class ItemUtil
             return Format.toFriendlyName(enchant.getKey().getKey());
         return enchantable.getName();
     }
-
+    
     /**
      * Determines if a material can be damaged
      * @param item
-     * @return
+     * @return 
      */
     public static boolean isDamageable(Material item)
     {
         return damageable.containsKey(item);
     }
-
+    
     /**
      * Gets the maximum damage for an item. This assumes damageability
      * has been confirmed with isDamageable()
      * @param item
-     * @return
+     * @return 
      */
     public static short getMaxDamage(Material item)
     {
         return damageable.get(item);
     }
-
+    
     /**
      * Loads the damageable items list from the damageable.txt resource.
      * @param plugin
@@ -277,7 +280,7 @@ public final class ItemUtil
             e.printStackTrace();
         }
     }
-
+    
     /**
      * Loads the enchantment names in enchants.txt
      * @param plugin
@@ -371,7 +374,7 @@ public final class ItemUtil
         if (!stack1.isSimilar(stack2)) {
             return stack1.getType() == stack2.getType() &&
                     (isSameBook(stack1, stack2)
-                            || isSameBanner(stack1, stack2));
+                    || isSameBanner(stack1, stack2));
         }
         return true;
     }
@@ -379,9 +382,9 @@ public final class ItemUtil
     public static boolean isShop(ItemStack item)
     {
         return isSign(item)&&
-                item.hasItemMeta() &&
-                item.getItemMeta().hasLore() &&
-                item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1).startsWith(ChatColor.GRAY + "ID: ");
+               item.hasItemMeta() &&
+               item.getItemMeta().hasLore() &&
+               item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1).startsWith(ChatColor.GRAY + "ID: ");
     }
 
     public static boolean isSign(ItemStack item)
@@ -452,5 +455,40 @@ public final class ItemUtil
             }
         }
         return all;
+    }
+
+    @Deprecated
+    public static ItemStack fromItemId(int id)
+    {
+        return fromItemId(id, (short)0);
+    }
+
+    @Deprecated
+    public static ItemStack fromItemId(int id, short damage)
+    {
+        Material type = legacyItems.get(id);
+        if (type == null) return null;
+        return new ItemStack(type, 1, damage);
+    }
+
+    @Deprecated
+    public static Map<Integer, Material> getLegacyItems()
+    {
+        return legacyItems;
+    }
+
+    @Deprecated
+    public static Map<Integer, Material> loadLegacyItems(JavaPlugin plugin) throws IOException
+    {
+        try (Scanner scanner = new Scanner(plugin.getResource("legacy_items.txt"))) {
+            String line;
+            while((line = scanner.nextLine()) != null) {
+                int idx = line.indexOf(' ');
+                int id = Integer.parseInt(line.substring(0, idx - 1));
+                Material material = Material.getMaterial(line.substring(idx).trim(), true);
+                legacyItems.put(id, material);
+            }
+        }
+        return legacyItems;
     }
 }
