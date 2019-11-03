@@ -7,6 +7,9 @@ import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.ShopPlugin;
 import org.tbax.baxshops.items.ItemUtil;
+import org.tbax.baxshops.notification.Claimable;
+import org.tbax.baxshops.notification.Notification;
+import org.tbax.baxshops.notification.Request;
 import org.tbax.baxshops.serialization.SavedState;
 import org.tbax.baxshops.serialization.StateLoader;
 import org.tbax.baxshops.serialization.StoredPlayer;
@@ -27,6 +30,8 @@ public class State_00000 implements StateLoader
     public State_00000(ShopPlugin plugin)
     {
         this.plugin = plugin;
+        playerMap.put(StoredPlayer.DUMMY_NAME, StoredPlayer.DUMMY);
+        playerMap.put(StoredPlayer.ERROR_NAME, StoredPlayer.ERROR);
     }
 
     public static File getNathanFile(JavaPlugin plugin)
@@ -68,6 +73,24 @@ public class State_00000 implements StateLoader
             StoredPlayer player = registerPlayer(entry.getKey());
             for (qs.shops.notification.Notification note : entry.getValue()) {
                 player.queueNote(note.getNewNote(this));
+            }
+
+            if (StoredPlayer.DUMMY.equals(player)) {
+                Deque<Notification> errors = new ArrayDeque<>();
+                while (player.getNotificationCount() > 0) {
+                    Notification n = player.dequeueNote();
+                    if (n instanceof Claimable || n instanceof Request) {
+                        errors.add(n);
+                    }
+                }
+                if (!errors.isEmpty()) {
+                    plugin.getLogger().warning("There is one or more claim or request notification assigned to the dummy player. " +
+                            "These cannot be honored and will be assigned to an error user. The configuration file will need to be fixed manually.");
+                    do {
+                        StoredPlayer.ERROR.queueNote(errors.removeFirst());
+                    }
+                    while(!errors.isEmpty());
+                }
             }
         }
         return playerMap.values();
