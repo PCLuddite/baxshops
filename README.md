@@ -1,9 +1,10 @@
 BaxShops
 =========
 
-BaxShops is a shop plugin for Bukkit, based on nathan/shops, updated for Bukkit 1.8+
+BaxShops is a shop plugin for Bukkit, based on and intended to be the ongoing replacement for [SignShops](https://github.com/nathan/shops), updated for Bukkit 1.8+
 
 **FEATURES**
+* Ability to read shops.dat file produced by nathan/shops
 * /buy, /sell, /restock are now commands
 * Shops can have more than one location, allowing them to be accessed in multiple areas of a world
 * Items can now be sold directly to the shop's inventory
@@ -14,6 +15,5 @@ BaxShops is a shop plugin for Bukkit, based on nathan/shops, updated for Bukkit 
 * Shops are saved in human-readable YAML format
 
 **IMPORTANT**
-This plugin is still in the developmental stages! It is for advanced users only. Changes between non-consecutive commits are **not** guaranteed to be compatible. It is recommended that you create a backup before updating. Consecutive commits will normally have a mechanism for state file conversion which may persist for several commits, but this compatability support may be dropped at any time. Finally, although this plugin behaves similarly to nathan/shops, they are NOT compatable (compatability *might* be added in the future).
-
+This plugin is still in beta! It is recommended to back up your saved data before updating.
 ---
