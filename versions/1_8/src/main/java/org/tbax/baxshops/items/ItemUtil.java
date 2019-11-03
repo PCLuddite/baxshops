@@ -19,9 +19,9 @@
 
 package org.tbax.baxshops.items;
 
-import org.bukkit.*;
-import org.bukkit.block.banner.Pattern;
-import org.bukkit.block.banner.PatternType;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Inventory;
@@ -30,7 +30,6 @@ import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.Format;
@@ -442,11 +441,12 @@ public final class ItemUtil
     @Deprecated
     public static Map<Integer, Material> loadLegacyItems(JavaPlugin plugin) throws IOException
     {
-        try (Scanner scanner = new Scanner(plugin.getResource("legacy_items.txt"))) {
+        legacyItems = new HashMap<>();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(plugin.getResource("legacy_items.txt")))) {
             String line;
-            while((line = scanner.nextLine()) != null) {
+            while((line = reader.readLine()) != null) {
                 int idx = line.indexOf(' ');
-                int id = Integer.parseInt(line.substring(0, idx - 1));
+                int id = Integer.parseInt(line.substring(0, idx));
                 Material material = Material.getMaterial(line.substring(idx).trim());
                 legacyItems.put(id, material);
             }

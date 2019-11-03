@@ -470,12 +470,13 @@ public final class ItemUtil
     @Deprecated
     public static Map<Integer, Material> loadLegacyItems(JavaPlugin plugin) throws IOException
     {
-        try (Scanner scanner = new Scanner(plugin.getResource("legacy_items.txt"))) {
+        legacyItems = new HashMap<>();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(plugin.getResource("legacy_items.txt")))) {
             String line;
-            while((line = scanner.nextLine()) != null) {
+            while((line = reader.readLine()) != null) {
                 int idx = line.indexOf(' ');
-                int id = Integer.parseInt(line.substring(0, idx - 1));
-                Material material = Material.getMaterial(line.substring(idx).trim(), true);
+                int id = Integer.parseInt(line.substring(0, idx));
+                Material material = Material.getMaterial(line.substring(idx).trim());
                 legacyItems.put(id, material);
             }
         }
