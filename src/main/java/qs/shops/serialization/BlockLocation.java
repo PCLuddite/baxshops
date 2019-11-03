@@ -2,6 +2,7 @@ package qs.shops.serialization;
 
 import java.io.Serializable;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 import qs.shops.Main;
@@ -31,6 +32,6 @@ public class BlockLocation implements Serializable {
 	 * @return
 	 */
 	public Location toLocation() {
-		return new Location(Main.instance.getServer().getWorld(worldName), x, y, z);
+		return new Location(Bukkit.getServer().getWorld(worldName), x, y, z);
 	}
 }

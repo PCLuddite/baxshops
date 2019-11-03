@@ -22,7 +22,6 @@ package org.tbax.baxshops.items;
 import org.bukkit.*;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Inventory;
@@ -51,7 +50,7 @@ public final class ItemUtil
     private static final Method AS_NMS_COPY;
     private static final Method GET_NAME;
 
-    private static Map<Integer, List<ItemStack>> legacyItems = null;
+    private static Map<Integer, Material> legacyItems = null;
 
     private static final Map<Material, Material> SIGN_TO_SIGN = new HashMap<>();
 
@@ -467,24 +466,27 @@ public final class ItemUtil
     @Deprecated
     public static ItemStack fromItemId(int id, short damage)
     {
-        Material type = legacyItems.get(id).get(0).getType();
+        Material type = legacyItems.get(id);
+        if (type == null) return null;
         return new ItemStack(type, 1, damage);
     }
 
     @Deprecated
-    public static Map<Integer, List<ItemStack>> getLegacyItems()
+    public static Map<Integer, Material> getLegacyItems()
     {
         return legacyItems;
     }
 
     @Deprecated
-    public static Map<Integer, List<ItemStack>> loadLegacyItems(JavaPlugin plugin) throws IOException
+    public static Map<Integer, Material> loadLegacyItems(JavaPlugin plugin) throws IOException
     {
-        try (InputStream stream = plugin.getResource("legacy_items.yml")) {
-            FileConfiguration itemYml = YamlConfiguration.loadConfiguration(new InputStreamReader(stream));
-            Map<?, ?> items = (Map<?, ?>)itemYml.get("items");
-            for(Map.Entry<?, ?> entry : items.entrySet()) {
-                legacyItems.put(Integer.parseInt((String)entry.getKey()), (List)entry.getValue());
+        try (Scanner scanner = new Scanner(plugin.getResource("legacy_items.txt"))) {
+            String line;
+            while((line = scanner.nextLine()) != null) {
+                int idx = line.indexOf(' ');
+                int id = Integer.parseInt(line.substring(0, idx - 1));
+                Material material = Material.getMaterial(line.substring(idx).trim(), true);
+                legacyItems.put(id, material);
             }
         }
         return legacyItems;

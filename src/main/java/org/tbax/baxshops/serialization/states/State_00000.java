@@ -6,6 +6,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.ShopPlugin;
+import org.tbax.baxshops.items.ItemUtil;
 import org.tbax.baxshops.serialization.SavedState;
 import org.tbax.baxshops.serialization.StateLoader;
 import org.tbax.baxshops.serialization.StoredPlayer;
@@ -41,6 +42,7 @@ public class State_00000 implements StateLoader
             try (ObjectInputStream stream = new ObjectInputStream(new FileInputStream(stateLocation))) {
                 nathanState = (State)stream.readObject();
             }
+            ItemUtil.loadLegacyItems(plugin);
         }
         catch (ClassCastException | IOException | ClassNotFoundException e) {
             e.printStackTrace();
