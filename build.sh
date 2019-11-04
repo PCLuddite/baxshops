@@ -24,7 +24,7 @@ if [ "$JAVA_HOME" = "" ]; then
     export JAVA_HOME=${JAVA_HOME%/*}
 fi
 TMP=".tmp$RANDOM"
-SHOPS_VER="1.0b2"
+SHOPS_VER="1.0b3"
 echo "JAVA_HOME=$JAVA_HOME"
 echo "SHOPS_VER=$SHOPS_VER"
 echo "TMP=$TMP"
