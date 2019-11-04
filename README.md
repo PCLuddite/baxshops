@@ -1,7 +1,7 @@
 BaxShops
 =========
 
-BaxShops is a shop plugin for Bukkit, based on and intended to be the ongoing replacement for [SignShops](https://github.com/nathan/shops), updated for Bukkit 1.8+
+BaxShops is a shop plugin for Bukkit, based on and intended to be the ongoing replacement for [SwornShops](https://github.com/nathan/shops), updated for Bukkit 1.8+
 
 **FEATURES**
 * Ability to read shops.dat file produced by nathan/shops
