@@ -33,6 +33,7 @@ import org.tbax.baxshops.notification.DeletedShopClaim;
 import org.tbax.baxshops.notification.SaleClaim;
 import org.tbax.baxshops.items.ItemUtil;
 import org.tbax.baxshops.serialization.StoredPlayer;
+import org.tbax.baxshops.versioning.LegacyPlayerUtil;
 
 import java.util.*;
 
@@ -103,7 +104,7 @@ public final class PlayerUtil
      */
     public static int getSpaceForItem(@NotNull Player player, @NotNull ItemStack item)
     {
-        ItemStack[] contents = player.getInventory().getStorageContents();
+        ItemStack[] contents = LegacyPlayerUtil.getInventoryContents(player);
         int max = item.getMaxStackSize();
         int space = 0;
 
@@ -387,7 +388,7 @@ public final class PlayerUtil
         if (inventory instanceof Inventory) {
             Inventory inv = (Inventory)inventory;
             if (inv instanceof PlayerInventory) {
-                ItemStack hand = ((PlayerInventory)inv).getItemInMainHand();
+                ItemStack hand = LegacyPlayerUtil.getItemInHand((PlayerInventory)inv);
                 if (ItemUtil.isSimilar(hand, item, smartStack)) {
                     if (amt < hand.getAmount()) {
                         hand.setAmount(hand.getAmount() - amt);
@@ -395,7 +396,7 @@ public final class PlayerUtil
                     }
                     else {
                         qty += hand.getAmount();
-                        ((PlayerInventory)inv).setItemInMainHand(null);
+                        LegacyPlayerUtil.setItemInHand((PlayerInventory)inv, null);
                     }
                 }
             }
@@ -458,8 +459,8 @@ public final class PlayerUtil
 
     public static ItemStack findSign(@NotNull Player player) throws PrematureAbortException
     {
-        if (ItemUtil.isSign(player.getInventory().getItemInMainHand())) {
-            return player.getInventory().getItemInMainHand();
+        if (ItemUtil.isSign(LegacyPlayerUtil.getItemInHand(player))) {
+            return LegacyPlayerUtil.getItemInHand(player);
         }
 
         Map<Integer, ? extends ItemStack> signs = ItemUtil.all(player.getInventory(), ItemUtil.getSignTypes());

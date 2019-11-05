@@ -19,8 +19,38 @@
  */
 package org.tbax.baxshops.versioning;
 
-import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
-public abstract class LegacyOfflinePlayer implements OfflinePlayer
+public final class LegacyPlayerUtil
 {
+    private LegacyPlayerUtil()
+    {
+    }
+
+    public static ItemStack getItemInHand(Player player)
+    {
+        return getItemInHand(player.getInventory());
+    }
+
+    public static void setItemInHand(Player player, ItemStack stack)
+    {
+        setItemInHand(player.getInventory(), stack);
+    }
+
+    public static void setItemInHand(PlayerInventory inventory, ItemStack stack)
+    {
+        inventory.setItemInMainHand(stack);
+    }
+
+    public static ItemStack getItemInHand(PlayerInventory inventory)
+    {
+        return inventory.getItemInMainHand();
+    }
+
+    public static ItemStack[] getInventoryContents(Player player)
+    {
+        return player.getInventory().getStorageContents();
+    }
 }

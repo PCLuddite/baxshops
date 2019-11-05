@@ -40,6 +40,7 @@ import org.tbax.baxshops.errors.CommandWarningException;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.items.ItemUtil;
 import org.tbax.baxshops.serialization.StoredPlayer;
+import org.tbax.baxshops.versioning.LegacyPlayerUtil;
 
 import java.util.*;
 
@@ -524,10 +525,15 @@ public final class ShopCmdActor implements CommandSender
     {
         if (getPlayer() == null)
             return null;
-        ItemStack item = getPlayer().getInventory().getItemInMainHand();
+        ItemStack item = LegacyPlayerUtil.getItemInHand(getPlayer());
         if (item == null || item.getType() == Material.AIR)
             return null;
         return item;
+    }
+
+    public void setItemInHand(ItemStack stack)
+    {
+        LegacyPlayerUtil.setItemInHand(getPlayer(), stack);
     }
 
     public List<BaxEntry> takeArgFromInventory(int index) throws PrematureAbortException
