@@ -24,8 +24,6 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionData;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.items.EnchantMap;
 import org.tbax.baxshops.items.ItemUtil;
@@ -303,20 +301,6 @@ public final class BaxEntry implements UpgradeableSerializable
     {
         return Format.money2(MathUtil.multiply(retailPrice, getAmount()));
     }
-
-    private static String getPotionInfo(ItemStack item)
-    {
-        if (item.getType() == Material.POTION) {
-            PotionData data = ((PotionMeta)item.getItemMeta()).getBasePotionData();
-            if (data.isExtended()) {
-                return Format.enchantments("(Extended)");
-            }
-            else if (data.isUpgraded()) {
-                return Format.enchantments("II");
-            }
-        }
-        return "";
-    }
     
     @Override
     public String toString()
@@ -363,7 +347,7 @@ public final class BaxEntry implements UpgradeableSerializable
         else {
             name = new StringBuilder(Format.listname(ItemUtil.getName(this)));
         }
-        String potionInfo = getPotionInfo(stack);
+        String potionInfo = ItemUtil.getPotionInfo(stack);
         if (!potionInfo.equals("")) {
             name.append(" ").append(potionInfo);
         }

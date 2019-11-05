@@ -27,11 +27,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BannerMeta;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.*;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionData;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.BaxShop;
@@ -540,5 +538,19 @@ public final class ItemUtil
             }
         }
         return signs;
+    }
+
+    public static String getPotionInfo(ItemStack item)
+    {
+        if (item.getType() == Material.POTION) {
+            PotionData data = ((PotionMeta)item.getItemMeta()).getBasePotionData();
+            if (data.isExtended()) {
+                return Format.enchantments("(Extended)");
+            }
+            else if (data.isUpgraded()) {
+                return Format.enchantments("II");
+            }
+        }
+        return "";
     }
 }
