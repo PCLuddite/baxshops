@@ -26,10 +26,11 @@ import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.Resources;
 import org.tbax.baxshops.serialization.annotations.SerializedAs;
 import org.tbax.baxshops.notification.Notification;
+import org.tbax.baxshops.versioning.LegacyOfflinePlayer;
 
 import java.util.*;
 
-public class StoredPlayer implements OfflinePlayer, UpgradeableSerializable
+public class StoredPlayer extends LegacyOfflinePlayer implements UpgradeableSerializable
 {
     public static final UUID DUMMY_UUID = UUID.fromString("326a36ea-b465-3192-a4f7-c313f347edc9");
     public static final String DUMMY_NAME = "world";
