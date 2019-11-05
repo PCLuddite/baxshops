@@ -23,16 +23,15 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.items.EnchantMap;
 import org.tbax.baxshops.items.ItemUtil;
-import org.tbax.baxshops.serialization.UpgradeableSerialization;
 import org.tbax.baxshops.serialization.SafeMap;
 import org.tbax.baxshops.serialization.UpgradeableSerializable;
+import org.tbax.baxshops.serialization.UpgradeableSerialization;
 
 import java.util.Map;
 import java.util.Objects;
@@ -256,20 +255,12 @@ public final class BaxEntry implements UpgradeableSerializable
     
     public int getDurability()
     {
-        if (stack.getItemMeta() instanceof Damageable) {
-            Damageable damage = (Damageable) stack.getItemMeta();
-            return damage.getDamage();
-        }
-        return 0;
+        return ItemUtil.getDurability(stack);
     }
 
     public void setDurability(int durability)
     {
-        if (stack.getItemMeta() instanceof Damageable) {
-            Damageable damage = (Damageable) stack.getItemMeta();
-            damage.setDamage(durability);
-            stack.setItemMeta((ItemMeta)damage);
-        }
+        ItemUtil.setDurability(stack, durability);
     }
     
     public int getDamagePercent()
@@ -280,9 +271,7 @@ public final class BaxEntry implements UpgradeableSerializable
     public void setDamagePercent(int pct)
     {
         double damage = (pct / 100d) * ItemUtil.getMaxDamage(stack.getType());
-        if (stack.getItemMeta() instanceof Damageable) {
-            setDurability((int)damage);
-        }
+        setDurability((int)damage);
     }
 
     public @NotNull String getName()

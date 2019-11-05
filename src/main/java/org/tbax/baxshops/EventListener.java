@@ -85,7 +85,7 @@ public class EventListener implements Listener
                     throw new CommandErrorException("You don't have permission to remove this shop.");
                 }
             }
-            for (Block block : BaxShop.getSignOnBlock(event.getBlock())) {
+            for (Block block : ItemUtil.getSignOnBlock(event.getBlock())) {
                 if (ShopPlugin.getShop(block.getLocation()) != null) {
                     throw new CommandErrorException("You cannot break this block because there is a shop on it.");
                 }
@@ -171,7 +171,7 @@ public class EventListener implements Listener
                 event.blockList().remove(b);
             }
             else {
-                for (Block block : BaxShop.getSignOnBlock(b)) {
+                for (Block block : ItemUtil.getSignOnBlock(b)) {
                     if (ShopPlugin.getShop(block.getLocation()) != null) {
                         event.blockList().remove(b);
                         break;
@@ -184,7 +184,7 @@ public class EventListener implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBlockPhysicsEvent(BlockPhysicsEvent e)
     {
-        for (Block block : BaxShop.getSignOnBlock(e.getBlock())) {
+        for (Block block : ItemUtil.getSignOnBlock(e.getBlock())) {
             if (ShopPlugin.getShop(block.getLocation()) != null) {
                 e.setCancelled(true);
                 break;

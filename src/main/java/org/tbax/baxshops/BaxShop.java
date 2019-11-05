@@ -23,9 +23,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
-import org.bukkit.block.data.type.WallSign;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
@@ -604,35 +602,6 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
             .distinct()
             .sorted()
             .collect(Collectors.toList());
-    }
-
-    public static List<Block> getSignOnBlock(Block block)
-    {
-        List<Block> signs = new ArrayList<>();
-        for (int x = -1; x <= 1; ++x) {
-            for (int y = -1; y <= 1; ++y) {
-                for(int z = -1; z <= 1; ++z) {
-                    Location l = block.getLocation().add(x, y, z);
-                    Block curr = l.getBlock();
-                    if (ItemUtil.isSign(curr.getType())) {
-                        if (curr.getBlockData() instanceof WallSign) {
-                            WallSign sign = (WallSign)curr.getBlockData();
-                            Block attached = curr.getRelative(sign.getFacing().getOppositeFace());
-                            if (attached.getLocation().equals(block.getLocation())) {
-                                signs.add(curr);
-                            }
-                        }
-                        else {
-                            Location below = l.subtract(0, 1, 0);
-                            if (below.equals(block.getLocation())) {
-                                signs.add(curr);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return signs;
     }
 
     public void sort(Comparator<? super BaxEntry> comparator) {
