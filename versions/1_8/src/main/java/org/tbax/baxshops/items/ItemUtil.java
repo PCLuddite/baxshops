@@ -31,6 +31,7 @@ import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.Potion;
 import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.Format;
@@ -494,5 +495,19 @@ public final class ItemUtil
             }
         }
         return signs;
+    }
+
+    public static String getPotionInfo(ItemStack item)
+    {
+        if (item.getType() == Material.POTION) {
+            Potion potion = Potion.fromItemStack(item);;
+            if (potion.hasExtendedDuration()) {
+                return Format.enchantments("(Extended)");
+            }
+            else if (potion.getTier() == Potion.Tier.TWO) {
+                return Format.enchantments("II");
+            }
+        }
+        return "";
     }
 }
