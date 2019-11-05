@@ -16,20 +16,20 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
  * USA
  */
-
 package org.tbax.baxshops.items;
 
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
+import org.bukkit.block.data.type.WallSign;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BannerMeta;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.*;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.potion.PotionData;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.BaxShop;
@@ -102,7 +102,7 @@ public final class ItemUtil
     private ItemUtil()
     {
     }
-    
+
     public static List<BaxEntry> getItemFromAlias(String input, BaxShop shop)
     {
         String[] words = input.toUpperCase().split("_");
@@ -216,7 +216,7 @@ public final class ItemUtil
         patterns[7] = new Pattern(DyeColor.BLACK, PatternType.BORDER);
         return Arrays.asList(patterns);
     }
-    
+
     public static String getEnchantName(Enchantment enchant)
     {
         Enchantable enchantable = enchants.get(enchant);
@@ -224,28 +224,28 @@ public final class ItemUtil
             return Format.toFriendlyName(enchant.getKey().getKey());
         return enchantable.getName();
     }
-    
+
     /**
      * Determines if a material can be damaged
      * @param item
-     * @return 
+     * @return
      */
     public static boolean isDamageable(Material item)
     {
         return damageable.containsKey(item);
     }
-    
+
     /**
      * Gets the maximum damage for an item. This assumes damageability
      * has been confirmed with isDamageable()
      * @param item
-     * @return 
+     * @return
      */
     public static short getMaxDamage(Material item)
     {
         return damageable.get(item);
     }
-    
+
     /**
      * Loads the damageable items list from the damageable.txt resource.
      * @param plugin
@@ -280,7 +280,7 @@ public final class ItemUtil
             e.printStackTrace();
         }
     }
-    
+
     /**
      * Loads the enchantment names in enchants.txt
      * @param plugin
@@ -491,5 +491,66 @@ public final class ItemUtil
             }
         }
         return legacyItems;
+    }
+
+    public static int getDurability(ItemStack stack)
+    {
+        if (stack.getItemMeta() instanceof Damageable) {
+            Damageable damage = (Damageable) stack.getItemMeta();
+            return damage.getDamage();
+        }
+        return 0;
+    }
+
+    public static void setDurability(ItemStack stack, int durability)
+    {
+        if (stack.getItemMeta() instanceof Damageable) {
+            Damageable damage = (Damageable) stack.getItemMeta();
+            damage.setDamage(durability);
+            stack.setItemMeta((ItemMeta)damage);
+        }
+    }
+
+    public static List<Block> getSignOnBlock(Block block)
+    {
+        List<Block> signs = new ArrayList<>();
+        for (int x = -1; x <= 1; ++x) {
+            for (int y = -1; y <= 1; ++y) {
+                for(int z = -1; z <= 1; ++z) {
+                    Location l = block.getLocation().add(x, y, z);
+                    Block curr = l.getBlock();
+                    if (ItemUtil.isSign(curr.getType())) {
+                        if (curr.getBlockData() instanceof WallSign) {
+                            WallSign sign = (WallSign)curr.getBlockData();
+                            Block attached = curr.getRelative(sign.getFacing().getOppositeFace());
+                            if (attached.getLocation().equals(block.getLocation())) {
+                                signs.add(curr);
+                            }
+                        }
+                        else {
+                            Location below = l.subtract(0, 1, 0);
+                            if (below.equals(block.getLocation())) {
+                                signs.add(curr);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return signs;
+    }
+
+    public static String getPotionInfo(ItemStack item)
+    {
+        if (item.getType() == Material.POTION) {
+            PotionData data = ((PotionMeta)item.getItemMeta()).getBasePotionData();
+            if (data.isExtended()) {
+                return Format.enchantments("(Extended)");
+            }
+            else if (data.isUpgraded()) {
+                return Format.enchantments("II");
+            }
+        }
+        return "";
     }
 }
