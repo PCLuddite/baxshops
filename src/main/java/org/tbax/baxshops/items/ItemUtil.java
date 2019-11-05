@@ -22,6 +22,7 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
+import org.bukkit.block.data.type.WallSign;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Inventory;
@@ -103,7 +104,7 @@ public final class ItemUtil
     private ItemUtil()
     {
     }
-    
+
     public static List<BaxEntry> getItemFromAlias(String input, BaxShop shop)
     {
         String[] words = input.toUpperCase().split("_");
@@ -225,28 +226,28 @@ public final class ItemUtil
             return Format.toFriendlyName(enchant.getKey().getKey());
         return enchantable.getName();
     }
-    
+
     /**
      * Determines if a material can be damaged
      * @param item
-     * @return 
+     * @return
      */
     public static boolean isDamageable(Material item)
     {
         return damageable.containsKey(item);
     }
-    
+
     /**
      * Gets the maximum damage for an item. This assumes damageability
      * has been confirmed with isDamageable()
      * @param item
-     * @return 
+     * @return
      */
     public static short getMaxDamage(Material item)
     {
         return damageable.get(item);
     }
-    
+
     /**
      * Loads the damageable items list from the damageable.txt resource.
      * @param plugin
@@ -281,7 +282,7 @@ public final class ItemUtil
             e.printStackTrace();
         }
     }
-    
+
     /**
      * Loads the enchantment names in enchants.txt
      * @param plugin
@@ -521,19 +522,17 @@ public final class ItemUtil
                     Location l = block.getLocation().add(x, y, z);
                     Block curr = l.getBlock();
                     if (ItemUtil.isSign(curr.getType())) {
-                        if (curr.getState().getData() instanceof org.bukkit.material.Sign) {
-                            org.bukkit.material.Sign sign = (org.bukkit.material.Sign)curr.getState().getData();
-                            if (sign.isWallSign()) {
-                                Block attached = curr.getRelative(sign.getFacing().getOppositeFace());
-                                if (attached.getLocation().equals(block.getLocation())) {
-                                    signs.add(curr);
-                                }
+                        if (curr.getBlockData() instanceof WallSign) {
+                            WallSign sign = (WallSign)curr.getBlockData();
+                            Block attached = curr.getRelative(sign.getFacing().getOppositeFace());
+                            if (attached.getLocation().equals(block.getLocation())) {
+                                signs.add(curr);
                             }
-                            else {
-                                Location below = l.subtract(0, 1, 0);
-                                if (below.equals(block.getLocation())) {
-                                    signs.add(curr);
-                                }
+                        }
+                        else {
+                            Location below = l.subtract(0, 1, 0);
+                            if (below.equals(block.getLocation())) {
+                                signs.add(curr);
                             }
                         }
                     }
