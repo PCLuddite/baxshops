@@ -55,7 +55,7 @@ public final class ItemUtil
 
     private static final Map<Material, Material> SIGN_TO_SIGN = new HashMap<>();
 
-    private static final List<Material> SIGN_TYPES = Arrays.asList(Material.SIGN, Material.WALL_SIGN);
+    private static final List<Material> SIGN_TYPES = Arrays.asList(Material.SIGN, Material.WALL_SIGN, Material.SIGN_POST);
 
     static {
         String name = Bukkit.getServer().getClass().getPackage().getName();
@@ -76,6 +76,7 @@ public final class ItemUtil
         GET_NAME = getNmMthd;
 
         SIGN_TO_SIGN.put(Material.WALL_SIGN, Material.SIGN);
+        SIGN_TO_SIGN.put(Material.SIGN_POST, Material.SIGN);
     }
 
     /**
