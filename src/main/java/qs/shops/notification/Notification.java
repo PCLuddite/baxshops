@@ -22,10 +22,9 @@
  */
 package qs.shops.notification;
 
-import java.io.Serializable;
-
-import org.bukkit.entity.Player;
 import org.tbax.baxshops.notification.DeprecatedNote;
+
+import java.io.Serializable;
 
 /**
  * The notification interface is used to represent shop-related
@@ -39,10 +38,4 @@ import org.tbax.baxshops.notification.DeprecatedNote;
  * once viewed, unless the notification is a Request or Claimable
  */
 public interface Notification extends DeprecatedNote, Serializable {
-	/**
-	 * Gets a short message suitable for this notification.
-	 * @param player the player to which the message will be sent (may be null)
-	 * @return the notification message
-	 */
-	public String getMessage(Player player);
 }

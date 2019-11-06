@@ -63,17 +63,6 @@ public class LollipopNotification implements Notification {
 		this.sender = sender;
 		this.tastiness = tastiness < 0 ? 0 : tastiness > 100 ? 100 : tastiness;
 	}
-	
-	@Override
-	public String getMessage(Player player) {
-		String adjective = null;
-		for (Entry<Double, String> entry : adjectives.entrySet()) {
-			if (tastiness >= entry.getKey()) {
-				adjective = entry.getValue();
-			}
-		}
-		return sender + " sent you " + adjective + " lollipop";
-	}
 
 	// begin modified class
 

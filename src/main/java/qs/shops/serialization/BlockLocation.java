@@ -22,12 +22,10 @@
  */
 package qs.shops.serialization;
 
-import java.io.Serializable;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
-import qs.shops.Main;
+import java.io.Serializable;
 
 /**
  * A BlockLocation is a Location suitable for serialization.

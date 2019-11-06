@@ -22,13 +22,9 @@
  */
 package qs.shops.notification;
 
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.serialization.StateLoader;
 import org.tbax.baxshops.serialization.states.State_00000;
-import qs.shops.Main;
 import qs.shops.Shop;
 import qs.shops.ShopEntry;
 
@@ -61,22 +57,6 @@ public class SaleRejection implements Claimable {
 		this.entry = entry;
 		this.seller = seller;
 	}
-	
-	@Override
-	public String getMessage(Player player) {
-		return null;
-	}
-
-	@Override
-	public boolean claim(Player player) {
-		ItemStack item = entry.toItemStack();
-		if (!Main.inventoryFitsItem(player, item)){
-			Main.sendError(player, "Your inventory is full");
-			return false;
-		}
-		player.getInventory().addItem(item);
-		return true;
-	}
 
 	// begin modified class
 
@@ -93,7 +73,7 @@ public class SaleRejection implements Claimable {
 				((State_00000)stateLoader).registerShop(shop),
 				((State_00000)stateLoader).registerPlayer(shop.owner),
 				((State_00000)stateLoader).registerPlayer(seller),
-				BaxEntry.fromNathan(entry)
+				entry.modernize()
 		);
 	}
 }

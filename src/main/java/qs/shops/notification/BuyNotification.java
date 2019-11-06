@@ -22,9 +22,7 @@
  */
 package qs.shops.notification;
 
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.serialization.StateLoader;
 import org.tbax.baxshops.serialization.states.State_00000;
 import qs.shops.Shop;
@@ -59,11 +57,6 @@ public class BuyNotification implements Notification {
 		this.entry = entry;
 		this.buyer = buyer;
 	}
-	
-	@Override
-	public String getMessage(Player player) {
-		return null;
-	}
 
 	// begin modified class
 
@@ -80,7 +73,7 @@ public class BuyNotification implements Notification {
 				((State_00000)stateLoader).registerShop(shop),
 				((State_00000)stateLoader).registerPlayer(buyer),
 				((State_00000)stateLoader).registerPlayer(shop.owner),
-				BaxEntry.fromNathan(entry)
+				entry.modernize()
 		);
 	}
 }

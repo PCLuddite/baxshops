@@ -22,14 +22,9 @@
  */
 package qs.shops.notification;
 
-import net.milkbowl.vault.economy.Economy;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.serialization.StateLoader;
 import org.tbax.baxshops.serialization.states.State_00000;
-import qs.shops.Main;
 import qs.shops.Shop;
 import qs.shops.ShopEntry;
 
@@ -76,49 +71,6 @@ public class SellRequest implements Request, TimedNotification {
 		c.add(Calendar.DATE, 5);
 		this.expirationDate = c.getTimeInMillis();
 	}
-	
-	@Override
-	public String getMessage(Player player) {
-		return null;
-	}
-	
-	@Override
-	public boolean accept(Player player) {
-		ItemStack item = entry.toItemStack();
-		if (!Main.inventoryFitsItem(player, item)){
-			Main.sendError(player, "Your inventory is full");
-			return false;
-		}
-		Economy econ = Main.econ;
-		float price = entry.quantity * entry.refundPrice;
-		if (!econ.has(shop.owner, price)) {
-			Main.sendError(player, "You do not have sufficient funds to accept this offer");
-			return false;
-		}
-		econ.withdrawPlayer(shop.owner, price);
-		econ.depositPlayer(seller, price);
-		
-		player.getInventory().addItem(item);
-		
-		SaleNotification n = new SaleNotification(shop, entry, seller);
-		Main.instance.sendNotification(seller, n);
-		
-		player.sendMessage("§BOffer accepted");
-		return true;
-	}
-	
-	@Override
-	public boolean reject(Player player) {
-		SaleRejection n = new SaleRejection(shop, entry, seller);
-		Main.instance.sendNotification(seller, n);
-		player.sendMessage("§COffer rejected");
-		return true;
-	}
-
-	@Override
-	public long expirationDate() {
-		return expirationDate;
-	}
 
 	// begin modified class
 
@@ -135,7 +87,7 @@ public class SellRequest implements Request, TimedNotification {
 				((State_00000)stateLoader).registerShop(shop),
 				((State_00000)stateLoader).registerPlayer(shop.owner),
 				((State_00000)stateLoader).registerPlayer(seller),
-				BaxEntry.fromNathan(entry)
+				entry.modernize()
 		);
 	}
 }

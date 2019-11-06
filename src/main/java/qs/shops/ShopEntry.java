@@ -23,6 +23,8 @@
 package qs.shops;
 
 import org.bukkit.inventory.ItemStack;
+import org.tbax.baxshops.BaxEntry;
+import org.tbax.baxshops.MathUtil;
 import org.tbax.baxshops.items.ItemUtil;
 
 import java.io.Serializable;
@@ -61,10 +63,21 @@ public class ShopEntry implements Serializable {
 	 */
 	public HashMap<Integer, Integer> enchantments = new HashMap<Integer, Integer>();
 
+	public BaxEntry modernize()
+	{
+		BaxEntry baxEntry = new BaxEntry();
+		baxEntry.setRefundPrice(MathUtil.roundedDouble(refundPrice));
+		baxEntry.setRetailPrice(MathUtil.roundedDouble(retailPrice));
+		baxEntry.setAmount(quantity);
+		baxEntry.setItem(ItemUtil.fromItemId(itemID, (short) itemDamage));
+		return baxEntry;
+	}
+
 	public ItemStack toItemStack()
 	{
 		ItemStack stack = ItemUtil.fromItemId(itemID, (short)itemDamage);
 		stack.setAmount(quantity);
 		return stack;
 	}
+
 }
