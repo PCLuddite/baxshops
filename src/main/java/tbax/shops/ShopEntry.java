@@ -58,6 +58,8 @@ public class ShopEntry implements Serializable
         BaxEntry baxEntry = new BaxEntry();
         baxEntry.setRefundPrice(MathUtil.roundedDouble(refundPrice));
         baxEntry.setRetailPrice(MathUtil.roundedDouble(retailPrice));
+        baxEntry.canBuy(true);
+        if (refundPrice >= 0) baxEntry.canSell(true);
         baxEntry.setAmount(quantity);
         baxEntry.setItem(ItemUtil.fromItemId(itemID, (short)itemDamage));
         return baxEntry;
