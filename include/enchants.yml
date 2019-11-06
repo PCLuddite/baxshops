@@ -1,81 +1,106 @@
 enchants:
 - enchantment: PROTECTION_ENVIRONMENTAL
   name: Protection
+  id: 0
   levels: true
 - enchantment: PROTECTION_FIRE
   name: Fire Protection
+  id: 1
   levels: true
 - enchantment: PROTECTION_FALL
   name: Feather Falling
+  id: 2
   levels: true
 - enchantment: PROTECTION_EXPLOSIONS
   name: Blast Protection
+  id: 3
   levels: true
 - enchantment: PROTECTION_PROJECTILE
   name: Projectile Protection
+  id: 4
   levels: true
 - enchantment: OXYGEN
   name: Respiration
+  id: 5
   levels: true
 - enchantment: WATER_WORKER
   name: Aqua Affinity
+  id: 6
   levels: false
 - enchantment: THORNS
   name: Thorns
+  id: 7
   levels: true
 - enchantment: DEPTH_STRIDER
   name: Depth Strider
+  id: 8
   levels: true
 - enchantment: FROST_WALKER
   name: Frost Walker
   levels: true
 - enchantment: DAMAGE_ALL
   name: Sharpness
+  id: 16
   levels: true
 - enchantment: DAMAGE_UNDEAD
   name: Smite
+  id: 17
   levels: true
 - enchantment: DAMAGE_ARTHROPODS
   name: Bane of Arthropods
+  id: 18
   levels: true
 - enchantment: KNOCKBACK
   name: Knockback
+  id: 19
   levels: true
 - enchantment: FIRE_ASPECT
   name: Fire Aspect
+  id: 20
   levels: true
 - enchantment: LOOT_BONUS_MOBS
   name: Looting
+  id: 21
   levels: true
 - enchantment: DIG_SPEED
   name: Efficiency
+  id: 32
   levels: true
 - enchantment: SILK_TOUCH
   name: Silk Touch
+  id: 33
   levels: false
 - enchantment: DURABILITY
   name: Unbreaking
+  id: 34
   levels: true
 - enchantment: LOOT_BONUS_BLOCKS
   name: Fortune
+  id: 35
   levels: true
 - enchantment: ARROW_DAMAGE
   name: Power
+  id: 48
   levels: true
 - enchantment: ARROW_KNOCKBACK
   name: Punch
+  id: 49
   levels: true
 - enchantment: ARROW_FIRE
   name: Flame
+  id: 50
   levels: false
 - enchantment: ARROW_INFINITE
   name: Infinity
+  id: 51
   levels: false
 - enchantment: LUCK
   name: Luck of the Sea
+  id: 61
   levels: true
 - enchantment: LURE
   name: Lure
+  id: 62
   levels: true
 - enchantment: MENDING
   name: Mending
