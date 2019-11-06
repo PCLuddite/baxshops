@@ -66,6 +66,7 @@ public class State_00000 implements StateLoader
                 nathanState = (State)stream.readObject();
             }
             ItemUtil.loadLegacyItems(plugin);
+            ItemUtil.loadLegacyEnchants();
         }
         catch (ClassCastException | IOException | ClassNotFoundException e) {
             e.printStackTrace();

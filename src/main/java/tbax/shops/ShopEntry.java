@@ -22,14 +22,17 @@
  */
 package tbax.shops;
 
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.MathUtil;
+import org.tbax.baxshops.ShopPlugin;
 import org.tbax.baxshops.items.ItemUtil;
 import org.tbax.baxshops.serialization.states.State_00050;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ShopEntry implements Serializable
 {
@@ -47,9 +50,21 @@ public class ShopEntry implements Serializable
         this.enchantments = new HashMap<>();
     }
 
-    public ItemStack toItemStack() {
+    public ItemStack toItemStack()
+    {
         ItemStack stack = ItemUtil.fromItemId(itemID, (short)itemDamage);
-        stack.setAmount(quantity);
+        if (enchantments != null) {
+            for (Map.Entry<Integer, Integer> entry : enchantments.entrySet()) {
+                Enchantment e = ItemUtil.getLegacyEnchantment(entry.getKey());
+                if (e == null) {
+                    ShopPlugin.logWarning("Unknown enchantment id " + entry.getKey() + ". This will not be added.");
+                }
+                else {
+                    stack.addUnsafeEnchantment(e, entry.getValue());
+                }
+            }
+        }
+        stack.setAmount(1);
         return stack;
     }
 
@@ -61,7 +76,7 @@ public class ShopEntry implements Serializable
         baxEntry.canBuy(true);
         if (refundPrice >= 0) baxEntry.canSell(true);
         baxEntry.setAmount(quantity);
-        baxEntry.setItem(ItemUtil.fromItemId(itemID, (short)itemDamage));
+        baxEntry.setItem(toItemStack());
         return baxEntry;
     }
 }

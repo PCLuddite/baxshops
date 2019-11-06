@@ -51,6 +51,7 @@ public final class ItemUtil
     private static final Method GET_NAME;
 
     private static Map<Integer, Material> legacyItems = null;
+    private static Map<Integer, Enchantment> legacyEnchants = null;
 
     private static final Map<Material, Material> SIGN_TO_SIGN = new HashMap<>();
 
@@ -497,6 +498,26 @@ public final class ItemUtil
             }
         }
         return legacyItems;
+    }
+
+    @Deprecated
+    public static Map<Integer, Enchantment> loadLegacyEnchants()
+    {
+        legacyEnchants = new HashMap<>();
+        for (Map.Entry<Enchantment, Enchantable> entry : enchants.entrySet()) {
+            try {
+                legacyEnchants.put(entry.getValue().getLegacyId(), entry.getKey());
+            }
+            catch (UnsupportedOperationException e) {
+                // do not add
+            }
+        }
+        return legacyEnchants;
+    }
+
+    @Deprecated
+    public static Enchantment getLegacyEnchantment(int id) {
+        return legacyEnchants.get(id);
     }
 
     public static int getDurability(ItemStack stack)

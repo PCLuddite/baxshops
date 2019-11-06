@@ -79,6 +79,7 @@ public class State_00050 implements StateLoader
                 state2 = (State2)stream.readObject();
             }
             ItemUtil.loadLegacyItems(plugin);
+            ItemUtil.loadLegacyEnchants();
         }
         catch (ClassCastException | IOException | ClassNotFoundException e) {
             e.printStackTrace();
