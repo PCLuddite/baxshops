@@ -295,7 +295,13 @@ public final class ItemUtil
                 Enchantment enchantment = Enchantment.getByKey(new NamespacedKey(plugin, (String)enchantMap.get("enchantment")));
                 String name = (String) enchantMap.get("name");
                 boolean levels = (Boolean) enchantMap.get("levels");
-                enchants.put(enchantment, new Enchantable(name, levels));
+                Object id = enchantMap.get("id");
+                if (id instanceof Number) {
+                    enchants.put(enchantment, new Enchantable(((Number)id).intValue(), name, levels));
+                }
+                else {
+                    enchants.put(enchantment, new Enchantable(name, levels));
+                }
             }
         }
         catch (IOException e) {

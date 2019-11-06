@@ -23,10 +23,18 @@ import org.tbax.baxshops.Format;
 public final class Enchantable
 {
     private String name;
+    private Integer legacyId;
     private boolean hasLevels;
 
     public Enchantable(String name, boolean hasLevels)
     {
+        this.name = name;
+        this.hasLevels = hasLevels;
+    }
+
+    public Enchantable(int legacyId, String name, boolean hasLevels)
+    {
+        this.legacyId = legacyId;
         this.name = name;
         this.hasLevels = hasLevels;
     }
@@ -39,6 +47,13 @@ public final class Enchantable
     public boolean hasLevels()
     {
         return hasLevels;
+    }
+
+    public int getLegacyId()
+    {
+        if (legacyId == null)
+            throw new UnsupportedOperationException("This is not a legacy enchantment");
+        return legacyId;
     }
 
     @Override
