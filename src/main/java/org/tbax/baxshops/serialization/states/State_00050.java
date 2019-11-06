@@ -31,6 +31,7 @@ import org.tbax.baxshops.notification.Request;
 import org.tbax.baxshops.serialization.SavedState;
 import org.tbax.baxshops.serialization.StateLoader;
 import org.tbax.baxshops.serialization.StoredPlayer;
+import tbax.shops.Shop;
 import tbax.shops.serialization.State2;
 
 import java.io.*;
@@ -38,7 +39,7 @@ import java.util.*;
 
 public class State_00050 implements StateLoader
 {
-    public static final double VERSION = 0.05;
+    public static final double VERSION = 0.5;
     private ShopPlugin plugin;
     private State2 state2;
     private Map<tbax.shops.Shop, BaxShop> shopMap = new HashMap<>();
@@ -132,14 +133,14 @@ public class State_00050 implements StateLoader
         return plugin;
     }
 
-    public UUID registerShop(tbax.shops.Shop shop)
+    public BaxShop registerShop(Shop shop)
     {
         BaxShop baxShop = shopMap.get(shop);
         if (baxShop == null) {
             baxShop = shop.modernize(this);
             shopMap.put(shop, baxShop);
         }
-        return baxShop.getId();
+        return baxShop;
     }
 
     public StoredPlayer registerPlayer(String name)

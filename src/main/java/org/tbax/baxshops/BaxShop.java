@@ -622,16 +622,4 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
     {
         return Objects.hash(id);
     }
-
-    public static BaxShop fromNathan(qs.shops.Shop shop, State_00000 state00000)
-    {
-        BaxShop baxShop = new BaxShop(UUID.randomUUID());
-        baxShop.setFlagInfinite(shop.isInfinite);
-        baxShop.addLocation(shop.location);
-        baxShop.setOwner(state00000.registerPlayer(shop.owner));
-        for(qs.shops.ShopEntry entry : shop.inventory) {
-            baxShop.add(BaxEntry.fromNathan(entry));
-        }
-        return baxShop;
-    }
 }

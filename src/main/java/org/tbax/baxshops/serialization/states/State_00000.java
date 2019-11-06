@@ -124,7 +124,7 @@ public class State_00000 implements StateLoader
     {
         BaxShop baxShop = shopMap.get(shop);
         if (baxShop == null) {
-            baxShop = BaxShop.fromNathan(shop, this);
+            baxShop = shop.modernize(this);
             shopMap.put(shop, baxShop);
         }
         return baxShop.getId();

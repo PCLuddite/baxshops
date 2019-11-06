@@ -23,7 +23,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.serialization.states.State_00300;
+import org.tbax.baxshops.versioning.LegacyConfigUtil;
 
 import java.io.File;
 import java.util.*;
@@ -186,7 +186,7 @@ public final class BaxConfig
         boolean changed = false;
         Set<String> keys = getFileConfig().getDefaults().getKeys(true);
         for (String key : keys) {
-            if (!getFileConfig().contains(key, true)) {
+            if (!LegacyConfigUtil.configContains(getFileConfig(), key, true)) {
                 getFileConfig().set(key, getFileConfig().getDefaults().get(key));
                 changed = true;
             }

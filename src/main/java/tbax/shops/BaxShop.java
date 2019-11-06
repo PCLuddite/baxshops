@@ -18,8 +18,10 @@
  */
 package tbax.shops;
 
+import org.bukkit.Location;
 import org.tbax.baxshops.ShopPlugin;
 import org.tbax.baxshops.serialization.states.State_00050;
+import tbax.shops.serialization.BlockLocation;
 
 import java.io.*;
 import java.util.*;
@@ -47,10 +49,53 @@ public class BaxShop extends Shop implements Serializable
     public org.tbax.baxshops.BaxShop modernize(State_00050 state_00050)
     {
         org.tbax.baxshops.BaxShop baxShop = super.modernize(state_00050);
-        baxShop.setFlagSellToShop((Boolean)getOption("sell_to_shop"));
+        Object buyRequests = flags.get("buy_request"),
+               sellRequests = flags.get("sell_request"),
+               sellToShop = flags.get("sell_to_shop");
+
+        if (buyRequests instanceof Boolean) baxShop.setFlagBuyRequests((Boolean)buyRequests);
+        if (sellRequests instanceof Boolean) baxShop.setFlagSellRequests((Boolean)sellRequests);
+        if (sellToShop instanceof Boolean) baxShop.setFlagSellToShop((Boolean)sellToShop);
+
         if ((Boolean)getOption("ignore_damage")) {
-            ShopPlugin.logWarning("Shop %s uses the 'ignore_damage' flag which is not supported. This flag will be removed.");
+            ShopPlugin.logWarning(String.format(
+                    "Shop %s uses the 'ignore_damage' flag which is not supported. This flag will be removed.",
+                    baxShop.getId().toString())
+            );
         }
+
+
+        if (getOption("ref") instanceof BaxShop) {
+            org.tbax.baxshops.BaxShop mainShop = state_00050.registerShop((BaxShop)getOption("ref"));
+            ShopPlugin.logWarning(String.format("Shop %s is a reference to %s. All of its locations will be removed and replaced with the main shop.",
+                    baxShop.getId().toString(),
+                    mainShop.getId().toString()
+            ));
+            mainShop.addLocation(location);
+        }
+        else {
+            loadLocations(baxShop);
+        }
+
         return baxShop;
+    }
+
+    public void loadLocations(org.tbax.baxshops.BaxShop baxShop) {
+        baxShop.addLocation(location);
+        if (!(getOption("ref_list") instanceof List)) {
+            return;
+        }
+        List<?> refList = (List<?>)getOption("ref_list");
+        for (Object o : refList) {
+            if (o instanceof BlockLocation) {
+                baxShop.addLocation(((BlockLocation)o).toLocation());
+            }
+            else {
+                ShopPlugin.logWarning(String.format("Unable to convert location of type %s for shop %s",
+                        o.getClass().getName(),
+                        baxShop.getId().toString()
+                ));
+            }
+        }
     }
 }

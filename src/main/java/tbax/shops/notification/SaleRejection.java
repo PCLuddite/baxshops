@@ -50,7 +50,7 @@ public class SaleRejection implements Claimable
     public @NotNull org.tbax.baxshops.notification.Notification getNewNote(StateLoader stateLoader)
     {
         return new org.tbax.baxshops.notification.SaleRejection(
-                ((State_00050)stateLoader).registerShop(shop),
+                ((State_00050)stateLoader).registerShop(shop).getId(),
                 ((State_00050)stateLoader).registerPlayer(shop.owner),
                 ((State_00050)stateLoader).registerPlayer(seller),
                 entry.modernize((State_00050)stateLoader)
