@@ -23,7 +23,7 @@ import org.tbax.baxshops.serialization.StateLoader;
 
 public class GeneralNotification implements Notification
 {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 4690549135531057376L;
     public String message;
 
     public GeneralNotification(final String msg) {
