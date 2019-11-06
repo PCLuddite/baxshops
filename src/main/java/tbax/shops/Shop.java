@@ -45,7 +45,7 @@ public class Shop implements Serializable
     public BaxShop modernize(State_00050 state_00050)
     {
         org.tbax.baxshops.BaxShop baxShop = new org.tbax.baxshops.BaxShop(location);
-        baxShop.setFlagInfinite(isInfinite);
+        baxShop.setFlagInfinite(isInfinite == null ? false : isInfinite);
         baxShop.setOwner(state_00050.registerPlayer(owner));
         for(ShopEntry entry : inventory) {
             baxShop.add(entry.modernize(state_00050));
