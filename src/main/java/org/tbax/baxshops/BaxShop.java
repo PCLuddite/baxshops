@@ -73,6 +73,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
         id = UUID.randomUUID();
         owner = StoredPlayer.DUMMY_UUID;
         this.locations.addAll(locations);
+        this.locations.remove(null);
     }
 
     public BaxShop(Location loc)
@@ -94,6 +95,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
         owner = shop.owner;
         legacyId = shop.legacyId;
         locations.addAll(shop.locations);
+        locations.remove(null);
         shop.stream().map(BaxEntry::new).forEach(inventory::add);
         flags = shop.flags;
     }
@@ -108,6 +110,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
         flags = State_00300.flagMapToFlag(map);
         inventory.addAll(map.getList("inventory"));
         locations.addAll(map.getList("locations"));
+        locations.remove(null);
     }
 
     @Override
@@ -119,6 +122,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
         flags = State_00420.convertFlag(map.getInteger("flags"));
         inventory.addAll(map.getList("inventory"));
         locations.addAll(map.getList("locations"));
+        locations.remove(null);
     }
 
     @Override
@@ -130,6 +134,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
         flags = map.getInteger("flags");
         inventory.addAll(map.getList("inventory"));
         locations.addAll(map.getList("locations"));
+        this.locations.remove(null);
     }
 
     @Override
@@ -158,6 +163,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
         flags = map.getInteger("flags");
         inventory.addAll(map.getList("inventory"));
         locations.addAll(map.getList("locations"));
+        this.locations.remove(null);
     }
 
     public UUID getId()
@@ -256,7 +262,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
 
     public void addLocation(Location loc)
     {
-        locations.add(loc);
+        if (loc != null) locations.add(loc);
     }
 
     public int getPages()
