@@ -71,7 +71,10 @@ public class BaxShop extends Shop implements Serializable
                     baxShop.getId().toString(),
                     mainShop.getId().toString()
             ));
-            mainShop.addLocation(location);
+            for (Location loc : baxShop.getLocations()) {
+                mainShop.addLocation(loc);
+                baxShop.removeLocation(loc);
+            }
         }
         else {
             loadLocations(baxShop);
