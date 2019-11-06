@@ -399,9 +399,9 @@ public final class ShopPlugin extends JavaPlugin
         try {
             savedState = SavedState.readFromDisk(this);
         }
-        catch (IOException e) {
+        catch (Exception e) {
             e.printStackTrace();
-            log.severe("An IO exception occurred trying to read saved data. BaxShops cannot load.");
+            log.severe("An exception occurred trying to read saved data. BaxShops cannot load.");
             getPluginLoader().disablePlugin(this);
             return;
         }
