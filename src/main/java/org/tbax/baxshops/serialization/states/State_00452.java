@@ -64,7 +64,14 @@ public class State_00452 extends State_00451
                     toRemove.add(shop);
                 }
                 else {
-                    ShopPlugin.logWarning(String.format("Shop %s has no locations but still has inventory. A claim will be sent to the owner.", shop.getId().toString()));
+                    if (StoredPlayer.DUMMY_UUID.equals(shop.getOwnerId())) {
+                        ShopPlugin.logWarning(String.format("Shop %s owned by '%s' has no locations but still has inventory.", shop.getId().toString(), StoredPlayer.DUMMY_NAME));
+                        ShopPlugin.logWarning("Ownership of this shop will be transferred to the error user and can be fixed manually in the configuration file.");
+                        shop.setOwner(StoredPlayer.ERROR);
+                    }
+                    else if (!StoredPlayer.ERROR_UUID.equals(shop.getOwnerId())) {
+                        ShopPlugin.logWarning(String.format("Shop %s has no locations but still has inventory. A claim will be sent to the owner if one hasn't been sent already.", shop.getId().toString()));
+                    }
                     notes.add(new HeadlessShopClaim(shop));
                 }
             }
