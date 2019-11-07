@@ -20,7 +20,6 @@ package org.tbax.baxshops.serialization.states;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.ShopPlugin;
 import org.tbax.baxshops.notification.NoteSet;
 import org.tbax.baxshops.notification.Notification;
@@ -28,50 +27,13 @@ import org.tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.*;
 
-public class State_00410 extends LoaderWithNotes
+public class State_00410 extends State_00400
 {
     public static final double VERSION = 4.1;
-    private ShopPlugin plugin;
 
     public State_00410(ShopPlugin plugin)
     {
-        this.plugin = plugin;
-    }
-
-    @Override
-    public @NotNull Collection<BaxShop> buildShops(@NotNull FileConfiguration state)
-    {
-        List<BaxShop> shops = new ArrayList<>();
-        if (!state.isList("shops")) {
-            return shops;
-        }
-        for (Object o : state.getList("shops")) {
-            if (o instanceof BaxShop) {
-                shops.add((BaxShop)o);
-            }
-            else {
-                plugin.getLogger().warning("Could not load BaxShop of type " + o.getClass());
-            }
-        }
-        return shops;
-    }
-
-    @Override
-    public @NotNull Collection<StoredPlayer> buildPlayers(@NotNull FileConfiguration state)
-    {
-        List<StoredPlayer> players = new ArrayList<>();
-        if (!state.isList("players")) {
-            return players;
-        }
-        for(Object o : state.getList("players")) {
-            if (o instanceof StoredPlayer) {
-                players.add((StoredPlayer)o);
-            }
-            else {
-                plugin.getLogger().warning("Could not load StoredPlayer of type " + o.getClass());
-            }
-        }
-        return players;
+        super(plugin);
     }
 
     @Override
@@ -120,11 +82,5 @@ public class State_00410 extends LoaderWithNotes
         }
 
         return notes;
-    }
-
-    @Override
-    public @NotNull ShopPlugin getPlugin()
-    {
-        return plugin;
     }
 }
