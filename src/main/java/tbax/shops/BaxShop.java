@@ -20,7 +20,7 @@ package tbax.shops;
 
 import org.bukkit.Location;
 import org.tbax.baxshops.ShopPlugin;
-import org.tbax.baxshops.serialization.states.State_00050;
+import org.tbax.baxshops.serialization.states.State_00100;
 import tbax.shops.serialization.BlockLocation;
 
 import java.io.*;
@@ -46,9 +46,9 @@ public class BaxShop extends Shop implements Serializable
         return this.flags.put(flagName, option);
     }
 
-    public org.tbax.baxshops.BaxShop modernize(State_00050 state_00050)
+    public org.tbax.baxshops.BaxShop modernize(State_00100 state_00100)
     {
-        org.tbax.baxshops.BaxShop baxShop = super.modernize(state_00050);
+        org.tbax.baxshops.BaxShop baxShop = super.modernize(state_00100);
         Object buyRequests = flags.get("buy_request"),
                sellRequests = flags.get("sell_request"),
                sellToShop = flags.get("sell_to_shop");
@@ -66,7 +66,7 @@ public class BaxShop extends Shop implements Serializable
 
 
         if (getOption("ref") instanceof BaxShop) {
-            org.tbax.baxshops.BaxShop mainShop = state_00050.registerShop((BaxShop)getOption("ref"));
+            org.tbax.baxshops.BaxShop mainShop = state_00100.registerShop((BaxShop)getOption("ref"));
             ShopPlugin.logWarning(String.format("Shop %s is a reference to %s. All of its locations will be removed and replaced with the main shop.",
                     baxShop.getId().toString(),
                     mainShop.getId().toString()

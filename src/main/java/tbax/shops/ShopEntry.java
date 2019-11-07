@@ -28,7 +28,7 @@ import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.MathUtil;
 import org.tbax.baxshops.ShopPlugin;
 import org.tbax.baxshops.items.ItemUtil;
-import org.tbax.baxshops.serialization.states.State_00050;
+import org.tbax.baxshops.serialization.states.State_00100;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -68,7 +68,7 @@ public class ShopEntry implements Serializable
         return stack;
     }
 
-    public BaxEntry modernize(State_00050 state00050)
+    public BaxEntry modernize(State_00100 state00050)
     {
         BaxEntry baxEntry = new BaxEntry();
         baxEntry.setRefundPrice(MathUtil.roundedDouble(refundPrice));

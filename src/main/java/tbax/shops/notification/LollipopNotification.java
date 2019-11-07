@@ -25,7 +25,7 @@ package tbax.shops.notification;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.serialization.StateLoader;
 import org.tbax.baxshops.serialization.StoredPlayer;
-import org.tbax.baxshops.serialization.states.State_00050;
+import org.tbax.baxshops.serialization.states.State_00100;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -74,7 +74,7 @@ public class LollipopNotification implements Notification
             }
         }
         return new org.tbax.baxshops.notification.LollipopNotification(
-                ((State_00050)stateLoader).registerPlayer(sender),
+                ((State_00100)stateLoader).registerPlayer(sender),
                 StoredPlayer.ERROR,
                 adjective
         );

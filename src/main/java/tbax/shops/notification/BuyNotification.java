@@ -25,7 +25,7 @@ package tbax.shops.notification;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.serialization.StateLoader;
 import org.tbax.baxshops.serialization.StoredPlayer;
-import org.tbax.baxshops.serialization.states.State_00050;
+import org.tbax.baxshops.serialization.states.State_00100;
 import tbax.shops.Shop;
 import tbax.shops.ShopEntry;
 
@@ -52,10 +52,10 @@ public class BuyNotification implements Notification
     public org.tbax.baxshops.notification.@NotNull Notification getNewNote(StateLoader stateLoader)
     {
         return new org.tbax.baxshops.notification.BuyNotification(
-                ((State_00050)stateLoader).registerShop(shop).getId(),
-                ((State_00050)stateLoader).registerPlayer(buyer),
+                ((State_00100)stateLoader).registerShop(shop).getId(),
+                ((State_00100)stateLoader).registerPlayer(buyer),
                 StoredPlayer.DUMMY,
-                entry.modernize((State_00050)stateLoader)
+                entry.modernize((State_00100)stateLoader)
         );
     }
 }
