@@ -32,6 +32,6 @@ public final class LegacyConfigUtil
     }
 
     public static boolean configContains(FileConfiguration config, String key, boolean ignoreDefault) {
-        return config.contains(key, ignoreDefault);
+        return (ignoreDefault ? config.get(key, null) : config.get(key)) != null;
     }
 }

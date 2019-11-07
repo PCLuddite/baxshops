@@ -24,6 +24,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.ShopPlugin;
+import org.tbax.baxshops.items.ItemUtil;
 import org.tbax.baxshops.serialization.PlayerMap;
 import org.tbax.baxshops.serialization.SavedState;
 import org.tbax.baxshops.serialization.StateLoader;
@@ -32,6 +33,7 @@ import tbax.shops.notification.Notification;
 import tbax.shops.serialization.JsonState;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.HashMap;
@@ -42,6 +44,7 @@ public class State_00200 implements StateLoader
     private ShopPlugin plugin;
     private PlayerMap players = new PlayerMap();
     private Map<Integer, BaxShop> legacyShops = new HashMap<>();
+    private Map<Integer, String> ownerNames = new HashMap<>();
     private JsonState jsonState;
     private JsonObject rootObject;
 
@@ -65,6 +68,13 @@ public class State_00200 implements StateLoader
             return new SavedState(plugin);
         }
         else {
+            try {
+                ItemUtil.loadLegacyItems(plugin);
+                ItemUtil.loadLegacyEnchants();
+            }
+            catch (IOException e) {
+                ShopPlugin.logSevere("Unable to load legacy items list required for conversion!");
+            }
             return StateLoader.super.loadState(state);
         }
     }
@@ -76,6 +86,7 @@ public class State_00200 implements StateLoader
         ShopPlugin.logInfo("Converting shops data...");
         for (Map.Entry<Integer, tbax.shops.BaxShop> entry : jsonState.shops.entrySet()) {
             registerShop(entry.getKey(), entry.getValue().modernize(this));
+            ownerNames.put(entry.getKey(), entry.getValue().owner);
         }
         return legacyShops.values();
     }
@@ -114,6 +125,23 @@ public class State_00200 implements StateLoader
             legacyShops.put(shopId, shop = BaxShop.DUMMY_SHOP);
         }
         return shop;
+    }
+
+    public String getShopOwner(int shopId)
+    {
+        String owner = ownerNames.get(shopId);
+        if (owner == null) {
+            BaxShop shop = getShop(shopId);
+            if (shop != BaxShop.DUMMY_SHOP) {
+                ShopPlugin.logWarning("Legacy shop " + shopId + " does not have an owner! This will be assigned to a dummy user.");
+                shop.setOwner(StoredPlayer.DUMMY);
+                ownerNames.put(shopId, owner = StoredPlayer.DUMMY_NAME);
+            }
+            else {
+                owner = StoredPlayer.DUMMY_NAME;
+            }
+        }
+        return owner;
     }
 
     public void registerShop(int uid, BaxShop baxShop)

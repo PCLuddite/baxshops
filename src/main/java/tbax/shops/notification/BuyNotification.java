@@ -66,7 +66,7 @@ public class BuyNotification implements Notification
             return new org.tbax.baxshops.notification.BuyNotification(
                     ((State_00100)stateLoader).registerShop(shop).getId(),
                     ((State_00100)stateLoader).registerPlayer(buyer),
-                    ((State_00100)stateLoader).registerShop(shop).getOwner(),
+                    ((State_00100)stateLoader).registerPlayer(shop.owner),
                     entry.modernize((State_00100) stateLoader)
             );
         }
@@ -74,7 +74,7 @@ public class BuyNotification implements Notification
             return new org.tbax.baxshops.notification.BuyNotification(
                     ((State_00200)stateLoader).getShop(shopId).getId(),
                     ((State_00200)stateLoader).registerPlayer(buyer),
-                    ((State_00200)stateLoader).getShop(shopId).getOwner(),
+                    ((State_00200)stateLoader).registerPlayer(((State_00200)stateLoader).getShopOwner(shopId)),
                     entry.modernize((State_00200)stateLoader)
             );
         }

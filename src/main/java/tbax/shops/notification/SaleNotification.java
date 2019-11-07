@@ -26,6 +26,7 @@ import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.serialization.StateLoader;
 import org.tbax.baxshops.serialization.states.State_00100;
+import org.tbax.baxshops.serialization.states.State_00200;
 import tbax.shops.Shop;
 import tbax.shops.ShopEntry;
 
@@ -60,11 +61,21 @@ public class SaleNotification implements Notification
     @Override
     public @NotNull org.tbax.baxshops.notification.Notification getNewNote(StateLoader stateLoader)
     {
-        return new org.tbax.baxshops.notification.BuyNotification(
-                ((State_00100)stateLoader).registerShop(shop).getId(),
-                ((State_00100)stateLoader).registerPlayer(shop.owner),
-                ((State_00100)stateLoader).registerPlayer(seller),
-                entry.modernize((State_00100)stateLoader)
-        );
+        if (stateLoader instanceof State_00100) {
+            return new org.tbax.baxshops.notification.BuyNotification(
+                    ((State_00100)stateLoader).registerShop(shop).getId(),
+                    ((State_00100)stateLoader).registerPlayer(shop.owner),
+                    ((State_00100)stateLoader).registerPlayer(seller),
+                    entry.modernize((State_00100) stateLoader)
+            );
+        }
+        else {
+            return new org.tbax.baxshops.notification.BuyNotification(
+                    ((State_00200)stateLoader).getShop(shopId).getId(),
+                    ((State_00200)stateLoader).registerPlayer(((State_00200)stateLoader).getShopOwner(shopId)),
+                    ((State_00200)stateLoader).registerPlayer(seller),
+                    entry.modernize((State_00200)stateLoader)
+            );
+        }
     }
 }

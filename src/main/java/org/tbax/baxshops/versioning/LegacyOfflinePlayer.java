@@ -19,8 +19,16 @@
  */
 package org.tbax.baxshops.versioning;
 
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
+@Deprecated
 public abstract class LegacyOfflinePlayer implements OfflinePlayer
 {
+    @Override
+    @Deprecated
+    public void setBanned(boolean b)
+    {
+        Bukkit.getOfflinePlayer(getUniqueId()).setBanned(b);
+    }
 }

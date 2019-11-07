@@ -70,7 +70,7 @@ public class SaleRejection implements Claimable
         else {
             return new org.tbax.baxshops.notification.SaleRejection(
                     ((State_00200)stateLoader).getShop(shopId).getId(),
-                    ((State_00200)stateLoader).getShop(shopId).getOwner(),
+                    ((State_00200)stateLoader).registerPlayer(((State_00200)stateLoader).getShopOwner(shopId)),
                     ((State_00200)stateLoader).registerPlayer(seller),
                     entry.modernize((State_00200)stateLoader)
             );

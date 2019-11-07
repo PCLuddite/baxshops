@@ -45,7 +45,7 @@ public class BuyClaim implements Notification
         return new org.tbax.baxshops.notification.BuyClaim(
                 ((State_00200)stateLoader).getShop(shopId).getId(),
                 ((State_00200)stateLoader).registerPlayer(buyer),
-                ((State_00200)stateLoader).getShop(shopId).getOwner(),
+                ((State_00200)stateLoader).registerPlayer(((State_00200)stateLoader).getShopOwner(shopId)),
                 entry.modernize((State_00200)stateLoader)
         );
     }

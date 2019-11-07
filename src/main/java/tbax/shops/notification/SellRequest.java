@@ -84,7 +84,7 @@ public class SellRequest implements Request, TimedNotification
         else {
             return new org.tbax.baxshops.notification.SaleRejection(
                     ((State_00200) stateLoader).getShop(shopId).getId(),
-                    ((State_00200) stateLoader).registerPlayer(shop.owner),
+                    ((State_00200)stateLoader).registerPlayer(((State_00200)stateLoader).getShopOwner(shopId)),
                     ((State_00200) stateLoader).registerPlayer(seller),
                     entry.modernize((State_00200)stateLoader)
             );
