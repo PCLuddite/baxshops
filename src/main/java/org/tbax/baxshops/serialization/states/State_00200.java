@@ -85,7 +85,7 @@ public class State_00200 implements StateLoader
         jsonState.loadShops(rootObject.get("shops").getAsJsonObject());
         ShopPlugin.logInfo("Converting shops data...");
         for (Map.Entry<Integer, tbax.shops.BaxShop> entry : jsonState.shops.entrySet()) {
-            registerShop(entry.getKey(), entry.getValue().modernize(this));
+            legacyShops.put(entry.getKey(), entry.getValue().modernize(this));
             ownerNames.put(entry.getKey(), entry.getValue().owner);
         }
         return legacyShops.values();
@@ -132,20 +132,15 @@ public class State_00200 implements StateLoader
         String owner = ownerNames.get(shopId);
         if (owner == null) {
             BaxShop shop = getShop(shopId);
-            if (shop != BaxShop.DUMMY_SHOP) {
+            if (shop == BaxShop.DUMMY_SHOP) {
+                owner = StoredPlayer.DUMMY_NAME;
+            }
+            else {
                 ShopPlugin.logWarning("Legacy shop " + shopId + " does not have an owner! This will be assigned to a dummy user.");
                 shop.setOwner(StoredPlayer.DUMMY);
                 ownerNames.put(shopId, owner = StoredPlayer.DUMMY_NAME);
             }
-            else {
-                owner = StoredPlayer.DUMMY_NAME;
-            }
         }
         return owner;
-    }
-
-    public void registerShop(int uid, BaxShop baxShop)
-    {
-        legacyShops.put(uid, baxShop);
     }
 }

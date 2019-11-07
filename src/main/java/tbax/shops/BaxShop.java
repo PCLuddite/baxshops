@@ -36,7 +36,6 @@ public class BaxShop extends Shop implements Serializable
     public HashMap<String, Object> flags;
 
     public int uid = -1;
-    public boolean infinite = false;
     public boolean sellToShop = false;
     public boolean notify = true;
     public boolean buyRequests = false;
@@ -51,7 +50,7 @@ public class BaxShop extends Shop implements Serializable
         this.uid = uid;
         this.owner = o.get("owner").getAsString();
         if (o.has("infinite")) {
-            this.infinite = o.get("infinite").getAsBoolean();
+            this.isInfinite = o.get("infinite").getAsBoolean();
         }
         if (o.has("sellToShop")) {
             this.sellToShop = o.get("sellToShop").getAsBoolean();
@@ -93,10 +92,11 @@ public class BaxShop extends Shop implements Serializable
         for (ShopEntry entry : inventory) {
             baxShop.add(entry.modernize(state00200));
         }
-        baxShop.setFlagInfinite(infinite);
+        baxShop.setFlagInfinite(isInfinite == null ? false : isInfinite);
         baxShop.setFlagBuyRequests(buyRequests);
         baxShop.setFlagSellToShop(sellToShop);
         baxShop.setFlagSellRequests(sellRequests);
+        baxShop.setOwner(state00200.registerPlayer(owner));
         return baxShop;
     }
 
