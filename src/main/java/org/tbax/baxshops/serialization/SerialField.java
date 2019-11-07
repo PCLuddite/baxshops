@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -89,19 +89,7 @@ public class SerialField
         SerializeMethod m = field.getAnnotation(SerializeMethod.class);
         if (m == null || m.getter() == null || "".equals(m.getter()))
             return null;
-        Class<?> current = clazz;
-        do {
-            try {
-                Method method = current.getDeclaredMethod(m.getter());
-                method.setAccessible(true);
-                return method;
-            }
-            catch (NoSuchMethodException e) {
-                current = clazz.getSuperclass();
-            }
-        }
-        while (current != null && !Object.class.equals(current));
-        throw new NoSuchMethodException(m.getter());
+        return findMethod(clazz, m.getter());
     }
 
     public Method getSetter() throws NoSuchMethodException
@@ -109,19 +97,30 @@ public class SerialField
         SerializeMethod m = field.getAnnotation(SerializeMethod.class);
         if (m == null || m.setter() == null || "".equals(m.setter()))
             return null;
+        return findMethod(clazz, m.setter());
+    }
+
+    private static Method findMethod(Class<?> clazz, String methodName) throws NoSuchMethodException
+    {
         Class<?> current = clazz;
         do {
             try {
-                Method method = current.getDeclaredMethod(m.setter());
-                method.setAccessible(true);
+                Method method;
+                try {
+                    method = current.getMethod(methodName);
+                }
+                catch (NoSuchMethodException e) {
+                    method = current.getDeclaredMethod(methodName);
+                    method.setAccessible(true);
+                }
                 return method;
             }
             catch (NoSuchMethodException e) {
                 current = clazz.getSuperclass();
             }
         }
-        while (current != null && !Object.class.equals(current));
-        throw new NoSuchMethodException(m.setter());
+        while (current != null);
+        throw new NoSuchMethodException(methodName);
     }
 
     public Method getMapPutter() throws ReflectiveOperationException
