@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -29,8 +29,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Deprecated
-public class State_00400 extends LegacyState
+public class State_00400 extends LoaderWithNotes
 {
     public static final double VERSION = 4.0;
     private ShopPlugin plugin;

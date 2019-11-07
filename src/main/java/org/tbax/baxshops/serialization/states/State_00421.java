@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,8 +28,7 @@ import org.tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.*;
 
-@Deprecated
-public class State_00421 extends LegacyState
+public class State_00421 extends LoaderWithNotes
 {
     public static final double VERSION = 4.21;
     private ShopPlugin plugin;

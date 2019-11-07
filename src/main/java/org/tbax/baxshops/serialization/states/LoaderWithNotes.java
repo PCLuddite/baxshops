@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -33,7 +33,7 @@ import java.util.Collection;
 import java.util.Deque;
 
 @Deprecated
-public abstract class LegacyState implements StateLoader
+public abstract class LoaderWithNotes implements StateLoader
 {
     public void loadConfig(@NotNull BaxConfig config)
     {
