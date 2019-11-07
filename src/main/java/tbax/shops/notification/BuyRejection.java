@@ -21,30 +21,38 @@ package tbax.shops.notification;
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.serialization.StateLoader;
+import org.tbax.baxshops.serialization.StoredPlayer;
+import org.tbax.baxshops.serialization.states.State_00200;
+import tbax.shops.ShopEntry;
 
-public class GeneralNotification implements Notification
+public class BuyRejection implements Notification
 {
-    private static final long serialVersionUID = 4690549135531057376L;
-    public String message;
-    public static final String JSON_TYPE_ID = "general";
+    public ShopEntry entry;
+    public int shopId;
+    public String seller;
+    public static final String JSON_TYPE_ID = "BuyReject";
 
-    public GeneralNotification(final String msg) {
-        this.message = msg;
-    }
-
-    public GeneralNotification(JsonObject o) {
-        message = o.get("msg").getAsString();
+    public BuyRejection(JsonObject o)
+    {
+        seller = o.get("seller").getAsString();
+        shopId = o.get("shop").getAsInt();
+        entry = new ShopEntry(o.get("entry").getAsJsonObject());
     }
 
     @Override
-    public org.tbax.baxshops.notification.@NotNull Notification getNewNote(StateLoader stateLoader)
+    public @NotNull org.tbax.baxshops.notification.Notification getNewNote(StateLoader stateLoader)
     {
-        return new org.tbax.baxshops.notification.GeneralNotification(message);
+        return new org.tbax.baxshops.notification.BuyRejection(
+                ((State_00200)stateLoader).getShop(shopId).getId(),
+                ((State_00200)stateLoader).getShop(shopId).getOwner(),
+                ((State_00200)stateLoader).registerPlayer(seller),
+                entry.modernize((State_00200)stateLoader)
+        );
     }
 
     @Override
     public @NotNull Class<? extends org.tbax.baxshops.notification.Notification> getNewNoteClass()
     {
-        return org.tbax.baxshops.notification.GeneralNotification.class;
+        return org.tbax.baxshops.notification.BuyRejection.class;
     }
 }

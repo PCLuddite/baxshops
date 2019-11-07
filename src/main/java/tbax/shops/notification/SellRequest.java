@@ -22,9 +22,11 @@
  */
 package tbax.shops.notification;
 
+import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.serialization.StateLoader;
 import org.tbax.baxshops.serialization.states.State_00100;
+import org.tbax.baxshops.serialization.states.State_00200;
 import tbax.shops.Shop;
 import tbax.shops.ShopEntry;
 
@@ -36,6 +38,7 @@ public class SellRequest implements Request, TimedNotification
     private static final long serialVersionUID = 1L;
     public ShopEntry entry;
     public Shop shop;
+    public int shopId;
     public long expirationDate;
     public String seller;
 
@@ -47,6 +50,13 @@ public class SellRequest implements Request, TimedNotification
         c.setTime(new Date());
         c.add(5, 5);
         this.expirationDate = c.getTimeInMillis();
+    }
+
+    public SellRequest(final JsonObject o) {
+        seller = o.get("seller").getAsString();
+        shopId = o.get("shop").getAsInt();
+        expirationDate = o.get("expires").getAsLong();
+        entry = new ShopEntry(o.get("entry").getAsJsonObject());
     }
 
     @Override
@@ -63,11 +73,21 @@ public class SellRequest implements Request, TimedNotification
     @Override
     public @NotNull org.tbax.baxshops.notification.Notification getNewNote(StateLoader stateLoader)
     {
-        return new org.tbax.baxshops.notification.SaleRejection(
-                ((State_00100)stateLoader).registerShop(shop).getId(),
-                ((State_00100)stateLoader).registerPlayer(shop.owner),
-                ((State_00100)stateLoader).registerPlayer(seller),
-                entry.modernize((State_00100)stateLoader)
-        );
+        if (stateLoader instanceof State_00100) {
+            return new org.tbax.baxshops.notification.SaleRejection(
+                    ((State_00100) stateLoader).registerShop(shop).getId(),
+                    ((State_00100) stateLoader).registerPlayer(shop.owner),
+                    ((State_00100) stateLoader).registerPlayer(seller),
+                    entry.modernize((State_00100) stateLoader)
+            );
+        }
+        else {
+            return new org.tbax.baxshops.notification.SaleRejection(
+                    ((State_00200) stateLoader).getShop(shopId).getId(),
+                    ((State_00200) stateLoader).registerPlayer(shop.owner),
+                    ((State_00200) stateLoader).registerPlayer(seller),
+                    entry.modernize((State_00200)stateLoader)
+            );
+        }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,10 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.ShopPlugin;
-import org.tbax.baxshops.serialization.states.State_00000;
-import org.tbax.baxshops.serialization.states.State_00100;
-import org.tbax.baxshops.serialization.states.State_00300;
-import org.tbax.baxshops.serialization.states.State_00470;
+import org.tbax.baxshops.serialization.states.*;
 
 import java.io.*;
 import java.text.DecimalFormat;
@@ -93,6 +90,10 @@ public final class SavedState
                     plugin.getLogger().info("Beginning conversion from tbax.shops.serialization.State2");
                     return new State_00100(plugin).loadState(new YamlConfiguration());
                 }
+            }
+            else if (State_00200.getJsonFile(plugin).exists()) {
+                plugin.getLogger().info("Beginning conversion from json");
+                return new State_00200(plugin).loadState(new YamlConfiguration());
             }
             else {
                 plugin.getLogger().info("YAML file did not exist. Starting fresh.");

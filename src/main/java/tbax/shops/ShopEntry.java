@@ -22,6 +22,8 @@
  */
 package tbax.shops;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.tbax.baxshops.BaxEntry;
@@ -29,6 +31,8 @@ import org.tbax.baxshops.MathUtil;
 import org.tbax.baxshops.ShopPlugin;
 import org.tbax.baxshops.items.ItemUtil;
 import org.tbax.baxshops.serialization.states.State_00100;
+import org.tbax.baxshops.serialization.states.State_00200;
+import sun.applet.Main;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -42,12 +46,25 @@ public class ShopEntry implements Serializable
     public int quantity;
     public int itemID;
     public int itemDamage;
-    public HashMap<Integer, Integer> enchantments;
+    public HashMap<Integer, Integer> enchantments = new HashMap<>();
 
     public ShopEntry() {
         this.retailPrice = -1.0;
         this.refundPrice = -1.0;
-        this.enchantments = new HashMap<>();
+    }
+
+    public ShopEntry(JsonObject o)
+    {
+        itemID = o.get("id").getAsInt();
+        itemDamage = o.get("damage").getAsShort();
+        quantity = o.get("quantity").getAsInt();
+        retailPrice = MathUtil.roundedDouble(o.get("retail").getAsDouble());
+        refundPrice = MathUtil.roundedDouble(o.get("refund").getAsDouble());
+        if (o.has("enchantments")) {
+            for (final Map.Entry<String, JsonElement> entry : o.get("enchantments").getAsJsonObject().entrySet()) {
+                enchantments.put(Integer.parseInt(entry.getKey()), entry.getValue().getAsInt());
+            }
+        }
     }
 
     public ItemStack toItemStack()
@@ -68,11 +85,23 @@ public class ShopEntry implements Serializable
         return stack;
     }
 
-    public BaxEntry modernize(State_00100 state00050)
+    public BaxEntry modernize(State_00100 state00100)
     {
         BaxEntry baxEntry = new BaxEntry();
         baxEntry.setRefundPrice(MathUtil.roundedDouble(refundPrice));
         baxEntry.setRetailPrice(MathUtil.roundedDouble(retailPrice));
+        baxEntry.canBuy(true);
+        if (refundPrice >= 0) baxEntry.canSell(true);
+        baxEntry.setAmount(quantity);
+        baxEntry.setItem(toItemStack());
+        return baxEntry;
+    }
+
+    public BaxEntry modernize(State_00200 state00200)
+    {
+        BaxEntry baxEntry = new BaxEntry();
+        baxEntry.setRefundPrice(refundPrice);
+        baxEntry.setRetailPrice(retailPrice);
         baxEntry.canBuy(true);
         if (refundPrice >= 0) baxEntry.canSell(true);
         baxEntry.setAmount(quantity);

@@ -22,6 +22,7 @@
  */
 package tbax.shops.notification;
 
+import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.serialization.StateLoader;
 import org.tbax.baxshops.serialization.StoredPlayer;
@@ -38,9 +39,16 @@ public class LollipopNotification implements Notification
     public String sender;
     public double tastiness;
 
+    public static final String JSON_TYPE_ID = "lolly";
+
     public LollipopNotification(final String sender, final double tastiness) {
         this.sender = sender;
         this.tastiness = ((tastiness < 0.0) ? 0.0 : ((tastiness > 100.0) ? 100.0 : tastiness));
+    }
+
+    public LollipopNotification(JsonObject o) {
+        sender = o.get("sender").getAsString();
+        tastiness = o.get("tastiness").getAsInt();
     }
 
     static {

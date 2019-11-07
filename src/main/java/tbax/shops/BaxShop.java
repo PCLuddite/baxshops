@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,21 +18,67 @@
  */
 package tbax.shops;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.tbax.baxshops.ShopPlugin;
 import org.tbax.baxshops.serialization.states.State_00100;
+import org.tbax.baxshops.serialization.states.State_00200;
 import tbax.shops.serialization.BlockLocation;
 
-import java.io.*;
+import java.io.Serializable;
 import java.util.*;
 
 public class BaxShop extends Shop implements Serializable
 {
     private static final long serialVersionUID = 1L;
     public HashMap<String, Object> flags;
+
+    public int uid = -1;
+    public boolean infinite = false;
+    public boolean sellToShop = false;
+    public boolean notify = true;
+    public boolean buyRequests = false;
+    public boolean sellRequests = true;
+    public Set<Location> locations;
     
     public BaxShop() {
         this.flags = new HashMap<>();
+    }
+
+    public BaxShop(int uid, final JsonObject o) {
+        this.uid = uid;
+        this.owner = o.get("owner").getAsString();
+        if (o.has("infinite")) {
+            this.infinite = o.get("infinite").getAsBoolean();
+        }
+        if (o.has("sellToShop")) {
+            this.sellToShop = o.get("sellToShop").getAsBoolean();
+        }
+        if (o.has("buyRequests")) {
+            this.buyRequests = o.get("buyRequests").getAsBoolean();
+        }
+        if (o.has("sellRequests")) {
+            this.sellRequests = o.get("sellRequests").getAsBoolean();
+        }
+        if (o.has("notify")) {
+            this.notify = o.get("notify").getAsBoolean();
+        }
+
+        locations = new HashSet<>();
+        for (JsonElement jsonElement : o.get("locations").getAsJsonArray()) {
+            JsonObject jsonLoc = jsonElement.getAsJsonObject();
+            locations.add(new Location(Bukkit.getServer().getWorld(jsonLoc.get("world").getAsString()),
+                    jsonLoc.get("x").getAsInt(),
+                    jsonLoc.get("y").getAsInt(),
+                    jsonLoc.get("z").getAsInt())
+            );
+        }
+
+        for (JsonElement jsonElement : o.get("entries").getAsJsonArray()) {
+            inventory.add(new ShopEntry(jsonElement.getAsJsonObject()));
+        }
     }
 
     public Object getOption(final String flagName) {
@@ -42,8 +88,16 @@ public class BaxShop extends Shop implements Serializable
         return false;
     }
 
-    public Object setOption(final String flagName, final Object option) {
-        return this.flags.put(flagName, option);
+    public org.tbax.baxshops.BaxShop modernize(State_00200 state00200) {
+        org.tbax.baxshops.BaxShop baxShop = new org.tbax.baxshops.BaxShop(locations);
+        for (ShopEntry entry : inventory) {
+            baxShop.add(entry.modernize(state00200));
+        }
+        baxShop.setFlagInfinite(infinite);
+        baxShop.setFlagBuyRequests(buyRequests);
+        baxShop.setFlagSellToShop(sellToShop);
+        baxShop.setFlagSellRequests(sellRequests);
+        return baxShop;
     }
 
     public org.tbax.baxshops.BaxShop modernize(State_00100 state_00100)
@@ -100,5 +154,10 @@ public class BaxShop extends Shop implements Serializable
                 ));
             }
         }
+    }
+
+    public Iterable<? extends Location> getLocations()
+    {
+        return Collections.unmodifiableSet(locations);
     }
 }

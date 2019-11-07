@@ -21,30 +21,38 @@ package tbax.shops.notification;
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.serialization.StateLoader;
+import org.tbax.baxshops.serialization.StoredPlayer;
+import org.tbax.baxshops.serialization.states.State_00200;
+import tbax.shops.ShopEntry;
 
-public class GeneralNotification implements Notification
+public class BuyClaim implements Notification
 {
-    private static final long serialVersionUID = 4690549135531057376L;
-    public String message;
-    public static final String JSON_TYPE_ID = "general";
+    public ShopEntry entry;
+    public int shopId;
+    public String buyer;
+    public static final String JSON_TYPE_ID = "BuyClaim";
 
-    public GeneralNotification(final String msg) {
-        this.message = msg;
-    }
-
-    public GeneralNotification(JsonObject o) {
-        message = o.get("msg").getAsString();
+    public BuyClaim(JsonObject o)
+    {
+        buyer = o.get("buyer").getAsString();
+        shopId = o.get("shop").getAsInt();
+        entry = new ShopEntry(o.get("entry").getAsJsonObject());
     }
 
     @Override
-    public org.tbax.baxshops.notification.@NotNull Notification getNewNote(StateLoader stateLoader)
+    public @NotNull org.tbax.baxshops.notification.Notification getNewNote(StateLoader stateLoader)
     {
-        return new org.tbax.baxshops.notification.GeneralNotification(message);
+        return new org.tbax.baxshops.notification.BuyClaim(
+                ((State_00200)stateLoader).getShop(shopId).getId(),
+                ((State_00200)stateLoader).registerPlayer(buyer),
+                ((State_00200)stateLoader).getShop(shopId).getOwner(),
+                entry.modernize((State_00200)stateLoader)
+        );
     }
 
     @Override
     public @NotNull Class<? extends org.tbax.baxshops.notification.Notification> getNewNoteClass()
     {
-        return org.tbax.baxshops.notification.GeneralNotification.class;
+        return org.tbax.baxshops.notification.BuyClaim.class;
     }
 }

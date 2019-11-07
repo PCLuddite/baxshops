@@ -22,6 +22,7 @@
  */
 package tbax.shops.notification;
 
+import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.serialization.StateLoader;
 import org.tbax.baxshops.serialization.states.State_00100;
@@ -33,12 +34,21 @@ public class SaleNotification implements Notification
     private static final long serialVersionUID = 1L;
     public ShopEntry entry;
     public Shop shop;
+    public int shopId;
     public String seller;
+
+    public static final String JSON_TYPE_ID = "SaleNote";
 
     public SaleNotification(final Shop shop, final ShopEntry entry, final String seller) {
         this.shop = shop;
         this.entry = entry;
         this.seller = seller;
+    }
+
+    public SaleNotification(JsonObject o) {
+        seller = o.get("seller").getAsString();
+        shopId = o.get("shop").getAsInt();
+        entry = new ShopEntry(o.get("entry").getAsJsonObject());
     }
 
     @Override
