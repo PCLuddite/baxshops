@@ -46,15 +46,14 @@ public class State_00452 extends State_00451
     private List<Notification> notes = new ArrayList<>();
 
     @Override
-    public @NotNull Collection<BaxShop> buildShops(@NotNull FileConfiguration state)
+    public void sanitizeShopData(Collection<BaxShop> shops)
     {
-        List<BaxShop> shops = (List<BaxShop>)super.buildShops(state);
-        for(int x = shops.size() - 1; x >= 0; --x) {
-            BaxShop shop = shops.get(x);
+        List<BaxShop> toRemove = new ArrayList<>();
+        for(BaxShop shop : shops) {
             for (Location location : new ArrayList<>(shop.getLocations())) {
                 if (!ItemUtil.isSign(location.getBlock().getType())) {
                     ShopPlugin.logWarning(String.format("Shop %s at %s is not a sign. This location will be removed.",
-                        shop.getId().toString(), Format.location(location)
+                            shop.getId().toString(), Format.location(location)
                     ));
                     shop.removeLocation(location);
                 }
@@ -62,7 +61,7 @@ public class State_00452 extends State_00451
             if (shop.getLocations().isEmpty() && !BaxShop.DUMMY_UUID.equals(shop.getId())) {
                 if (shop.isEmpty()) {
                     ShopPlugin.logInfo(String.format("Shop %s has no locations and no inventory. This shop will be removed.", shop.getId().toString()));
-                    shops.remove(shop);
+                    toRemove.add(shop);
                 }
                 else {
                     ShopPlugin.logWarning(String.format("Shop %s has no locations but still has inventory. A claim will be sent to the owner.", shop.getId().toString()));
@@ -70,7 +69,7 @@ public class State_00452 extends State_00451
                 }
             }
         }
-        return shops;
+        shops.removeAll(toRemove);
     }
 
     @Override

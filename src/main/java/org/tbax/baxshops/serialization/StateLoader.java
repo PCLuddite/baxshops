@@ -22,10 +22,14 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.ShopPlugin;
+import org.tbax.baxshops.notification.Claimable;
 import org.tbax.baxshops.notification.Notification;
+import org.tbax.baxshops.notification.Request;
 
 import java.lang.reflect.Field;
+import java.util.ArrayDeque;
 import java.util.Collection;
+import java.util.Deque;
 
 public interface StateLoader
 {
@@ -40,8 +44,10 @@ public interface StateLoader
 
         ShopPlugin.logInfo("Loading shop data...");
         Collection<BaxShop> shops = buildShops(state);
+        sanitizeShopData(shops);
         ShopPlugin.logInfo("Loading player data...");
         Collection<StoredPlayer> players = buildPlayers(state);
+        sanitizePlayerData(players);
 
         for (StoredPlayer player : players) {
             savedState.players.put(player);
@@ -55,6 +61,32 @@ public interface StateLoader
         }
 
         return savedState;
+    }
+
+    default void sanitizeShopData(Collection<BaxShop> shops)
+    {
+        // do not sanitize by default
+    }
+
+    default void sanitizePlayerData(Collection<StoredPlayer> players)
+    {
+        boolean newErrNotes = false;
+        for (StoredPlayer player : players) {
+            if (StoredPlayer.DUMMY.equals(player)) { // don't save any dummy notes
+                while (player.hasNotes()) {
+                    Notification n = player.dequeueNote();
+                    if (n instanceof Claimable || n instanceof Request) {
+                        StoredPlayer.ERROR.queueNote(n);
+                        newErrNotes = true;
+                    }
+                }
+                if (newErrNotes) {
+                    ShopPlugin.logWarning("There is one or more claim or request notification assigned to \"" + StoredPlayer.DUMMY_NAME + "\" who is not a real player. ");
+                    ShopPlugin.logWarning("These requests cannot be honored and will be assigned to an error user. These can be fixed manually in the configuration file.");
+                }
+                break;
+            }
+        }
     }
 
     default double getVersion()
