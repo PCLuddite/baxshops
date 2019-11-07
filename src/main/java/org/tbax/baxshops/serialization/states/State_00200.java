@@ -114,6 +114,8 @@ public class State_00200 implements StateLoader
 
     public StoredPlayer registerPlayer(String playerName)
     {
+        if (playerName == null)
+            return StoredPlayer.ERROR;
         return players.get(playerName).get(0);
     }
 

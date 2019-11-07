@@ -47,6 +47,11 @@ public class GeneralNotification implements Notification, UpgradeableSerializabl
         this.message = message;
     }
 
+    public GeneralNotification(Map<String, Object> args)
+    {
+        UpgradeableSerialization.deserialize(this, args);
+    }
+
     @Override
     public @NotNull String getMessage(CommandSender sender)
     {
@@ -81,5 +86,15 @@ public class GeneralNotification implements Notification, UpgradeableSerializabl
     public @NotNull Map<String, Object> serialize()
     {
         return UpgradeableSerialization.serialize(this);
+    }
+
+    public static GeneralNotification deserialize(Map<String, Object> args)
+    {
+        return new GeneralNotification(args);
+    }
+
+    public static GeneralNotification valueOf(Map<String, Object> args)
+    {
+        return new GeneralNotification(args);
     }
 }

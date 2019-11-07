@@ -425,6 +425,7 @@ public final class ShopPlugin extends JavaPlugin
         ConfigurationSerialization.registerClass(BuyRejection.class, "tbax.baxshops.notification.BuyRejection");
         ConfigurationSerialization.registerClass(BuyRequest.class, "tbax.baxshops.notification.BuyRequest");
         ConfigurationSerialization.registerClass(DeletedShopClaim.class, "tbax.baxshops.notification.DeletedShopClaim");
+        ConfigurationSerialization.registerClass(GeneralNotification.class);
         ConfigurationSerialization.registerClass(HeadlessShopClaim.class);
         ConfigurationSerialization.registerClass(LollipopNotification.class, "tbax.baxshops.notification.LollipopNotification");
         ConfigurationSerialization.registerClass(NoteSet.class, "tbax.baxshops.notifications.NoteSet");
