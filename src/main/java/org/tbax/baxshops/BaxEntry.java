@@ -22,6 +22,7 @@ package org.tbax.baxshops;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
@@ -350,6 +351,10 @@ public final class BaxEntry implements UpgradeableSerializable
         String potionInfo = ItemUtil.getPotionInfo(stack);
         if (!potionInfo.equals("")) {
             name.append(" ").append(potionInfo);
+        }
+
+        if (EnchantMap.isEnchanted(stack)) {
+            name.append(" ").append(Format.enchantments("(" + EnchantMap.abbreviatedListString(stack) + ")"));
         }
         
         if (ItemUtil.isDamageable(stack.getType()) && getDurability() > 0) {
