@@ -32,7 +32,6 @@ import org.tbax.baxshops.ShopPlugin;
 import org.tbax.baxshops.items.ItemUtil;
 import org.tbax.baxshops.serialization.states.State_00100;
 import org.tbax.baxshops.serialization.states.State_00200;
-import sun.applet.Main;
 
 import java.io.Serializable;
 import java.util.HashMap;
