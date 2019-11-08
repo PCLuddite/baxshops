@@ -57,6 +57,7 @@ public final class EnchantMap implements Map<Enchantment, Integer>
 
     public static boolean isEnchanted(@NotNull ItemStack stack)
     {
+        if (!stack.getEnchantments().isEmpty()) return true;
         Map<Enchantment, Integer> enchantMap = getEnchants(stack);
         return !(enchantMap == null || enchantMap.isEmpty());
     }
