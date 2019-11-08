@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -57,7 +57,6 @@ public final class EnchantMap implements Map<Enchantment, Integer>
 
     public static boolean isEnchanted(@NotNull ItemStack stack)
     {
-        if (!stack.getEnchantments().isEmpty()) return true;
         Map<Enchantment, Integer> enchantMap = getEnchants(stack);
         return !(enchantMap == null || enchantMap.isEmpty());
     }
