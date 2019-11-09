@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  * Portions derived from Shops Copyright (c) 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * This library is free software; you can redistribute it and/or
@@ -41,16 +41,16 @@ public final class LegacyPlayerUtil
 
     public static void setItemInHand(PlayerInventory inventory, ItemStack stack)
     {
-        inventory.setItemInHand(stack);
+        inventory.setItemInMainHand(stack);
     }
 
     public static ItemStack getItemInHand(PlayerInventory inventory)
     {
-        return inventory.getItemInHand();
+        return inventory.getItemInMainHand();
     }
 
     public static ItemStack[] getInventoryContents(Player player)
     {
-        return player.getInventory().getContents();
+        return player.getInventory().getStorageContents();
     }
 }
