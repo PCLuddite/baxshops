@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -34,6 +34,7 @@ public final class Resources
     public static final String SHOP_EXISTS = "You can't create a new shop here! Another shop already exists on this block!";
     public static final String NOT_FOUND_SELECTED = "You do not have any shop selected!\nYou must select a shop to perform this action!";
     // Errors
+    public static final String NOT_FOUND_SIGN = "You need a sign %s.";
     public static final String NOT_ONLINE = "The player needs to be online to use this command.";
     public static final String NO_ROOM_FOR_ITEM = "You do not have enough room for %d %s";
     public static final String NOT_FOUND_SHOPITEM = "That item has not been added to this shop.\nUse /shop add to add a new item";

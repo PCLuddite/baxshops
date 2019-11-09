@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  * Portions derived from Shops Copyright (c) 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * This library is free software; you can redistribute it and/or
@@ -121,7 +121,7 @@ public final class CmdCreate extends BaxShopCommand
 
         ItemStack sign = PlayerUtil.findSign(actor.getPlayer());
         if (!actor.isAdmin() && sign == null) {
-            actor.exitError("You need a sign to set up a shop.");
+            actor.exitError(Resources.NOT_FOUND_SIGN, "to set up a shop");
         }
 
         if (ShopPlugin.getShop(loc) != null)

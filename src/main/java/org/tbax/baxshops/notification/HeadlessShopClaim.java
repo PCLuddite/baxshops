@@ -18,14 +18,22 @@
  */
 package org.tbax.baxshops.notification;
 
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.BaxShop;
+import org.tbax.baxshops.PlayerUtil;
+import org.tbax.baxshops.Resources;
+import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.errors.PrematureAbortException;
+import org.tbax.baxshops.items.ItemUtil;
 import org.tbax.baxshops.serialization.UpgradeableSerializable;
 import org.tbax.baxshops.serialization.UpgradeableSerialization;
+import org.tbax.baxshops.serialization.annotations.DoNotSerialize;
 
 import java.util.Date;
 import java.util.Map;
@@ -35,6 +43,9 @@ public class HeadlessShopClaim implements Claimable, UpgradeableSerializable
 {
     private Date date = new Date();
     private BaxShop shop;
+
+    @DoNotSerialize
+    private Material signType;
 
     public HeadlessShopClaim(Map<String, Object> args)
     {
@@ -53,6 +64,33 @@ public class HeadlessShopClaim implements Claimable, UpgradeableSerializable
             return "You have a shop with inventory that has no locations.";
         }
         return getMessage();
+    }
+
+    @Override
+    public boolean claim(ShopCmdActor actor)
+    {
+        ItemStack stack;
+        try {
+            stack = PlayerUtil.findSign(actor.getPlayer());
+        }
+        catch (PrematureAbortException e) {
+            actor.sendMessage(e.getMessage());
+            return false;
+        }
+        if (stack != null) {
+            signType = stack.getType();
+        }
+        else if (!actor.isAdmin()) {
+            actor.sendError(Resources.NOT_FOUND_SIGN, "to claim this shop");
+            return false;
+        }
+        if(Claimable.super.claim(actor)) {
+            if (!actor.isAdmin()) {
+                actor.getPlayer().getInventory().remove(new ItemStack(getSignType(), 1));
+            }
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -89,10 +127,17 @@ public class HeadlessShopClaim implements Claimable, UpgradeableSerializable
         return deserialize(args);
     }
 
+    public Material getSignType()
+    {
+        if (signType == null)
+            return ItemUtil.getDefaultSignType();
+        return signType;
+    }
+
     @Override
     public BaxEntry getEntry()
     {
-        return new BaxEntry(shop.toItem());
+        return new BaxEntry(shop.toItem(getSignType()));
     }
 
     @Override
