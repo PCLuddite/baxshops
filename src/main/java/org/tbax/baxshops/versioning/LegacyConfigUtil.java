@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  * Portions derived from Shops Copyright (c) 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * This library is free software; you can redistribute it and/or
@@ -32,6 +32,6 @@ public final class LegacyConfigUtil
     }
 
     public static boolean configContains(FileConfiguration config, String key, boolean ignoreDefault) {
-        return (ignoreDefault ? config.get(key, null) : config.get(key)) != null;
+        return config.contains(key, ignoreDefault);
     }
 }
