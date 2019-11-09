@@ -346,14 +346,14 @@ public final class BaxEntry implements UpgradeableSerializable
         }
         else {
             name = new StringBuilder(Format.listname(ItemUtil.getName(this)));
+            if (EnchantMap.isEnchanted(stack)) {
+                name.append(" ").append(Format.enchantments("(" + EnchantMap.abbreviatedListString(stack) + ")"));
+            }
         }
+        
         String potionInfo = ItemUtil.getPotionInfo(stack);
         if (!potionInfo.equals("")) {
             name.append(" ").append(potionInfo);
-        }
-
-        if (EnchantMap.isEnchanted(stack)) {
-            name.append(" ").append(Format.enchantments("(" + EnchantMap.abbreviatedListString(stack) + ")"));
         }
         
         if (ItemUtil.isDamageable(stack.getType()) && getDurability() > 0) {
