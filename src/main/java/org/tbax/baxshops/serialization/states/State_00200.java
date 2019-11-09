@@ -18,7 +18,10 @@
  */
 package org.tbax.baxshops.serialization.states;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -33,6 +36,7 @@ import tbax.shops.notification.Notification;
 import tbax.shops.serialization.JsonState;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Collection;
@@ -59,6 +63,22 @@ public class State_00200 implements StateLoader
         return new File(plugin.getDataFolder(), JsonState.JSON_FILE_PATH);
     }
 
+    public static double getJsonFileVersion(JavaPlugin plugin)
+    {
+        File stateLocation = getJsonFile(plugin);
+        try (JsonReader jr = new JsonReader(new FileReader(stateLocation))) {
+            JsonParser p = new JsonParser();
+            JsonElement element = p.parse(jr);
+            if (element.isJsonObject()) {
+                return element.getAsJsonObject().get("version").getAsDouble();
+            }
+        }
+        catch (Exception e) {
+            // do nothing
+        }
+        return 0d;
+    }
+
     @Override
     public SavedState loadState(@NotNull FileConfiguration state)
     {
@@ -82,7 +102,7 @@ public class State_00200 implements StateLoader
     @Override
     public @NotNull Collection<BaxShop> buildShops(@NotNull FileConfiguration state)
     {
-        jsonState.loadShops(rootObject.get("shops").getAsJsonObject());
+        jsonState.loadShops(this, rootObject.get("shops").getAsJsonObject());
         ShopPlugin.logInfo("Converting shops data...");
         for (Map.Entry<Integer, tbax.shops.BaxShop> entry : jsonState.shops.entrySet()) {
             legacyShops.put(entry.getKey(), entry.getValue().modernize(this));
@@ -95,7 +115,7 @@ public class State_00200 implements StateLoader
     public @NotNull Collection<StoredPlayer> buildPlayers(@NotNull FileConfiguration state)
     {
         ShopPlugin.logInfo("Loading notification data...");
-        jsonState.loadNotes(rootObject.get("notes").getAsJsonObject());
+        jsonState.loadNotes(this, rootObject.get("notes").getAsJsonObject());
         ShopPlugin.logInfo("Converting notification data...");
         for (Map.Entry<String, ArrayDeque<Notification>> entry : jsonState.pending.entrySet()) {
             StoredPlayer player = registerPlayer(entry.getKey());

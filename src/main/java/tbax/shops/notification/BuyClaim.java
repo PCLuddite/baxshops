@@ -21,8 +21,9 @@ package tbax.shops.notification;
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.serialization.StateLoader;
-import org.tbax.baxshops.serialization.StoredPlayer;
 import org.tbax.baxshops.serialization.states.State_00200;
+import org.tbax.baxshops.serialization.states.State_00205;
+import org.tbax.baxshops.serialization.states.State_00210;
 import tbax.shops.ShopEntry;
 
 public class BuyClaim implements Notification
@@ -32,11 +33,19 @@ public class BuyClaim implements Notification
     public String buyer;
     public static final String JSON_TYPE_ID = "BuyClaim";
 
-    public BuyClaim(JsonObject o)
+    public BuyClaim(State_00200 state00200, JsonObject o)
     {
         buyer = o.get("buyer").getAsString();
         shopId = o.get("shop").getAsInt();
-        entry = new ShopEntry(o.get("entry").getAsJsonObject());
+        if (state00200 instanceof State_00210) {
+            entry = new ShopEntry((State_00210)state00200, o.get("entry").getAsJsonObject());
+        }
+        else if (state00200 instanceof State_00205) {
+            entry = new ShopEntry((State_00205)state00200, o.get("entry").getAsJsonObject());
+        }
+        else {
+            entry = new ShopEntry(state00200, o.get("entry").getAsJsonObject());
+        }
     }
 
     @Override

@@ -27,6 +27,8 @@ import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.serialization.StateLoader;
 import org.tbax.baxshops.serialization.states.State_00100;
 import org.tbax.baxshops.serialization.states.State_00200;
+import org.tbax.baxshops.serialization.states.State_00205;
+import org.tbax.baxshops.serialization.states.State_00210;
 import tbax.shops.Shop;
 import tbax.shops.ShopEntry;
 
@@ -52,11 +54,19 @@ public class SellRequest implements Request, TimedNotification
         this.expirationDate = c.getTimeInMillis();
     }
 
-    public SellRequest(final JsonObject o) {
+    public SellRequest(State_00200 state00200, JsonObject o) {
         seller = o.get("seller").getAsString();
         shopId = o.get("shop").getAsInt();
         expirationDate = o.get("expires").getAsLong();
-        entry = new ShopEntry(o.get("entry").getAsJsonObject());
+        if (state00200 instanceof State_00210) {
+            entry = new ShopEntry((State_00210)state00200, o.get("entry").getAsJsonObject());
+        }
+        else if (state00200 instanceof State_00205) {
+            entry = new ShopEntry((State_00205)state00200, o.get("entry").getAsJsonObject());
+        }
+        else {
+            entry = new ShopEntry(state00200, o.get("entry").getAsJsonObject());
+        }
     }
 
     @Override

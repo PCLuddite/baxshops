@@ -24,6 +24,8 @@ import org.tbax.baxshops.notification.SaleClaim;
 import org.tbax.baxshops.notification.SaleNotificationAutoClaim;
 import org.tbax.baxshops.serialization.StateLoader;
 import org.tbax.baxshops.serialization.states.State_00200;
+import org.tbax.baxshops.serialization.states.State_00205;
+import org.tbax.baxshops.serialization.states.State_00210;
 import tbax.shops.ShopEntry;
 import tbax.shops.BaxShop;
 
@@ -36,16 +38,24 @@ public class SaleNotificationAuto implements Claimable
     public String seller;
     public static final String JSON_TYPE_ID = "SaleNoteAuto";
 
-    public SaleNotificationAuto(final BaxShop shop, final ShopEntry entry, final String seller) {
+    public SaleNotificationAuto(BaxShop shop, ShopEntry entry, String seller) {
         this.shop = shop;
         this.entry = entry;
         this.seller = seller;
     }
 
-    public SaleNotificationAuto(JsonObject o) {
+    public SaleNotificationAuto(State_00200 state00200, JsonObject o) {
         seller = o.get("seller").getAsString();
         shopId = o.get("shop").getAsInt();
-        entry = new ShopEntry(o.get("entry").getAsJsonObject());
+        if (state00200 instanceof State_00210) {
+            entry = new ShopEntry((State_00210)state00200, o.get("entry").getAsJsonObject());
+        }
+        else if (state00200 instanceof State_00205) {
+            entry = new ShopEntry((State_00205)state00200, o.get("entry").getAsJsonObject());
+        }
+        else {
+            entry = new ShopEntry(state00200, o.get("entry").getAsJsonObject());
+        }
     }
 
     @Override

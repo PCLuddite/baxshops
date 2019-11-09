@@ -92,8 +92,22 @@ public final class SavedState
                 }
             }
             else if (State_00200.getJsonFile(plugin).exists()) {
-                plugin.getLogger().info("Beginning conversion from json");
-                return new State_00200(plugin).loadState(new YamlConfiguration());
+                double jsonVersion = State_00200.getJsonFileVersion(plugin);
+                if (jsonVersion == 0) {
+                    plugin.getLogger().info("Beginning conversion from json");
+                }
+                else {
+                    plugin.getLogger().info("Beginning conversion from json " + new DecimalFormat("0.0#").format(jsonVersion));
+                }
+                if (jsonVersion == 2.1) {
+                    return new State_00210(plugin).loadState(new YamlConfiguration());
+                }
+                else if (jsonVersion == 2.0) {
+                    return new State_00205(plugin).loadState(new YamlConfiguration());
+                }
+                else {
+                    return new State_00200(plugin).loadState(new YamlConfiguration());
+                }
             }
             else {
                 plugin.getLogger().info("YAML file did not exist. Starting fresh.");

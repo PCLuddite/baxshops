@@ -23,8 +23,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
 import org.tbax.baxshops.ShopPlugin;
+import org.tbax.baxshops.serialization.states.State_00200;
 import tbax.shops.BaxShop;
 import tbax.shops.notification.*;
 
@@ -74,12 +74,12 @@ public final class JsonState
         return null;
     }
 
-    public void loadShops(JsonObject shopObject)
+    public void loadShops(State_00200 loader, JsonObject shopObject)
     {
         for (Map.Entry<String, JsonElement> entry : shopObject.entrySet()) {
             try {
                 int uid = Integer.parseInt(entry.getKey());
-                BaxShop shop = new BaxShop(uid, entry.getValue().getAsJsonObject());
+                BaxShop shop = new BaxShop(loader, uid, entry.getValue().getAsJsonObject());
                 shops.put(shop.uid, shop);
                 for (final Location loc : shop.getLocations()) {
                     this.locations.put(loc, shop.uid);
@@ -91,14 +91,14 @@ public final class JsonState
         }
     }
 
-    public void loadNotes(final JsonObject noteObject)
+    public void loadNotes(State_00200 loader, JsonObject noteObject)
     {
         for (Map.Entry<String, JsonElement> entry : noteObject.entrySet()) {
             ArrayDeque<Notification> notes = new ArrayDeque<>();
             if (entry.getValue().isJsonArray()) {
                 for (JsonElement e : entry.getValue().getAsJsonArray()) {
                     if (e.isJsonObject()) {
-                        Notification n = loadNote(e.getAsJsonObject());
+                        Notification n = loadNote(loader, e.getAsJsonObject());
                         if (n == null) {
                             continue;
                         }
@@ -113,39 +113,24 @@ public final class JsonState
         }
     }
 
-    private Notification loadNote(JsonObject o)
+    private Notification loadNote(State_00200 loader, JsonObject o)
     {
         String asString = o.get("type").getAsString();
         switch (asString) {
-            case "BuyClaim": return new BuyClaim(o);
-            case "BuyNote": return new BuyNotification(o);
-            case "BuyReject": return new BuyRejection(o);
-            case "BuyRequest": return new BuyRequest(o);
+            case "BuyClaim": return new BuyClaim(loader, o);
+            case "BuyNote": return new BuyNotification(loader, o);
+            case "BuyReject": return new BuyRejection(loader, o);
+            case "BuyRequest": return new BuyRequest(loader, o);
             case "DeathNote": return new DeathNotification(o);
             case "general": return new GeneralNotification(o);
             case "lolly": return new LollipopNotification(o);
-            case "SaleNote": return new SaleNotification(o);
-            case "SaleNoteAuto": return new SaleNotificationAuto(o);
-            case "SaleReject": return new SaleRejection(o);
-            case "SellRequest": return new SellRequest(o);
+            case "SaleNote": return new SaleNotification(loader, o);
+            case "SaleNoteAuto": return new SaleNotificationAuto(loader, o);
+            case "SaleReject": return new SaleRejection(loader, o);
+            case "SellRequest": return new SellRequest(loader, o);
             default:
                 log.warning("Unknown message type '" + o.get("type").getAsString() + "'. Skipped.");
                 return null;
         }
-    }
-
-    public ArrayDeque<Notification> getNotifications(OfflinePlayer pl)
-    {
-        return getNotifications(pl.getName());
-    }
-
-    public ArrayDeque<Notification> getNotifications(String player)
-    {
-        ArrayDeque<Notification> n = pending.get(player);
-        if (n == null) {
-            n = new ArrayDeque<>();
-            this.pending.put(player, n);
-        }
-        return n;
     }
 }

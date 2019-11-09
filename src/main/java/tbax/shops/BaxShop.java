@@ -25,6 +25,8 @@ import org.bukkit.Location;
 import org.tbax.baxshops.ShopPlugin;
 import org.tbax.baxshops.serialization.states.State_00100;
 import org.tbax.baxshops.serialization.states.State_00200;
+import org.tbax.baxshops.serialization.states.State_00205;
+import org.tbax.baxshops.serialization.states.State_00210;
 import tbax.shops.serialization.BlockLocation;
 
 import java.io.Serializable;
@@ -46,7 +48,7 @@ public class BaxShop extends Shop implements Serializable
         this.flags = new HashMap<>();
     }
 
-    public BaxShop(int uid, final JsonObject o) {
+    public BaxShop(State_00200 state00200, int uid, JsonObject o) {
         this.uid = uid;
         this.owner = o.get("owner").getAsString();
         if (o.has("infinite")) {
@@ -76,7 +78,15 @@ public class BaxShop extends Shop implements Serializable
         }
 
         for (JsonElement jsonElement : o.get("entries").getAsJsonArray()) {
-            inventory.add(new ShopEntry(jsonElement.getAsJsonObject()));
+            if (state00200 instanceof State_00210) {
+                inventory.add(new ShopEntry((State_00210)state00200, jsonElement.getAsJsonObject()));
+            }
+            else if (state00200 instanceof State_00205) {
+                inventory.add(new ShopEntry((State_00205)state00200, jsonElement.getAsJsonObject()));
+            }
+            else {
+                inventory.add(new ShopEntry(state00200, jsonElement.getAsJsonObject()));
+            }
         }
     }
 

@@ -22,8 +22,9 @@ import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.notification.Notification;
 import org.tbax.baxshops.serialization.StateLoader;
-import org.tbax.baxshops.serialization.StoredPlayer;
 import org.tbax.baxshops.serialization.states.State_00200;
+import org.tbax.baxshops.serialization.states.State_00205;
+import org.tbax.baxshops.serialization.states.State_00210;
 import tbax.shops.ShopEntry;
 
 public class BuyRequest implements Request, TimedNotification
@@ -34,11 +35,19 @@ public class BuyRequest implements Request, TimedNotification
     public String buyer;
     public static final String JSON_TYPE_ID = "BuyRequest";
 
-    public BuyRequest(JsonObject o) {
+    public BuyRequest(State_00200 state00200, JsonObject o) {
         buyer = o.get("buyer").getAsString();
         shopId = o.get("shop").getAsInt();
         expirationDate = o.get("expires").getAsLong();
-        purchased = new ShopEntry(o.get("entry").getAsJsonObject());
+        if (state00200 instanceof State_00210) {
+            purchased = new ShopEntry((State_00210)state00200, o.get("entry").getAsJsonObject());
+        }
+        else if (state00200 instanceof State_00205) {
+            purchased = new ShopEntry((State_00205)state00200, o.get("entry").getAsJsonObject());
+        }
+        else {
+            purchased = new ShopEntry(state00200, o.get("entry").getAsJsonObject());
+        }
     }
 
     @Override
