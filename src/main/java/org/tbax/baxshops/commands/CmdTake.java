@@ -50,7 +50,7 @@ public final class CmdTake extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
         CommandHelp help = super.getHelp(actor);
         help.setDescription("take an item from a shop without purchasing it");

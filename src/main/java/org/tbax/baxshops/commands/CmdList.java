@@ -23,7 +23,6 @@ import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.Format;
 import org.tbax.baxshops.ShopSelection;
-import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.CommandHelp;
 
 public final class CmdList extends BaxShopCommand
@@ -41,7 +40,7 @@ public final class CmdList extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
         CommandHelp help = super.getHelp(actor);
         help.setDescription("List all locations for this shop");

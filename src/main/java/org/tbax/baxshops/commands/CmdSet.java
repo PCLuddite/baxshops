@@ -49,7 +49,7 @@ public final class CmdSet extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
         CommandHelp help = super.getHelp(actor);
         help.setDescription("change the buy or sell price for a shop item");

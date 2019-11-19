@@ -50,7 +50,7 @@ public final class CmdSetIndex extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
         CommandHelp help = super.getHelp(actor);
         help.setDescription("Change the order of an entry in the shop");

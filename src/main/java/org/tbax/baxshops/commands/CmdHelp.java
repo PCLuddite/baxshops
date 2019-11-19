@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  * Portions derived from Shops Copyright (c) 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * This library is free software; you can redistribute it and/or
@@ -23,6 +23,10 @@ import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.*;
 import org.tbax.baxshops.errors.PrematureAbortException;
 
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public final class CmdHelp extends BaxShopCommand
 {
     @Override
@@ -44,12 +48,12 @@ public final class CmdHelp extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
         CommandHelp help = super.getHelp(actor);
-        help.setDescription("show help with shops");
+        help.setDescription("show a list of shop commands");
         help.setArgs(
-            new CommandHelpArgument("action", "get help on a /shop action, e.g. /shop h create", true)
+            new CommandHelpArgument("action", "get help on a /shop action, e.g. /shop h buy", false)
         );
         return help;
     }
@@ -91,8 +95,9 @@ public final class CmdHelp extends BaxShopCommand
             actor.appendArg(1); // show page 1 by default
         }
         if (actor.isArgInt(1)) {
-            actor.sendMessage("Use this to lookup information on specific commands.");
-            actor.sendMessage("To lookup a command, use:\n%s\n", Format.command("/shop help <command>"));
+            actor.getSender().sendMessage("Use this to lookup information on specific commands.");
+            actor.getSender().sendMessage(String.format("To lookup a command, use:\n%s\n", Format.command("/shop help <command>")));
+            showHelpList(actor, actor.getArgInt(1));
         }
         else {
             BaxShopCommand cmd = ShopPlugin.getCommands().get(actor.getArg(1));
@@ -100,14 +105,32 @@ public final class CmdHelp extends BaxShopCommand
                 actor.exitError(Resources.INVALID_SHOP_ACTION, actor.getArg(1));
             }
             CommandHelp help = cmd.getHelp(actor);
-            //noinspection ConstantConditions
             if (cmd == null) {
-                actor.exitWarning("No documentation was found for this command.");
+                actor.exitError("No documentation could be found for /shop %s", actor.getArg(1));
             }
             else if (!cmd.hasPermission(actor)) {
                 actor.sendError("You do not have permission to view the documentation for this command");
             }
             actor.getSender().sendMessage(help.toString());
+        }
+    }
+
+    private void showHelpList(@NotNull ShopCmdActor actor, int page)
+    {
+        List<BaxShopCommand> commands = ShopPlugin.getCommands().values().stream()
+            .filter(cmd -> cmd.hasPermission(actor))
+            .sorted(Comparator.comparing(BaxShopCommand::getName))
+            .collect(Collectors.toList());
+        int pages = (int)Math.ceil((double)commands.size() / ShopSelection.ITEMS_PER_PAGE);
+        actor.getSender().sendMessage(Format.header(String.format("Showing page %d of %d", page + 1, pages)));
+        int i = page * ShopSelection.ITEMS_PER_PAGE,
+                stop = (page + 1) * ShopSelection.ITEMS_PER_PAGE,
+                max = Math.min(stop, commands.size());
+        for (; i < max; ++i) {
+            actor.getSender().sendMessage(commands.get(i).getHelp(actor).getDescription());
+        }
+        for (; i < stop; i++) {
+            actor.getSender().sendMessage("");
         }
     }
 }

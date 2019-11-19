@@ -52,7 +52,7 @@ public final class CmdRestock extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
         CommandHelp help = super.getHelp(actor);
         help.setDescription("Restock a shop with the held item, or any item in the player's inventory");

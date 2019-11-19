@@ -22,7 +22,6 @@ package org.tbax.baxshops.commands;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.ShopPlugin;
-import org.tbax.baxshops.errors.PrematureAbortException;
 
 public final class CmdSave extends BaxShopCommand
 {
@@ -40,7 +39,7 @@ public final class CmdSave extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
         CommandHelp help = super.getHelp(actor);
         help.setDescription("saves all shops");

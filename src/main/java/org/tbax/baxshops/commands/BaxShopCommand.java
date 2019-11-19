@@ -34,7 +34,7 @@ public abstract class BaxShopCommand implements TabCompleter
     public abstract @NotNull String getName();
     public abstract String getPermission();
 
-    public CommandHelp getHelp(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
         return new CommandHelp(getName(), getAliases());
     }
