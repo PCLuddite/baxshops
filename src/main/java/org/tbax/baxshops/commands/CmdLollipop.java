@@ -113,7 +113,7 @@ public final class CmdLollipop extends BaxShopCommand
         OfflinePlayer sender = actor.getPlayer() == null ? StoredPlayer.DUMMY : actor.getPlayer();
         StoredPlayer recipient = actor.getArgPlayer(1);
         if (recipient == null)
-            actor.exitError(Resources.NOT_REGISTERED_PLAYER, actor.getArg(1), "before receiving a lollipop");
+            actor.exitError(Resources.NOT_REGISTERED_PLAYER, actor.getArg(1), "receive a lollipop");
 
         List<LollipopNotification> otherPops = recipient.getNotifications().stream()
             .filter(n -> n instanceof LollipopNotification)
