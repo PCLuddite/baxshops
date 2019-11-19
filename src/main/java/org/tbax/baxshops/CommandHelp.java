@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,6 +20,7 @@ package org.tbax.baxshops;
 
 import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
+import org.tbax.baxshops.commands.BaxShopCommand;
 
 @SuppressWarnings("unused")
 public final class CommandHelp
@@ -27,17 +28,25 @@ public final class CommandHelp
     private String command;
     private String[] aliases;
     private CommandHelpArgument[] args;
-    private String description;
+    private String longDescription;
+    private String shortDescription;
 
-    public CommandHelp(@NotNull String cmdName)
+    public CommandHelp(@NotNull BaxShopCommand cmd, @NotNull String shortDescription)
     {
-        command = cmdName;
+        this(cmd.getName(), cmd.getAliases(), shortDescription);
     }
 
-    public CommandHelp(@NotNull String cmdName, String... aliases)
+    public CommandHelp(@NotNull String cmdName, @NotNull String shortDescription)
+    {
+        command = cmdName;
+        this.shortDescription = shortDescription;
+    }
+
+    public CommandHelp(@NotNull String cmdName, String[] aliases, @NotNull String shortDescription)
     {
         command = cmdName;
         this.aliases = aliases;
+        this.shortDescription = shortDescription;
     }
 
     public @NotNull String getName()
@@ -60,14 +69,24 @@ public final class CommandHelp
         this.aliases = aliases;
     }
 
-    public String getDescription()
+    public String getLongDescription()
     {
-        return description;
+        return longDescription;
     }
 
-    public void setDescription(String desc)
+    public void setLongDescription(String desc)
     {
-        description = desc;
+        longDescription = desc;
+    }
+
+    public String getShortDescription()
+    {
+        return shortDescription;
+    }
+
+    public void setShortDescription(String desc)
+    {
+        shortDescription = desc;
     }
 
     public CommandHelpArgument[] getArgs()
@@ -109,8 +128,11 @@ public final class CommandHelp
     {
         StringBuilder sb = new StringBuilder();
         sb.append(Format.header(String.format("Help: /shop %s", command))).append('\n');
-        if (description != null) {
-            sb.append(ChatColor.WHITE).append(description).append('\n');
+        if (longDescription != null) {
+            sb.append(ChatColor.WHITE).append(longDescription).append('\n');
+        }
+        else {
+            sb.append(ChatColor.WHITE).append(shortDescription).append('\n');
         }
         sb.append(getUsageString()).append('\n');
         if (aliases != null && aliases.length != 0) {

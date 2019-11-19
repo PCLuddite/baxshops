@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,6 +22,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
+import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.Format;
 import org.tbax.baxshops.commands.ShopCmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
@@ -35,6 +36,12 @@ public final class FlagCmdList extends FlagCmd
     public @NotNull String[] getAliases()
     {
         return new String[]{"list"};
+    }
+
+    @Override
+    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    {
+        return null;
     }
 
     @Override
@@ -53,12 +60,15 @@ public final class FlagCmdList extends FlagCmd
     public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         BaxShop shop = actor.getShop();
-        assert shop != null;
+        if (!actor.isAdmin() && !shop.getOwner().equals(actor.getPlayer())) {
+            actor.exitError("You do not have permission to view this shop's flags");
+        }
         actor.getSender().sendMessage("\nFlags currently applied to this shop:");
-        actor.getSender().sendMessage(String.format("%s: %s", Format.flag("Infinite"), Format.keyword(shop.hasFlagInfinite() ? "Yes" : "No")));
-        actor.getSender().sendMessage(String.format("%s: %s", Format.flag("Sell to Shop"), Format.keyword(shop.hasFlagSellToShop() ? "Yes" : "No")));
-        actor.getSender().sendMessage(String.format("%s: %s", Format.flag("Sell Requests"), Format.keyword(shop.hasFlagSellRequests() ? "Yes" : "No")));
-        actor.getSender().sendMessage(String.format("%s: %s", Format.flag("Buy Requests"), Format.keyword(shop.hasFlagBuyRequests() ? "Yes" : "No")));
+        actor.getSender().sendMessage(String.format("%-20s: %s", Format.flag("Infinite"), Format.keyword(shop.hasFlagInfinite() ? "Yes" : "No")));
+        actor.getSender().sendMessage(String.format("%-20s: %s", Format.flag("Sell to Shop"), Format.keyword(shop.hasFlagSellToShop() ? "Yes" : "No")));
+        actor.getSender().sendMessage(String.format("%-20s: %s", Format.flag("Sell Requests"), Format.keyword(shop.hasFlagSellRequests() ? "Yes" : "No")));
+        actor.getSender().sendMessage(String.format("%-20s: %s", Format.flag("Buy Requests"), Format.keyword(shop.hasFlagBuyRequests() ? "Yes" : "No")));
+        actor.getSender().sendMessage(String.format("%-20s: %s", Format.flag("Smart Stack"), Format.keyword(shop.hasFlagSmartStack() ? "Yes" : "No")));
     }
 
     @Override

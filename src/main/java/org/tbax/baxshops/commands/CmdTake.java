@@ -52,11 +52,11 @@ public final class CmdTake extends BaxShopCommand
     @Override
     public CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
-        CommandHelp help = super.getHelp(actor);
-        help.setDescription("take an item from a shop without purchasing it");
+        CommandHelp help = new CommandHelp(this, "take an item from the shop");
+        help.setLongDescription("Take an item from a shop. This is a synonym for /shop buy if you are the shop owner.");
         help.setArgs(
-            new CommandHelpArgument("item", "the item to take from the shop", true),
-            new CommandHelpArgument("quantity", "the quantity to take from the shop", false, 1)
+            new CommandHelpArgument("entry", "the item to take from the shop", true),
+            new CommandHelpArgument("quantity", "the quantity to take from the shop", 1)
         );
         return help;
     }

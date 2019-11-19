@@ -53,13 +53,13 @@ public final class CmdLollipop extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
-        CommandHelp help = super.getHelp(actor);
-        help.setDescription("Hand out a lollipop");
+        CommandHelp help = new CommandHelp(this, "hand out a lollipop");
+        help.setLongDescription("Give a lollipop to your friends");
         help.setArgs(
             new CommandHelpArgument("player", "player to send lollipop", true),
-            new CommandHelpArgument("tastiness", "the tastiness", true)
+            new CommandHelpArgument("tastiness", "the tastiness", false)
         );
         return help;
     }

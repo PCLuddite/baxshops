@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  * Portions derived from Shops Copyright (c) 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * This library is free software; you can redistribute it and/or
@@ -52,10 +52,10 @@ public final class CmdSell extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
-        CommandHelp help = super.getHelp(actor);
-        help.setDescription("sell an item to a shop or request to sell if sell requests for the shop are active");
+        CommandHelp help = new CommandHelp(this, "sell an item");
+        help.setLongDescription("Sell an item to a shop or send a request if sell requests for the shop are active");
         help.setArgs(
             new CommandHelpArgument("quantity", "the quantity to you wish to sell", false)
         );

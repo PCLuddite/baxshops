@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,6 +21,7 @@ package org.tbax.baxshops.commands;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
+import org.tbax.baxshops.CommandHelpArgument;
 import org.tbax.baxshops.Format;
 import org.tbax.baxshops.ShopSelection;
 import org.tbax.baxshops.CommandHelp;
@@ -40,10 +41,13 @@ public final class CmdList extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
-        CommandHelp help = super.getHelp(actor);
-        help.setDescription("List all locations for this shop");
+        CommandHelp help = new CommandHelp(this, "list all shop locations");
+        help.setLongDescription("List all locations (x, y, z) for this shop");
+        help.setArgs(
+                new CommandHelpArgument("page", "the page number", 1)
+        );
         return help;
     }
 

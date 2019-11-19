@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -50,10 +50,10 @@ public final class CmdSetIndex extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
-        CommandHelp help = super.getHelp(actor);
-        help.setDescription("Change the order of an entry in the shop");
+        CommandHelp help = new CommandHelp(this, "change entry order");
+        help.setLongDescription("Change the order of an entry in the shop");
         help.setArgs(
             new CommandHelpArgument("old-index", "the current index of the item", true),
             new CommandHelpArgument("new-index", "the new index of the item", true)

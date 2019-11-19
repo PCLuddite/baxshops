@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -50,12 +50,12 @@ public final class CmdSetAmnt extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
-        CommandHelp help = super.getHelp(actor);
-        help.setDescription("set the quantity for an item in a shop");
+        CommandHelp help = new CommandHelp(this, "set an entry quantity");
+        help.setLongDescription("Set the quantity for an item in a shop. This can only be done by an admin.");
         help.setArgs(
-            new CommandHelpArgument("item", "the item for which to set the quantity", true),
+            new CommandHelpArgument("entry", "the item for which to set the quantity", true),
             new CommandHelpArgument("quantity", "the quantity for the item", true)
         );
         return help;

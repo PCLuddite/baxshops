@@ -48,10 +48,9 @@ public final class CmdHelp extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
-        CommandHelp help = super.getHelp(actor);
-        help.setDescription("show a list of shop commands");
+        CommandHelp help = new CommandHelp(this, "show a list of commands");
         help.setArgs(
             new CommandHelpArgument("action", "get help on a /shop action, e.g. /shop h buy", false)
         );
@@ -96,8 +95,8 @@ public final class CmdHelp extends BaxShopCommand
         }
         if (actor.isArgInt(1)) {
             actor.getSender().sendMessage("Use this to lookup information on specific commands.");
-            actor.getSender().sendMessage(String.format("To lookup a command, use:\n%s\n", Format.command("/shop help <command>")));
-            showHelpList(actor, actor.getArgInt(1));
+            actor.getSender().sendMessage(String.format("To lookup a command, use:\n%s", Format.command("/shop help <command>")));
+            showHelpList(actor, actor.getArgInt(1) - 1);
         }
         else {
             BaxShopCommand cmd = ShopPlugin.getCommands().get(actor.getArg(1));
@@ -119,6 +118,7 @@ public final class CmdHelp extends BaxShopCommand
     {
         List<BaxShopCommand> commands = ShopPlugin.getCommands().values().stream()
             .filter(cmd -> cmd.hasPermission(actor))
+            .distinct()
             .sorted(Comparator.comparing(BaxShopCommand::getName))
             .collect(Collectors.toList());
         int pages = (int)Math.ceil((double)commands.size() / ShopSelection.ITEMS_PER_PAGE);
@@ -127,7 +127,7 @@ public final class CmdHelp extends BaxShopCommand
                 stop = (page + 1) * ShopSelection.ITEMS_PER_PAGE,
                 max = Math.min(stop, commands.size());
         for (; i < max; ++i) {
-            actor.getSender().sendMessage(commands.get(i).getHelp(actor).getDescription());
+            actor.getSender().sendMessage(commands.get(i).getHelp(actor).getName());
         }
         for (; i < stop; i++) {
             actor.getSender().sendMessage("");

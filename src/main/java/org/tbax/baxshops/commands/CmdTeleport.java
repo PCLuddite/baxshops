@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -54,8 +54,8 @@ public final class CmdTeleport extends BaxShopCommand
     @Override
     public CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
-        CommandHelp help = super.getHelp(actor);
-        help.setDescription("Teleport to a specific shop location. Use /shop list for a list of locations");
+        CommandHelp help = new CommandHelp(this, "teleport to a shop location");
+        help.setLongDescription("Teleport to a specific shop location. Use /shop list for a list of locations. This can only be done by an admin.");
         help.setArgs(
             new CommandHelpArgument("index", "the index of the shop location", true)
         );

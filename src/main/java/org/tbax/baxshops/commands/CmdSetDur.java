@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -44,12 +44,12 @@ public final class CmdSetDur extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
-        CommandHelp help = super.getHelp(actor);
-        help.setDescription("Set the damage percentage for an item");
+        CommandHelp help = new CommandHelp(this, "set an item's damage percent");
+        help.setLongDescription("Set the damage percentage for an item. This can only be done by an admin.");
         help.setArgs(
-            new CommandHelpArgument("item", "the item for which to set the durability", true),
+            new CommandHelpArgument("entry", "the item for which to set the durability", true),
             new CommandHelpArgument("damage", "the damage percentage", true)
         );
         return help;

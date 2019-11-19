@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -16,7 +16,6 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
  * USA
  */
-
 package org.tbax.baxshops.commands;
 
 import org.bukkit.command.Command;
@@ -33,12 +32,7 @@ public abstract class BaxShopCommand implements TabCompleter
 {
     public abstract @NotNull String getName();
     public abstract String getPermission();
-
-    public CommandHelp getHelp(@NotNull ShopCmdActor actor)
-    {
-        return new CommandHelp(getName(), getAliases());
-    }
-
+    public abstract @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor);
     public abstract boolean hasValidArgCount(@NotNull ShopCmdActor actor);
     public abstract boolean requiresSelection(@NotNull ShopCmdActor actor);
     public abstract boolean requiresOwner(@NotNull ShopCmdActor actor);
@@ -51,7 +45,6 @@ public abstract class BaxShopCommand implements TabCompleter
         return new String[]{getName()};
     }
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean hasPermission(@NotNull ShopCmdActor actor)
     {
         if (getPermission() == null)

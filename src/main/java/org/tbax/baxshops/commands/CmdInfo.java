@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,6 +18,7 @@
  */
 package org.tbax.baxshops.commands;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -43,10 +44,11 @@ public final class CmdInfo extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
-        CommandHelp help = super.getHelp(actor);
-        help.setDescription("Gets extended information about an entry in a shop");
+        CommandHelp help = new CommandHelp(this, "show more information about an entry");
+        help.setLongDescription("Show extended information about an entry in the selected shop. It is recommended to use this before all major purchases.\n" +
+                ChatColor.ITALIC + "Caveat emptor" + ChatColor.RESET);
         help.setArgs(
             new CommandHelpArgument("item", "the name or shop index of the entry", true)
         );

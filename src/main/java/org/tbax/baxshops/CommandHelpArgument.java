@@ -31,14 +31,17 @@ public final class CommandHelpArgument
 
     public CommandHelpArgument(@NotNull String arg, @NotNull String desc, boolean req)
     {
-        this(arg, desc, req, null);
-    }
-
-    public CommandHelpArgument(@NotNull String arg, @NotNull String desc, boolean req, Object defaultVal)
-    {
         argument = arg;
         description = desc;
         required = req;
+        defaultValue = "";
+    }
+
+    public CommandHelpArgument(@NotNull String arg, @NotNull String desc, Object defaultVal)
+    {
+        argument = arg;
+        description = desc;
+        required = false;
         defaultValue = defaultVal + "";
     }
 

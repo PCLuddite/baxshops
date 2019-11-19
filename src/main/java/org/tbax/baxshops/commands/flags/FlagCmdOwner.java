@@ -21,10 +21,7 @@ package org.tbax.baxshops.commands.flags;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.BaxShop;
-import org.tbax.baxshops.Format;
-import org.tbax.baxshops.Resources;
-import org.tbax.baxshops.ShopPlugin;
+import org.tbax.baxshops.*;
 import org.tbax.baxshops.commands.ShopCmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.serialization.StoredPlayer;
@@ -44,6 +41,17 @@ public final class FlagCmdOwner extends FlagCmd
     public boolean requiresRealOwner(@NotNull ShopCmdActor actor)
     {
         return false;
+    }
+
+    @Override
+    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    {
+        CommandHelp help = new CommandHelp(this, "set the owner of a shop");
+        help.setLongDescription("Transfers ownership of a shop to another player");
+        help.setArgs(
+                new CommandHelpArgument("new owner", "the name or UUID of the new owner", true)
+        );
+        return help;
     }
 
     @Override

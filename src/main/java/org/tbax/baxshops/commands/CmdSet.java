@@ -49,14 +49,14 @@ public final class CmdSet extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
-        CommandHelp help = super.getHelp(actor);
-        help.setDescription("change the buy or sell price for a shop item");
+        CommandHelp help = new CommandHelp(this, "set a price for an item");
+        help.setLongDescription("Change the buy or sell price for a shop item already in a shop");
         help.setArgs(
-            new CommandHelpArgument("item", "the item in the shop", true),
-            new CommandHelpArgument("$buy", "the new price for buying a single item", true),
-            new CommandHelpArgument("$sell", "the new price for selling a single item. If no price is specified, the item cannot be sold.", false)
+            new CommandHelpArgument("entry", "the item in the shop", true),
+            new CommandHelpArgument("buy price", "the new price for buying a single item", true),
+            new CommandHelpArgument("sell price", "the new price for selling a single item. If no price is specified, the item cannot be sold.", false)
         );
         return help;
     }

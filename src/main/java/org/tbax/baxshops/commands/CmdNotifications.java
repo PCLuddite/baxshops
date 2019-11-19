@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  * Portions derived from Shops Copyright (c) 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * This library is free software; you can redistribute it and/or
@@ -50,13 +50,13 @@ public final class CmdNotifications extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
-        CommandHelp help = super.getHelp(actor);
-        help.setDescription(
-            "Shows a list of notifications to sell items to your shops\n" +
-            "These can be offers (e.g., someone wishes to sell you an item)\n" +
-            "or messages (e.g., an offer was accepted).\n" +
+        CommandHelp help = new CommandHelp(this, "show latest notification");
+        help.setLongDescription(
+            "Shows your latest notification and remove it from your notification queue.\n" +
+            "A notification can be an offer (e.g., someone wishes to sell you an item)\n" +
+            "or simply a message (e.g., an offer was accepted).\n" +
             "Use /shop accept and /shop reject on offers."
         );
         return help;

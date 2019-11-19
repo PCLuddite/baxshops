@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  * Portions derived from Shops Copyright (c) 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * This library is free software; you can redistribute it and/or
@@ -24,6 +24,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
+import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.Format;
 import org.tbax.baxshops.ShopPlugin;
 import org.tbax.baxshops.errors.PrematureAbortException;
@@ -46,6 +47,16 @@ public final class CmdDelete extends BaxShopCommand
     public String getPermission()
     {
         return "shops.owner";
+    }
+
+    @Override
+    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    {
+        CommandHelp help = new CommandHelp(this, "delete a shop");
+        help.setLongDescription("Deletes the selected shop and turns it into a normal sign. Only owners and ops may do this. " +
+                "If the shop has multiple locations, only that location will be deleted. If this is the only location of the shop, " +
+                "all shop inventory must be removed prior to it being deleted. Infinite shops may be deleted without inventory being removed.");
+        return help;
     }
 
     @Override

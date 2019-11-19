@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  * Portions derived from Shops Copyright (c) 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * This library is free software; you can redistribute it and/or
@@ -51,13 +51,13 @@ public final class CmdBuy extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
-        CommandHelp help = super.getHelp(actor);
-        help.setDescription("buy an item from this shop");
+        CommandHelp help = new CommandHelp(this, "buy an item from a shop");
+        help.setLongDescription("Buy an item from the selected shop. You will be charged the purchase amount with the funds credited to the owner.");
         help.setArgs(
             new CommandHelpArgument("item", "the name of the item or an entry number in the shop", true),
-            new CommandHelpArgument("quantity", "the quantity you wish to buy", false, 1)
+            new CommandHelpArgument("quantity", "the quantity you wish to buy", 1)
         );
         return help;
     }

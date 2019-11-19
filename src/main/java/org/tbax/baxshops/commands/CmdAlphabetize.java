@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  * Portions derived from Shops Copyright (c) 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * This library is free software; you can redistribute it and/or
@@ -21,6 +21,7 @@ package org.tbax.baxshops.commands;
 
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxEntry;
+import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.errors.PrematureAbortException;
 
 import java.util.Comparator;
@@ -37,6 +38,14 @@ public final class CmdAlphabetize extends BaxShopCommand
     public @NotNull String[] getAliases()
     {
         return new String[] { "alphabetize", "alphabetise" };
+    }
+
+    @Override
+    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    {
+        CommandHelp help = new CommandHelp(this, "sorts shop inventory alphabetically");
+        help.setLongDescription("Sort all inventory in the shop alphabetically");
+        return help;
     }
 
     @Override

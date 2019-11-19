@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -42,6 +42,17 @@ public final class CmdEmpty extends BaxShopCommand
     public String getPermission()
     {
         return "shops.owner";
+    }
+
+    @Override
+    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    {
+        CommandHelp help = new CommandHelp(this, "remove all shop inventory");
+        help.setLongDescription("Takes out all shop inventory and adds it to yours");
+        help.setArgs(
+                new CommandHelpArgument("entry", "the entry to start removing items at", 1)
+        );
+        return help;
     }
 
     @Override

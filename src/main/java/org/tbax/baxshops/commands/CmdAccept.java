@@ -52,10 +52,10 @@ public final class CmdAccept extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
-        CommandHelp help = super.getHelp(actor);
-        help.setDescription("accept your most recent notification");
+        CommandHelp help = new CommandHelp(this, "accept your most recent notification");
+        help.setLongDescription("Accept your most recent notification and remove it from the notification queue");
         return help;
     }
 

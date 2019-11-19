@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  * Portions derived from Shops Copyright (c) 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * This library is free software; you can redistribute it and/or
@@ -50,12 +50,12 @@ public final class CmdRemove extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
-        CommandHelp help = super.getHelp(actor);
-        help.setDescription("remove an item from the shop");
+        CommandHelp help = new CommandHelp(this, "remove an item from the shop");
+        help.setLongDescription("Remove an entry from a shop. The current stock will be added to your inventory.");
         help.setArgs(
-            new CommandHelpArgument("item", "the name or entry number of the item to remove", true)
+            new CommandHelpArgument("entry", "the name or entry number of the item to remove", true)
         );
         return help;
     }

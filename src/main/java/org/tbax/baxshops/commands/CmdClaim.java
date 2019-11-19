@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  * Portions derived from Shops Copyright (c) 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * This library is free software; you can redistribute it and/or
@@ -20,6 +20,8 @@
 package org.tbax.baxshops.commands;
 
 import org.jetbrains.annotations.NotNull;
+import org.tbax.baxshops.CommandHelp;
+import org.tbax.baxshops.CommandHelpArgument;
 import org.tbax.baxshops.Resources;
 import org.tbax.baxshops.ShopPlugin;
 import org.tbax.baxshops.errors.PrematureAbortException;
@@ -45,6 +47,15 @@ public final class CmdClaim extends BaxShopCommand
     public String getPermission()
     {
         return null;
+    }
+
+    @Override
+    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    {
+        CommandHelp help = new CommandHelp(this, "claim your most recent notification");
+        help.setLongDescription("If your most recent notification is a claim, the item will be added to your inventory " +
+                "and this notification removed from the queue. You will not be able to claim an item if there is not enough room in your inventory.");
+        return help;
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  * Portions derived from Shops Copyright (c) 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * This library is free software; you can redistribute it and/or
@@ -46,13 +46,13 @@ public final class CmdAdd extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
-        CommandHelp help = super.getHelp(actor);
-        help.setDescription("add held item to this shop");
+        CommandHelp help = new CommandHelp(this, "add an item to a shop");
+        help.setLongDescription("Adds the item in the main hand to the selected shop");
         help.setArgs(
-          new CommandHelpArgument("buy price", "the price of a single item in the stack", true),
-          new CommandHelpArgument("sell price", "the selling price of a single item in the stack (by default the item cannot be sold)", false)
+                new CommandHelpArgument("buy price", "the retail price for a single item in the stack", true),
+                new CommandHelpArgument("sell price", "the refund price of a single item in the stack (if left blank the item cannot be sold to the shop)", false)
         );
         return help;
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,6 +19,8 @@
 package org.tbax.baxshops.commands;
 
 import org.jetbrains.annotations.NotNull;
+import org.tbax.baxshops.CommandHelp;
+import org.tbax.baxshops.CommandHelpArgument;
 import org.tbax.baxshops.errors.PrematureAbortException;
 
 public final class CmdSetFoodLevel extends BaxShopCommand
@@ -39,6 +41,17 @@ public final class CmdSetFoodLevel extends BaxShopCommand
     public String getPermission()
     {
         return null;
+    }
+
+    @Override
+    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    {
+        CommandHelp help = new CommandHelp(this, "set hunger level");
+        help.setLongDescription("Sets your hunger level. This can only be done by an admin.");
+        help.setArgs(
+                new CommandHelpArgument("level", "Your hunger level out of 20", true)
+        );
+        return help;
     }
 
     @Override

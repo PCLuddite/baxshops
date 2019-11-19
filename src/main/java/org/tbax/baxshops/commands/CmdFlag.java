@@ -23,10 +23,12 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.CommandHelpArgument;
+import org.tbax.baxshops.Resources;
 import org.tbax.baxshops.commands.flags.*;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.serialization.StoredPlayer;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -63,13 +65,28 @@ public final class CmdFlag extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
-        CommandHelp help = super.getHelp(actor);
-        help.setDescription("Set a specific flag or list all flags applied to a selected shop");
+        CommandHelp help = new CommandHelp(this, "manage shop flags");
+        StringBuilder description = new StringBuilder("Set a specific flag or list all flags applied to a selected shop.");
+        description.append("\nThe following flags are available:");
+
+        List<FlagCmd> flags = flagCmds.values().stream()
+                .filter(cmd -> cmd.hasPermission(actor))
+                .distinct()
+                .sorted(Comparator.comparing(BaxShopCommand::getName))
+                .map(cmd -> (FlagCmd)cmd)
+                .collect(Collectors.toList());
+
+        for (FlagCmd cmd : flags) {
+            description.append("\n");
+            description.append(cmd.getName()).append(" - ").append(cmd.getHelp(actor).getShortDescription());
+        }
+
+        help.setLongDescription(description.toString());
         help.setArgs(
-            new CommandHelpArgument("name|list", "the name of the flag to set or a list of all flags currently applied to this shop", true),
-            new CommandHelpArgument("setting", "the value this flag should be set to", false)
+            new CommandHelpArgument("option", "the name of the flag to set or use 'list' of all flags currently applied to this shop", true),
+            new CommandHelpArgument("true/false", "the value this flag should be set to", false)
         );
         return help;
     }
@@ -126,7 +143,12 @@ public final class CmdFlag extends BaxShopCommand
 		if (flagCmd.requiresRealOwner(actor) && actor.getShop() != null && StoredPlayer.DUMMY.equals(actor.getShop().getOwner())) {
 		    actor.exitError("%s is not a real player and cannot receive notifications.\nThe value of this flag cannot be changed.", actor.getShop().getOwner());
         }
-		flagCmd.onCommand(actor);
+		if (actor.hasPermission(flagCmd.getPermission())) {
+            flagCmd.onCommand(actor);
+        }
+		else {
+		    actor.sendError("You are not permitted to change this flag");
+        }
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,6 +20,8 @@ package org.tbax.baxshops.commands.flags;
 
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
+import org.tbax.baxshops.CommandHelp;
+import org.tbax.baxshops.CommandHelpArgument;
 import org.tbax.baxshops.Format;
 import org.tbax.baxshops.commands.ShopCmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
@@ -36,6 +38,17 @@ public final class FlagCmdSellToShop extends FlagCmd
     public boolean requiresRealOwner(@NotNull ShopCmdActor actor)
     {
         return true;
+    }
+
+    @Override
+    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    {
+        CommandHelp help = new CommandHelp(this, "sell items directly to your shop");
+        help.setLongDescription("Sell items to your shop's inventory and not your own.");
+        help.setArgs(
+                new CommandHelpArgument("true|false", "whether or not this flag is enabled", true)
+        );
+        return help;
     }
 
     @Override

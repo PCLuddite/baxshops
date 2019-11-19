@@ -59,15 +59,19 @@ public final class CmdCreate extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
-        CommandHelp help = super.getHelp(actor);
-        help.setDescription("create a new shop");
+        CommandHelp help = new CommandHelp(this, "create a shop");
         if (actor.isAdmin()) {
+            help.setLongDescription("Creates a new shop with a sign from your inventory. You must specify a shop owner. " +
+                            "The type of sign will be copied from a sign in your inventory. If no sign is found, the default sign type will be used.");
             help.setArgs(
                 new CommandHelpArgument("owner", "the owner of the shop", true),
-                new CommandHelpArgument("infinite", "whether the shop is infinite", false, "no")
+                new CommandHelpArgument("infinite", "whether the shop is infinite", "no")
             );
+        }
+        else {
+            help.setLongDescription("Creates a new shop with a sign from your inventory with you as the owner");
         }
         return help;
     }

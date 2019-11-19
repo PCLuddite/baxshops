@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,6 +19,7 @@
 package org.tbax.baxshops.commands;
 
 import org.jetbrains.annotations.NotNull;
+import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.ShopPlugin;
 import org.tbax.baxshops.errors.PrematureAbortException;
 
@@ -36,6 +37,14 @@ public final class CmdReload extends BaxShopCommand
     public String getPermission()
     {
         return "shops.admin";
+    }
+
+    @Override
+    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    {
+        CommandHelp help = new CommandHelp(this, "reload save file");
+        help.setLongDescription("Save the state and reloads shops.yml");
+        return help;
     }
 
     @Override

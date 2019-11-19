@@ -42,10 +42,10 @@ public final class CmdCopy extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
-        CommandHelp help = super.getHelp(actor);
-        help.setDescription("Copies the shop using a sign from the player's inventory");
+        CommandHelp help = new CommandHelp(this, "copy a shop to your inventory");
+        help.setLongDescription("Copies a selected shop using a sign from the player's inventory.");
         return help;
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  * Portions derived from Shops Copyright (c) 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * This library is free software; you can redistribute it and/or
@@ -49,8 +49,8 @@ public final class CmdSkip extends BaxShopCommand
     @Override
     public CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
-        CommandHelp help = super.getHelp(actor);
-        help.setDescription("skip your most recent notification");
+        CommandHelp help = new CommandHelp(this, "skip latest notification");
+        help.setLongDescription("Skip your most recent notification and add it to the back of your queue");
         return help;
     }
 
