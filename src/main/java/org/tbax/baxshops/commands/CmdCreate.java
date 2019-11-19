@@ -109,7 +109,7 @@ public final class CmdCreate extends BaxShopCommand
     {
         OfflinePlayer owner;
         if (actor.isAdmin()) {
-            owner = actor.getArgPlayer(1);
+            owner = actor.getArgPlayerSafe(1);
         }
         else {
             owner = actor.getPlayer();

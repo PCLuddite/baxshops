@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,6 +23,7 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.Format;
+import org.tbax.baxshops.Resources;
 import org.tbax.baxshops.ShopPlugin;
 import org.tbax.baxshops.commands.ShopCmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
@@ -50,7 +51,16 @@ public final class FlagCmdOwner extends FlagCmd
     {
         BaxShop shop = actor.getShop();
         assert shop != null;
-        shop.setOwner(actor.getArgPlayer(2));
+        StoredPlayer newOwner = actor.getArgPlayer(2);
+        if (newOwner == null) {
+            if (actor.isAdmin()) { // only admin can set owner to non-registered player
+                newOwner = actor.getArgPlayerSafe(2);
+            }
+            else {
+                actor.exitError(Resources.NOT_REGISTERED_PLAYER, actor.getArg(2), "be a shop owner");
+            }
+        }
+        shop.setOwner(newOwner);
         actor.sendMessage(Format.username(shop.getOwner().getName()) + " is now the owner!");
         if (actor.isOwner()) {
             actor.sendMessage("You will still be able to edit this shop until you leave or reselect it.");

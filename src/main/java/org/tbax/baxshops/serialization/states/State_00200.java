@@ -136,7 +136,7 @@ public class State_00200 implements StateLoader
     {
         if (playerName == null)
             return StoredPlayer.ERROR;
-        return players.get(playerName).get(0);
+        return players.getOrCreate(playerName).get(0);
     }
 
     public BaxShop getShop(int shopId)

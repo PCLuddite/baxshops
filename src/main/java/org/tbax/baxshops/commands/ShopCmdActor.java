@@ -624,11 +624,14 @@ public final class ShopCmdActor implements CommandSender
     public StoredPlayer getArgPlayer(int index) throws PrematureAbortException
     {
         try {
-            return ShopPlugin.getSavedState().getOfflinePlayerSafe(getArgUuid(index));
+            return ShopPlugin.getSavedState().getOfflinePlayer(getArgUuid(index));
         }
         catch (PrematureAbortException e){
-            List<StoredPlayer> players = ShopPlugin.getSavedState().getOfflinePlayer(args[index]);
-            if (players.size() > 1) {
+            List<StoredPlayer> players = ShopPlugin.getOfflinePlayer(args[index]);
+            if (players.isEmpty()) {
+                return null;
+            }
+            else if (players.size() > 1) {
                 StringBuilder sb = new StringBuilder();
                 sb.append("There are multiple players with that name. Please specify the UUID instead.\n");
                 for (StoredPlayer player : players) {
@@ -638,6 +641,16 @@ public final class ShopCmdActor implements CommandSender
             }
             return players.get(0);
         }
+    }
+
+    public StoredPlayer getArgPlayerSafe(int index) throws PrematureAbortException
+    {
+        StoredPlayer player = getArgPlayer(index);
+        if (player == null)
+            return ShopPlugin.getOfflinePlayerSafe(args[index]).get(0);
+        if (player == StoredPlayer.ERROR)
+            return ShopPlugin.getOfflinePlayer(getArgUuid(index));
+        return player;
     }
 
     public void setAction(String action)

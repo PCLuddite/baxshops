@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  * Portions derived from Shops Copyright (c) 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * This library is free software; you can redistribute it and/or
@@ -23,10 +23,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.CommandHelp;
-import org.tbax.baxshops.CommandHelpArgument;
-import org.tbax.baxshops.Format;
-import org.tbax.baxshops.ShopPlugin;
+import org.tbax.baxshops.*;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.notification.LollipopNotification;
 import org.tbax.baxshops.serialization.StoredPlayer;
@@ -98,7 +95,7 @@ public final class CmdLollipop extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException // tested OK 3-14-19
+    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         String tastiness = LollipopNotification.DEFAULT_TASTINESS;
         if (actor.getNumArgs() == 3) {
@@ -115,6 +112,8 @@ public final class CmdLollipop extends BaxShopCommand
 
         OfflinePlayer sender = actor.getPlayer() == null ? StoredPlayer.DUMMY : actor.getPlayer();
         StoredPlayer recipient = actor.getArgPlayer(1);
+        if (recipient == null)
+            actor.exitError(Resources.NOT_REGISTERED_PLAYER, actor.getArg(1), "before receiving a lollipop");
 
         List<LollipopNotification> otherPops = recipient.getNotifications().stream()
             .filter(n -> n instanceof LollipopNotification)

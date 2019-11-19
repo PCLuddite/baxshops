@@ -71,14 +71,14 @@ public class State_00300 extends LoaderWithNotes
     {
         if (playerName == null)
             return StoredPlayer.ERROR;
-        return players.get(playerName).get(0);
+        return players.getOrCreate(playerName).get(0);
     }
 
     public UUID getPlayerId(String playerName)
     {
         if (playerName == null)
             return StoredPlayer.ERROR_UUID;
-        return players.get(playerName).get(0).getUniqueId();
+        return players.getOrCreate(playerName).get(0).getUniqueId();
     }
 
     public Collection<StoredPlayer> getPlayers()

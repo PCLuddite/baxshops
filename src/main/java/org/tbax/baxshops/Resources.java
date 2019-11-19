@@ -35,7 +35,7 @@ public final class Resources
     public static final String NOT_FOUND_SELECTED = "You do not have any shop selected!\nYou must select a shop to perform this action!";
     // Errors
     public static final String NOT_FOUND_SIGN = "You need a sign %s.";
-    public static final String NOT_ONLINE = "The player needs to be online to use this command.";
+    public static final String NOT_REGISTERED_PLAYER = "%s must log in at least once to %s";
     public static final String NO_ROOM_FOR_ITEM = "You do not have enough room for %d %s";
     public static final String NOT_FOUND_SHOPITEM = "That item has not been added to this shop.\nUse /shop add to add a new item";
     public static final String INVALID_DECIMAL = "The number entered for the %s is invalid.";

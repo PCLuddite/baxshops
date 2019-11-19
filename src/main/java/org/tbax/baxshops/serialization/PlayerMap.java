@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -79,12 +79,12 @@ public class PlayerMap implements Map<UUID, StoredPlayer>
         if (key instanceof UUID)
             return get((UUID)key);
         if (key instanceof String) {
-            List<StoredPlayer> uuids = get((String) key);
-            if (uuids == null || uuids.isEmpty())
+            List<StoredPlayer> players = get((String) key);
+            if (players.isEmpty())
                 return null;
-            if (uuids.size() > 1)
+            if (players.size() > 1)
                 throw new ClassCastException();
-            return uuids.get(0);
+            return players.get(0);
         }
         throw new ClassCastException();
     }
@@ -97,19 +97,29 @@ public class PlayerMap implements Map<UUID, StoredPlayer>
     public List<StoredPlayer> get(String playerName)
     {
         Set<UUID> uuids = playerNames.get(playerName);
-        if (uuids == null) {
-            StoredPlayer player = new StoredPlayer(playerName);
-            uuids = new HashSet<>();
-            uuids.add(player.getUniqueId());
-            players.put(player.getUniqueId(), player);
-            playerNames.put(player.getName(), uuids);
-        }
+        if (uuids == null) return Collections.emptyList();
         StoredPlayer[] ret = new StoredPlayer[uuids.size()];
         int x = 0;
         for (UUID uuid : uuids) {
             ret[x++] = get(uuid);
         }
         return Arrays.asList(ret);
+    }
+
+    public List<StoredPlayer> getOrCreate(String playerName)
+    {
+        List<StoredPlayer> storedPlayers = get(playerName);
+        if (storedPlayers.isEmpty()) {
+            StoredPlayer player = new StoredPlayer(playerName);
+            Set<UUID> uuids = new HashSet<>();
+            uuids.add(player.getUniqueId());
+            players.put(player.getUniqueId(), player);
+            playerNames.put(player.getName(), uuids);
+            return Collections.singletonList(player);
+        }
+        else {
+            return storedPlayers;
+        }
     }
 
     @Override

@@ -183,6 +183,11 @@ public final class SavedState
         return player;
     }
 
+    public List<StoredPlayer> getOfflinePlayerSafe(String playerName)
+    {
+        return players.getOrCreate(playerName);
+    }
+
     public List<StoredPlayer> getOfflinePlayer(String playerName)
     {
         return players.get(playerName);

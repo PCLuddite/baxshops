@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  * Portions derived from Shops Copyright (c) 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * This library is free software; you can redistribute it and/or
@@ -37,7 +37,6 @@ import org.tbax.baxshops.serialization.SavedState;
 import org.tbax.baxshops.serialization.StateFile;
 import org.tbax.baxshops.serialization.StoredPlayer;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -218,7 +217,7 @@ public final class ShopPlugin extends JavaPlugin
         savedState.removeLocation(shopId, loc);
     }
 
-    public static @NotNull OfflinePlayer getOfflinePlayer(UUID uuid)
+    public static StoredPlayer getOfflinePlayer(UUID uuid)
     {
         return savedState.getOfflinePlayer(uuid);
     }
@@ -237,6 +236,11 @@ public final class ShopPlugin extends JavaPlugin
     public static BaxShop getShopByShortId(String shortId)
     {
         return savedState.getShopByShortId(shortId);
+    }
+
+    public static @NotNull List<StoredPlayer> getOfflinePlayerSafe(String playerName)
+    {
+        return savedState.getOfflinePlayerSafe(playerName);
     }
 
     public static @NotNull List<StoredPlayer> getOfflinePlayer(String playerName)
@@ -316,7 +320,6 @@ public final class ShopPlugin extends JavaPlugin
     {
         return econ;
     }
-
     public static void sendInfo(@NotNull CommandSender sender, String message)
     {
         sender.sendMessage(message);
@@ -324,6 +327,7 @@ public final class ShopPlugin extends JavaPlugin
             logPlayerMessage((Player)sender, message);
         }
     }
+
     public static void sendInfo(@NotNull CommandSender sender, String[] message)
     {
         sender.sendMessage(message);
