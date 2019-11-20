@@ -54,9 +54,9 @@ public final class CmdNotifications extends BaxShopCommand
     {
         CommandHelp help = new CommandHelp(this, "show latest notification");
         help.setLongDescription(
-            "Shows your latest notification and remove it from your notification queue.\n" +
-            "A notification can be an offer (e.g., someone wishes to sell you an item)\n" +
-            "or simply a message (e.g., an offer was accepted).\n" +
+            "Shows your latest notification and remove it from your notification queue. " +
+            "A notification can be an offer (e.g., someone wishes to sell you an item) " +
+            "or simply a message (e.g., an offer was accepted). " +
             "Use /shop accept and /shop reject on offers."
         );
         return help;

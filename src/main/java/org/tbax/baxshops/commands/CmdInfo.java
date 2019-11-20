@@ -47,7 +47,7 @@ public final class CmdInfo extends BaxShopCommand
     public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "show more information about an entry");
-        help.setLongDescription("Show extended information about an entry in the selected shop. It is recommended to use this before all major purchases.\n" +
+        help.setLongDescription("Show extended information about an entry in the selected shop. It is recommended to use this before all major purchases. " +
                 ChatColor.ITALIC + "Caveat emptor" + ChatColor.RESET);
         help.setArgs(
             new CommandHelpArgument("item", "the name or shop index of the entry", true)
