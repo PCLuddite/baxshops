@@ -20,6 +20,7 @@
 package org.tbax.baxshops;
 
 import net.milkbowl.vault.economy.Economy;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -128,7 +129,13 @@ public final class ShopPlugin extends JavaPlugin
     {
         StoredPlayer storedPlayer = savedState.getOfflinePlayer(player.getUniqueId());
         Notification n = storedPlayer.peekNote();
-        sendInfo(player, n.getMessage(player));
+        if (n.getSentDate() == null) {
+            sendInfo(player, n.getMessage(player));
+        }
+        else {
+            sendInfo(player, String.format("%s[%tD %2$tl:%2$tM %2$tp]%s %s", ChatColor.DARK_GRAY,
+                    n.getSentDate(), ChatColor.RESET, n.getMessage(player)));
+        }
         if (n instanceof Request) {
             ShopPlugin.sendMessage(player, String.format("Use %s or %s to manage this request.",
                 Format.command("/shop accept"),
@@ -338,9 +345,7 @@ public final class ShopPlugin extends JavaPlugin
 
     public static void sendMessage(@NotNull CommandSender sender, String message)
     {
-        for (String line : Format.wordWrap(message)) {
-            sender.sendMessage(line);
-        }
+        sender.sendMessage(Format.wordWrap(message));
     }
 
     public static void logPlayerMessage(Player pl, String message)
