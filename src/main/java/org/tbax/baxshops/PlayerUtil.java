@@ -157,11 +157,11 @@ public final class PlayerUtil
             return true;
         }
         catch (CommandErrorException | CommandWarningException e) {
-            player.sendMessage(e.getMessage());
+            ShopPlugin.sendMessage(player, e.getMessage());
             return false;
         }
         catch (PrematureAbortException e) {
-            player.sendMessage(e.getMessage());
+            ShopPlugin.sendMessage(player, e.getMessage());
             return true;
         }
     }

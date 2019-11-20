@@ -93,7 +93,7 @@ public class EventListener implements Listener
         }
         catch (PrematureAbortException e) {
             event.setCancelled(true);
-            event.getPlayer().sendMessage(e.getMessage());
+            ShopPlugin.sendMessage(event.getPlayer(), e.getMessage());
         }
     }
 
@@ -112,7 +112,7 @@ public class EventListener implements Listener
             if (b.hasMetadata("shopid")) {
                 shop = ShopPlugin.getShop(UUID.fromString(b.getMetadata("shopid").get(0).asString()));
                 if (shop == null) {
-                    event.getPlayer().sendMessage("This shop has been closed.");
+                    ShopPlugin.sendMessage(event.getPlayer(),"This shop has been closed.");
                     return;
                 }
             }
@@ -225,7 +225,7 @@ public class EventListener implements Listener
         }
         catch (PrematureAbortException e) {
             event.setCancelled(true);
-            event.getPlayer().sendMessage(e.getMessage());
+            ShopPlugin.sendMessage(event.getPlayer(), e.getMessage());
         }
     }
     
@@ -248,7 +248,7 @@ public class EventListener implements Listener
     {
         StoredPlayer player = ShopPlugin.getSavedState().joinPlayer(event.getPlayer());
         if (player.hasNotes()) {
-            event.getPlayer().sendMessage(ChatColor.WHITE + "You have new notifications. Use " + Format.command("/shop notifications") + ChatColor.WHITE + " to view them");
+            ShopPlugin.sendMessage(event.getPlayer(), ChatColor.WHITE + "You have new notifications. Use " + Format.command("/shop notifications") + ChatColor.WHITE + " to view them");
         }
     }
 

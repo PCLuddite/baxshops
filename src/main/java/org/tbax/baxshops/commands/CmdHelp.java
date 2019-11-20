@@ -96,7 +96,7 @@ public final class CmdHelp extends BaxShopCommand
         }
         if (actor.isArgInt(1)) {
             actor.getSender().sendMessage("Use this to lookup information on specific commands.");
-            actor.getSender().sendMessage(String.format("To lookup a command, use:\n%s", Format.command("/shop help <command>")));
+            actor.getSender().sendMessage(String.format("To lookup a command, use: %s", Format.command("/shop help <command>")));
             showHelpList(actor, actor.getArgInt(1) - 1);
         }
         else {

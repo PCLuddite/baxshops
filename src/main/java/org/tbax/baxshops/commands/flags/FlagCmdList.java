@@ -66,10 +66,10 @@ public final class FlagCmdList extends FlagCmd
             actor.exitError("You do not have permission to view this shop's flags");
         }
         actor.getSender().sendMessage("\nFlags currently applied to this shop:");
-        actor.getSender().sendMessage(String.format("%-20s: %s", Format.flag("Infinite"), Format.keyword(shop.hasFlagInfinite() ? "Yes" : "No")));
-        actor.getSender().sendMessage(String.format("%-20s: %s", Format.flag("Sell to Shop"), Format.keyword(shop.hasFlagSellToShop() ? "Yes" : "No")));
-        actor.getSender().sendMessage(String.format("%-20s: %s", Format.flag("Sell Requests"), Format.keyword(shop.hasFlagSellRequests() ? "Yes" : "No")));
-        actor.getSender().sendMessage(String.format("%-20s: %s", Format.flag("Buy Requests"), Format.keyword(shop.hasFlagBuyRequests() ? "Yes" : "No")));
+        actor.getSender().sendMessage(String.format("%s: %s", Format.flag("Infinite"), Format.keyword(shop.hasFlagInfinite() ? "Yes" : "No")));
+        actor.getSender().sendMessage(String.format("%s: %s", Format.flag("Sell to Shop"), Format.keyword(shop.hasFlagSellToShop() ? "Yes" : "No")));
+        actor.getSender().sendMessage(String.format("%s: %s", Format.flag("Sell Requests"), Format.keyword(shop.hasFlagSellRequests() ? "Yes" : "No")));
+        actor.getSender().sendMessage(String.format("%s: %s", Format.flag("Buy Requests"), Format.keyword(shop.hasFlagBuyRequests() ? "Yes" : "No")));
         if (actor.isAdmin()) {
             actor.getSender().sendMessage(String.format("%-20s: %s", Format.flag("Smart Stack"), Format.keyword(shop.hasFlagSmartStack() ? "Yes" : "No")));
         }

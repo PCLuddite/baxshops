@@ -18,6 +18,7 @@
  */
 package org.tbax.baxshops;
 
+import net.milkbowl.vault.chat.Chat;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
@@ -26,8 +27,7 @@ import org.jetbrains.annotations.Nullable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Methods for formatting strings
@@ -328,5 +328,57 @@ public final class Format
             }
         }
         return sb.toString();
+    }
+
+    public static int countVisibleCharacters(String message)
+    {
+        int count = 0;
+        for(int i = 0; i < message.length(); ++i) {
+            if (message.charAt(i) == ChatColor.COLOR_CHAR) {
+                ++i;
+            }
+            else {
+                ++count;
+            }
+        }
+        return count;
+    }
+
+    public static @NotNull String[] wordWrap(String message)
+    {
+        final int MAX_LINE_LENGTH = 52;
+        StringBuilder sb = new StringBuilder();
+        Scanner scanner = new Scanner(message.replace('\n', ' '));
+        int currentLine = 0;
+        Set<ChatColor> modifiers = new HashSet<>();
+        while(scanner.hasNext()) {
+            String word = scanner.next();
+            int chars = 0;
+            for (int i = 0; i < word.length(); ++i) {
+                if (word.charAt(i) == ChatColor.COLOR_CHAR) {
+                    ChatColor color = ChatColor.getByChar(word.charAt(++i));
+                    if (color == ChatColor.RESET) {
+                        modifiers.clear();
+                    }
+                    else {
+                        modifiers.add(color);
+                    }
+                }
+                else {
+                    ++chars;
+                }
+            }
+            if (chars + currentLine > MAX_LINE_LENGTH) {
+                currentLine = 0;
+                sb.append('\n');
+                for (ChatColor color : modifiers) {
+                    sb.append(color);
+                }
+            }
+            sb.append(word);
+            if (scanner.hasNext()) sb.append(' ');
+            currentLine += word.length();
+        }
+        return sb.toString().split("\\n");
     }
 }

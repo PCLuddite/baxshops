@@ -22,6 +22,7 @@ package org.tbax.baxshops.commands;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.CommandHelp;
+import org.tbax.baxshops.ShopPlugin;
 import org.tbax.baxshops.errors.PrematureAbortException;
 
 import java.util.Comparator;
@@ -88,6 +89,6 @@ public final class CmdAlphabetize extends BaxShopCommand
     public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         actor.getShop().sort(Comparator.comparing(BaxEntry::getName));
-        actor.sendMessage("Shop inventory is now sorted alphabetically");
+        ShopPlugin.sendMessage(actor, "Shop inventory is now sorted alphabetically");
     }
 }

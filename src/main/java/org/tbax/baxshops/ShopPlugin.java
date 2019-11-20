@@ -109,12 +109,12 @@ public final class ShopPlugin extends JavaPlugin
         StoredPlayer storedPlayer = savedState.getOfflinePlayer(player.getUniqueId());
         Collection<Notification> notifications = storedPlayer.getNotifications();
         if (notifications.isEmpty()) {
-            player.sendMessage("You have no new notifications");
+            ShopPlugin.sendMessage(player, "You have no new notifications");
             return 0;
         }
         else {
             int size = notifications.size();
-            player.sendMessage(String.format("You have %s notification%s", Format.number(size), size == 1 ? "" : "s"));
+            ShopPlugin.sendMessage(player, String.format("You have %s notification%s", Format.number(size), size == 1 ? "" : "s"));
             return size;
         }
     }
@@ -130,13 +130,13 @@ public final class ShopPlugin extends JavaPlugin
         Notification n = storedPlayer.peekNote();
         sendInfo(player, n.getMessage(player));
         if (n instanceof Request) {
-            player.sendMessage(String.format("Use %s or %s to manage this request.",
+            ShopPlugin.sendMessage(player, String.format("Use %s or %s to manage this request.",
                 Format.command("/shop accept"),
                 Format.command("/shop reject"))
             );
         }
         else if (n instanceof Claimable) {
-            player.sendMessage(String.format("Use %s to claim and remove this notification.",
+            ShopPlugin.sendMessage(player, String.format("Use %s to claim and remove this notification.",
                 Format.command("/shop claim"))
             );
         }
@@ -320,9 +320,10 @@ public final class ShopPlugin extends JavaPlugin
     {
         return econ;
     }
+
     public static void sendInfo(@NotNull CommandSender sender, String message)
     {
-        sender.sendMessage(message);
+        sendMessage(sender, message);
         if (stateFile.getConfig().isLogNotes() && sender instanceof Player) {
             logPlayerMessage((Player)sender, message);
         }
@@ -330,9 +331,15 @@ public final class ShopPlugin extends JavaPlugin
 
     public static void sendInfo(@NotNull CommandSender sender, String[] message)
     {
-        sender.sendMessage(message);
-        if (stateFile.getConfig().isLogNotes() && sender instanceof Player) {
-            logPlayerMessage((Player)sender, String.join("\n", message));
+        for (String line : message) {
+            sendInfo(sender, line);
+        }
+    }
+
+    public static void sendMessage(@NotNull CommandSender sender, String message)
+    {
+        for (String line : Format.wordWrap(message)) {
+            sender.sendMessage(line);
         }
     }
 
