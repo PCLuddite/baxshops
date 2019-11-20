@@ -381,6 +381,10 @@ public final class Format
                 currentLine += chars;
             }
         }
-        return sb.toString().split("\\n");
+        String[] lines = sb.toString().split("\\n");
+        for (int n = 1; n < lines.length; ++n) {
+            lines[n] = ChatColor.getLastColors(lines[n - 1]) + lines[n];
+        }
+        return lines;
     }
 }
