@@ -40,7 +40,7 @@ public final class CmdSetFoodLevel extends BaxShopCommand
     @Override
     public String getPermission()
     {
-        return null;
+        return "shops.admin";
     }
 
     @Override
