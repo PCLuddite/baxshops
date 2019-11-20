@@ -82,10 +82,6 @@ public final class CommandHelpArgument
 
     public String toString()
     {
-        return String.format("%s%s %s-%s %s",
-            ChatColor.AQUA, argument,
-            ChatColor.GRAY, ChatColor.WHITE,
-            description
-        );
+        return ChatColor.GOLD + argument + ChatColor.GRAY + ": " + description;
     }
 }

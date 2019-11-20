@@ -46,6 +46,9 @@ public final class CommandHelp
     {
         command = cmdName;
         this.aliases = aliases;
+        if (aliases != null && aliases.length == 1 && command.equalsIgnoreCase(aliases[0])) {
+            this.aliases = null;
+        }
         this.shortDescription = shortDescription;
     }
 
@@ -102,7 +105,8 @@ public final class CommandHelp
     public @NotNull String getUsageString()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append(ChatColor.AQUA).append("Usage: ").append(ChatColor.WHITE).append("/shop ").append(command);
+        sb.append(ChatColor.BLUE).append("Usage: ").append(ChatColor.GRAY).append("/shop ")
+                .append(ChatColor.DARK_AQUA).append(command).append(ChatColor.GRAY);
         if (args != null) {
             for (CommandHelpArgument arg : args) {
                 sb.append(" ").append(arg.getUsageString());
@@ -114,7 +118,6 @@ public final class CommandHelp
     public @NotNull String getAliasString()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append(ChatColor.AQUA);
         for(String alias : aliases) {
             if (!command.equalsIgnoreCase(alias)) {
                 sb.append(" ").append(alias);
@@ -128,15 +131,19 @@ public final class CommandHelp
     {
         StringBuilder sb = new StringBuilder();
         sb.append(Format.header(String.format("Help: /shop %s", command))).append('\n');
+        sb.append(getUsageString());
+        if (aliases != null && aliases.length != 0) {
+            sb.append('\n').append(ChatColor.BLUE).append("Aliases: ").append(ChatColor.GRAY).append(getAliasString());
+        }
+        sb.append('\n');
+        sb.append('\n');
         if (longDescription != null) {
-            sb.append(ChatColor.WHITE).append(longDescription).append('\n');
+            for (String line : Format.wordWrap(longDescription)) {
+                sb.append(ChatColor.GRAY).append(line).append('\n');
+            }
         }
         else {
-            sb.append(ChatColor.WHITE).append(shortDescription).append('\n');
-        }
-        sb.append(getUsageString()).append('\n');
-        if (aliases != null && aliases.length != 0) {
-            sb.append(getAliasString()).append('\n');
+            sb.append(ChatColor.GRAY).append(shortDescription);
         }
         if (args != null) {
             for (CommandHelpArgument arg : args) {

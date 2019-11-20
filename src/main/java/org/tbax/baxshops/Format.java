@@ -346,11 +346,11 @@ public final class Format
 
     public static @NotNull String[] wordWrap(String message)
     {
-        final int MAX_LINE_LENGTH = 52;
+        final int MAX_LINE_LENGTH = 50;
         StringBuilder sb = new StringBuilder();
         Scanner scanner = new Scanner(message.replace('\n', ' '));
         int currentLine = 0;
-        Set<ChatColor> modifiers = new HashSet<>();
+        List<ChatColor> modifiers = new ArrayList<>();
         while(scanner.hasNext()) {
             String word = scanner.next();
             int chars = 0;

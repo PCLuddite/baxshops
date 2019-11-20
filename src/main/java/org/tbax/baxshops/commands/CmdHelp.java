@@ -111,7 +111,7 @@ public final class CmdHelp extends BaxShopCommand
             else if (!cmd.hasPermission(actor)) {
                 actor.sendError("You do not have permission to view the documentation for this command");
             }
-            actor.getSender().sendMessage(help.toString());
+            actor.getSender().sendMessage(help.toString().split("\\n"));
         }
     }
 

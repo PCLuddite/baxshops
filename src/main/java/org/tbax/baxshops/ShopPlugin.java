@@ -285,7 +285,7 @@ public final class ShopPlugin extends JavaPlugin
     {
         try {
             if (!cmd.hasValidArgCount(actor)) {
-                actor.getSender().sendMessage(cmd.getHelp(actor).toString());
+                actor.getSender().sendMessage(cmd.getHelp(actor).toString().split("\\n"));
                 logPlayerMessage(actor.getPlayer(), "Command help was sent to player");
             }
             else if(!cmd.hasPermission(actor)) {
