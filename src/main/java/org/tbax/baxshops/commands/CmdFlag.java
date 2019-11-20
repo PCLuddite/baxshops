@@ -18,6 +18,7 @@
  */
 package org.tbax.baxshops.commands;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
@@ -68,8 +69,8 @@ public final class CmdFlag extends BaxShopCommand
     public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "manage shop flags");
-        StringBuilder description = new StringBuilder("Set a specific flag or list all flags applied to a selected shop.");
-        description.append("\nThe following flags are available:");
+        StringBuilder description = new StringBuilder("Set a specific flag or list all flags applied to a selected shop.\n");
+        description.append("\nThe following flags are available:\n");
 
         List<FlagCmd> flags = flagCmds.values().stream()
                 .filter(cmd -> cmd.hasPermission(actor))
@@ -80,7 +81,7 @@ public final class CmdFlag extends BaxShopCommand
 
         for (FlagCmd cmd : flags) {
             description.append("\n");
-            description.append(cmd.getName()).append(" - ").append(cmd.getHelp(actor).getShortDescription());
+            description.append(cmd.getName()).append(": ").append(cmd.getHelp(actor).getShortDescription());
         }
 
         help.setLongDescription(description.toString());

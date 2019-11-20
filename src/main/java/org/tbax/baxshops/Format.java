@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,7 +18,6 @@
  */
 package org.tbax.baxshops;
 
-import net.milkbowl.vault.chat.Chat;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
@@ -348,36 +347,39 @@ public final class Format
     {
         final int MAX_LINE_LENGTH = 50;
         StringBuilder sb = new StringBuilder();
-        Scanner scanner = new Scanner(message.replace('\n', ' '));
-        int currentLine = 0;
-        List<ChatColor> modifiers = new ArrayList<>();
-        while(scanner.hasNext()) {
-            String word = scanner.next();
-            int chars = 0;
-            for (int i = 0; i < word.length(); ++i) {
-                if (word.charAt(i) == ChatColor.COLOR_CHAR) {
-                    ChatColor color = ChatColor.getByChar(word.charAt(++i));
-                    if (color == ChatColor.RESET) {
-                        modifiers.clear();
+        for(String line : message.split("\\n")) {
+            if (sb.length() > 0) sb.append("\n");
+            Scanner scanner = new Scanner(line);
+            int currentLine = 0;
+            List<ChatColor> modifiers = new ArrayList<>();
+            while (scanner.hasNext()) {
+                String word = scanner.next();
+                int chars = 0;
+                for (int i = 0; i < word.length(); ++i) {
+                    if (word.charAt(i) == ChatColor.COLOR_CHAR) {
+                        ChatColor color = ChatColor.getByChar(word.charAt(++i));
+                        if (color == ChatColor.RESET) {
+                            modifiers.clear();
+                        }
+                        else {
+                            modifiers.add(color);
+                        }
                     }
                     else {
-                        modifiers.add(color);
+                        ++chars;
                     }
                 }
-                else {
-                    ++chars;
+                if (chars + currentLine > MAX_LINE_LENGTH) {
+                    currentLine = 0;
+                    sb.append('\n');
+                    for (ChatColor color : modifiers) {
+                        sb.append(color);
+                    }
                 }
+                sb.append(word);
+                if (scanner.hasNext()) sb.append(' ');
+                currentLine += chars;
             }
-            if (chars + currentLine > MAX_LINE_LENGTH) {
-                currentLine = 0;
-                sb.append('\n');
-                for (ChatColor color : modifiers) {
-                    sb.append(color);
-                }
-            }
-            sb.append(word);
-            if (scanner.hasNext()) sb.append(' ');
-            currentLine += word.length();
         }
         return sb.toString().split("\\n");
     }
