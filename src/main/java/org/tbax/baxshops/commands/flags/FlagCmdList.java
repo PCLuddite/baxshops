@@ -41,7 +41,9 @@ public final class FlagCmdList extends FlagCmd
     @Override
     public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
-        return null;
+        CommandHelp help = new CommandHelp(this, "list all flags");
+        help.setLongDescription("List all flags currently applied to this shop");
+        return help;
     }
 
     @Override
@@ -68,7 +70,9 @@ public final class FlagCmdList extends FlagCmd
         actor.getSender().sendMessage(String.format("%-20s: %s", Format.flag("Sell to Shop"), Format.keyword(shop.hasFlagSellToShop() ? "Yes" : "No")));
         actor.getSender().sendMessage(String.format("%-20s: %s", Format.flag("Sell Requests"), Format.keyword(shop.hasFlagSellRequests() ? "Yes" : "No")));
         actor.getSender().sendMessage(String.format("%-20s: %s", Format.flag("Buy Requests"), Format.keyword(shop.hasFlagBuyRequests() ? "Yes" : "No")));
-        actor.getSender().sendMessage(String.format("%-20s: %s", Format.flag("Smart Stack"), Format.keyword(shop.hasFlagSmartStack() ? "Yes" : "No")));
+        if (actor.isAdmin()) {
+            actor.getSender().sendMessage(String.format("%-20s: %s", Format.flag("Smart Stack"), Format.keyword(shop.hasFlagSmartStack() ? "Yes" : "No")));
+        }
     }
 
     @Override

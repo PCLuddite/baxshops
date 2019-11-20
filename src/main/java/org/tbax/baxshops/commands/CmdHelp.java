@@ -19,6 +19,7 @@
  */
 package org.tbax.baxshops.commands;
 
+import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.*;
 import org.tbax.baxshops.errors.PrematureAbortException;
@@ -127,7 +128,8 @@ public final class CmdHelp extends BaxShopCommand
                 stop = (page + 1) * ShopSelection.ITEMS_PER_PAGE,
                 max = Math.min(stop, commands.size());
         for (; i < max; ++i) {
-            actor.getSender().sendMessage(commands.get(i).getHelp(actor).getName());
+            CommandHelp help = commands.get(i).getHelp(actor);
+            actor.getSender().sendMessage(String.format("%s%s: %s", Format.command(help.getName()), ChatColor.GRAY, help.getShortDescription()));
         }
         for (; i < stop; i++) {
             actor.getSender().sendMessage("");

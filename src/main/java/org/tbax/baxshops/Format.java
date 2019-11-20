@@ -139,7 +139,9 @@ public final class Format
     
     public static @NotNull String command(@NotNull String cmd)
     {
-        return reset(ChatColor.AQUA + cmd);
+        int space = cmd.indexOf(' ');
+        if (space < 0) return reset(ChatColor.GOLD + cmd);
+        return reset(ChatColor.GOLD + cmd.substring(0, space) + ChatColor.GRAY + cmd.substring(space));
     }
     
     public static @NotNull String retailPrice(@NotNull String price)
