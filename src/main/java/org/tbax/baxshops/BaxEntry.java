@@ -79,7 +79,7 @@ public final class BaxEntry implements UpgradeableSerializable
             stack = ItemStack.deserialize((Map) map.get("stack"));
         }
         quantity = map.getInteger("quantity");
-        buySell = CAN_BUY;
+        buySell = CAN_BUY | (refundPrice >= 0 ? CAN_SELL : 0);
     }
 
     @Override @SuppressWarnings("unchecked")
@@ -91,7 +91,7 @@ public final class BaxEntry implements UpgradeableSerializable
         if (map.get("stack") instanceof Map) {
             stack = ItemStack.deserialize((Map) map.get("stack"));
         }
-        buySell = CAN_BUY;
+        buySell = CAN_BUY | (refundPrice >= 0 ? CAN_SELL : 0);
     }
 
     @Override
