@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -104,6 +104,11 @@ public abstract class StandardNote implements Notification, UpgradeableSerializa
     public @Nullable Date getSentDate()
     {
         return date;
+    }
+
+    public void setSentDate(@Nullable Date sentDate)
+    {
+        date = sentDate;
     }
 
     public @NotNull OfflinePlayer getBuyer()

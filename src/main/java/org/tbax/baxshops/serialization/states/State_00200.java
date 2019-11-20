@@ -28,11 +28,11 @@ import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.ShopPlugin;
 import org.tbax.baxshops.items.ItemUtil;
+import org.tbax.baxshops.notification.Notification;
 import org.tbax.baxshops.serialization.PlayerMap;
 import org.tbax.baxshops.serialization.SavedState;
 import org.tbax.baxshops.serialization.StateLoader;
 import org.tbax.baxshops.serialization.StoredPlayer;
-import tbax.shops.notification.Notification;
 import tbax.shops.serialization.JsonState;
 
 import java.io.File;
@@ -117,10 +117,12 @@ public class State_00200 implements StateLoader
         ShopPlugin.logInfo("Loading notification data...");
         jsonState.loadNotes(this, rootObject.get("notes").getAsJsonObject());
         ShopPlugin.logInfo("Converting notification data...");
-        for (Map.Entry<String, ArrayDeque<Notification>> entry : jsonState.pending.entrySet()) {
+        for (Map.Entry<String, ArrayDeque<tbax.shops.notification.Notification>> entry : jsonState.pending.entrySet()) {
             StoredPlayer player = registerPlayer(entry.getKey());
             while (!entry.getValue().isEmpty()) {
-                player.queueNote(entry.getValue().removeFirst().getNewNote(this));
+                Notification newNote = entry.getValue().removeFirst().getNewNote(this);
+                newNote.setSentDate(null);
+                player.queueNote(newNote);
             }
         }
         return players.values();

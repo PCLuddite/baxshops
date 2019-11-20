@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -103,6 +103,12 @@ public class HeadlessShopClaim implements Claimable, UpgradeableSerializable
     public @Nullable Date getSentDate()
     {
         return date;
+    }
+
+    @Override
+    public void setSentDate(@Nullable Date sentDate)
+    {
+        date = sentDate;
     }
 
     @Override

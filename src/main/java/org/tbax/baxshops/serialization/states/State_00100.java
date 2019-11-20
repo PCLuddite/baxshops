@@ -104,7 +104,9 @@ public class State_00100 implements StateLoader
         for (Map.Entry<String, ArrayDeque<tbax.shops.notification.Notification>> entry : state2.pending.entrySet()) {
             StoredPlayer player = registerPlayer(entry.getKey());
             for (tbax.shops.notification.Notification note : entry.getValue()) {
-                player.queueNote(note.getNewNote(this));
+                Notification newNote = note.getNewNote(this);
+                newNote.setSentDate(null);
+                player.queueNote(newNote);
             }
 
             if (StoredPlayer.DUMMY.equals(player)) {

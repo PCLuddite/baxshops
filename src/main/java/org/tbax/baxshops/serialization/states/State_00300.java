@@ -153,11 +153,12 @@ public class State_00300 extends LoaderWithNotes
                 for (Object o : (List)entry.getValue()) {
                     Notification n = null;
                     if (o instanceof Notification) {
-                        n = (Notification) o;
+                        n = (Notification)o;
                         pending.add(n);
                     }
                     else if (o instanceof DeprecatedNote) {
                         n = ((DeprecatedNote)o).getNewNote(this);
+                        n.setSentDate(null);
                         pending.add(n);
                     }
                     else {

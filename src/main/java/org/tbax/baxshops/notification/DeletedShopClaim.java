@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -21,6 +21,7 @@ package org.tbax.baxshops.notification;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.Format;
 import org.tbax.baxshops.ShopPlugin;
@@ -124,6 +125,12 @@ public final class DeletedShopClaim implements UpgradeableSerializable, Claimabl
     public Date getSentDate()
     {
         return date;
+    }
+
+    @Override
+    public void setSentDate(@Nullable Date sentDate)
+    {
+        date = sentDate;
     }
 
     public static DeletedShopClaim deserialize(Map<String, Object> args)

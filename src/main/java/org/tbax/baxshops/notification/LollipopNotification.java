@@ -22,6 +22,7 @@ package org.tbax.baxshops.notification;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.tbax.baxshops.Format;
 import org.tbax.baxshops.ShopPlugin;
 import org.tbax.baxshops.serialization.SafeMap;
@@ -165,6 +166,12 @@ public final class LollipopNotification implements Notification, UpgradeableSeri
     public Date getSentDate()
     {
         return date;
+    }
+
+    @Override
+    public void setSentDate(@Nullable Date sentDate)
+    {
+        date = sentDate;
     }
 
     public static LollipopNotification deserialize(Map<String, Object> args)

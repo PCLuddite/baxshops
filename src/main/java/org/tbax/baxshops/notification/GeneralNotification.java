@@ -71,6 +71,12 @@ public class GeneralNotification implements Notification, UpgradeableSerializabl
     }
 
     @Override
+    public void setSentDate(@Nullable Date sentDate)
+    {
+        date = sentDate;
+    }
+
+    @Override
     public @NotNull UUID getRecipientId()
     {
         return recipientId;

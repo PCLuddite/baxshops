@@ -91,7 +91,9 @@ public class State_00000 implements StateLoader
         for (Map.Entry<String, ArrayDeque<qs.shops.notification.Notification>> entry : nathanState.pending.entrySet()) {
             StoredPlayer player = registerPlayer(entry.getKey());
             for (qs.shops.notification.Notification note : entry.getValue()) {
-                player.queueNote(note.getNewNote(this));
+                Notification newNote = note.getNewNote(this);
+                newNote.setSentDate(null);
+                player.queueNote(newNote);
             }
 
             if (StoredPlayer.DUMMY.equals(player)) {
