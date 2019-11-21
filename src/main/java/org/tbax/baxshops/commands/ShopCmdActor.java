@@ -199,9 +199,9 @@ public final class ShopCmdActor implements CommandSender
         return false;
     }
 
-    public ShopSelection getSelection()
+    public @Nullable ShopSelection getSelection()
     {
-        return ShopPlugin.getSelection(getPlayer());
+        return getPlayer() == null ? null : ShopPlugin.getSelection(getPlayer());
     }
     
     public int getNumArgs()
