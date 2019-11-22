@@ -343,48 +343,50 @@ public final class Format
         return count;
     }
 
-    public static @NotNull String[] wordWrap(String message)
+    public static @NotNull String wordWrap(String input)
     {
         final int MAX_LINE_LENGTH = 50;
-        StringBuilder sb = new StringBuilder();
-        for(String line : message.split("\\n")) {
-            if (sb.length() > 0) sb.append("\n");
-            Scanner scanner = new Scanner(line);
-            int currentLine = 0;
-            List<ChatColor> modifiers = new ArrayList<>();
-            while (scanner.hasNext()) {
-                String word = scanner.next();
-                int chars = 0;
-                for (int i = 0; i < word.length(); ++i) {
-                    if (word.charAt(i) == ChatColor.COLOR_CHAR) {
-                        ChatColor color = ChatColor.getByChar(word.charAt(++i));
-                        if (color == ChatColor.RESET) {
-                            modifiers.clear();
-                        }
-                        else {
-                            modifiers.add(color);
-                        }
+
+        StringBuilder output = new StringBuilder(input.length() * 2);
+        StringBuilder word = new StringBuilder(input.length());
+        StringBuilder formats = new StringBuilder(input.length());
+
+        int lineCount = 0, wordCount = 0;
+
+        for(int index = 0; index < input.length() + 1; ++index) {
+            char c = index < input.length() ? input.charAt(index) : '\0';
+            ChatColor format;
+            if (Character.isWhitespace(c) || c == '\0') {
+                if (lineCount + wordCount > MAX_LINE_LENGTH) {
+                    output.append('\n');
+                    output.append(formats);
+                    lineCount = 0;
+                }
+                output.append(word);
+                if (c != '\0') output.append(c);
+                if (c == '\n') {
+                    output.append(formats);
+                    lineCount = 0;
+                }
+                lineCount += wordCount;
+                word.setLength(0);
+                wordCount = 0;
+            }
+            else {
+                if (c == ChatColor.COLOR_CHAR && index + 1 < input.length() && (format = ChatColor.getByChar(c = input.charAt(index + 1))) != null) {
+                    word.append(ChatColor.COLOR_CHAR);
+                    if (format == ChatColor.RESET) {
+                        formats.setLength(0);
                     }
                     else {
-                        ++chars;
+                        formats.append(format);
                     }
+                    ++index;
                 }
-                if (chars + currentLine > MAX_LINE_LENGTH) {
-                    currentLine = 0;
-                    sb.append('\n');
-                    for (ChatColor color : modifiers) {
-                        sb.append(color);
-                    }
-                }
-                sb.append(word);
-                if (scanner.hasNext()) sb.append(' ');
-                currentLine += chars;
+                word.append(c);
+                ++wordCount;
             }
         }
-        String[] lines = sb.toString().split("\\n");
-        for (int n = 1; n < lines.length; ++n) {
-            lines[n] = ChatColor.getLastColors(lines[n - 1]) + lines[n];
-        }
-        return lines;
+        return output.toString();
     }
 }

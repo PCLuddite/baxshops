@@ -138,9 +138,7 @@ public final class CommandHelp
         sb.append('\n');
         sb.append('\n');
         if (longDescription != null) {
-            for (String line : Format.wordWrap(longDescription)) {
-                sb.append(ChatColor.GRAY).append(line).append('\n');
-            }
+            sb.append(Format.wordWrap(ChatColor.GRAY + longDescription)).append('\n');
         }
         else {
             sb.append(ChatColor.GRAY).append(shortDescription);
