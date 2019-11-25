@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -427,6 +427,15 @@ public final class ItemUtil
         return SIGN_TYPES;
     }
 
+    public static List<ItemStack> getSignTypesAsItems()
+    {
+        ItemStack[] stacks = new ItemStack[SIGN_TYPES.size()];
+        for(int i = 0; i < SIGN_TYPES.size(); ++i) {
+            stacks[i] = new ItemStack(SIGN_TYPES.get(i), 1);
+        }
+        return Arrays.asList(stacks);
+    }
+
     public static ItemStack newDefaultSign()
     {
         return new ItemStack(getDefaultSignType(), 1);
@@ -443,12 +452,15 @@ public final class ItemUtil
         return m == null ? sign : m;
     }
 
-    public static Map<Integer, ? extends ItemStack> all(Inventory inventory, List<Material> materials)
+    public static Map<Integer, ? extends ItemStack> all(Inventory inventory, List<ItemStack> itemStacks)
     {
         Map<Integer, ItemStack> all = new HashMap<>();
-        for (Material material : materials) {
-            for(Map.Entry<? extends Integer, ? extends ItemStack> entry : inventory.all(material).entrySet()) {
-                all.put(entry.getKey(), entry.getValue());
+        for(int idx = 0; idx < inventory.getSize(); ++idx) {
+            ItemStack item = inventory.getItem(idx);
+            for (ItemStack other : itemStacks) {
+                if (other.isSimilar(item)) {
+                    all.put(idx, other);
+                }
             }
         }
         return all;

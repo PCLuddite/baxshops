@@ -463,7 +463,7 @@ public final class PlayerUtil
             return LegacyPlayerUtil.getItemInHand(player);
         }
 
-        Map<Integer, ? extends ItemStack> signs = ItemUtil.all(player.getInventory(), ItemUtil.getSignTypes());
+        Map<Integer, ? extends ItemStack> signs = ItemUtil.all(player.getInventory(), ItemUtil.getSignTypesAsItems());
         if (signs.isEmpty()) {
             return null;
         }
