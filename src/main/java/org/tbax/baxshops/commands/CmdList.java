@@ -21,10 +21,14 @@ package org.tbax.baxshops.commands;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
+import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.CommandHelpArgument;
 import org.tbax.baxshops.Format;
 import org.tbax.baxshops.ShopSelection;
-import org.tbax.baxshops.CommandHelp;
+import org.tbax.baxshops.errors.PrematureAbortException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class CmdList extends BaxShopCommand
 {
@@ -54,7 +58,7 @@ public final class CmdList extends BaxShopCommand
     @Override
     public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
     {
-        return actor.getNumArgs() == 1;
+        return actor.getNumArgs() == 1 || actor.getNumArgs() == 2;
     }
 
     @Override
@@ -82,23 +86,43 @@ public final class CmdList extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor)
+    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
-        ShopSelection selection = actor.getSelection();
-        actor.sendMessage(Format.header("Shop Locations"));
-        if (!selection.getShop().getLocations().isEmpty()) {
-            int index = 0;
-            actor.sendMessage(" %-3s %-16s %-18s", ChatColor.GRAY + "#", ChatColor.WHITE + "Location", ChatColor.WHITE + "Sign Text");
-            for(Location loc : selection.getShop().getLocations()) {
-                actor.sendMessage("%-3s %-16s %-18s %s",
-                                ChatColor.WHITE.toString() + ++index + ".",
-                                Format.location(loc),
-                                ChatColor.LIGHT_PURPLE + selection.getShop().getSignTextString(loc),
-                                (selection.getLocation().equals(loc) ? ChatColor.LIGHT_PURPLE + " (current)" : ""));
+        if (actor.getNumArgs() == 1) {
+            actor.appendArg(1); // show page 1 by default
+        }
+
+        if (actor.getShop().getLocations().size() > 1) {
+            int page = actor.getArgInt(1) - 1;
+            if (page < 0 || page > actor.getShop().getLocations().size()) {
+                actor.exitError("That's not a valid page number");
             }
+            actor.sendMessage("Shop Locations");
+            showLocList(actor, page);
         }
         else {
             actor.sendMessage(ChatColor.YELLOW + "This shop has no other locations.");
+        }
+    }
+
+    private void showLocList(@NotNull ShopCmdActor actor, int page)
+    {
+        List<Location> locations = new ArrayList<>(actor.getShop().getLocations());
+        int pages = (int)Math.ceil((double)locations.size() / ShopSelection.ITEMS_PER_PAGE);
+        actor.getSender().sendMessage(Format.header(String.format("Showing page %d of %d", page + 1, pages)));
+        int i = page * ShopSelection.ITEMS_PER_PAGE,
+                stop = (page + 1) * ShopSelection.ITEMS_PER_PAGE,
+                max = Math.min(stop, locations.size());
+        for (; i < max; ++i) {
+            Location loc = locations.get(i);
+            actor.sendMessage("%-3s %-16s %-18s %s",
+                    ChatColor.WHITE.toString() + i + ".",
+                    Format.location(loc),
+                    ChatColor.LIGHT_PURPLE + actor.getShop().getSignTextString(loc),
+                    (actor.getSelection().getLocation().equals(loc) ? ChatColor.LIGHT_PURPLE + " (current)" : ""));
+        }
+        for (; i < stop; i++) {
+            actor.getSender().sendMessage("");
         }
     }
 }
