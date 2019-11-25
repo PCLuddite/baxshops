@@ -77,11 +77,13 @@ public final class ShopPlugin extends JavaPlugin
             commands.add(CmdList.class);
             commands.add(CmdLollipop.class);
             commands.add(CmdNotifications.class);
+            commands.add(CmdPage.class);
             commands.add(CmdReject.class);
             commands.add(CmdReload.class);
             commands.add(CmdRemove.class);
             commands.add(CmdRestock.class);
             commands.add(CmdSave.class);
+            commands.add(CmdSelect.class);
             commands.add(CmdSell.class);
             commands.add(CmdSet.class);
             commands.add(CmdSetAmnt.class);
@@ -189,7 +191,7 @@ public final class ShopPlugin extends JavaPlugin
         }
     }
 
-    public static ShopSelection getSelection(Player player)
+    public static ShopSelection getSelection(OfflinePlayer player)
     {
         ShopSelection selected = selectedShops.get(player.getUniqueId());
         if (selected == null) {
@@ -199,7 +201,7 @@ public final class ShopPlugin extends JavaPlugin
         return selected;
     }
 
-    public static void clearSelection(Player player)
+    public static void clearSelection(OfflinePlayer player)
     {
         selectedShops.remove(player.getUniqueId());
     }

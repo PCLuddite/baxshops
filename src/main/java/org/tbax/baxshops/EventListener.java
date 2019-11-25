@@ -145,18 +145,7 @@ public class EventListener implements Listener
             selection.setIsOwner(isOwner);
             selection.setShop(shop);
             selection.setPage(0);
-            StringBuilder intro = new StringBuilder(ChatColor.WHITE.toString());
-            intro.append("Welcome to ");
-            if (isOwner) {
-                intro.append(Format.username("your"));
-            }
-            else {
-                intro.append(Format.username(shop.getOwner().getName())).append("'s");
-            }
-            intro.append(" shop\n");
-            intro.append(ChatColor.GRAY.toString());
-            intro.append("For help with shops, type /shop help.");
-            player.sendMessage(intro.toString());
+            selection.showIntro(player);
         }
 
         selection.showListing(player);

@@ -19,7 +19,9 @@
  */
 package org.tbax.baxshops;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -125,5 +127,21 @@ public final class ShopSelection
     public ItemStack toItem(Material signType)
     {
         return shop.toItem(location, signType);
+    }
+
+    public void showIntro(CommandSender sender)
+    {
+        StringBuilder intro = new StringBuilder(ChatColor.WHITE.toString());
+        intro.append("Welcome to ");
+        if (owner) {
+            intro.append(Format.username("your"));
+        }
+        else {
+            intro.append(Format.username(shop.getOwner().getName())).append("'s");
+        }
+        intro.append(" shop\n");
+        intro.append(ChatColor.GRAY.toString());
+        intro.append("For help with shops, type /shop help.");
+        sender.sendMessage(intro.toString());
     }
 }

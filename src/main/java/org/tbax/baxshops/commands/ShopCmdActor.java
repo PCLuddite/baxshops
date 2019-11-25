@@ -19,6 +19,7 @@
  */
 package org.tbax.baxshops.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -201,7 +202,17 @@ public final class ShopCmdActor implements CommandSender
 
     public @Nullable ShopSelection getSelection()
     {
-        return getPlayer() == null ? null : ShopPlugin.getSelection(getPlayer());
+        if (getPlayer() == null) {
+            if (getSender() == Bukkit.getConsoleSender()) {
+                return ShopPlugin.getSelection(StoredPlayer.DUMMY);
+            }
+            else {
+                return null;
+            }
+        }
+        else {
+            return ShopPlugin.getSelection(getPlayer());
+        }
     }
     
     public int getNumArgs()
