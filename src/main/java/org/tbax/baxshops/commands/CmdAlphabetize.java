@@ -76,7 +76,7 @@ public final class CmdAlphabetize extends BaxShopCommand
     @Override
     public boolean requiresPlayer(@NotNull ShopCmdActor actor)
     {
-        return true;
+        return false;
     }
 
     @Override
