@@ -24,6 +24,7 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.items.EnchantMap;
 import org.tbax.baxshops.items.ItemUtil;
@@ -240,10 +241,11 @@ public final class BaxEntry implements UpgradeableSerializable
     {
         return stack.getItemMeta();
     }
-        
+
     public void setAmount(int amt)
     {
         quantity = amt;
+        ShopPlugin.logIf(quantity < 0, "shop has an item with a quantity of less than 0");
     }
     
     public int getAmount()

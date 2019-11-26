@@ -389,6 +389,17 @@ public final class ShopPlugin extends JavaPlugin
         return savedState.getRegisteredPlayers();
     }
 
+    public static void logIf(boolean condition, String message)
+    {
+        if (condition)
+            logPossibleError(message);
+    }
+
+    public static void logPossibleError(String msg)
+    {
+        logWarning("Possible error: " + msg);
+    }
+
     @Override
     public void onEnable()
     {
