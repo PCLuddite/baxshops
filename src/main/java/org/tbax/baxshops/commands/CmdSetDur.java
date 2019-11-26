@@ -26,6 +26,7 @@ import org.tbax.baxshops.CommandHelpArgument;
 import org.tbax.baxshops.Resources;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.CommandHelp;
+import org.tbax.baxshops.items.ItemUtil;
 
 import java.util.List;
 
@@ -90,6 +91,9 @@ public final class CmdSetDur extends BaxShopCommand
     {
         BaxEntry entry = actor.getArgEntry(1);
         short damage = actor.getArgShort(2, String.format(Resources.INVALID_DECIMAL, "damage"));
+        if (damage > 100 || damage < 0) {
+            actor.exitError("Damage percentage must be between 0 and 100");
+        }
         entry.setDamagePercent(damage);
         actor.sendMessage("The damage has been set.");
     }
