@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
- * Portions derived from Shops Copyright (c) 2012 Nathan Dinsmore and Sam Lazarus.
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
