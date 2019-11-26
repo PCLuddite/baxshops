@@ -35,7 +35,7 @@ import java.util.UUID;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-public final class SavedState
+public final class State
 {
     static final double STATE_VERSION = State_00470.VERSION; // state file format version
 
@@ -55,7 +55,7 @@ public final class SavedState
     final ShopPlugin plugin;
     final Logger log;
 
-    public SavedState(@NotNull ShopPlugin plugin)
+    public State(@NotNull ShopPlugin plugin)
     {
         stateFile = new StateFile(plugin);
         this.plugin = plugin;
@@ -77,7 +77,7 @@ public final class SavedState
         return shops.getShopByLocation(loc);
     }
 
-    public static SavedState readFromDisk(@NotNull ShopPlugin plugin) throws IOException
+    public static State readFromDisk(@NotNull ShopPlugin plugin) throws IOException
     {
         File stateLocation = ShopPlugin.getStateFile().getFile();
         if (!stateLocation.exists()) {
@@ -111,7 +111,7 @@ public final class SavedState
             }
             else {
                 plugin.getLogger().info("YAML file did not exist. Starting fresh.");
-                return new SavedState(plugin);
+                return new State(plugin);
             }
         }
         double ver = StateFile.readVersion(stateLocation);
@@ -132,7 +132,7 @@ public final class SavedState
         }
         catch (ReflectiveOperationException e) {
             plugin.getLogger().warning("Unknown state file version. Starting from scratch...");
-            return new SavedState(plugin);
+            return new State(plugin);
         }
 
         if (ver != STATE_VERSION) {
@@ -217,9 +217,9 @@ public final class SavedState
         players.clear();
 
         log.info("Reloading BaxShops...");
-        SavedState savedState = readFromDisk(plugin);
-        shops = savedState.shops;
-        players = savedState.players;
+        State state = readFromDisk(plugin);
+        shops = state.shops;
+        players = state.players;
         log.info("BaxShops has finished reloading");
     }
 

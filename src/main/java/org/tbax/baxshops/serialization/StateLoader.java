@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -27,9 +27,7 @@ import org.tbax.baxshops.notification.Notification;
 import org.tbax.baxshops.notification.Request;
 
 import java.lang.reflect.Field;
-import java.util.ArrayDeque;
 import java.util.Collection;
-import java.util.Deque;
 
 public interface StateLoader
 {
@@ -38,9 +36,9 @@ public interface StateLoader
 
     @NotNull ShopPlugin getPlugin();
 
-    default SavedState loadState(@NotNull FileConfiguration state)
+    default State loadState(@NotNull FileConfiguration state)
     {
-        SavedState savedState = new SavedState(getPlugin());
+        State savedState = new State(getPlugin());
 
         ShopPlugin.logInfo("Loading shop data...");
         Collection<BaxShop> shops = buildShops(state);
@@ -102,13 +100,13 @@ public interface StateLoader
         return ver;
     }
 
-    default void addPlayer(SavedState savedState, StoredPlayer storedPlayer)
+    default void addPlayer(State state, StoredPlayer storedPlayer)
     {
-        savedState.players.put(storedPlayer);
+        state.players.put(storedPlayer);
     }
 
-    default void addShop(SavedState savedState, BaxShop shop)
+    default void addShop(State state, BaxShop shop)
     {
-        savedState.shops.put(shop.getId(), shop);
+        state.shops.put(shop.getId(), shop);
     }
 }

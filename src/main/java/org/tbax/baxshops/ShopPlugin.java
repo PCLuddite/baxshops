@@ -34,7 +34,7 @@ import org.tbax.baxshops.commands.*;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.items.ItemUtil;
 import org.tbax.baxshops.notification.*;
-import org.tbax.baxshops.serialization.SavedState;
+import org.tbax.baxshops.serialization.State;
 import org.tbax.baxshops.serialization.StateFile;
 import org.tbax.baxshops.serialization.StoredPlayer;
 
@@ -47,7 +47,7 @@ public final class ShopPlugin extends JavaPlugin
     private static CommandMap commands;
     private static Economy econ;
     private static Logger log;
-    private static SavedState savedState;
+    private static State state;
     private static String[] RAW_COMMANDS = { "buy", "sell", "restock", "restockall" };
     private static StateFile stateFile;
 
@@ -109,7 +109,7 @@ public final class ShopPlugin extends JavaPlugin
 
     public static int showNotificationCount(Player player)
     {
-        StoredPlayer storedPlayer = savedState.getOfflinePlayer(player.getUniqueId());
+        StoredPlayer storedPlayer = state.getOfflinePlayer(player.getUniqueId());
         Collection<Notification> notifications = storedPlayer.getNotifications();
         if (notifications.isEmpty()) {
             ShopPlugin.sendMessage(player, "You have no new notifications");
@@ -129,7 +129,7 @@ public final class ShopPlugin extends JavaPlugin
      */
     public static void showNotification(Player player)
     {
-        StoredPlayer storedPlayer = savedState.getOfflinePlayer(player.getUniqueId());
+        StoredPlayer storedPlayer = state.getOfflinePlayer(player.getUniqueId());
         Notification n = storedPlayer.peekNote();
         if (n.getSentDate() == null) {
             sendInfo(player, n.getMessage(player));
@@ -174,7 +174,7 @@ public final class ShopPlugin extends JavaPlugin
      */
     public static void sendNotification(OfflinePlayer player, Notification n, boolean logNote)
     {
-        StoredPlayer storedPlayer = savedState.getOfflinePlayer(player.getUniqueId());
+        StoredPlayer storedPlayer = state.getOfflinePlayer(player.getUniqueId());
         if (logNote)
             log.info(Format.toAnsiColor(n.getMessage(null)));
 
@@ -208,63 +208,63 @@ public final class ShopPlugin extends JavaPlugin
 
     public static void sendNotification(UUID playerId, Notification note)
     {
-        sendNotification(savedState.getOfflinePlayer(playerId), note);
+        sendNotification(state.getOfflinePlayer(playerId), note);
     }
 
     public static void addShop(BaxShop shop)
     {
-        savedState.addShop(shop);
+        state.addShop(shop);
     }
 
     public static void removeShop(UUID shopId)
     {
-        savedState.removeShop(shopId);
+        state.removeShop(shopId);
     }
 
     public static void removeLocation(UUID shopId, Location loc)
     {
-        savedState.removeLocation(shopId, loc);
+        state.removeLocation(shopId, loc);
     }
 
     public static StoredPlayer getOfflinePlayer(UUID uuid)
     {
-        return savedState.getOfflinePlayer(uuid);
+        return state.getOfflinePlayer(uuid);
     }
 
     public static BaxShop getShop(UUID shopId)
     {
-        return savedState.getShop(shopId);
+        return state.getShop(shopId);
     }
 
     public static BaxShop getShopByShortId2(String shortId2)
     {
-        return savedState.getShopByShortId2(shortId2);
+        return state.getShopByShortId2(shortId2);
     }
 
     @Deprecated
     public static BaxShop getShopByShortId(String shortId)
     {
-        return savedState.getShopByShortId(shortId);
+        return state.getShopByShortId(shortId);
     }
 
     public static @NotNull List<StoredPlayer> getOfflinePlayerSafe(String playerName)
     {
-        return savedState.getOfflinePlayerSafe(playerName);
+        return state.getOfflinePlayerSafe(playerName);
     }
 
     public static @NotNull List<StoredPlayer> getOfflinePlayer(String playerName)
     {
-        return savedState.getOfflinePlayer(playerName);
+        return state.getOfflinePlayer(playerName);
     }
 
     public static BaxShop getShop(Location location)
     {
-        return savedState.getShop(location);
+        return state.getShop(location);
     }
 
     public static boolean addLocation(Location location, BaxShop shop)
     {
-        return savedState.addLocation(shop, location);
+        return state.addLocation(shop, location);
     }
 
     public static boolean runCommand(ShopCmdActor actor)
@@ -364,9 +364,9 @@ public final class ShopPlugin extends JavaPlugin
         log.info(sb.toString());
     }
 
-    public static SavedState getSavedState()
+    public static State getState()
     {
-        return savedState;
+        return state;
     }
 
     public static void logInfo(String msg)
@@ -386,7 +386,7 @@ public final class ShopPlugin extends JavaPlugin
 
     public static Collection<StoredPlayer> getRegisteredPlayers()
     {
-        return savedState.getRegisteredPlayers();
+        return state.getRegisteredPlayers();
     }
 
     public static void logIf(boolean condition, String message)
@@ -426,7 +426,7 @@ public final class ShopPlugin extends JavaPlugin
 
         saveDefaultConfig();
         try {
-            savedState = SavedState.readFromDisk(this);
+            state = State.readFromDisk(this);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -438,7 +438,7 @@ public final class ShopPlugin extends JavaPlugin
         // run an initial save 5 minutes after starting, then a recurring save
         // every 30 minutes after the first save
         this.getServer().getScheduler().scheduleSyncRepeatingTask(this,
-                () -> stateFile.writeToDisk(getSavedState()),
+                () -> stateFile.writeToDisk(getState()),
                 6000L,
                 36000L
         );
@@ -472,7 +472,7 @@ public final class ShopPlugin extends JavaPlugin
     public void onDisable()
     {
         log.info("Saving BaxShops...");
-        stateFile.writeToDisk(getSavedState());
+        stateFile.writeToDisk(getState());
     }
 
     @Override

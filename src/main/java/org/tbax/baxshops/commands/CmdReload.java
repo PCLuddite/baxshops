@@ -82,7 +82,7 @@ public final class CmdReload extends BaxShopCommand
     {
         actor.sendMessage("Initiating reload. See log for details.");
         try {
-            ShopPlugin.getSavedState().reload();
+            ShopPlugin.getState().reload();
         }
         catch (IOException e) {
             e.printStackTrace();

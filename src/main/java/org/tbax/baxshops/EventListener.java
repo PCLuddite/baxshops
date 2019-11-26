@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  * Portions derived from Shops Copyright (c) 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * This library is free software; you can redistribute it and/or
@@ -235,7 +235,7 @@ public class EventListener implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerJoin(PlayerJoinEvent event)
     {
-        StoredPlayer player = ShopPlugin.getSavedState().joinPlayer(event.getPlayer());
+        StoredPlayer player = ShopPlugin.getState().joinPlayer(event.getPlayer());
         if (player.hasNotes()) {
             ShopPlugin.sendMessage(event.getPlayer(), ChatColor.WHITE + "You have new notifications. Use " + Format.command("/shop notifications") + ChatColor.WHITE + " to view them");
         }

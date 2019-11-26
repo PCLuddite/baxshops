@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  * Portions derived from Shops Copyright (c) 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * This library is free software; you can redistribute it and/or
@@ -635,7 +635,7 @@ public final class ShopCmdActor implements CommandSender
     public StoredPlayer getArgPlayer(int index) throws PrematureAbortException
     {
         try {
-            return ShopPlugin.getSavedState().getOfflinePlayer(getArgUuid(index));
+            return ShopPlugin.getState().getOfflinePlayer(getArgUuid(index));
         }
         catch (PrematureAbortException e){
             List<StoredPlayer> players = ShopPlugin.getOfflinePlayer(args[index]);
@@ -683,6 +683,6 @@ public final class ShopCmdActor implements CommandSender
 
     public StoredPlayer getStoredPlayer()
     {
-        return ShopPlugin.getSavedState().getOfflinePlayer(getPlayer().getUniqueId());
+        return ShopPlugin.getState().getOfflinePlayer(getPlayer().getUniqueId());
     }
 }

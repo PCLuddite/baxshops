@@ -25,7 +25,7 @@ import org.tbax.baxshops.ShopPlugin;
 import org.tbax.baxshops.notification.NoteSet;
 import org.tbax.baxshops.notification.Notification;
 import org.tbax.baxshops.serialization.BaxConfig;
-import org.tbax.baxshops.serialization.SavedState;
+import org.tbax.baxshops.serialization.State;
 import org.tbax.baxshops.serialization.StateLoader;
 import org.tbax.baxshops.serialization.StoredPlayer;
 
@@ -42,9 +42,9 @@ public abstract class LoaderWithNotes implements StateLoader
     public abstract  @NotNull Collection<NoteSet> buildNotifications(@NotNull FileConfiguration state);
 
     @Override
-    public SavedState loadState(@NotNull FileConfiguration state)
+    public State loadState(@NotNull FileConfiguration state)
     {
-        SavedState savedState = new SavedState(getPlugin());
+        State savedState = new State(getPlugin());
 
         ShopPlugin.logInfo("Loading shop data...");
         Collection<BaxShop> shops = buildShops(state);

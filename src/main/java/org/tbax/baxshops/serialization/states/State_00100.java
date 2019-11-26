@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,7 +28,7 @@ import org.tbax.baxshops.items.ItemUtil;
 import org.tbax.baxshops.notification.Claimable;
 import org.tbax.baxshops.notification.Notification;
 import org.tbax.baxshops.notification.Request;
-import org.tbax.baxshops.serialization.SavedState;
+import org.tbax.baxshops.serialization.State;
 import org.tbax.baxshops.serialization.StateLoader;
 import org.tbax.baxshops.serialization.StoredPlayer;
 import tbax.shops.Shop;
@@ -71,7 +71,7 @@ public class State_00100 implements StateLoader
     }
 
     @Override
-    public SavedState loadState(@NotNull FileConfiguration state)
+    public State loadState(@NotNull FileConfiguration state)
     {
         File stateLocation = getState2File(getPlugin());
         try {
@@ -84,7 +84,7 @@ public class State_00100 implements StateLoader
         catch (ClassCastException | IOException | ClassNotFoundException e) {
             e.printStackTrace();
             ShopPlugin.logSevere("Unable to load shops.dat! A new state will be loaded");
-            return new SavedState(getPlugin());
+            return new State(getPlugin());
         }
         return StateLoader.super.loadState(state);
     }

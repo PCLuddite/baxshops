@@ -30,7 +30,7 @@ import org.tbax.baxshops.ShopPlugin;
 import org.tbax.baxshops.items.ItemUtil;
 import org.tbax.baxshops.notification.Notification;
 import org.tbax.baxshops.serialization.PlayerMap;
-import org.tbax.baxshops.serialization.SavedState;
+import org.tbax.baxshops.serialization.State;
 import org.tbax.baxshops.serialization.StateLoader;
 import org.tbax.baxshops.serialization.StoredPlayer;
 import tbax.shops.serialization.JsonState;
@@ -80,12 +80,12 @@ public class State_00200 implements StateLoader
     }
 
     @Override
-    public SavedState loadState(@NotNull FileConfiguration state)
+    public State loadState(@NotNull FileConfiguration state)
     {
         rootObject = jsonState.loadState();
         if (rootObject == null) {
             ShopPlugin.logSevere("Unable to load old shops.json! A new state file will be created.");
-            return new SavedState(plugin);
+            return new State(plugin);
         }
         else {
             try {

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -28,11 +28,10 @@ import org.tbax.baxshops.items.ItemUtil;
 import org.tbax.baxshops.notification.Claimable;
 import org.tbax.baxshops.notification.Notification;
 import org.tbax.baxshops.notification.Request;
-import org.tbax.baxshops.serialization.SavedState;
+import org.tbax.baxshops.serialization.State;
 import org.tbax.baxshops.serialization.StateLoader;
 import org.tbax.baxshops.serialization.StoredPlayer;
 import qs.shops.Shop;
-import qs.shops.serialization.State;
 
 import java.io.*;
 import java.util.*;
@@ -41,7 +40,7 @@ public class State_00000 implements StateLoader
 {
     public static final double VERSION = 0;
     private ShopPlugin plugin;
-    private State nathanState;
+    private qs.shops.serialization.State nathanState;
     private Map<Shop, BaxShop> shopMap = new HashMap<>();
     private Map<String, StoredPlayer> playerMap = new HashMap<>();
 
@@ -58,12 +57,12 @@ public class State_00000 implements StateLoader
     }
 
     @Override
-    public SavedState loadState(@NotNull FileConfiguration state)
+    public State loadState(@NotNull FileConfiguration state)
     {
         File stateLocation = getNathanFile(getPlugin());
         try {
             try (ObjectInputStream stream = new ObjectInputStream(new FileInputStream(stateLocation))) {
-                nathanState = (State)stream.readObject();
+                nathanState = (qs.shops.serialization.State)stream.readObject();
             }
             ItemUtil.loadLegacyItems(plugin);
             ItemUtil.loadLegacyEnchants();
@@ -71,7 +70,7 @@ public class State_00000 implements StateLoader
         catch (ClassCastException | IOException | ClassNotFoundException e) {
             e.printStackTrace();
             ShopPlugin.logSevere("Unable to load shops.dat! A new state will be loaded");
-            return new SavedState(getPlugin());
+            return new State(getPlugin());
         }
         return StateLoader.super.loadState(state);
     }

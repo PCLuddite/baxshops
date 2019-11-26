@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -59,7 +59,7 @@ public final class UpgradeableSerialization
 
     public static Method getUpgrader(Class<? extends UpgradeableSerializable> cls) throws ReflectiveOperationException
     {
-        String verStr = getVersionString(SavedState.getLoadedState());
+        String verStr = getVersionString(State.getLoadedState());
         return cls.getMethod("upgrade" + verStr, SafeMap.class);
     }
 

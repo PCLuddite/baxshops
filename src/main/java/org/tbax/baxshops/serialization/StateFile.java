@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -42,7 +42,7 @@ public final class StateFile
     /**
      * Saves all shops
      */
-    public void writeToDisk(SavedState savedState)
+    public void writeToDisk(State savedState)
     {
         if (!backup()) {
             plugin.getLogger().warning("Failed to back up BaxShops");
@@ -65,7 +65,7 @@ public final class StateFile
             else {
                 String yaml = state.saveToString();
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter(stateFile))) {
-                    writer.write("VERSION " + SavedState.STATE_VERSION);
+                    writer.write("VERSION " + State.STATE_VERSION);
                     writer.newLine();
                     writer.write(yaml);
                 }
@@ -129,7 +129,7 @@ public final class StateFile
         return true;
     }
 
-    public void deleteOldestBackup(SavedState savedState)
+    public void deleteOldestBackup(State state)
     {
         File backupFolder = getBackupFile();
         List<File> backups = getBackupFiles();
@@ -142,7 +142,7 @@ public final class StateFile
         while (backups.size() >= nBaks) {
             File delete = new File(backupFolder, backups.remove(backups.size() - 1) .getName());
             if (!delete.delete()) {
-                savedState.log.warning(String.format("Unable to delete old backup %s", delete.getName()));
+                state.log.warning(String.format("Unable to delete old backup %s", delete.getName()));
             }
         }
     }

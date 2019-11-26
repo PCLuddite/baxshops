@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -27,7 +27,7 @@ import org.tbax.baxshops.ShopPlugin;
 import org.tbax.baxshops.items.ItemUtil;
 import org.tbax.baxshops.notification.HeadlessShopClaim;
 import org.tbax.baxshops.notification.Notification;
-import org.tbax.baxshops.serialization.SavedState;
+import org.tbax.baxshops.serialization.State;
 import org.tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.ArrayList;
@@ -80,10 +80,10 @@ public class State_00452 extends State_00451
     }
 
     @Override
-    public SavedState loadState(@NotNull FileConfiguration state)
+    public State loadState(@NotNull FileConfiguration state)
     {
         notes.clear();
-        SavedState savedState = super.loadState(state);
+        State savedState = super.loadState(state);
         for(Notification note : notes) {
             StoredPlayer player = savedState.getOfflinePlayer(note.getRecipientId());
             if (!player.getNotifications().contains(note)) {
