@@ -100,17 +100,6 @@ public class State_00300 extends LoaderWithNotes
     }
 
     @Override
-    public void loadConfig(@NotNull BaxConfig config)
-    {
-        config.setDeathTaxEnabled(config.getFileConfig().contains("DeathTax"));
-        if (config.isDeathTaxEnabled()) {
-            String goesTo = config.getFileConfig().getString("DeathTax.GoesTo");
-            config.setDeathTaxGoesTo(getPlayerId(goesTo));
-        }
-        invalidateMaps();
-    }
-
-    @Override
     public @NotNull Collection<BaxShop> buildShops(@NotNull FileConfiguration state)
     {
         List<BaxShop> shops = new ArrayList<>();
