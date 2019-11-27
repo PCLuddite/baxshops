@@ -4,7 +4,7 @@ BaxShops
 BaxShops is a shop plugin for Bukkit, based on and intended to be the ongoing replacement for [SwornShops](https://github.com/nathan/shops), updated for Bukkit 1.8+
 
 **FEATURES**
-* Ability to read shops.dat file produced by nathan/shops
+* Ability to convert from the old shops.dat file produced by SwornShops
 * /buy, /sell, /restock are now commands
 * Shops can have more than one location, allowing them to be accessed in multiple areas of a world
 * Items can now be sold directly to the shop's inventory
