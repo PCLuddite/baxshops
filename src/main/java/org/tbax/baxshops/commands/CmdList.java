@@ -116,7 +116,7 @@ public final class CmdList extends BaxShopCommand
         for (; i < max; ++i) {
             Location loc = locations.get(i);
             actor.sendMessage("%-3s %-16s %-18s %s",
-                    ChatColor.WHITE.toString() + i + ".",
+                    ChatColor.WHITE.toString() + (i + 1) + ".",
                     Format.location(loc),
                     ChatColor.LIGHT_PURPLE + actor.getShop().getSignTextString(loc),
                     (actor.getSelection().getLocation().equals(loc) ? ChatColor.LIGHT_PURPLE + " (current)" : ""));
