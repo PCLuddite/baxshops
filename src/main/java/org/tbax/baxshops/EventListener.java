@@ -263,32 +263,4 @@ public class EventListener implements Listener
             }
         }
     }
-    
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerDeath(PlayerDeathEvent event)
-    {
-        BaxConfig config = ShopPlugin.getStateFile().getConfig();
-        if (!config.isDeathTaxEnabled())
-            return;
-        if (!config.isStupidDeath(event))
-            return;
-
-        UUID uuid = config.getDeathTaxGoesTo();
-        Player pl = event.getEntity();
-        double minimum = config.getDeathTaxMinimum();
-        double percent = config.getDeathTaxPercentage();
-        if (ShopPlugin.getEconomy().has(pl, minimum)) {
-            double death_tax = MathUtil.multiply(ShopPlugin.getEconomy().getBalance(pl), percent);
-            if (config.getDeathTaxMaximum() > 0) {
-                death_tax = Math.min(death_tax, config.getDeathTaxMaximum());
-            }
-            ShopPlugin.getEconomy().withdrawPlayer(pl, death_tax);
-            ShopPlugin.sendInfo(pl, String.format("You were fined %s for dying.", Format.money(death_tax)));
-            if (!uuid.equals(StoredPlayer.DUMMY_UUID)) { // do not deposit in dummy world account
-                OfflinePlayer recipient = ShopPlugin.getOfflinePlayer(uuid);
-                ShopPlugin.getEconomy().depositPlayer(recipient, death_tax);
-                ShopPlugin.sendNotification(recipient, new DeathTaxReceivedNote(recipient, pl, event.getDeathMessage(), death_tax));
-            }
-        }
-    }
 }
