@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,7 +18,16 @@
  */
 package org.tbax.baxshops.serialization.states;
 
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.ShopPlugin;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class State_00470 extends State_00460
 {
@@ -27,5 +36,14 @@ public class State_00470 extends State_00460
     public State_00470(ShopPlugin plugin)
     {
         super(plugin);
+    }
+
+    @Override
+    public FileConfiguration readFile(@NotNull File stateLocation) throws IOException
+    {
+        try (BufferedReader reader = new BufferedReader(new FileReader(stateLocation))) {
+            reader.readLine();
+            return YamlConfiguration.loadConfiguration(reader);
+        }
     }
 }

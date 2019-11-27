@@ -19,7 +19,9 @@
 package org.tbax.baxshops.serialization.states;
 
 import org.bukkit.Location;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
@@ -57,6 +59,24 @@ public class State_00100 implements StateLoader
         return new File(plugin.getDataFolder(), "shops.dat");
     }
 
+    @Override
+    public FileConfiguration readFile(@NotNull File stateLocation)
+    {
+        try {
+            try (ObjectInputStream stream = new ObjectInputStream(new FileInputStream(stateLocation))) {
+                state2 = (State2)stream.readObject();
+            }
+            ItemUtil.loadLegacyItems(plugin);
+            ItemUtil.loadLegacyEnchants();
+        }
+        catch (ClassCastException | IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            ShopPlugin.logSevere("Unable to load shops.dat! A new state will be loaded");
+            return null;
+        }
+        return new YamlConfiguration();
+    }
+
     public static Class<?> getSerializedClass(JavaPlugin plugin) throws IOException
     {
         try {
@@ -68,25 +88,6 @@ public class State_00100 implements StateLoader
             ShopPlugin.logSevere("Unknown class in shops.dat!");
             return null;
         }
-    }
-
-    @Override
-    public State loadState(@NotNull FileConfiguration state)
-    {
-        File stateLocation = getState2File(getPlugin());
-        try {
-            try (ObjectInputStream stream = new ObjectInputStream(new FileInputStream(stateLocation))) {
-                state2 = (State2)stream.readObject();
-            }
-            ItemUtil.loadLegacyItems(plugin);
-            ItemUtil.loadLegacyEnchants();
-        }
-        catch (ClassCastException | IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            ShopPlugin.logSevere("Unable to load shops.dat! A new state will be loaded");
-            return new State(getPlugin());
-        }
-        return StateLoader.super.loadState(state);
     }
 
     @Override

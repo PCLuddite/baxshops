@@ -22,7 +22,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
@@ -80,22 +82,17 @@ public class State_00200 implements StateLoader
     }
 
     @Override
-    public State loadState(@NotNull FileConfiguration state)
+    public FileConfiguration readFile(@NotNull File stateLocation) throws IOException, InvalidConfigurationException
     {
         rootObject = jsonState.loadState();
         if (rootObject == null) {
             ShopPlugin.logSevere("Unable to load old shops.json! A new state file will be created.");
-            return new State(plugin);
+            return null;
         }
         else {
-            try {
-                ItemUtil.loadLegacyItems(plugin);
-                ItemUtil.loadLegacyEnchants();
-            }
-            catch (IOException e) {
-                ShopPlugin.logSevere("Unable to load legacy items list required for conversion!");
-            }
-            return StateLoader.super.loadState(state);
+            ItemUtil.loadLegacyItems(plugin);
+            ItemUtil.loadLegacyEnchants();
+            return new YamlConfiguration();
         }
     }
 

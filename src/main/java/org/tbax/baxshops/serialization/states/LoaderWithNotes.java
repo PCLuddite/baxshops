@@ -18,6 +18,7 @@
  */
 package org.tbax.baxshops.serialization.states;
 
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
@@ -29,6 +30,8 @@ import org.tbax.baxshops.serialization.State;
 import org.tbax.baxshops.serialization.StateLoader;
 import org.tbax.baxshops.serialization.StoredPlayer;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Deque;
 
@@ -42,8 +45,9 @@ public abstract class LoaderWithNotes implements StateLoader
     public abstract  @NotNull Collection<NoteSet> buildNotifications(@NotNull FileConfiguration state);
 
     @Override
-    public State loadState(@NotNull FileConfiguration state)
+    public State loadState(@NotNull File stateLocation) throws IOException, InvalidConfigurationException
     {
+        FileConfiguration state = readFile(stateLocation);
         State savedState = new State(getPlugin());
 
         ShopPlugin.logInfo("Loading shop data...");

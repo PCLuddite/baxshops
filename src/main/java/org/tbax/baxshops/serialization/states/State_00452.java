@@ -19,7 +19,7 @@
 package org.tbax.baxshops.serialization.states;
 
 import org.bukkit.Location;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.Format;
@@ -30,6 +30,8 @@ import org.tbax.baxshops.notification.Notification;
 import org.tbax.baxshops.serialization.State;
 import org.tbax.baxshops.serialization.StoredPlayer;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -80,10 +82,10 @@ public class State_00452 extends State_00451
     }
 
     @Override
-    public State loadState(@NotNull FileConfiguration state)
+    public State loadState(@NotNull File stateLocation) throws IOException, InvalidConfigurationException
     {
         notes.clear();
-        State savedState = super.loadState(state);
+        State savedState = super.loadState(stateLocation);
         for(Notification note : notes) {
             StoredPlayer player = savedState.getOfflinePlayer(note.getRecipientId());
             if (!player.getNotifications().contains(note)) {

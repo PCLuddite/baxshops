@@ -18,7 +18,9 @@
  */
 package org.tbax.baxshops.serialization;
 
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.ShopPlugin;
@@ -26,6 +28,8 @@ import org.tbax.baxshops.notification.Claimable;
 import org.tbax.baxshops.notification.Notification;
 import org.tbax.baxshops.notification.Request;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Collection;
 
@@ -36,8 +40,14 @@ public interface StateLoader
 
     @NotNull ShopPlugin getPlugin();
 
-    default State loadState(@NotNull FileConfiguration state)
+    default FileConfiguration readFile(@NotNull File stateLocation) throws IOException, InvalidConfigurationException
     {
+        return YamlConfiguration.loadConfiguration(stateLocation);
+    }
+
+    default State loadState(@NotNull File stateLocation) throws IOException, InvalidConfigurationException
+    {
+        FileConfiguration state = readFile(stateLocation);
         State savedState = new State(getPlugin());
 
         ShopPlugin.logInfo("Loading shop data...");

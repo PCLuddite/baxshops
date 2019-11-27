@@ -18,6 +18,7 @@
  */
 package org.tbax.baxshops.commands;
 
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.ShopPlugin;
@@ -84,9 +85,9 @@ public final class CmdReload extends BaxShopCommand
         try {
             ShopPlugin.getState().reload();
         }
-        catch (IOException e) {
+        catch (IOException | InvalidConfigurationException e) {
             e.printStackTrace();
-            actor.sendError("An IO exception occoured. See log for details.");
+            actor.sendError("An exception occoured. See log for details.");
         }
     }
 }

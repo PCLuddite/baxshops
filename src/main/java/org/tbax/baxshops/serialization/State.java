@@ -19,6 +19,7 @@
 package org.tbax.baxshops.serialization;
 
 import org.bukkit.Location;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -77,18 +78,18 @@ public final class State
         return shops.getShopByLocation(loc);
     }
 
-    public static State readFromDisk(@NotNull ShopPlugin plugin) throws IOException
+    public static State readFromDisk(@NotNull ShopPlugin plugin) throws IOException, InvalidConfigurationException
     {
         File stateLocation = ShopPlugin.getStateFile().getFile();
         if (!stateLocation.exists()) {
             if (State_00100.getState2File(plugin).exists()) {
                 if (State_00100.getSerializedClass(plugin) == qs.shops.serialization.State.class) {
                     plugin.getLogger().info("Beginning conversion from nathan/shops");
-                    return new State_00000(plugin).loadState(new YamlConfiguration());
+                    return new State_00000(plugin).loadState(State_00000.getNathanFile(plugin));
                 }
                 else {
                     plugin.getLogger().info("Beginning conversion from tbax.shops.serialization.State2");
-                    return new State_00100(plugin).loadState(new YamlConfiguration());
+                    return new State_00100(plugin).loadState(State_00100.getState2File(plugin));
                 }
             }
             else if (State_00200.getJsonFile(plugin).exists()) {
@@ -100,13 +101,13 @@ public final class State
                     plugin.getLogger().info("Beginning conversion from json " + new DecimalFormat("0.0#").format(jsonVersion));
                 }
                 if (jsonVersion == 2.1) {
-                    return new State_00210(plugin).loadState(new YamlConfiguration());
+                    return new State_00210(plugin).loadState(State_00200.getJsonFile(plugin));
                 }
                 else if (jsonVersion == 2.0) {
-                    return new State_00205(plugin).loadState(new YamlConfiguration());
+                    return new State_00205(plugin).loadState(State_00200.getJsonFile(plugin));
                 }
                 else {
-                    return new State_00200(plugin).loadState(new YamlConfiguration());
+                    return new State_00200(plugin).loadState(State_00200.getJsonFile(plugin));
                 }
             }
             else {
@@ -138,16 +139,7 @@ public final class State
         if (ver != STATE_VERSION) {
             plugin.getLogger().info("Converting state file version " + (new DecimalFormat("0.0#")).format(ver));
         }
-
-        if (ver >= State_00470.VERSION) {
-            try (BufferedReader reader = new BufferedReader(new FileReader(stateLocation))) {
-                reader.readLine();
-                return loader.loadState(YamlConfiguration.loadConfiguration(reader));
-            }
-        }
-        else {
-            return loader.loadState(YamlConfiguration.loadConfiguration(stateLocation));
-        }
+        return loader.loadState(stateLocation);
     }
 
     public void addShop(BaxShop shop)
@@ -207,7 +199,7 @@ public final class State
         return storedPlayer;
     }
 
-    public void reload() throws IOException
+    public void reload() throws IOException, InvalidConfigurationException
     {
         log.info("Reloading BaxShops...");
         stateFile.writeToDisk(this);

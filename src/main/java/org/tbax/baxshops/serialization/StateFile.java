@@ -215,18 +215,11 @@ public final class StateFile
 
     public static double readVersion(File file)
     {
-        try {
-            try (Scanner scanner = new Scanner(file)) {
-                try {
-                    if (!scanner.next().equals("VERSION")) return 0d;
-                    return scanner.nextDouble();
-                }
-                catch (NoSuchElementException e) {
-                    return 0d;
-                }
-            }
+        try (Scanner scanner = new Scanner(file)) {
+            if (!scanner.next().equals("VERSION")) return 0d;
+            return scanner.nextDouble();
         }
-        catch (IOException e) {
+        catch (NoSuchElementException | IOException e) {
             return 0d;
         }
     }

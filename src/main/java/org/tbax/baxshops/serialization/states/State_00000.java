@@ -19,7 +19,9 @@
 package org.tbax.baxshops.serialization.states;
 
 import org.bukkit.Location;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
@@ -57,9 +59,8 @@ public class State_00000 implements StateLoader
     }
 
     @Override
-    public State loadState(@NotNull FileConfiguration state)
+    public FileConfiguration readFile(@NotNull File stateLocation)
     {
-        File stateLocation = getNathanFile(getPlugin());
         try {
             try (ObjectInputStream stream = new ObjectInputStream(new FileInputStream(stateLocation))) {
                 nathanState = (qs.shops.serialization.State)stream.readObject();
@@ -70,9 +71,9 @@ public class State_00000 implements StateLoader
         catch (ClassCastException | IOException | ClassNotFoundException e) {
             e.printStackTrace();
             ShopPlugin.logSevere("Unable to load shops.dat! A new state will be loaded");
-            return new State(getPlugin());
+            return null;
         }
-        return StateLoader.super.loadState(state);
+        return new YamlConfiguration();
     }
 
     @Override
