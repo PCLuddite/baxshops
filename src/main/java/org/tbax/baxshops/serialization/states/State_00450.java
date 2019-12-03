@@ -18,13 +18,19 @@
  */
 package org.tbax.baxshops.serialization.states;
 
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.ShopPlugin;
 import org.tbax.baxshops.serialization.StateLoader;
 import org.tbax.baxshops.serialization.StoredPlayer;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -79,5 +85,22 @@ public class State_00450 implements StateLoader
     public @NotNull ShopPlugin getPlugin()
     {
         return plugin;
+    }
+
+    @Override
+    public FileConfiguration readFile(@NotNull File stateLocation) throws IOException, InvalidConfigurationException
+    {
+        StringBuilder configString = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader(stateLocation))) {
+            String line;
+            while((line = reader.readLine()) != null) {
+                if (line.trim().startsWith("- ==: tbax.baxshops.")) {
+                    configString.append(line.replace("- ==: tbax.baxshops.", "- ==: org.tbax.baxshops."));
+                }
+            }
+        }
+        YamlConfiguration config = new YamlConfiguration();
+        config.loadFromString(configString.toString());
+        return config;
     }
 }

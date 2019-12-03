@@ -28,7 +28,9 @@ import org.tbax.baxshops.notification.Claimable;
 import org.tbax.baxshops.notification.Notification;
 import org.tbax.baxshops.notification.Request;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Collection;
@@ -40,10 +42,7 @@ public interface StateLoader
 
     @NotNull ShopPlugin getPlugin();
 
-    default FileConfiguration readFile(@NotNull File stateLocation) throws IOException, InvalidConfigurationException
-    {
-        return YamlConfiguration.loadConfiguration(stateLocation);
-    }
+    FileConfiguration readFile(@NotNull File stateLocation) throws IOException, InvalidConfigurationException;
 
     default State loadState(@NotNull File stateLocation) throws IOException, InvalidConfigurationException
     {
