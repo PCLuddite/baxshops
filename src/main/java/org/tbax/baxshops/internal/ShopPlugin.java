@@ -441,12 +441,11 @@ public final class ShopPlugin extends JavaPlugin
         }
 
         // run an initial save 5 minutes after starting, then a recurring save
-        // every 30 minutes after the first save
         this.getServer().getScheduler().scheduleSyncRepeatingTask(this,
                 () -> stateFile.writeToDisk(getState()),
-                6000L,
-                36000L
+                6000L, stateFile.getConfig().getBackupInterval() * 1200
         );
+
         log.info("BaxShops has loaded successfully!");
     }
 

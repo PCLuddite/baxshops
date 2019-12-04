@@ -22,6 +22,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.tbax.baxshops.Format;
+import org.tbax.baxshops.internal.ShopPlugin;
 
 import java.io.*;
 import java.util.*;
@@ -44,8 +45,8 @@ public final class StateFile
      */
     public void writeToDisk(State savedState)
     {
-        if (!backup()) {
-            plugin.getLogger().warning("Failed to back up BaxShops");
+        if (getConfig().getBackupDays() != 0 && !backup()) {
+            ShopPlugin.logWarning("Failed to back up BaxShops before saving!");
         }
 
         if (getConfig().saveDefaults()) {
@@ -71,11 +72,13 @@ public final class StateFile
                 }
             }
 
-            if (hasStateChanged()) {
-                deleteOldestBackup(savedState);
-            }
-            else {
-                deleteLatestBackup();
+            if (getConfig().getBackupDays() > 0) {
+                if (hasStateChanged()) {
+                    deleteOldestBackup();
+                }
+                else {
+                    deleteLatestBackup();
+                }
             }
         }
         catch (IOException e) {
@@ -108,41 +111,44 @@ public final class StateFile
             return false;
         }
 
-        try {
-            String backupName = Format.FILE_DATE_FORMAT.format(new Date()) + ".yml";
-            File backup = new File(backupFolder, backupName);
-            try (InputStream in = new FileInputStream(stateLocation)) {
-                try (OutputStream out = new FileOutputStream(backup)) {
-                    byte[] buf = new byte[1024];
-                    int i;
-                    while ((i = in.read(buf)) > 0) {
-                        out.write(buf, 0, i);
-                    }
-                }
+        String backupName = Format.FILE_DATE_FORMAT.format(new Date()) + ".yml";
+        File backup = new File(backupFolder, backupName);
+        try (InputStream in = new FileInputStream(stateLocation);
+             OutputStream out = new FileOutputStream(backup))
+        {
+            byte[] buf = new byte[1024];
+            int i;
+            while ((i = in.read(buf)) > 0) {
+                out.write(buf, 0, i);
             }
         }
         catch (IOException e) {
             e.printStackTrace();
-            plugin.getLogger().severe("Backup failed!");
+            ShopPlugin.logSevere("Backup failed!");
             return false;
         }
         return true;
     }
 
-    public void deleteOldestBackup(State state)
+    public void deleteOldestBackup()
     {
-        File backupFolder = getBackupFile();
         List<File> backups = getBackupFiles();
-        int nBaks = getConfig().getBackups();
+        int days = getConfig().getBackupDays();
 
-        if (backups == null || nBaks <= 0 || backups.size() < nBaks) {
+        if (backups == null || days <= 0) {
             return;
         }
 
-        while (backups.size() >= nBaks) {
-            File delete = new File(backupFolder, backups.remove(backups.size() - 1) .getName());
-            if (!delete.delete()) {
-                state.log.warning(String.format("Unable to delete old backup %s", delete.getName()));
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -1);
+        Date limit = cal.getTime();
+
+        for(File backup : backups) {
+            String name = backup.getName().substring(0, backup.getName().lastIndexOf('.'));
+            if (limit.after(Format.parseFileDate(name))) {
+                if (!backup.delete()) {
+                    ShopPlugin.logWarning(String.format("Unable to delete old backup %s", backup.getName()));
+                }
             }
         }
     }
@@ -179,14 +185,13 @@ public final class StateFile
         if (latest.length() != state.length())
             return true;
 
-        try {
-            try (InputStream stream1 = new FileInputStream(latest);
-                 InputStream stream2 = new FileInputStream(state)) {
-                int b1;
-                while((b1 = stream1.read()) != -1) {
-                    if (b1 != stream2.read()) {
-                        return true;
-                    }
+        try (InputStream stream1 = new FileInputStream(latest);
+             InputStream stream2 = new FileInputStream(state))
+        {
+            int b1;
+            while ((b1 = stream1.read()) != -1) {
+                if (b1 != stream2.read()) {
+                    return true;
                 }
             }
             return false;

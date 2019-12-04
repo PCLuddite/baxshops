@@ -4,8 +4,12 @@
 # | |_) || (_| | >  <  ___) || | | || (_) || |_) |\__ \
 # |____/  \__,_|/_/\_\|____/ |_| |_| \___/ | .__/ |___/
 #                                          |_|
-# Backups: 15                                                   # Number of backups to keep. Set this to -1 to never delete old backups
-# LogNotes: false                                                # Show all notifications in log
+# Backup:
+#   Days: 1         # Number of days to keep backups. Set this to -1 to never delete backups or 0 to disable backups
+#   Interval: 60    # The interval (in minutes) to back up
+# LogNotes: false   # Show all notifications and messages from players in the log
 #
-Backups: 15
+Backup:
+  Days: 1
+  Interval: 60
 LogNotes: false

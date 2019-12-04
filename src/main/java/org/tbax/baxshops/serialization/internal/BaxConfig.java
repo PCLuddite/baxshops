@@ -28,8 +28,9 @@ import java.util.*;
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public final class BaxConfig
 {
-    private final int DEFAULT_BACKUPS = 15;
     private final boolean DEFAULT_LOG_NOTES = false;
+    private final int DEFAULT_BACKUP_DAYS = 1;
+    private final int DEFAULT_BACKUP_INTERVAL = 60; // in minutes
 
     private final JavaPlugin plugin;
 
@@ -43,14 +44,24 @@ public final class BaxConfig
         return plugin.getConfig();
     }
 
-    public int getBackups()
+    public int getBackupDays()
     {
-        return getFileConfig().getInt("Backups", DEFAULT_BACKUPS);
+        return getFileConfig().getInt("Backup.Days", DEFAULT_BACKUP_DAYS);
     }
 
-    public void setBackups(int backups)
+    public void setBackupDays(int days)
     {
-        getFileConfig().set("Backups", backups);
+        getFileConfig().set("Backup.Days", days);
+    }
+
+    public int getBackupInterval()
+    {
+        return getFileConfig().getInt("Backup.Interval", DEFAULT_BACKUP_INTERVAL);
+    }
+
+    public void setBackupInterval(int minutes)
+    {
+        getFileConfig().set("Backup.Interval", minutes);
     }
 
     public boolean isLogNotes()
@@ -66,12 +77,12 @@ public final class BaxConfig
     public boolean backup()
     {
         File configFile = new File(plugin.getDataFolder(), "config.yml");
-        File backupFile = new File(plugin.getDataFolder(), "CONFIG.BAK");
+        File backupFile = new File(plugin.getDataFolder(), "config.bak");
 
         if (backupFile.exists()) {
             int i = 0;
             do {
-                backupFile = new File(plugin.getDataFolder(), "CONFIG.BAK" + i++);
+                backupFile = new File(plugin.getDataFolder(), "config.bak" + i++);
             }
             while(backupFile.exists());
         }
