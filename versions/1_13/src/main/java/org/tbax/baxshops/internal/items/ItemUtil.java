@@ -18,24 +18,23 @@
  */
 package org.tbax.baxshops.internal.items;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.banner.Pattern;
+import org.bukkit.block.banner.PatternType;
+import org.bukkit.block.data.type.WallSign;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BannerMeta;
-import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.*;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionData;
+import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.Format;
-import org.tbax.baxshops.ShopPlugin;
+import org.tbax.baxshops.internal.ShopPlugin;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -56,7 +55,8 @@ public final class ItemUtil
 
     private static final Map<Material, Material> SIGN_TO_SIGN = new HashMap<>();
 
-    private static final List<Material> SIGN_TYPES = Arrays.asList(Material.SIGN, Material.WALL_SIGN, Material.SIGN_POST);
+    private static final List<Material> SIGN_TYPES = Arrays.asList(Material.SIGN, Material.WALL_SIGN,
+            Material.LEGACY_SIGN, Material.LEGACY_WALL_SIGN, Material.LEGACY_SIGN_POST);
 
     static {
         String name = Bukkit.getServer().getClass().getPackage().getName();
@@ -77,7 +77,8 @@ public final class ItemUtil
         GET_NAME = getNmMthd;
 
         SIGN_TO_SIGN.put(Material.WALL_SIGN, Material.SIGN);
-        SIGN_TO_SIGN.put(Material.SIGN_POST, Material.SIGN);
+        SIGN_TO_SIGN.put(Material.LEGACY_WALL_SIGN, Material.LEGACY_SIGN);
+        SIGN_TO_SIGN.put(Material.LEGACY_SIGN_POST, Material.LEGACY_SIGN);
     }
 
     /**
@@ -159,6 +160,9 @@ public final class ItemUtil
             if (enchants != null)
                 return EnchantMap.fullListString(enchants);
         }
+        else if (isOminousBanner(item)) {
+            return ChatColor.GOLD + "Ominous Banner";
+        }
 
         item = item.clone();
         ItemMeta meta = item.getItemMeta();
@@ -181,12 +185,34 @@ public final class ItemUtil
             return item.getType().toString();
         }
     }
+
+    public static boolean isOminousBanner(@NotNull ItemStack stack)
+    {
+        if (stack.getType() != Material.WHITE_BANNER)
+            return false;
+        BannerMeta bannerMeta = (BannerMeta)stack.getItemMeta();
+        return bannerMeta.getPatterns().containsAll(ominousPatterns());
+    }
+
+    private static List<Pattern> ominousPatterns()
+    {
+        Pattern[] patterns = new Pattern[8];
+        patterns[0] = new Pattern(DyeColor.CYAN, PatternType.RHOMBUS_MIDDLE);
+        patterns[1] = new Pattern(DyeColor.LIGHT_GRAY, PatternType.STRIPE_BOTTOM);
+        patterns[2] = new Pattern(DyeColor.GRAY, PatternType.STRIPE_CENTER);
+        patterns[3] = new Pattern(DyeColor.LIGHT_GRAY, PatternType.BORDER);
+        patterns[4] = new Pattern(DyeColor.BLACK, PatternType.STRIPE_MIDDLE);
+        patterns[5] = new Pattern(DyeColor.LIGHT_GRAY, PatternType.HALF_HORIZONTAL);
+        patterns[6] = new Pattern(DyeColor.LIGHT_GRAY, PatternType.CIRCLE_MIDDLE);
+        patterns[7] = new Pattern(DyeColor.BLACK, PatternType.BORDER);
+        return Arrays.asList(patterns);
+    }
     
     public static String getEnchantName(Enchantment enchant)
     {
         Enchantable enchantable = enchants.get(enchant);
         if (enchantable == null)
-            return Format.toFriendlyName(enchant.getName());
+            return Format.toFriendlyName(enchant.getKey().getKey());
         return enchantable.getName();
     }
     
@@ -257,7 +283,7 @@ public final class ItemUtil
             List<Map<?, ?>> section = enchantConfig.getMapList("enchants");
 
             for (Map<?, ?> enchantMap : section) {
-                Enchantment enchantment = Enchantment.getByName((String)enchantMap.get("enchantment"));
+                Enchantment enchantment = Enchantment.getByKey(new NamespacedKey(plugin, (String)enchantMap.get("enchantment")));
                 String name = (String) enchantMap.get("name");
                 boolean levels = (Boolean) enchantMap.get("levels");
                 Object id = enchantMap.get("id");
@@ -283,7 +309,7 @@ public final class ItemUtil
     {
         Enchantable enchantable = enchants.get(enchantment);
         if (enchantable == null)
-            return new Enchantable(Format.toFriendlyName(enchantment.getName()), true);
+            return new Enchantable(Format.toFriendlyName(enchantment.getKey().getKey()), true);
         return enchantable;
     }
 
@@ -498,12 +524,20 @@ public final class ItemUtil
 
     public static int getDurability(ItemStack stack)
     {
-        return stack.getDurability();
+        if (stack.getItemMeta() instanceof Damageable) {
+            Damageable damage = (Damageable) stack.getItemMeta();
+            return damage.getDamage();
+        }
+        return 0;
     }
 
     public static void setDurability(ItemStack stack, int durability)
     {
-        stack.setDurability((short)durability);
+        if (stack.getItemMeta() instanceof Damageable) {
+            Damageable damage = (Damageable) stack.getItemMeta();
+            damage.setDamage(durability);
+            stack.setItemMeta((ItemMeta)damage);
+        }
     }
 
     public static List<Block> getSignOnBlock(Block block)
@@ -515,19 +549,17 @@ public final class ItemUtil
                     Location l = block.getLocation().add(x, y, z);
                     Block curr = l.getBlock();
                     if (ItemUtil.isSign(curr.getType())) {
-                        if (curr.getState().getData() instanceof org.bukkit.material.Sign) {
-                            org.bukkit.material.Sign sign = (org.bukkit.material.Sign)curr.getState().getData();
-                            if (sign.isWallSign()) {
-                                Block attached = curr.getRelative(sign.getFacing().getOppositeFace());
-                                if (attached.getLocation().equals(block.getLocation())) {
-                                    signs.add(curr);
-                                }
+                        if (curr.getBlockData() instanceof WallSign) {
+                            WallSign sign = (WallSign)curr.getBlockData();
+                            Block attached = curr.getRelative(sign.getFacing().getOppositeFace());
+                            if (attached.getLocation().equals(block.getLocation())) {
+                                signs.add(curr);
                             }
-                            else {
-                                Location below = l.subtract(0, 1, 0);
-                                if (below.equals(block.getLocation())) {
-                                    signs.add(curr);
-                                }
+                        }
+                        else {
+                            Location below = l.subtract(0, 1, 0);
+                            if (below.equals(block.getLocation())) {
+                                signs.add(curr);
                             }
                         }
                     }
@@ -540,11 +572,11 @@ public final class ItemUtil
     public static String getPotionInfo(ItemStack item)
     {
         if (item.getType() == Material.POTION) {
-            Potion potion = Potion.fromItemStack(item);;
-            if (potion.hasExtendedDuration()) {
+            PotionData data = ((PotionMeta)item.getItemMeta()).getBasePotionData();
+            if (data.isExtended()) {
                 return Format.enchantments("(Extended)");
             }
-            else if (potion.getTier() == Potion.Tier.TWO) {
+            else if (data.isUpgraded()) {
                 return Format.enchantments("II");
             }
         }
