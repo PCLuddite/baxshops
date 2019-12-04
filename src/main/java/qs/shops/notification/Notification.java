@@ -22,7 +22,7 @@
  */
 package qs.shops.notification;
 
-import org.tbax.baxshops.notification.DeprecatedNote;
+import org.tbax.baxshops.notification.internal.DeprecatedNote;
 
 import java.io.Serializable;
 

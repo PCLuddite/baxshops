@@ -20,7 +20,7 @@ package tbax.shops.notification;
 
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.serialization.StateLoader;
+import org.tbax.baxshops.serialization.internal.StateLoader;
 
 public class GeneralNotification implements Notification
 {

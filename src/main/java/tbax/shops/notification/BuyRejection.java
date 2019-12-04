@@ -20,10 +20,10 @@ package tbax.shops.notification;
 
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.serialization.StateLoader;
-import org.tbax.baxshops.serialization.states.State_00200;
-import org.tbax.baxshops.serialization.states.State_00205;
-import org.tbax.baxshops.serialization.states.State_00210;
+import org.tbax.baxshops.serialization.internal.StateLoader;
+import org.tbax.baxshops.serialization.internal.states.State_00200;
+import org.tbax.baxshops.serialization.internal.states.State_00205;
+import org.tbax.baxshops.serialization.internal.states.State_00210;
 import tbax.shops.ShopEntry;
 
 public class BuyRejection implements Notification
@@ -51,7 +51,7 @@ public class BuyRejection implements Notification
     @Override
     public @NotNull org.tbax.baxshops.notification.Notification getNewNote(StateLoader stateLoader)
     {
-        return new org.tbax.baxshops.notification.BuyRejection(
+        return new org.tbax.baxshops.notification.internal.BuyRejection(
                 ((State_00200)stateLoader).getShop(shopId).getId(),
                 ((State_00200)stateLoader).registerPlayer(((State_00200)stateLoader).getShopOwner(shopId)),
                 ((State_00200)stateLoader).registerPlayer(seller),
@@ -62,6 +62,6 @@ public class BuyRejection implements Notification
     @Override
     public @NotNull Class<? extends org.tbax.baxshops.notification.Notification> getNewNoteClass()
     {
-        return org.tbax.baxshops.notification.BuyRejection.class;
+        return org.tbax.baxshops.notification.internal.BuyRejection.class;
     }
 }

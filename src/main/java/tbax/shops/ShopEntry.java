@@ -32,12 +32,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.MathUtil;
-import org.tbax.baxshops.ShopPlugin;
-import org.tbax.baxshops.items.ItemUtil;
-import org.tbax.baxshops.serialization.states.State_00100;
-import org.tbax.baxshops.serialization.states.State_00200;
-import org.tbax.baxshops.serialization.states.State_00205;
-import org.tbax.baxshops.serialization.states.State_00210;
+import org.tbax.baxshops.internal.ShopPlugin;
+import org.tbax.baxshops.internal.items.ItemUtil;
+import org.tbax.baxshops.serialization.internal.states.State_00100;
+import org.tbax.baxshops.serialization.internal.states.State_00200;
+import org.tbax.baxshops.serialization.internal.states.State_00205;
+import org.tbax.baxshops.serialization.internal.states.State_00210;
 
 import java.io.Serializable;
 import java.util.ArrayList;

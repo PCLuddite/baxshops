@@ -22,11 +22,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.tbax.baxshops.ShopPlugin;
-import org.tbax.baxshops.serialization.states.State_00100;
-import org.tbax.baxshops.serialization.states.State_00200;
-import org.tbax.baxshops.serialization.states.State_00205;
-import org.tbax.baxshops.serialization.states.State_00210;
+import org.tbax.baxshops.internal.ShopPlugin;
+import org.tbax.baxshops.serialization.internal.states.State_00100;
+import org.tbax.baxshops.serialization.internal.states.State_00200;
+import org.tbax.baxshops.serialization.internal.states.State_00205;
+import org.tbax.baxshops.serialization.internal.states.State_00210;
 import tbax.shops.serialization.BlockLocation;
 
 import java.io.Serializable;

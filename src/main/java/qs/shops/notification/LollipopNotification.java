@@ -22,11 +22,10 @@
  */
 package qs.shops.notification;
 
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.serialization.StateLoader;
+import org.tbax.baxshops.serialization.internal.StateLoader;
 import org.tbax.baxshops.serialization.StoredPlayer;
-import org.tbax.baxshops.serialization.states.State_00000;
+import org.tbax.baxshops.serialization.internal.states.State_00000;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -69,7 +68,7 @@ public class LollipopNotification implements Notification {
 	@Override
 	public @NotNull Class<? extends org.tbax.baxshops.notification.Notification> getNewNoteClass()
 	{
-		return org.tbax.baxshops.notification.LollipopNotification.class;
+		return org.tbax.baxshops.notification.internal.LollipopNotification.class;
 	}
 
 	@Override
@@ -81,7 +80,7 @@ public class LollipopNotification implements Notification {
 				adjective = entry.getValue();
 			}
 		}
-		return new org.tbax.baxshops.notification.LollipopNotification(
+		return new org.tbax.baxshops.notification.internal.LollipopNotification(
 				((State_00000)stateLoader).registerPlayer(sender),
 				StoredPlayer.ERROR,
 				adjective

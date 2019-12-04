@@ -24,11 +24,12 @@ package tbax.shops.notification;
 
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.serialization.StateLoader;
-import org.tbax.baxshops.serialization.states.State_00100;
-import org.tbax.baxshops.serialization.states.State_00200;
-import org.tbax.baxshops.serialization.states.State_00205;
-import org.tbax.baxshops.serialization.states.State_00210;
+import org.tbax.baxshops.notification.internal.BuyNotification;
+import org.tbax.baxshops.serialization.internal.StateLoader;
+import org.tbax.baxshops.serialization.internal.states.State_00100;
+import org.tbax.baxshops.serialization.internal.states.State_00200;
+import org.tbax.baxshops.serialization.internal.states.State_00205;
+import org.tbax.baxshops.serialization.internal.states.State_00210;
 import tbax.shops.Shop;
 import tbax.shops.ShopEntry;
 
@@ -65,14 +66,14 @@ public class SaleNotification implements Notification
     @Override
     public @NotNull Class<? extends org.tbax.baxshops.notification.Notification> getNewNoteClass()
     {
-        return org.tbax.baxshops.notification.BuyNotification.class;
+        return BuyNotification.class;
     }
 
     @Override
     public @NotNull org.tbax.baxshops.notification.Notification getNewNote(StateLoader stateLoader)
     {
         if (stateLoader instanceof State_00100) {
-            return new org.tbax.baxshops.notification.BuyNotification(
+            return new BuyNotification(
                     ((State_00100)stateLoader).registerShop(shop).getId(),
                     ((State_00100)stateLoader).registerPlayer(shop.owner),
                     ((State_00100)stateLoader).registerPlayer(seller),
@@ -80,7 +81,7 @@ public class SaleNotification implements Notification
             );
         }
         else {
-            return new org.tbax.baxshops.notification.BuyNotification(
+            return new BuyNotification(
                     ((State_00200)stateLoader).getShop(shopId).getId(),
                     ((State_00200)stateLoader).registerPlayer(((State_00200)stateLoader).getShopOwner(shopId)),
                     ((State_00200)stateLoader).registerPlayer(seller),

@@ -20,12 +20,11 @@ package tbax.shops.notification;
 
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.notification.SaleClaim;
-import org.tbax.baxshops.notification.SaleNotificationAutoClaim;
-import org.tbax.baxshops.serialization.StateLoader;
-import org.tbax.baxshops.serialization.states.State_00200;
-import org.tbax.baxshops.serialization.states.State_00205;
-import org.tbax.baxshops.serialization.states.State_00210;
+import org.tbax.baxshops.notification.internal.SaleClaim;
+import org.tbax.baxshops.serialization.internal.StateLoader;
+import org.tbax.baxshops.serialization.internal.states.State_00200;
+import org.tbax.baxshops.serialization.internal.states.State_00205;
+import org.tbax.baxshops.serialization.internal.states.State_00210;
 import tbax.shops.ShopEntry;
 import tbax.shops.BaxShop;
 
@@ -71,6 +70,6 @@ public class SaleNotificationAuto implements Claimable
     @Override
     public @NotNull Class<? extends org.tbax.baxshops.notification.Notification> getNewNoteClass()
     {
-        return org.tbax.baxshops.notification.SaleClaim.class;
+        return SaleClaim.class;
     }
 }

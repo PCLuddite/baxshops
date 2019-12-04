@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,10 +23,12 @@ import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.Resources;
+import org.tbax.baxshops.internal.Resources;
 import org.tbax.baxshops.serialization.annotations.SerializedAs;
 import org.tbax.baxshops.notification.Notification;
-import org.tbax.baxshops.versioning.LegacyOfflinePlayer;
+import org.tbax.baxshops.internal.versioning.LegacyOfflinePlayer;
+import org.tbax.baxshops.serialization.internal.UpgradeableSerializable;
+import org.tbax.baxshops.serialization.internal.UpgradeableSerialization;
 
 import java.util.*;
 

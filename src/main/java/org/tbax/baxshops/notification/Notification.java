@@ -24,7 +24,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.tbax.baxshops.ShopPlugin;
+import org.tbax.baxshops.internal.ShopPlugin;
 
 import java.util.Date;
 import java.util.UUID;

@@ -24,13 +24,13 @@ import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.items.EnchantMap;
-import org.tbax.baxshops.items.ItemUtil;
+import org.tbax.baxshops.internal.ShopPlugin;
+import org.tbax.baxshops.internal.items.EnchantMap;
+import org.tbax.baxshops.internal.items.ItemUtil;
 import org.tbax.baxshops.serialization.SafeMap;
-import org.tbax.baxshops.serialization.UpgradeableSerializable;
-import org.tbax.baxshops.serialization.UpgradeableSerialization;
+import org.tbax.baxshops.serialization.internal.UpgradeableSerializable;
+import org.tbax.baxshops.serialization.internal.UpgradeableSerialization;
 
 import java.util.Map;
 import java.util.Objects;

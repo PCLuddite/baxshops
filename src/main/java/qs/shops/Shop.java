@@ -24,7 +24,7 @@ package qs.shops;
 
 import org.bukkit.Location;
 import org.tbax.baxshops.BaxShop;
-import org.tbax.baxshops.serialization.states.State_00000;
+import org.tbax.baxshops.serialization.internal.states.State_00000;
 
 import java.io.Serializable;
 import java.util.ArrayList;

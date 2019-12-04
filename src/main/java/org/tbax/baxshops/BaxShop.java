@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  * Portions derived from Shops Copyright (c) 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * This library is free software; you can redistribute it and/or
@@ -27,16 +27,18 @@ import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.items.ItemUtil;
+import org.tbax.baxshops.internal.Resources;
+import org.tbax.baxshops.internal.ShopPlugin;
+import org.tbax.baxshops.internal.ShopSelection;
+import org.tbax.baxshops.internal.items.ItemUtil;
 import org.tbax.baxshops.serialization.SafeMap;
 import org.tbax.baxshops.serialization.StoredPlayer;
-import org.tbax.baxshops.serialization.UpgradeableSerializable;
-import org.tbax.baxshops.serialization.UpgradeableSerialization;
+import org.tbax.baxshops.serialization.internal.UpgradeableSerializable;
+import org.tbax.baxshops.serialization.internal.UpgradeableSerialization;
 import org.tbax.baxshops.serialization.annotations.DoNotSerialize;
 import org.tbax.baxshops.serialization.annotations.SerializeMethod;
-import org.tbax.baxshops.serialization.states.State_00000;
-import org.tbax.baxshops.serialization.states.State_00300;
-import org.tbax.baxshops.serialization.states.State_00420;
+import org.tbax.baxshops.serialization.internal.states.State_00300;
+import org.tbax.baxshops.serialization.internal.states.State_00420;
 
 import java.util.*;
 import java.util.stream.Collectors;

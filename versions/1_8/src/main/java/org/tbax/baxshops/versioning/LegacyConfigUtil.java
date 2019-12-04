@@ -17,7 +17,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
  * USA
  */
-package org.tbax.baxshops.versioning;
+package org.tbax.baxshops.internal.versioning;
 
 import org.bukkit.configuration.file.FileConfiguration;
 

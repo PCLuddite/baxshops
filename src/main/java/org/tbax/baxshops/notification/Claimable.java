@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  * Portions derived from Shops Copyright (c) 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * This library is free software; you can redistribute it and/or
@@ -20,7 +20,7 @@
 package org.tbax.baxshops.notification;
 
 import org.tbax.baxshops.BaxEntry;
-import org.tbax.baxshops.Resources;
+import org.tbax.baxshops.internal.Resources;
 import org.tbax.baxshops.commands.ShopCmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 

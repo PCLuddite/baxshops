@@ -39,9 +39,10 @@ import org.tbax.baxshops.errors.CommandErrorException;
 import org.tbax.baxshops.errors.CommandMessageException;
 import org.tbax.baxshops.errors.CommandWarningException;
 import org.tbax.baxshops.errors.PrematureAbortException;
-import org.tbax.baxshops.items.ItemUtil;
+import org.tbax.baxshops.internal.*;
+import org.tbax.baxshops.internal.items.ItemUtil;
 import org.tbax.baxshops.serialization.StoredPlayer;
-import org.tbax.baxshops.versioning.LegacyPlayerUtil;
+import org.tbax.baxshops.internal.versioning.LegacyPlayerUtil;
 
 import java.util.*;
 

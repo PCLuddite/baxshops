@@ -21,10 +21,10 @@ package tbax.shops.notification;
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.notification.Notification;
-import org.tbax.baxshops.serialization.StateLoader;
-import org.tbax.baxshops.serialization.states.State_00200;
-import org.tbax.baxshops.serialization.states.State_00205;
-import org.tbax.baxshops.serialization.states.State_00210;
+import org.tbax.baxshops.serialization.internal.StateLoader;
+import org.tbax.baxshops.serialization.internal.states.State_00200;
+import org.tbax.baxshops.serialization.internal.states.State_00205;
+import org.tbax.baxshops.serialization.internal.states.State_00210;
 import tbax.shops.ShopEntry;
 
 public class BuyRequest implements Request, TimedNotification
@@ -53,7 +53,7 @@ public class BuyRequest implements Request, TimedNotification
     @Override
     public @NotNull Notification getNewNote(StateLoader stateLoader)
     {
-        return new org.tbax.baxshops.notification.BuyRequest(
+        return new org.tbax.baxshops.notification.internal.BuyRequest(
                 ((State_00200)stateLoader).getShop(shopId).getId(),
                 ((State_00200)stateLoader).registerPlayer(buyer),
                 ((State_00200)stateLoader).registerPlayer(((State_00200)stateLoader).getShopOwner(shopId)),
@@ -64,7 +64,7 @@ public class BuyRequest implements Request, TimedNotification
     @Override
     public @NotNull Class<? extends Notification> getNewNoteClass()
     {
-        return org.tbax.baxshops.notification.BuyRequest.class;
+        return org.tbax.baxshops.notification.internal.BuyRequest.class;
     }
 
     @Override

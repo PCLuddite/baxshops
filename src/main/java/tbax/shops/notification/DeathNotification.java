@@ -22,8 +22,8 @@ import com.google.gson.JsonObject;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.notification.GeneralNotification;
-import org.tbax.baxshops.serialization.StateLoader;
-import org.tbax.baxshops.serialization.states.State_00200;
+import org.tbax.baxshops.serialization.internal.StateLoader;
+import org.tbax.baxshops.serialization.internal.states.State_00200;
 
 public class DeathNotification implements Notification
 {

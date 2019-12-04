@@ -23,8 +23,9 @@
 package qs.shops.notification;
 
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.serialization.StateLoader;
-import org.tbax.baxshops.serialization.states.State_00000;
+import org.tbax.baxshops.notification.internal.SaleRejection;
+import org.tbax.baxshops.serialization.internal.StateLoader;
+import org.tbax.baxshops.serialization.internal.states.State_00000;
 import qs.shops.Shop;
 import qs.shops.ShopEntry;
 
@@ -77,13 +78,13 @@ public class SellRequest implements Request, TimedNotification {
 	@Override
 	public @NotNull Class<? extends org.tbax.baxshops.notification.Notification> getNewNoteClass()
 	{
-		return org.tbax.baxshops.notification.SaleRejection.class;
+		return SaleRejection.class;
 	}
 
 	@Override
 	public @NotNull org.tbax.baxshops.notification.Notification getNewNote(StateLoader stateLoader)
 	{
-		return new org.tbax.baxshops.notification.SaleRejection(
+		return new SaleRejection(
 				((State_00000)stateLoader).registerShop(shop),
 				((State_00000)stateLoader).registerPlayer(shop.owner),
 				((State_00000)stateLoader).registerPlayer(seller),
