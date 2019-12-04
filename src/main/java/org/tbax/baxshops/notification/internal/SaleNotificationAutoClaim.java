@@ -23,7 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.notification.Notification;
 import org.tbax.baxshops.serialization.internal.StateLoader;
-import org.tbax.baxshops.serialization.internal.states.State_00300;
+import org.tbax.baxshops.serialization.internal.states.StateLoader_00300;
 
 import java.util.Map;
 
@@ -41,8 +41,8 @@ public class SaleNotificationAutoClaim implements DeprecatedNote, ConfigurationS
     public @NotNull SaleClaim getNewNote(StateLoader stateLoader)
     {
         return new SaleClaim(BaxShop.DUMMY_UUID,
-                ((State_00300)stateLoader).getPlayer(note.getBuyer()),
-                ((State_00300)stateLoader).getPlayer(note.getSeller()),
+                ((StateLoader_00300)stateLoader).getPlayer(note.getBuyer()),
+                ((StateLoader_00300)stateLoader).getPlayer(note.getSeller()),
                 note.getEntry()
         );
     }

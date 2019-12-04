@@ -20,11 +20,11 @@ package org.tbax.baxshops.serialization.internal.states;
 
 import org.tbax.baxshops.internal.ShopPlugin;
 
-public class State_00480 extends State_00470
+public class StateLoader_00422 extends StateLoader_00421
 {
-    public static final double VERSION = 4.8;
+    public static final double VERSION = 4.22;
 
-    public State_00480(ShopPlugin plugin)
+    public StateLoader_00422(ShopPlugin plugin)
     {
         super(plugin);
     }

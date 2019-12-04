@@ -44,7 +44,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class State_00200 implements StateLoader
+public class StateLoader_00200 implements StateLoader
 {
     private ShopPlugin plugin;
     private PlayerMap players = new PlayerMap();
@@ -53,7 +53,7 @@ public class State_00200 implements StateLoader
     private JsonState jsonState;
     private JsonObject rootObject;
 
-    public State_00200(ShopPlugin plugin)
+    public StateLoader_00200(ShopPlugin plugin)
     {
         this.plugin = plugin;
         jsonState = new JsonState(plugin);

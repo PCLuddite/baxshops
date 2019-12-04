@@ -24,7 +24,7 @@ package qs.shops;
 
 import org.bukkit.Location;
 import org.tbax.baxshops.BaxShop;
-import org.tbax.baxshops.serialization.internal.states.State_00000;
+import org.tbax.baxshops.serialization.internal.states.StateLoader_00000;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ public class Shop implements Serializable {
 	 */
 	public transient Location location;
 
-	public BaxShop modernize(State_00000 state00000)
+	public BaxShop modernize(StateLoader_00000 state00000)
 	{
 		BaxShop baxShop = new BaxShop(location);
 		baxShop.setFlagInfinite(isInfinite);

@@ -34,10 +34,10 @@ import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.MathUtil;
 import org.tbax.baxshops.internal.ShopPlugin;
 import org.tbax.baxshops.internal.items.ItemUtil;
-import org.tbax.baxshops.serialization.internal.states.State_00100;
-import org.tbax.baxshops.serialization.internal.states.State_00200;
-import org.tbax.baxshops.serialization.internal.states.State_00205;
-import org.tbax.baxshops.serialization.internal.states.State_00210;
+import org.tbax.baxshops.serialization.internal.states.StateLoader_00100;
+import org.tbax.baxshops.serialization.internal.states.StateLoader_00200;
+import org.tbax.baxshops.serialization.internal.states.StateLoader_00205;
+import org.tbax.baxshops.serialization.internal.states.StateLoader_00210;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -61,7 +61,7 @@ public class ShopEntry implements Serializable
         this.refundPrice = -1.0;
     }
 
-    public ShopEntry(State_00200 state00200, JsonObject o)
+    public ShopEntry(StateLoader_00200 state00200, JsonObject o)
     {
         stack = ItemUtil.fromItemId(o.get("id").getAsInt(), o.get("damage").getAsShort());
         quantity = o.get("quantity").getAsInt();
@@ -80,7 +80,7 @@ public class ShopEntry implements Serializable
         }
     }
 
-    public ShopEntry(State_00205 state00205, JsonObject o)
+    public ShopEntry(StateLoader_00205 state00205, JsonObject o)
     {
         stack = new ItemStack(Material.getMaterial(o.get("id").getAsString()), 1, o.get("damage").getAsShort());
         if (o.has("enchantments")) {
@@ -99,7 +99,7 @@ public class ShopEntry implements Serializable
         quantity = o.get("quantity").getAsInt();
     }
 
-    public ShopEntry(State_00210 state00210, JsonObject o)
+    public ShopEntry(StateLoader_00210 state00210, JsonObject o)
     {
         stack = new ItemStack(Material.getMaterial(o.get("id").getAsString()), 1, o.get("damage").getAsShort());
         if (o.has("enchantments")) {
@@ -157,7 +157,7 @@ public class ShopEntry implements Serializable
         return stack;
     }
 
-    public BaxEntry modernize(State_00100 state00100)
+    public BaxEntry modernize(StateLoader_00100 state00100)
     {
         BaxEntry baxEntry = new BaxEntry();
         baxEntry.setRefundPrice(MathUtil.roundedDouble(refundPrice));
@@ -169,7 +169,7 @@ public class ShopEntry implements Serializable
         return baxEntry;
     }
 
-    public BaxEntry modernize(State_00200 state00200)
+    public BaxEntry modernize(StateLoader_00200 state00200)
     {
         BaxEntry baxEntry = new BaxEntry();
         baxEntry.setRefundPrice(refundPrice);

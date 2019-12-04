@@ -36,7 +36,7 @@ import qs.shops.Shop;
 import java.io.*;
 import java.util.*;
 
-public class State_00000 implements StateLoader
+public class StateLoader_00000 implements StateLoader
 {
     public static final double VERSION = 0;
     private ShopPlugin plugin;
@@ -44,7 +44,7 @@ public class State_00000 implements StateLoader
     private Map<Shop, BaxShop> shopMap = new HashMap<>();
     private Map<String, StoredPlayer> playerMap = new HashMap<>();
 
-    public State_00000(ShopPlugin plugin)
+    public StateLoader_00000(ShopPlugin plugin)
     {
         this.plugin = plugin;
         playerMap.put(StoredPlayer.DUMMY_NAME, StoredPlayer.DUMMY);

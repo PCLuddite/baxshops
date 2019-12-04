@@ -35,14 +35,14 @@ import org.tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.*;
 
-public class State_00300 extends LoaderWithNotes
+public class StateLoader_00300 extends LoaderWithNotes
 {
     public static final double VERSION = 3.0;
     private Map<Long, UUID> legacyIds = new HashMap<>();
     private PlayerMap players = new PlayerMap();
     private ShopPlugin plugin;
 
-    public State_00300(@NotNull ShopPlugin plugin)
+    public StateLoader_00300(@NotNull ShopPlugin plugin)
     {
         this.plugin = plugin;
     }

@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 
 public final class State
 {
-    static final double STATE_VERSION = State_00480.VERSION; // state file format version
+    static final double STATE_VERSION = StateLoader_00480.VERSION; // state file format version
 
     private static double loadedState;
     private final StateFile stateFile;
@@ -83,18 +83,18 @@ public final class State
     {
         File stateLocation = ShopPlugin.getStateFile().getFile();
         if (!stateLocation.exists()) {
-            if (State_00100.getState2File(plugin).exists()) {
-                if (State_00100.getSerializedClass(plugin) == qs.shops.serialization.State.class) {
+            if (StateLoader_00100.getState2File(plugin).exists()) {
+                if (StateLoader_00100.getSerializedClass(plugin) == qs.shops.serialization.State.class) {
                     plugin.getLogger().info("Beginning conversion from nathan/shops");
-                    return new State_00000(plugin).loadState(State_00000.getNathanFile(plugin));
+                    return new StateLoader_00000(plugin).loadState(StateLoader_00000.getNathanFile(plugin));
                 }
                 else {
                     plugin.getLogger().info("Beginning conversion from tbax.shops.serialization.State2");
-                    return new State_00100(plugin).loadState(State_00100.getState2File(plugin));
+                    return new StateLoader_00100(plugin).loadState(StateLoader_00100.getState2File(plugin));
                 }
             }
-            else if (State_00200.getJsonFile(plugin).exists()) {
-                double jsonVersion = State_00200.getJsonFileVersion(plugin);
+            else if (StateLoader_00200.getJsonFile(plugin).exists()) {
+                double jsonVersion = StateLoader_00200.getJsonFileVersion(plugin);
                 if (jsonVersion == 0) {
                     plugin.getLogger().info("Beginning conversion from json");
                 }
@@ -102,13 +102,13 @@ public final class State
                     plugin.getLogger().info("Beginning conversion from json " + new DecimalFormat("0.0#").format(jsonVersion));
                 }
                 if (jsonVersion == 2.1) {
-                    return new State_00210(plugin).loadState(State_00200.getJsonFile(plugin));
+                    return new StateLoader_00210(plugin).loadState(StateLoader_00200.getJsonFile(plugin));
                 }
                 else if (jsonVersion == 2.0) {
-                    return new State_00205(plugin).loadState(State_00200.getJsonFile(plugin));
+                    return new StateLoader_00205(plugin).loadState(StateLoader_00200.getJsonFile(plugin));
                 }
                 else {
-                    return new State_00200(plugin).loadState(State_00200.getJsonFile(plugin));
+                    return new StateLoader_00200(plugin).loadState(StateLoader_00200.getJsonFile(plugin));
                 }
             }
             else {
@@ -122,7 +122,7 @@ public final class State
                 ver = plugin.getConfig().getDouble("StateVersion", STATE_VERSION);
             }
             else {
-                ver = State_00300.VERSION; // version 3.0 was the last version not to be in config.yml
+                ver = StateLoader_00300.VERSION; // version 3.0 was the last version not to be in config.yml
             }
         }
 

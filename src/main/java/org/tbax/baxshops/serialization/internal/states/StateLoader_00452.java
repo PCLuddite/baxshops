@@ -36,11 +36,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class State_00452 extends State_00451
+public class StateLoader_00452 extends StateLoader_00451
 {
     public static final double VERSION = 4.52;
 
-    public State_00452(ShopPlugin plugin)
+    public StateLoader_00452(ShopPlugin plugin)
     {
         super(plugin);
     }

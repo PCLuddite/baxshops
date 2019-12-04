@@ -37,8 +37,8 @@ import org.tbax.baxshops.serialization.internal.UpgradeableSerializable;
 import org.tbax.baxshops.serialization.internal.UpgradeableSerialization;
 import org.tbax.baxshops.serialization.annotations.DoNotSerialize;
 import org.tbax.baxshops.serialization.annotations.SerializeMethod;
-import org.tbax.baxshops.serialization.internal.states.State_00300;
-import org.tbax.baxshops.serialization.internal.states.State_00420;
+import org.tbax.baxshops.serialization.internal.states.StateLoader_00300;
+import org.tbax.baxshops.serialization.internal.states.StateLoader_00420;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -109,7 +109,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
         id = UUID.randomUUID();
         legacyId = map.getLong("id");
         shortId = new String[] { createShortId() };
-        flags = State_00300.flagMapToFlag(map);
+        flags = StateLoader_00300.flagMapToFlag(map);
         inventory.addAll(map.getList("inventory"));
         locations.addAll(map.getList("locations"));
         locations.remove(null);
@@ -121,7 +121,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
         id =  map.getUUID("id", UUID.randomUUID());
         shortId = new String[] { createShortId() };
         owner = map.getUUID("owner", StoredPlayer.ERROR_UUID);
-        flags = State_00420.convertFlag(map.getInteger("flags"));
+        flags = StateLoader_00420.convertFlag(map.getInteger("flags"));
         inventory.addAll(map.getList("inventory"));
         locations.addAll(map.getList("locations"));
         locations.remove(null);

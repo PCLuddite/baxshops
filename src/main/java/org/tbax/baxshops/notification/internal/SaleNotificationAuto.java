@@ -25,7 +25,7 @@ import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.notification.Notification;
 import org.tbax.baxshops.serialization.SafeMap;
 import org.tbax.baxshops.serialization.internal.StateLoader;
-import org.tbax.baxshops.serialization.internal.states.State_00300;
+import org.tbax.baxshops.serialization.internal.states.StateLoader_00300;
 
 import java.util.Map;
 
@@ -48,8 +48,8 @@ public class SaleNotificationAuto implements DeprecatedNote, ConfigurationSerial
     public @NotNull SaleNotification getNewNote(StateLoader stateLoader)
     {
         return new SaleNotification(BaxShop.DUMMY_UUID,
-                ((State_00300)stateLoader).getPlayer(buyer),
-                ((State_00300)stateLoader).getPlayer(seller),
+                ((StateLoader_00300)stateLoader).getPlayer(buyer),
+                ((StateLoader_00300)stateLoader).getPlayer(seller),
                 entry);
     }
 

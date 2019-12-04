@@ -37,7 +37,7 @@ import tbax.shops.serialization.State2;
 import java.io.*;
 import java.util.*;
 
-public class State_00100 implements StateLoader
+public class StateLoader_00100 implements StateLoader
 {
     public static final double VERSION = 1.0;
     private ShopPlugin plugin;
@@ -45,7 +45,7 @@ public class State_00100 implements StateLoader
     private Map<tbax.shops.Shop, BaxShop> shopMap = new HashMap<>();
     private Map<String, StoredPlayer> playerMap = new HashMap<>();
 
-    public State_00100(ShopPlugin plugin)
+    public StateLoader_00100(ShopPlugin plugin)
     {
         this.plugin = plugin;
         playerMap.put(StoredPlayer.DUMMY_NAME, StoredPlayer.DUMMY);

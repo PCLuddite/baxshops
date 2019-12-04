@@ -24,7 +24,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import org.bukkit.Location;
 import org.tbax.baxshops.internal.ShopPlugin;
-import org.tbax.baxshops.serialization.internal.states.State_00200;
+import org.tbax.baxshops.serialization.internal.states.StateLoader_00200;
 import tbax.shops.BaxShop;
 import tbax.shops.notification.*;
 
@@ -74,7 +74,7 @@ public final class JsonState
         return null;
     }
 
-    public void loadShops(State_00200 loader, JsonObject shopObject)
+    public void loadShops(StateLoader_00200 loader, JsonObject shopObject)
     {
         for (Map.Entry<String, JsonElement> entry : shopObject.entrySet()) {
             try {
@@ -91,7 +91,7 @@ public final class JsonState
         }
     }
 
-    public void loadNotes(State_00200 loader, JsonObject noteObject)
+    public void loadNotes(StateLoader_00200 loader, JsonObject noteObject)
     {
         for (Map.Entry<String, JsonElement> entry : noteObject.entrySet()) {
             ArrayDeque<Notification> notes = new ArrayDeque<>();
@@ -113,7 +113,7 @@ public final class JsonState
         }
     }
 
-    private Notification loadNote(State_00200 loader, JsonObject o)
+    private Notification loadNote(StateLoader_00200 loader, JsonObject o)
     {
         String asString = o.get("type").getAsString();
         switch (asString) {

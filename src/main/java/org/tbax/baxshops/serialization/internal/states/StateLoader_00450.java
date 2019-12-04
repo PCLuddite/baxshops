@@ -19,22 +19,25 @@
 package org.tbax.baxshops.serialization.internal.states;
 
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.internal.ShopPlugin;
-import org.tbax.baxshops.notification.internal.NoteSet;
+import org.tbax.baxshops.serialization.internal.StateLoader;
 import org.tbax.baxshops.serialization.StoredPlayer;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class State_00400 extends LoaderWithNotes
+public class StateLoader_00450 implements StateLoader
 {
-    public static final double VERSION = 4.0;
+    public static final double VERSION = 4.5;
     private ShopPlugin plugin;
 
-    public State_00400(@NotNull ShopPlugin plugin)
+    public StateLoader_00450(ShopPlugin plugin)
     {
         this.plugin = plugin;
     }
@@ -76,26 +79,14 @@ public class State_00400 extends LoaderWithNotes
     }
 
     @Override
-    public @NotNull Collection<NoteSet> buildNotifications(@NotNull FileConfiguration state)
-    {
-        List<NoteSet> notes = new ArrayList<>();
-        if (!state.isList("notes")) {
-            return notes;
-        }
-        for (Object o : state.getList("notes")) {
-            if (o instanceof NoteSet) {
-                notes.add((NoteSet)o);
-            }
-            else {
-                plugin.getLogger().warning("Could not load NoteSet of type " + o.getClass());
-            }
-        }
-        return notes;
-    }
-
-    @Override
     public @NotNull ShopPlugin getPlugin()
     {
         return plugin;
+    }
+
+    @Override
+    public FileConfiguration readFile(@NotNull File stateLocation) throws IOException
+    {
+        return YamlConfiguration.loadConfiguration(stateLocation);
     }
 }

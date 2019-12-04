@@ -18,14 +18,31 @@
  */
 package org.tbax.baxshops.serialization.internal.states;
 
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.internal.ShopPlugin;
 
-public class State_00460 extends State_00452
-{
-    public static final double VERSION = 4.6;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 
-    public State_00460(ShopPlugin plugin)
+public class StateLoader_00470 extends StateLoader_00460
+{
+    public static final double VERSION = 4.7;
+
+    public StateLoader_00470(ShopPlugin plugin)
     {
         super(plugin);
+    }
+
+    @Override
+    public FileConfiguration readFile(@NotNull File stateLocation) throws IOException
+    {
+        try (BufferedReader reader = new BufferedReader(new FileReader(stateLocation))) {
+            reader.readLine();
+            return YamlConfiguration.loadConfiguration(reader);
+        }
     }
 }

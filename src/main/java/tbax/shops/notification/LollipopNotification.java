@@ -26,7 +26,7 @@ import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.serialization.internal.StateLoader;
 import org.tbax.baxshops.serialization.StoredPlayer;
-import org.tbax.baxshops.serialization.internal.states.State_00100;
+import org.tbax.baxshops.serialization.internal.states.StateLoader_00100;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -82,7 +82,7 @@ public class LollipopNotification implements Notification
             }
         }
         return new org.tbax.baxshops.notification.internal.LollipopNotification(
-                ((State_00100)stateLoader).registerPlayer(sender),
+                ((StateLoader_00100)stateLoader).registerPlayer(sender),
                 StoredPlayer.ERROR,
                 adjective
         );

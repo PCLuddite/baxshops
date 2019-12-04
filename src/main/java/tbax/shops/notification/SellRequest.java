@@ -26,10 +26,10 @@ import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.notification.internal.SaleRejection;
 import org.tbax.baxshops.serialization.internal.StateLoader;
-import org.tbax.baxshops.serialization.internal.states.State_00100;
-import org.tbax.baxshops.serialization.internal.states.State_00200;
-import org.tbax.baxshops.serialization.internal.states.State_00205;
-import org.tbax.baxshops.serialization.internal.states.State_00210;
+import org.tbax.baxshops.serialization.internal.states.StateLoader_00100;
+import org.tbax.baxshops.serialization.internal.states.StateLoader_00200;
+import org.tbax.baxshops.serialization.internal.states.StateLoader_00205;
+import org.tbax.baxshops.serialization.internal.states.StateLoader_00210;
 import tbax.shops.Shop;
 import tbax.shops.ShopEntry;
 
@@ -55,15 +55,15 @@ public class SellRequest implements Request, TimedNotification
         this.expirationDate = c.getTimeInMillis();
     }
 
-    public SellRequest(State_00200 state00200, JsonObject o) {
+    public SellRequest(StateLoader_00200 state00200, JsonObject o) {
         seller = o.get("seller").getAsString();
         shopId = o.get("shop").getAsInt();
         expirationDate = o.get("expires").getAsLong();
-        if (state00200 instanceof State_00210) {
-            entry = new ShopEntry((State_00210)state00200, o.get("entry").getAsJsonObject());
+        if (state00200 instanceof StateLoader_00210) {
+            entry = new ShopEntry((StateLoader_00210)state00200, o.get("entry").getAsJsonObject());
         }
-        else if (state00200 instanceof State_00205) {
-            entry = new ShopEntry((State_00205)state00200, o.get("entry").getAsJsonObject());
+        else if (state00200 instanceof StateLoader_00205) {
+            entry = new ShopEntry((StateLoader_00205)state00200, o.get("entry").getAsJsonObject());
         }
         else {
             entry = new ShopEntry(state00200, o.get("entry").getAsJsonObject());
@@ -84,20 +84,20 @@ public class SellRequest implements Request, TimedNotification
     @Override
     public @NotNull org.tbax.baxshops.notification.Notification getNewNote(StateLoader stateLoader)
     {
-        if (stateLoader instanceof State_00100) {
+        if (stateLoader instanceof StateLoader_00100) {
             return new SaleRejection(
-                    ((State_00100) stateLoader).registerShop(shop).getId(),
-                    ((State_00100) stateLoader).registerPlayer(shop.owner),
-                    ((State_00100) stateLoader).registerPlayer(seller),
-                    entry.modernize((State_00100) stateLoader)
+                    ((StateLoader_00100) stateLoader).registerShop(shop).getId(),
+                    ((StateLoader_00100) stateLoader).registerPlayer(shop.owner),
+                    ((StateLoader_00100) stateLoader).registerPlayer(seller),
+                    entry.modernize((StateLoader_00100) stateLoader)
             );
         }
         else {
             return new SaleRejection(
-                    ((State_00200) stateLoader).getShop(shopId).getId(),
-                    ((State_00200)stateLoader).registerPlayer(((State_00200)stateLoader).getShopOwner(shopId)),
-                    ((State_00200) stateLoader).registerPlayer(seller),
-                    entry.modernize((State_00200)stateLoader)
+                    ((StateLoader_00200) stateLoader).getShop(shopId).getId(),
+                    ((StateLoader_00200)stateLoader).registerPlayer(((StateLoader_00200)stateLoader).getShopOwner(shopId)),
+                    ((StateLoader_00200) stateLoader).registerPlayer(seller),
+                    entry.modernize((StateLoader_00200)stateLoader)
             );
         }
     }

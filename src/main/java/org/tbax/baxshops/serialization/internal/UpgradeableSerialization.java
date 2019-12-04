@@ -55,7 +55,7 @@ public final class UpgradeableSerialization
     public static StateLoader getStateLoader(ShopPlugin plugin, double ver) throws ReflectiveOperationException
     {
         String verStr = getVersionString(ver);
-        Class<?> stateClass = getClass("org.tbax.baxshops.serialization.internal.states", "State_" + verStr);
+        Class<?> stateClass = getClass("org.tbax.baxshops.serialization.internal.states", "StateLoader_" + verStr);
         return (StateLoader)stateClass.getConstructor(ShopPlugin.class).newInstance(plugin);
     }
 

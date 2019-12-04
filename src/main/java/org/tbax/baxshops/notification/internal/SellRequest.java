@@ -24,7 +24,7 @@ import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.notification.Notification;
 import org.tbax.baxshops.serialization.SafeMap;
 import org.tbax.baxshops.serialization.internal.StateLoader;
-import org.tbax.baxshops.serialization.internal.states.State_00300;
+import org.tbax.baxshops.serialization.internal.states.StateLoader_00300;
 
 import java.util.Map;
 
@@ -50,9 +50,9 @@ public class SellRequest implements DeprecatedNote, ConfigurationSerializable
     @Override
     public @NotNull SaleRequest getNewNote(StateLoader stateLoader)
     {
-        return new SaleRequest(((State_00300)stateLoader).getShopId(shopId),
-            ((State_00300)stateLoader).getPlayer(buyer),
-            ((State_00300)stateLoader).getPlayer(seller),
+        return new SaleRequest(((StateLoader_00300)stateLoader).getShopId(shopId),
+            ((StateLoader_00300)stateLoader).getPlayer(buyer),
+            ((StateLoader_00300)stateLoader).getPlayer(seller),
             entry);
     }
 

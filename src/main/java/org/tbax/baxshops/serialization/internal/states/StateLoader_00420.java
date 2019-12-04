@@ -21,7 +21,7 @@ package org.tbax.baxshops.serialization.internal.states;
 import org.tbax.baxshops.BaxShopFlag;
 import org.tbax.baxshops.internal.ShopPlugin;
 
-public class State_00420 extends State_00411
+public class StateLoader_00420 extends StateLoader_00411
 {
     public static final double VERSION = 4.2;
 
@@ -32,7 +32,7 @@ public class State_00420 extends State_00411
     private static final int BUY_REQUESTS = 1<<4;   // 010000
     private static final int SELL_REQUESTS = 1<<5;  // 100000
 
-    public State_00420(ShopPlugin plugin)
+    public StateLoader_00420(ShopPlugin plugin)
     {
         super(plugin);
     }
