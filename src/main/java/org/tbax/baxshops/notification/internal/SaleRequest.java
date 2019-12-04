@@ -24,7 +24,7 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.Format;
-import org.tbax.baxshops.internal.PlayerUtil;
+import org.tbax.baxshops.PlayerUtil;
 import org.tbax.baxshops.internal.ShopPlugin;
 import org.tbax.baxshops.commands.ShopCmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;

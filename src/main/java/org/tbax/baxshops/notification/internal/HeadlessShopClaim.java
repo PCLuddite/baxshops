@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.BaxShop;
-import org.tbax.baxshops.internal.PlayerUtil;
+import org.tbax.baxshops.PlayerUtil;
 import org.tbax.baxshops.internal.Resources;
 import org.tbax.baxshops.commands.ShopCmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;

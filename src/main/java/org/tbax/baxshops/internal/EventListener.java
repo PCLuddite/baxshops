@@ -35,6 +35,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.Format;
+import org.tbax.baxshops.PlayerUtil;
 import org.tbax.baxshops.errors.CommandErrorException;
 import org.tbax.baxshops.errors.CommandWarningException;
 import org.tbax.baxshops.errors.PrematureAbortException;

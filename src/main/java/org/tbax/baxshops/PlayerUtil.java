@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
  * USA
  */
-package org.tbax.baxshops.internal;
+package org.tbax.baxshops;
 
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -33,6 +33,8 @@ import org.tbax.baxshops.MathUtil;
 import org.tbax.baxshops.errors.CommandErrorException;
 import org.tbax.baxshops.errors.CommandWarningException;
 import org.tbax.baxshops.errors.PrematureAbortException;
+import org.tbax.baxshops.internal.Resources;
+import org.tbax.baxshops.internal.ShopPlugin;
 import org.tbax.baxshops.notification.internal.DeletedShopClaim;
 import org.tbax.baxshops.notification.internal.SaleClaim;
 import org.tbax.baxshops.internal.items.ItemUtil;

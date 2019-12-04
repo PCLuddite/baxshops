@@ -27,7 +27,7 @@ import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.BaxQuantity;
-import org.tbax.baxshops.internal.PlayerUtil;
+import org.tbax.baxshops.PlayerUtil;
 import org.tbax.baxshops.internal.Resources;
 import org.tbax.baxshops.internal.ShopPlugin;
 import org.tbax.baxshops.internal.items.ItemUtil;
