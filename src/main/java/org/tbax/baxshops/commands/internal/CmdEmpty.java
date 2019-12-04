@@ -107,11 +107,11 @@ public final class CmdEmpty extends BaxShopCommand
 
         for(int idx = startIdx; idx < shop.size(); ++idx) {
             BaxEntry entry = shop.getEntry(idx);
-            ItemStack stack = entry.toItemStack();
 
-            if (stack.getAmount() <= 0)
+            if (entry.getAmount() <= 0)
                 continue;
 
+            ItemStack stack = entry.toItemStack();
             int overflow = PlayerUtil.giveItem(actor.getPlayer(), stack, false);
             entry.subtract(stack.getAmount() - overflow);
             if (overflow > 0) {
