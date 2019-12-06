@@ -524,12 +524,27 @@ public final class ShopPlugin extends JavaPlugin
         else if (actor.getNumArgs() > 1) {
             BaxShopCommand cmd = commands.get(actor.getArg(0));
             if (cmd == null) return Collections.emptyList();
-            String arg = actor.getArg(actor.getNumArgs() - 1).toLowerCase();
+            String[] argWords = actor.getArg(actor.getNumArgs() - 1).toLowerCase().split("_");
+            String lastWord = argWords[argWords.length - 1];
             List<String> suggestions = cmd.onTabComplete(actor, command, alias, args);
             List<String> filtered = new ArrayList<>(suggestions.size());
             for(String suggestion : suggestions) {
-                if (Arrays.stream(suggestion.split("_")).anyMatch(word -> word.startsWith(arg))) {
+                if (Arrays.stream(suggestion.split("_")).anyMatch(word -> word.startsWith(lastWord))) {
                     filtered.add(suggestion);
+                }
+            }
+            if (argWords.length > 1) {
+                for (int i = filtered.size() - 1; i >= 0; --i) {
+                    List<String> suggestionWords = Arrays.asList(filtered.get(i).split("_"));
+                    boolean found = false;
+                    for (int j = 0; j < args.length - 1 && !found; ++j) {
+                        if (suggestionWords.contains(argWords[j])) {
+                            found = true;
+                        }
+                    }
+                    if (!found) {
+                        filtered.remove(i);
+                    }
                 }
             }
             return filtered;
