@@ -22,6 +22,7 @@
  */
 package tbax.shops.notification;
 
+@Deprecated
 public interface Claimable extends Notification
 {
 }

@@ -38,6 +38,7 @@ import java.util.Map;
  * with a retail (buy) price and a refund (sell) price. If the item's
  * refund price is -1, the item cannot be sold to the shop.
  */
+@Deprecated
 public class ShopEntry implements Serializable {
 	private static final long serialVersionUID = 1L;
 	/**

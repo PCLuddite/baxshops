@@ -28,5 +28,6 @@ package qs.shops.notification;
  * When a Claimable notification is sent, the notification is
  * automatically claimed if the user is online.
  */
+@Deprecated
 public interface Claimable extends Notification {
 }

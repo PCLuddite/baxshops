@@ -30,6 +30,7 @@ import java.io.Serializable;
 /**
  * A BlockLocation is a Location suitable for serialization.
  */
+@Deprecated
 public class BlockLocation implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

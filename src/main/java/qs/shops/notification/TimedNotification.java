@@ -27,5 +27,6 @@ package qs.shops.notification;
  * after which it expires.
  * TimedNotifications are automatically rejected when they expire.
  */
+@Deprecated
 public interface TimedNotification {
 }

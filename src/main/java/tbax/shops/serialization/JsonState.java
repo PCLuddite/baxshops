@@ -36,6 +36,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
 
+@Deprecated
 public final class JsonState
 {
     public static final String JSON_FILE_PATH = "shops.json";

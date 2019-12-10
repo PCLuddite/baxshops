@@ -27,6 +27,7 @@ import org.bukkit.Location;
 
 import java.io.Serializable;
 
+@Deprecated
 public class BlockLocation implements Serializable
 {
     private static final long serialVersionUID = 1L;

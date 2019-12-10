@@ -31,6 +31,7 @@ import org.tbax.baxshops.internal.serialization.states.StateLoader_00100;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+@Deprecated
 public class LollipopNotification implements Notification
 {
     private static final long serialVersionUID = 1L;

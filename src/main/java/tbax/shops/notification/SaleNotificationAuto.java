@@ -28,6 +28,7 @@ import org.tbax.baxshops.internal.serialization.states.StateLoader_00210;
 import tbax.shops.ShopEntry;
 import tbax.shops.BaxShop;
 
+@Deprecated
 public class SaleNotificationAuto implements Claimable
 {
     private static final long serialVersionUID = 1L;

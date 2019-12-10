@@ -32,6 +32,7 @@ import org.tbax.baxshops.internal.serialization.states.StateLoader_00210;
 import tbax.shops.Shop;
 import tbax.shops.ShopEntry;
 
+@Deprecated
 public class BuyNotification implements Notification
 {
     private static final long serialVersionUID = 1L;

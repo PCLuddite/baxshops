@@ -25,6 +25,7 @@ import org.tbax.baxshops.notification.GeneralNotification;
 import org.tbax.baxshops.internal.serialization.StateLoader;
 import org.tbax.baxshops.internal.serialization.states.StateLoader_00200;
 
+@Deprecated
 public class DeathNotification implements Notification
 {
     private static final long serialVersionUID = 1L;

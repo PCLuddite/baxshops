@@ -37,6 +37,7 @@ import java.util.Date;
  * to sell him/her an item.
  * SellRequests expire after five days.
  */
+@Deprecated
 public class SellRequest implements Request, TimedNotification {
 	private static final long serialVersionUID = 1L;
 	/**

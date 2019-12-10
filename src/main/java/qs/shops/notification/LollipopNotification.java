@@ -35,6 +35,7 @@ import java.util.Map.Entry;
  * A LollipopNotification notifies a player that someone sent him/her a
  * lollipop.
  */
+@Deprecated
 public class LollipopNotification implements Notification {
 	private static final long serialVersionUID = 1L;
 	

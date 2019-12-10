@@ -26,6 +26,7 @@ import org.tbax.baxshops.internal.notification.DeprecatedNote;
 
 import java.io.Serializable;
 
+@Deprecated
 public interface Notification extends DeprecatedNote, Serializable
 {
 }

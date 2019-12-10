@@ -35,6 +35,7 @@ import qs.shops.notification.Notification;
 /**
  * State saves the whole state of the Shops plugin in a serializable class.
  */
+@Deprecated
 public class State implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

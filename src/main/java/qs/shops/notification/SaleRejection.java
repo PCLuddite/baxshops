@@ -31,6 +31,7 @@ import qs.shops.ShopEntry;
 /**
  * A SaleRejection notifies a seller that his/her offer was rejected.
  */
+@Deprecated
 public class SaleRejection implements Claimable {
 	private static final long serialVersionUID = 1L;
 	/**

@@ -37,5 +37,6 @@ import java.io.Serializable;
  * A Notification is regarded as a message and will be deleted
  * once viewed, unless the notification is a Request or Claimable
  */
+@Deprecated
 public interface Notification extends DeprecatedNote, Serializable {
 }

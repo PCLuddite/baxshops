@@ -28,6 +28,7 @@ import tbax.shops.notification.*;
 import org.bukkit.*;
 import java.util.*;
 
+@Deprecated
 public class State2 implements Serializable
 {
     private static final long serialVersionUID = 1L;

@@ -22,6 +22,7 @@
  */
 package tbax.shops.notification;
 
+@Deprecated
 public interface Request extends Notification
 {
 }

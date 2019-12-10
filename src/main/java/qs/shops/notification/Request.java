@@ -25,5 +25,6 @@ package qs.shops.notification;
 /**
  * A Request represents a /accept- or /reject-able {@link Notification}.
  */
+@Deprecated
 public interface Request extends Notification {
 }

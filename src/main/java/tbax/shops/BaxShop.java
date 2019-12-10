@@ -32,6 +32,7 @@ import tbax.shops.serialization.BlockLocation;
 import java.io.Serializable;
 import java.util.*;
 
+@Deprecated
 public class BaxShop extends Shop implements Serializable
 {
     private static final long serialVersionUID = 1L;

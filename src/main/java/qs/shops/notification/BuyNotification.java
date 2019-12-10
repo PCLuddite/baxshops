@@ -32,6 +32,7 @@ import qs.shops.ShopEntry;
  * A BuyNotification notifies a shop owner that someone bought an item
  * from him/her.
  */
+@Deprecated
 public class BuyNotification implements Notification {
 	private static final long serialVersionUID = 1L;
 	/**

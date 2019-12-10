@@ -22,6 +22,7 @@ import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.internal.serialization.StateLoader;
 
+@Deprecated
 public class GeneralNotification implements Notification
 {
     private static final long serialVersionUID = 4690549135531057376L;

@@ -32,6 +32,7 @@ import java.util.ArrayList;
 /**
  * A Shop represents a user's shop and its inventory of items.
  */
+@Deprecated
 public class Shop implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

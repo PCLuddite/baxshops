@@ -33,6 +33,7 @@ import qs.shops.ShopEntry;
  * A SaleNotification notifies a player that his/her sale of an
  * item was successful.
  */
+@Deprecated
 public class SaleNotification implements Notification {
 	private static final long serialVersionUID = 1L;
 	/**

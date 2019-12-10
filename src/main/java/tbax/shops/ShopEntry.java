@@ -45,6 +45,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated
 public class ShopEntry implements Serializable
 {
     private static final long serialVersionUID = 1L;

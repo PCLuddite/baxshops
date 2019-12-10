@@ -36,6 +36,7 @@ import tbax.shops.ShopEntry;
 import java.util.Calendar;
 import java.util.Date;
 
+@Deprecated
 public class SellRequest implements Request, TimedNotification
 {
     private static final long serialVersionUID = 1L;

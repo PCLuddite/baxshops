@@ -27,6 +27,7 @@ import org.tbax.baxshops.internal.serialization.states.StateLoader_00205;
 import org.tbax.baxshops.internal.serialization.states.StateLoader_00210;
 import tbax.shops.ShopEntry;
 
+@Deprecated
 public class BuyRequest implements Request, TimedNotification
 {
     public ShopEntry purchased;

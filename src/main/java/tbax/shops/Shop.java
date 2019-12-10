@@ -29,6 +29,7 @@ import org.tbax.baxshops.internal.serialization.states.StateLoader_00100;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+@Deprecated
 public class Shop implements Serializable
 {
     private static final long serialVersionUID = 1L;
