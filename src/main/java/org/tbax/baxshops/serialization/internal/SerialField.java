@@ -20,6 +20,7 @@ package org.tbax.baxshops.serialization.internal;
 
 import org.tbax.baxshops.serialization.SafeMap;
 import org.tbax.baxshops.serialization.annotations.SerializeMethod;
+import org.tbax.baxshops.serialization.annotations.SerializeNonNull;
 import org.tbax.baxshops.serialization.annotations.SerializedAs;
 
 import java.lang.reflect.Array;
@@ -37,6 +38,14 @@ public class SerialField
         f.setAccessible(true);
         field = f;
         this.clazz = clazz;
+    }
+
+    public <E extends UpgradeableSerializable> boolean shouldSerialize(E obj) throws ReflectiveOperationException
+    {
+        if (field.getAnnotation(SerializeNonNull.class) != null) {
+            return get(obj) != null;
+        }
+        return true;
     }
 
     public String name()

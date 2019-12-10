@@ -86,7 +86,9 @@ public final class UpgradeableSerialization
         for (Field field : getFields(obj.getClass())) {
             SerialField serialField = new SerialField(obj.getClass(), field);
             try {
-                serialField.putMap(map, obj);
+                if (serialField.shouldSerialize(obj)) {
+                    serialField.putMap(map, obj);
+                }
             }
             catch (ReflectiveOperationException e) {
                 throw new RuntimeException(obj.getClass().getCanonicalName() + " caused a serialization error", e);

@@ -197,7 +197,7 @@ public final class PlayerUtil
     {
         double price = MathUtil.multiply(entry.getRefundPrice(), entry.getAmount());
 
-        if (!buyer.equals(StoredPlayer.DUMMY)) { // don't charge the dummy
+        if (!buyer.equals(StoredPlayer.DUMMY) || ShopPlugin.getBaxConfig().hasDepositDummy()) { // don't charge the dummy
             if (!ShopPlugin.getEconomy().has(buyer, price)) {
                 throw new CommandErrorException(Resources.NO_MONEY_SELLER);
             }

@@ -39,6 +39,7 @@ import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.items.ItemUtil;
 import org.tbax.baxshops.notification.*;
 import org.tbax.baxshops.notification.internal.*;
+import org.tbax.baxshops.serialization.internal.BaxConfig;
 import org.tbax.baxshops.serialization.internal.State;
 import org.tbax.baxshops.serialization.internal.StateFile;
 import org.tbax.baxshops.serialization.StoredPlayer;
@@ -403,6 +404,11 @@ public final class ShopPlugin extends JavaPlugin
     public static void logPossibleError(String msg)
     {
         logWarning("Possible error: " + msg);
+    }
+
+    public static BaxConfig getBaxConfig()
+    {
+        return getStateFile().getConfig();
     }
 
     @Override

@@ -7,9 +7,25 @@
 # Backup:
 #   Days: 1         # Number of days to keep backups. Set this to -1 to never delete backups or 0 to disable backups
 #   Interval: 60    # The interval (in minutes) to back up
+# SpecialPlayers:
+#  Dummy:           # this name and id will be used as a nonexistent player
+#    name: world
+#    uuid: 326a36ea-b465-3192-a4f7-c313f347edc9
+#    RealDeposit: false     # Set this to true to actually carry out financial transactions with the dummy
+#  Error:           # this name and id will be used to assign for errors such as when a notification has no recipient
+#    name: §c<ERROR>
+#    uuid: 3d748006-ddc3-4f1b-a7c9-01fab68d0797
 # LogNotes: false   # Show all notifications and messages from players in the log
 #
 Backup:
   Days: 1
   Interval: 60
+SpecialPlayers:
+  Dummy:
+    name: world
+    uuid: 326a36ea-b465-3192-a4f7-c313f347edc9
+    RealDeposit: false
+  Error:
+    name: §c<ERROR>
+    uuid: 3d748006-ddc3-4f1b-a7c9-01fab68d0797
 LogNotes: false

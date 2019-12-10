@@ -53,18 +53,11 @@ public abstract class LoaderWithNotes implements StateLoader
 
         ShopPlugin.logInfo("Loading shop data...");
         Collection<BaxShop> shops = buildShops(state);
+        sanitizeShopData(shops);
         ShopPlugin.logInfo("Loading notifications...");
         Collection<NoteSet> notes = buildNotifications(state);
         ShopPlugin.logInfo("Loading player data...");
         Collection<StoredPlayer> players = buildPlayers(state);
-
-        for (StoredPlayer player : players) {
-            addPlayer(savedState, player);
-        }
-
-        for (BaxShop shop : shops) {
-            addShop(savedState, shop);
-        }
 
         for (NoteSet noteSet : notes) {
             Deque<Notification> deque = noteSet.getNotifications();
@@ -73,6 +66,11 @@ public abstract class LoaderWithNotes implements StateLoader
                 player.queueNote(note);
             }
         }
+        
+        sanitizePlayerData(players);
+
+        savedState.setPlayers(players);
+        savedState.setShops(shops);
 
         loadConfig(ShopPlugin.getStateFile().getConfig());
         return savedState;

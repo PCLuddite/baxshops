@@ -54,8 +54,8 @@ public final class StateFile
         }
 
         FileConfiguration state = new YamlConfiguration();
-        state.set("shops", new ArrayList<>(savedState.shops.values()));
-        state.set("players", new ArrayList<>(savedState.players.values()));
+        state.set("shops", new ArrayList<>(savedState.getShops()));
+        state.set("players", new ArrayList<>(savedState.getPlayers()));
 
         try {
             File dir = plugin.getDataFolder();

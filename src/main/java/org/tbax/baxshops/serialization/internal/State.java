@@ -25,21 +25,22 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.internal.ShopPlugin;
+import org.tbax.baxshops.notification.Notification;
 import org.tbax.baxshops.serialization.PlayerMap;
 import org.tbax.baxshops.serialization.StoredPlayer;
 import org.tbax.baxshops.serialization.internal.states.*;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public final class State
 {
-    static final double STATE_VERSION = StateLoader_00480.VERSION; // state file format version
+    static final double STATE_VERSION = StateLoader_00481.VERSION; // state file format version
 
     private static double loadedState;
     private final StateFile stateFile;
@@ -47,21 +48,19 @@ public final class State
     /**
      * A map of ids map to their shops
      */
-    ShopMap shops = new ShopMap();
+    private ShopMap shops = new ShopMap();
 
     /**
      * A map containing each player's attributes for when they're offline
      */
-    PlayerMap players = new PlayerMap();
+    private PlayerMap players;
 
-    final ShopPlugin plugin;
-    final Logger log;
+    private final ShopPlugin plugin;
 
     public State(@NotNull ShopPlugin plugin)
     {
         stateFile = new StateFile(plugin);
         this.plugin = plugin;
-        this.log = plugin.getLogger();
     }
 
     public static double getLoadedState()
@@ -202,18 +201,18 @@ public final class State
 
     public void reload() throws IOException, InvalidConfigurationException
     {
-        log.info("Reloading BaxShops...");
+        ShopPlugin.logInfo("Reloading BaxShops...");
         stateFile.writeToDisk(this);
-        log.info("Clearing memory...");
+        ShopPlugin.logInfo("Clearing memory...");
 
         shops.clear();
         players.clear();
 
-        log.info("Reloading BaxShops...");
+        ShopPlugin.logInfo("Reloading BaxShops...");
         State state = readFromDisk(plugin);
         shops = state.shops;
         players = state.players;
-        log.info("BaxShops has finished reloading");
+        ShopPlugin.logInfo("BaxShops has finished reloading");
     }
 
     public void removeLocation(UUID shopId, Location loc)
@@ -242,5 +241,27 @@ public final class State
     public BaxShop getShopByShortId2(String shortId2)
     {
         return shops.getShopByShortId2(shortId2);
+    }
+
+    public void setPlayers(Collection<StoredPlayer> players)
+    {
+        this.players = new PlayerMap(players);
+    }
+
+    public void setShops(Collection<BaxShop> baxShops)
+    {
+        for (BaxShop shop : baxShops) {
+            shops.put(shop.getId(), shop);
+        }
+    }
+
+    public Collection<BaxShop> getShops()
+    {
+        return shops.values();
+    }
+
+    public Collection<StoredPlayer> getPlayers()
+    {
+        return players.values();
     }
 }

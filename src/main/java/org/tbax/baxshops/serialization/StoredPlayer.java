@@ -23,10 +23,12 @@ import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.internal.Resources;
-import org.tbax.baxshops.serialization.annotations.SerializedAs;
-import org.tbax.baxshops.notification.Notification;
+import org.tbax.baxshops.internal.ShopPlugin;
 import org.tbax.baxshops.internal.versioning.LegacyOfflinePlayer;
+import org.tbax.baxshops.notification.Notification;
+import org.tbax.baxshops.serialization.annotations.SerializeNonNull;
+import org.tbax.baxshops.serialization.annotations.SerializedAs;
+import org.tbax.baxshops.serialization.internal.BaxConfig;
 import org.tbax.baxshops.serialization.internal.UpgradeableSerializable;
 import org.tbax.baxshops.serialization.internal.UpgradeableSerialization;
 
@@ -34,13 +36,13 @@ import java.util.*;
 
 public class StoredPlayer extends LegacyOfflinePlayer implements UpgradeableSerializable
 {
-    public static final UUID DUMMY_UUID = UUID.fromString("326a36ea-b465-3192-a4f7-c313f347edc9");
-    public static final String DUMMY_NAME = "world";
-    public static final StoredPlayer DUMMY = new StoredPlayer(DUMMY_NAME, DUMMY_UUID);
+    public static final UUID DUMMY_UUID = ShopPlugin.getBaxConfig().getDummyId();
+    public static final String DUMMY_NAME = ShopPlugin.getBaxConfig().getDummyName();
+    public static final StoredPlayer DUMMY = new StoredPlayer(DUMMY_NAME, DUMMY_UUID, "WORLD");
 
-    public static final UUID ERROR_UUID = UUID.fromString("3d748006-ddc3-4f1b-a7c9-01fab68d0797");
-    public static final String ERROR_NAME = Resources.ERROR_INLINE;
-    public static final StoredPlayer ERROR = new StoredPlayer(ERROR_NAME, ERROR_UUID);
+    public static final UUID ERROR_UUID = ShopPlugin.getBaxConfig().getErrorId();
+    public static final String ERROR_NAME = ShopPlugin.getBaxConfig().getErrorName();
+    public static final StoredPlayer ERROR = new StoredPlayer(ERROR_NAME, ERROR_UUID, "ERROR");
 
     private UUID uuid = UUID.randomUUID();
     private Deque<Notification> notifications = new ArrayDeque<>();
@@ -50,6 +52,9 @@ public class StoredPlayer extends LegacyOfflinePlayer implements UpgradeableSeri
 
     @SerializedAs("name")
     private String lastSeenName;
+
+    @SerializeNonNull
+    private String special;
 
     public StoredPlayer(String name, UUID uuid)
     {
@@ -70,6 +75,13 @@ public class StoredPlayer extends LegacyOfflinePlayer implements UpgradeableSeri
         lastSeenName = name;
     }
 
+    private StoredPlayer(String name, UUID uuid, String special)
+    {
+        this.uuid = uuid;
+        this.lastSeenName = name;
+        this.special = special;
+    }
+
     public StoredPlayer(Map<String, Object> args)
     {
         UpgradeableSerialization.upgrade(this, args);
@@ -81,6 +93,21 @@ public class StoredPlayer extends LegacyOfflinePlayer implements UpgradeableSeri
         uuid = map.getUUID("uuid", UUID.randomUUID());
         lastSeenName = map.getString("name", uuid.toString());
         legacyPlayer = map.getBoolean("legacy", true);
+    }
+
+    @Override
+    public void upgrade00480(@NotNull SafeMap map)
+    {
+        uuid = map.getUUID("uuid", UUID.randomUUID());
+        lastSeenName = map.getString("name", uuid.toString());
+        legacyPlayer = map.getBoolean("legacy", true);
+        notifications = map.getDeque("notifications", new ArrayDeque<>());
+        if (BaxConfig.DEFAULT_DUMMY_ID.equals(uuid)) {
+            special = "WORLD";
+        }
+        else if (BaxConfig.DEFAULT_ERROR_ID.equals(uuid)) {
+            special = "ERROR";
+        }
     }
 
     public OfflinePlayer getOfflinePlayer()
@@ -258,5 +285,32 @@ public class StoredPlayer extends LegacyOfflinePlayer implements UpgradeableSeri
     public static StoredPlayer valueOf(Map<String, Object> args)
     {
         return deserialize(args);
+    }
+
+    public String getSpecial()
+    {
+        return special;
+    }
+
+    public boolean isSpecial()
+    {
+        return special != null;
+    }
+
+    public boolean isErrorUser()
+    {
+        return "ERROR".equals(getSpecial());
+    }
+
+    public boolean isDummyUser()
+    {
+        return "WORLD".equals(getSpecial());
+    }
+
+    public void queueAll(Collection<? extends Notification> notifications)
+    {
+        for(Notification n : notifications) {
+            queueNote(n);
+        }
     }
 }

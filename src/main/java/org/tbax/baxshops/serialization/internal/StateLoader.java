@@ -55,17 +55,8 @@ public interface StateLoader
         Collection<StoredPlayer> players = buildPlayers(state);
         sanitizePlayerData(players);
 
-        for (StoredPlayer player : players) {
-            savedState.players.put(player);
-            for (Notification n : player.getNotifications()) {
-                n.setRecipient(player);
-            }
-        }
-
-        for (BaxShop shop : shops) {
-            savedState.shops.put(shop.getId(), shop);
-        }
-
+        savedState.setPlayers(players);
+        savedState.setShops(shops);
         return savedState;
     }
 
@@ -76,9 +67,9 @@ public interface StateLoader
 
     default void sanitizePlayerData(Collection<StoredPlayer> players)
     {
-        boolean newErrNotes = false;
         for (StoredPlayer player : players) {
-            if (StoredPlayer.DUMMY.equals(player)) { // don't save any dummy notes
+            if (player.isDummyUser()) { // don't save any dummy notes
+                boolean newErrNotes = false;
                 while (player.hasNotes()) {
                     Notification n = player.dequeueNote();
                     if (n instanceof Claimable || n instanceof Request) {
@@ -87,10 +78,12 @@ public interface StateLoader
                     }
                 }
                 if (newErrNotes) {
-                    ShopPlugin.logWarning("There is one or more claim or request notification assigned to \"" + StoredPlayer.DUMMY_NAME + "\" who is not a real player. ");
+                    ShopPlugin.logWarning("There is one or more claim or request notification assigned to \"" + player.getName() + "\" who is not a real player. ");
                     ShopPlugin.logWarning("These requests cannot be honored and will be assigned to an error user. These can be fixed manually in the configuration file.");
                 }
-                break;
+            }
+            for(Notification n : player.getNotifications()) {
+                n.setRecipient(player);
             }
         }
     }
@@ -106,15 +99,5 @@ public interface StateLoader
             SerializationException.throwStateLoaderException(e);
         }
         return ver;
-    }
-
-    default void addPlayer(State state, StoredPlayer storedPlayer)
-    {
-        state.players.put(storedPlayer);
-    }
-
-    default void addShop(State state, BaxShop shop)
-    {
-        state.shops.put(shop.getId(), shop);
     }
 }

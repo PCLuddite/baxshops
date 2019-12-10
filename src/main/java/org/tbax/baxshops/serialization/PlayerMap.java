@@ -35,6 +35,25 @@ public class PlayerMap implements Map<UUID, StoredPlayer>
         put(StoredPlayer.ERROR);
     }
 
+    public PlayerMap(Collection<? extends StoredPlayer> players)
+    {
+        for (StoredPlayer player : players) {
+            if (player.isDummyUser() && !StoredPlayer.DUMMY_UUID.equals(player.getUniqueId())) {
+                survivorship.put(player.getUniqueId(), StoredPlayer.DUMMY_UUID);
+                StoredPlayer.DUMMY.queueAll(player.getNotifications());
+            }
+            else if (player.isErrorUser() && !StoredPlayer.ERROR_UUID.equals(player.getUniqueId())) {
+                survivorship.put(player.getUniqueId(), StoredPlayer.ERROR_UUID);
+                StoredPlayer.ERROR.queueAll(player.getNotifications());
+            }
+            else {
+                put(player);
+            }
+        }
+        put(StoredPlayer.DUMMY);
+        put(StoredPlayer.ERROR);
+    }
+
     @Override
     public int size()
     {
@@ -237,7 +256,6 @@ public class PlayerMap implements Map<UUID, StoredPlayer>
         return null;
     }
 
-    @SuppressWarnings("UnusedReturnValue")
     public StoredPlayer put(StoredPlayer storedPlayer)
     {
         return put(storedPlayer.getUniqueId(), storedPlayer);

@@ -20,6 +20,7 @@ package org.tbax.baxshops.serialization.internal;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.tbax.baxshops.internal.Resources;
 import org.tbax.baxshops.internal.versioning.LegacyConfigUtil;
 
 import java.io.File;
@@ -28,9 +29,14 @@ import java.util.*;
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public final class BaxConfig
 {
-    private final boolean DEFAULT_LOG_NOTES = false;
-    private final int DEFAULT_BACKUP_DAYS = 1;
-    private final int DEFAULT_BACKUP_INTERVAL = 60; // in minutes
+    public static final boolean DEFAULT_LOG_NOTES = false;
+    public static final int DEFAULT_BACKUP_DAYS = 1;
+    public static final int DEFAULT_BACKUP_INTERVAL = 60; // in minutes
+    public static final UUID DEFAULT_DUMMY_ID = UUID.fromString("326a36ea-b465-3192-a4f7-c313f347edc9");
+    public static final String DEFAULT_DUMMY_NAME = "world";
+    public static final UUID DEFAULT_ERROR_ID = UUID.fromString("3d748006-ddc3-4f1b-a7c9-01fab68d0797");
+    public static final String DEFAULT_ERROR_NAME = Resources.ERROR_INLINE;
+    public static final boolean DEFAULT_DEPOSIT_DUMMY = false;
 
     private final JavaPlugin plugin;
 
@@ -72,6 +78,68 @@ public final class BaxConfig
     public void setLogNotes(boolean logNotes)
     {
         getFileConfig().set("LogNotes", logNotes);
+    }
+
+    public UUID getErrorId()
+    {
+        try {
+            return UUID.fromString(getFileConfig().getString("SpecialPlayers.Error.uuid", DEFAULT_ERROR_ID.toString()));
+        }
+        catch (IllegalArgumentException e) {
+            return DEFAULT_ERROR_ID;
+        }
+    }
+
+    public String getErrorName()
+    {
+        return getFileConfig().getString("SpecialPlayers.Error.name", DEFAULT_ERROR_NAME);
+    }
+
+    public void setErrorName(String name)
+    {
+        getFileConfig().set("SpecialPlayers.Error.name", name);
+    }
+
+
+    public void setErrorId(UUID uuid)
+    {
+        getFileConfig().set("SpecialPlayers.Error.uuid", uuid.toString());
+    }
+
+    public UUID getDummyId()
+    {
+        try {
+            return UUID.fromString(getFileConfig().getString("SpecialPlayers.Dummy.uuid", DEFAULT_DUMMY_ID.toString()));
+        }
+        catch (IllegalArgumentException e) {
+            return DEFAULT_DUMMY_ID;
+        }
+    }
+
+    public void setDummyName(String name)
+    {
+        getFileConfig().set("SpecialPlayers.Dummy.name", name);
+    }
+
+
+    public void setDummyId(UUID uuid)
+    {
+        getFileConfig().set("SpecialPlayers.Dummy.uuid", uuid.toString());
+    }
+
+    public String getDummyName()
+    {
+        return getFileConfig().getString("SpecialPlayers.Dummy.name", DEFAULT_DUMMY_NAME);
+    }
+
+    public boolean hasDepositDummy()
+    {
+        return getFileConfig().getBoolean("SpecialPlayers.Dummy.RealDeposit", DEFAULT_DEPOSIT_DUMMY);
+    }
+
+    public void setHasDepositDummy(boolean depositDummy)
+    {
+        getFileConfig().set("SpecialPlayers.Dummy.RealDeposit", depositDummy);
     }
 
     public boolean backup()
