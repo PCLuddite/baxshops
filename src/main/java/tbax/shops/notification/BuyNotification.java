@@ -24,11 +24,11 @@ package tbax.shops.notification;
 
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.serialization.internal.StateLoader;
-import org.tbax.baxshops.serialization.internal.states.StateLoader_00100;
-import org.tbax.baxshops.serialization.internal.states.StateLoader_00200;
-import org.tbax.baxshops.serialization.internal.states.StateLoader_00205;
-import org.tbax.baxshops.serialization.internal.states.StateLoader_00210;
+import org.tbax.baxshops.internal.serialization.StateLoader;
+import org.tbax.baxshops.internal.serialization.states.StateLoader_00100;
+import org.tbax.baxshops.internal.serialization.states.StateLoader_00200;
+import org.tbax.baxshops.internal.serialization.states.StateLoader_00205;
+import org.tbax.baxshops.internal.serialization.states.StateLoader_00210;
 import tbax.shops.Shop;
 import tbax.shops.ShopEntry;
 
@@ -64,14 +64,14 @@ public class BuyNotification implements Notification
     @Override
     public @NotNull Class<? extends org.tbax.baxshops.notification.Notification> getNewNoteClass()
     {
-        return org.tbax.baxshops.notification.internal.BuyNotification.class;
+        return org.tbax.baxshops.internal.notification.BuyNotification.class;
     }
 
     @Override
     public org.tbax.baxshops.notification.@NotNull Notification getNewNote(StateLoader stateLoader)
     {
         if (stateLoader instanceof StateLoader_00100) {
-            return new org.tbax.baxshops.notification.internal.BuyNotification(
+            return new org.tbax.baxshops.internal.notification.BuyNotification(
                     ((StateLoader_00100)stateLoader).registerShop(shop).getId(),
                     ((StateLoader_00100)stateLoader).registerPlayer(buyer),
                     ((StateLoader_00100)stateLoader).registerPlayer(shop.owner),
@@ -79,7 +79,7 @@ public class BuyNotification implements Notification
             );
         }
         else {
-            return new org.tbax.baxshops.notification.internal.BuyNotification(
+            return new org.tbax.baxshops.internal.notification.BuyNotification(
                     ((StateLoader_00200)stateLoader).getShop(shopId).getId(),
                     ((StateLoader_00200)stateLoader).registerPlayer(buyer),
                     ((StateLoader_00200)stateLoader).registerPlayer(((StateLoader_00200)stateLoader).getShopOwner(shopId)),

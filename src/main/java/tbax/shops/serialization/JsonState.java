@@ -24,7 +24,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import org.bukkit.Location;
 import org.tbax.baxshops.internal.ShopPlugin;
-import org.tbax.baxshops.serialization.internal.states.StateLoader_00200;
+import org.tbax.baxshops.internal.serialization.states.StateLoader_00200;
 import tbax.shops.BaxShop;
 import tbax.shops.notification.*;
 

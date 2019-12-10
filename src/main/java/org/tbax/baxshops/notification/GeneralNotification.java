@@ -22,8 +22,8 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.tbax.baxshops.serialization.internal.UpgradeableSerializable;
-import org.tbax.baxshops.serialization.internal.UpgradeableSerialization;
+import org.tbax.baxshops.internal.serialization.UpgradeableSerializable;
+import org.tbax.baxshops.internal.serialization.UpgradeableSerialization;
 import org.tbax.baxshops.serialization.annotations.SerializeMethod;
 import org.tbax.baxshops.serialization.annotations.SerializedAs;
 

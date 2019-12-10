@@ -26,8 +26,8 @@ import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.internal.ShopPlugin;
 import org.tbax.baxshops.serialization.SafeMap;
 import org.tbax.baxshops.serialization.StoredPlayer;
-import org.tbax.baxshops.serialization.internal.UpgradeableSerializable;
-import org.tbax.baxshops.serialization.internal.UpgradeableSerialization;
+import org.tbax.baxshops.internal.serialization.UpgradeableSerializable;
+import org.tbax.baxshops.internal.serialization.UpgradeableSerialization;
 import org.tbax.baxshops.serialization.annotations.DoNotSerialize;
 import org.tbax.baxshops.serialization.annotations.SerializeMethod;
 

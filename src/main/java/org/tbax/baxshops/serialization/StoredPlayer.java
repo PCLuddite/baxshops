@@ -28,9 +28,9 @@ import org.tbax.baxshops.internal.versioning.LegacyOfflinePlayer;
 import org.tbax.baxshops.notification.Notification;
 import org.tbax.baxshops.serialization.annotations.SerializeNonNull;
 import org.tbax.baxshops.serialization.annotations.SerializedAs;
-import org.tbax.baxshops.serialization.internal.BaxConfig;
-import org.tbax.baxshops.serialization.internal.UpgradeableSerializable;
-import org.tbax.baxshops.serialization.internal.UpgradeableSerialization;
+import org.tbax.baxshops.internal.serialization.BaxConfig;
+import org.tbax.baxshops.internal.serialization.UpgradeableSerializable;
+import org.tbax.baxshops.internal.serialization.UpgradeableSerialization;
 
 import java.util.*;
 

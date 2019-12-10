@@ -23,8 +23,8 @@
 package qs.shops.notification;
 
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.serialization.internal.StateLoader;
-import org.tbax.baxshops.serialization.internal.states.StateLoader_00000;
+import org.tbax.baxshops.internal.serialization.StateLoader;
+import org.tbax.baxshops.internal.serialization.states.StateLoader_00000;
 import qs.shops.Shop;
 import qs.shops.ShopEntry;
 
@@ -63,13 +63,13 @@ public class SaleRejection implements Claimable {
 	@Override
 	public @NotNull Class<? extends org.tbax.baxshops.notification.Notification> getNewNoteClass()
 	{
-		return org.tbax.baxshops.notification.internal.SaleRejection.class;
+		return org.tbax.baxshops.internal.notification.SaleRejection.class;
 	}
 
 	@Override
 	public @NotNull org.tbax.baxshops.notification.Notification getNewNote(StateLoader stateLoader)
 	{
-		return new org.tbax.baxshops.notification.internal.SaleRejection(
+		return new org.tbax.baxshops.internal.notification.SaleRejection(
 				((StateLoader_00000)stateLoader).registerShop(shop),
 				((StateLoader_00000)stateLoader).registerPlayer(shop.owner),
 				((StateLoader_00000)stateLoader).registerPlayer(seller),

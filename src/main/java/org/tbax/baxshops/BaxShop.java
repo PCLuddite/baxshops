@@ -33,12 +33,12 @@ import org.tbax.baxshops.internal.ShopSelection;
 import org.tbax.baxshops.internal.items.ItemUtil;
 import org.tbax.baxshops.serialization.SafeMap;
 import org.tbax.baxshops.serialization.StoredPlayer;
-import org.tbax.baxshops.serialization.internal.UpgradeableSerializable;
-import org.tbax.baxshops.serialization.internal.UpgradeableSerialization;
+import org.tbax.baxshops.internal.serialization.UpgradeableSerializable;
+import org.tbax.baxshops.internal.serialization.UpgradeableSerialization;
 import org.tbax.baxshops.serialization.annotations.DoNotSerialize;
 import org.tbax.baxshops.serialization.annotations.SerializeMethod;
-import org.tbax.baxshops.serialization.internal.states.StateLoader_00300;
-import org.tbax.baxshops.serialization.internal.states.StateLoader_00420;
+import org.tbax.baxshops.internal.serialization.states.StateLoader_00300;
+import org.tbax.baxshops.internal.serialization.states.StateLoader_00420;
 
 import java.util.*;
 import java.util.stream.Collectors;

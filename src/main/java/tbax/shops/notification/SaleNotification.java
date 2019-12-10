@@ -24,12 +24,12 @@ package tbax.shops.notification;
 
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.notification.internal.BuyNotification;
-import org.tbax.baxshops.serialization.internal.StateLoader;
-import org.tbax.baxshops.serialization.internal.states.StateLoader_00100;
-import org.tbax.baxshops.serialization.internal.states.StateLoader_00200;
-import org.tbax.baxshops.serialization.internal.states.StateLoader_00205;
-import org.tbax.baxshops.serialization.internal.states.StateLoader_00210;
+import org.tbax.baxshops.internal.notification.BuyNotification;
+import org.tbax.baxshops.internal.serialization.StateLoader;
+import org.tbax.baxshops.internal.serialization.states.StateLoader_00100;
+import org.tbax.baxshops.internal.serialization.states.StateLoader_00200;
+import org.tbax.baxshops.internal.serialization.states.StateLoader_00205;
+import org.tbax.baxshops.internal.serialization.states.StateLoader_00210;
 import tbax.shops.Shop;
 import tbax.shops.ShopEntry;
 

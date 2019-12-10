@@ -23,9 +23,9 @@
 package qs.shops.notification;
 
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.notification.internal.SaleRejection;
-import org.tbax.baxshops.serialization.internal.StateLoader;
-import org.tbax.baxshops.serialization.internal.states.StateLoader_00000;
+import org.tbax.baxshops.internal.notification.SaleRejection;
+import org.tbax.baxshops.internal.serialization.StateLoader;
+import org.tbax.baxshops.internal.serialization.states.StateLoader_00000;
 import qs.shops.Shop;
 import qs.shops.ShopEntry;
 

@@ -34,10 +34,10 @@ import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.MathUtil;
 import org.tbax.baxshops.internal.ShopPlugin;
 import org.tbax.baxshops.internal.items.ItemUtil;
-import org.tbax.baxshops.serialization.internal.states.StateLoader_00100;
-import org.tbax.baxshops.serialization.internal.states.StateLoader_00200;
-import org.tbax.baxshops.serialization.internal.states.StateLoader_00205;
-import org.tbax.baxshops.serialization.internal.states.StateLoader_00210;
+import org.tbax.baxshops.internal.serialization.states.StateLoader_00100;
+import org.tbax.baxshops.internal.serialization.states.StateLoader_00200;
+import org.tbax.baxshops.internal.serialization.states.StateLoader_00205;
+import org.tbax.baxshops.internal.serialization.states.StateLoader_00210;
 
 import java.io.Serializable;
 import java.util.ArrayList;

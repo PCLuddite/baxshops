@@ -29,8 +29,8 @@ import org.tbax.baxshops.internal.ShopPlugin;
 import org.tbax.baxshops.internal.items.EnchantMap;
 import org.tbax.baxshops.internal.items.ItemUtil;
 import org.tbax.baxshops.serialization.SafeMap;
-import org.tbax.baxshops.serialization.internal.UpgradeableSerializable;
-import org.tbax.baxshops.serialization.internal.UpgradeableSerialization;
+import org.tbax.baxshops.internal.serialization.UpgradeableSerializable;
+import org.tbax.baxshops.internal.serialization.UpgradeableSerialization;
 
 import java.util.Map;
 import java.util.Objects;
