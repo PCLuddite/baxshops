@@ -18,11 +18,13 @@
  */
 package org.tbax.baxshops.internal.serialization;
 
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.tbax.baxshops.Format;
 import org.tbax.baxshops.internal.ShopPlugin;
+import org.tbax.baxshops.internal.versioning.LegacyConfigUtil;
 
 import java.io.*;
 import java.util.*;
@@ -91,8 +93,13 @@ public final class StateFile
     {
         if (!config.backup())
             plugin.getLogger().warning("Could not backup config. Configuration may be lost.");
-        if (config.getFileConfig().contains("StateVersion"))
-            config.getFileConfig().set("StateVersion", null);
+        Configuration fileConfig = config.getFileConfig();
+        Configuration defaultConfig = fileConfig.getDefaults();
+        for (String key : fileConfig.getKeys(true)) {
+            if (!defaultConfig.contains(key)) {
+                fileConfig.set(key, null);
+            }
+        }
         config.save();
     }
 
