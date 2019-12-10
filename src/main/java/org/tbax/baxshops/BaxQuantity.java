@@ -18,10 +18,13 @@
  */
 package org.tbax.baxshops;
 
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.errors.CommandErrorException;
 import org.tbax.baxshops.errors.PrematureAbortException;
+import org.tbax.baxshops.internal.versioning.LegacyPlayerUtil;
 
 import java.util.Arrays;
 
@@ -31,12 +34,14 @@ public class BaxQuantity
     private String argument;
     private ItemStack stack;
     private Iterable<ItemStack> inventory;
+    private Player player;
 
-    public BaxQuantity(@NotNull String arg, ItemStack item, @NotNull Iterable<ItemStack> inv)
+    public BaxQuantity(@NotNull String arg, @NotNull Player player, @NotNull Iterable<ItemStack> inv, ItemStack item)
     {
         argument = arg;
         stack = item;
         inventory = inv;
+        this.player = player;
     }
 
     public void setItem(ItemStack stack)
@@ -80,7 +85,17 @@ public class BaxQuantity
                 return stack.getMaxStackSize();
             }
             else if (isFill()) {
-                return stack.getMaxStackSize() - stack.getAmount();
+                ItemStack playerStack = LegacyPlayerUtil.getItemInHand(player);
+                if (playerStack == null || stack.getType() != playerStack.getType()) {
+                    int idx = player.getInventory().first(stack.getType());
+                    if (idx < 0) {
+                        return stack.getMaxStackSize();
+                    }
+                    else {
+                        playerStack = player.getInventory().getItem(idx);
+                    }
+                }
+                return stack.getMaxStackSize() - playerStack.getAmount();
             }
             throw new CommandErrorException(e, "'" + argument + "' is not a valid quantity");
         }

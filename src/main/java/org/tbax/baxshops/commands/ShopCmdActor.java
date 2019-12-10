@@ -228,7 +228,7 @@ public final class ShopCmdActor implements CommandSender
 
     public BaxQuantity getArgPlayerQty(int index)
     {
-        return new BaxQuantity(args[index], getItemInHand(), getPlayer().getInventory());
+        return new BaxQuantity(args[index], getPlayer(), getPlayer().getInventory(), getItemInHand());
     }
 
     public BaxQuantity getArgShopQty(int index, BaxEntry entry) throws PrematureAbortException
@@ -237,7 +237,7 @@ public final class ShopCmdActor implements CommandSender
             throw new CommandErrorException(Resources.NOT_FOUND_SELECTED);
         if (getShop().hasFlagInfinite() && (BaxQuantity.isAll(args[index]) || BaxQuantity.isMost(args[index])))
             throw new CommandErrorException("This shop has infinite supplies. You cannot take " + args[index].toLowerCase());
-        return new BaxQuantity(args[index], entry.toItemStack(), getShop().getItemStackInventory());
+        return new BaxQuantity(args[index], getPlayer(), getShop().getItemStackInventory(), entry.toItemStack());
     }
 
     public boolean isArgQty(int index)
