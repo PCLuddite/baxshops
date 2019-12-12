@@ -18,7 +18,17 @@
  */
 package org.tbax.baxshops.internal.items;
 
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.tbax.baxshops.Format;
+import org.tbax.baxshops.internal.ShopPlugin;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public final class Enchantable
 {
@@ -68,4 +78,40 @@ public final class Enchantable
             return name + " " + Format.toNumeral(levels);
         return name;
     }
+
+//    public static void reloadEnchantments(ShopPlugin plugin) throws IOException
+//    {
+//        YamlConfiguration yamlConfiguration = new YamlConfiguration();
+//        ItemUtil.loadEnchants(plugin);
+//        List<Map<String, Object>> list = new ArrayList<>();
+//        for(Enchantment enchantment : Enchantment.values()) {
+//            Map<String, Object> map = new HashMap<>();
+//            Enchantable enchantable = ItemUtil.enchants.get(enchantment);
+//            map.put("enchantment", enchantment.getName());
+//
+//            Map<String, String> key = new HashMap<>();
+//            key.put("namespace", enchantment.getKey().getNamespace());
+//            key.put("key", enchantment.getKey().getKey());
+//            map.put("key", key);
+//
+//            if (enchantable == null) {
+//                map.put("name", enchantment.getKey().getKey());
+//                map.put("levels", enchantment);
+//            }
+//            else {
+//                map.put("name", enchantable.getName());
+//                map.put("levels", enchantable.hasLevels());
+//                try {
+//                    map.put("id", enchantable.getLegacyId());
+//                }
+//                catch (UnsupportedOperationException e) {
+//                    // do nothing
+//                }
+//            }
+//
+//            list.add(map);
+//        }
+//        yamlConfiguration.set("enchants", list);
+//        yamlConfiguration.save(new File(plugin.getDataFolder(), "enchants.yml"));
+//    }
 }
