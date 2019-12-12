@@ -49,7 +49,7 @@ public class BaxShop extends Shop implements Serializable
         this.flags = new HashMap<>();
     }
 
-    public BaxShop(StateLoader_00100 state00200, int uid, JsonObject o) {
+    public BaxShop(StateLoader_00100 stateLoader_00100, int uid, JsonObject o) {
         this.uid = uid;
         this.owner = o.get("owner").getAsString();
         if (o.has("infinite")) {
@@ -79,14 +79,14 @@ public class BaxShop extends Shop implements Serializable
         }
 
         for (JsonElement jsonElement : o.get("entries").getAsJsonArray()) {
-            if (state00200 instanceof StateLoader_00210) {
-                inventory.add(new ShopEntry((StateLoader_00210)state00200, jsonElement.getAsJsonObject()));
+            if (stateLoader_00100 instanceof StateLoader_00210) {
+                inventory.add(new ShopEntry((StateLoader_00210)stateLoader_00100, jsonElement.getAsJsonObject()));
             }
-            else if (state00200 instanceof StateLoader_00200) {
-                inventory.add(new ShopEntry((StateLoader_00200)state00200, jsonElement.getAsJsonObject()));
+            else if (stateLoader_00100 instanceof StateLoader_00200) {
+                inventory.add(new ShopEntry((StateLoader_00200)stateLoader_00100, jsonElement.getAsJsonObject()));
             }
             else {
-                inventory.add(new ShopEntry(state00200, jsonElement.getAsJsonObject()));
+                inventory.add(new ShopEntry(stateLoader_00100, jsonElement.getAsJsonObject()));
             }
         }
     }
@@ -98,16 +98,16 @@ public class BaxShop extends Shop implements Serializable
         return false;
     }
 
-    public org.tbax.baxshops.BaxShop modernize(StateLoader_00100 state00200) {
+    public org.tbax.baxshops.BaxShop modernize(StateLoader_00100 stateLoader_00100) {
         org.tbax.baxshops.BaxShop baxShop = new org.tbax.baxshops.BaxShop(locations);
         for (ShopEntry entry : inventory) {
-            baxShop.add(entry.modernize(state00200));
+            baxShop.add(entry.modernize(stateLoader_00100));
         }
         baxShop.setFlagInfinite(isInfinite == null ? false : isInfinite);
         baxShop.setFlagBuyRequests(buyRequests);
         baxShop.setFlagSellToShop(sellToShop);
         baxShop.setFlagSellRequests(sellRequests);
-        baxShop.setOwner(state00200.registerPlayer(owner));
+        baxShop.setOwner(stateLoader_00100.registerPlayer(owner));
         return baxShop;
     }
 

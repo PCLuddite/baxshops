@@ -62,7 +62,7 @@ public class ShopEntry implements Serializable
         this.refundPrice = -1.0;
     }
 
-    public ShopEntry(StateLoader_00100 state00200, JsonObject o)
+    public ShopEntry(StateLoader_00100 stateLoader_00100, JsonObject o)
     {
         stack = ItemUtil.fromItemId(o.get("id").getAsInt(), o.get("damage").getAsShort());
         quantity = o.get("quantity").getAsInt();
@@ -81,7 +81,7 @@ public class ShopEntry implements Serializable
         }
     }
 
-    public ShopEntry(StateLoader_00200 state00205, JsonObject o)
+    public ShopEntry(StateLoader_00200 stateLoader_00200, JsonObject o)
     {
         stack = new ItemStack(Material.getMaterial(o.get("id").getAsString()), 1, o.get("damage").getAsShort());
         if (o.has("enchantments")) {
@@ -100,7 +100,7 @@ public class ShopEntry implements Serializable
         quantity = o.get("quantity").getAsInt();
     }
 
-    public ShopEntry(StateLoader_00210 state00210, JsonObject o)
+    public ShopEntry(StateLoader_00210 stateLoader_00210, JsonObject o)
     {
         stack = new ItemStack(Material.getMaterial(o.get("id").getAsString()), 1, o.get("damage").getAsShort());
         if (o.has("enchantments")) {
@@ -145,7 +145,6 @@ public class ShopEntry implements Serializable
     {
         if (stack != null) return stack.clone();
         stack = ItemUtil.fromItemId(itemID, (short)itemDamage);
-        stack.setAmount(quantity);
         for (Map.Entry<Integer, Integer> entry : enchantments.entrySet()) {
             Enchantment e = ItemUtil.getLegacyEnchantment(entry.getKey());
             if (e == null) {
@@ -158,7 +157,7 @@ public class ShopEntry implements Serializable
         return stack;
     }
 
-    public BaxEntry modernize(StateLoader_00050 state00100)
+    public BaxEntry modernize(StateLoader_00050 stateLoader_00050)
     {
         BaxEntry baxEntry = new BaxEntry();
         baxEntry.setRefundPrice(MathUtil.roundedDouble(refundPrice));
@@ -170,7 +169,7 @@ public class ShopEntry implements Serializable
         return baxEntry;
     }
 
-    public BaxEntry modernize(StateLoader_00100 state00200)
+    public BaxEntry modernize(StateLoader_00100 stateLoader_00100)
     {
         BaxEntry baxEntry = new BaxEntry();
         baxEntry.setRefundPrice(refundPrice);
