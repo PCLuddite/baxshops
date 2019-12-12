@@ -283,7 +283,8 @@ public final class ItemUtil
             List<Map<?, ?>> section = enchantConfig.getMapList("enchants");
 
             for (Map<?, ?> enchantMap : section) {
-                Enchantment enchantment = Enchantment.getByKey(new NamespacedKey(plugin, (String)enchantMap.get("enchantment")));
+                Map<?, ?> namespaceKey = (Map<?, ?>)enchantMap.get("key");
+                Enchantment enchantment = Enchantment.getByKey(NamespacedKey.minecraft((String)namespaceKey.get("key")));
                 String name = (String) enchantMap.get("name");
                 boolean levels = (Boolean) enchantMap.get("levels");
                 Object id = enchantMap.get("id");
