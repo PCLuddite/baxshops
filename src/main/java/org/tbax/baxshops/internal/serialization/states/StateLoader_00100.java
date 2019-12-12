@@ -18,7 +18,11 @@
  */
 package org.tbax.baxshops.internal.serialization.states;
 
-import org.bukkit.Location;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.stream.JsonReader;
+import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -26,107 +30,100 @@ import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.internal.ShopPlugin;
 import org.tbax.baxshops.internal.items.ItemUtil;
-import org.tbax.baxshops.notification.Claimable;
 import org.tbax.baxshops.notification.Notification;
-import org.tbax.baxshops.notification.Request;
+import org.tbax.baxshops.serialization.PlayerMap;
 import org.tbax.baxshops.internal.serialization.StateLoader;
 import org.tbax.baxshops.serialization.StoredPlayer;
-import tbax.shops.Shop;
-import tbax.shops.serialization.State2;
+import tbax.shops.serialization.JsonState;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayDeque;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class StateLoader_00100 implements StateLoader
 {
     public static final double VERSION = 1.0;
+
     private ShopPlugin plugin;
-    private State2 state2;
-    private Map<tbax.shops.Shop, BaxShop> shopMap = new HashMap<>();
-    private Map<String, StoredPlayer> playerMap = new HashMap<>();
+    private PlayerMap players = new PlayerMap();
+    private Map<Integer, BaxShop> legacyShops = new HashMap<>();
+    private Map<Integer, String> ownerNames = new HashMap<>();
+    private JsonState jsonState;
+    private JsonObject rootObject;
 
     public StateLoader_00100(ShopPlugin plugin)
     {
         this.plugin = plugin;
-        playerMap.put(StoredPlayer.DUMMY_NAME, StoredPlayer.DUMMY);
-        playerMap.put(StoredPlayer.ERROR_NAME, StoredPlayer.ERROR);
+        jsonState = new JsonState(plugin);
     }
 
-    public static File getState2File(JavaPlugin plugin)
+    public static File getJsonFile(JavaPlugin plugin)
     {
-        return new File(plugin.getDataFolder(), "shops.dat");
+        return new File(plugin.getDataFolder(), JsonState.JSON_FILE_PATH);
+    }
+
+    public static double getJsonFileVersion(JavaPlugin plugin)
+    {
+        File stateLocation = getJsonFile(plugin);
+        try (JsonReader jr = new JsonReader(new FileReader(stateLocation))) {
+            JsonParser p = new JsonParser();
+            JsonElement element = p.parse(jr);
+            if (element.isJsonObject()) {
+                return element.getAsJsonObject().get("version").getAsDouble();
+            }
+        }
+        catch (Exception e) {
+            // do nothing
+        }
+        return 0d;
     }
 
     @Override
-    public FileConfiguration readFile(@NotNull File stateLocation)
+    public FileConfiguration readFile(@NotNull File stateLocation) throws IOException, InvalidConfigurationException
     {
-        try {
-            try (ObjectInputStream stream = new ObjectInputStream(new FileInputStream(stateLocation))) {
-                state2 = (State2)stream.readObject();
-            }
+        rootObject = jsonState.loadState();
+        if (rootObject == null) {
+            ShopPlugin.logSevere("Unable to load old shops.json! A new state file will be created.");
+            return null;
+        }
+        else {
             ItemUtil.loadLegacyItems(plugin);
             ItemUtil.loadLegacyEnchants();
-        }
-        catch (ClassCastException | IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            ShopPlugin.logSevere("Unable to load shops.dat! A new state will be loaded");
-            return null;
-        }
-        return new YamlConfiguration();
-    }
-
-    public static Class<?> getSerializedClass(JavaPlugin plugin) throws IOException
-    {
-        try {
-            try (ObjectInputStream stream = new ObjectInputStream(new FileInputStream(getState2File(plugin)))) {
-                return stream.readObject().getClass();
-            }
-        }
-        catch (ClassNotFoundException e) {
-            ShopPlugin.logSevere("Unknown class in shops.dat!");
-            return null;
+            return new YamlConfiguration();
         }
     }
 
     @Override
     public @NotNull Collection<BaxShop> buildShops(@NotNull FileConfiguration state)
     {
-        for (Map.Entry<Location, tbax.shops.BaxShop> entry : state2.getShops().entrySet()) {
-            registerShop(entry.getValue());
+        jsonState.loadShops(this, rootObject.get("shops").getAsJsonObject());
+        ShopPlugin.logInfo("Converting shops data...");
+        for (Map.Entry<Integer, tbax.shops.BaxShop> entry : jsonState.shops.entrySet()) {
+            legacyShops.put(entry.getKey(), entry.getValue().modernize(this));
+            ownerNames.put(entry.getKey(), entry.getValue().owner);
         }
-        return shopMap.values();
+        return legacyShops.values();
     }
 
     @Override
     public @NotNull Collection<StoredPlayer> buildPlayers(@NotNull FileConfiguration state)
     {
-        for (Map.Entry<String, ArrayDeque<tbax.shops.notification.Notification>> entry : state2.pending.entrySet()) {
+        ShopPlugin.logInfo("Loading notification data...");
+        jsonState.loadNotes(this, rootObject.get("notes").getAsJsonObject());
+        ShopPlugin.logInfo("Converting notification data...");
+        for (Map.Entry<String, ArrayDeque<tbax.shops.notification.Notification>> entry : jsonState.pending.entrySet()) {
             StoredPlayer player = registerPlayer(entry.getKey());
-            for (tbax.shops.notification.Notification note : entry.getValue()) {
-                Notification newNote = note.getNewNote(this);
+            while (!entry.getValue().isEmpty()) {
+                Notification newNote = entry.getValue().removeFirst().getNewNote(this);
                 newNote.setSentDate(null);
                 player.queueNote(newNote);
             }
-
-            if (StoredPlayer.DUMMY.equals(player)) {
-                Deque<Notification> errors = new ArrayDeque<>();
-                while (player.getNotificationCount() > 0) {
-                    Notification n = player.dequeueNote();
-                    if (n instanceof Claimable || n instanceof Request) {
-                        errors.add(n);
-                    }
-                }
-                if (!errors.isEmpty()) {
-                    plugin.getLogger().warning("There is one or more claim or request notification assigned to the dummy player. " +
-                            "These cannot be honored and will be assigned to an error user. The configuration file will need to be fixed manually.");
-                    do {
-                        StoredPlayer.ERROR.queueNote(errors.removeFirst());
-                    }
-                    while(!errors.isEmpty());
-                }
-            }
         }
-        return playerMap.values();
+        return players.values();
     }
 
     @Override
@@ -135,23 +132,37 @@ public class StateLoader_00100 implements StateLoader
         return plugin;
     }
 
-    public BaxShop registerShop(Shop shop)
+    public StoredPlayer registerPlayer(String playerName)
     {
-        BaxShop baxShop = shopMap.get(shop);
-        if (baxShop == null) {
-            baxShop = shop.modernize(this);
-            shopMap.put(shop, baxShop);
-        }
-        return baxShop;
+        if (playerName == null)
+            return StoredPlayer.ERROR;
+        return players.getOrCreate(playerName).get(0);
     }
 
-    public StoredPlayer registerPlayer(String name)
+    public BaxShop getShop(int shopId)
     {
-        StoredPlayer player = playerMap.get(name);
-        if (player == null) {
-            player = new StoredPlayer(name);
-            playerMap.put(name, player);
+        BaxShop shop = legacyShops.get(shopId);
+        if (shop == null) {
+            ShopPlugin.logWarning("Legacy shop " + shopId + " does not exist! A dummy shop will be used instead.");
+            legacyShops.put(shopId, shop = BaxShop.DUMMY_SHOP);
         }
-        return player;
+        return shop;
+    }
+
+    public String getShopOwner(int shopId)
+    {
+        String owner = ownerNames.get(shopId);
+        if (owner == null) {
+            BaxShop shop = getShop(shopId);
+            if (shop == BaxShop.DUMMY_SHOP) {
+                owner = StoredPlayer.DUMMY_NAME;
+            }
+            else {
+                ShopPlugin.logWarning("Legacy shop " + shopId + " does not have an owner! This will be assigned to a dummy user.");
+                shop.setOwner(StoredPlayer.DUMMY);
+                ownerNames.put(shopId, owner = StoredPlayer.DUMMY_NAME);
+            }
+        }
+        return owner;
     }
 }

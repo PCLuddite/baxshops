@@ -24,6 +24,8 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.tbax.baxshops.Format;
 import org.tbax.baxshops.internal.ShopPlugin;
+import org.tbax.baxshops.internal.serialization.states.StateLoader_00100;
+import org.tbax.baxshops.internal.serialization.states.StateLoader_00300;
 import org.tbax.baxshops.internal.versioning.LegacyConfigUtil;
 
 import java.io.*;
@@ -103,6 +105,33 @@ public final class StateFile
         config.save();
     }
 
+    public double findVersion()
+    {
+        if (getFile().exists()) {
+            double ver = readVersion(getFile());
+            if (ver == 0d) {
+                if (plugin.getConfig().contains("StateVersion")) {
+                    return plugin.getConfig().getDouble("StateVersion");
+                }
+                else {
+                    return StateLoader_00300.VERSION; // version 3.0 was the last version not to be in config.yml
+                }
+            }
+            else {
+                return ver;
+            }
+        }
+        else if (StateLoader_00100.getJsonFile(plugin).exists()) {
+            double jsonVersion = StateLoader_00100.getJsonFileVersion(plugin);
+            if (jsonVersion == 0d) {
+                return StateLoader_00100.VERSION;
+            }
+            else {
+                return jsonVersion;
+            }
+        }
+        return 0d;
+    }
 
     public boolean backup()
     {

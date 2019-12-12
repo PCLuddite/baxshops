@@ -21,8 +21,8 @@ package tbax.shops.notification;
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.internal.serialization.StateLoader;
+import org.tbax.baxshops.internal.serialization.states.StateLoader_00100;
 import org.tbax.baxshops.internal.serialization.states.StateLoader_00200;
-import org.tbax.baxshops.internal.serialization.states.StateLoader_00205;
 import org.tbax.baxshops.internal.serialization.states.StateLoader_00210;
 import tbax.shops.ShopEntry;
 
@@ -34,15 +34,15 @@ public class BuyRejection implements Notification
     public String seller;
     public static final String JSON_TYPE_ID = "BuyReject";
 
-    public BuyRejection(StateLoader_00200 state00200, JsonObject o)
+    public BuyRejection(StateLoader_00100 state00200, JsonObject o)
     {
         seller = o.get("seller").getAsString();
         shopId = o.get("shop").getAsInt();
         if (state00200 instanceof StateLoader_00210) {
             entry = new ShopEntry((StateLoader_00210)state00200, o.get("entry").getAsJsonObject());
         }
-        else if (state00200 instanceof StateLoader_00205) {
-            entry = new ShopEntry((StateLoader_00205)state00200, o.get("entry").getAsJsonObject());
+        else if (state00200 instanceof StateLoader_00200) {
+            entry = new ShopEntry((StateLoader_00200)state00200, o.get("entry").getAsJsonObject());
         }
         else {
             entry = new ShopEntry(state00200, o.get("entry").getAsJsonObject());
@@ -53,10 +53,10 @@ public class BuyRejection implements Notification
     public @NotNull org.tbax.baxshops.notification.Notification getNewNote(StateLoader stateLoader)
     {
         return new org.tbax.baxshops.internal.notification.BuyRejection(
-                ((StateLoader_00200)stateLoader).getShop(shopId).getId(),
-                ((StateLoader_00200)stateLoader).registerPlayer(((StateLoader_00200)stateLoader).getShopOwner(shopId)),
-                ((StateLoader_00200)stateLoader).registerPlayer(seller),
-                entry.modernize((StateLoader_00200)stateLoader)
+                ((StateLoader_00100)stateLoader).getShop(shopId).getId(),
+                ((StateLoader_00100)stateLoader).registerPlayer(((StateLoader_00100)stateLoader).getShopOwner(shopId)),
+                ((StateLoader_00100)stateLoader).registerPlayer(seller),
+                entry.modernize((StateLoader_00100)stateLoader)
         );
     }
 

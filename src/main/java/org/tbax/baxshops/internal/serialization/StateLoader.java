@@ -45,14 +45,18 @@ public interface StateLoader
 
     default State loadState(@NotNull File stateLocation) throws IOException, InvalidConfigurationException
     {
-        FileConfiguration state = readFile(stateLocation);
+        FileConfiguration stateConfig = readFile(stateLocation);
         State savedState = new State(getPlugin());
 
+        if (stateConfig == null) {
+            return savedState;
+        }
+
         ShopPlugin.logInfo("Loading shop data...");
-        Collection<BaxShop> shops = buildShops(state);
+        Collection<BaxShop> shops = buildShops(stateConfig);
         sanitizeShopData(shops);
         ShopPlugin.logInfo("Loading player data...");
-        Collection<StoredPlayer> players = buildPlayers(state);
+        Collection<StoredPlayer> players = buildPlayers(stateConfig);
         sanitizePlayerData(players);
 
         savedState.setPlayers(players);

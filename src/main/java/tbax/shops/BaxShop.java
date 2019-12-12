@@ -23,9 +23,9 @@ import com.google.gson.JsonObject;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.tbax.baxshops.internal.ShopPlugin;
+import org.tbax.baxshops.internal.serialization.states.StateLoader_00050;
 import org.tbax.baxshops.internal.serialization.states.StateLoader_00100;
 import org.tbax.baxshops.internal.serialization.states.StateLoader_00200;
-import org.tbax.baxshops.internal.serialization.states.StateLoader_00205;
 import org.tbax.baxshops.internal.serialization.states.StateLoader_00210;
 import tbax.shops.serialization.BlockLocation;
 
@@ -49,7 +49,7 @@ public class BaxShop extends Shop implements Serializable
         this.flags = new HashMap<>();
     }
 
-    public BaxShop(StateLoader_00200 state00200, int uid, JsonObject o) {
+    public BaxShop(StateLoader_00100 state00200, int uid, JsonObject o) {
         this.uid = uid;
         this.owner = o.get("owner").getAsString();
         if (o.has("infinite")) {
@@ -82,8 +82,8 @@ public class BaxShop extends Shop implements Serializable
             if (state00200 instanceof StateLoader_00210) {
                 inventory.add(new ShopEntry((StateLoader_00210)state00200, jsonElement.getAsJsonObject()));
             }
-            else if (state00200 instanceof StateLoader_00205) {
-                inventory.add(new ShopEntry((StateLoader_00205)state00200, jsonElement.getAsJsonObject()));
+            else if (state00200 instanceof StateLoader_00200) {
+                inventory.add(new ShopEntry((StateLoader_00200)state00200, jsonElement.getAsJsonObject()));
             }
             else {
                 inventory.add(new ShopEntry(state00200, jsonElement.getAsJsonObject()));
@@ -98,7 +98,7 @@ public class BaxShop extends Shop implements Serializable
         return false;
     }
 
-    public org.tbax.baxshops.BaxShop modernize(StateLoader_00200 state00200) {
+    public org.tbax.baxshops.BaxShop modernize(StateLoader_00100 state00200) {
         org.tbax.baxshops.BaxShop baxShop = new org.tbax.baxshops.BaxShop(locations);
         for (ShopEntry entry : inventory) {
             baxShop.add(entry.modernize(state00200));
@@ -111,9 +111,9 @@ public class BaxShop extends Shop implements Serializable
         return baxShop;
     }
 
-    public org.tbax.baxshops.BaxShop modernize(StateLoader_00100 stateLoader_00100)
+    public org.tbax.baxshops.BaxShop modernize(StateLoader_00050 stateLoader_00050)
     {
-        org.tbax.baxshops.BaxShop baxShop = super.modernize(stateLoader_00100);
+        org.tbax.baxshops.BaxShop baxShop = super.modernize(stateLoader_00050);
         Object buyRequests = flags.get("buy_request"),
                sellRequests = flags.get("sell_request"),
                sellToShop = flags.get("sell_to_shop");
@@ -131,7 +131,7 @@ public class BaxShop extends Shop implements Serializable
 
 
         if (getOption("ref") instanceof BaxShop) {
-            org.tbax.baxshops.BaxShop mainShop = stateLoader_00100.registerShop((BaxShop)getOption("ref"));
+            org.tbax.baxshops.BaxShop mainShop = stateLoader_00050.registerShop((BaxShop)getOption("ref"));
             ShopPlugin.logWarning(String.format("Shop %s is a reference to %s. All of its locations will be removed and replaced with the main shop.",
                     baxShop.getId().toString(),
                     mainShop.getId().toString()

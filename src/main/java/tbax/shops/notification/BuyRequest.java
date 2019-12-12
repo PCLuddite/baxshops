@@ -22,8 +22,8 @@ import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.notification.Notification;
 import org.tbax.baxshops.internal.serialization.StateLoader;
+import org.tbax.baxshops.internal.serialization.states.StateLoader_00100;
 import org.tbax.baxshops.internal.serialization.states.StateLoader_00200;
-import org.tbax.baxshops.internal.serialization.states.StateLoader_00205;
 import org.tbax.baxshops.internal.serialization.states.StateLoader_00210;
 import tbax.shops.ShopEntry;
 
@@ -36,15 +36,15 @@ public class BuyRequest implements Request, TimedNotification
     public String buyer;
     public static final String JSON_TYPE_ID = "BuyRequest";
 
-    public BuyRequest(StateLoader_00200 state00200, JsonObject o) {
+    public BuyRequest(StateLoader_00100 state00200, JsonObject o) {
         buyer = o.get("buyer").getAsString();
         shopId = o.get("shop").getAsInt();
         expirationDate = o.get("expires").getAsLong();
         if (state00200 instanceof StateLoader_00210) {
             purchased = new ShopEntry((StateLoader_00210)state00200, o.get("entry").getAsJsonObject());
         }
-        else if (state00200 instanceof StateLoader_00205) {
-            purchased = new ShopEntry((StateLoader_00205)state00200, o.get("entry").getAsJsonObject());
+        else if (state00200 instanceof StateLoader_00200) {
+            purchased = new ShopEntry((StateLoader_00200)state00200, o.get("entry").getAsJsonObject());
         }
         else {
             purchased = new ShopEntry(state00200, o.get("entry").getAsJsonObject());
@@ -55,10 +55,10 @@ public class BuyRequest implements Request, TimedNotification
     public @NotNull Notification getNewNote(StateLoader stateLoader)
     {
         return new org.tbax.baxshops.internal.notification.BuyRequest(
-                ((StateLoader_00200)stateLoader).getShop(shopId).getId(),
-                ((StateLoader_00200)stateLoader).registerPlayer(buyer),
-                ((StateLoader_00200)stateLoader).registerPlayer(((StateLoader_00200)stateLoader).getShopOwner(shopId)),
-                purchased.modernize((StateLoader_00200)stateLoader)
+                ((StateLoader_00100)stateLoader).getShop(shopId).getId(),
+                ((StateLoader_00100)stateLoader).registerPlayer(buyer),
+                ((StateLoader_00100)stateLoader).registerPlayer(((StateLoader_00100)stateLoader).getShopOwner(shopId)),
+                purchased.modernize((StateLoader_00100)stateLoader)
         );
     }
 

@@ -24,7 +24,7 @@ package tbax.shops;
 
 import org.bukkit.Location;
 import org.tbax.baxshops.BaxShop;
-import org.tbax.baxshops.internal.serialization.states.StateLoader_00100;
+import org.tbax.baxshops.internal.serialization.states.StateLoader_00050;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -43,13 +43,13 @@ public class Shop implements Serializable
         this.inventory = new ArrayList<>();
     }
 
-    public BaxShop modernize(StateLoader_00100 stateLoader_00100)
+    public BaxShop modernize(StateLoader_00050 stateLoader_00050)
     {
         org.tbax.baxshops.BaxShop baxShop = new org.tbax.baxshops.BaxShop(location);
         baxShop.setFlagInfinite(isInfinite == null ? false : isInfinite);
-        baxShop.setOwner(stateLoader_00100.registerPlayer(owner));
+        baxShop.setOwner(stateLoader_00050.registerPlayer(owner));
         for(ShopEntry entry : inventory) {
-            baxShop.add(entry.modernize(stateLoader_00100));
+            baxShop.add(entry.modernize(stateLoader_00050));
         }
         return baxShop;
     }

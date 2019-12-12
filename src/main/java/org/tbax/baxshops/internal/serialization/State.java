@@ -80,63 +80,42 @@ public final class State
     public static State readFromDisk(@NotNull ShopPlugin plugin) throws IOException, InvalidConfigurationException
     {
         File stateLocation = ShopPlugin.getStateFile().getFile();
-        if (!stateLocation.exists()) {
-            if (StateLoader_00100.getState2File(plugin).exists()) {
-                if (StateLoader_00100.getSerializedClass(plugin) == qs.shops.serialization.State.class) {
-                    plugin.getLogger().info("Beginning conversion from nathan/shops");
+        loadedState = ShopPlugin.getStateFile().findVersion();
+        if (loadedState == 0d) {
+            if (stateLocation.exists()) {
+                ShopPlugin.logWarning("Unable to read file format version! The save may be corrupt.");
+                return null;
+            }
+            else if (StateLoader_00050.getState2File(plugin).exists()) {
+                if (StateLoader_00050.getSerializedClass(plugin) == qs.shops.serialization.State.class) {
+                    loadedState = StateLoader_00000.VERSION;
+                    ShopPlugin.logInfo("Beginning conversion from nathan/shops");
                     return new StateLoader_00000(plugin).loadState(StateLoader_00000.getNathanFile(plugin));
                 }
                 else {
-                    plugin.getLogger().info("Beginning conversion from tbax.shops.serialization.State2");
-                    return new StateLoader_00100(plugin).loadState(StateLoader_00100.getState2File(plugin));
-                }
-            }
-            else if (StateLoader_00200.getJsonFile(plugin).exists()) {
-                double jsonVersion = StateLoader_00200.getJsonFileVersion(plugin);
-                if (jsonVersion == 0) {
-                    plugin.getLogger().info("Beginning conversion from json");
-                }
-                else {
-                    plugin.getLogger().info("Beginning conversion from json " + new DecimalFormat("0.0#").format(jsonVersion));
-                }
-                if (jsonVersion == 2.1) {
-                    return new StateLoader_00210(plugin).loadState(StateLoader_00200.getJsonFile(plugin));
-                }
-                else if (jsonVersion == 2.0) {
-                    return new StateLoader_00205(plugin).loadState(StateLoader_00200.getJsonFile(plugin));
-                }
-                else {
-                    return new StateLoader_00200(plugin).loadState(StateLoader_00200.getJsonFile(plugin));
+                    loadedState = StateLoader_00050.VERSION;
+                    ShopPlugin.logInfo("Beginning conversion from tbax.shops.serialization.State2");
+                    return new StateLoader_00050(plugin).loadState(StateLoader_00050.getState2File(plugin));
                 }
             }
             else {
-                plugin.getLogger().info("YAML file did not exist. Starting fresh.");
+                loadedState = STATE_VERSION;
+                ShopPlugin.logInfo("No save was found. Starting from scratch.");
                 return new State(plugin);
             }
         }
-        double ver = StateFile.readVersion(stateLocation);
-        if (ver == 0d) {
-            if (plugin.getConfig().contains("StateVersion")) {
-                ver = plugin.getConfig().getDouble("StateVersion", STATE_VERSION);
-            }
-            else {
-                ver = StateLoader_00300.VERSION; // version 3.0 was the last version not to be in config.yml
-            }
-        }
-
-        loadedState = ver;
 
         StateLoader loader;
         try {
-            loader = UpgradeableSerialization.getStateLoader(plugin, ver);
+            loader = UpgradeableSerialization.getStateLoader(plugin, loadedState);
         }
         catch (ReflectiveOperationException e) {
-            plugin.getLogger().warning("Unknown state file version. Starting from scratch...");
+            ShopPlugin.logWarning("Unknown state file version. Starting from scratch...");
             return new State(plugin);
         }
 
-        if (ver != STATE_VERSION) {
-            plugin.getLogger().info("Converting state file version " + (new DecimalFormat("0.0#")).format(ver));
+        if (loadedState != STATE_VERSION) {
+            ShopPlugin.logInfo("Converting state file version " + (new DecimalFormat("0.0#")).format(loadedState));
         }
         return loader.loadState(stateLocation);
     }

@@ -23,7 +23,7 @@ import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.notification.GeneralNotification;
 import org.tbax.baxshops.internal.serialization.StateLoader;
-import org.tbax.baxshops.internal.serialization.states.StateLoader_00200;
+import org.tbax.baxshops.internal.serialization.states.StateLoader_00100;
 
 @Deprecated
 public class DeathNotification implements Notification
@@ -55,7 +55,7 @@ public class DeathNotification implements Notification
     @Override
     public @NotNull org.tbax.baxshops.notification.Notification getNewNote(StateLoader stateLoader)
     {
-        OfflinePlayer player = ((StateLoader_00200)stateLoader).registerPlayer(person);
+        OfflinePlayer player = ((StateLoader_00100)stateLoader).registerPlayer(person);
         GeneralNotification n = new GeneralNotification(getMessage(player));
         n.setRecipient(player);
         return n;

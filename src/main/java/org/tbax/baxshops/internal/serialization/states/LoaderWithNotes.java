@@ -48,16 +48,20 @@ public abstract class LoaderWithNotes implements StateLoader
     @Override
     public State loadState(@NotNull File stateLocation) throws IOException, InvalidConfigurationException
     {
-        FileConfiguration state = readFile(stateLocation);
+        FileConfiguration stateConfig = readFile(stateLocation);
         State savedState = new State(getPlugin());
 
+        if (stateConfig == null) {
+            return savedState;
+        }
+
         ShopPlugin.logInfo("Loading shop data...");
-        Collection<BaxShop> shops = buildShops(state);
+        Collection<BaxShop> shops = buildShops(stateConfig);
         sanitizeShopData(shops);
         ShopPlugin.logInfo("Loading notifications...");
-        Collection<NoteSet> notes = buildNotifications(state);
+        Collection<NoteSet> notes = buildNotifications(stateConfig);
         ShopPlugin.logInfo("Loading player data...");
-        Collection<StoredPlayer> players = buildPlayers(state);
+        Collection<StoredPlayer> players = buildPlayers(stateConfig);
 
         for (NoteSet noteSet : notes) {
             Deque<Notification> deque = noteSet.getNotifications();
