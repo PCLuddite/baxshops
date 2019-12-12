@@ -50,7 +50,7 @@ public final class ItemUtil
     private static final Method AS_NMS_COPY;
     private static final Method GET_NAME;
 
-    private static Map<Integer, Material> legacyItems = null;
+    private static Map<Integer, LegacyItem> legacyItems = null;
     private static Map<Integer, Enchantment> legacyEnchants = null;
 
     private static final Map<Material, Material> SIGN_TO_SIGN = new HashMap<>();
@@ -311,11 +311,6 @@ public final class ItemUtil
         }
     }
 
-    public static boolean hasEnchantLevels(Enchantment enchantment)
-    {
-        return getEnchantable(enchantment).hasLevels();
-    }
-
     public static Enchantable getEnchantable(Enchantment enchantment)
     {
         Enchantable enchantable = enchants.get(enchantment);
@@ -486,35 +481,25 @@ public final class ItemUtil
     @Deprecated
     public static ItemStack fromItemId(int id, short damage)
     {
-        Material type = legacyItems.get(id);
-        if (type == null) return null;
-        return new ItemStack(type, 1, damage);
+        LegacyItem item = legacyItems.get(id);
+        if (item == null) return null;
+        return item.toItemStack(damage);
     }
 
-    @Deprecated
-    public static Map<Integer, Material> getLegacyItems()
-    {
-        return legacyItems;
-    }
-
-    @Deprecated
-    public static Map<Integer, Material> loadLegacyItems(JavaPlugin plugin) throws IOException
+    public static void loadLegacyItems(JavaPlugin plugin) throws IOException
     {
         legacyItems = new HashMap<>();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(plugin.getResource("legacy_items.txt")))) {
             String line;
             while((line = reader.readLine()) != null) {
-                int idx = line.indexOf(' ');
-                int id = Integer.parseInt(line.substring(0, idx));
-                Material material = Material.getMaterial(line.substring(idx).trim());
-                legacyItems.put(id, material);
+                Scanner scanner = new Scanner(line);
+                LegacyItem item = new LegacyItem(scanner.nextInt(), scanner.next(), scanner.nextBoolean());
+                legacyItems.put(item.getItemId(), item);
             }
         }
-        return legacyItems;
     }
 
-    @Deprecated
-    public static Map<Integer, Enchantment> loadLegacyEnchants()
+    public static void loadLegacyEnchants()
     {
         legacyEnchants = new HashMap<>();
         for (Map.Entry<Enchantment, Enchantable> entry : enchants.entrySet()) {
@@ -525,7 +510,6 @@ public final class ItemUtil
                 // do not add
             }
         }
-        return legacyEnchants;
     }
 
     @Deprecated
