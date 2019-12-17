@@ -117,7 +117,7 @@ public final class CmdSelect extends BaxShopCommand
         }
 
         ShopSelection selection = ShopPlugin.getSelection(player);
-        selection.setLocation(locations.get(locNbr));
+        selection.setLocation(locations.get(locNbr - 1));
         selection.setShop(shop);
         selection.setIsOwner(shop.getOwner().equals(StoredPlayer.DUMMY));
         selection.setPage(0);
