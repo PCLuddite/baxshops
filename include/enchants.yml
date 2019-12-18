@@ -1,248 +1,211 @@
 enchants:
-  - enchantment: PROTECTION_FIRE
-    name: Fire Protection
-    id: 1
-    key:
-      namespace: minecraft
-      key: fire_protection
-    levels: true
-  - enchantment: DAMAGE_ALL
-    name: Sharpness
-    id: 16
-    key:
-      namespace: minecraft
-      key: sharpness
-    levels: true
-  - enchantment: ARROW_FIRE
-    name: Flame
-    id: 50
-    key:
-      namespace: minecraft
-      key: flame
-    levels: false
-  - enchantment: WATER_WORKER
-    name: Aqua Affinity
-    id: 6
-    key:
-      namespace: minecraft
-      key: aqua_affinity
-    levels: false
-  - enchantment: ARROW_KNOCKBACK
-    name: Punch
-    id: 49
-    key:
-      namespace: minecraft
-      key: punch
-    levels: true
-  - enchantment: LOYALTY
-    name: Loyalty
-    key:
-      namespace: minecraft
-      key: loyalty
-    levels: true
-  - enchantment: DEPTH_STRIDER
-    name: Depth Strider
-    id: 8
-    key:
-      namespace: minecraft
-      key: depth_strider
-    levels: true
-  - enchantment: VANISHING_CURSE
-    name: Vanishing Curse
-    key:
-      namespace: minecraft
-      key: vanishing_curse
-    levels: false
-  - enchantment: DURABILITY
-    name: Unbreaking
-    id: 34
-    key:
-      namespace: minecraft
-      key: unbreaking
-    levels: true
-  - enchantment: KNOCKBACK
-    name: Knockback
-    id: 19
-    key:
-      namespace: minecraft
-      key: knockback
-    levels: true
-  - enchantment: LUCK
-    name: Luck of the Sea
-    id: 61
-    key:
-      namespace: minecraft
-      key: luck_of_the_sea
-    levels: true
-  - enchantment: BINDING_CURSE
-    name: Binding Curse
-    key:
-      namespace: minecraft
-      key: binding_curse
-    levels: false
-  - enchantment: LOOT_BONUS_BLOCKS
-    name: Fortune
-    id: 35
-    key:
-      namespace: minecraft
-      key: fortune
-    levels: true
-  - enchantment: PROTECTION_ENVIRONMENTAL
-    name: Protection
-    id: 0
-    key:
-      namespace: minecraft
-      key: protection
-    levels: true
-  - enchantment: DIG_SPEED
-    name: Efficiency
-    id: 32
-    key:
-      namespace: minecraft
-      key: efficiency
-    levels: true
-  - enchantment: MENDING
-    name: Mending
-    key:
-      namespace: minecraft
-      key: mending
-    levels: false
-  - enchantment: FROST_WALKER
-    name: Frost Walker
-    key:
-      namespace: minecraft
-      key: frost_walker
-    levels: true
-  - enchantment: LURE
-    name: Lure
-    id: 62
-    key:
-      namespace: minecraft
-      key: lure
-    levels: true
-  - enchantment: LOOT_BONUS_MOBS
-    name: Looting
-    id: 21
-    key:
-      namespace: minecraft
-      key: looting
-    levels: true
-  - enchantment: PIERCING
-    name: Piercing
-    key:
-      namespace: minecraft
-      key: piercing
-    levels: true
-  - enchantment: PROTECTION_EXPLOSIONS
-    name: Blast Protection
-    id: 3
-    key:
-      namespace: minecraft
-      key: blast_protection
-    levels: true
-  - enchantment: DAMAGE_UNDEAD
-    name: Smite
-    id: 17
-    key:
-      namespace: minecraft
-      key: smite
-    levels: true
-  - enchantment: MULTISHOT
-    name: Multishot
-    key:
-      namespace: minecraft
-      key: multishot
-    levels: false
-  - enchantment: FIRE_ASPECT
-    name: Fire Aspect
-    id: 20
-    key:
-      namespace: minecraft
-      key: fire_aspect
-    levels: true
-  - enchantment: CHANNELING
-    name: Channeling
-    key:
-      namespace: minecraft
-      key: channeling
-    levels: false
-  - enchantment: SWEEPING_EDGE
-    name: Sweeping Edge
-    key:
-      namespace: minecraft
-      key: sweeping
-    levels: true
-  - enchantment: THORNS
-    name: Thorns
-    id: 7
-    key:
-      namespace: minecraft
-      key: thorns
-    levels: true
-  - enchantment: DAMAGE_ARTHROPODS
-    name: Bane of Arthropods
-    id: 18
-    key:
-      namespace: minecraft
-      key: bane_of_arthropods
-    levels: true
-  - enchantment: OXYGEN
-    name: Respiration
-    id: 5
-    key:
-      namespace: minecraft
-      key: respiration
-    levels: true
-  - enchantment: RIPTIDE
-    name: Riptide
-    key:
-      namespace: minecraft
-      key: riptide
-    levels: false
-  - enchantment: SILK_TOUCH
-    name: Silk Touch
-    id: 33
-    key:
-      namespace: minecraft
-      key: silk_touch
-    levels: false
-  - enchantment: QUICK_CHARGE
-    name: Quick Charge
-    key:
-      namespace: minecraft
-      key: quick_charge
-    levels: false
-  - enchantment: PROTECTION_PROJECTILE
-    name: Projectile Protection
-    id: 4
-    key:
-      namespace: minecraft
-      key: projectile_protection
-    levels: true
-  - enchantment: IMPALING
-    name: Impaling
-    key:
-      namespace: minecraft
-      key: impaling
-    levels: false
-  - enchantment: PROTECTION_FALL
-    name: Feather Falling
-    id: 2
-    key:
-      namespace: minecraft
-      key: feather_falling
-    levels: true
-  - enchantment: ARROW_DAMAGE
-    name: Power
-    id: 48
-    key:
-      namespace: minecraft
-      key: power
-    levels: true
-  - enchantment: ARROW_INFINITE
-    name: Infinity
-    id: 51
-    key:
-      namespace: minecraft
-      key: infinity
-    levels: false
+- enchantment: PROTECTION_FIRE
+  name: Fire Protection
+  id: 1
+  key:
+    namespace: minecraft
+    key: fire_protection
+- enchantment: DAMAGE_ALL
+  name: Sharpness
+  id: 16
+  key:
+    namespace: minecraft
+    key: sharpness
+- enchantment: ARROW_FIRE
+  name: Flame
+  id: 50
+  key:
+    namespace: minecraft
+    key: flame
+- enchantment: WATER_WORKER
+  name: Aqua Affinity
+  id: 6
+  key:
+    namespace: minecraft
+    key: aqua_affinity
+- enchantment: ARROW_KNOCKBACK
+  name: Punch
+  id: 49
+  key:
+    namespace: minecraft
+    key: punch
+- enchantment: LOYALTY
+  name: Loyalty
+  key:
+    namespace: minecraft
+    key: loyalty
+- enchantment: DEPTH_STRIDER
+  name: Depth Strider
+  id: 8
+  key:
+    namespace: minecraft
+    key: depth_strider
+- enchantment: VANISHING_CURSE
+  name: Vanishing Curse
+  key:
+    namespace: minecraft
+    key: vanishing_curse
+- enchantment: DURABILITY
+  name: Unbreaking
+  id: 34
+  key:
+    namespace: minecraft
+    key: unbreaking
+- enchantment: KNOCKBACK
+  name: Knockback
+  id: 19
+  key:
+    namespace: minecraft
+    key: knockback
+- enchantment: LUCK
+  name: Luck of the Sea
+  id: 61
+  key:
+    namespace: minecraft
+    key: luck_of_the_sea
+- enchantment: BINDING_CURSE
+  name: Binding Curse
+  key:
+    namespace: minecraft
+    key: binding_curse
+- enchantment: LOOT_BONUS_BLOCKS
+  name: Fortune
+  id: 35
+  key:
+    namespace: minecraft
+    key: fortune
+- enchantment: PROTECTION_ENVIRONMENTAL
+  name: Protection
+  id: 0
+  key:
+    namespace: minecraft
+    key: protection
+- enchantment: DIG_SPEED
+  name: Efficiency
+  id: 32
+  key:
+    namespace: minecraft
+    key: efficiency
+- enchantment: MENDING
+  name: Mending
+  key:
+    namespace: minecraft
+    key: mending
+- enchantment: FROST_WALKER
+  name: Frost Walker
+  key:
+    namespace: minecraft
+    key: frost_walker
+- enchantment: LURE
+  name: Lure
+  id: 62
+  key:
+    namespace: minecraft
+    key: lure
+- enchantment: LOOT_BONUS_MOBS
+  name: Looting
+  id: 21
+  key:
+    namespace: minecraft
+    key: looting
+- enchantment: PIERCING
+  name: Piercing
+  key:
+    namespace: minecraft
+    key: piercing
+- enchantment: PROTECTION_EXPLOSIONS
+  name: Blast Protection
+  id: 3
+  key:
+    namespace: minecraft
+    key: blast_protection
+- enchantment: DAMAGE_UNDEAD
+  name: Smite
+  id: 17
+  key:
+    namespace: minecraft
+    key: smite
+- enchantment: MULTISHOT
+  name: Multishot
+  key:
+    namespace: minecraft
+    key: multishot
+- enchantment: FIRE_ASPECT
+  name: Fire Aspect
+  id: 20
+  key:
+    namespace: minecraft
+    key: fire_aspect
+- enchantment: CHANNELING
+  name: Channeling
+  key:
+    namespace: minecraft
+    key: channeling
+- enchantment: SWEEPING_EDGE
+  name: Sweeping Edge
+  key:
+    namespace: minecraft
+    key: sweeping
+- enchantment: THORNS
+  name: Thorns
+  id: 7
+  key:
+    namespace: minecraft
+    key: thorns
+- enchantment: DAMAGE_ARTHROPODS
+  name: Bane of Arthropods
+  id: 18
+  key:
+    namespace: minecraft
+    key: bane_of_arthropods
+- enchantment: OXYGEN
+  name: Respiration
+  id: 5
+  key:
+    namespace: minecraft
+    key: respiration
+- enchantment: RIPTIDE
+  name: Riptide
+  key:
+    namespace: minecraft
+    key: riptide
+- enchantment: SILK_TOUCH
+  name: Silk Touch
+  id: 33
+  key:
+    namespace: minecraft
+    key: silk_touch
+- enchantment: QUICK_CHARGE
+  name: Quick Charge
+  key:
+    namespace: minecraft
+    key: quick_charge
+- enchantment: PROTECTION_PROJECTILE
+  name: Projectile Protection
+  id: 4
+  key:
+    namespace: minecraft
+    key: projectile_protection
+- enchantment: IMPALING
+  name: Impaling
+  key:
+    namespace: minecraft
+    key: impaling
+- enchantment: PROTECTION_FALL
+  name: Feather Falling
+  id: 2
+  key:
+    namespace: minecraft
+    key: feather_falling
+- enchantment: ARROW_DAMAGE
+  name: Power
+  id: 48
+  key:
+    namespace: minecraft
+    key: power
+- enchantment: ARROW_INFINITE
+  name: Infinity
+  id: 51
+  key:
+    namespace: minecraft
+    key: infinity

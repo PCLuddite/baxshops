@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,35 +18,26 @@
  */
 package org.tbax.baxshops.internal.items;
 
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.tbax.baxshops.Format;
-import org.tbax.baxshops.internal.ShopPlugin;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public final class Enchantable
 {
+    private Enchantment enchantment;
     private String name;
-    private Integer legacyId;
-    private boolean hasLevels;
+    private int legacyId = -1;
 
-    public Enchantable(String name, boolean hasLevels)
+    public Enchantable(Enchantment enchantment, String name)
     {
+        this.enchantment = enchantment;
         this.name = name;
-        this.hasLevels = hasLevels;
     }
 
-    public Enchantable(int legacyId, String name, boolean hasLevels)
+    public Enchantable(Enchantment enchantment, String name, int legacyId)
     {
+        this.enchantment = enchantment;
         this.legacyId = legacyId;
         this.name = name;
-        this.hasLevels = hasLevels;
     }
 
     public String getName()
@@ -56,12 +47,12 @@ public final class Enchantable
 
     public boolean hasLevels()
     {
-        return hasLevels;
+        return enchantment.getMaxLevel() > 1;
     }
 
     public int getLegacyId()
     {
-        if (legacyId == null)
+        if (legacyId < 0)
             throw new UnsupportedOperationException("This is not a legacy enchantment");
         return legacyId;
     }
@@ -74,7 +65,7 @@ public final class Enchantable
 
     public String toString(int levels)
     {
-        if (hasLevels)
+        if (hasLevels())
             return name + " " + Format.toNumeral(levels);
         return name;
     }
@@ -86,7 +77,7 @@ public final class Enchantable
 //        List<Map<String, Object>> list = new ArrayList<>();
 //        for(Enchantment enchantment : Enchantment.values()) {
 //            Map<String, Object> map = new HashMap<>();
-//            Enchantable enchantable = ItemUtil.enchants.get(enchantment);
+//            Enchantable enchantable = ItemUtil.getEnchantable(enchantment);
 //            map.put("enchantment", enchantment.getName());
 //
 //            Map<String, String> key = new HashMap<>();
@@ -100,7 +91,6 @@ public final class Enchantable
 //            }
 //            else {
 //                map.put("name", enchantable.getName());
-//                map.put("levels", enchantable.hasLevels());
 //                try {
 //                    map.put("id", enchantable.getLegacyId());
 //                }
