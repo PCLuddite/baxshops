@@ -44,7 +44,7 @@ public final class CmdRemove extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[] { "remove", "rm" };
+        return new String[] { "rm" };
     }
 
     @Override

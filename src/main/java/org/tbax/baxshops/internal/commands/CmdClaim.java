@@ -42,7 +42,7 @@ public final class CmdClaim extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[] { "claim", "c" };
+        return new String[] { "c" };
     }
 
     @Override

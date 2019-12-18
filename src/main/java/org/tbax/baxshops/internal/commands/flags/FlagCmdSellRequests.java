@@ -31,13 +31,19 @@ public final class FlagCmdSellRequests extends FlagCmd
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[]{"sellrequests", "sellrequest", "sell_request", "sell_requests"};
+        return new String[] { "sellrequest", "sell_request", "sell_requests" };
     }
 
     @Override
     public boolean requiresRealOwner(@NotNull ShopCmdActor actor)
     {
         return true;
+    }
+
+    @Override
+    public @NotNull String getName()
+    {
+        return "sellrequests";
     }
 
     @Override

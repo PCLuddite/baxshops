@@ -50,7 +50,7 @@ public final class CmdLollipop extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[] { "lollipop", "lol", "lolly" };
+        return new String[] { "lol", "lolly" };
     }
 
     @Override

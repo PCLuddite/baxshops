@@ -138,6 +138,7 @@ public final class CommandMap implements Map<String, BaxShopCommand>
     public void add(@NotNull Class<? extends BaxShopCommand> cmdClass) throws InstantiationException, IllegalAccessException
     {
         BaxShopCommand cmd = cmdClass.newInstance();
+        put(cmd.getName(), cmd);
         for (String alias : cmd.getAliases()) {
             put(alias, cmd);
         }

@@ -43,7 +43,7 @@ public final class CmdSet extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[] { "set", "setprice" };
+        return new String[] { "setprice" };
     }
 
     @Override

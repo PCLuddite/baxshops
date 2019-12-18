@@ -39,7 +39,7 @@ public final class CmdAlphabetize extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[] { "alphabetize", "alphabetise" };
+        return new String[] { "alphabetise" };
     }
 
     @Override

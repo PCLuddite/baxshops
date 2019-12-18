@@ -43,7 +43,7 @@ public final class CmdSetIndex extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[] { "setindex", "setorder", "reorder" };
+        return new String[] { "setorder", "reorder" };
     }
 
     @Override

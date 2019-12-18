@@ -31,13 +31,19 @@ public final class FlagCmdSellToShop extends FlagCmd
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[]{"selltoshop", "sell_to_shop"};
+        return new String[] { "sell_to_shop" };
     }
 
     @Override
     public boolean requiresRealOwner(@NotNull ShopCmdActor actor)
     {
         return true;
+    }
+
+    @Override
+    public @NotNull String getName()
+    {
+        return "selltoshop";
     }
 
     @Override

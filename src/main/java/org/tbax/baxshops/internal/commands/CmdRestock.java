@@ -46,7 +46,7 @@ public final class CmdRestock extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[] { "restock", "r" };
+        return new String[] { "r" };
     }
 
     @Override

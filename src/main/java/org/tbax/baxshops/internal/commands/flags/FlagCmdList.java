@@ -33,9 +33,9 @@ import java.util.List;
 public final class FlagCmdList extends FlagCmd
 {
     @Override
-    public @NotNull String[] getAliases()
+    public @NotNull String getName()
     {
-        return new String[]{"list"};
+        return "list";
     }
 
     @Override

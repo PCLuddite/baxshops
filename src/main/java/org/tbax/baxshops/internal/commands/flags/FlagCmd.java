@@ -31,12 +31,6 @@ import java.util.List;
 public abstract class FlagCmd extends BaxShopCommand
 {
     @Override
-    public @NotNull String getName()
-    {
-        return getAliases()[0];
-    }
-
-    @Override
     public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
     {
         return actor.getNumArgs() == 3;
@@ -47,10 +41,6 @@ public abstract class FlagCmd extends BaxShopCommand
     {
         return Permissions.SHOP_OWNER;
     }
-
-    @NotNull
-    @Override
-    public abstract String[] getAliases();
 
     @Override
     public boolean requiresSelection(@NotNull ShopCmdActor actor)

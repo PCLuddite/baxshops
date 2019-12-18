@@ -47,7 +47,7 @@ public final class CmdHelp extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[] { "help", "h" };
+        return new String[] { "h" };
     }
 
     @Override

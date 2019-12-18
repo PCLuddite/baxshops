@@ -43,7 +43,7 @@ public final class CmdAdd extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[] { "add", "+", "ad" };
+        return new String[] { "+", "ad" };
     }
 
     @Override

@@ -40,7 +40,7 @@ public final class CmdSkip extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[] { "skip", "sk" };
+        return new String[] { "sk" };
     }
 
     @Override

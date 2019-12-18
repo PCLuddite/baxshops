@@ -24,6 +24,7 @@ import org.bukkit.command.TabCompleter;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.errors.PrematureAbortException;
+import org.tbax.baxshops.internal.Permissions;
 
 import java.util.Collections;
 import java.util.List;
@@ -31,24 +32,30 @@ import java.util.List;
 public abstract class BaxShopCommand implements TabCompleter
 {
     public abstract @NotNull String getName();
+
     public abstract String getPermission();
+
     public abstract @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor);
+
     public abstract boolean hasValidArgCount(@NotNull ShopCmdActor actor);
+
     public abstract boolean requiresSelection(@NotNull ShopCmdActor actor);
+
     public abstract boolean requiresOwner(@NotNull ShopCmdActor actor);
+
     public abstract boolean requiresPlayer(@NotNull ShopCmdActor actor);
+
     public abstract boolean requiresItemInHand(@NotNull ShopCmdActor actor);
+
     public abstract void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException;
 
     public @NotNull String[] getAliases()
     {
-        return new String[]{getName()};
+        return new String[0];
     }
 
     public boolean hasPermission(@NotNull ShopCmdActor actor)
     {
-        if (getPermission() == null)
-            return true;
         return actor.hasPermission(getPermission());
     }
 
@@ -56,7 +63,11 @@ public abstract class BaxShopCommand implements TabCompleter
     {
         return false;
     }
-    public boolean allowsExclusion(ShopCmdActor actor) { return false; }
+
+    public boolean allowsExclusion(ShopCmdActor actor)
+    {
+        return false;
+    }
 
     public @NotNull Class<? extends BaxShopCommand> getAlternative()
     {
@@ -65,7 +76,7 @@ public abstract class BaxShopCommand implements TabCompleter
 
     public final boolean requiresAdmin()
     {
-        return "shops.admin".equalsIgnoreCase(getPermission());
+        return Permissions.SHOP_ADMIN.equalsIgnoreCase(getPermission());
     }
 
     @Override

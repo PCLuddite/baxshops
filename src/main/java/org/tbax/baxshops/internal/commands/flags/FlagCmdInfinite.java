@@ -32,7 +32,13 @@ public final class FlagCmdInfinite extends FlagCmd
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[] { "infinite", "isinfinite", "inf" };
+        return new String[] { "isinfinite", "inf" };
+    }
+
+    @Override
+    public @NotNull String getName()
+    {
+        return "infinite";
     }
 
     @Override

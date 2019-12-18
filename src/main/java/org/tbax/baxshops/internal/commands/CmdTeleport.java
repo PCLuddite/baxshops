@@ -45,7 +45,7 @@ public final class CmdTeleport extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[] { "teleport", "tp" };
+        return new String[] { "tp" };
     }
 
     @Override

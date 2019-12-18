@@ -31,7 +31,7 @@ public final class FlagCmdBuyRequests extends FlagCmd
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[]{"buyrequests", "buyrequest", "buy_request", "buy_requests"};
+        return new String[] { "buyrequest", "buy_request", "buy_requests" };
     }
 
     @Override
@@ -41,12 +41,18 @@ public final class FlagCmdBuyRequests extends FlagCmd
     }
 
     @Override
+    public @NotNull String getName()
+    {
+        return "buyrequests";
+    }
+
+    @Override
     public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "require requests to buy from the shop");
-        help.setLongDescription("Require players to send a request before purchasing an item. This way you can screen who is buying from your shop");
+        help.setLongDescription("Require players to send a request before purchasing an item");
         help.setArgs(
-                new CommandHelpArgument("true|false", "whether or not this flag is enabled", true)
+                new CommandHelpArgument("option", "whether or not this flag is enabled", true)
         );
         return help;
     }
@@ -55,7 +61,7 @@ public final class FlagCmdBuyRequests extends FlagCmd
     public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         BaxShop shop = actor.getShop();
-        boolean value = actor.getArgBoolean(2, "Usage:\n/shop flag buyrequests [true|false]");
+        boolean value = actor.getArgBoolean(2);
         assert shop != null;
         shop.setFlagBuyRequests(value);
         actor.sendMessage(Format.flag("Buy requests") + " for this shop are " + Format.keyword(value ? "enabled" : "disabled"));

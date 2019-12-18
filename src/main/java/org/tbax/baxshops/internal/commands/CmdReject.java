@@ -42,7 +42,7 @@ public final class CmdReject extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[] { "reject", "no" };
+        return new String[] { "no" };
     }
 
     @Override

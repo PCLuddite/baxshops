@@ -34,16 +34,14 @@ import org.tbax.baxshops.serialization.StoredPlayer;
 
 public final class CmdAccept extends BaxShopCommand
 {
-    @NotNull
     @Override
-    public String getName()
+    public @NotNull String getName()
     {
         return "accept";
     }
 
-    @NotNull
     @Override
-    public String[] getAliases()
+    public @NotNull String[] getAliases()
     {
         return new String[] { "yes", "a" };
     }

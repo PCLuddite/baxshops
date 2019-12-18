@@ -47,7 +47,7 @@ public final class CmdSell extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[] { "sell", "s" };
+        return new String[] { "s" };
     }
 
     @Override

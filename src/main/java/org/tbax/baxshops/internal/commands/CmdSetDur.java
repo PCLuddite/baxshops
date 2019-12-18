@@ -43,7 +43,7 @@ public final class CmdSetDur extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[] { "setdamage", "setdmg", "setdurability", "setdur" };
+        return new String[] { "setdmg", "setdurability", "setdur" };
     }
 
     @Override

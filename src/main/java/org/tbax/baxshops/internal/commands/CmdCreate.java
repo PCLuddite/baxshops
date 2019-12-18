@@ -54,7 +54,7 @@ public final class CmdCreate extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[] { "create", "mk" };
+        return new String[] { "mk", "make" };
     }
 
     @Override

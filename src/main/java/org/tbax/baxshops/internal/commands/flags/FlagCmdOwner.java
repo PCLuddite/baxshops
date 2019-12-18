@@ -21,7 +21,10 @@ package org.tbax.baxshops.internal.commands.flags;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.*;
+import org.tbax.baxshops.BaxShop;
+import org.tbax.baxshops.CommandHelp;
+import org.tbax.baxshops.CommandHelpArgument;
+import org.tbax.baxshops.Format;
 import org.tbax.baxshops.commands.ShopCmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Resources;
@@ -34,15 +37,15 @@ import java.util.stream.Collectors;
 public final class FlagCmdOwner extends FlagCmd
 {
     @Override
-    public @NotNull String[] getAliases()
-    {
-        return new String[]{"owner"};
-    }
-
-    @Override
     public boolean requiresRealOwner(@NotNull ShopCmdActor actor)
     {
         return false;
+    }
+
+    @Override
+    public @NotNull String getName()
+    {
+        return "owner";
     }
 
     @Override
@@ -81,7 +84,7 @@ public final class FlagCmdOwner extends FlagCmd
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
     {
         return ShopPlugin.getRegisteredPlayers().stream()
-            .map(StoredPlayer::getName)
-            .collect(Collectors.toList());
+                .map(StoredPlayer::getName)
+                .collect(Collectors.toList());
     }
 }

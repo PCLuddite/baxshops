@@ -32,13 +32,13 @@ public final class CmdSetFoodLevel extends BaxShopCommand
     @Override
     public @NotNull String getName()
     {
-        return "setfoodlevel";
+        return "sethunger";
     }
 
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[] { "setfoodlevel", "setfood" };
+        return new String[] { "sethungerlevel", "setfoodlevel", "setfood" };
     }
 
     @Override

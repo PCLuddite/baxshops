@@ -43,7 +43,7 @@ public final class CmdDelete extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[] { "delete", "del" };
+        return new String[] { "del" };
     }
 
     @Override

@@ -45,7 +45,7 @@ public final class CmdTake extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[] { "take", "t" };
+        return new String[] { "t" };
     }
 
     @Override

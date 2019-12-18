@@ -37,13 +37,13 @@ public final class CmdSetAmnt extends BaxShopCommand
     @Override
     public @NotNull String getName()
     {
-        return "setamnt";
+        return "setamount";
     }
 
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[] { "setamnt", "setamt" };
+        return new String[] { "setamnt", "setamt", "setquantity", "setqty" };
     }
 
     @Override

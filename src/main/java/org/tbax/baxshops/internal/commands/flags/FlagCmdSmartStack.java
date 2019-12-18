@@ -31,13 +31,19 @@ public final class FlagCmdSmartStack extends FlagCmd
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[] { "smartstack", "smart_stack" };
+        return new String[] { "smart_stack" };
     }
 
     @Override
     public boolean requiresRealOwner(@NotNull ShopCmdActor actor)
     {
         return false;
+    }
+
+    @Override
+    public @NotNull String getName()
+    {
+        return "smartstack";
     }
 
     @Override
