@@ -222,23 +222,6 @@ public final class ItemUtil
     }
 
     /**
-     * Determines if a material can be damaged
-     */
-    public static boolean isDamageable(Material item)
-    {
-        return item.getMaxDurability() == 0;
-    }
-
-    /**
-     * Gets the maximum damage for an item. This assumes damageability
-     * has been confirmed with isDamageable()
-     */
-    public static short getMaxDamage(Material item)
-    {
-        return item.getMaxDurability();
-    }
-
-    /**
      * Loads the enchantment names in enchants.txt
      */
     public static void loadEnchants(ShopPlugin plugin)

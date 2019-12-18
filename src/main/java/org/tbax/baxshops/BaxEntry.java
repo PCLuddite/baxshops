@@ -265,12 +265,12 @@ public final class BaxEntry implements UpgradeableSerializable
     
     public int getDamagePercent()
     {
-        return (int)Math.round((getDurability() * 100d) / ItemUtil.getMaxDamage(stack.getType()));
+        return (int)Math.round((getDurability() * 100d) / stack.getType().getMaxDurability());
     }
     
-    public void setDamagePercent(int pct)
+    public void setDamagePercent(double pct)
     {
-        double damage = (pct / 100d) * ItemUtil.getMaxDamage(stack.getType());
+        double damage = (pct / 100d) * stack.getType().getMaxDurability();
         setDurability((int)damage);
     }
 
@@ -312,7 +312,7 @@ public final class BaxEntry implements UpgradeableSerializable
         info.append('\n');
         info.append("Name: ").append(Format.itemName(ItemUtil.getName(this))).append('\n');
         info.append("Material: ").append(Format.command(stack.getType().toString())).append('\n');
-        if (ItemUtil.isDamageable(stack.getType())) {
+        if (stack.getType().getMaxDurability() > 0) {
             info.append("Damage: ").append(ChatColor.YELLOW).append(getDamagePercent()).append('%').append(ChatColor.RESET).append('\n');
         }
         if (stack.hasItemMeta()) {
@@ -360,7 +360,7 @@ public final class BaxEntry implements UpgradeableSerializable
             name.append(" ").append(potionInfo);
         }
         
-        if (ItemUtil.isDamageable(stack.getType()) && getDurability() > 0) {
+        if (stack.getType().getMaxDurability() > 0 && getDurability() > 0) {
             if (infinite || getAmount() > 0) {
                 name.append(ChatColor.YELLOW);
             }
