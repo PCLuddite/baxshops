@@ -26,6 +26,7 @@ import org.tbax.baxshops.CommandHelpArgument;
 import org.tbax.baxshops.Format;
 import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.ShopSelection;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.CommandHelp;
@@ -44,13 +45,13 @@ public final class CmdTeleport extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[]{"teleport","tp"};
+        return new String[] { "teleport", "tp" };
     }
 
     @Override
     public String getPermission()
     {
-        return "shops.admin";
+        return Permissions.SHOP_ADMIN;
     }
 
     @Override
@@ -59,7 +60,7 @@ public final class CmdTeleport extends BaxShopCommand
         CommandHelp help = new CommandHelp(this, "teleport to a shop location");
         help.setLongDescription("Teleport to a specific shop location. Use /shop list for a list of locations. This can only be done by an admin.");
         help.setArgs(
-            new CommandHelpArgument("index", "the index of the shop location", true)
+                new CommandHelpArgument("index", "the index of the shop location", true)
         );
         return help;
     }
@@ -121,7 +122,7 @@ public final class CmdTeleport extends BaxShopCommand
         ShopCmdActor actor = (ShopCmdActor)sender;
         if (actor.isAdmin() && actor.getNumArgs() == 2 && actor.getShop() != null) {
             String[] nums = new String[actor.getShop().getLocations().size()];
-            for(int i = 0; i < nums.length; ++i) {
+            for (int i = 0; i < nums.length; ++i) {
                 nums[i] = String.valueOf(i + 1);
             }
             return Arrays.asList(nums);

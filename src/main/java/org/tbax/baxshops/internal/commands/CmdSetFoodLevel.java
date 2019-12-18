@@ -18,12 +18,14 @@
  */
 package org.tbax.baxshops.internal.commands;
 
+import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.CommandHelpArgument;
 import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
+import org.tbax.baxshops.internal.Permissions;
 
 public final class CmdSetFoodLevel extends BaxShopCommand
 {
@@ -36,22 +38,23 @@ public final class CmdSetFoodLevel extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[] {"setfoodlevel", "setfood"};
+        return new String[] { "setfoodlevel", "setfood" };
     }
 
     @Override
     public String getPermission()
     {
-        return "shops.admin";
+        return Permissions.SHOP_ADMIN;
     }
 
     @Override
     public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "set hunger level");
-        help.setLongDescription("Sets your hunger level. This can only be done by an admin.");
+        help.setLongDescription("Sets the hunger level of a player");
         help.setArgs(
-                new CommandHelpArgument("level", "Your hunger level out of 20", true)
+                new CommandHelpArgument("level", "The hunger level out of 20", true),
+                new CommandHelpArgument("player", "the players whose hunger to change", actor.getName())
         );
         return help;
     }
@@ -90,6 +93,16 @@ public final class CmdSetFoodLevel extends BaxShopCommand
     public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         int level = actor.getArgInt(1);
-        actor.getPlayer().setFoodLevel(level);
+        OfflinePlayer player;
+        if (actor.getNumArgs() == 2) {
+            player = actor.getPlayer();
+        }
+        else {
+            player = actor.getArgPlayer(1);
+            if (!player.isOnline()) {
+                actor.exitError("The player must be online to change their hunger level");
+            }
+        }
+        player.getPlayer().setFoodLevel(level);
     }
 }

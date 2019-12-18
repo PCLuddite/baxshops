@@ -26,8 +26,7 @@ import org.tbax.baxshops.*;
 import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
-import org.tbax.baxshops.BaxQuantity;
-import org.tbax.baxshops.PlayerUtil;
+import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.Resources;
 import org.tbax.baxshops.internal.ShopPlugin;
 import org.tbax.baxshops.internal.items.ItemUtil;
@@ -48,13 +47,13 @@ public final class CmdSell extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[]{"sell","s"};
+        return new String[] { "sell", "s" };
     }
 
     @Override
     public String getPermission()
     {
-        return "shops.sell";
+        return Permissions.SHOP_TRADER_SELL;
     }
 
     @Override
@@ -63,7 +62,7 @@ public final class CmdSell extends BaxShopCommand
         CommandHelp help = new CommandHelp(this, "sell an item");
         help.setLongDescription("Sell an item to a shop or send a request if sell requests for the shop are active");
         help.setArgs(
-            new CommandHelpArgument("quantity", "the quantity to you wish to sell", false)
+                new CommandHelpArgument("quantity", "the quantity to you wish to sell", false)
         );
         return help;
     }
@@ -142,7 +141,7 @@ public final class CmdSell extends BaxShopCommand
         }
 
         double total = 0.0;
-        for(BaxEntry entry : items) {
+        for (BaxEntry entry : items) {
             if (entry.getAmount() > 0) {
                 double price = sell(actor, entry);
                 if (price >= 0.0) {
@@ -170,7 +169,7 @@ public final class CmdSell extends BaxShopCommand
             SaleRequest request = new SaleRequest(shop.getId(), shop.getOwner(), actor.getPlayer(), entry);
             ShopPlugin.sendNotification(shop.getOwner(), request);
             actor.sendMessage("Your request to sell %s for %s has been sent.",
-                Format.itemName(entry.getAmount(), name), Format.money(price)
+                    Format.itemName(entry.getAmount(), name), Format.money(price)
             );
             return 0;
         }
@@ -178,10 +177,10 @@ public final class CmdSell extends BaxShopCommand
             PlayerUtil.sellItem(shop, shop.getOwner(), actor.getPlayer(), entry);
             PlayerUtil.takeFromInventory(actor.getPlayer().getInventory(), entry.getItemStack(), entry.getAmount(), actor.getShop().hasFlagSmartStack());
             actor.sendMessage(
-                "You have sold %s for %s to %s.",
-                Format.itemName(entry.getAmount(), name),
-                Format.money(price),
-                Format.username(shop.getOwner().getName())
+                    "You have sold %s for %s to %s.",
+                    Format.itemName(entry.getAmount(), name),
+                    Format.money(price),
+                    Format.username(shop.getOwner().getName())
             );
             return price;
         }

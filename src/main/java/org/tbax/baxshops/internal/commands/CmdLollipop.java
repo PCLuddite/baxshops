@@ -23,10 +23,13 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.*;
+import org.tbax.baxshops.CommandHelp;
+import org.tbax.baxshops.CommandHelpArgument;
+import org.tbax.baxshops.Format;
 import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
+import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.Resources;
 import org.tbax.baxshops.internal.ShopPlugin;
 import org.tbax.baxshops.internal.notification.LollipopNotification;
@@ -47,13 +50,13 @@ public final class CmdLollipop extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[]{"lollipop","lol","lolly"};
+        return new String[] { "lollipop", "lol", "lolly" };
     }
 
     @Override
     public String getPermission()
     {
-        return null;
+        return Permissions.SHOP_TRADER;
     }
 
     @Override
@@ -62,8 +65,8 @@ public final class CmdLollipop extends BaxShopCommand
         CommandHelp help = new CommandHelp(this, "hand out a lollipop");
         help.setLongDescription("Give a lollipop to your friends");
         help.setArgs(
-            new CommandHelpArgument("player", "player to send lollipop", true),
-            new CommandHelpArgument("tastiness", "the tastiness", false)
+                new CommandHelpArgument("player", "player to send lollipop", true),
+                new CommandHelpArgument("tastiness", "the tastiness", false)
         );
         return help;
     }
@@ -120,10 +123,10 @@ public final class CmdLollipop extends BaxShopCommand
             actor.exitError(Resources.NOT_REGISTERED_PLAYER, actor.getArg(1), "receive a lollipop");
 
         List<LollipopNotification> otherPops = recipient.getNotifications().stream()
-            .filter(n -> n instanceof LollipopNotification)
-            .map(n -> (LollipopNotification)n)
-            .filter(n -> n.getSender().equals(sender))
-            .collect(Collectors.toList());
+                .filter(n -> n instanceof LollipopNotification)
+                .map(n -> (LollipopNotification)n)
+                .filter(n -> n.getSender().equals(sender))
+                .collect(Collectors.toList());
 
         if (otherPops.isEmpty()) {
             LollipopNotification lol = new LollipopNotification(sender, recipient, tastiness);
@@ -132,8 +135,8 @@ public final class CmdLollipop extends BaxShopCommand
         }
         else {
             actor.sendError("%s has to eat your %s lollipop before you can send another",
-                recipient.getName(),
-                "".equals(otherPops.get(0).getTastiness()) ? "other" : otherPops.get(0).getTastiness()
+                    recipient.getName(),
+                    "".equals(otherPops.get(0).getTastiness()) ? "other" : otherPops.get(0).getTastiness()
             );
         }
     }
@@ -144,8 +147,8 @@ public final class CmdLollipop extends BaxShopCommand
         ShopCmdActor actor = (ShopCmdActor)sender;
         if (actor.getNumArgs() == 2) {
             return ShopPlugin.getRegisteredPlayers().stream()
-                .map(StoredPlayer::getName)
-                .collect(Collectors.toList());
+                    .map(StoredPlayer::getName)
+                    .collect(Collectors.toList());
         }
         else if (actor.getNumArgs() == 3) {
             return Arrays.asList(LollipopNotification.STOCK_ADJECTIVES);

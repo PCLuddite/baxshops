@@ -22,10 +22,13 @@ import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.*;
+import org.tbax.baxshops.BaxShop;
+import org.tbax.baxshops.CommandHelp;
+import org.tbax.baxshops.CommandHelpArgument;
 import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
+import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.ShopPlugin;
 import org.tbax.baxshops.internal.ShopSelection;
 import org.tbax.baxshops.serialization.StoredPlayer;
@@ -45,7 +48,7 @@ public final class CmdSelect extends BaxShopCommand
     @Override
     public String getPermission()
     {
-        return "shops.admin";
+        return Permissions.SHOP_ADMIN;
     }
 
     @Override
@@ -53,7 +56,7 @@ public final class CmdSelect extends BaxShopCommand
     {
         CommandHelp help = new CommandHelp(this, "change your current shop selection");
         help.setLongDescription("Select a shop based on its UUID. If the shop has multiple locations " +
-                        "and no location is specified, the first shop is selected.");
+                "and no location is specified, the first shop is selected.");
         help.setArgs(
                 new CommandHelpArgument("uuid", "the unique ID of the shop", true),
                 new CommandHelpArgument("location", "the shop location. See /shop list", 1)
@@ -109,7 +112,7 @@ public final class CmdSelect extends BaxShopCommand
         }
 
         OfflinePlayer player;
-        if (actor.getSender() instanceof  Player) {
+        if (actor.getSender() instanceof Player) {
             player = actor.getPlayer();
         }
         else {

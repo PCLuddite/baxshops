@@ -27,6 +27,7 @@ import org.tbax.baxshops.CommandHelpArgument;
 import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
+import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.items.ItemUtil;
 
 public final class CmdSign extends BaxShopCommand
@@ -40,7 +41,7 @@ public final class CmdSign extends BaxShopCommand
     @Override
     public String getPermission()
     {
-        return "shops.owner";
+        return Permissions.SHOP_OWNER;
     }
 
     @Override
@@ -49,7 +50,7 @@ public final class CmdSign extends BaxShopCommand
         CommandHelp help = new CommandHelp(this, "edit sign text");
         help.setLongDescription("Change the text on a shop sign");
         help.setArgs(
-            new CommandHelpArgument("text", "the new text of the sign, each line separated by |", true)
+                new CommandHelpArgument("text", "the new text of the sign, each line separated by |", true)
         );
         return help;
     }
@@ -94,7 +95,7 @@ public final class CmdSign extends BaxShopCommand
             actor.exitError("This shop is missing its sign.");
         }
 
-        Sign sign = (Sign) b.getState();
+        Sign sign = (Sign)b.getState();
         StringBuilder sb = new StringBuilder();
         for (int i = 1; i < actor.getNumArgs(); ++i) {
             sb.append(actor.getArg(i));

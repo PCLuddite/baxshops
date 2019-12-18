@@ -23,9 +23,10 @@ import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.errors.PrematureAbortException;
+import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.Resources;
 import org.tbax.baxshops.internal.ShopPlugin;
-import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.notification.Claimable;
 import org.tbax.baxshops.notification.Notification;
 import org.tbax.baxshops.notification.Request;
@@ -44,13 +45,13 @@ public final class CmdAccept extends BaxShopCommand
     @Override
     public String[] getAliases()
     {
-        return new String[]{"yes","a"};
+        return new String[] { "yes", "a" };
     }
 
     @Override
     public String getPermission()
     {
-        return null;
+        return Permissions.SHOP_TRADER;
     }
 
     @Override
@@ -101,13 +102,13 @@ public final class CmdAccept extends BaxShopCommand
         else {
             Notification n = player.peekNote();
             if (n instanceof Request) {
-                Request r = (Request) n;
+                Request r = (Request)n;
                 if (r.accept(actor)) {
                     player.dequeueNote();
                 }
             }
             else if (n instanceof Claimable) {
-                Claimable c = (Claimable) n;
+                Claimable c = (Claimable)n;
                 if (c.claim(actor)) {
                     player.dequeueNote();
                 }

@@ -26,8 +26,9 @@ import org.tbax.baxshops.CommandHelpArgument;
 import org.tbax.baxshops.Format;
 import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
-import org.tbax.baxshops.internal.ShopSelection;
 import org.tbax.baxshops.errors.PrematureAbortException;
+import org.tbax.baxshops.internal.Permissions;
+import org.tbax.baxshops.internal.ShopSelection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +44,7 @@ public final class CmdList extends BaxShopCommand
     @Override
     public String getPermission()
     {
-        return "shops.owner";
+        return Permissions.SHOP_OWNER;
     }
 
     @Override

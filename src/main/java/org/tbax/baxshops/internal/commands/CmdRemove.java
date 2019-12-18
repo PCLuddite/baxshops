@@ -27,6 +27,7 @@ import org.tbax.baxshops.*;
 import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
+import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.Resources;
 import org.tbax.baxshops.internal.items.ItemUtil;
 
@@ -43,13 +44,13 @@ public final class CmdRemove extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[]{"remove","rm"};
+        return new String[] { "remove", "rm" };
     }
 
     @Override
     public String getPermission()
     {
-        return "shops.owner";
+        return Permissions.SHOP_OWNER;
     }
 
     @Override
@@ -58,7 +59,7 @@ public final class CmdRemove extends BaxShopCommand
         CommandHelp help = new CommandHelp(this, "remove an item from the shop");
         help.setLongDescription("Remove an entry from a shop. The current stock will be added to your inventory.");
         help.setArgs(
-            new CommandHelpArgument("entry", "the name or entry number of the item to remove", true)
+                new CommandHelpArgument("entry", "the name or entry number of the item to remove", true)
         );
         return help;
     }
@@ -112,8 +113,8 @@ public final class CmdRemove extends BaxShopCommand
             }
             else {
                 actor.sendMessage("%s %s added to your inventory.",
-                    Format.itemName(stack.getAmount(), ItemUtil.getName(entry)),
-                    stack.getAmount() == 1 ? "was" : "were");
+                        Format.itemName(stack.getAmount(), ItemUtil.getName(entry)),
+                        stack.getAmount() == 1 ? "was" : "were");
             }
         }
         if (!shop.hasFlagInfinite() && entry.getAmount() > 0) {

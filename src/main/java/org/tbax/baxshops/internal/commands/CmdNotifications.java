@@ -25,8 +25,9 @@ import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
-import org.tbax.baxshops.internal.ShopPlugin;
 import org.tbax.baxshops.errors.PrematureAbortException;
+import org.tbax.baxshops.internal.Permissions;
+import org.tbax.baxshops.internal.ShopPlugin;
 
 import java.util.Collections;
 import java.util.List;
@@ -42,13 +43,13 @@ public final class CmdNotifications extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[]{"notifications","pending","p","n"};
+        return new String[] { "notifications", "pending", "p", "n" };
     }
 
     @Override
     public String getPermission()
     {
-        return null;
+        return Permissions.SHOP_TRADER;
     }
 
     @Override
@@ -56,10 +57,10 @@ public final class CmdNotifications extends BaxShopCommand
     {
         CommandHelp help = new CommandHelp(this, "show latest notification");
         help.setLongDescription(
-            "Shows your latest notification and remove it from your notification queue. " +
-            "A notification can be an offer (e.g., someone wishes to sell you an item) " +
-            "or simply a message (e.g., an offer was accepted). " +
-            "Use /shop accept and /shop reject on offers."
+                "Shows your latest notification and remove it from your notification queue. " +
+                        "A notification can be an offer (e.g., someone wishes to sell you an item) " +
+                        "or simply a message (e.g., an offer was accepted). " +
+                        "Use /shop accept and /shop reject on offers."
         );
         return help;
     }
@@ -95,7 +96,8 @@ public final class CmdNotifications extends BaxShopCommand
     }
 
     @Override
-    public boolean hasPermission(@NotNull ShopCmdActor actor) {
+    public boolean hasPermission(@NotNull ShopCmdActor actor)
+    {
         if (actor.getNumArgs() == 2 && actor.getArg(1).equalsIgnoreCase("clear"))
             return actor.isAdmin();
         return true;

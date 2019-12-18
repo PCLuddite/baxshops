@@ -23,6 +23,7 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.internal.Permissions;
 
 import java.util.Arrays;
 import java.util.List;
@@ -44,7 +45,7 @@ public abstract class FlagCmd extends BaxShopCommand
     @Override
     public String getPermission()
     {
-        return "shops.owner";
+        return Permissions.SHOP_OWNER;
     }
 
     @NotNull

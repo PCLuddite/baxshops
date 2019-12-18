@@ -23,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.ShopPlugin;
 
 public final class CmdSave extends BaxShopCommand
@@ -37,7 +38,7 @@ public final class CmdSave extends BaxShopCommand
     @Override
     public String getPermission()
     {
-        return "shops.admin";
+        return Permissions.SHOP_ADMIN;
     }
 
     @Override

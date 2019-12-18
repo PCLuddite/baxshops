@@ -26,6 +26,7 @@ import org.tbax.baxshops.*;
 import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
+import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.Resources;
 import org.tbax.baxshops.internal.items.ItemUtil;
 
@@ -42,13 +43,13 @@ public final class CmdSet extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[]{"set","setprice"};
+        return new String[] { "set", "setprice" };
     }
 
     @Override
     public String getPermission()
     {
-        return "shops.owner";
+        return Permissions.SHOP_OWNER;
     }
 
     @Override
@@ -57,9 +58,9 @@ public final class CmdSet extends BaxShopCommand
         CommandHelp help = new CommandHelp(this, "set a price for an item");
         help.setLongDescription("Change the buy or sell price for a shop item already in a shop");
         help.setArgs(
-            new CommandHelpArgument("entry", "the item in the shop", true),
-            new CommandHelpArgument("buy price", "the new price for buying a single item", true),
-            new CommandHelpArgument("sell price", "the new price for selling a single item. If no price is specified, the item cannot be sold.", false)
+                new CommandHelpArgument("entry", "the item in the shop", true),
+                new CommandHelpArgument("buy price", "the new price for buying a single item", true),
+                new CommandHelpArgument("sell price", "the new price for selling a single item. If no price is specified, the item cannot be sold.", false)
         );
         return help;
     }

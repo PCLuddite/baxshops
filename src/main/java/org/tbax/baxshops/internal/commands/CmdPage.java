@@ -25,12 +25,13 @@ import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.CommandHelpArgument;
 import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.errors.PrematureAbortException;
+import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.ShopPlugin;
 import org.tbax.baxshops.internal.ShopSelection;
-import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.serialization.StoredPlayer;
 
-public class CmdPage extends BaxShopCommand
+public final class CmdPage extends BaxShopCommand
 {
     @Override
     public @NotNull String getName()
@@ -41,7 +42,7 @@ public class CmdPage extends BaxShopCommand
     @Override
     public String getPermission()
     {
-        return "shops.admin";
+        return Permissions.SHOP_ADMIN;
     }
 
     @Override

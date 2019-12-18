@@ -22,12 +22,13 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxEntry;
+import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.CommandHelpArgument;
 import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
-import org.tbax.baxshops.internal.Resources;
 import org.tbax.baxshops.errors.PrematureAbortException;
-import org.tbax.baxshops.CommandHelp;
+import org.tbax.baxshops.internal.Permissions;
+import org.tbax.baxshops.internal.Resources;
 
 import java.util.List;
 
@@ -36,13 +37,19 @@ public final class CmdSetDur extends BaxShopCommand
     @Override
     public @NotNull String getName()
     {
-        return "setdur";
+        return "setdamage";
+    }
+
+    @Override
+    public @NotNull String[] getAliases()
+    {
+        return new String[] { "setdamage", "setdmg", "setdurability", "setdur" };
     }
 
     @Override
     public String getPermission()
     {
-        return "shops.admin";
+        return Permissions.SHOP_ADMIN;
     }
 
     @Override
@@ -51,8 +58,8 @@ public final class CmdSetDur extends BaxShopCommand
         CommandHelp help = new CommandHelp(this, "set an item's damage percent");
         help.setLongDescription("Set the damage percentage for an item. This can only be done by an admin.");
         help.setArgs(
-            new CommandHelpArgument("entry", "the item for which to set the durability", true),
-            new CommandHelpArgument("damage", "the damage percentage", true)
+                new CommandHelpArgument("entry", "the item for which to set the durability", true),
+                new CommandHelpArgument("damage", "the damage percentage", true)
         );
         return help;
     }

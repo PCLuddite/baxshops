@@ -23,8 +23,8 @@ import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.ShopPlugin;
-import org.tbax.baxshops.errors.PrematureAbortException;
 
 import java.io.IOException;
 
@@ -39,7 +39,7 @@ public final class CmdReload extends BaxShopCommand
     @Override
     public String getPermission()
     {
-        return "shops.admin";
+        return Permissions.SHOP_ADMIN;
     }
 
     @Override
@@ -81,7 +81,7 @@ public final class CmdReload extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public void onCommand(@NotNull ShopCmdActor actor)
     {
         actor.sendMessage("Initiating reload. See log for details.");
         try {

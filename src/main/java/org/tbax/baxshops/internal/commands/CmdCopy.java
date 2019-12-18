@@ -23,16 +23,17 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
+import org.tbax.baxshops.PlayerUtil;
 import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
-import org.tbax.baxshops.PlayerUtil;
 import org.tbax.baxshops.errors.PrematureAbortException;
+import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.items.ItemUtil;
 
 public final class CmdCopy extends BaxShopCommand
 {
     @Override
-    public @NotNull  String getName()
+    public @NotNull String getName()
     {
         return "copy";
     }
@@ -40,7 +41,7 @@ public final class CmdCopy extends BaxShopCommand
     @Override
     public String getPermission()
     {
-        return "shops.owner";
+        return Permissions.SHOP_OWNER;
     }
 
     @Override

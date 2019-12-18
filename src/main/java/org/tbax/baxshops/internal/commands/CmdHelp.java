@@ -21,10 +21,13 @@ package org.tbax.baxshops.internal.commands;
 
 import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.*;
+import org.tbax.baxshops.CommandHelp;
+import org.tbax.baxshops.CommandHelpArgument;
+import org.tbax.baxshops.Format;
 import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
+import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.Resources;
 import org.tbax.baxshops.internal.ShopPlugin;
 import org.tbax.baxshops.internal.ShopSelection;
@@ -44,13 +47,13 @@ public final class CmdHelp extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[]{"help", "h"};
+        return new String[] { "help", "h" };
     }
 
     @Override
     public String getPermission()
     {
-        return null;
+        return Permissions.SHOP_TRADER;
     }
 
     @Override
@@ -58,7 +61,7 @@ public final class CmdHelp extends BaxShopCommand
     {
         CommandHelp help = new CommandHelp(this, "show a list of commands");
         help.setArgs(
-            new CommandHelpArgument("action", "get help on a /shop action, e.g. /shop h buy", false)
+                new CommandHelpArgument("action", "get help on a /shop action, e.g. /shop h buy", false)
         );
         return help;
     }
@@ -123,10 +126,10 @@ public final class CmdHelp extends BaxShopCommand
     private void showHelpList(@NotNull ShopCmdActor actor, int page)
     {
         List<BaxShopCommand> commands = ShopPlugin.getCommands().values().stream()
-            .filter(cmd -> cmd.hasPermission(actor))
-            .distinct()
-            .sorted(Comparator.comparing(BaxShopCommand::getName))
-            .collect(Collectors.toList());
+                .filter(cmd -> cmd.hasPermission(actor))
+                .distinct()
+                .sorted(Comparator.comparing(BaxShopCommand::getName))
+                .collect(Collectors.toList());
         int pages = (int)Math.ceil((double)commands.size() / ShopSelection.ITEMS_PER_PAGE);
         actor.getSender().sendMessage(Format.header(String.format("Showing page %d of %d", page + 1, pages)));
         int i = page * ShopSelection.ITEMS_PER_PAGE,

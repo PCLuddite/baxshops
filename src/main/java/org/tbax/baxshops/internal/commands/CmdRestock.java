@@ -28,7 +28,7 @@ import org.tbax.baxshops.*;
 import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
-import org.tbax.baxshops.BaxQuantity;
+import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.Resources;
 import org.tbax.baxshops.internal.items.ItemUtil;
 
@@ -46,13 +46,13 @@ public final class CmdRestock extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[]{"restock","r"};
+        return new String[] { "restock", "r" };
     }
 
     @Override
     public String getPermission()
     {
-        return "shops.owner";
+        return Permissions.SHOP_OWNER;
     }
 
     @Override
@@ -61,7 +61,7 @@ public final class CmdRestock extends BaxShopCommand
         CommandHelp help = new CommandHelp(this, "restock the shop");
         help.setLongDescription("Restock a shop with the item held in the main hand, or any item in the player's inventory");
         help.setArgs(
-            new CommandHelpArgument("quantity", "the amount to restock", false)
+                new CommandHelpArgument("quantity", "the amount to restock", false)
         );
         return help;
     }
@@ -129,12 +129,12 @@ public final class CmdRestock extends BaxShopCommand
             entry.add(takenItem.getAmount());
             if (!(qty.isAll() || qty.isMost()) && takenItem.getAmount() < qty.getQuantity()) {
                 actor.sendMessage("Could only restock with " + ChatColor.RED + "%d %s" + ChatColor.RESET + ". The shop now has %s.",
-                                    takenItem.getAmount(), ItemUtil.getName(takenItem), Format.number(entry.getAmount())
+                        takenItem.getAmount(), ItemUtil.getName(takenItem), Format.number(entry.getAmount())
                 );
             }
             else {
                 actor.sendMessage("Restocked with %s in inventory. The shop now has %s.",
-                                Format.itemName(takenItem.getAmount(), ItemUtil.getName(entry)), Format.number(entry.getAmount())
+                        Format.itemName(takenItem.getAmount(), ItemUtil.getName(entry)), Format.number(entry.getAmount())
                 );
             }
         }

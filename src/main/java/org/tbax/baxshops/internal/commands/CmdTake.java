@@ -27,6 +27,7 @@ import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.BaxQuantity;
+import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.Resources;
 import org.tbax.baxshops.internal.items.ItemUtil;
 
@@ -44,23 +45,23 @@ public final class CmdTake extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[]{"take","t"};
+        return new String[] { "take", "t" };
     }
 
     @Override
     public String getPermission()
     {
-        return "shops.owner";
+        return Permissions.SHOP_OWNER;
     }
 
     @Override
     public CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "take an item from the shop");
-        help.setLongDescription("Take an item from a shop. This is a synonym for /shop buy if you are the shop owner.");
+        help.setLongDescription("Take an item from a shop. /shop buy is a synonym for this if you are the shop owner.");
         help.setArgs(
-            new CommandHelpArgument("entry", "the item to take from the shop", true),
-            new CommandHelpArgument("quantity", "the quantity to take from the shop", 1)
+                new CommandHelpArgument("entry", "the item to take from the shop", true),
+                new CommandHelpArgument("quantity", "the quantity to take from the shop", 1)
         );
         return help;
     }
@@ -141,10 +142,8 @@ public final class CmdTake extends BaxShopCommand
         }
         else {
             actor.sendMessage("%s %s added to your inventory.",
-                Format.itemName(
-                    stack.getAmount(),
-                    ItemUtil.getName(stack)),
-                amt.getQuantity() == 1 ? "was" : "were"
+                    Format.itemName(stack.getAmount(), ItemUtil.getName(stack)),
+                    amt.getQuantity() == 1 ? "was" : "were"
             );
         }
     }

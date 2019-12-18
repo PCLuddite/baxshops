@@ -25,8 +25,9 @@ import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.CommandHelpArgument;
 import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
-import org.tbax.baxshops.internal.commands.flags.*;
 import org.tbax.baxshops.errors.PrematureAbortException;
+import org.tbax.baxshops.internal.Permissions;
+import org.tbax.baxshops.internal.commands.flags.*;
 import org.tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.Comparator;
@@ -62,7 +63,7 @@ public final class CmdFlag extends BaxShopCommand
     @Override
     public String getPermission()
     {
-        return "shops.owner";
+        return Permissions.SHOP_OWNER;
     }
 
     @Override
@@ -86,8 +87,8 @@ public final class CmdFlag extends BaxShopCommand
 
         help.setLongDescription(description.toString());
         help.setArgs(
-            new CommandHelpArgument("option", "the name of the flag to set or use 'list' of all flags currently applied to this shop", true),
-            new CommandHelpArgument("true/false", "the value this flag should be set to", false)
+                new CommandHelpArgument("option", "the name of the flag to set or use 'list' of all flags currently applied to this shop", true),
+                new CommandHelpArgument("true/false", "the value this flag should be set to", false)
         );
         return help;
     }
@@ -140,15 +141,15 @@ public final class CmdFlag extends BaxShopCommand
     @Override
     public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
-		FlagCmd flagCmd = (FlagCmd)flagCmds.get(actor.getArg(1));
-		if (flagCmd.requiresRealOwner(actor) && actor.getShop() != null && StoredPlayer.DUMMY.equals(actor.getShop().getOwner())) {
-		    actor.exitError("%s is not a real player and cannot receive notifications.\nThe value of this flag cannot be changed.", actor.getShop().getOwner());
+        FlagCmd flagCmd = (FlagCmd)flagCmds.get(actor.getArg(1));
+        if (flagCmd.requiresRealOwner(actor) && actor.getShop() != null && StoredPlayer.DUMMY.equals(actor.getShop().getOwner())) {
+            actor.exitError("%s is not a real player and cannot receive notifications.\nThe value of this flag cannot be changed.", actor.getShop().getOwner());
         }
-		if (actor.hasPermission(flagCmd.getPermission())) {
+        if (actor.hasPermission(flagCmd.getPermission())) {
             flagCmd.onCommand(actor);
         }
-		else {
-		    actor.sendError("You are not permitted to change this flag");
+        else {
+            actor.sendError("You are not permitted to change this flag");
         }
     }
 
@@ -158,9 +159,9 @@ public final class CmdFlag extends BaxShopCommand
         ShopCmdActor actor = (ShopCmdActor)sender;
         if (args.length == 2) {
             return flagCmds.entrySet().stream()
-                .filter(c -> c.getKey().equals(c.getValue().getName()) && c.getValue().hasPermission(actor))
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
+                    .filter(c -> c.getKey().equals(c.getValue().getName()) && c.getValue().hasPermission(actor))
+                    .map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
         }
         else if (args.length > 2) {
             FlagCmd flagCmd = (FlagCmd)flagCmds.get(actor.getArg(1));

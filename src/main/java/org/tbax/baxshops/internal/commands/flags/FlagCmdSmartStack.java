@@ -52,7 +52,7 @@ public final class FlagCmdSmartStack extends FlagCmd
         CommandHelp help = new CommandHelp(this, "enable certain like-items to be stacked");
         help.setLongDescription("Enables you to stack certain items that are essentially equivalent, " +
                         "ignoring certain meta data (e.g. enchanted books, banners, etc). " +
-                        "This flag is still in beta and can only be used by an admin.");
+                        "This flag is experimental and is liable to change.");
         help.setArgs(
                 new CommandHelpArgument("true|false", "whether or not this flag is enabled", true)
         );

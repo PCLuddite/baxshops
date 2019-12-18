@@ -117,7 +117,7 @@ public final class ShopCmdActor implements CommandSender
 
     public boolean isAdmin()
     {
-        return sender.hasPermission("shops.admin");
+        return sender.hasPermission(Permissions.SHOP_ADMIN);
     }
 
     public boolean isOwner()
@@ -139,8 +139,6 @@ public final class ShopCmdActor implements CommandSender
 
     public boolean hasPermission(@NotNull String permission)
     {
-        if (permission == null)
-            return true;
         return sender.hasPermission(permission);
     }
 

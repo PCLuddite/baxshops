@@ -23,11 +23,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxEntry;
+import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.CommandHelpArgument;
 import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
-import org.tbax.baxshops.CommandHelp;
+import org.tbax.baxshops.internal.Permissions;
 
 import java.util.List;
 
@@ -42,7 +43,7 @@ public final class CmdInfo extends BaxShopCommand
     @Override
     public String getPermission()
     {
-        return "shops.buy";
+        return Permissions.SHOP_TRADER_BUY;
     }
 
     @Override
@@ -52,7 +53,7 @@ public final class CmdInfo extends BaxShopCommand
         help.setLongDescription("Show extended information about an entry in the selected shop. It is recommended to use this before all major purchases. " +
                 ChatColor.ITALIC + "Caveat emptor" + ChatColor.RESET);
         help.setArgs(
-            new CommandHelpArgument("item", "the name or shop index of the entry", true)
+                new CommandHelpArgument("item", "the name or shop index of the entry", true)
         );
         return help;
     }

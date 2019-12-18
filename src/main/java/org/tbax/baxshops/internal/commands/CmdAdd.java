@@ -21,10 +21,14 @@ package org.tbax.baxshops.internal.commands;
 
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.*;
+import org.tbax.baxshops.BaxEntry;
+import org.tbax.baxshops.CommandHelp;
+import org.tbax.baxshops.CommandHelpArgument;
+import org.tbax.baxshops.Format;
 import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
+import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.Resources;
 import org.tbax.baxshops.internal.items.ItemUtil;
 
@@ -39,13 +43,13 @@ public final class CmdAdd extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[]{"add","+","ad"};
+        return new String[] { "add", "+", "ad" };
     }
 
     @Override
     public String getPermission()
     {
-        return "shops.owner";
+        return Permissions.SHOP_OWNER;
     }
 
     @Override
@@ -113,7 +117,7 @@ public final class CmdAdd extends BaxShopCommand
         }
         if (actor.getShop().contains(stack)) {
             actor.exitError("That item has already been added to this shop\n" +
-                            "Use /shop restock to restock"
+                    "Use /shop restock to restock"
             );
         }
 

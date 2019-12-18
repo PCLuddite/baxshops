@@ -25,19 +25,20 @@ import org.tbax.baxshops.CommandHelpArgument;
 import org.tbax.baxshops.Format;
 import org.tbax.baxshops.commands.ShopCmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
+import org.tbax.baxshops.internal.Permissions;
 
 public final class FlagCmdInfinite extends FlagCmd
 {
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[]{"infinite", "isinfinite", "inf"};
+        return new String[] { "infinite", "isinfinite", "inf" };
     }
 
     @Override
     public String getPermission()
     {
-        return "shops.admin";
+        return Permissions.SHOP_ADMIN;
     }
 
     @Override
@@ -50,7 +51,7 @@ public final class FlagCmdInfinite extends FlagCmd
     public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "allow this shop to have limitless inventory");
-        help.setLongDescription("Allows you to create a shop that never runs out of inventory. Only admins can set this flag.");
+        help.setLongDescription("Allows you to create a shop that never runs out of inventory.");
         help.setArgs(
                 new CommandHelpArgument("true|false", "whether or not this flag is enabled", true)
         );

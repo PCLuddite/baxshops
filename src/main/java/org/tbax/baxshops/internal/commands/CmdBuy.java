@@ -26,7 +26,7 @@ import org.tbax.baxshops.*;
 import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
-import org.tbax.baxshops.BaxQuantity;
+import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.Resources;
 import org.tbax.baxshops.internal.ShopPlugin;
 import org.tbax.baxshops.internal.items.ItemUtil;
@@ -45,14 +45,15 @@ public final class CmdBuy extends BaxShopCommand
     }
 
     @Override
-    public @NotNull String[] getAliases() {
-        return new String[]{"buy","b"};
+    public @NotNull String[] getAliases()
+    {
+        return new String[] { "buy", "b" };
     }
 
     @Override
     public String getPermission()
     {
-        return "shops.buy";
+        return Permissions.SHOP_TRADER_BUY;
     }
 
     @Override
@@ -61,8 +62,8 @@ public final class CmdBuy extends BaxShopCommand
         CommandHelp help = new CommandHelp(this, "buy an item from a shop");
         help.setLongDescription("Buy an item from the selected shop. You will be charged the purchase amount with the funds credited to the owner.");
         help.setArgs(
-            new CommandHelpArgument("item", "the name of the item or an entry number in the shop", true),
-            new CommandHelpArgument("quantity", "the quantity you wish to buy", 1)
+                new CommandHelpArgument("item", "the name of the item or an entry number in the shop", true),
+                new CommandHelpArgument("quantity", "the quantity you wish to buy", 1)
         );
         return help;
     }

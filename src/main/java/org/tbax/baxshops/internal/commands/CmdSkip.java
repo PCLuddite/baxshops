@@ -23,9 +23,10 @@ import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.errors.PrematureAbortException;
+import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.Resources;
 import org.tbax.baxshops.internal.ShopPlugin;
-import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.serialization.StoredPlayer;
 
 public final class CmdSkip extends BaxShopCommand
@@ -39,13 +40,13 @@ public final class CmdSkip extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[]{"skip","sk"};
+        return new String[] { "skip", "sk" };
     }
 
     @Override
     public String getPermission()
     {
-        return null;
+        return Permissions.SHOP_TRADER;
     }
 
     @Override

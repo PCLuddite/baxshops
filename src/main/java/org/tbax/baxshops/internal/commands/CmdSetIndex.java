@@ -22,12 +22,13 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxEntry;
+import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.CommandHelpArgument;
 import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
-import org.tbax.baxshops.internal.Resources;
 import org.tbax.baxshops.errors.PrematureAbortException;
-import org.tbax.baxshops.CommandHelp;
+import org.tbax.baxshops.internal.Permissions;
+import org.tbax.baxshops.internal.Resources;
 
 import java.util.List;
 
@@ -42,13 +43,13 @@ public final class CmdSetIndex extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[]{"setindex","setorder","reorder"};
+        return new String[] { "setindex", "setorder", "reorder" };
     }
 
     @Override
     public String getPermission()
     {
-        return "shops.owner";
+        return Permissions.SHOP_OWNER;
     }
 
     @Override
@@ -57,8 +58,8 @@ public final class CmdSetIndex extends BaxShopCommand
         CommandHelp help = new CommandHelp(this, "change entry order");
         help.setLongDescription("Change the order of an entry in the shop");
         help.setArgs(
-            new CommandHelpArgument("old-index", "the current index of the item", true),
-            new CommandHelpArgument("new-index", "the new index of the item", true)
+                new CommandHelpArgument("old-index", "the current index of the item", true),
+                new CommandHelpArgument("new-index", "the new index of the item", true)
         );
         return help;
     }
@@ -100,13 +101,13 @@ public final class CmdSetIndex extends BaxShopCommand
         int oldIndex = actor.getShop().indexOf(actor.getArgEntry(1));
         int newIndex = actor.getArgInt(2, String.format(Resources.INVALID_DECIMAL, "new index"));
         if (newIndex > actor.getShop().size()) {
-            actor.exitError( "You must choose a new index that is less than the number of items in the shop!");
+            actor.exitError("You must choose a new index that is less than the number of items in the shop!");
         }
         if (newIndex < 1) {
             actor.exitError("The new index must be greater than 0.");
         }
         if (newIndex == oldIndex) {
-            actor.exitWarning( "The index has not been changed.");
+            actor.exitWarning("The index has not been changed.");
         }
         BaxEntry entry = actor.getShop().removeEntryAt(oldIndex);
         if (actor.getShop().size() < newIndex) {

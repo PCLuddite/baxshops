@@ -26,8 +26,9 @@ import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.CommandHelpArgument;
 import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
-import org.tbax.baxshops.internal.Resources;
 import org.tbax.baxshops.errors.PrematureAbortException;
+import org.tbax.baxshops.internal.Permissions;
+import org.tbax.baxshops.internal.Resources;
 
 import java.util.List;
 
@@ -42,13 +43,13 @@ public final class CmdSetAmnt extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[]{"setamnt","setamt"};
+        return new String[] { "setamnt", "setamt" };
     }
 
     @Override
     public String getPermission()
     {
-        return "shops.admin";
+        return Permissions.SHOP_ADMIN;
     }
 
     @Override
@@ -57,8 +58,8 @@ public final class CmdSetAmnt extends BaxShopCommand
         CommandHelp help = new CommandHelp(this, "set an entry quantity");
         help.setLongDescription("Set the quantity for an item in a shop. This can only be done by an admin.");
         help.setArgs(
-            new CommandHelpArgument("entry", "the item for which to set the quantity", true),
-            new CommandHelpArgument("quantity", "the quantity for the item", true)
+                new CommandHelpArgument("entry", "the item for which to set the quantity", true),
+                new CommandHelpArgument("quantity", "the quantity for the item", true)
         );
         return help;
     }

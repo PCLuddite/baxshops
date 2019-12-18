@@ -26,7 +26,7 @@ import org.tbax.baxshops.*;
 import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
-import org.tbax.baxshops.PlayerUtil;
+import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.Resources;
 import org.tbax.baxshops.internal.items.ItemUtil;
 
@@ -45,7 +45,7 @@ public final class CmdEmpty extends BaxShopCommand
     @Override
     public String getPermission()
     {
-        return "shops.owner";
+        return Permissions.SHOP_OWNER;
     }
 
     @Override
@@ -105,7 +105,7 @@ public final class CmdEmpty extends BaxShopCommand
         if (shop.hasFlagInfinite())
             actor.exitError("You cannot empty the inventory of an infinite shop");
 
-        for(int idx = startIdx; idx < shop.size(); ++idx) {
+        for (int idx = startIdx; idx < shop.size(); ++idx) {
             BaxEntry entry = shop.getEntry(idx);
 
             if (entry.getAmount() <= 0)
@@ -123,8 +123,7 @@ public final class CmdEmpty extends BaxShopCommand
                 }
             }
             else {
-                actor.sendMessage("%s was added to your inventory",
-                    Format.itemName(stack.getAmount(), entry.getName()));
+                actor.sendMessage("%s was added to your inventory", Format.itemName(stack.getAmount(), entry.getName()));
             }
         }
     }
@@ -135,8 +134,8 @@ public final class CmdEmpty extends BaxShopCommand
         ShopCmdActor actor = (ShopCmdActor)sender;
         if (actor.getShop() != null && args.length == 2) {
             return IntStream.range(1, actor.getShop().size() + 1)
-                .mapToObj(String::valueOf)
-                .collect(Collectors.toList());
+                    .mapToObj(String::valueOf)
+                    .collect(Collectors.toList());
         }
         return super.onTabComplete(sender, command, alias, args);
     }

@@ -28,8 +28,9 @@ import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.Format;
 import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
-import org.tbax.baxshops.internal.ShopPlugin;
 import org.tbax.baxshops.errors.PrematureAbortException;
+import org.tbax.baxshops.internal.Permissions;
+import org.tbax.baxshops.internal.ShopPlugin;
 
 public final class CmdDelete extends BaxShopCommand
 {
@@ -42,13 +43,13 @@ public final class CmdDelete extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[]{"delete","del"};
+        return new String[] { "delete", "del" };
     }
-    
+
     @Override
     public String getPermission()
     {
-        return "shops.owner";
+        return Permissions.SHOP_OWNER;
     }
 
     @Override
@@ -114,9 +115,9 @@ public final class CmdDelete extends BaxShopCommand
         ShopPlugin.clearSelection(actor.getPlayer());
     }
 
-    private void removeShop(ShopCmdActor actor, BaxShop shop) throws PrematureAbortException
+    private void removeShop(ShopCmdActor actor, BaxShop shop)
     {
-        for(Location loc : shop.getLocations()) {
+        for (Location loc : shop.getLocations()) {
             changeSignText(actor, loc);
             ShopPlugin.removeLocation(shop.getId(), loc);
         }
@@ -129,7 +130,7 @@ public final class CmdDelete extends BaxShopCommand
         assert shop != null;
         try {
             Block b = loc.getBlock();
-            Sign sign = (Sign) b.getState();
+            Sign sign = (Sign)b.getState();
             sign.setLine(0, "This shop has");
             sign.setLine(1, "been closed by");
             sign.setLine(2, (shop.getOwner().equals(actor.getPlayer()) ? "the owner" : "an admin") + ".");

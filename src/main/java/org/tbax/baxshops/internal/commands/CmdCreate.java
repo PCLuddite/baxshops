@@ -33,7 +33,7 @@ import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
 import org.tbax.baxshops.errors.CommandErrorException;
 import org.tbax.baxshops.errors.PrematureAbortException;
-import org.tbax.baxshops.PlayerUtil;
+import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.Resources;
 import org.tbax.baxshops.internal.ShopPlugin;
 import org.tbax.baxshops.internal.items.ItemUtil;
@@ -54,13 +54,13 @@ public final class CmdCreate extends BaxShopCommand
     @Override
     public @NotNull String[] getAliases()
     {
-        return new String[]{"create","mk"};
+        return new String[] { "create", "mk" };
     }
 
     @Override
     public String getPermission()
     {
-        return "shops.owner";
+        return Permissions.SHOP_OWNER;
     }
 
     @Override
@@ -69,10 +69,10 @@ public final class CmdCreate extends BaxShopCommand
         CommandHelp help = new CommandHelp(this, "create a shop");
         if (actor.isAdmin()) {
             help.setLongDescription("Creates a new shop with a sign from your inventory. You must specify a shop owner. " +
-                            "The type of sign will be copied from a sign in your inventory. If no sign is found, the default sign type will be used.");
+                    "The type of sign will be copied from a sign in your inventory. If no sign is found, the default sign type will be used.");
             help.setArgs(
-                new CommandHelpArgument("owner", "the owner of the shop", true),
-                new CommandHelpArgument("infinite", "whether the shop is infinite", "no")
+                    new CommandHelpArgument("owner", "the owner of the shop", true),
+                    new CommandHelpArgument("infinite", "whether the shop is infinite", "no")
             );
         }
         else {
@@ -144,10 +144,10 @@ public final class CmdCreate extends BaxShopCommand
         shop.setOwner(owner);
 
         buildShopSign(loc, sign,
-            "",
-            shop.getAbbreviatedOwnerName() + "'s",
-            "shop",
-            ""
+                "",
+                shop.getAbbreviatedOwnerName() + "'s",
+                "shop",
+                ""
         );
 
         ShopPlugin.addShop(shop);
@@ -174,11 +174,11 @@ public final class CmdCreate extends BaxShopCommand
 
         Block b = loc.getWorld().getBlockAt(loc);
         Block blockUnder = locUnder.getWorld().getBlockAt(locUnder);
-        if (blockUnder.getType() == Material.AIR || blockUnder.getType() == Material.TNT){
+        if (blockUnder.getType() == Material.AIR || blockUnder.getType() == Material.TNT) {
             throw new CommandErrorException("Sign does not have a block to place it on");
         }
 
-        byte angle = (byte) ((((int) loc.getYaw() + 225) / 90) << 2);
+        byte angle = (byte)((((int)loc.getYaw() + 225) / 90) << 2);
 
         b.setType(sign.getType());
         loc.setYaw(angle);
@@ -188,7 +188,7 @@ public final class CmdCreate extends BaxShopCommand
         }
 
         Sign signBlock = (Sign)b.getState();
-        for(int i = 0; i < signLines.length; ++i) {
+        for (int i = 0; i < signLines.length; ++i) {
             signBlock.setLine(i, signLines[i]);
         }
         signBlock.update();
@@ -202,8 +202,8 @@ public final class CmdCreate extends BaxShopCommand
         if (actor.isAdmin()) {
             if (actor.getNumArgs() == 2) {
                 return ShopPlugin.getRegisteredPlayers().stream()
-                    .map(StoredPlayer::getName)
-                    .collect(Collectors.toList());
+                        .map(StoredPlayer::getName)
+                        .collect(Collectors.toList());
             }
             else if (actor.getNumArgs() == 3) {
                 return Arrays.asList("true", "false");

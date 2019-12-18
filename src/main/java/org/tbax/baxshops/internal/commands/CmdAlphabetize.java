@@ -23,8 +23,8 @@ import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.ShopPlugin;
-import org.tbax.baxshops.errors.PrematureAbortException;
 
 import java.util.Comparator;
 
@@ -53,7 +53,7 @@ public final class CmdAlphabetize extends BaxShopCommand
     @Override
     public String getPermission()
     {
-        return null;
+        return Permissions.SHOP_OWNER;
     }
 
     @Override
@@ -87,7 +87,7 @@ public final class CmdAlphabetize extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public void onCommand(@NotNull ShopCmdActor actor)
     {
         actor.getShop().sort(Comparator.comparing(BaxEntry::getName));
         ShopPlugin.sendMessage(actor, "Shop inventory is now sorted alphabetically");

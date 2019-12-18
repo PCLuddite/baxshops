@@ -26,6 +26,7 @@ import org.tbax.baxshops.CommandHelpArgument;
 import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
+import org.tbax.baxshops.internal.Permissions;
 
 public final class CmdSerial extends BaxShopCommand
 {
@@ -38,7 +39,7 @@ public final class CmdSerial extends BaxShopCommand
     @Override
     public String getPermission()
     {
-        return "shops.buy";
+        return Permissions.SHOP_TRADER_BUY;
     }
 
     @Override
