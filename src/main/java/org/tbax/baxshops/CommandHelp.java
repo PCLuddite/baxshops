@@ -25,51 +25,20 @@ import org.tbax.baxshops.commands.BaxShopCommand;
 @SuppressWarnings("unused")
 public final class CommandHelp
 {
-    private String command;
-    private String[] aliases;
+    private BaxShopCommand cmd;
     private CommandHelpArgument[] args;
     private String longDescription;
     private String shortDescription;
 
     public CommandHelp(@NotNull BaxShopCommand cmd, @NotNull String shortDescription)
     {
-        this(cmd.getName(), cmd.getAliases(), shortDescription);
-    }
-
-    public CommandHelp(@NotNull String cmdName, @NotNull String shortDescription)
-    {
-        command = cmdName;
-        this.shortDescription = shortDescription;
-    }
-
-    public CommandHelp(@NotNull String cmdName, String[] aliases, @NotNull String shortDescription)
-    {
-        command = cmdName;
-        this.aliases = aliases;
-        if (aliases != null && aliases.length == 1 && command.equalsIgnoreCase(aliases[0])) {
-            this.aliases = null;
-        }
+        this.cmd = cmd;
         this.shortDescription = shortDescription;
     }
 
     public @NotNull String getName()
     {
-        return command;
-    }
-
-    public @NotNull String setName()
-    {
-        return command;
-    }
-
-    public String[] getAliases()
-    {
-        return aliases;
-    }
-
-    public void setAliases(String... aliases)
-    {
-        this.aliases = aliases;
+        return cmd.getName();
     }
 
     public String getLongDescription()
@@ -106,7 +75,7 @@ public final class CommandHelp
     {
         StringBuilder sb = new StringBuilder();
         sb.append(ChatColor.BLUE).append("Usage: ").append(ChatColor.GRAY).append("/shop ")
-                .append(ChatColor.DARK_AQUA).append(command).append(ChatColor.GRAY);
+                .append(ChatColor.DARK_AQUA).append(cmd.getName()).append(ChatColor.GRAY);
         if (args != null) {
             for (CommandHelpArgument arg : args) {
                 sb.append(" ").append(arg.getUsageString());
@@ -118,10 +87,8 @@ public final class CommandHelp
     public @NotNull String getAliasString()
     {
         StringBuilder sb = new StringBuilder();
-        for(String alias : aliases) {
-            if (!command.equalsIgnoreCase(alias)) {
-                sb.append(" ").append(alias);
-            }
+        for(String alias : cmd.getAliases()) {
+            sb.append(" ").append(alias);
         }
         return sb.toString();
     }
@@ -130,10 +97,10 @@ public final class CommandHelp
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append(Format.header(String.format("Help: /shop %s", command))).append('\n');
+        sb.append(Format.header(String.format("Help: /shop %s", cmd.getName()))).append('\n');
         sb.append(getUsageString());
-        if (aliases != null && aliases.length != 0) {
-            sb.append('\n').append(ChatColor.BLUE).append("Aliases: ").append(ChatColor.GRAY).append(getAliasString());
+        if (cmd.getAliases().length != 0) {
+            sb.append('\n').append(ChatColor.BLUE).append("Aliases:").append(ChatColor.GRAY).append(getAliasString());
         }
         sb.append('\n');
         sb.append('\n');
@@ -141,8 +108,13 @@ public final class CommandHelp
             sb.append(Format.wordWrap(ChatColor.GRAY + longDescription)).append('\n');
         }
         else {
-            sb.append(ChatColor.GRAY).append(shortDescription);
+            sb.append(ChatColor.GRAY).append(shortDescription).append('\n');
         }
+
+        if (cmd.requiresAdmin()) {
+            sb.append(ChatColor.DARK_RED).append("This command is only available to admins").append('\n');
+        }
+
         if (args != null) {
             for (CommandHelpArgument arg : args) {
                 sb.append('\n').append(arg);

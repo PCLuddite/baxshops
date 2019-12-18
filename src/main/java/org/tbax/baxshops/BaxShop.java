@@ -95,6 +95,7 @@ public final class BaxShop implements UpgradeableSerializable, Collection<BaxEnt
             shortId = Arrays.copyOf(shop.shortId, shop.shortId.length);
         }
         owner = shop.owner;
+        legacyOwner = shop.legacyOwner;
         legacyId = shop.legacyId;
         locations.addAll(shop.locations);
         locations.remove(null);
