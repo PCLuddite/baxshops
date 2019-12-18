@@ -54,8 +54,8 @@ public class StateLoader_00452 extends StateLoader_00451
         for(BaxShop shop : shops) {
             for (Location location : new ArrayList<>(shop.getLocations())) {
                 if (!ItemUtil.isSign(location.getBlock().getType())) {
-                    ShopPlugin.logWarning(String.format("Shop %s at %s is not a sign. This location will be removed.",
-                            shop.getId().toString(), Format.location(location)
+                    ShopPlugin.logWarning(String.format("Shop %s at %s is type %s, not a sign. This location will be removed.",
+                            shop.getId().toString(), Format.location(location), location.getBlock().getType()
                     ));
                     shop.removeLocation(location);
                 }
