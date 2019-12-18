@@ -122,7 +122,8 @@ public final class ShopCmdActor implements CommandSender
 
     public boolean isOwner()
     {
-        return getShop() != null && getShop().getOwner().equals(sender);
+        ShopSelection selection = getSelection();
+        return selection != null && selection.isOwner();
     }
 
     @Override

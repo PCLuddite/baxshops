@@ -16,7 +16,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
  * USA
  */
-package org.tbax.baxshops.internal.commands.flags;
+package org.tbax.baxshops.internal.commands;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -25,8 +25,10 @@ import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.CommandHelpArgument;
 import org.tbax.baxshops.Format;
+import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
+import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.Resources;
 import org.tbax.baxshops.internal.ShopPlugin;
 import org.tbax.baxshops.serialization.StoredPlayer;
@@ -34,36 +36,72 @@ import org.tbax.baxshops.serialization.StoredPlayer;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public final class FlagCmdOwner extends FlagCmd
+public final class CmdSetOwner extends BaxShopCommand
 {
-    @Override
-    public boolean requiresRealOwner(@NotNull ShopCmdActor actor)
-    {
-        return false;
-    }
-
     @Override
     public @NotNull String getName()
     {
-        return "owner";
+        return "setowner";
+    }
+
+    @Override
+    public @NotNull String[] getAliases()
+    {
+        return new String[] { "owner" };
+    }
+
+    @Override
+    public String getPermission()
+    {
+        return Permissions.SHOP_OWNER;
     }
 
     @Override
     public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "set the owner of a shop");
-        help.setLongDescription("Transfers ownership of a shop to another player");
+        help.setLongDescription("Transfers ownership of a shop to another player. When changing the owner from yourself," +
+                        " you will still have control of the shop until you walk away.");
         help.setArgs(
-                new CommandHelpArgument("new owner", "the name or UUID of the new owner", true)
+                new CommandHelpArgument("player", "the name or UUID of the new owner", true)
         );
         return help;
+    }
+
+    @Override
+    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
+    {
+        return actor.getNumArgs() == 3;
+    }
+
+    @Override
+    public boolean requiresSelection(@NotNull ShopCmdActor actor)
+    {
+        return true;
+    }
+
+    @Override
+    public boolean requiresOwner(@NotNull ShopCmdActor actor)
+    {
+        return true;
+    }
+
+    @Override
+    public boolean requiresPlayer(@NotNull ShopCmdActor actor)
+    {
+        return false;
+    }
+
+    @Override
+    public boolean requiresItemInHand(@NotNull ShopCmdActor actor)
+    {
+        return false;
     }
 
     @Override
     public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         BaxShop shop = actor.getShop();
-        assert shop != null;
         StoredPlayer newOwner = actor.getArgPlayer(2);
         if (newOwner == null) {
             if (actor.isAdmin()) { // only admin can set owner to non-registered player
