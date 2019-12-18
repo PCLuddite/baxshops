@@ -432,8 +432,6 @@ public final class ShopPlugin extends JavaPlugin
         }
 
         loadConfigurationSerializable();
-
-        ItemUtil.loadDamageable(this);
         ItemUtil.loadEnchants(this);
 
         saveDefaultConfig();
