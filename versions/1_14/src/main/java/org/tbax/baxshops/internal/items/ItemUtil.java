@@ -107,7 +107,7 @@ public final class ItemUtil
         int maxMatch = -1;
         List<BaxEntry> entries = new ArrayList<>();
 
-        for(BaxEntry entry : shop) {
+        for (BaxEntry entry : shop) {
             String entryName = entry.getName().toUpperCase();
             if (Objects.equals(entryName, normalizedInput)) {
                 return Collections.singletonList(entry); // 100% match
@@ -131,8 +131,8 @@ public final class ItemUtil
     private static int getMatches(String[] array1, String[] array2)
     {
         int matches = 0;
-        for(String word1 : array1) {
-            for(String word2 : array2) {
+        for (String word1 : array1) {
+            for (String word2 : array2) {
                 if (word1.equals(word2)) {
                     ++matches;
                 }
@@ -179,7 +179,7 @@ public final class ItemUtil
             Object nmsCopy = AS_NMS_COPY.invoke(null, item);
             Object txtObj = GET_NAME.invoke(nmsCopy);
             try {
-                return (String) txtObj;
+                return (String)txtObj;
             }
             catch (ClassCastException e) {
                 return (String)txtObj.getClass().getMethod("getText").invoke(txtObj);
@@ -233,14 +233,16 @@ public final class ItemUtil
             for (Map<?, ?> enchantMap : section) {
                 Map<?, ?> namespaceKey = (Map<?, ?>)enchantMap.get("key");
                 Enchantment enchantment = Enchantment.getByKey(NamespacedKey.minecraft((String)namespaceKey.get("key")));
-                String name = (String)enchantMap.get("name");
-                boolean levels = (Boolean)enchantMap.get("levels");
-                Object id = enchantMap.get("id");
-                if (id instanceof Number) {
-                    enchants.put(enchantment, new Enchantable(((Number)id).intValue(), name, levels));
-                }
-                else {
-                    enchants.put(enchantment, new Enchantable(name, levels));
+                if (enchantment != null) {
+                    String name = (String)enchantMap.get("name");
+                    boolean levels = (Boolean)enchantMap.get("levels");
+                    Object id = enchantMap.get("id");
+                    if (id instanceof Number) {
+                        enchants.put(enchantment, new Enchantable(((Number)id).intValue(), name, levels));
+                    }
+                    else {
+                        enchants.put(enchantment, new Enchantable(name, levels));
+                    }
                 }
             }
         }
@@ -314,15 +316,14 @@ public final class ItemUtil
         if (!smartStack) return stack1.isSimilar(stack2);
         if (!stack1.isSimilar(stack2)) {
             return stack1.getType() == stack2.getType() &&
-                    (isSameBook(stack1, stack2)
-                            || isSameBanner(stack1, stack2));
+                    (isSameBook(stack1, stack2)  || isSameBanner(stack1, stack2));
         }
         return true;
     }
 
     public static boolean isShop(ItemStack item)
     {
-        return isSign(item)&&
+        return isSign(item) &&
                 item.hasItemMeta() &&
                 item.getItemMeta().hasLore() &&
                 item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1).startsWith(ChatColor.GRAY + "ID: ");
@@ -360,7 +361,7 @@ public final class ItemUtil
     {
         List<String> lore = item.getItemMeta().getLore().subList(0, item.getItemMeta().getLore().size() - 1);
         String[] lines = new String[lore.size()];
-        for(int i = 0; i < lines.length; ++i) {
+        for (int i = 0; i < lines.length; ++i) {
             lines[i] = ChatColor.stripColor(lore.get(i));
         }
         return lines;
@@ -369,7 +370,7 @@ public final class ItemUtil
     public static List<ItemStack> getSignTypesAsItems()
     {
         ItemStack[] stacks = new ItemStack[SIGN_TYPES.size()];
-        for(int i = 0; i < SIGN_TYPES.size(); ++i) {
+        for (int i = 0; i < SIGN_TYPES.size(); ++i) {
             stacks[i] = new ItemStack(SIGN_TYPES.get(i), 1);
         }
         return Arrays.asList(stacks);
@@ -394,7 +395,7 @@ public final class ItemUtil
     public static Map<Integer, ? extends ItemStack> all(Inventory inventory, List<ItemStack> itemStacks)
     {
         Map<Integer, ItemStack> all = new HashMap<>();
-        for(int idx = 0; idx < inventory.getSize(); ++idx) {
+        for (int idx = 0; idx < inventory.getSize(); ++idx) {
             ItemStack item = inventory.getItem(idx);
             for (ItemStack other : itemStacks) {
                 if (other.isSimilar(item)) {
@@ -424,7 +425,7 @@ public final class ItemUtil
         legacyItems = new HashMap<>();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(plugin.getResource("legacy_items.txt")))) {
             String line;
-            while((line = reader.readLine()) != null) {
+            while ((line = reader.readLine()) != null) {
                 Scanner scanner = new Scanner(line);
                 LegacyItem item = new LegacyItem(scanner.nextInt(), scanner.next(), scanner.nextBoolean());
                 legacyItems.put(item.getItemId(), item);
@@ -446,14 +447,15 @@ public final class ItemUtil
     }
 
     @Deprecated
-    public static Enchantment getLegacyEnchantment(int id) {
+    public static Enchantment getLegacyEnchantment(int id)
+    {
         return legacyEnchants.get(id);
     }
 
     public static int getDurability(ItemStack stack)
     {
         if (stack.getItemMeta() instanceof Damageable) {
-            Damageable damage = (Damageable) stack.getItemMeta();
+            Damageable damage = (Damageable)stack.getItemMeta();
             return damage.getDamage();
         }
         return 0;
@@ -462,7 +464,7 @@ public final class ItemUtil
     public static void setDurability(ItemStack stack, int durability)
     {
         if (stack.getItemMeta() instanceof Damageable) {
-            Damageable damage = (Damageable) stack.getItemMeta();
+            Damageable damage = (Damageable)stack.getItemMeta();
             damage.setDamage(durability);
             stack.setItemMeta((ItemMeta)damage);
         }
@@ -473,7 +475,7 @@ public final class ItemUtil
         List<Block> signs = new ArrayList<>();
         for (int x = -1; x <= 1; ++x) {
             for (int y = -1; y <= 1; ++y) {
-                for(int z = -1; z <= 1; ++z) {
+                for (int z = -1; z <= 1; ++z) {
                     Location l = block.getLocation().add(x, y, z);
                     Block curr = l.getBlock();
                     if (ItemUtil.isSign(curr.getType())) {
