@@ -43,14 +43,13 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.util.*;
 
-@SuppressWarnings("JavaDoc")
 public final class ItemUtil
 {
     private static final String MINECRAFT_VERSION;
     private static final Method AS_NMS_COPY;
     private static final Method GET_NAME;
 
-    private static Map<Integer, Material> legacyItems = null;
+    private static Map<Integer, LegacyItem> legacyItems = null;
     private static Map<Integer, Enchantment> legacyEnchants = null;
 
     private static final Map<Material, Material> SIGN_TO_SIGN = new HashMap<>();
@@ -67,7 +66,7 @@ public final class ItemUtil
         try {
             Class<?> itemStackCls = Class.forName("net.minecraft.server." + MINECRAFT_VERSION + ".ItemStack");
             nmsCpyMthd = Class.forName("org.bukkit.craftbukkit." + MINECRAFT_VERSION + ".inventory.CraftItemStack")
-                .getMethod("asNMSCopy", ItemStack.class);
+                    .getMethod("asNMSCopy", ItemStack.class);
             getNmMthd = itemStackCls.getMethod("getName");
         }
         catch (ReflectiveOperationException e) {
@@ -82,10 +81,6 @@ public final class ItemUtil
     }
 
     /**
-     * An array of items that can be damaged
-     */
-    private static final Map<Material, Short> damageable = new HashMap<>();
-    /**
      * A list of enchantment names
      */
     private static final Map<Enchantment, Enchantable> enchants = new HashMap<>();
@@ -93,7 +88,7 @@ public final class ItemUtil
     private ItemUtil()
     {
     }
-    
+
     public static List<BaxEntry> getItemFromAlias(String input, BaxShop shop)
     {
         String[] words = input.toUpperCase().split("_");
@@ -207,7 +202,7 @@ public final class ItemUtil
         patterns[7] = new Pattern(DyeColor.BLACK, PatternType.BORDER);
         return Arrays.asList(patterns);
     }
-    
+
     public static String getEnchantName(Enchantment enchant)
     {
         Enchantable enchantable = enchants.get(enchant);
@@ -215,66 +210,9 @@ public final class ItemUtil
             return Format.toFriendlyName(enchant.getKey().getKey());
         return enchantable.getName();
     }
-    
-    /**
-     * Determines if a material can be damaged
-     * @param item
-     * @return 
-     */
-    public static boolean isDamageable(Material item)
-    {
-        return damageable.containsKey(item);
-    }
-    
-    /**
-     * Gets the maximum damage for an item. This assumes damageability
-     * has been confirmed with isDamageable()
-     * @param item
-     * @return 
-     */
-    public static short getMaxDamage(Material item)
-    {
-        return damageable.get(item);
-    }
-    
-    /**
-     * Loads the damageable items list from the damageable.txt resource.
-     * @param plugin
-     */
-    public static void loadDamageable(ShopPlugin plugin)
-    {
-        InputStream stream = plugin.getResource("damageable.txt");
-        if (stream == null) {
-            return;
-        }
-        int i = 1;
-        try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(stream));
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (line.length() == 0 || line.charAt(0) == '#') {
-                    continue;
-                }
-                Scanner scanner = new Scanner(line);
-                Material material = Material.getMaterial(scanner.next());
-                short maxDamage = scanner.nextShort();
-                damageable.put(material, maxDamage);
-                i++;
-            }
-            stream.close();
-        }
-        catch (IOException e) {
-            plugin.getLogger().warning("Failed to readFromDisk damageable: " + e.toString());
-        }
-        catch (NoSuchElementException e) {
-            plugin.getLogger().info("loadDamageable broke at line: " + i);
-            e.printStackTrace();
-        }
-    }
-    
+
     /**
      * Loads the enchantment names in enchants.txt
-     * @param plugin
      */
     public static void loadEnchants(ShopPlugin plugin)
     {
@@ -285,8 +223,8 @@ public final class ItemUtil
             for (Map<?, ?> enchantMap : section) {
                 Map<?, ?> namespaceKey = (Map<?, ?>)enchantMap.get("key");
                 Enchantment enchantment = Enchantment.getByKey(NamespacedKey.minecraft((String)namespaceKey.get("key")));
-                String name = (String) enchantMap.get("name");
-                boolean levels = (Boolean) enchantMap.get("levels");
+                String name = (String)enchantMap.get("name");
+                boolean levels = (Boolean)enchantMap.get("levels");
                 Object id = enchantMap.get("id");
                 if (id instanceof Number) {
                     enchants.put(enchantment, new Enchantable(((Number)id).intValue(), name, levels));
@@ -299,11 +237,6 @@ public final class ItemUtil
         catch (IOException e) {
             plugin.getLogger().warning("Failed to readFromDisk enchants: " + e.toString());
         }
-    }
-
-    public static boolean hasEnchantLevels(Enchantment enchantment)
-    {
-        return getEnchantable(enchantment).hasLevels();
     }
 
     public static Enchantable getEnchantable(Enchantment enchantment)
@@ -372,7 +305,7 @@ public final class ItemUtil
         if (!stack1.isSimilar(stack2)) {
             return stack1.getType() == stack2.getType() &&
                     (isSameBook(stack1, stack2)
-                    || isSameBanner(stack1, stack2));
+                            || isSameBanner(stack1, stack2));
         }
         return true;
     }
@@ -380,9 +313,9 @@ public final class ItemUtil
     public static boolean isShop(ItemStack item)
     {
         return isSign(item)&&
-               item.hasItemMeta() &&
-               item.getItemMeta().hasLore() &&
-               item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1).startsWith(ChatColor.GRAY + "ID: ");
+                item.hasItemMeta() &&
+                item.getItemMeta().hasLore() &&
+                item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1).startsWith(ChatColor.GRAY + "ID: ");
     }
 
     public static boolean isSign(ItemStack item)
@@ -421,11 +354,6 @@ public final class ItemUtil
             lines[i] = ChatColor.stripColor(lore.get(i));
         }
         return lines;
-    }
-
-    public static List<Material> getSignTypes()
-    {
-        return SIGN_TYPES;
     }
 
     public static List<ItemStack> getSignTypesAsItems()
@@ -476,35 +404,25 @@ public final class ItemUtil
     @Deprecated
     public static ItemStack fromItemId(int id, short damage)
     {
-        Material type = legacyItems.get(id);
-        if (type == null) return null;
-        return new ItemStack(type, 1, damage);
+        LegacyItem item = legacyItems.get(id);
+        if (item == null) return null;
+        return item.toItemStack(damage);
     }
 
-    @Deprecated
-    public static Map<Integer, Material> getLegacyItems()
-    {
-        return legacyItems;
-    }
-
-    @Deprecated
-    public static Map<Integer, Material> loadLegacyItems(JavaPlugin plugin) throws IOException
+    public static void loadLegacyItems(JavaPlugin plugin) throws IOException
     {
         legacyItems = new HashMap<>();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(plugin.getResource("legacy_items.txt")))) {
             String line;
             while((line = reader.readLine()) != null) {
-                int idx = line.indexOf(' ');
-                int id = Integer.parseInt(line.substring(0, idx));
-                Material material = Material.getMaterial(line.substring(idx).trim());
-                legacyItems.put(id, material);
+                Scanner scanner = new Scanner(line);
+                LegacyItem item = new LegacyItem(scanner.nextInt(), scanner.next(), scanner.nextBoolean());
+                legacyItems.put(item.getItemId(), item);
             }
         }
-        return legacyItems;
     }
 
-    @Deprecated
-    public static Map<Integer, Enchantment> loadLegacyEnchants()
+    public static void loadLegacyEnchants()
     {
         legacyEnchants = new HashMap<>();
         for (Map.Entry<Enchantment, Enchantable> entry : enchants.entrySet()) {
@@ -515,7 +433,6 @@ public final class ItemUtil
                 // do not add
             }
         }
-        return legacyEnchants;
     }
 
     @Deprecated

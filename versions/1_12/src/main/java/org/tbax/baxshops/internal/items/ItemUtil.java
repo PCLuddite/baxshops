@@ -45,7 +45,6 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.util.*;
 
-@SuppressWarnings("JavaDoc")
 public final class ItemUtil
 {
     private static final String MINECRAFT_VERSION;
@@ -79,10 +78,6 @@ public final class ItemUtil
         SIGN_TO_SIGN.put(Material.WALL_SIGN, Material.SIGN);
     }
 
-    /**
-     * An array of items that can be damaged
-     */
-    private static final Map<Material, Short> damageable = new HashMap<>();
     /**
      * A list of enchantment names
      */
@@ -190,62 +185,6 @@ public final class ItemUtil
     }
 
     /**
-     * Determines if a material can be damaged
-     * @param item
-     * @return
-     */
-    public static boolean isDamageable(Material item)
-    {
-        return damageable.containsKey(item);
-    }
-
-    /**
-     * Gets the maximum damage for an item. This assumes damageability
-     * has been confirmed with isDamageable()
-     * @param item
-     * @return
-     */
-    public static short getMaxDamage(Material item)
-    {
-        return damageable.get(item);
-    }
-
-    /**
-     * Loads the damageable items list from the damageable.txt resource.
-     * @param plugin
-     */
-    public static void loadDamageable(ShopPlugin plugin)
-    {
-        InputStream stream = plugin.getResource("damageable.txt");
-        if (stream == null) {
-            return;
-        }
-        int i = 1;
-        try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(stream));
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (line.length() == 0 || line.charAt(0) == '#') {
-                    continue;
-                }
-                Scanner scanner = new Scanner(line);
-                Material material = Material.getMaterial(scanner.next());
-                short maxDamage = scanner.nextShort();
-                damageable.put(material, maxDamage);
-                i++;
-            }
-            stream.close();
-        }
-        catch (IOException e) {
-            plugin.getLogger().warning("Failed to readFromDisk damageable: " + e.toString());
-        }
-        catch (NoSuchElementException e) {
-            plugin.getLogger().info("loadDamageable broke at line: " + i);
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Loads the enchantment names in enchants.txt
      * @param plugin
      */
@@ -256,8 +195,7 @@ public final class ItemUtil
             List<Map<?, ?>> section = enchantConfig.getMapList("enchants");
 
             for (Map<?, ?> enchantMap : section) {
-                Map<?, ?> namespaceKey = (Map<?, ?>)enchantMap.get("key");
-                Enchantment enchantment = Enchantment.getByName((String)namespaceKey.get("key"));
+                Enchantment enchantment = Enchantment.getByName((String)enchantMap.get("enchantment"));
                 String name = (String)enchantMap.get("name");
                 boolean levels = (Boolean)enchantMap.get("levels");
                 Object id = enchantMap.get("id");
@@ -389,11 +327,6 @@ public final class ItemUtil
             lines[i] = ChatColor.stripColor(lore.get(i));
         }
         return lines;
-    }
-
-    public static List<Material> getSignTypes()
-    {
-        return SIGN_TYPES;
     }
 
     public static List<ItemStack> getSignTypesAsItems()

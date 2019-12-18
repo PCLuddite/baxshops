@@ -18,11 +18,10 @@
  */
 package org.tbax.baxshops.internal.items;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.banner.Pattern;
+import org.bukkit.block.banner.PatternType;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Inventory;
@@ -32,6 +31,7 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.Potion;
+import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.Format;
@@ -44,7 +44,6 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.util.*;
 
-@SuppressWarnings("JavaDoc")
 public final class ItemUtil
 {
     private static final String MINECRAFT_VERSION;
@@ -56,7 +55,7 @@ public final class ItemUtil
 
     private static final Map<Material, Material> SIGN_TO_SIGN = new HashMap<>();
 
-    private static final List<Material> SIGN_TYPES = Arrays.asList(Material.SIGN, Material.WALL_SIGN, Material.SIGN_POST);
+    private static final List<Material> SIGN_TYPES = Arrays.asList(Material.SIGN, Material.SIGN_POST, Material.WALL_SIGN);
 
     static {
         String name = Bukkit.getServer().getClass().getPackage().getName();
@@ -80,10 +79,6 @@ public final class ItemUtil
         SIGN_TO_SIGN.put(Material.SIGN_POST, Material.SIGN);
     }
 
-    /**
-     * An array of items that can be damaged
-     */
-    private static final Map<Material, Short> damageable = new HashMap<>();
     /**
      * A list of enchantment names
      */
@@ -159,6 +154,9 @@ public final class ItemUtil
             if (enchants != null)
                 return EnchantMap.fullListString(enchants);
         }
+        else if (isOminousBanner(item)) {
+            return ChatColor.GOLD + "Ominous Banner";
+        }
 
         item = item.clone();
         ItemMeta meta = item.getItemMeta();
@@ -182,6 +180,28 @@ public final class ItemUtil
         }
     }
 
+    public static boolean isOminousBanner(@NotNull ItemStack stack)
+    {
+        if (stack.getType() != Material.BANNER)
+            return false;
+        BannerMeta bannerMeta = (BannerMeta)stack.getItemMeta();
+        return bannerMeta.getPatterns().containsAll(ominousPatterns());
+    }
+
+    private static List<Pattern> ominousPatterns()
+    {
+        Pattern[] patterns = new Pattern[8];
+        patterns[0] = new Pattern(DyeColor.CYAN, PatternType.RHOMBUS_MIDDLE);
+        patterns[1] = new Pattern(DyeColor.SILVER, PatternType.STRIPE_BOTTOM);
+        patterns[2] = new Pattern(DyeColor.GRAY, PatternType.STRIPE_CENTER);
+        patterns[3] = new Pattern(DyeColor.SILVER, PatternType.BORDER);
+        patterns[4] = new Pattern(DyeColor.BLACK, PatternType.STRIPE_MIDDLE);
+        patterns[5] = new Pattern(DyeColor.SILVER, PatternType.HALF_HORIZONTAL);
+        patterns[6] = new Pattern(DyeColor.SILVER, PatternType.CIRCLE_MIDDLE);
+        patterns[7] = new Pattern(DyeColor.BLACK, PatternType.BORDER);
+        return Arrays.asList(patterns);
+    }
+
     public static String getEnchantName(Enchantment enchant)
     {
         Enchantable enchantable = enchants.get(enchant);
@@ -191,64 +211,7 @@ public final class ItemUtil
     }
 
     /**
-     * Determines if a material can be damaged
-     * @param item
-     * @return
-     */
-    public static boolean isDamageable(Material item)
-    {
-        return damageable.containsKey(item);
-    }
-
-    /**
-     * Gets the maximum damage for an item. This assumes damageability
-     * has been confirmed with isDamageable()
-     * @param item
-     * @return
-     */
-    public static short getMaxDamage(Material item)
-    {
-        return damageable.get(item);
-    }
-
-    /**
-     * Loads the damageable items list from the damageable.txt resource.
-     * @param plugin
-     */
-    public static void loadDamageable(ShopPlugin plugin)
-    {
-        InputStream stream = plugin.getResource("damageable.txt");
-        if (stream == null) {
-            return;
-        }
-        int i = 1;
-        try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(stream));
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (line.length() == 0 || line.charAt(0) == '#') {
-                    continue;
-                }
-                Scanner scanner = new Scanner(line);
-                Material material = Material.getMaterial(scanner.next());
-                short maxDamage = scanner.nextShort();
-                damageable.put(material, maxDamage);
-                i++;
-            }
-            stream.close();
-        }
-        catch (IOException e) {
-            plugin.getLogger().warning("Failed to readFromDisk damageable: " + e.toString());
-        }
-        catch (NoSuchElementException e) {
-            plugin.getLogger().info("loadDamageable broke at line: " + i);
-            e.printStackTrace();
-        }
-    }
-
-    /**
      * Loads the enchantment names in enchants.txt
-     * @param plugin
      */
     public static void loadEnchants(ShopPlugin plugin)
     {
@@ -257,8 +220,7 @@ public final class ItemUtil
             List<Map<?, ?>> section = enchantConfig.getMapList("enchants");
 
             for (Map<?, ?> enchantMap : section) {
-                Map<?, ?> namespaceKey = (Map<?, ?>)enchantMap.get("key");
-                Enchantment enchantment = Enchantment.getByName((String)namespaceKey.get("key"));
+                Enchantment enchantment = Enchantment.getByName((String)enchantMap.get("enchantment"));
                 String name = (String)enchantMap.get("name");
                 boolean levels = (Boolean)enchantMap.get("levels");
                 Object id = enchantMap.get("id");
@@ -392,11 +354,6 @@ public final class ItemUtil
         return lines;
     }
 
-    public static List<Material> getSignTypes()
-    {
-        return SIGN_TYPES;
-    }
-
     public static List<ItemStack> getSignTypesAsItems()
     {
         ItemStack[] stacks = new ItemStack[SIGN_TYPES.size()];
@@ -479,16 +436,6 @@ public final class ItemUtil
     @Deprecated
     public static Enchantment getLegacyEnchantment(int id) {
         return legacyEnchants.get(id);
-    }
-
-    public static int getDurability(ItemStack stack)
-    {
-        return stack.getDurability();
-    }
-
-    public static void setDurability(ItemStack stack, int durability)
-    {
-        stack.setDurability((short)durability);
     }
 
     public static List<Block> getSignOnBlock(Block block)
