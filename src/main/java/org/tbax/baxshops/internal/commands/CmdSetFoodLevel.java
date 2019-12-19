@@ -28,9 +28,6 @@ import org.tbax.baxshops.commands.ShopCmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public final class CmdSetFoodLevel extends BaxShopCommand
 {
     @Override
