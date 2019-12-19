@@ -225,13 +225,12 @@ public final class ItemUtil
                 Enchantment enchantment = Enchantment.getByKey(NamespacedKey.minecraft((String)namespaceKey.get("key")));
                 if (enchantment != null) {
                     String name = (String)enchantMap.get("name");
-                    boolean levels = (Boolean)enchantMap.get("levels");
                     Object id = enchantMap.get("id");
                     if (id instanceof Number) {
-                        enchants.put(enchantment, new Enchantable(((Number)id).intValue(), name, levels));
+                        enchants.put(enchantment, new Enchantable(enchantment, name, ((Number)id).intValue()));
                     }
                     else {
-                        enchants.put(enchantment, new Enchantable(name, levels));
+                        enchants.put(enchantment, new Enchantable(enchantment, name));
                     }
                 }
             }
@@ -245,7 +244,7 @@ public final class ItemUtil
     {
         Enchantable enchantable = enchants.get(enchantment);
         if (enchantable == null)
-            return new Enchantable(Format.toFriendlyName(enchantment.getKey().getKey()), true);
+            return new Enchantable(enchantment, Format.toFriendlyName(enchantment.getKey().getKey()));
         return enchantable;
     }
 
@@ -306,7 +305,7 @@ public final class ItemUtil
         if (!smartStack) return stack1.isSimilar(stack2);
         if (!stack1.isSimilar(stack2)) {
             return stack1.getType() == stack2.getType() &&
-                    (isSameBook(stack1, stack2) || isSameBanner(stack1, stack2));
+                    (isSameBook(stack1, stack2)  || isSameBanner(stack1, stack2));
         }
         return true;
     }
