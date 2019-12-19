@@ -27,20 +27,16 @@ import org.tbax.baxshops.internal.notification.NoteSet;
 import org.tbax.baxshops.internal.serialization.State;
 import org.tbax.baxshops.internal.serialization.StateLoader;
 import org.tbax.baxshops.notification.Notification;
-import org.tbax.baxshops.serialization.PlayerMap;
 import org.tbax.baxshops.serialization.StoredPlayer;
 
 import java.io.File;
 import java.util.Collection;
 import java.util.Deque;
-import java.util.List;
-import java.util.UUID;
 
 @Deprecated
 public abstract class LoaderWithNotes implements StateLoader
 {
     public abstract  @NotNull Collection<NoteSet> buildNotifications(@NotNull FileConfiguration state);
-    private PlayerMap playerMap = new PlayerMap();
 
     @Override
     public State loadState(@NotNull File stateLocation)
@@ -74,24 +70,6 @@ public abstract class LoaderWithNotes implements StateLoader
         }
 
         return savedState;
-    }
-
-    @Override
-    public StoredPlayer getPlayer(State savedState, UUID playerId)
-    {
-        return playerMap.get(playerId);
-    }
-
-    @Override
-    public List<StoredPlayer> getPlayer(State savedState, String playerName)
-    {
-        return playerMap.get(playerName);
-    }
-
-    @Override
-    public StoredPlayer getPlayerSafe(State savedState, String playerName)
-    {
-        return playerMap.getOrCreate(playerName).get(0);
     }
 
     @Override

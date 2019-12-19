@@ -21,9 +21,8 @@ package org.tbax.baxshops.internal.notification;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
-import org.tbax.baxshops.notification.Notification;
 import org.tbax.baxshops.internal.serialization.StateLoader;
-import org.tbax.baxshops.internal.serialization.states.StateLoader_00300;
+import org.tbax.baxshops.notification.Notification;
 
 import java.util.Map;
 
@@ -41,8 +40,8 @@ public class SaleNotificationAutoClaim implements DeprecatedNote, ConfigurationS
     public @NotNull SaleClaim getNewNote(StateLoader stateLoader)
     {
         return new SaleClaim(BaxShop.DUMMY_UUID,
-                ((StateLoader_00300)stateLoader).getPlayer(note.getBuyer()),
-                ((StateLoader_00300)stateLoader).getPlayer(note.getSeller()),
+                stateLoader.getPlayerSafe(null, note.getBuyer()),
+                stateLoader.getPlayerSafe(null, note.getSeller()),
                 note.getEntry()
         );
     }

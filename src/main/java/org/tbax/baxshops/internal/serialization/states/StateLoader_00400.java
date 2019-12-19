@@ -23,16 +23,16 @@ import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.internal.ShopPlugin;
 import org.tbax.baxshops.internal.notification.NoteSet;
-import org.tbax.baxshops.internal.serialization.State;
 import org.tbax.baxshops.serialization.StoredPlayer;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class StateLoader_00400 extends LoaderWithNotes
 {
     public static final double VERSION = 4.0;
     private ShopPlugin plugin;
-    private Map<UUID, StoredPlayer> players = new HashMap<>();
 
     public StateLoader_00400(@NotNull ShopPlugin plugin)
     {
@@ -60,19 +60,19 @@ public class StateLoader_00400 extends LoaderWithNotes
     @Override
     public @NotNull Collection<StoredPlayer> buildPlayers(@NotNull FileConfiguration state)
     {
+        List<StoredPlayer> players = new ArrayList<>();
         if (!state.isList("players")) {
-            return players.values();
+            return players;
         }
-        for(Object o : state.getList("players")) {
+        for (Object o : state.getList("players")) {
             if (o instanceof StoredPlayer) {
-                StoredPlayer player = (StoredPlayer)o;
-                players.put(player.getUniqueId(), getPlayer(null, player.getUniqueId()));
+                players.add((StoredPlayer)o);
             }
             else {
                 plugin.getLogger().warning("Could not load StoredPlayer of type " + o.getClass());
             }
         }
-        return players.values();
+        return players;
     }
 
     @Override

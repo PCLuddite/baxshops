@@ -24,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.BaxShopFlag;
 import org.tbax.baxshops.internal.ShopPlugin;
+import org.tbax.baxshops.internal.serialization.State;
 import org.tbax.baxshops.notification.*;
 import org.tbax.baxshops.internal.notification.DeletedShopClaim;
 import org.tbax.baxshops.internal.notification.DeprecatedNote;
@@ -33,6 +34,7 @@ import org.tbax.baxshops.serialization.PlayerMap;
 import org.tbax.baxshops.serialization.SafeMap;
 import org.tbax.baxshops.serialization.StoredPlayer;
 
+import java.io.File;
 import java.util.*;
 
 public class StateLoader_00300 extends LoaderWithNotes
@@ -65,23 +67,37 @@ public class StateLoader_00300 extends LoaderWithNotes
         return flags;
     }
 
+    @Override
+    public State loadState(@NotNull File stateLocation)
+    {
+        State state = super.loadState(stateLocation);
+        ShopPlugin.logInfo("Cleaning up legacy data...");
+        state.setPlayers(players.values());
+        invalidateMaps();
+        return state;
+    }
+
     public UUID getShopId(long legacyId)
     {
         return legacyIds.get(legacyId);
     }
 
-    public OfflinePlayer getPlayer(String playerName)
+    public List<StoredPlayer> getPlayer(State savedState, String playerName)
+    {
+        return players.get(playerName);
+    }
+
+    public StoredPlayer getPlayerSafe(State savedState, String playerName)
     {
         if (playerName == null)
             return StoredPlayer.ERROR;
         return players.getOrCreate(playerName).get(0);
     }
 
-    public UUID getPlayerId(String playerName)
+    @Override
+    public StoredPlayer getPlayer(State savedState, UUID playerId)
     {
-        if (playerName == null)
-            return StoredPlayer.ERROR_UUID;
-        return players.getOrCreate(playerName).get(0).getUniqueId();
+        return players.get(playerId);
     }
 
     public Collection<StoredPlayer> getPlayers()
@@ -113,7 +129,7 @@ public class StateLoader_00300 extends LoaderWithNotes
             if (o instanceof BaxShop) {
                 BaxShop shop = (BaxShop) o;
                 addLegacyShop(shop.getLegacyId(), shop.getId());
-                shop.setOwner(getPlayer(shop.getLegacyOwner()));
+                shop.setOwner(getPlayerSafe(null, shop.getLegacyOwner()));
                 shops.add(shop);
             } else {
                 plugin.getLogger().warning("Could not load BaxShop of type " + o.getClass());
@@ -136,12 +152,12 @@ public class StateLoader_00300 extends LoaderWithNotes
             return noteSets;
         }
         for (Map.Entry<?, ?> entry : state.getConfigurationSection("notes").getValues(false).entrySet()) {
-            OfflinePlayer player = getPlayer(entry.getKey().toString());
+            OfflinePlayer player = getPlayerSafe(null, entry.getKey().toString());
             if (!(entry.getValue() instanceof List)) {
                 plugin.getLogger().warning("Could not load notifications of type " + entry.getValue().getClass());
             }
             else {
-                Deque<Notification> pending = new ArrayDeque<>(((List<?>) entry.getValue()).size());
+                Deque<Notification> pending = new ArrayDeque<>(((List<?>)entry.getValue()).size());
                 for (Object o : (List<?>)entry.getValue()) {
                     Notification n = null;
                     if (o instanceof Notification) {
@@ -186,17 +202,17 @@ public class StateLoader_00300 extends LoaderWithNotes
     {
         if (n instanceof StandardNote) {
             StandardNote standardNote = (StandardNote)n;
-            standardNote.setBuyer(getPlayer(standardNote.getLegacyBuyer()));
-            standardNote.setSeller(getPlayer(standardNote.getLegacySeller()));
+            standardNote.setBuyer(getPlayerSafe(null, standardNote.getLegacyBuyer()));
+            standardNote.setSeller(getPlayerSafe(null, standardNote.getLegacySeller()));
             standardNote.setShop(getShopId(standardNote.getLegacyShopId()));
         }
         else if (n instanceof DeletedShopClaim) {
             DeletedShopClaim deletedShopClaim = (DeletedShopClaim)n;
-            deletedShopClaim.setOwner(getPlayer(deletedShopClaim.getLegacyOwner()));
+            deletedShopClaim.setOwner(getPlayerSafe(null, deletedShopClaim.getLegacyOwner()));
         }
         else if (n instanceof LollipopNotification) {
             LollipopNotification lollipopNotification = (LollipopNotification)n;
-            lollipopNotification.setSender(getPlayer(lollipopNotification.getLegacySender()));
+            lollipopNotification.setSender(getPlayerSafe(null, lollipopNotification.getLegacySender()));
         }
     }
 

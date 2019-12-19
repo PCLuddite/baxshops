@@ -51,9 +51,9 @@ public class SellRequest implements DeprecatedNote, ConfigurationSerializable
     public @NotNull SaleRequest getNewNote(StateLoader stateLoader)
     {
         return new SaleRequest(((StateLoader_00300)stateLoader).getShopId(shopId),
-            ((StateLoader_00300)stateLoader).getPlayer(buyer),
-            ((StateLoader_00300)stateLoader).getPlayer(seller),
-            entry);
+                stateLoader.getPlayerSafe(null, buyer),
+                stateLoader.getPlayerSafe(null, seller),
+                entry);
     }
 
     public String getBuyer()

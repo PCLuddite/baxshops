@@ -22,10 +22,9 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.BaxShop;
+import org.tbax.baxshops.internal.serialization.StateLoader;
 import org.tbax.baxshops.notification.Notification;
 import org.tbax.baxshops.serialization.SafeMap;
-import org.tbax.baxshops.internal.serialization.StateLoader;
-import org.tbax.baxshops.internal.serialization.states.StateLoader_00300;
 
 import java.util.Map;
 
@@ -48,8 +47,8 @@ public class SaleNotificationAuto implements DeprecatedNote, ConfigurationSerial
     public @NotNull SaleNotification getNewNote(StateLoader stateLoader)
     {
         return new SaleNotification(BaxShop.DUMMY_UUID,
-                ((StateLoader_00300)stateLoader).getPlayer(buyer),
-                ((StateLoader_00300)stateLoader).getPlayer(seller),
+                stateLoader.getPlayerSafe(null, buyer),
+                stateLoader.getPlayerSafe(null, seller),
                 entry);
     }
 
