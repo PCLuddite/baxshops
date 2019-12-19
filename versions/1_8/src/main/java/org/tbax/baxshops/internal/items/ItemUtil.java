@@ -439,6 +439,16 @@ public final class ItemUtil
         return legacyEnchants.get(id);
     }
 
+    public static int getDurability(ItemStack stack)
+    {
+        return stack.getDurability();
+    }
+
+    public static void setDurability(ItemStack stack, int durability)
+    {
+        stack.setDurability((short)durability);
+    }
+
     public static List<Block> getSignOnBlock(Block block)
     {
         List<Block> signs = new ArrayList<>();
