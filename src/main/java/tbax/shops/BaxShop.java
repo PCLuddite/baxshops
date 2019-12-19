@@ -101,19 +101,19 @@ public class BaxShop extends Shop implements Serializable
     public org.tbax.baxshops.BaxShop modernize(StateLoader_00100 stateLoader_00100) {
         org.tbax.baxshops.BaxShop baxShop = new org.tbax.baxshops.BaxShop(locations);
         for (ShopEntry entry : inventory) {
-            baxShop.add(entry.modernize(stateLoader_00100));
+            baxShop.add(entry.update(stateLoader_00100));
         }
         baxShop.setFlagInfinite(isInfinite == null ? false : isInfinite);
         baxShop.setFlagBuyRequests(buyRequests);
         baxShop.setFlagSellToShop(sellToShop);
         baxShop.setFlagSellRequests(sellRequests);
-        baxShop.setOwner(stateLoader_00100.registerPlayer(owner));
+        baxShop.setOwner(stateLoader_00100.getPlayerSafe(null, owner));
         return baxShop;
     }
 
-    public org.tbax.baxshops.BaxShop modernize(StateLoader_00050 stateLoader_00050)
+    public org.tbax.baxshops.BaxShop update(StateLoader_00050 stateLoader_00050)
     {
-        org.tbax.baxshops.BaxShop baxShop = super.modernize(stateLoader_00050);
+        org.tbax.baxshops.BaxShop baxShop = super.update(stateLoader_00050);
         Object buyRequests = flags.get("buy_request"),
                sellRequests = flags.get("sell_request"),
                sellToShop = flags.get("sell_to_shop");
@@ -131,7 +131,7 @@ public class BaxShop extends Shop implements Serializable
 
 
         if (getOption("ref") instanceof BaxShop) {
-            org.tbax.baxshops.BaxShop mainShop = stateLoader_00050.registerShop((BaxShop)getOption("ref"));
+            org.tbax.baxshops.BaxShop mainShop = stateLoader_00050.getBaxShop((BaxShop)getOption("ref"));
             ShopPlugin.logWarning(String.format("Shop %s is a reference to %s. All of its locations will be removed and replaced with the main shop.",
                     baxShop.getId().toString(),
                     mainShop.getId().toString()

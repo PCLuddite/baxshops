@@ -87,7 +87,7 @@ public class StateLoader_00452 extends StateLoader_00451
         notes.clear();
         State savedState = super.loadState(stateLocation);
         for(Notification note : notes) {
-            StoredPlayer player = savedState.getOfflinePlayer(note.getRecipientId());
+            StoredPlayer player = getPlayer(savedState, note.getRecipientId());
             if (!player.getNotifications().contains(note)) {
                 player.queueNote(note);
             }

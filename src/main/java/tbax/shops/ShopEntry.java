@@ -157,7 +157,7 @@ public class ShopEntry implements Serializable
         return stack;
     }
 
-    public BaxEntry modernize(StateLoader_00050 stateLoader_00050)
+    public BaxEntry update(StateLoader_00050 stateLoader_00050)
     {
         BaxEntry baxEntry = new BaxEntry();
         baxEntry.setRefundPrice(MathUtil.roundedDouble(refundPrice));
@@ -169,7 +169,7 @@ public class ShopEntry implements Serializable
         return baxEntry;
     }
 
-    public BaxEntry modernize(StateLoader_00100 stateLoader_00100)
+    public BaxEntry update(StateLoader_00100 stateLoader_00100)
     {
         BaxEntry baxEntry = new BaxEntry();
         baxEntry.setRefundPrice(refundPrice);

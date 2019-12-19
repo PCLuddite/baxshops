@@ -38,13 +38,15 @@ public class SaleNotificationAuto implements Claimable
     public String seller;
     public static final String JSON_TYPE_ID = "SaleNoteAuto";
 
-    public SaleNotificationAuto(BaxShop shop, ShopEntry entry, String seller) {
+    public SaleNotificationAuto(BaxShop shop, ShopEntry entry, String seller)
+    {
         this.shop = shop;
         this.entry = entry;
         this.seller = seller;
     }
 
-    public SaleNotificationAuto(StateLoader_00100 state00200, JsonObject o) {
+    public SaleNotificationAuto(StateLoader_00100 state00200, JsonObject o)
+    {
         seller = o.get("seller").getAsString();
         shopId = o.get("shop").getAsInt();
         if (state00200 instanceof StateLoader_00210) {
@@ -61,10 +63,10 @@ public class SaleNotificationAuto implements Claimable
     @Override
     public org.tbax.baxshops.notification.@NotNull Notification getNewNote(StateLoader stateLoader)
     {
-        return new SaleClaim(((StateLoader_00100)stateLoader).getShop(shopId).getId(),
-                ((StateLoader_00100)stateLoader).registerPlayer(((StateLoader_00100)stateLoader).getShopOwner(shopId)),
-                ((StateLoader_00100)stateLoader).registerPlayer(seller),
-                entry.modernize((StateLoader_00100)stateLoader)
+        return new SaleClaim(stateLoader.getShop(null, shopId).getId(),
+                stateLoader.getPlayerSafe(null, ((StateLoader_00100)stateLoader).getShopOwner(shopId)),
+                stateLoader.getPlayerSafe(null, seller),
+                entry.update((StateLoader_00100)stateLoader)
         );
     }
 

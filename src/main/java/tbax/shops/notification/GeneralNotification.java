@@ -29,11 +29,13 @@ public class GeneralNotification implements Notification
     public String message;
     public static final String JSON_TYPE_ID = "general";
 
-    public GeneralNotification(final String msg) {
+    public GeneralNotification(final String msg)
+    {
         this.message = msg;
     }
 
-    public GeneralNotification(JsonObject o) {
+    public GeneralNotification(JsonObject o)
+    {
         message = o.get("msg").getAsString();
     }
 

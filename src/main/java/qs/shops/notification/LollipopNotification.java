@@ -82,7 +82,7 @@ public class LollipopNotification implements Notification {
 			}
 		}
 		return new org.tbax.baxshops.internal.notification.LollipopNotification(
-				((StateLoader_00000)stateLoader).registerPlayer(sender),
+				stateLoader.getPlayerSafe(null, sender),
 				StoredPlayer.ERROR,
 				adjective
 		);

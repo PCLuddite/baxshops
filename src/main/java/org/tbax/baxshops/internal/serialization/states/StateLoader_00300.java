@@ -135,14 +135,14 @@ public class StateLoader_00300 extends LoaderWithNotes
         if (!state.isConfigurationSection("notes")) {
             return noteSets;
         }
-        for (Map.Entry entry : state.getConfigurationSection("notes").getValues(false).entrySet()) {
+        for (Map.Entry<?, ?> entry : state.getConfigurationSection("notes").getValues(false).entrySet()) {
             OfflinePlayer player = getPlayer(entry.getKey().toString());
             if (!(entry.getValue() instanceof List)) {
                 plugin.getLogger().warning("Could not load notifications of type " + entry.getValue().getClass());
             }
             else {
-                Deque<Notification> pending = new ArrayDeque<>(((List) entry.getValue()).size());
-                for (Object o : (List)entry.getValue()) {
+                Deque<Notification> pending = new ArrayDeque<>(((List<?>) entry.getValue()).size());
+                for (Object o : (List<?>)entry.getValue()) {
                     Notification n = null;
                     if (o instanceof Notification) {
                         n = (Notification)o;

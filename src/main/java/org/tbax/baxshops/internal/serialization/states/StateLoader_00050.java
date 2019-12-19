@@ -26,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.internal.ShopPlugin;
 import org.tbax.baxshops.internal.items.ItemUtil;
+import org.tbax.baxshops.internal.serialization.State;
 import org.tbax.baxshops.notification.Claimable;
 import org.tbax.baxshops.notification.Notification;
 import org.tbax.baxshops.notification.Request;
@@ -92,7 +93,7 @@ public class StateLoader_00050 implements StateLoader
     public @NotNull Collection<BaxShop> buildShops(@NotNull FileConfiguration state)
     {
         for (Map.Entry<Location, tbax.shops.BaxShop> entry : state2.getShops().entrySet()) {
-            registerShop(entry.getValue());
+            getBaxShop(entry.getValue());
         }
         return shopMap.values();
     }
@@ -101,7 +102,7 @@ public class StateLoader_00050 implements StateLoader
     public @NotNull Collection<StoredPlayer> buildPlayers(@NotNull FileConfiguration state)
     {
         for (Map.Entry<String, ArrayDeque<tbax.shops.notification.Notification>> entry : state2.pending.entrySet()) {
-            StoredPlayer player = registerPlayer(entry.getKey());
+            StoredPlayer player = getPlayerSafe(null, entry.getKey());
             for (tbax.shops.notification.Notification note : entry.getValue()) {
                 Notification newNote = note.getNewNote(this);
                 newNote.setSentDate(null);
@@ -135,17 +136,18 @@ public class StateLoader_00050 implements StateLoader
         return plugin;
     }
 
-    public BaxShop registerShop(Shop shop)
+    public BaxShop getBaxShop(Shop shop)
     {
         BaxShop baxShop = shopMap.get(shop);
         if (baxShop == null) {
-            baxShop = shop.modernize(this);
+            baxShop = shop.update(this);
             shopMap.put(shop, baxShop);
         }
         return baxShop;
     }
 
-    public StoredPlayer registerPlayer(String name)
+    @Override
+    public StoredPlayer getPlayerSafe(State savedState, String name)
     {
         StoredPlayer player = playerMap.get(name);
         if (player == null) {

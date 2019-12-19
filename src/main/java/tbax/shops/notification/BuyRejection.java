@@ -53,10 +53,10 @@ public class BuyRejection implements Notification
     public @NotNull org.tbax.baxshops.notification.Notification getNewNote(StateLoader stateLoader)
     {
         return new org.tbax.baxshops.internal.notification.BuyRejection(
-                ((StateLoader_00100)stateLoader).getShop(shopId).getId(),
-                ((StateLoader_00100)stateLoader).registerPlayer(((StateLoader_00100)stateLoader).getShopOwner(shopId)),
-                ((StateLoader_00100)stateLoader).registerPlayer(seller),
-                entry.modernize((StateLoader_00100)stateLoader)
+                stateLoader.getShop(null, shopId).getId(),
+                stateLoader.getPlayerSafe(null, ((StateLoader_00100)stateLoader).getShopOwner(shopId)),
+                stateLoader.getPlayerSafe(null, seller),
+                entry.update((StateLoader_00100)stateLoader)
         );
     }
 

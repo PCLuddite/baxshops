@@ -43,13 +43,13 @@ public class Shop implements Serializable
         this.inventory = new ArrayList<>();
     }
 
-    public BaxShop modernize(StateLoader_00050 stateLoader_00050)
+    public BaxShop update(StateLoader_00050 stateLoader_00050)
     {
         org.tbax.baxshops.BaxShop baxShop = new org.tbax.baxshops.BaxShop(location);
         baxShop.setFlagInfinite(isInfinite == null ? false : isInfinite);
-        baxShop.setOwner(stateLoader_00050.registerPlayer(owner));
+        baxShop.setOwner(stateLoader_00050.getPlayerSafe(null, owner));
         for(ShopEntry entry : inventory) {
-            baxShop.add(entry.modernize(stateLoader_00050));
+            baxShop.add(entry.update(stateLoader_00050));
         }
         return baxShop;
     }

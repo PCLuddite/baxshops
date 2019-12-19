@@ -30,6 +30,7 @@ import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.internal.ShopPlugin;
 import org.tbax.baxshops.internal.items.ItemUtil;
+import org.tbax.baxshops.internal.serialization.State;
 import org.tbax.baxshops.notification.Notification;
 import org.tbax.baxshops.serialization.PlayerMap;
 import org.tbax.baxshops.internal.serialization.StateLoader;
@@ -116,7 +117,7 @@ public class StateLoader_00100 implements StateLoader
         jsonState.loadNotes(this, rootObject.get("notes").getAsJsonObject());
         ShopPlugin.logInfo("Converting notification data...");
         for (Map.Entry<String, ArrayDeque<tbax.shops.notification.Notification>> entry : jsonState.pending.entrySet()) {
-            StoredPlayer player = registerPlayer(entry.getKey());
+            StoredPlayer player = getPlayerSafe(null, entry.getKey());
             while (!entry.getValue().isEmpty()) {
                 Notification newNote = entry.getValue().removeFirst().getNewNote(this);
                 newNote.setSentDate(null);
@@ -132,14 +133,16 @@ public class StateLoader_00100 implements StateLoader
         return plugin;
     }
 
-    public StoredPlayer registerPlayer(String playerName)
+    @Override
+    public StoredPlayer getPlayerSafe(State savedState, String playerName)
     {
         if (playerName == null)
             return StoredPlayer.ERROR;
         return players.getOrCreate(playerName).get(0);
     }
 
-    public BaxShop getShop(int shopId)
+    @Override
+    public BaxShop getShop(State savedState, int shopId)
     {
         BaxShop shop = legacyShops.get(shopId);
         if (shop == null) {
@@ -153,7 +156,7 @@ public class StateLoader_00100 implements StateLoader
     {
         String owner = ownerNames.get(shopId);
         if (owner == null) {
-            BaxShop shop = getShop(shopId);
+            BaxShop shop = getShop(null, shopId);
             if (shop == BaxShop.DUMMY_SHOP) {
                 owner = StoredPlayer.DUMMY_NAME;
             }

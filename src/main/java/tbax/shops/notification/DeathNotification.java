@@ -55,7 +55,7 @@ public class DeathNotification implements Notification
     @Override
     public @NotNull org.tbax.baxshops.notification.Notification getNewNote(StateLoader stateLoader)
     {
-        OfflinePlayer player = ((StateLoader_00100)stateLoader).registerPlayer(person);
+        OfflinePlayer player = stateLoader.getPlayerSafe(null, person);
         GeneralNotification n = new GeneralNotification(getMessage(player));
         n.setRecipient(player);
         return n;

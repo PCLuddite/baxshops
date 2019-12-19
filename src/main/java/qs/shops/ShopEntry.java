@@ -67,7 +67,7 @@ public class ShopEntry implements Serializable {
 	 */
 	public HashMap<Integer, Integer> enchantments = new HashMap<Integer, Integer>();
 
-	public BaxEntry modernize()
+	public BaxEntry update()
 	{
 		BaxEntry baxEntry = new BaxEntry();
 		baxEntry.setRefundPrice(MathUtil.roundedDouble(refundPrice));

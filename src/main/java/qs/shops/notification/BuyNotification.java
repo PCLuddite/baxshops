@@ -71,10 +71,10 @@ public class BuyNotification implements Notification {
 	public @NotNull org.tbax.baxshops.notification.Notification getNewNote(StateLoader stateLoader)
 	{
 		return new org.tbax.baxshops.internal.notification.BuyNotification(
-				((StateLoader_00000)stateLoader).registerShop(shop),
-				((StateLoader_00000)stateLoader).registerPlayer(buyer),
-				((StateLoader_00000)stateLoader).registerPlayer(shop.owner),
-				entry.modernize()
+				((StateLoader_00000)stateLoader).getBaxShopId(shop),
+				stateLoader.getPlayerSafe(null, buyer),
+				stateLoader.getPlayerSafe(null, shop.owner),
+				entry.update()
 		);
 	}
 }

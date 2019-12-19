@@ -63,7 +63,7 @@ public class StateLoader_00421 extends LoaderWithNotes
         if (!state.isList("players")) {
             return players;
         }
-        for(Object o : state.getList("players")) {
+        for (Object o : state.getList("players")) {
             if (o instanceof StoredPlayer) {
                 players.add((StoredPlayer)o);
             }
@@ -84,7 +84,7 @@ public class StateLoader_00421 extends LoaderWithNotes
 
         NoteSet errorNotes = new NoteSet(StoredPlayer.ERROR_UUID);
 
-        for (Map.Entry entry : state.getConfigurationSection("notes").getValues(false).entrySet()) {
+        for (Map.Entry<?, ?> entry : state.getConfigurationSection("notes").getValues(false).entrySet()) {
             UUID playerId;
             try {
                 playerId = UUID.fromString(entry.getKey().toString());
@@ -94,10 +94,10 @@ public class StateLoader_00421 extends LoaderWithNotes
                 ShopPlugin.logWarning("UUID " + entry.getKey() + " is invalid. Notes will be assigned to an error user.");
             }
             if (entry.getValue() instanceof List) {
-                Deque<Notification> pending = new ArrayDeque<>(((List) entry.getValue()).size());
-                for (Object o : (List) entry.getValue()) {
+                Deque<Notification> pending = new ArrayDeque<>(((List<?>)entry.getValue()).size());
+                for (Object o : (List<?>)entry.getValue()) {
                     if (o instanceof Notification) {
-                        pending.add((Notification) o);
+                        pending.add((Notification)o);
                     }
                     else {
                         ShopPlugin.logWarning("Could not load Notification of type " + entry.getValue().getClass());

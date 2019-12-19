@@ -53,13 +53,13 @@ public class Shop implements Serializable {
 	 */
 	public transient Location location;
 
-	public BaxShop modernize(StateLoader_00000 state00000)
+	public BaxShop update(StateLoader_00000 state00000)
 	{
 		BaxShop baxShop = new BaxShop(location);
 		baxShop.setFlagInfinite(isInfinite);
-		baxShop.setOwner(state00000.registerPlayer(owner));
+		baxShop.setOwner(state00000.getPlayerSafe(null, owner));
 		for(ShopEntry entry : inventory) {
-			baxShop.add(entry.modernize());
+			baxShop.add(entry.update());
 		}
 		return baxShop;
 	}

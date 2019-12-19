@@ -42,12 +42,14 @@ public class LollipopNotification implements Notification
 
     public static final String JSON_TYPE_ID = "lolly";
 
-    public LollipopNotification(final String sender, final double tastiness) {
+    public LollipopNotification(final String sender, final double tastiness)
+    {
         this.sender = sender;
         this.tastiness = ((tastiness < 0.0) ? 0.0 : ((tastiness > 100.0) ? 100.0 : tastiness));
     }
 
-    public LollipopNotification(JsonObject o) {
+    public LollipopNotification(JsonObject o)
+    {
         sender = o.get("sender").getAsString();
         tastiness = o.get("tastiness").getAsInt();
     }
@@ -83,7 +85,7 @@ public class LollipopNotification implements Notification
             }
         }
         return new org.tbax.baxshops.internal.notification.LollipopNotification(
-                ((StateLoader_00050)stateLoader).registerPlayer(sender),
+                stateLoader.getPlayerSafe(null, sender),
                 StoredPlayer.ERROR,
                 adjective
         );

@@ -33,6 +33,8 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
 public interface StateLoader
 {
@@ -90,6 +92,34 @@ public interface StateLoader
                 n.setRecipient(player);
             }
         }
+    }
+
+    default StoredPlayer getPlayer(State savedState, UUID playerId)
+    {
+        return savedState.getOfflinePlayer(playerId);
+    }
+
+    default List<StoredPlayer> getPlayer(State savedState, String playerName)
+    {
+        return savedState.getOfflinePlayer(playerName);
+    }
+
+    default StoredPlayer getPlayerSafe(State savedState, String playerName)
+    {
+        List<StoredPlayer> players = getPlayer(savedState, playerName);
+        if (players == null || players.isEmpty())
+            return StoredPlayer.ERROR;
+        return players.get(0);
+    }
+
+    default BaxShop getShop(State savedState, UUID shopId)
+    {
+        return savedState.getShop(shopId);
+    }
+
+    default BaxShop getShop(State savedState, int shopId)
+    {
+        throw new UnsupportedOperationException();
     }
 
     default double getVersion()

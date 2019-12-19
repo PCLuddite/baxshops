@@ -42,13 +42,15 @@ public class BuyNotification implements Notification
     public String buyer;
     public static final String JSON_TYPE_ID = "BuyNote";
 
-    public BuyNotification(final Shop shop, final ShopEntry entry, final String buyer) {
+    public BuyNotification(final Shop shop, final ShopEntry entry, final String buyer)
+    {
         this.shop = shop;
         this.entry = entry;
         this.buyer = buyer;
     }
 
-    public BuyNotification(StateLoader_00100 state00200, JsonObject o) {
+    public BuyNotification(StateLoader_00100 state00200, JsonObject o)
+    {
         buyer = o.get("buyer").getAsString();
         shopId = o.get("shop").getAsInt();
         if (state00200 instanceof StateLoader_00210) {
@@ -73,18 +75,18 @@ public class BuyNotification implements Notification
     {
         if (stateLoader instanceof StateLoader_00050) {
             return new org.tbax.baxshops.internal.notification.BuyNotification(
-                    ((StateLoader_00050)stateLoader).registerShop(shop).getId(),
-                    ((StateLoader_00050)stateLoader).registerPlayer(buyer),
-                    ((StateLoader_00050)stateLoader).registerPlayer(shop.owner),
-                    entry.modernize((StateLoader_00050) stateLoader)
+                    ((StateLoader_00050)stateLoader).getBaxShop(shop).getId(),
+                    stateLoader.getPlayerSafe(null, buyer),
+                    stateLoader.getPlayerSafe(null, shop.owner),
+                    entry.update((StateLoader_00050)stateLoader)
             );
         }
         else {
             return new org.tbax.baxshops.internal.notification.BuyNotification(
-                    ((StateLoader_00100)stateLoader).getShop(shopId).getId(),
-                    ((StateLoader_00100)stateLoader).registerPlayer(buyer),
-                    ((StateLoader_00100)stateLoader).registerPlayer(((StateLoader_00100)stateLoader).getShopOwner(shopId)),
-                    entry.modernize((StateLoader_00100)stateLoader)
+                    stateLoader.getShop(null, shopId).getId(),
+                    stateLoader.getPlayerSafe(null, buyer),
+                    stateLoader.getPlayerSafe(null, ((StateLoader_00100)stateLoader).getShopOwner(shopId)),
+                    entry.update((StateLoader_00100)stateLoader)
             );
         }
     }

@@ -18,35 +18,32 @@
  */
 package org.tbax.baxshops.internal.serialization.states;
 
-import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.internal.ShopPlugin;
-import org.tbax.baxshops.notification.Notification;
 import org.tbax.baxshops.internal.notification.NoteSet;
-import org.tbax.baxshops.internal.serialization.BaxConfig;
 import org.tbax.baxshops.internal.serialization.State;
 import org.tbax.baxshops.internal.serialization.StateLoader;
+import org.tbax.baxshops.notification.Notification;
+import org.tbax.baxshops.serialization.PlayerMap;
 import org.tbax.baxshops.serialization.StoredPlayer;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Deque;
+import java.util.List;
+import java.util.UUID;
 
 @Deprecated
 public abstract class LoaderWithNotes implements StateLoader
 {
-    public void loadConfig(@NotNull BaxConfig config)
-    {
-    }
-
     public abstract  @NotNull Collection<NoteSet> buildNotifications(@NotNull FileConfiguration state);
+    private PlayerMap playerMap = new PlayerMap();
 
     @Override
-    public State loadState(@NotNull File stateLocation) throws IOException, InvalidConfigurationException
+    public State loadState(@NotNull File stateLocation)
     {
         FileConfiguration stateConfig = readFile(stateLocation);
         State savedState = new State(getPlugin());
@@ -58,26 +55,43 @@ public abstract class LoaderWithNotes implements StateLoader
         ShopPlugin.logInfo("Loading shop data...");
         Collection<BaxShop> shops = buildShops(stateConfig);
         sanitizeShopData(shops);
-        ShopPlugin.logInfo("Loading notifications...");
-        Collection<NoteSet> notes = buildNotifications(stateConfig);
+        savedState.setShops(shops);
+
         ShopPlugin.logInfo("Loading player data...");
         Collection<StoredPlayer> players = buildPlayers(stateConfig);
+        sanitizePlayerData(players);
+        savedState.setPlayers(players);
+
+        ShopPlugin.logInfo("Loading notifications...");
+        Collection<NoteSet> notes = buildNotifications(stateConfig);
 
         for (NoteSet noteSet : notes) {
             Deque<Notification> deque = noteSet.getNotifications();
-            StoredPlayer player = savedState.getOfflinePlayer(noteSet.getRecipient());
+            StoredPlayer player = getPlayer(savedState, noteSet.getRecipient());
             for (Notification note : deque) {
                 player.queueNote(note);
             }
         }
-        
-        sanitizePlayerData(players);
 
-        savedState.setPlayers(players);
-        savedState.setShops(shops);
-
-        loadConfig(ShopPlugin.getStateFile().getConfig());
         return savedState;
+    }
+
+    @Override
+    public StoredPlayer getPlayer(State savedState, UUID playerId)
+    {
+        return playerMap.get(playerId);
+    }
+
+    @Override
+    public List<StoredPlayer> getPlayer(State savedState, String playerName)
+    {
+        return playerMap.get(playerName);
+    }
+
+    @Override
+    public StoredPlayer getPlayerSafe(State savedState, String playerName)
+    {
+        return playerMap.getOrCreate(playerName).get(0);
     }
 
     @Override
