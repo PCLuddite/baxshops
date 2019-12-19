@@ -383,6 +383,25 @@ public final class ShopCmdActor implements CommandSender
         return entry;
     }
 
+    public String getArgEnum(int index, String... args) throws PrematureAbortException
+    {
+        return getArgEnum(index, Arrays.asList(args));
+    }
+
+    public String getArgEnum(int index, List<String> args) throws PrematureAbortException
+    {
+        String arg = getArg(index);
+        for (String a : args) {
+            if (a.equalsIgnoreCase(arg)) {
+                return a;
+            }
+        }
+        throw new CommandErrorException("'" + arg + "' must be either " +
+                String.join(", ", args.subList(0, args.size() - 2)) + " or " +
+                args.get(args.size() - 1)
+        );
+    }
+
     public int getArgEntryIndex(int index) throws PrematureAbortException
     {
         return getArgEntryIndex(index, Resources.NOT_FOUND_SHOPITEM);

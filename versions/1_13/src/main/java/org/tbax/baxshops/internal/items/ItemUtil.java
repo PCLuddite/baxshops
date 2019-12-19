@@ -20,8 +20,10 @@ package org.tbax.baxshops.internal.items;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
+import org.bukkit.block.data.type.Sign;
 import org.bukkit.block.data.type.WallSign;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -486,6 +488,21 @@ public final class ItemUtil
             }
         }
         return signs;
+    }
+
+    public static boolean isWallSign(Block block)
+    {
+        return block.getBlockData() instanceof WallSign;
+    }
+
+    public static BlockFace getSignFacing(Block block)
+    {
+        return ((Sign)block.getBlockData()).getRotation();
+    }
+
+    public static void setSignFacing(Block block, BlockFace face)
+    {
+        ((Sign)block.getBlockData()).setRotation(face);
     }
 
     public static String getPotionInfo(ItemStack item)

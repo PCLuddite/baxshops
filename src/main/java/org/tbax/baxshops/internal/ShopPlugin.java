@@ -98,6 +98,7 @@ public final class ShopPlugin extends JavaPlugin
             commands.add(CmdSerial.class);
             commands.add(CmdSet.class);
             commands.add(CmdSetAmnt.class);
+            commands.add(CmdSetAngle.class);
             commands.add(CmdSetDur.class);
             commands.add(CmdSetFoodLevel.class);
             commands.add(CmdSetIndex.class);

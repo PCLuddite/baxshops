@@ -23,6 +23,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Inventory;
@@ -452,6 +454,31 @@ public final class ItemUtil
             }
         }
         return signs;
+    }
+
+    public static boolean isWallSign(Block block)
+    {
+        BlockState blockState = block.getState();
+        if (blockState.getData() instanceof org.bukkit.material.Sign) {
+            org.bukkit.material.Sign sign = (org.bukkit.material.Sign)blockState.getData();
+            return sign.isWallSign();
+        }
+        return false;
+    }
+
+    public static BlockFace getSignFacing(Block block)
+    {
+        org.bukkit.material.Sign sign = (org.bukkit.material.Sign)block.getState().getData();
+        return sign.getFacing();
+    }
+
+    public static void setSignFacing(Block block, BlockFace face)
+    {
+        BlockState blockState = block.getState();
+        org.bukkit.material.Sign sign = (org.bukkit.material.Sign)blockState.getData();
+        sign.setFacingDirection(face);
+        blockState.setData(sign);
+        blockState.update();
     }
 
     public static String getPotionInfo(ItemStack item)
