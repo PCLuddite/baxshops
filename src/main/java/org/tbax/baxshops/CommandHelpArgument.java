@@ -42,7 +42,7 @@ public final class CommandHelpArgument
         argument = arg;
         description = desc;
         required = false;
-        defaultValue = defaultVal + "";
+        defaultValue = String.valueOf(defaultVal);
     }
 
     public boolean isRequired()
@@ -63,6 +63,11 @@ public final class CommandHelpArgument
     public String getDefaultValue()
     {
         return defaultValue;
+    }
+
+    public void setDefaultValue(Object value)
+    {
+        defaultValue = String.valueOf(value);
     }
 
     public String getUsageString()

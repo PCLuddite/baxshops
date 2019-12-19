@@ -18,6 +18,7 @@
  */
 package org.tbax.baxshops.internal.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
@@ -26,6 +27,9 @@ import org.tbax.baxshops.commands.BaxShopCommand;
 import org.tbax.baxshops.commands.ShopCmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public final class CmdSetFoodLevel extends BaxShopCommand
 {
@@ -54,15 +58,18 @@ public final class CmdSetFoodLevel extends BaxShopCommand
         help.setLongDescription("Sets the hunger level of a player");
         help.setArgs(
                 new CommandHelpArgument("level", "The hunger level out of 20", true),
-                new CommandHelpArgument("player", "the players whose hunger to change", actor.getName())
+                new CommandHelpArgument("player", "the players whose hunger to change", (actor.getSender() == Bukkit.getConsoleSender()))
         );
+        if (!help.getArgs()[1].isRequired()) {
+            help.getArgs()[1].setDefaultValue(actor.getSender().getName());
+        }
         return help;
     }
 
     @Override
     public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
     {
-        return actor.getNumArgs() == 2;
+        return actor.getNumArgs() == 3 || (actor.getNumArgs() == 2 && actor.getSender() != Bukkit.getConsoleSender());
     }
 
     @Override
