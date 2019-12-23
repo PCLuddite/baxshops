@@ -396,10 +396,7 @@ public final class ShopCmdActor implements CommandSender
                 return a;
             }
         }
-        throw new CommandErrorException("'" + arg + "' must be either " +
-                String.join(", ", args.subList(0, args.size() - 2)) + " or " +
-                args.get(args.size() - 1)
-        );
+        throw new CommandErrorException("'" + arg + "' must be either " + Format.listOr(args));
     }
 
     public int getArgEntryIndex(int index) throws PrematureAbortException

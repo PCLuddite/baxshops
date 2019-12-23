@@ -199,6 +199,16 @@ public final class Format
         return format + ChatColor.RESET;
     }
 
+    public static @NotNull String listOr(List<? extends CharSequence> elements)
+    {
+        return String.join(", ", elements.subList(0, elements.size() - 2)) + " or " + elements.get(elements.size() - 1);
+    }
+
+    public static @NotNull String listAnd(List<? extends CharSequence> elements)
+    {
+        return String.join(", ", elements.subList(0, elements.size() - 2)) + " and " + elements.get(elements.size() - 1);
+    }
+
     private static final String[] NUMERALS = { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
     private static final int[] NUMBERS = { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 };
     
