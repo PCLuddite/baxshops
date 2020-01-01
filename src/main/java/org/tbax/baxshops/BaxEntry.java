@@ -36,7 +36,7 @@ import java.util.Map;
 import java.util.Objects;
 
 @SuppressWarnings("unused")
-public final class BaxEntry implements UpgradeableSerializable
+public class BaxEntry implements UpgradeableSerializable
 {
     private static final int CAN_BUY = 1;
     private static final int CAN_SELL = 2;

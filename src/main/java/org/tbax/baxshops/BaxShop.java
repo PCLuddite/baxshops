@@ -43,7 +43,7 @@ import org.tbax.baxshops.internal.serialization.states.StateLoader_00420;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public final class BaxShop implements UpgradeableSerializable, Collection<BaxEntry>
+public class BaxShop implements UpgradeableSerializable, Collection<BaxEntry>
 {
     public static final UUID DUMMY_UUID = UUID.fromString("8f289a15-cf9f-4266-b368-429cb31780ae");
     public static final BaxShop DUMMY_SHOP = new BaxShop(DUMMY_UUID);
