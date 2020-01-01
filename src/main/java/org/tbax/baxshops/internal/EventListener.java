@@ -249,7 +249,7 @@ public class EventListener implements Listener
         if (s.getShop() != null) {
             Location shopLoc = s.getLocation();
             Location pLoc = event.getTo();
-            if (shopLoc.getWorld() != pl.getWorld() || shopLoc.distanceSquared(pLoc) > Resources.SHOP_RANGE) {
+            if (shopLoc != null && shopLoc.getWorld() != pl.getWorld() || shopLoc.distanceSquared(pLoc) > Resources.SHOP_RANGE) {
                 if (ShopPlugin.getStateFile().getConfig().isLogNotes()) {
                     ShopPlugin.logInfo(String.format("%s left shop %s", pl.getName(), s.getShop().getId().toString()));
                 }
