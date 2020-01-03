@@ -462,7 +462,7 @@ public class BaxEntry implements UpgradeableSerializable
         if (canSell()) {
             component.append(" ");
             ChatComponent sellComponent = new ChatComponent(Format.refundPrice(refundPrice))
-                    .clickEvent(ClickEvent.suggestCommand("/sell " + index + " "))
+                    .clickEvent(ClickEvent.suggestCommand("/sell "))
                     .hoverEvent(HoverEvent.showText("Sell for " + Format.money(refundPrice)));
             if (strikethrough) {
                 sellComponent.setText(Format.stripColor(sellComponent.getText()));
