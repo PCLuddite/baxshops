@@ -21,15 +21,14 @@ package org.tbax.baxshops.internal.commands;
 
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
-import org.tbax.baxshops.commands.BaxShopCommand;
-import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.Resources;
 import org.tbax.baxshops.internal.ShopPlugin;
 import org.tbax.baxshops.serialization.StoredPlayer;
 
-public final class CmdSkip extends BaxShopCommand
+public final class CmdSkip extends ShopCommand
 {
     @Override
     public @NotNull String getName()
@@ -50,7 +49,7 @@ public final class CmdSkip extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public CommandHelp getHelp(@NotNull CmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "skip latest notification");
         help.setLongDescription("Skip your most recent notification and add it to the back of your queue");
@@ -58,7 +57,7 @@ public final class CmdSkip extends BaxShopCommand
     }
 
     @Override
-    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
+    public boolean hasValidArgCount(@NotNull CmdActor actor)
     {
         return false;
     }
@@ -76,7 +75,7 @@ public final class CmdSkip extends BaxShopCommand
     }
 
     @Override
-    public boolean requiresPlayer(@NotNull ShopCmdActor actor)
+    public boolean requiresPlayer(@NotNull CmdActor actor)
     {
         return true;
     }
@@ -88,7 +87,7 @@ public final class CmdSkip extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         StoredPlayer player = actor.getStoredPlayer();
         if (!player.hasNotes()) {

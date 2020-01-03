@@ -19,10 +19,10 @@
  */
 package org.tbax.baxshops.notification;
 
-import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.commands.CmdActor;
 
 public interface Request extends Notification
 {
-    boolean accept(ShopCmdActor acceptingActor);
-    boolean reject(ShopCmdActor rejectingActor);
+    boolean accept(CmdActor acceptingActor);
+    boolean reject(CmdActor rejectingActor);
 }

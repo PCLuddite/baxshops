@@ -24,13 +24,12 @@ import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.PlayerUtil;
-import org.tbax.baxshops.commands.BaxShopCommand;
-import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.items.ItemUtil;
 
-public final class CmdCopy extends BaxShopCommand
+public final class CmdCopy extends ShopCommand
 {
     @Override
     public @NotNull String getName()
@@ -45,7 +44,7 @@ public final class CmdCopy extends BaxShopCommand
     }
 
     @Override
-    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull CmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "copy a shop to your inventory");
         help.setLongDescription("Copies a selected shop using a sign from the player's inventory.");
@@ -53,7 +52,7 @@ public final class CmdCopy extends BaxShopCommand
     }
 
     @Override
-    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
+    public boolean hasValidArgCount(@NotNull CmdActor actor)
     {
         return actor.getNumArgs() == 1;
     }
@@ -71,7 +70,7 @@ public final class CmdCopy extends BaxShopCommand
     }
 
     @Override
-    public boolean requiresPlayer(@NotNull ShopCmdActor actor)
+    public boolean requiresPlayer(@NotNull CmdActor actor)
     {
         return true;
     }
@@ -83,7 +82,7 @@ public final class CmdCopy extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException // tested OK 3-14-19
+    public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException // tested OK 3-14-19
     {
         Material signType;
         if (actor.isAdmin()) {

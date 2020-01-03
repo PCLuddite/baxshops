@@ -25,8 +25,7 @@ import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.CommandHelpArgument;
 import org.tbax.baxshops.Format;
-import org.tbax.baxshops.commands.BaxShopCommand;
-import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.Resources;
@@ -36,7 +35,7 @@ import org.tbax.baxshops.serialization.StoredPlayer;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public final class CmdSetOwner extends BaxShopCommand
+public final class CmdSetOwner extends ShopCommand
 {
     @Override
     public @NotNull String getName()
@@ -57,7 +56,7 @@ public final class CmdSetOwner extends BaxShopCommand
     }
 
     @Override
-    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull CmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "set the owner of a shop");
         help.setLongDescription("Transfers ownership of a shop to another player. When changing the owner from yourself," +
@@ -69,7 +68,7 @@ public final class CmdSetOwner extends BaxShopCommand
     }
 
     @Override
-    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
+    public boolean hasValidArgCount(@NotNull CmdActor actor)
     {
         return actor.getNumArgs() == 3;
     }
@@ -87,7 +86,7 @@ public final class CmdSetOwner extends BaxShopCommand
     }
 
     @Override
-    public boolean requiresPlayer(@NotNull ShopCmdActor actor)
+    public boolean requiresPlayer(@NotNull CmdActor actor)
     {
         return false;
     }
@@ -99,7 +98,7 @@ public final class CmdSetOwner extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         BaxShop shop = actor.getShop();
         StoredPlayer newOwner = actor.getArgPlayer(2);

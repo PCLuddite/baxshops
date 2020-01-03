@@ -21,14 +21,13 @@ package org.tbax.baxshops.internal.commands;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
-import org.tbax.baxshops.commands.BaxShopCommand;
-import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.ShopPlugin;
 
 import java.io.IOException;
 
-public final class CmdReload extends BaxShopCommand
+public final class CmdReload extends ShopCommand
 {
     @Override
     public @NotNull String getName()
@@ -43,7 +42,7 @@ public final class CmdReload extends BaxShopCommand
     }
 
     @Override
-    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull CmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "reload save file");
         help.setLongDescription("Save the state and reloads shops.yml");
@@ -51,7 +50,7 @@ public final class CmdReload extends BaxShopCommand
     }
 
     @Override
-    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
+    public boolean hasValidArgCount(@NotNull CmdActor actor)
     {
         return actor.getNumArgs() == 1;
     }
@@ -69,7 +68,7 @@ public final class CmdReload extends BaxShopCommand
     }
 
     @Override
-    public boolean requiresPlayer(@NotNull ShopCmdActor actor)
+    public boolean requiresPlayer(@NotNull CmdActor actor)
     {
         return false;
     }
@@ -81,7 +80,7 @@ public final class CmdReload extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor)
+    public void onShopCommand(@NotNull ShopCmdActor actor)
     {
         actor.sendMessage("Initiating reload. See log for details.");
         try {

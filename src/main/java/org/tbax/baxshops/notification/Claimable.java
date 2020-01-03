@@ -21,14 +21,14 @@ package org.tbax.baxshops.notification;
 
 import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.internal.Resources;
-import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 
 public interface Claimable extends Notification
 {
     BaxEntry getEntry();
 
-    default boolean claim(ShopCmdActor actor)
+    default boolean claim(CmdActor actor)
     {
         BaxEntry entry = getEntry();
         try {

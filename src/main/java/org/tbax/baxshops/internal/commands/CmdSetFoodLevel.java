@@ -23,12 +23,11 @@ import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.CommandHelpArgument;
-import org.tbax.baxshops.commands.BaxShopCommand;
-import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
 
-public final class CmdSetFoodLevel extends BaxShopCommand
+public final class CmdSetFoodLevel extends ShopCommand
 {
     @Override
     public @NotNull String getName()
@@ -49,7 +48,7 @@ public final class CmdSetFoodLevel extends BaxShopCommand
     }
 
     @Override
-    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull CmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "set hunger level");
         help.setLongDescription("Sets the hunger level of a player");
@@ -64,7 +63,7 @@ public final class CmdSetFoodLevel extends BaxShopCommand
     }
 
     @Override
-    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
+    public boolean hasValidArgCount(@NotNull CmdActor actor)
     {
         return actor.getNumArgs() == 3 || (actor.getNumArgs() == 2 && actor.getSender() != Bukkit.getConsoleSender());
     }
@@ -82,7 +81,7 @@ public final class CmdSetFoodLevel extends BaxShopCommand
     }
 
     @Override
-    public boolean requiresPlayer(@NotNull ShopCmdActor actor)
+    public boolean requiresPlayer(@NotNull CmdActor actor)
     {
         return true;
     }
@@ -94,7 +93,7 @@ public final class CmdSetFoodLevel extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         int level = actor.getArgInt(1);
         OfflinePlayer player;

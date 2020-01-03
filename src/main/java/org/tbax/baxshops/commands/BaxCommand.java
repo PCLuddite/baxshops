@@ -24,60 +24,45 @@ import org.bukkit.command.TabCompleter;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.errors.PrematureAbortException;
-import org.tbax.baxshops.internal.Permissions;
 
 import java.util.Collections;
 import java.util.List;
 
-public abstract class BaxShopCommand implements TabCompleter
+public abstract class BaxCommand implements TabCompleter
 {
     public abstract @NotNull String getName();
 
     public abstract String getPermission();
 
-    public abstract @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor);
+    public abstract @NotNull CommandHelp getHelp(@NotNull CmdActor actor);
 
-    public abstract boolean hasValidArgCount(@NotNull ShopCmdActor actor);
+    public abstract boolean hasValidArgCount(@NotNull CmdActor actor);
 
-    public abstract boolean requiresSelection(@NotNull ShopCmdActor actor);
+    public abstract boolean requiresPlayer(@NotNull CmdActor actor);
 
-    public abstract boolean requiresOwner(@NotNull ShopCmdActor actor);
-
-    public abstract boolean requiresPlayer(@NotNull ShopCmdActor actor);
-
-    public abstract boolean requiresItemInHand(@NotNull ShopCmdActor actor);
-
-    public abstract void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException;
+    public abstract void onCommand(@NotNull CmdActor actor) throws PrematureAbortException;
 
     public @NotNull String[] getAliases()
     {
         return new String[0];
     }
 
-    public boolean hasPermission(@NotNull ShopCmdActor actor)
+    public boolean hasPermission(@NotNull CmdActor actor)
     {
         return actor.hasPermission(getPermission());
     }
 
-    public boolean useAlternative(ShopCmdActor actor)
+    public boolean useAlternative(CmdActor actor)
     {
         return false;
     }
 
-    public boolean allowsExclusion(ShopCmdActor actor)
-    {
-        return false;
-    }
-
-    public @NotNull Class<? extends BaxShopCommand> getAlternative()
+    public @NotNull Class<? extends BaxCommand> getAlternative()
     {
         return this.getClass();
     }
 
-    public final boolean requiresAdmin()
-    {
-        return Permissions.SHOP_ADMIN.equalsIgnoreCase(getPermission());
-    }
+    public abstract boolean requiresAdmin();
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)

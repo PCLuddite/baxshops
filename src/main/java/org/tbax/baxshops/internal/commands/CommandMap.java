@@ -19,24 +19,22 @@
 package org.tbax.baxshops.internal.commands;
 
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.commands.BaxShopCommand;
-import org.tbax.baxshops.commands.ShopCmdActor;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public final class CommandMap implements Map<String, BaxShopCommand>
+public final class CommandMap implements Map<String, ShopCommand>
 {
-    private final Map<String, BaxShopCommand> cmds = new HashMap<>();
+    private final Map<String, ShopCommand> cmds = new HashMap<>();
     private final Set<String> names = new HashSet<>();
 
     public CommandMap()
     {
     }
 
-    public CommandMap(@NotNull Collection<Class<? extends BaxShopCommand>> cmdClasses) throws InstantiationException, IllegalAccessException
+    public CommandMap(@NotNull Collection<Class<? extends ShopCommand>> cmdClasses) throws InstantiationException, IllegalAccessException
     {
-        for (Class<? extends BaxShopCommand> command : cmdClasses) {
+        for (Class<? extends ShopCommand> command : cmdClasses) {
             add(command);
         }
     }
@@ -66,26 +64,26 @@ public final class CommandMap implements Map<String, BaxShopCommand>
     }
 
     @Override
-    public BaxShopCommand get(Object key)
+    public ShopCommand get(Object key)
     {
         return cmds.get(key);
     }
 
     @Override
-    public BaxShopCommand put(String key, BaxShopCommand value)
+    public ShopCommand put(String key, ShopCommand value)
     {
         names.add(value.getName());
         return cmds.put(key, value);
     }
 
     @Override
-    public BaxShopCommand remove(Object key)
+    public ShopCommand remove(Object key)
     {
         return cmds.remove(key);
     }
 
     @Override
-    public void putAll(@NotNull Map<? extends String, ? extends BaxShopCommand> m)
+    public void putAll(@NotNull Map<? extends String, ? extends ShopCommand> m)
     {
         cmds.putAll(m);
     }
@@ -104,13 +102,13 @@ public final class CommandMap implements Map<String, BaxShopCommand>
     }
 
     @Override
-    public Collection<BaxShopCommand> values()
+    public Collection<ShopCommand> values()
     {
         return cmds.values();
     }
 
     @Override
-    public Set<Entry<String, BaxShopCommand>> entrySet()
+    public Set<Entry<String, ShopCommand>> entrySet()
     {
         return cmds.entrySet();
     }
@@ -135,9 +133,9 @@ public final class CommandMap implements Map<String, BaxShopCommand>
             .collect(Collectors.toMap(Entry::getKey, Entry::getValue, (a, b) -> b, CommandMap::new));
     }
 
-    public void add(@NotNull Class<? extends BaxShopCommand> cmdClass) throws InstantiationException, IllegalAccessException
+    public void add(@NotNull Class<? extends ShopCommand> cmdClass) throws InstantiationException, IllegalAccessException
     {
-        BaxShopCommand cmd = cmdClass.newInstance();
+        ShopCommand cmd = cmdClass.newInstance();
         put(cmd.getName(), cmd);
         for (String alias : cmd.getAliases()) {
             put(alias, cmd);

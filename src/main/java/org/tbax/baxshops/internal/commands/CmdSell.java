@@ -23,8 +23,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.*;
-import org.tbax.baxshops.commands.BaxShopCommand;
-import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.commands.BaxCommand;
+import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.Resources;
@@ -36,7 +36,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public final class CmdSell extends BaxShopCommand
+public final class CmdSell extends ShopCommand
 {
     @Override
     public @NotNull String getName()
@@ -57,7 +57,7 @@ public final class CmdSell extends BaxShopCommand
     }
 
     @Override
-    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull CmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "sell an item");
         help.setLongDescription("Sell an item to a shop or send a request if sell requests for the shop are active");
@@ -68,7 +68,7 @@ public final class CmdSell extends BaxShopCommand
     }
 
     @Override
-    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
+    public boolean hasValidArgCount(@NotNull CmdActor actor)
     {
         return actor.getNumArgs() == 2 || actor.getNumArgs() == 1;
     }
@@ -86,7 +86,7 @@ public final class CmdSell extends BaxShopCommand
     }
 
     @Override
-    public boolean requiresPlayer(@NotNull ShopCmdActor actor)
+    public boolean requiresPlayer(@NotNull CmdActor actor)
     {
         return true;
     }
@@ -98,13 +98,13 @@ public final class CmdSell extends BaxShopCommand
     }
 
     @Override
-    public boolean useAlternative(ShopCmdActor actor)
+    public boolean useAlternative(CmdActor actor)
     {
-        return actor.isOwner();
+        return ((ShopCmdActor)actor).isOwner();
     }
 
     @Override
-    public @NotNull Class<? extends BaxShopCommand> getAlternative()
+    public @NotNull Class<? extends BaxCommand> getAlternative()
     {
         return CmdRestock.class;
     }
@@ -116,7 +116,7 @@ public final class CmdSell extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         if (actor.getNumArgs() == 1) {
             assert actor.getItemInHand() != null;
@@ -161,7 +161,6 @@ public final class CmdSell extends BaxShopCommand
     private static double sell(ShopCmdActor actor, BaxEntry entry) throws PrematureAbortException
     {
         BaxShop shop = actor.getShop();
-        assert shop != null;
 
         String name = ItemUtil.getName(entry.getItemStack());
         double price = MathUtil.multiply(entry.getAmount(), entry.getRefundPrice());
@@ -189,7 +188,7 @@ public final class CmdSell extends BaxShopCommand
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
     {
-        ShopCmdActor actor = (ShopCmdActor)sender;
+        CmdActor actor = (CmdActor)sender;
         if (actor.getNumArgs() == 2) {
             return Arrays.asList("all", "any", "most", "stack");
         }

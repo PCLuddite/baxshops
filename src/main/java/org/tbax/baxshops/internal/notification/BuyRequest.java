@@ -23,7 +23,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.*;
-import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Resources;
 import org.tbax.baxshops.internal.ShopPlugin;
@@ -52,7 +52,7 @@ public final class BuyRequest extends StandardNote implements Request
     }
 
     @Override
-    public boolean accept(ShopCmdActor acceptingActor)
+    public boolean accept(CmdActor acceptingActor)
     {
         try {
             double price = MathUtil.multiply(entry.getAmount(), entry.getRetailPrice());
@@ -80,7 +80,7 @@ public final class BuyRequest extends StandardNote implements Request
     }
 
     @Override
-    public boolean reject(ShopCmdActor rejectingActor)
+    public boolean reject(CmdActor rejectingActor)
     {
         BaxShop shop = ShopPlugin.getShop(shopId);
         if (shop == null) {

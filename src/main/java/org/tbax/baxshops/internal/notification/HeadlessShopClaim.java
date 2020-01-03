@@ -28,7 +28,7 @@ import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.PlayerUtil;
 import org.tbax.baxshops.internal.Resources;
-import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.items.ItemUtil;
 import org.tbax.baxshops.notification.Claimable;
@@ -68,7 +68,7 @@ public class HeadlessShopClaim implements Claimable, UpgradeableSerializable
     }
 
     @Override
-    public boolean claim(ShopCmdActor actor)
+    public boolean claim(CmdActor actor)
     {
         ItemStack stack;
         try {

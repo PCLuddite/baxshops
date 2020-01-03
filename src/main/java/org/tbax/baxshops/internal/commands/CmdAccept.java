@@ -21,8 +21,7 @@ package org.tbax.baxshops.internal.commands;
 
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
-import org.tbax.baxshops.commands.BaxShopCommand;
-import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.Resources;
@@ -32,7 +31,7 @@ import org.tbax.baxshops.notification.Notification;
 import org.tbax.baxshops.notification.Request;
 import org.tbax.baxshops.serialization.StoredPlayer;
 
-public final class CmdAccept extends BaxShopCommand
+public final class CmdAccept extends ShopCommand
 {
     @Override
     public @NotNull String getName()
@@ -53,7 +52,7 @@ public final class CmdAccept extends BaxShopCommand
     }
 
     @Override
-    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull CmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "accept your most recent notification");
         help.setLongDescription("Accept your most recent notification and remove it from the notification queue");
@@ -61,9 +60,15 @@ public final class CmdAccept extends BaxShopCommand
     }
 
     @Override
-    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
+    public boolean hasValidArgCount(@NotNull CmdActor actor)
     {
         return actor.getNumArgs() == 1;
+    }
+
+    @Override
+    public boolean requiresPlayer(@NotNull CmdActor actor)
+    {
+        return true;
     }
 
     @Override
@@ -79,19 +84,13 @@ public final class CmdAccept extends BaxShopCommand
     }
 
     @Override
-    public boolean requiresPlayer(@NotNull ShopCmdActor actor)
-    {
-        return true;
-    }
-
-    @Override
     public boolean requiresItemInHand(@NotNull ShopCmdActor actor)
     {
         return false;
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         StoredPlayer player = actor.getStoredPlayer();
         if (!player.hasNotes()) {

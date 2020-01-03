@@ -25,8 +25,7 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.CommandHelpArgument;
-import org.tbax.baxshops.commands.BaxShopCommand;
-import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.items.ItemUtil;
@@ -34,7 +33,7 @@ import org.tbax.baxshops.internal.items.ItemUtil;
 import java.util.Arrays;
 import java.util.List;
 
-public final class CmdSetAngle extends BaxShopCommand
+public final class CmdSetAngle extends ShopCommand
 {
     @Override
     public @NotNull String getName()
@@ -55,7 +54,7 @@ public final class CmdSetAngle extends BaxShopCommand
     }
 
     @Override
-    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull CmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "rotate the shop sign");
         help.setLongDescription("Rotate a shop to face a given direction");
@@ -66,7 +65,7 @@ public final class CmdSetAngle extends BaxShopCommand
     }
 
     @Override
-    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
+    public boolean hasValidArgCount(@NotNull CmdActor actor)
     {
         return actor.getNumArgs() == 2;
     }
@@ -84,7 +83,7 @@ public final class CmdSetAngle extends BaxShopCommand
     }
 
     @Override
-    public boolean requiresPlayer(@NotNull ShopCmdActor actor)
+    public boolean requiresPlayer(@NotNull CmdActor actor)
     {
         return false;
     }
@@ -96,7 +95,7 @@ public final class CmdSetAngle extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         String direction = actor.getArgEnum(1,
                 "NORTH", "NORTHEAST", "EAST", "SOUTHEAST", "SOUTH", "SOUTHWEST", "WEST", "NORTHWEST"

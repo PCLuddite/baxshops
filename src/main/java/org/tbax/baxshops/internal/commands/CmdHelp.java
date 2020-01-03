@@ -24,8 +24,8 @@ import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.CommandHelpArgument;
 import org.tbax.baxshops.Format;
-import org.tbax.baxshops.commands.BaxShopCommand;
-import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.commands.BaxCommand;
+import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.Resources;
@@ -37,7 +37,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public final class CmdHelp extends BaxShopCommand
+public final class CmdHelp extends ShopCommand
 {
     @Override
     public @NotNull String getName()
@@ -58,7 +58,7 @@ public final class CmdHelp extends BaxShopCommand
     }
 
     @Override
-    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull CmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "show a list of commands");
         help.setArgs(
@@ -68,7 +68,7 @@ public final class CmdHelp extends BaxShopCommand
     }
 
     @Override
-    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
+    public boolean hasValidArgCount(@NotNull CmdActor actor)
     {
         return actor.getNumArgs() == 1 || actor.getNumArgs() == 2;
     }
@@ -86,7 +86,7 @@ public final class CmdHelp extends BaxShopCommand
     }
 
     @Override
-    public boolean requiresPlayer(@NotNull ShopCmdActor actor)
+    public boolean requiresPlayer(@NotNull CmdActor actor)
     {
         return false;
     }
@@ -98,7 +98,7 @@ public final class CmdHelp extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         if (actor.getNumArgs() == 1) {
             actor.appendArg(1); // show page 1 by default
@@ -109,7 +109,7 @@ public final class CmdHelp extends BaxShopCommand
             showHelpList(actor, actor.getArgInt(1) - 1);
         }
         else {
-            BaxShopCommand cmd = ShopPlugin.getCommands().get(actor.getArg(1));
+            BaxCommand cmd = ShopPlugin.getCommands().get(actor.getArg(1));
             if (cmd == null) {
                 actor.exitError(Resources.INVALID_SHOP_ACTION, actor.getArg(1));
             }
@@ -124,12 +124,12 @@ public final class CmdHelp extends BaxShopCommand
         }
     }
 
-    private void showHelpList(@NotNull ShopCmdActor actor, int page)
+    private void showHelpList(@NotNull CmdActor actor, int page)
     {
-        List<BaxShopCommand> commands = ShopPlugin.getCommands().values().stream()
+        List<BaxCommand> commands = ShopPlugin.getCommands().values().stream()
                 .filter(cmd -> cmd.hasPermission(actor))
                 .distinct()
-                .sorted(Comparator.comparing(BaxShopCommand::getName))
+                .sorted(Comparator.comparing(BaxCommand::getName))
                 .collect(Collectors.toList());
         int pages = (int)Math.ceil((double)commands.size() / ShopSelection.ITEMS_PER_PAGE);
         Format.header(page + 1, pages, "/shop help").sendTo(actor.getSender());

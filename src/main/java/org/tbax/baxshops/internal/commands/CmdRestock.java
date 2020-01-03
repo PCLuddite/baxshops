@@ -25,8 +25,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.*;
-import org.tbax.baxshops.commands.BaxShopCommand;
-import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.Resources;
@@ -35,7 +34,7 @@ import org.tbax.baxshops.internal.items.ItemUtil;
 import java.util.Arrays;
 import java.util.List;
 
-public final class CmdRestock extends BaxShopCommand
+public final class CmdRestock extends ShopCommand
 {
     @Override
     public @NotNull String getName()
@@ -56,7 +55,7 @@ public final class CmdRestock extends BaxShopCommand
     }
 
     @Override
-    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull CmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "restock the shop");
         help.setLongDescription("Restock a shop with the item held in the main hand, or any item in the player's inventory");
@@ -67,7 +66,7 @@ public final class CmdRestock extends BaxShopCommand
     }
 
     @Override
-    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
+    public boolean hasValidArgCount(@NotNull CmdActor actor)
     {
         return actor.getNumArgs() == 2 || actor.getNumArgs() == 1;
     }
@@ -85,7 +84,7 @@ public final class CmdRestock extends BaxShopCommand
     }
 
     @Override
-    public boolean requiresPlayer(@NotNull ShopCmdActor actor)
+    public boolean requiresPlayer(@NotNull CmdActor actor)
     {
         return true;
     }
@@ -103,9 +102,8 @@ public final class CmdRestock extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException // tested OK 3/16/19
+    public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
-        assert actor.getShop() != null;
         if (actor.getShop().hasFlagInfinite()) {
             actor.exitError("This shop does not need to be restocked.");
         }
@@ -158,7 +156,7 @@ public final class CmdRestock extends BaxShopCommand
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
     {
-        ShopCmdActor actor = (ShopCmdActor)sender;
+        CmdActor actor = (CmdActor)sender;
         if (actor.getNumArgs() == 2) {
             return Arrays.asList("all", "any", "most", "stack");
         }

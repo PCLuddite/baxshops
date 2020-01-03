@@ -22,19 +22,18 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
+import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.CommandHelpArgument;
 import org.tbax.baxshops.Format;
-import org.tbax.baxshops.commands.BaxShopCommand;
-import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.commands.CmdActor;
+import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.ShopSelection;
-import org.tbax.baxshops.errors.PrematureAbortException;
-import org.tbax.baxshops.CommandHelp;
 
 import java.util.Arrays;
 import java.util.List;
 
-public final class CmdTeleport extends BaxShopCommand
+public final class CmdTeleport extends ShopCommand
 {
     @Override
     public @NotNull String getName()
@@ -55,7 +54,7 @@ public final class CmdTeleport extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public CommandHelp getHelp(@NotNull CmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "teleport to a shop location");
         help.setLongDescription("Teleport to a specific shop location. Use /shop list for a list of locations. This can only be done by an admin.");
@@ -66,7 +65,7 @@ public final class CmdTeleport extends BaxShopCommand
     }
 
     @Override
-    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
+    public boolean hasValidArgCount(@NotNull CmdActor actor)
     {
         return actor.getNumArgs() == 2;
     }
@@ -84,7 +83,7 @@ public final class CmdTeleport extends BaxShopCommand
     }
 
     @Override
-    public boolean requiresPlayer(@NotNull ShopCmdActor actor)
+    public boolean requiresPlayer(@NotNull CmdActor actor)
     {
         return true;
     }
@@ -96,7 +95,7 @@ public final class CmdTeleport extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         ShopSelection selection = actor.getSelection();
 

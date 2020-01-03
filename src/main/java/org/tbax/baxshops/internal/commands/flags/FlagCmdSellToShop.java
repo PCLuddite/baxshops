@@ -23,8 +23,9 @@ import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.CommandHelpArgument;
 import org.tbax.baxshops.Format;
-import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
+import org.tbax.baxshops.internal.commands.ShopCmdActor;
 
 public final class FlagCmdSellToShop extends FlagCmd
 {
@@ -35,7 +36,7 @@ public final class FlagCmdSellToShop extends FlagCmd
     }
 
     @Override
-    public boolean requiresRealOwner(@NotNull ShopCmdActor actor)
+    public boolean requiresRealOwner(@NotNull CmdActor actor)
     {
         return true;
     }
@@ -47,7 +48,7 @@ public final class FlagCmdSellToShop extends FlagCmd
     }
 
     @Override
-    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull CmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "sell items directly to your shop");
         help.setLongDescription("Sell items to your shop's inventory and not your own.");
@@ -58,7 +59,7 @@ public final class FlagCmdSellToShop extends FlagCmd
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         BaxShop shop = actor.getShop();
         boolean value = actor.getArgBoolean(2, "Usage:\n/shop flag sell_to_shop [true|false]");

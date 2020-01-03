@@ -25,14 +25,13 @@ import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.CommandHelpArgument;
 import org.tbax.baxshops.Format;
-import org.tbax.baxshops.commands.BaxShopCommand;
-import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.Resources;
 import org.tbax.baxshops.internal.items.ItemUtil;
 
-public final class CmdAdd extends BaxShopCommand
+public final class CmdAdd extends ShopCommand
 {
     @Override
     public @NotNull String getName()
@@ -53,7 +52,7 @@ public final class CmdAdd extends BaxShopCommand
     }
 
     @Override
-    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull CmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "add an item to a shop");
         help.setLongDescription("Adds the item in the main hand to the selected shop");
@@ -65,7 +64,7 @@ public final class CmdAdd extends BaxShopCommand
     }
 
     @Override
-    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
+    public boolean hasValidArgCount(@NotNull CmdActor actor)
     {
         return actor.getNumArgs() == 2 || actor.getNumArgs() == 3;
     }
@@ -83,7 +82,7 @@ public final class CmdAdd extends BaxShopCommand
     }
 
     @Override
-    public boolean requiresPlayer(@NotNull ShopCmdActor actor)
+    public boolean requiresPlayer(@NotNull CmdActor actor)
     {
         return true;
     }
@@ -95,7 +94,7 @@ public final class CmdAdd extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException // tested OK 3-13-19
+    public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException // tested OK 3-13-19
     {
         BaxEntry newEntry = new BaxEntry();
         double retailAmount = actor.getArgRoundedDouble(1, String.format(Resources.INVALID_DECIMAL, "buy price")),
@@ -110,8 +109,6 @@ public final class CmdAdd extends BaxShopCommand
         }
 
         ItemStack stack = actor.getItemInHand();
-        assert stack != null;
-        assert actor.getShop() != null;
         if (ItemUtil.isShop(stack)) {
             actor.exitError("You can't add a shop to a shop.");
         }

@@ -23,10 +23,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.*;
-import org.tbax.baxshops.commands.BaxShopCommand;
-import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
-import org.tbax.baxshops.BaxQuantity;
 import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.Resources;
 import org.tbax.baxshops.internal.items.ItemUtil;
@@ -34,7 +32,7 @@ import org.tbax.baxshops.internal.items.ItemUtil;
 import java.util.Arrays;
 import java.util.List;
 
-public final class CmdTake extends BaxShopCommand
+public final class CmdTake extends ShopCommand
 {
     @Override
     public @NotNull String getName()
@@ -55,7 +53,7 @@ public final class CmdTake extends BaxShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public CommandHelp getHelp(@NotNull CmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "take an item from the shop");
         help.setLongDescription("Take an item from a shop. /shop buy is a synonym for this if you are the shop owner.");
@@ -67,12 +65,12 @@ public final class CmdTake extends BaxShopCommand
     }
 
     @Override
-    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
+    public boolean hasValidArgCount(@NotNull CmdActor actor)
     {
         BaxShop shop;
         if (actor.getNumArgs() == 3 || actor.getNumArgs() == 2)
             return true;
-        shop = actor.getShop();
+        shop = ((ShopCmdActor)actor).getShop();
         return actor.getNumArgs() == 1 && shop != null && shop.size() == 1;
     }
 
@@ -89,7 +87,7 @@ public final class CmdTake extends BaxShopCommand
     }
 
     @Override
-    public boolean requiresPlayer(@NotNull ShopCmdActor actor)
+    public boolean requiresPlayer(@NotNull CmdActor actor)
     {
         return true;
     }
@@ -101,7 +99,7 @@ public final class CmdTake extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         BaxShop shop = actor.getShop();
         BaxEntry entry;

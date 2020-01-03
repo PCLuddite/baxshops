@@ -24,8 +24,9 @@ import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.Format;
-import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
+import org.tbax.baxshops.internal.commands.ShopCmdActor;
 
 import java.util.Collections;
 import java.util.List;
@@ -39,7 +40,7 @@ public final class FlagCmdList extends FlagCmd
     }
 
     @Override
-    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull CmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "list all flags");
         help.setLongDescription("List all flags currently applied to this shop");
@@ -47,19 +48,19 @@ public final class FlagCmdList extends FlagCmd
     }
 
     @Override
-    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
+    public boolean hasValidArgCount(@NotNull CmdActor actor)
     {
         return actor.getNumArgs() == 2;
     }
 
     @Override
-    public boolean requiresRealOwner(@NotNull ShopCmdActor actor)
+    public boolean requiresRealOwner(@NotNull CmdActor actor)
     {
         return false;
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         BaxShop shop = actor.getShop();
         if (!actor.isAdmin() && !shop.getOwner().equals(actor.getPlayer())) {

@@ -345,47 +345,7 @@ public class BaxEntry implements UpgradeableSerializable
 
     public String toString(int index, boolean infinite)
     {
-        StringBuilder name;
-        if(stack.getType() == Material.ENCHANTED_BOOK && EnchantMap.isEnchanted(stack)) {
-            name = new StringBuilder(Format.enchantments(ItemUtil.getName(this)));
-        }
-        else {
-            name = new StringBuilder(Format.listname(ItemUtil.getName(this)));
-            if (EnchantMap.isEnchanted(stack)) {
-                name.append(" ").append(Format.enchantments("(" + EnchantMap.abbreviatedListString(stack) + ")"));
-            }
-        }
-        
-        String potionInfo = ItemUtil.getPotionInfo(stack);
-        if (!potionInfo.equals("")) {
-            name.append(" ").append(potionInfo);
-        }
-        
-        if (stack.getType().getMaxDurability() > 0 && getDurability() > 0) {
-            if (infinite || getAmount() > 0) {
-                name.append(ChatColor.YELLOW);
-            }
-            name.append(" (Damage: ").append(getDamagePercent()).append("%)");
-        }
-
-        if (canBuy())
-            name.append(" ").append(Format.retailPrice(retailPrice));
-
-        if (canSell())
-            name.append(" ").append(Format.refundPrice(refundPrice));
-
-        if (!(canBuy() || canBuy()))
-            name.append(" ").append(ChatColor.DARK_RED).append("(Not for sale)");
-
-        if (infinite) {
-            return String.format("%s. %s", Format.bullet(index), Format.listname(name.toString()));
-        }
-        else if (getAmount() <= 0) {
-            return String.format("%s. (0) %s", ChatColor.RED.toString() + ChatColor.STRIKETHROUGH + index, Format.stripColor(name.toString()));
-        }
-        else {
-            return String.format("%d. " + ChatColor.GRAY + "(%d) %s", index, getAmount(), name.toString());
-        }
+        return toChatComponent(index, infinite).toPlainString();
     }
 
     public ChatComponent toChatComponent(int index, boolean infinite)

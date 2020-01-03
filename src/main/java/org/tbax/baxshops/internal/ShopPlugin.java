@@ -33,8 +33,7 @@ import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.Format;
-import org.tbax.baxshops.commands.BaxShopCommand;
-import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.commands.BaxCommand;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.commands.*;
 import org.tbax.baxshops.internal.items.ItemUtil;
@@ -118,7 +117,7 @@ public final class ShopPlugin extends JavaPlugin
         }
     }
 
-    public static Map<String, BaxShopCommand> getCommands()
+    public static Map<String, ShopCommand> getCommands()
     {
         return commands;
     }
@@ -298,24 +297,24 @@ public final class ShopPlugin extends JavaPlugin
             return false;
         }
 
-        BaxShopCommand cmd = commands.get(actor.getAction());
+        ShopCommand cmd = commands.get(actor.getAction());
         if (cmd == null) {
             actor.sendError(Resources.INVALID_SHOP_ACTION, actor.getAction());
             return true;
         }
         else if (cmd.useAlternative(actor)) {
             try {
-                cmd = cmd.getAlternative().newInstance();
+                cmd = (ShopCommand)cmd.getAlternative().newInstance();
                 actor.setAction(cmd.getName());
             }
-            catch (InstantiationException | IllegalAccessException e) {
+            catch (InstantiationException | IllegalAccessException | ClassCastException e) {
                 e.printStackTrace();
             }
         }
         return runCommand(cmd, actor);
     }
 
-    public static boolean runCommand(BaxShopCommand cmd, ShopCmdActor actor)
+    public static boolean runCommand(ShopCommand cmd, ShopCmdActor actor)
     {
         try {
             if (!cmd.hasValidArgCount(actor)) {
@@ -556,7 +555,7 @@ public final class ShopPlugin extends JavaPlugin
                 .collect(Collectors.toList());
         }
         else if (actor.getNumArgs() > 1) {
-            BaxShopCommand cmd = commands.get(actor.getArg(0));
+            BaxCommand cmd = commands.get(actor.getArg(0));
             if (cmd == null) return Collections.emptyList();
             String[] argWords = actor.getArg(actor.getNumArgs() - 1).toLowerCase().split("_");
             String lastWord = argWords[argWords.length - 1];

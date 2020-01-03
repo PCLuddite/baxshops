@@ -1,6 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
- * Portions derived from Shops Copyright (c) 2012 Nathan Dinsmore and Sam Lazarus.
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,7 +24,7 @@ import org.bukkit.entity.Player;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
-public final class ChatSerializer
+final class ChatSerializer
 {
     private static final String VERSION = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
 

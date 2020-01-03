@@ -23,12 +23,11 @@ import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.CommandHelpArgument;
-import org.tbax.baxshops.commands.BaxShopCommand;
-import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
 
-public final class CmdSerial extends BaxShopCommand
+public final class CmdSerial extends ShopCommand
 {
     @Override
     public @NotNull String getName()
@@ -43,7 +42,7 @@ public final class CmdSerial extends BaxShopCommand
     }
 
     @Override
-    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull CmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "show the shop entry as a YAML string");
         help.setLongDescription("Show what the shop entry would look like as a serialized YAML string");
@@ -54,7 +53,7 @@ public final class CmdSerial extends BaxShopCommand
     }
 
     @Override
-    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
+    public boolean hasValidArgCount(@NotNull CmdActor actor)
     {
         return actor.getNumArgs() == 2;
     }
@@ -72,7 +71,7 @@ public final class CmdSerial extends BaxShopCommand
     }
 
     @Override
-    public boolean requiresPlayer(@NotNull ShopCmdActor actor)
+    public boolean requiresPlayer(@NotNull CmdActor actor)
     {
         return false;
     }
@@ -84,7 +83,7 @@ public final class CmdSerial extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         BaxEntry entry = actor.getArgEntry(1);
         YamlConfiguration config = new YamlConfiguration();

@@ -25,8 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.CommandHelpArgument;
-import org.tbax.baxshops.commands.BaxShopCommand;
-import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.ShopPlugin;
@@ -37,7 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public final class CmdSelect extends BaxShopCommand
+public final class CmdSelect extends ShopCommand
 {
     @Override
     public @NotNull String getName()
@@ -52,7 +51,7 @@ public final class CmdSelect extends BaxShopCommand
     }
 
     @Override
-    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull CmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "change your current shop selection");
         help.setLongDescription("Select a shop based on its UUID. If the shop has multiple locations " +
@@ -65,7 +64,7 @@ public final class CmdSelect extends BaxShopCommand
     }
 
     @Override
-    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
+    public boolean hasValidArgCount(@NotNull CmdActor actor)
     {
         return actor.getNumArgs() == 2 || actor.getNumArgs() == 3;
     }
@@ -83,7 +82,7 @@ public final class CmdSelect extends BaxShopCommand
     }
 
     @Override
-    public boolean requiresPlayer(@NotNull ShopCmdActor actor)
+    public boolean requiresPlayer(@NotNull CmdActor actor)
     {
         return false;
     }
@@ -95,7 +94,7 @@ public final class CmdSelect extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         if (actor.getNumArgs() == 2)
             actor.appendArg("1");

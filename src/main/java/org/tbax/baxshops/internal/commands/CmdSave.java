@@ -21,12 +21,11 @@ package org.tbax.baxshops.internal.commands;
 
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
-import org.tbax.baxshops.commands.BaxShopCommand;
-import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.ShopPlugin;
 
-public final class CmdSave extends BaxShopCommand
+public final class CmdSave extends ShopCommand
 {
 
     @Override
@@ -42,7 +41,7 @@ public final class CmdSave extends BaxShopCommand
     }
 
     @Override
-    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull CmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "saves shops data");
         help.setLongDescription("Saves all shops data to shops.yml");
@@ -50,7 +49,7 @@ public final class CmdSave extends BaxShopCommand
     }
 
     @Override
-    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
+    public boolean hasValidArgCount(@NotNull CmdActor actor)
     {
         return actor.getNumArgs() == 1;
     }
@@ -62,7 +61,7 @@ public final class CmdSave extends BaxShopCommand
     }
 
     @Override
-    public boolean requiresPlayer(@NotNull ShopCmdActor actor)
+    public boolean requiresPlayer(@NotNull CmdActor actor)
     {
         return false;
     }
@@ -80,7 +79,7 @@ public final class CmdSave extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor)
+    public void onShopCommand(@NotNull ShopCmdActor actor)
     {
         ShopPlugin.getStateFile().writeToDisk(ShopPlugin.getState());
         actor.sendMessage("Shops successfully saved");

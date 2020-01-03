@@ -247,7 +247,7 @@ public final class ChatComponent
         this.hoverEvent = hoverEvent;
     }
 
-    private String toPlainString()
+    public String toPlainString()
     {
         StringBuilder sb = new StringBuilder(text.length());
         if (color != null) {

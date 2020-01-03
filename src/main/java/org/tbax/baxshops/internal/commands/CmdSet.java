@@ -23,8 +23,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.*;
-import org.tbax.baxshops.commands.BaxShopCommand;
-import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.Resources;
@@ -32,7 +31,7 @@ import org.tbax.baxshops.internal.items.ItemUtil;
 
 import java.util.List;
 
-public final class CmdSet extends BaxShopCommand
+public final class CmdSet extends ShopCommand
 {
     @Override
     public @NotNull String getName()
@@ -53,7 +52,7 @@ public final class CmdSet extends BaxShopCommand
     }
 
     @Override
-    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull CmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "set a price for an item");
         help.setLongDescription("Change the buy or sell price for a shop item already in a shop");
@@ -66,7 +65,7 @@ public final class CmdSet extends BaxShopCommand
     }
 
     @Override
-    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
+    public boolean hasValidArgCount(@NotNull CmdActor actor)
     {
         return actor.getNumArgs() == 3 || actor.getNumArgs() == 4;
     }
@@ -84,7 +83,7 @@ public final class CmdSet extends BaxShopCommand
     }
 
     @Override
-    public boolean requiresPlayer(@NotNull ShopCmdActor actor)
+    public boolean requiresPlayer(@NotNull CmdActor actor)
     {
         return false;
     }
@@ -96,7 +95,7 @@ public final class CmdSet extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         BaxShop shop = actor.getShop();
         assert shop != null;

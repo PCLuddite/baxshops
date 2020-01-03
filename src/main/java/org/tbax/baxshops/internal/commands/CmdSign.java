@@ -24,13 +24,12 @@ import org.bukkit.block.Sign;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.CommandHelpArgument;
-import org.tbax.baxshops.commands.BaxShopCommand;
-import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.items.ItemUtil;
 
-public final class CmdSign extends BaxShopCommand
+public final class CmdSign extends ShopCommand
 {
     @Override
     public @NotNull String getName()
@@ -45,7 +44,7 @@ public final class CmdSign extends BaxShopCommand
     }
 
     @Override
-    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull CmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "edit sign text");
         help.setLongDescription("Change the text on a shop sign");
@@ -56,7 +55,7 @@ public final class CmdSign extends BaxShopCommand
     }
 
     @Override
-    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
+    public boolean hasValidArgCount(@NotNull CmdActor actor)
     {
         return actor.getNumArgs() >= 2;
     }
@@ -74,7 +73,7 @@ public final class CmdSign extends BaxShopCommand
     }
 
     @Override
-    public boolean requiresPlayer(@NotNull ShopCmdActor actor)
+    public boolean requiresPlayer(@NotNull CmdActor actor)
     {
         return false;
     }
@@ -86,7 +85,7 @@ public final class CmdSign extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         assert actor.getShop() != null;
         Block b = actor.getSelection().getLocation().getBlock();

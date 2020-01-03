@@ -21,17 +21,18 @@ package org.tbax.baxshops.internal.commands.flags;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.commands.BaxShopCommand;
-import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.internal.Permissions;
+import org.tbax.baxshops.internal.commands.ShopCmdActor;
+import org.tbax.baxshops.internal.commands.ShopCommand;
 
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class FlagCmd extends BaxShopCommand
+public abstract class FlagCmd extends ShopCommand
 {
     @Override
-    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
+    public boolean hasValidArgCount(@NotNull CmdActor actor)
     {
         return actor.getNumArgs() == 3;
     }
@@ -55,7 +56,7 @@ public abstract class FlagCmd extends BaxShopCommand
     }
 
     @Override
-    public boolean requiresPlayer(@NotNull ShopCmdActor actor)
+    public boolean requiresPlayer(@NotNull CmdActor actor)
     {
         return false;
     }
@@ -66,7 +67,7 @@ public abstract class FlagCmd extends BaxShopCommand
         return false;
     }
 
-    public abstract boolean requiresRealOwner(@NotNull ShopCmdActor actor);
+    public abstract boolean requiresRealOwner(@NotNull CmdActor actor);
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)

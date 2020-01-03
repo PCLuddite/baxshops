@@ -24,8 +24,7 @@ import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.CommandHelpArgument;
 import org.tbax.baxshops.Format;
-import org.tbax.baxshops.commands.BaxShopCommand;
-import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.ShopSelection;
@@ -33,7 +32,7 @@ import org.tbax.baxshops.internal.ShopSelection;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class CmdList extends BaxShopCommand
+public final class CmdList extends ShopCommand
 {
     @Override
     public @NotNull String getName()
@@ -48,7 +47,7 @@ public final class CmdList extends BaxShopCommand
     }
 
     @Override
-    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull CmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "list all shop locations");
         help.setLongDescription("List all locations (x, y, z) for this shop");
@@ -59,7 +58,7 @@ public final class CmdList extends BaxShopCommand
     }
 
     @Override
-    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
+    public boolean hasValidArgCount(@NotNull CmdActor actor)
     {
         return actor.getNumArgs() == 1 || actor.getNumArgs() == 2;
     }
@@ -77,7 +76,7 @@ public final class CmdList extends BaxShopCommand
     }
 
     @Override
-    public boolean requiresPlayer(@NotNull ShopCmdActor actor)
+    public boolean requiresPlayer(@NotNull CmdActor actor)
     {
         return false;
     }
@@ -89,7 +88,7 @@ public final class CmdList extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         if (actor.getNumArgs() == 1) {
             actor.appendArg(1); // show page 1 by default

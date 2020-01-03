@@ -23,8 +23,8 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.CommandHelpArgument;
-import org.tbax.baxshops.commands.BaxShopCommand;
-import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.commands.BaxCommand;
+import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.commands.flags.*;
@@ -35,7 +35,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public final class CmdFlag extends BaxShopCommand
+public final class CmdFlag extends ShopCommand
 {
     private static final CommandMap flagCmds = new CommandMap();
 
@@ -66,7 +66,7 @@ public final class CmdFlag extends BaxShopCommand
     }
 
     @Override
-    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull CmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "manage shop flags");
         StringBuilder description = new StringBuilder("Set a specific flag or list all flags applied to a selected shop.\n");
@@ -75,7 +75,7 @@ public final class CmdFlag extends BaxShopCommand
         List<FlagCmd> flags = flagCmds.values().stream()
                 .filter(cmd -> cmd.hasPermission(actor))
                 .distinct()
-                .sorted(Comparator.comparing(BaxShopCommand::getName))
+                .sorted(Comparator.comparing(BaxCommand::getName))
                 .map(cmd -> (FlagCmd)cmd)
                 .collect(Collectors.toList());
 
@@ -93,11 +93,11 @@ public final class CmdFlag extends BaxShopCommand
     }
 
     @Override
-    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
+    public boolean hasValidArgCount(@NotNull CmdActor actor)
     {
         if (actor.getNumArgs() < 2)
             return false;
-        BaxShopCommand command = flagCmds.get(actor.getArg(1));
+        BaxCommand command = flagCmds.get(actor.getArg(1));
         return command != null && command.hasValidArgCount(actor);
     }
 
@@ -106,7 +106,7 @@ public final class CmdFlag extends BaxShopCommand
     {
         if (actor.getNumArgs() < 2)
             return false;
-        BaxShopCommand command = flagCmds.get(actor.getArg(1));
+        ShopCommand command = flagCmds.get(actor.getArg(1));
         return command != null && command.requiresSelection(actor);
     }
 
@@ -115,16 +115,16 @@ public final class CmdFlag extends BaxShopCommand
     {
         if (actor.getNumArgs() < 2)
             return false;
-        BaxShopCommand command = flagCmds.get(actor.getArg(1));
+        ShopCommand command = flagCmds.get(actor.getArg(1));
         return command != null && command.requiresOwner(actor);
     }
 
     @Override
-    public boolean requiresPlayer(@NotNull ShopCmdActor actor)
+    public boolean requiresPlayer(@NotNull CmdActor actor)
     {
         if (actor.getNumArgs() < 2)
             return false;
-        BaxShopCommand command = flagCmds.get(actor.getArg(1));
+        BaxCommand command = flagCmds.get(actor.getArg(1));
         return command != null && command.requiresPlayer(actor);
     }
 
@@ -133,12 +133,12 @@ public final class CmdFlag extends BaxShopCommand
     {
         if (actor.getNumArgs() < 2)
             return false;
-        BaxShopCommand command = flagCmds.get(actor.getArg(1));
+        ShopCommand command = flagCmds.get(actor.getArg(1));
         return command != null && command.requiresItemInHand(actor);
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
+    public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         FlagCmd flagCmd = (FlagCmd)flagCmds.get(actor.getArg(1));
         if (flagCmd.requiresRealOwner(actor) && actor.getShop() != null && StoredPlayer.DUMMY.equals(actor.getShop().getOwner())) {
@@ -155,7 +155,7 @@ public final class CmdFlag extends BaxShopCommand
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
     {
-        ShopCmdActor actor = (ShopCmdActor)sender;
+        CmdActor actor = (CmdActor)sender;
         if (args.length == 2) {
             return flagCmds.entrySet().stream()
                     .filter(c -> c.getKey().equals(c.getValue().getName()) && c.getValue().hasPermission(actor))

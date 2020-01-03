@@ -26,7 +26,7 @@ import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.Format;
 import org.tbax.baxshops.PlayerUtil;
 import org.tbax.baxshops.internal.ShopPlugin;
-import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.notification.Request;
 import org.tbax.baxshops.notification.StandardNote;
@@ -53,7 +53,7 @@ public final class SaleRequest extends StandardNote implements Request
     }
 
     @Override
-    public boolean accept(ShopCmdActor acceptingActor)
+    public boolean accept(CmdActor acceptingActor)
     {
         try {
             PlayerUtil.sellItem(shopId, buyer, seller, entry);
@@ -67,7 +67,7 @@ public final class SaleRequest extends StandardNote implements Request
     }
 
     @Override
-    public boolean reject(ShopCmdActor rejectingActor)
+    public boolean reject(CmdActor rejectingActor)
     {
         SaleRejection rejection = new SaleRejection(shopId, buyer, seller, entry);
         ShopPlugin.sendNotification(seller, rejection);

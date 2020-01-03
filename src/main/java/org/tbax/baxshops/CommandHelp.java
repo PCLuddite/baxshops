@@ -20,17 +20,17 @@ package org.tbax.baxshops;
 
 import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.commands.BaxShopCommand;
+import org.tbax.baxshops.commands.BaxCommand;
 
 @SuppressWarnings("unused")
 public final class CommandHelp
 {
-    private BaxShopCommand cmd;
+    private BaxCommand cmd;
     private CommandHelpArgument[] args;
     private String longDescription;
     private String shortDescription;
 
-    public CommandHelp(@NotNull BaxShopCommand cmd, @NotNull String shortDescription)
+    public CommandHelp(@NotNull BaxCommand cmd, @NotNull String shortDescription)
     {
         this.cmd = cmd;
         this.shortDescription = shortDescription;

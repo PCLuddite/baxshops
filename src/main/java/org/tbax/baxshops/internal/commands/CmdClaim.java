@@ -21,8 +21,7 @@ package org.tbax.baxshops.internal.commands;
 
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
-import org.tbax.baxshops.commands.BaxShopCommand;
-import org.tbax.baxshops.commands.ShopCmdActor;
+import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.Resources;
@@ -31,7 +30,7 @@ import org.tbax.baxshops.notification.Claimable;
 import org.tbax.baxshops.notification.Notification;
 import org.tbax.baxshops.serialization.StoredPlayer;
 
-public final class CmdClaim extends BaxShopCommand
+public final class CmdClaim extends ShopCommand
 {
     @Override
     public @NotNull String getName()
@@ -52,7 +51,7 @@ public final class CmdClaim extends BaxShopCommand
     }
 
     @Override
-    public @NotNull CommandHelp getHelp(@NotNull ShopCmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull CmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "claim your most recent notification");
         help.setLongDescription("If your most recent notification is a claim, the item will be added to your inventory " +
@@ -61,7 +60,7 @@ public final class CmdClaim extends BaxShopCommand
     }
 
     @Override
-    public boolean hasValidArgCount(@NotNull ShopCmdActor actor)
+    public boolean hasValidArgCount(@NotNull CmdActor actor)
     {
         return actor.getNumArgs() == 1;
     }
@@ -79,7 +78,7 @@ public final class CmdClaim extends BaxShopCommand
     }
 
     @Override
-    public boolean requiresPlayer(@NotNull ShopCmdActor actor)
+    public boolean requiresPlayer(@NotNull CmdActor actor)
     {
         return true;
     }
@@ -91,7 +90,7 @@ public final class CmdClaim extends BaxShopCommand
     }
 
     @Override
-    public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException // tested OK 4-21-19
+    public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException // tested OK 4-21-19
     {
         StoredPlayer player = actor.getStoredPlayer();
         if (!player.hasNotes()) {
