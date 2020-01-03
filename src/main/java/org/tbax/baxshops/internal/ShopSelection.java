@@ -119,7 +119,7 @@ public final class ShopSelection
                     stop = (page + 1) * ITEMS_PER_PAGE,
                     max = Math.min(stop, shop.size());
             for (; i < max; i++) {
-                sender.sendMessage(shop.getEntry(i).toString(i + 1, shop.hasFlagInfinite()));
+                shop.getEntry(i).toChatComponent(i + 1, shop.hasFlagInfinite()).sendTo(sender);
             }
             for (; i < stop; i++) {
                 sender.sendMessage("");

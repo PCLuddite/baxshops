@@ -28,9 +28,13 @@ import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.internal.ShopPlugin;
 import org.tbax.baxshops.internal.items.EnchantMap;
 import org.tbax.baxshops.internal.items.ItemUtil;
-import org.tbax.baxshops.serialization.SafeMap;
 import org.tbax.baxshops.internal.serialization.UpgradeableSerializable;
 import org.tbax.baxshops.internal.serialization.UpgradeableSerialization;
+import org.tbax.baxshops.internal.text.ChatComponent;
+import org.tbax.baxshops.internal.text.ChatTextStyle;
+import org.tbax.baxshops.internal.text.HoverEvent;
+import org.tbax.baxshops.internal.text.TextColor;
+import org.tbax.baxshops.serialization.SafeMap;
 
 import java.util.Map;
 import java.util.Objects;
@@ -385,6 +389,53 @@ public class BaxEntry implements UpgradeableSerializable
         else {
             return String.format("%d. " + ChatColor.GRAY + "(%d) %s", index, getAmount(), name.toString());
         }
+    }
+
+    public ChatComponent toChatComponent(int index, boolean infinite)
+    {
+        ChatComponent component = new ChatComponent("", TextColor.GRAY);
+
+        if (infinite) {
+            component.append(Format.bullet(index)).append(". ");
+        }
+        else if (getAmount() <= 0) {
+            component.append(String.valueOf(index), TextColor.RED, ChatTextStyle.STRIKETHROUGH).append(" (0) ");
+        }
+        else {
+            component.append(index + ". (" + getAmount() + ") ", TextColor.GRAY);
+        }
+
+        if(stack.getType() == Material.ENCHANTED_BOOK && EnchantMap.isEnchanted(stack)) {
+            component.append(ChatComponent.of(Format.enchantments(ItemUtil.getName(this)))
+                    .hoverEvent(HoverEvent.showItem(getItemStack())));
+        }
+        else {
+            component.append(ChatComponent.of(ItemUtil.getName(this))
+                    .hoverEvent(HoverEvent.showItem(getItemStack())));
+            if (EnchantMap.isEnchanted(stack)) {
+                component.append(" ").append(Format.enchantments("(" + EnchantMap.abbreviatedListString(stack) + ")"));
+            }
+        }
+
+        String potionInfo = ItemUtil.getPotionInfo(stack);
+        if (!potionInfo.equals("")) {
+            component.append(" " + potionInfo);
+        }
+
+        if (stack.getType().getMaxDurability() > 0 && getDurability() > 0) {
+            component.append(" (Damage: " + getDamagePercent()+ "%)", TextColor.YELLOW);
+        }
+
+        if (canBuy())
+            component.append(" " + Format.retailPrice(retailPrice));
+
+        if (canSell())
+            component.append(" " + Format.refundPrice(refundPrice));
+
+        if (!(canBuy() || canBuy()))
+            component.append(" " + ChatColor.DARK_RED + "(Not for sale)");
+
+        return component;
     }
     
     public static BaxEntry deserialize(Map<String, Object> args)
