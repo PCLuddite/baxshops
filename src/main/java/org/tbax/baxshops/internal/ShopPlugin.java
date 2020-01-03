@@ -42,6 +42,9 @@ import org.tbax.baxshops.internal.notification.*;
 import org.tbax.baxshops.internal.serialization.BaxConfig;
 import org.tbax.baxshops.internal.serialization.State;
 import org.tbax.baxshops.internal.serialization.StateFile;
+import org.tbax.baxshops.internal.text.ChatComponent;
+import org.tbax.baxshops.internal.text.ClickEvent;
+import org.tbax.baxshops.internal.text.HoverEvent;
 import org.tbax.baxshops.notification.Claimable;
 import org.tbax.baxshops.notification.GeneralNotification;
 import org.tbax.baxshops.notification.Notification;
@@ -152,15 +155,24 @@ public final class ShopPlugin extends JavaPlugin
                     n.getSentDate(), ChatColor.RESET, n.getMessage(player)));
         }
         if (n instanceof Request) {
-            ShopPlugin.sendMessage(player, String.format("Use %s or %s to manage this request.",
-                Format.command("/shop accept"),
-                Format.command("/shop reject"))
-            );
+            ChatComponent request = ChatComponent.of("Use ")
+                    .append(ChatComponent.of(Format.command("/shop accept"))
+                            .clickEvent(ClickEvent.runCommand("/shop accept"))
+                            .hoverEvent(HoverEvent.showText(ChatColor.AQUA + "Accept this request")))
+                    .append(" or ")
+                    .append(ChatComponent.of(Format.command("/shop reject"))
+                            .clickEvent(ClickEvent.runCommand("/shop reject"))
+                            .hoverEvent(HoverEvent.showText(ChatColor.AQUA + "Decline this request")))
+                    .append(" to manage this request.");
+            request.sendTo(player);
         }
         else if (n instanceof Claimable) {
-            ShopPlugin.sendMessage(player, String.format("Use %s to claim and remove this notification.",
-                Format.command("/shop claim"))
-            );
+            ChatComponent request = ChatComponent.of("Use ")
+                    .append(ChatComponent.of(Format.command("/shop claim"))
+                            .clickEvent(ClickEvent.runCommand("/shop claim"))
+                            .hoverEvent(HoverEvent.showText(ChatColor.AQUA + "Claim this item")))
+                    .append(" to claim this and remove the notification.");
+            request.sendTo(player);
         }
         else {
             storedPlayer.dequeueNote();

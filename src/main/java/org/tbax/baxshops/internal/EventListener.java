@@ -20,7 +20,10 @@
 package org.tbax.baxshops.internal;
 
 import com.google.common.base.Objects;
-import org.bukkit.*;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -40,6 +43,9 @@ import org.tbax.baxshops.errors.CommandErrorException;
 import org.tbax.baxshops.errors.CommandWarningException;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.items.ItemUtil;
+import org.tbax.baxshops.internal.text.ChatComponent;
+import org.tbax.baxshops.internal.text.ClickEvent;
+import org.tbax.baxshops.internal.text.HoverEvent;
 import org.tbax.baxshops.serialization.StoredPlayer;
 
 import java.util.UUID;
@@ -237,7 +243,12 @@ public class EventListener implements Listener
     {
         StoredPlayer player = ShopPlugin.getState().joinPlayer(event.getPlayer());
         if (player.hasNotes()) {
-            ShopPlugin.sendMessage(event.getPlayer(), ChatColor.WHITE + "You have new notifications. Use " + Format.command("/shop notifications") + ChatColor.WHITE + " to view them");
+            ChatComponent.of("You have new notifications. Use ")
+                    .append(ChatComponent.of(Format.command("/shop notifications"))
+                            .hoverEvent(HoverEvent.showText(ChatColor.AQUA + "Show next notification"))
+                            .clickEvent(ClickEvent.runCommand("/shop notifications")))
+                    .append(" to view them")
+                    .sendTo(event.getPlayer());
         }
     }
 
