@@ -329,18 +329,28 @@ public final class Format
             ChatColor.RESET;
     }
 
-    public static @NotNull ChatComponent header(String title, int page, int maxPages)
+    public static @NotNull ChatComponent header(String title, int page, int maxPages, String command)
     {
-        return ChatComponent.of("", TextColor.GRAY)
-                .append(ChatComponent.of("<< ", TextColor.GOLD)
-                        .hoverEvent(HoverEvent.showText(ChatColor.AQUA + "Previous"))
-                        .clickEvent(ClickEvent.runCommand("/shop page " + (page - 1))))
-                .append("---------")
-                .append(title, TextColor.WHITE)
-                .append("---------")
-                .append(ChatComponent.of(" >>", TextColor.GOLD)
-                        .hoverEvent(HoverEvent.showText(ChatColor.AQUA + "Next"))
-                        .clickEvent(ClickEvent.runCommand("/shop page " + (page + 1))));
+        ChatComponent text = ChatComponent.of("", TextColor.GRAY);
+        if (page > 1) {
+            text.append(ChatComponent.of("<< ", TextColor.GOLD)
+                    .hoverEvent(HoverEvent.showText(ChatColor.AQUA + "Previous"))
+                    .clickEvent(ClickEvent.runCommand(command + " " + (page - 1))));
+        }
+        else {
+            text.append(ChatComponent.of("<< ", TextColor.DARK_GRAY));
+        }
+        text.append("--------- ").append(title, TextColor.WHITE).append(" ---------");
+
+        if (page < maxPages) {
+            text.append(ChatComponent.of(" >>", TextColor.GOLD)
+                    .hoverEvent(HoverEvent.showText(ChatColor.AQUA + "Next"))
+                    .clickEvent(ClickEvent.runCommand(command + " " + (page + 1))));
+        }
+        else {
+            text.append(ChatComponent.of(" >>", TextColor.DARK_GRAY));
+        }
+        return text;
     }
 
     public static @NotNull String stripColor(@NotNull String str)

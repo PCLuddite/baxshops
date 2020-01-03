@@ -117,7 +117,7 @@ public final class ShopSelection
             }
         }
         else {
-            Format.header(String.format("Showing page %d of %d", page + 1, pages), page + 1, pages).sendTo(sender);
+            Format.header(String.format("Showing page %d of %d", page + 1, pages), page + 1, pages, "/shop page").sendTo(sender);
             int i = page * ITEMS_PER_PAGE,
                     stop = (page + 1) * ITEMS_PER_PAGE,
                     max = Math.min(stop, shop.size());
@@ -144,7 +144,7 @@ public final class ShopSelection
                 .append(ChatComponent.of("For help with shops, type ", TextColor.GRAY)
                         .append(ChatComponent.of("/shop help")
                                 .clickEvent(ClickEvent.runCommand("/shop help"))
-                                .hoverEvent(HoverEvent.showText(ChatColor.GOLD + "Get help with shops"))
+                                .hoverEvent(HoverEvent.showText(ChatColor.AQUA + "Get help with shops"))
                 ));
         msg.sendTo(sender);
     }
