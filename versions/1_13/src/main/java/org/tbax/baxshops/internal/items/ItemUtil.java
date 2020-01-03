@@ -18,6 +18,8 @@
  */
 package org.tbax.baxshops.internal.items;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -503,6 +505,54 @@ public final class ItemUtil
     public static void setSignFacing(Block block, BlockFace face)
     {
         ((Sign)block.getBlockData()).setRotation(face);
+    }
+
+    public static String getNBTTag(ItemStack stack)
+    {
+        JsonObject object = new JsonObject();
+        object.addProperty("id", stack.getType().getKey().toString());
+        object.addProperty("Count", stack.getAmount());
+        if (stack.getType().getMaxDurability() > 0) {
+            object.addProperty("Damage", getDurability(stack));
+        }
+        JsonObject tag = new JsonObject();
+        if (stack.getEnchantments() != null && !stack.getEnchantments().isEmpty()) {
+            JsonArray enchantArray = new JsonArray();
+            for (Map.Entry<Enchantment, Integer> enchants : stack.getEnchantments().entrySet()) {
+                JsonObject enchantMap = new JsonObject();
+                enchantMap.addProperty("id", enchants.getKey().getKey().toString());
+                enchantMap.addProperty("lvl", enchants.getValue());
+                enchantArray.add(enchantMap);
+            }
+            tag.add("Enchantments", enchantArray);
+        }
+
+        JsonObject display = new JsonObject();
+        if (stack.hasItemMeta()) {
+            ItemMeta itemMeta = stack.getItemMeta();
+            if (itemMeta.hasDisplayName()) {
+                JsonObject text = new JsonObject();
+                text.addProperty("text", stack.getItemMeta().getDisplayName());
+                display.addProperty("Name", text.toString());
+            }
+            if (itemMeta.hasLore()) {
+                JsonArray lore = new JsonArray();
+                for (String line : itemMeta.getLore()) {
+                    JsonObject text = new JsonObject();
+                    text.addProperty("text", line);
+                    lore.add(text.toString());
+                }
+                display.add("Lore", lore);
+            }
+        }
+
+        if (display.size() > 0) {
+            tag.add("display", display);
+        }
+        if (tag.size() > 0) {
+            object.add("tag", tag);
+        }
+        return object.toString();
     }
 
     public static String getPotionInfo(ItemStack item)
