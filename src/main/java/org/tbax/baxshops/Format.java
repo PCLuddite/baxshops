@@ -23,10 +23,7 @@ import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.tbax.baxshops.internal.ShopPlugin;
-import org.tbax.baxshops.internal.text.ChatComponent;
-import org.tbax.baxshops.internal.text.ClickEvent;
-import org.tbax.baxshops.internal.text.HoverEvent;
-import org.tbax.baxshops.internal.text.TextColor;
+import org.tbax.baxshops.internal.text.*;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -329,26 +326,26 @@ public final class Format
             ChatColor.RESET;
     }
 
-    public static @NotNull ChatComponent header(String title, int page, int maxPages, String command)
+    public static @NotNull ChatComponent header(int page, int maxPages, String command)
     {
         ChatComponent text = ChatComponent.of("", TextColor.GRAY);
         if (page > 1) {
-            text.append(ChatComponent.of("<< ", TextColor.GOLD)
+            text.append(ChatComponent.of("<<", TextColor.GOLD, ChatTextStyle.UNDERLINED)
                     .hoverEvent(HoverEvent.showText(ChatColor.AQUA + "Previous"))
                     .clickEvent(ClickEvent.runCommand(command + " " + (page - 1))));
         }
         else {
-            text.append(ChatComponent.of("<< ", TextColor.DARK_GRAY));
+            text.append(ChatComponent.of("<<", TextColor.DARK_GRAY));
         }
-        text.append("--------- ").append(title, TextColor.WHITE).append(" ---------");
+        text.append(" --------- ").append(String.format("Showing page %d of %d", page, maxPages), TextColor.WHITE).append(" --------- ");
 
         if (page < maxPages) {
-            text.append(ChatComponent.of(" >>", TextColor.GOLD)
+            text.append(ChatComponent.of(">>", TextColor.GOLD, ChatTextStyle.UNDERLINED)
                     .hoverEvent(HoverEvent.showText(ChatColor.AQUA + "Next"))
                     .clickEvent(ClickEvent.runCommand(command + " " + (page + 1))));
         }
         else {
-            text.append(ChatComponent.of(" >>", TextColor.DARK_GRAY));
+            text.append(ChatComponent.of(">>", TextColor.DARK_GRAY));
         }
         return text;
     }

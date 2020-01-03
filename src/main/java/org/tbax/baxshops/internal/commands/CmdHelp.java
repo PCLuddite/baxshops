@@ -31,9 +31,7 @@ import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.Resources;
 import org.tbax.baxshops.internal.ShopPlugin;
 import org.tbax.baxshops.internal.ShopSelection;
-import org.tbax.baxshops.internal.text.ChatComponent;
-import org.tbax.baxshops.internal.text.ClickEvent;
-import org.tbax.baxshops.internal.text.HoverEvent;
+import org.tbax.baxshops.internal.text.*;
 
 import java.util.Comparator;
 import java.util.List;
@@ -134,14 +132,14 @@ public final class CmdHelp extends BaxShopCommand
                 .sorted(Comparator.comparing(BaxShopCommand::getName))
                 .collect(Collectors.toList());
         int pages = (int)Math.ceil((double)commands.size() / ShopSelection.ITEMS_PER_PAGE);
-        Format.header(String.format("Showing page %d of %d", page + 1, pages), page + 1, pages, "/shop help").sendTo(actor.getSender());
+        Format.header(page + 1, pages, "/shop help").sendTo(actor.getSender());
         int i = page * ShopSelection.ITEMS_PER_PAGE,
                 stop = (page + 1) * ShopSelection.ITEMS_PER_PAGE,
                 max = Math.min(stop, commands.size());
         for (; i < max; ++i) {
             CommandHelp help = commands.get(i).getHelp(actor);
             ChatComponent.of("").append(
-                    ChatComponent.of(Format.command(help.getName()))
+                    ChatComponent.of(help.getName(), TextColor.GOLD, ChatTextStyle.UNDERLINED)
                             .hoverEvent(HoverEvent.showText(ChatColor.GRAY + "Click for more info"))
                             .clickEvent(ClickEvent.runCommand("/shop help " + help.getName())))
                     .append(": ")

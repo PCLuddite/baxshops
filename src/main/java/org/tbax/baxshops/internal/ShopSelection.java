@@ -26,10 +26,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.Format;
-import org.tbax.baxshops.internal.text.ChatComponent;
-import org.tbax.baxshops.internal.text.ClickEvent;
-import org.tbax.baxshops.internal.text.HoverEvent;
-import org.tbax.baxshops.internal.text.TextColor;
+import org.tbax.baxshops.internal.text.*;
 
 /**
  * A ShopSelection represents a user's selected shop.
@@ -117,7 +114,7 @@ public final class ShopSelection
             }
         }
         else {
-            Format.header(String.format("Showing page %d of %d", page + 1, pages), page + 1, pages, "/shop page").sendTo(sender);
+            Format.header(page + 1, pages, "/shop page").sendTo(sender);
             int i = page * ITEMS_PER_PAGE,
                     stop = (page + 1) * ITEMS_PER_PAGE,
                     max = Math.min(stop, shop.size());
@@ -142,7 +139,7 @@ public final class ShopSelection
                 .append("shop")
                 .appendLine()
                 .append(ChatComponent.of("For help with shops, type ", TextColor.GRAY)
-                        .append(ChatComponent.of("/shop help")
+                        .append(ChatComponent.of("/shop help", ChatTextStyle.UNDERLINED)
                                 .clickEvent(ClickEvent.runCommand("/shop help"))
                                 .hoverEvent(HoverEvent.showText(ChatColor.AQUA + "Get help with shops"))
                 ));
