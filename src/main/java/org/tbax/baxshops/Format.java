@@ -23,6 +23,10 @@ import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.tbax.baxshops.internal.ShopPlugin;
+import org.tbax.baxshops.internal.text.ChatComponent;
+import org.tbax.baxshops.internal.text.ClickEvent;
+import org.tbax.baxshops.internal.text.HoverEvent;
+import org.tbax.baxshops.internal.text.TextColor;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -323,6 +327,20 @@ public final class Format
             ChatColor.GRAY +
             " ------------" +
             ChatColor.RESET;
+    }
+
+    public static @NotNull ChatComponent header(String title, int page, int maxPages)
+    {
+        return ChatComponent.of("", TextColor.GRAY)
+                .append(ChatComponent.of("<< ", TextColor.GOLD)
+                        .hoverEvent(HoverEvent.showText(ChatColor.AQUA + "Previous"))
+                        .clickEvent(ClickEvent.runCommand("/shop page " + (page - 1))))
+                .append("---------")
+                .append(title, TextColor.WHITE)
+                .append("---------")
+                .append(ChatComponent.of(" >>", TextColor.GOLD)
+                        .hoverEvent(HoverEvent.showText(ChatColor.AQUA + "Next"))
+                        .clickEvent(ClickEvent.runCommand("/shop page " + (page + 1))));
     }
 
     public static @NotNull String stripColor(@NotNull String str)

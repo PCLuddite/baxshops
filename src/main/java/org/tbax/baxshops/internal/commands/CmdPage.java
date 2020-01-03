@@ -90,8 +90,11 @@ public final class CmdPage extends BaxShopCommand
     public void onCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         int page = actor.getArgInt(1);
-        if (page < 1 || page > actor.getShop().getPages()) {
-            actor.exitError("That's not a page in this shop");
+        if (page < 1) {
+            page = actor.getShop().getPages();
+        }
+        else if (page > actor.getShop().getPages()) {
+            page = 1;
         }
 
         OfflinePlayer player;

@@ -115,17 +115,18 @@ public final class ShopSelection
             for (int i = 0; i < stop; ++i) {
                 sender.sendMessage("");
             }
-            return;
         }
-        sender.sendMessage(Format.header(String.format("Showing page %d of %d", page + 1, pages)));
-        int i = page * ITEMS_PER_PAGE,
-                stop = (page + 1) * ITEMS_PER_PAGE,
-                max = Math.min(stop, shop.size());
-        for (; i < max; i++) {
-            sender.sendMessage(shop.getEntry(i).toString(i + 1, shop.hasFlagInfinite()));
-        }
-        for (; i < stop; i++) {
-            sender.sendMessage("");
+        else {
+            Format.header(String.format("Showing page %d of %d", page + 1, pages), page + 1, pages).sendTo(sender);
+            int i = page * ITEMS_PER_PAGE,
+                    stop = (page + 1) * ITEMS_PER_PAGE,
+                    max = Math.min(stop, shop.size());
+            for (; i < max; i++) {
+                sender.sendMessage(shop.getEntry(i).toString(i + 1, shop.hasFlagInfinite()));
+            }
+            for (; i < stop; i++) {
+                sender.sendMessage("");
+            }
         }
     }
 
