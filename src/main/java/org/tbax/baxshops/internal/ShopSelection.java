@@ -20,13 +20,16 @@
 package org.tbax.baxshops.internal;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
+import org.bukkit.inventory.ItemStack;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.Format;
+import org.tbax.baxshops.internal.text.ChatComponent;
+import org.tbax.baxshops.internal.text.ClickEvent;
+import org.tbax.baxshops.internal.text.HoverEvent;
+import org.tbax.baxshops.internal.text.TextColor;
 
 /**
  * A ShopSelection represents a user's selected shop.
@@ -133,17 +136,15 @@ public final class ShopSelection
 
     public void showIntro(CommandSender sender)
     {
-        StringBuilder intro = new StringBuilder(ChatColor.WHITE.toString());
-        intro.append("Welcome to ");
-        if (owner) {
-            intro.append(Format.username("your"));
-        }
-        else {
-            intro.append(Format.username(shop.getOwner().getName())).append("'s");
-        }
-        intro.append(" shop\n");
-        intro.append(ChatColor.GRAY.toString());
-        intro.append("For help with shops, type /shop help.");
-        sender.sendMessage(intro.toString());
+        ChatComponent msg = new ChatComponent("Welcome to ", TextColor.WHITE)
+                .append(owner ? "your " : shop.getOwner().getName() + "'s ", TextColor.DARK_BLUE)
+                .append("shop")
+                .appendLine()
+                .append(ChatComponent.of("For help with shops, type ", TextColor.GRAY)
+                        .append(ChatComponent.of("/shop help")
+                                .clickEvent(ClickEvent.runCommand("/shop help"))
+                                .hoverEvent(HoverEvent.showText(ChatColor.GOLD + "Get help with shops"))
+                ));
+        msg.sendTo(sender);
     }
 }
