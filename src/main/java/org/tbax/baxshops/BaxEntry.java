@@ -30,10 +30,7 @@ import org.tbax.baxshops.internal.items.EnchantMap;
 import org.tbax.baxshops.internal.items.ItemUtil;
 import org.tbax.baxshops.internal.serialization.UpgradeableSerializable;
 import org.tbax.baxshops.internal.serialization.UpgradeableSerialization;
-import org.tbax.baxshops.internal.text.ChatComponent;
-import org.tbax.baxshops.internal.text.ChatTextStyle;
-import org.tbax.baxshops.internal.text.HoverEvent;
-import org.tbax.baxshops.internal.text.TextColor;
+import org.tbax.baxshops.internal.text.*;
 import org.tbax.baxshops.serialization.SafeMap;
 
 import java.util.Map;
@@ -393,48 +390,95 @@ public class BaxEntry implements UpgradeableSerializable
 
     public ChatComponent toChatComponent(int index, boolean infinite)
     {
-        ChatComponent component = new ChatComponent("", TextColor.GRAY);
+        ChatComponent component;
+        boolean strikethrough = false;
 
         if (infinite) {
-            component.append(Format.bullet(index)).append(". ");
+            component = ChatComponent.of(Format.bullet(index) + ". ", TextColor.GRAY);
         }
         else if (getAmount() <= 0) {
-            component.append(String.valueOf(index), TextColor.RED, ChatTextStyle.STRIKETHROUGH).append(" (0) ");
+            component = ChatComponent.of(index + " (0) ", TextColor.RED, ChatTextStyle.STRIKETHROUGH);
+            strikethrough = true;
         }
         else {
-            component.append(index + ". (" + getAmount() + ") ", TextColor.GRAY);
+            component = ChatComponent.of(index + ". (" + getAmount() + ") ", TextColor.GRAY);
         }
 
         if(stack.getType() == Material.ENCHANTED_BOOK && EnchantMap.isEnchanted(stack)) {
-            component.append(ChatComponent.of(Format.enchantments(ItemUtil.getName(this)))
-                    .hoverEvent(HoverEvent.showItem(getItemStack())));
+            ChatComponent name = new ChatComponent(ItemUtil.getName(this))
+                    .hoverEvent(HoverEvent.showItem(getItemStack()))
+                    .clickEvent(ClickEvent.runCommand("/shop info " + index));
+            if (!strikethrough) {
+                name.setText(Format.enchantments(name.getText()));
+            }
+            component.append(name);
         }
         else {
-            component.append(ChatComponent.of(ItemUtil.getName(this))
-                    .hoverEvent(HoverEvent.showItem(getItemStack())));
-            if (EnchantMap.isEnchanted(stack)) {
-                component.append(" ").append(Format.enchantments("(" + EnchantMap.abbreviatedListString(stack) + ")"));
+            ChatComponent name = new ChatComponent(ItemUtil.getName(this))
+                    .hoverEvent(HoverEvent.showItem(getItemStack()))
+                    .clickEvent(ClickEvent.runCommand("/shop info " + index));
+            if (!strikethrough) {
+                name.setText(Format.listname(name.getText()));
             }
+            if (EnchantMap.isEnchanted(stack)) {
+                name.append(" ");
+                ChatComponent enchants = new ChatComponent("(" + EnchantMap.abbreviatedListString(stack) + ")");
+                if (!strikethrough) {
+                    enchants.setText(Format.enchantments(enchants.getText()));
+                }
+                name.append(enchants);
+            }
+            component.append(name);
         }
 
         String potionInfo = ItemUtil.getPotionInfo(stack);
-        if (!potionInfo.equals("")) {
-            component.append(" " + potionInfo);
+        if (!"".equals(potionInfo)) {
+            ChatComponent potionInfoComponent = new ChatComponent(" " + potionInfo);
+            if (strikethrough) {
+                potionInfoComponent.setText(Format.stripColor(potionInfoComponent.getText()));
+            }
+            component.append(potionInfoComponent);
         }
 
         if (stack.getType().getMaxDurability() > 0 && getDurability() > 0) {
-            component.append(" (Damage: " + getDamagePercent()+ "%)", TextColor.YELLOW);
+            ChatComponent damageComponent = new ChatComponent(" (Damage: " + getDamagePercent() + "%)");
+            if (!strikethrough) {
+                damageComponent.setColor(TextColor.YELLOW);
+            }
+            component.append(damageComponent);
         }
 
-        if (canBuy())
-            component.append(" " + Format.retailPrice(retailPrice));
+        if (canBuy()) {
+            component.append(" ");
+            ChatComponent buyComponent = new ChatComponent(Format.retailPrice(retailPrice))
+                    .clickEvent(ClickEvent.suggestCommand("/buy " + index + " "))
+                    .hoverEvent(HoverEvent.showText("Purchase for " + Format.money(retailPrice)));
+            if (strikethrough) {
+                buyComponent.setText(Format.stripColor(buyComponent.getText()));
+            }
+            component.append(buyComponent);
+        }
 
-        if (canSell())
-            component.append(" " + Format.refundPrice(refundPrice));
+        if (canSell()) {
+            component.append(" ");
+            ChatComponent sellComponent = new ChatComponent(Format.refundPrice(refundPrice))
+                    .clickEvent(ClickEvent.suggestCommand("/sell " + index + " "))
+                    .hoverEvent(HoverEvent.showText("Sell for " + Format.money(refundPrice)));
+            if (strikethrough) {
+                sellComponent.setText(Format.stripColor(sellComponent.getText()));
+            }
+            component.append(sellComponent);
+        }
 
-        if (!(canBuy() || canBuy()))
-            component.append(" " + ChatColor.DARK_RED + "(Not for sale)");
-
+        if (!(canBuy() || canBuy())) {
+            component.append(" ");
+            ChatComponent nfs = new ChatComponent("(Not for Sale)");
+            if (!strikethrough) {
+                nfs.setColor(TextColor.DARK_RED);
+            }
+            component.append(nfs);
+        }
+        
         return component;
     }
     
