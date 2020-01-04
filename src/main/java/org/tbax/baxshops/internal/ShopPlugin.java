@@ -450,6 +450,7 @@ public final class ShopPlugin extends JavaPlugin
 
         loadConfigurationSerializable();
         ItemUtil.loadEnchants(this);
+        ItemUtil.loadPotions(this);
 
         saveDefaultConfig();
         try {
