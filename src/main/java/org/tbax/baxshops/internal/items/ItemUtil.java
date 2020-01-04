@@ -264,13 +264,18 @@ public final class ItemUtil
             List<Map<?, ?>> section = potionConfig.getMapList("potions");
 
             for (Map<?, ?> potionMap : section) {
-                PotionType potionType = PotionType.valueOf((String)potionMap.get("type"));
-                String name = (String)potionMap.get("name");
-                String regular = (String)potionMap.get("regular");
-                String upgraded = (String)potionMap.get("upgraded");
-                String extended = (String)potionMap.get("extended");
-                PotionInfo info = new PotionInfo(potionType, name, regular, upgraded, extended);
-                potions.put(potionType, info);
+                try {
+                    PotionType potionType = PotionType.valueOf((String)potionMap.get("type"));
+                    String name = (String)potionMap.get("name");
+                    String regular = (String)potionMap.get("regular");
+                    String upgraded = (String)potionMap.get("upgraded");
+                    String extended = (String)potionMap.get("extended");
+                    PotionInfo info = new PotionInfo(potionType, name, regular, upgraded, extended);
+                    potions.put(potionType, info);
+                }
+                catch (IllegalArgumentException e) {
+                    // skip
+                }
             }
         }
         catch (IOException e) {
