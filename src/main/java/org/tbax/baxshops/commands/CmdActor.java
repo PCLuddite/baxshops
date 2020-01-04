@@ -55,7 +55,7 @@ public interface CmdActor extends CommandSender
 
     default boolean cmdIs(String... names)
     {
-        String name = getName();
+        String name = getCmdName();
         for (String testName : names) {
             if (testName.equalsIgnoreCase(name))
                 return true;
