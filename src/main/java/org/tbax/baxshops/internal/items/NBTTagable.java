@@ -146,6 +146,10 @@ public final class NBTTagable
             if (customPotionEffectsElement != null) {
                 tag.add("CustomPotionEffects", customPotionEffectsElement);
             }
+
+            if (potionMeta.hasColor()) {
+                tag.addProperty("CustomPotionColor", potionMeta.getColor().asRGB());
+            }
         }
 
         if (tag.entrySet().size() > 0) {
