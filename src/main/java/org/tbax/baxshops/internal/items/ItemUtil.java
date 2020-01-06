@@ -32,8 +32,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.BaxShop;
@@ -314,7 +315,7 @@ public final class ItemUtil
         if (!smartStack) return stack1.isSimilar(stack2);
         if (!stack1.isSimilar(stack2)) {
             return stack1.getType() == stack2.getType() &&
-                    (isSameBook(stack1, stack2) || isSameBanner(stack1, stack2));
+                    (isSameBook(stack1, stack2)  || isSameBanner(stack1, stack2));
         }
         return true;
     }
@@ -528,12 +529,13 @@ public final class ItemUtil
 
     public static String getPotionInfo(ItemStack item)
     {
-        if (item.getType() == Material.POTION) {
-            Potion potion = Potion.fromItemStack(item);
-            if (potion.hasExtendedDuration()) {
+        ItemMeta meta = item.getItemMeta();
+        if (meta instanceof PotionMeta) {
+            PotionData data = ((PotionMeta)meta).getBasePotionData();
+            if (data.isExtended()) {
                 return Format.enchantments("(Extended)");
             }
-            else if (potion.getTier() == Potion.Tier.TWO) {
+            else if (data.isUpgraded()) {
                 return Format.enchantments("II");
             }
         }

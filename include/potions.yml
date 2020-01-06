@@ -43,6 +43,10 @@ potions:
   regular: regeneration
   upgraded: strong_regeneration
   extended: long_regeneration
+- type: SLOW_FALLING
+  name: Slow Falling
+  regular: slow_falling
+  extended: long_slow_fallin
 - type: SLOWNESS
   name: Slowness
   regular: slowness
@@ -58,6 +62,11 @@ potions:
   regular: swiftness
   upgraded: strong_swiftness
   extended: long_swiftness
+- type: TURTLE_MASTER
+  name: The Turtle Master
+  regular: turtle_master
+  upgraded: strong_turtle_master
+  extended: long_turtle_master
 - type: THICK
   name: Thick Potion
   regular: thick

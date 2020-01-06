@@ -29,12 +29,22 @@ enchants:
   key:
     namespace: minecraft
     key: punch
+- enchantment: LOYALTY
+  name: Loyalty
+  key:
+    namespace: minecraft
+    key: loyalty
 - enchantment: DEPTH_STRIDER
   name: Depth Strider
   id: 8
   key:
     namespace: minecraft
     key: depth_strider
+- enchantment: VANISHING_CURSE
+  name: Vanishing Curse
+  key:
+    namespace: minecraft
+    key: vanishing_curse
 - enchantment: DURABILITY
   name: Unbreaking
   id: 34
@@ -53,6 +63,11 @@ enchants:
   key:
     namespace: minecraft
     key: luck_of_the_sea
+- enchantment: BINDING_CURSE
+  name: Binding Curse
+  key:
+    namespace: minecraft
+    key: binding_curse
 - enchantment: LOOT_BONUS_BLOCKS
   name: Fortune
   id: 35
@@ -93,6 +108,11 @@ enchants:
   key:
     namespace: minecraft
     key: looting
+- enchantment: PIERCING
+  name: Piercing
+  key:
+    namespace: minecraft
+    key: piercing
 - enchantment: PROTECTION_EXPLOSIONS
   name: Blast Protection
   id: 3
@@ -105,12 +125,27 @@ enchants:
   key:
     namespace: minecraft
     key: smite
+- enchantment: MULTISHOT
+  name: Multishot
+  key:
+    namespace: minecraft
+    key: multishot
 - enchantment: FIRE_ASPECT
   name: Fire Aspect
   id: 20
   key:
     namespace: minecraft
     key: fire_aspect
+- enchantment: CHANNELING
+  name: Channeling
+  key:
+    namespace: minecraft
+    key: channeling
+- enchantment: SWEEPING_EDGE
+  name: Sweeping Edge
+  key:
+    namespace: minecraft
+    key: sweeping
 - enchantment: THORNS
   name: Thorns
   id: 7
@@ -129,18 +164,33 @@ enchants:
   key:
     namespace: minecraft
     key: respiration
+- enchantment: RIPTIDE
+  name: Riptide
+  key:
+    namespace: minecraft
+    key: riptide
 - enchantment: SILK_TOUCH
   name: Silk Touch
   id: 33
   key:
     namespace: minecraft
     key: silk_touch
+- enchantment: QUICK_CHARGE
+  name: Quick Charge
+  key:
+    namespace: minecraft
+    key: quick_charge
 - enchantment: PROTECTION_PROJECTILE
   name: Projectile Protection
   id: 4
   key:
     namespace: minecraft
     key: projectile_protection
+- enchantment: IMPALING
+  name: Impaling
+  key:
+    namespace: minecraft
+    key: impaling
 - enchantment: PROTECTION_FALL
   name: Feather Falling
   id: 2
