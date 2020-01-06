@@ -1,3 +1,4 @@
+#!/bin/bash
 #
 #  Copyright (C) Timothy Baxendale
 # 
@@ -16,7 +17,6 @@
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
 #  USA
 #
-#!/bin/bash
 
 if [ "$JAVA_HOME" = "" ]; then
     export JAVA_HOME=$(readlink /etc/alternatives/javac)
