@@ -18,15 +18,13 @@
  */
 package org.tbax.baxshops.internal.items;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
-import org.bukkit.block.banner.Pattern;
-import org.bukkit.block.banner.PatternType;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.Inventory;
@@ -36,7 +34,7 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.Potion;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.potion.PotionType;
 import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.Format;
@@ -59,7 +57,6 @@ public final class ItemUtil
     private static Map<Integer, Enchantment> legacyEnchants = null;
 
     private static final Map<Material, Material> SIGN_TO_SIGN = new HashMap<>();
-
     private static final List<Material> SIGN_TYPES = Arrays.asList(Material.SIGN, Material.SIGN_POST, Material.WALL_SIGN);
 
     static {
@@ -88,6 +85,7 @@ public final class ItemUtil
      * A list of enchantment names
      */
     private static final Map<Enchantment, Enchantable> enchants = new HashMap<>();
+    private static final Map<PotionType, PotionInfo> potions = new HashMap<>();
 
     private ItemUtil()
     {
@@ -159,9 +157,6 @@ public final class ItemUtil
             if (enchants != null)
                 return EnchantMap.fullListString(enchants);
         }
-        else if (isOminousBanner(item)) {
-            return ChatColor.GOLD + "Ominous Banner";
-        }
 
         item = item.clone();
         ItemMeta meta = item.getItemMeta();
@@ -185,28 +180,6 @@ public final class ItemUtil
         }
     }
 
-    public static boolean isOminousBanner(@NotNull ItemStack stack)
-    {
-        if (stack.getType() != Material.BANNER)
-            return false;
-        BannerMeta bannerMeta = (BannerMeta)stack.getItemMeta();
-        return bannerMeta.getPatterns().containsAll(ominousPatterns());
-    }
-
-    private static List<Pattern> ominousPatterns()
-    {
-        Pattern[] patterns = new Pattern[8];
-        patterns[0] = new Pattern(DyeColor.CYAN, PatternType.RHOMBUS_MIDDLE);
-        patterns[1] = new Pattern(DyeColor.SILVER, PatternType.STRIPE_BOTTOM);
-        patterns[2] = new Pattern(DyeColor.GRAY, PatternType.STRIPE_CENTER);
-        patterns[3] = new Pattern(DyeColor.SILVER, PatternType.BORDER);
-        patterns[4] = new Pattern(DyeColor.BLACK, PatternType.STRIPE_MIDDLE);
-        patterns[5] = new Pattern(DyeColor.SILVER, PatternType.HALF_HORIZONTAL);
-        patterns[6] = new Pattern(DyeColor.SILVER, PatternType.CIRCLE_MIDDLE);
-        patterns[7] = new Pattern(DyeColor.BLACK, PatternType.BORDER);
-        return Arrays.asList(patterns);
-    }
-
     public static String getEnchantName(Enchantment enchant)
     {
         Enchantable enchantable = enchants.get(enchant);
@@ -216,7 +189,7 @@ public final class ItemUtil
     }
 
     /**
-     * Loads the enchantment names in enchants.txt
+     * Loads the enchantment names in enchants.yml
      */
     public static void loadEnchants(ShopPlugin plugin)
     {
@@ -239,7 +212,36 @@ public final class ItemUtil
             }
         }
         catch (IOException e) {
-            plugin.getLogger().warning("Failed to readFromDisk enchants: " + e.toString());
+            plugin.getLogger().warning("Failed to read enchants file: " + e.toString());
+        }
+    }
+
+    /**
+     * Loads the potion names in potions.yml
+     */
+    public static void loadPotions(ShopPlugin plugin)
+    {
+        try (InputStream stream = plugin.getResource("potions.yml")) {
+            YamlConfiguration potionConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(stream));
+            List<Map<?, ?>> section = potionConfig.getMapList("potions");
+
+            for (Map<?, ?> potionMap : section) {
+                try {
+                    PotionType potionType = PotionType.valueOf((String)potionMap.get("type"));
+                    String name = (String)potionMap.get("name");
+                    String regular = (String)potionMap.get("regular");
+                    String upgraded = (String)potionMap.get("upgraded");
+                    String extended = (String)potionMap.get("extended");
+                    PotionInfo info = new PotionInfo(potionType, name, regular, upgraded, extended);
+                    potions.put(potionType, info);
+                }
+                catch (IllegalArgumentException e) {
+                    // skip
+                }
+            }
+        }
+        catch (IOException e) {
+            plugin.getLogger().warning("Failed to read potions file: " + e.toString());
         }
     }
 
@@ -512,52 +514,12 @@ public final class ItemUtil
 
     public static String getNBTTag(ItemStack stack)
     {
-        JsonObject object = new JsonObject();
-        object.addProperty("id", stack.getType().getId());
-        object.addProperty("Count", stack.getAmount());
-        if (stack.getType().getMaxDurability() > 0) {
-            object.addProperty("Damage", getDurability(stack));
-        }
-        JsonObject tag = new JsonObject();
-        if (stack.getEnchantments() != null && !stack.getEnchantments().isEmpty()) {
-            JsonArray enchantArray = new JsonArray();
-            for (Map.Entry<Enchantment, Integer> enchants : stack.getEnchantments().entrySet()) {
-                JsonObject enchantMap = new JsonObject();
-                enchantMap.addProperty("id", enchants.getKey().getId()
-                );
-                enchantMap.addProperty("lvl", enchants.getValue());
-                enchantArray.add(enchantMap);
-            }
-            tag.add("Enchantments", enchantArray);
-        }
+        return new NBTTagable(stack).toString();
+    }
 
-        JsonObject display = new JsonObject();
-        if (stack.hasItemMeta()) {
-            ItemMeta itemMeta = stack.getItemMeta();
-            if (itemMeta.hasDisplayName()) {
-                JsonObject text = new JsonObject();
-                text.addProperty("text", stack.getItemMeta().getDisplayName());
-                display.addProperty("Name", text.toString());
-            }
-            if (itemMeta.hasLore()) {
-                JsonArray lore = new JsonArray();
-                for (String line : itemMeta.getLore()) {
-                    JsonObject text = new JsonObject();
-                    text.addProperty("text", line);
-                    lore.add(new JsonPrimitive(text.toString()));
-                }
-                display.add("Lore", lore);
-            }
-        }
-
-        if (!display.entrySet().isEmpty()) {
-            tag.add("display", display);
-        }
-        if (!tag.entrySet().isEmpty()) {
-            object.add("tag", tag);
-        }
-        ShopPlugin.logInfo(object.toString());
-        return object.toString();
+    public static PotionInfo getNbtPotionInfo(PotionType type)
+    {
+        return potions.get(type);
     }
 
     public static String getPotionInfo(ItemStack item)
