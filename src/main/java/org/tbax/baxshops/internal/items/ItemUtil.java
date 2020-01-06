@@ -57,12 +57,7 @@ public final class ItemUtil
 
     private static final Map<Material, Material> SIGN_TO_SIGN = new HashMap<>();
 
-    private static final List<Material> SIGN_TYPES = Arrays.asList(Material.SPRUCE_SIGN, Material.SPRUCE_WALL_SIGN,
-            Material.ACACIA_SIGN, Material.ACACIA_WALL_SIGN,
-            Material.BIRCH_SIGN, Material.BIRCH_WALL_SIGN,
-            Material.DARK_OAK_SIGN, Material.DARK_OAK_WALL_SIGN,
-            Material.JUNGLE_SIGN, Material.JUNGLE_WALL_SIGN,
-            Material.OAK_SIGN, Material.OAK_WALL_SIGN,
+    private static final List<Material> SIGN_TYPES = Arrays.asList(Material.SIGN, Material.WALL_SIGN,
             Material.LEGACY_SIGN, Material.LEGACY_WALL_SIGN, Material.LEGACY_SIGN_POST);
 
     static {
@@ -83,12 +78,7 @@ public final class ItemUtil
         AS_NMS_COPY = nmsCpyMthd;
         GET_NAME = getNmMthd;
 
-        SIGN_TO_SIGN.put(Material.OAK_WALL_SIGN, Material.OAK_SIGN);
-        SIGN_TO_SIGN.put(Material.ACACIA_WALL_SIGN, Material.ACACIA_SIGN);
-        SIGN_TO_SIGN.put(Material.BIRCH_WALL_SIGN, Material.BIRCH_SIGN);
-        SIGN_TO_SIGN.put(Material.DARK_OAK_WALL_SIGN, Material.DARK_OAK_SIGN);
-        SIGN_TO_SIGN.put(Material.SPRUCE_WALL_SIGN, Material.SPRUCE_SIGN);
-        SIGN_TO_SIGN.put(Material.JUNGLE_WALL_SIGN, Material.JUNGLE_SIGN);
+        SIGN_TO_SIGN.put(Material.WALL_SIGN, Material.SIGN);
         SIGN_TO_SIGN.put(Material.LEGACY_WALL_SIGN, Material.LEGACY_SIGN);
         SIGN_TO_SIGN.put(Material.LEGACY_SIGN_POST, Material.LEGACY_SIGN);
     }
@@ -415,7 +405,7 @@ public final class ItemUtil
 
     public static Material getDefaultSignType()
     {
-        return Material.OAK_SIGN;
+        return Material.SIGN;
     }
 
     public static Material toInventorySign(Material sign)
@@ -510,8 +500,8 @@ public final class ItemUtil
                 for (int z = -1; z <= 1; ++z) {
                     Location l = block.getLocation().add(x, y, z);
                     Block curr = l.getBlock();
-                    if (isSign(curr.getType())) {
-                        if (isWallSign(curr)) {
+                    if (ItemUtil.isSign(curr.getType())) {
+                        if (curr.getBlockData() instanceof WallSign) {
                             WallSign sign = (WallSign)curr.getBlockData();
                             Block attached = curr.getRelative(sign.getFacing().getOppositeFace());
                             if (attached.getLocation().equals(block.getLocation())) {
