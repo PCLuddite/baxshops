@@ -21,11 +21,13 @@ package org.tbax.baxshops.internal.items;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionData;
+import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.Map;
@@ -57,7 +59,7 @@ public final class NBTTagable
             JsonArray enchantArray = new JsonArray();
             for (Map.Entry<Enchantment, Integer> enchants : stack.getEnchantments().entrySet()) {
                 JsonObject enchantMap = new JsonObject();
-                enchantMap.addProperty("id", enchants.getKey().getKey().toString());
+                enchantMap.addProperty("id", enchants.getKey().getId());
                 enchantMap.addProperty("lvl", enchants.getValue());
                 enchantArray.add(enchantMap);
             }
@@ -73,7 +75,7 @@ public final class NBTTagable
             for (String line : itemMeta.getLore()) {
                 JsonObject text = new JsonObject();
                 text.addProperty("text", line);
-                lore.add(text.toString());
+                lore.add(new JsonPrimitive(text.toString()));
             }
             return lore;
         }
@@ -101,7 +103,7 @@ public final class NBTTagable
         if (loreElement != null) {
             display.add("Lore", loreElement);
         }
-        if (display.size() > 0) {
+        if (display.entrySet().size() > 0) {
             return display;
         }
         else {
@@ -121,19 +123,18 @@ public final class NBTTagable
             tag.add("display", displayElement);
         }
 
-        if (itemMeta instanceof PotionMeta) {
-            PotionMeta potionMeta = (PotionMeta)itemMeta;
-            PotionData potionData = potionMeta.getBasePotionData();
-            PotionInfo potionInfo = ItemUtil.getNbtPotionInfo(potionMeta.getBasePotionData().getType());
+        if (stack.getType() == Material.POTION) {
+            Potion potion = Potion.fromItemStack(stack);
+            PotionInfo potionInfo = ItemUtil.getNbtPotionInfo(potion.getType());
 
             String name;
             if (potionInfo == null) {
-                name = potionData.getType().name().toLowerCase();
+                name = potion.getType().name().toLowerCase();
             }
-            else if (potionData.isExtended()) {
+            else if (potion.hasExtendedDuration()) {
                 name = potionInfo.getExtendedNbtName();
             }
-            else if (potionData.isUpgraded()) {
+            else if (potion.getTier() == Potion.Tier.TWO) {
                 name = potionInfo.getUpgradedNbtName();
             }
             else {
@@ -145,13 +146,9 @@ public final class NBTTagable
             if (customPotionEffectsElement != null) {
                 tag.add("CustomPotionEffects", customPotionEffectsElement);
             }
-
-            if (potionMeta.hasColor()) {
-                tag.addProperty("CustomPotionColor", potionMeta.getColor().asRGB());
-            }
         }
 
-        if (tag.size() > 0) {
+        if (tag.entrySet().size() > 0) {
             return tag;
         } else {
             return null;
@@ -180,7 +177,7 @@ public final class NBTTagable
     public JsonElement asJsonElement()
     {
         JsonObject object = new JsonObject();
-        object.addProperty("id", stack.getType().getKey().toString());
+        object.addProperty("id", stack.getType().getId());
         object.addProperty("Count", stack.getAmount());
         if (stack.getType().getMaxDurability() > 0) {
             object.addProperty("Damage", ItemUtil.getDurability(stack));

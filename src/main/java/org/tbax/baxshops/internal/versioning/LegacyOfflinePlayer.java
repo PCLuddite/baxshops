@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  * Portions derived from Shops Copyright (c) 2012 Nathan Dinsmore and Sam Lazarus.
  *
  * This library is free software; you can redistribute it and/or
@@ -19,8 +19,16 @@
  */
 package org.tbax.baxshops.internal.versioning;
 
+import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
+@Deprecated
 public abstract class LegacyOfflinePlayer implements OfflinePlayer
 {
+    @Override
+    @Deprecated
+    public void setBanned(boolean b)
+    {
+        Bukkit.getOfflinePlayer(getUniqueId()).setBanned(b);
+    }
 }

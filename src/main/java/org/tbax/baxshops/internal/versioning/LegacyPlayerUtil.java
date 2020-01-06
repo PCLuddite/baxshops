@@ -41,16 +41,16 @@ public final class LegacyPlayerUtil
 
     public static void setItemInHand(PlayerInventory inventory, ItemStack stack)
     {
-        inventory.setItemInMainHand(stack);
+        inventory.setItemInHand(stack);
     }
 
     public static ItemStack getItemInHand(PlayerInventory inventory)
     {
-        return inventory.getItemInMainHand();
+        return inventory.getItemInHand();
     }
 
     public static ItemStack[] getInventoryContents(Player player)
     {
-        return player.getInventory().getStorageContents();
+        return player.getInventory().getContents();
     }
 }
