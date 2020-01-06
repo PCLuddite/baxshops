@@ -57,7 +57,7 @@ public final class NBTTagable
             JsonArray enchantArray = new JsonArray();
             for (Map.Entry<Enchantment, Integer> enchants : stack.getEnchantments().entrySet()) {
                 JsonObject enchantMap = new JsonObject();
-                enchantMap.addProperty("id", enchants.getKey().getKey().toString());
+                enchantMap.addProperty("id", enchants.getKey().getId());
                 enchantMap.addProperty("lvl", enchants.getValue());
                 enchantArray.add(enchantMap);
             }
@@ -180,7 +180,7 @@ public final class NBTTagable
     public JsonElement asJsonElement()
     {
         JsonObject object = new JsonObject();
-        object.addProperty("id", stack.getType().getKey().toString());
+        object.addProperty("id", stack.getType().getId());
         object.addProperty("Count", stack.getAmount());
         if (stack.getType().getMaxDurability() > 0) {
             object.addProperty("Damage", ItemUtil.getDurability(stack));

@@ -51,7 +51,7 @@ public final class LegacyItem
 
     public ItemStack toItemStack(short damage)
     {
-        Material material = Material.getMaterial(name, isLegacy());
+        Material material = Material.getMaterial(name);
         if (material == null) return null;
         return new ItemStack(material, 1, damage);
     }
