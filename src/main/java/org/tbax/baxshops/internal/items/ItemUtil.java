@@ -198,8 +198,12 @@ public final class ItemUtil
             List<Map<?, ?>> section = enchantConfig.getMapList("enchants");
 
             for (Map<?, ?> enchantMap : section) {
-                Enchantment enchantment = Enchantment.getByName((String)enchantMap.get("enchantment"));
-                if (enchantment != null) {
+                String enchantName = (String)enchantMap.get("enchantment");
+                Enchantment enchantment = Enchantment.getByName(enchantName);
+                if (enchantment == null) {
+                    ShopPlugin.logWarning(enchantName + " is not an enchantment type");
+                }
+                else {
                     String name = (String)enchantMap.get("name");
                     Object id = enchantMap.get("id");
                     if (id instanceof Number) {
@@ -236,7 +240,7 @@ public final class ItemUtil
                     potions.put(potionType, info);
                 }
                 catch (IllegalArgumentException e) {
-                    // skip
+                    ShopPlugin.logWarning(potionMap.get("type") + " is not a potion type");
                 }
             }
         }
