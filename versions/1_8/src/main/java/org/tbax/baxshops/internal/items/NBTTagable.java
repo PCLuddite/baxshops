@@ -29,7 +29,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
-import org.tbax.baxshops.internal.ShopPlugin;
 
 import java.util.Map;
 
@@ -187,7 +186,6 @@ public final class NBTTagable
         if (tag != null) {
             object.add("tag", tag);
         }
-        ShopPlugin.logInfo(object.toString());
         return object;
     }
 
