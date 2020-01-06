@@ -23,35 +23,15 @@ if [ "$JAVA_HOME" = "" ]; then
     export JAVA_HOME=${JAVA_HOME%/*}
     export JAVA_HOME=${JAVA_HOME%/*}
 fi
-TMP=".tmp$RANDOM"
 SHOPS_VER="1.0b3"
+VERSION='1_14'
 echo "JAVA_HOME=$JAVA_HOME"
 echo "SHOPS_VER=$SHOPS_VER"
-echo "TMP=$TMP"
 
-stash() {
-    local VERSION="$1"
-    if [[ ! -d "./$TMP/$VERSION" ]]; then
-        mkdir -p "./$TMP/$VERSION"
-    fi
-    for FILE in $(find "versions/$VERSION/." -type f); do
-        cp --parents -v "${FILE#versions/$VERSION/}" "./$TMP/$VERSION/"
-    done
-}
 
-unstash() {
-    local VERSION="$1"
-    cp -vr ./$TMP/$VERSION/* .
-}
-
-compile() {
-    local VERSION="$1"
-    
+compile() {    
     echo "Building version $VERSION..."
     
-    stash $VERSION
-    
-    cp -vr versions/$VERSION/* .
     mvn install clean
     STATUS=$?
     if [[ $STATUS = 0 ]]; then
@@ -59,36 +39,13 @@ compile() {
             if [[ ! -d './bin' ]]; then
                 mkdir './bin'
             fi
-            cp -v "./target/baxshops-${SHOPS_VER}-bukkit$VERSION-RELEASE.jar" "./bin/baxshops-$SHOPS_VER-bukkit$VERSION-RELEASE.jar"
+            cp -v "./target/baxshops-${SHOPS_VER}-bukkit${VERSION}-RELEASE.jar" "./bin/baxshops-${SHOPS_VER}-bukkit${VERSION}-RELEASE.jar"
         fi
     fi
     
-    unstash $VERSION
-    
     echo "Done."
+    return $SATUS
 }
 
-if [[ "$1" = "trunk" ]]; then
-    mvn install clean
-    STATUS=$?
-    if [[ $STATUS = 0 ]]; then
-        mvn package
-        cp -v "./target/baxshops-${SHOPS_VER}-SNAPSHOT.jar" "./bin/baxshops-${SHOPS_VER}-SNAPSHOT.jar"
-    fi
-    exit $STATUS
-elif [[ "$1" != "" ]]; then
-    VERSION="$1"
-    if [[ ! -d "versions/$VERSION" ]]; then
-        echo "No version $VERSION to build"
-        exit 1
-    fi
-    compile $VERSION
-else
-    for DIR in versions/*; do
-        VERSION=${DIR#versions/}
-        compile $VERSION
-        echo
-    done
-fi
-
-rm -r ./$TMP
+compile
+exit $?
