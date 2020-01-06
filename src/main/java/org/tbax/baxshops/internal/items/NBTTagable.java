@@ -22,12 +22,11 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.Map;
@@ -123,18 +122,19 @@ public final class NBTTagable
             tag.add("display", displayElement);
         }
 
-        if (stack.getType() == Material.POTION) {
-            Potion potion = Potion.fromItemStack(stack);
-            PotionInfo potionInfo = ItemUtil.getNbtPotionInfo(potion.getType());
+        if (itemMeta instanceof PotionMeta) {
+            PotionMeta potionMeta = (PotionMeta)itemMeta;
+            PotionData potionData = potionMeta.getBasePotionData();
+            PotionInfo potionInfo = ItemUtil.getNbtPotionInfo(potionMeta.getBasePotionData().getType());
 
             String name;
             if (potionInfo == null) {
-                name = potion.getType().name().toLowerCase();
+                name = potionData.getType().name().toLowerCase();
             }
-            else if (potion.hasExtendedDuration()) {
+            else if (potionData.isExtended()) {
                 name = potionInfo.getExtendedNbtName();
             }
-            else if (potion.getTier() == Potion.Tier.TWO) {
+            else if (potionData.isUpgraded()) {
                 name = potionInfo.getUpgradedNbtName();
             }
             else {

@@ -71,6 +71,16 @@ enchants:
   key:
     namespace: minecraft
     key: efficiency
+- enchantment: MENDING
+  name: Mending
+  key:
+    namespace: minecraft
+    key: mending
+- enchantment: FROST_WALKER
+  name: Frost Walker
+  key:
+    namespace: minecraft
+    key: frost_walker
 - enchantment: LURE
   name: Lure
   id: 62
