@@ -158,7 +158,7 @@ public final class CmdSell extends ShopCommand
         }
     }
 
-    private static double sell(ShopCmdActor actor, BaxEntry entry) throws PrematureAbortException
+    static double sell(ShopCmdActor actor, BaxEntry entry) throws PrematureAbortException
     {
         BaxShop shop = actor.getShop();
 
