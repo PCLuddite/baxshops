@@ -308,7 +308,7 @@ public class BaxEntry implements UpgradeableSerializable
     @Override
     public String toString()
     {   
-        return toItemStack().toString();
+        return getItemStack().toString();
     }
 
     public String toString(int index, boolean infinite)
@@ -390,7 +390,7 @@ public class BaxEntry implements UpgradeableSerializable
         if (canSell()) {
             component.append(" ");
             ChatComponent sellComponent = new ChatComponent(Format.refundPrice(refundPrice))
-                    .clickEvent(ClickEvent.suggestCommand("/sell "))
+                    .clickEvent(ClickEvent.suggestCommand("/shop sellfrominventory " + index + " "))
                     .hoverEvent(HoverEvent.showText("Sell for " + Format.money(refundPrice)));
             if (strikethrough) {
                 sellComponent.setText(Format.stripColor(sellComponent.getText()));
