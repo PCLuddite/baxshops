@@ -215,6 +215,7 @@ public class EventListener implements Listener
                     sign.setLine(2, lines[2]);
                     sign.setLine(3, lines.length > 3 ? lines[3] : "");
                 }
+                sign.setEditable(true);
                 sign.update();
             }
         }
