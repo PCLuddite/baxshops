@@ -315,7 +315,7 @@ public final class ItemUtil
         if (!smartStack) return stack1.isSimilar(stack2);
         if (!stack1.isSimilar(stack2)) {
             return stack1.getType() == stack2.getType() &&
-                    (isSameBook(stack1, stack2)  || isSameBanner(stack1, stack2));
+                    (isSameBook(stack1, stack2) || isSameBanner(stack1, stack2));
         }
         return true;
     }
