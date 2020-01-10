@@ -113,7 +113,7 @@ public final class CmdRestockFromInventory extends ShopCommand
             actor.exitError("You do not have any in your inventory to restock");
 
         BaxQuantity qty =  new BaxQuantity(actor.getArg(2), actor.getPlayer(), actor.getInventory(), stack);
-        List<BaxEntry> taken = actor.takeArgFromInventory(1);
+        List<BaxEntry> taken = PlayerUtil.takeQtyFromInventory(qty, actor.getShop(), Collections.emptyList());
 
         BaxEntry takenItem = taken.get(0);
         entry.add(takenItem.getAmount());
