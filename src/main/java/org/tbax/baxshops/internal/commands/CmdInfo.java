@@ -21,15 +21,21 @@ package org.tbax.baxshops.internal.commands;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.CommandHelpArgument;
+import org.tbax.baxshops.Format;
 import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
+import org.tbax.baxshops.internal.items.EnchantMap;
+import org.tbax.baxshops.internal.text.*;
 
 import java.util.List;
+import java.util.Map;
 
 public final class CmdInfo extends ShopCommand
 {
@@ -91,7 +97,52 @@ public final class CmdInfo extends ShopCommand
     public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         BaxEntry entry = actor.getArgEntry(1);
-        actor.getSender().sendMessage(entry.toString());
+        int index = actor.getShop().indexOf(entry) + 1;
+        ChatComponent info = ChatComponent.of(Format.header("Entry Information"));
+        info.append("\nName: ").append(ChatComponent.of(entry.getName())
+            .hoverEvent(HoverEvent.showItem(entry.getItemStack()))
+        );
+        info.append("\nMaterial: ").append(entry.getType().toString());
+        if (entry.getType().getMaxDurability() > 0) {
+            info.append("\nDamage: ").append(entry.getDamagePercent() + "%", TextColor.YELLOW);
+        }
+        if (entry.getItemStack().hasItemMeta()) {
+            ItemMeta meta = entry.getItemStack().getItemMeta();
+            if (meta.hasDisplayName()) {
+                info.append("\nDisplay Name: ").append(meta.getDisplayName(), TextColor.YELLOW);
+            }
+            if (meta.hasLore()) {
+                info.append("\nDescription:");
+                for (String line : meta.getLore()) {
+                    info.append("\n" + line, TextColor.BLUE);
+                }
+            }
+        }
+        Map<Enchantment, Integer> enchmap = EnchantMap.getEnchants(entry.getItemStack());
+        if (enchmap != null && !enchmap.isEmpty()) {
+            info.append("\nEnchants: ").append(Format.enchantments(EnchantMap.fullListString(enchmap)));
+        }
+        info.append("\nQuantity: ").append(entry.getAmount() == 0 ? ChatColor.DARK_RED + "OUT OF STOCK" : Format.number(entry.getAmount()));
+        if (entry.canBuy()) {
+            info.append("\n");
+            info.append(ChatComponent.of("[BUY]", TextColor.GREEN, ChatTextStyle.UNDERLINED)
+                    .hoverEvent(HoverEvent.showText("Buy for " + entry.getFormattedBuyPrice()))
+                    .clickEvent(ClickEvent.suggestCommand("/buy " + index + " "))
+            );
+            info.append(" ");
+        }
+        if (entry.canSell()) {
+            info.append(ChatComponent.of("[SELL]", TextColor.BLUE, ChatTextStyle.UNDERLINED)
+                    .hoverEvent(HoverEvent.showText("Sell for " + entry.getFormattedSellPrice()))
+                    .clickEvent(ClickEvent.suggestCommand("/sell "))
+            );
+        }
+        if (actor.getPlayer() == null) {
+            info.sendTo(actor.getSender());
+        }
+        else {
+            info.sendTo(actor.getPlayer());
+        }
     }
 
     @Override
