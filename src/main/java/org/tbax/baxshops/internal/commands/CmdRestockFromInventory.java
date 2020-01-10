@@ -110,7 +110,7 @@ public final class CmdRestockFromInventory extends ShopCommand
             }
         }
         if (stack == null)
-            actor.exitError("You do not have any in your inventory to sell");
+            actor.exitError("You do not have any in your inventory to restock");
 
         BaxQuantity qty =  new BaxQuantity(actor.getArg(2), actor.getPlayer(), actor.getInventory(), stack);
         List<BaxEntry> taken = actor.takeArgFromInventory(1);
