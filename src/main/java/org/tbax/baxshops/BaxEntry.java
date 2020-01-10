@@ -308,39 +308,7 @@ public class BaxEntry implements UpgradeableSerializable
     @Override
     public String toString()
     {   
-        StringBuilder info = new StringBuilder();
-        info.append(Format.header("BaxEntry Information"));
-        info.append('\n');
-        info.append("Name: ").append(Format.itemName(ItemUtil.getName(this))).append('\n');
-        info.append("Material: ").append(Format.command(stack.getType().toString())).append('\n');
-        if (stack.getType().getMaxDurability() > 0) {
-            info.append("Damage: ").append(ChatColor.YELLOW).append(getDamagePercent()).append('%').append(ChatColor.RESET).append('\n');
-        }
-        if (stack.hasItemMeta()) {
-            ItemMeta meta = stack.getItemMeta();
-            if (meta.hasDisplayName()) {
-                info.append("Display Name: ").append(ChatColor.YELLOW).append(stack.getItemMeta().getDisplayName()).append(ChatColor.RESET).append('\n');
-            }
-            if (meta.hasLore()) {
-                info.append("Description: ").append(ChatColor.BLUE);
-                for (String line : meta.getLore()) {
-                    info.append(line).append(' ');
-                }
-                info.append(ChatColor.RESET).append('\n');
-            }
-        }
-        Map<Enchantment, Integer> enchmap = EnchantMap.getEnchants(stack);
-        if (enchmap != null && !enchmap.isEmpty()) {
-            info.append("Enchants: ").append(Format.enchantments(EnchantMap.fullListString(enchmap))).append('\n');
-        }
-        info.append("Quantity: ").append(getAmount() == 0 ? ChatColor.DARK_RED + "OUT OF STOCK" + ChatColor.RESET : Format.number(getAmount())).append('\n');
-        if (canBuy()) {
-            info.append("Buy Price: ").append(ChatColor.DARK_GREEN).append(ShopPlugin.getEconomy().format(retailPrice)).append(ChatColor.RESET).append('\n');
-        }
-        if (canSell()) {
-            info.append("Sell Price: ").append(ChatColor.BLUE).append(ShopPlugin.getEconomy().format(refundPrice)).append(ChatColor.RESET).append('\n');
-        }
-        return info.toString();
+        return getItemStack().toString();
     }
 
     public String toString(int index, boolean infinite)
@@ -422,7 +390,7 @@ public class BaxEntry implements UpgradeableSerializable
         if (canSell()) {
             component.append(" ");
             ChatComponent sellComponent = new ChatComponent(Format.refundPrice(refundPrice))
-                    .clickEvent(ClickEvent.suggestCommand("/sell "))
+                    .clickEvent(ClickEvent.suggestCommand("/shop sellfrominventory " + index + " "))
                     .hoverEvent(HoverEvent.showText("Sell for " + Format.money(refundPrice)));
             if (strikethrough) {
                 sellComponent.setText(Format.stripColor(sellComponent.getText()));
