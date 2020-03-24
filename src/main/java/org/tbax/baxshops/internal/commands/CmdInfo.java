@@ -134,7 +134,7 @@ public final class CmdInfo extends ShopCommand
         if (entry.canSell()) {
             info.append(ChatComponent.of("[SELL]", TextColor.BLUE, ChatTextStyle.UNDERLINED)
                     .hoverEvent(HoverEvent.showText("Sell for " + entry.getFormattedSellPrice()))
-                    .clickEvent(ClickEvent.suggestCommand("/sell "))
+                    .clickEvent(ClickEvent.suggestCommand("/shop sellfrominventory " + index + " "))
             );
         }
         if (actor.getPlayer() == null) {
