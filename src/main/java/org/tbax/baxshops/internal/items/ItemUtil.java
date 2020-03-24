@@ -38,6 +38,8 @@ import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.Format;
 import org.tbax.baxshops.internal.ShopPlugin;
+import org.tbax.baxshops.internal.nms.NmsItemStack;
+import org.tbax.baxshops.internal.nms.RuntimeObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -48,10 +50,6 @@ import java.util.*;
 
 public final class ItemUtil
 {
-    private static final String MINECRAFT_VERSION;
-    private static final Method AS_NMS_COPY;
-    private static final Method GET_NAME;
-
     private static Map<Integer, LegacyItem> legacyItems = null;
     private static Map<Integer, Enchantment> legacyEnchants = null;
 
@@ -66,23 +64,6 @@ public final class ItemUtil
             Material.LEGACY_SIGN, Material.LEGACY_WALL_SIGN, Material.LEGACY_SIGN_POST);
 
     static {
-        String name = Bukkit.getServer().getClass().getPackage().getName();
-        MINECRAFT_VERSION = name.substring(name.lastIndexOf('.') + 1);
-
-        Method nmsCpyMthd = null;
-        Method getNmMthd = null;
-        try {
-            Class<?> itemStackCls = Class.forName("net.minecraft.server." + MINECRAFT_VERSION + ".ItemStack");
-            nmsCpyMthd = Class.forName("org.bukkit.craftbukkit." + MINECRAFT_VERSION + ".inventory.CraftItemStack")
-                    .getMethod("asNMSCopy", ItemStack.class);
-            getNmMthd = itemStackCls.getMethod("getName");
-        }
-        catch (ReflectiveOperationException e) {
-            e.printStackTrace();
-        }
-        AS_NMS_COPY = nmsCpyMthd;
-        GET_NAME = getNmMthd;
-
         SIGN_TO_SIGN.put(Material.OAK_WALL_SIGN, Material.OAK_SIGN);
         SIGN_TO_SIGN.put(Material.ACACIA_WALL_SIGN, Material.ACACIA_SIGN);
         SIGN_TO_SIGN.put(Material.BIRCH_WALL_SIGN, Material.BIRCH_SIGN);
@@ -180,19 +161,23 @@ public final class ItemUtil
             item.setItemMeta(meta);
         }
         try {
-            Object nmsCopy = AS_NMS_COPY.invoke(null, item);
-            Object txtObj = GET_NAME.invoke(nmsCopy);
-            try {
-                return (String)txtObj;
-            }
-            catch (ClassCastException e) {
-                return (String)txtObj.getClass().getMethod("getText").invoke(txtObj);
-            }
+            return getNmsCopy(item).getName().getText();
         }
         catch (ReflectiveOperationException | ClassCastException e) {
             ShopPlugin.logWarning("Could not get item name for " + item.getType());
             return item.getType().toString();
         }
+    }
+
+    private static Method asNmsCopyMethod = null;
+    public static NmsItemStack getNmsCopy(ItemStack stack) throws ReflectiveOperationException
+    {
+        if (asNmsCopyMethod == null) {
+            Class<?> craftItemStackCls = RuntimeObject.getRuntimeClass("org.bukkit.craftbukkit." +
+                    RuntimeObject.MINECRAFT_VERSION + ".inventory.CraftItemStack");
+            asNmsCopyMethod = craftItemStackCls.getMethod("asNMSCopy", ItemStack.class);
+        }
+        return new NmsItemStack(asNmsCopyMethod.invoke(null, stack));
     }
 
     public static boolean isOminousBanner(@NotNull ItemStack stack)
