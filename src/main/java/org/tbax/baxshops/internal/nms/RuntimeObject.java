@@ -48,7 +48,7 @@ public abstract class RuntimeObject
     {
         Class<?> cls = classCache.get(className);
         if (cls == null) {
-            classCache.put(className, Class.forName(className));
+            classCache.put(className, cls = Class.forName(className));
         }
         return cls;
     }
