@@ -94,6 +94,7 @@ public final class ShopPlugin extends JavaPlugin
             commands.add(CmdReload.class);
             commands.add(CmdRemove.class);
             commands.add(CmdRestock.class);
+            commands.add(CmdRestockFromInventory.class);
             commands.add(CmdSave.class);
             commands.add(CmdSelect.class);
             commands.add(CmdSell.class);

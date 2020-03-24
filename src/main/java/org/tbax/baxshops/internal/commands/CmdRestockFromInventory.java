@@ -18,23 +18,22 @@
  */
 package org.tbax.baxshops.internal.commands;
 
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.*;
-import org.tbax.baxshops.commands.BaxCommand;
 import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
-import org.tbax.baxshops.internal.Resources;
-import org.tbax.baxshops.internal.ShopPlugin;
+import org.tbax.baxshops.internal.items.ItemUtil;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public final class CmdSellFromInventory extends ShopCommand
+public final class CmdRestockFromInventory extends ShopCommand
 {
     @Override
     public boolean requiresSelection(@NotNull ShopCmdActor actor)
@@ -45,7 +44,7 @@ public final class CmdSellFromInventory extends ShopCommand
     @Override
     public boolean requiresOwner(@NotNull ShopCmdActor actor)
     {
-        return false;
+        return true;
     }
 
     @Override
@@ -57,36 +56,24 @@ public final class CmdSellFromInventory extends ShopCommand
     @Override
     public @NotNull String getName()
     {
-        return "sellfrominventory";
+        return "restockfrominventory";
     }
 
     @Override
     public String getPermission()
     {
-        return Permissions.SHOP_TRADER_SELL;
-    }
-
-    @Override
-    public boolean useAlternative(CmdActor actor)
-    {
-        return ((ShopCmdActor)actor).isOwner();
-    }
-
-    @Override
-    public @NotNull Class<? extends BaxCommand> getAlternative()
-    {
-        return CmdRestockFromInventory.class;
+        return Permissions.SHOP_OWNER;
     }
 
     @Override
     public @NotNull CommandHelp getHelp(@NotNull CmdActor actor)
     {
-        CommandHelp help = new CommandHelp(this, "search for an item in your inventory to sell");
-        help.setLongDescription("Searches for an item matching a shop entry to sell to the shop. This is different " +
-                "from '/shop sell' in that '/shop sell' only sells items you are currently holding");
+        CommandHelp help = new CommandHelp(this, "search for an item in your inventory to restock");
+        help.setLongDescription("Searches for an item matching a shop entry to restock the shop. This is different " +
+                "from '/shop restock' in that '/shop restock' only sells items you are currently holding");
         help.setArgs(
-                new CommandHelpArgument("entry", "the entry that you are selling", true),
-                new CommandHelpArgument("qty", "the amount to sell", 1)
+                new CommandHelpArgument("entry", "the entry that you are restocking", true),
+                new CommandHelpArgument("qty", "the amount to restock", 1)
         );
         return help;
     }
@@ -110,9 +97,11 @@ public final class CmdSellFromInventory extends ShopCommand
             actor.appendArg(1);
         }
 
+        if (actor.getShop().hasFlagInfinite()) {
+            actor.exitError("This shop does not need to be restocked.");
+        }
+
         BaxEntry entry = actor.getArgEntry(1);
-        if (!entry.canSell())
-            actor.exitError("The owner of the shop isn't buying %s", entry.getName());
 
         ItemStack stack = null;
         for(int index = 0; stack == null && index < actor.getInventory().getSize(); ++index) {
@@ -121,22 +110,22 @@ public final class CmdSellFromInventory extends ShopCommand
             }
         }
         if (stack == null)
-            actor.exitError("You do not have any in your inventory to sell");
+            actor.exitError("You do not have any in your inventory to restock");
 
         BaxQuantity qty =  new BaxQuantity(actor.getArg(2), actor.getPlayer(), actor.getInventory(), stack);
+        List<BaxEntry> taken = PlayerUtil.takeQtyFromInventory(qty, actor.getShop(), Collections.emptyList());
 
-        if (qty.isAny() || qty.isFill())
-            actor.exitError("'" + actor.getArg(2) +  "' is not a valid quantity");
-
-        List<BaxEntry> items = PlayerUtil.peekQtyFromInventory(qty, actor.getShop(), Collections.emptyList());
-
-        double total = CmdSell.sell(actor, items.get(0));
-        if (total > 0.0) {
-            actor.sendMessage("You earned %s.", Format.money(total));
-            actor.sendMessage(Resources.CURRENT_BALANCE, Format.money2(ShopPlugin.getEconomy().getBalance(actor.getPlayer())));
+        BaxEntry takenItem = taken.get(0);
+        entry.add(takenItem.getAmount());
+        if (!(qty.isAll() || qty.isMost()) && takenItem.getAmount() < qty.getQuantity()) {
+            actor.sendMessage("Could only restock with " + ChatColor.RED + "%d %s" + ChatColor.RESET + ". The shop now has %s.",
+                    takenItem.getAmount(), ItemUtil.getName(takenItem), Format.number(entry.getAmount())
+            );
         }
-        else if (actor.getShop().hasFlagSellRequests()) {
-            actor.sendMessage("Your money will be deposited when the buyer accepts the sale.");
+        else {
+            actor.sendMessage("Restocked with %s in inventory. The shop now has %s.",
+                    Format.itemName(takenItem.getAmount(), ItemUtil.getName(entry)), Format.number(entry.getAmount())
+            );
         }
     }
 
