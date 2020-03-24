@@ -25,6 +25,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.tbax.baxshops.internal.ShopPlugin;
+import org.tbax.baxshops.internal.nms.*;
 
 import java.util.*;
 
@@ -220,9 +222,16 @@ public final class ChatComponent
     public void sendTo(Player player)
     {
         try {
-            ChatSerializer.sendTo(player, this);
+            IChatBaseComponent component = ChatSerializer.a(toString());
+            PacketPlayOutChat packet = new PacketPlayOutChat(component);
+            packet.a = component;
+
+            CraftPlayer craftPlayer = new CraftPlayer(player);
+            PlayerConnection playerConnection = craftPlayer.getHandle().playerConnection;
+            playerConnection.sendPacket(packet);
         }
         catch (ReflectiveOperationException e) {
+            ShopPlugin.logSevere("Reflection error at " +  e.getMessage());
             player.sendMessage(toPlainString());
         }
     }
