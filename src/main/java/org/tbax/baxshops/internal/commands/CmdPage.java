@@ -41,7 +41,7 @@ public final class CmdPage extends ShopCommand
     @Override
     public String getPermission()
     {
-        return Permissions.SHOP_ADMIN;
+        return Permissions.SHOP_TRADER;
     }
 
     @Override
