@@ -28,7 +28,7 @@ public final class IChatBaseComponent extends NmsObject
     }
 
     @Override
-    public Object getRuntimeObject()
+    public Object __object()
     {
         return runtimeObject;
     }

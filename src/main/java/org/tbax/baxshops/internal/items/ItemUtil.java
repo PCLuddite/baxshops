@@ -173,7 +173,7 @@ public final class ItemUtil
     public static NmsItemStack getNmsCopy(ItemStack stack) throws ReflectiveOperationException
     {
         if (asNmsCopyMethod == null) {
-            Class<?> craftItemStackCls = RuntimeObject.getRuntimeClass("org.bukkit.craftbukkit." +
+            Class<?> craftItemStackCls = RuntimeObject.__class("org.bukkit.craftbukkit." +
                     RuntimeObject.MINECRAFT_VERSION + ".inventory.CraftItemStack");
             asNmsCopyMethod = craftItemStackCls.getMethod("asNMSCopy", ItemStack.class);
         }

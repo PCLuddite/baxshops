@@ -28,7 +28,7 @@ public final class ChatSerializer extends NmsObject
 
     public static IChatBaseComponent a(String text) throws ReflectiveOperationException
     {
-        Class<?> runtimeClass = getRuntimeClass(RUNTIME_CLASS_NAME);
+        Class<?> runtimeClass = __class(RUNTIME_CLASS_NAME);
         if (aMethod == null) {
             aMethod = runtimeClass.getMethod("a", String.class);
         }
@@ -36,13 +36,13 @@ public final class ChatSerializer extends NmsObject
     }
 
     @Override
-    protected String getRuntimeClassName()
+    protected String __class_name()
     {
         return RUNTIME_CLASS_NAME;
     }
 
     @Override
-    public Object getRuntimeObject()
+    public Object __object()
     {
         return null;
     }

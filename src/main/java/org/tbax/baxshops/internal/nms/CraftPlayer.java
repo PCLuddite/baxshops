@@ -32,22 +32,22 @@ public final class CraftPlayer extends CraftObject
     }
 
     @Override
-    protected String getRuntimePackageName()
+    protected String __pkg_name()
     {
-        return super.getRuntimePackageName() + ".entity";
+        return super.__pkg_name() + ".entity";
     }
 
     private static Method getHandleMethod;
     public EntityPlayer getHandle() throws ReflectiveOperationException
     {
         if (getHandleMethod == null) {
-            getHandleMethod = getRuntimeMethod("getHandle");
+            getHandleMethod = __method("getHandle");
         }
         return new EntityPlayer(getHandleMethod.invoke(player));
     }
 
     @Override
-    public Object getRuntimeObject()
+    public Object __object()
     {
         return player;
     }

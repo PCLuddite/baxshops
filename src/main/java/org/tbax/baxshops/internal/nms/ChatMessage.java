@@ -33,13 +33,13 @@ public final class ChatMessage extends NmsObject
     public String getText() throws ReflectiveOperationException
     {
         if (getTextMethod == null) {
-            getTextMethod = getRuntimeMethod("getText");
+            getTextMethod = __method("getText");
         }
         return (String)getTextMethod.invoke(runtimeObject);
     }
 
     @Override
-    public Object getRuntimeObject()
+    public Object __object()
     {
         return runtimeObject;
     }
