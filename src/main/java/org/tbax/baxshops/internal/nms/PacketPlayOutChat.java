@@ -43,16 +43,11 @@ public final class PacketPlayOutChat extends Packet
     @Override
     public Object getRuntimeObject() throws ReflectiveOperationException
     {
-        try {
-            if (aField == null) {
-                aField = getRuntimeClass().getDeclaredField("a");
-                aField.setAccessible(true);
-            }
-            aField.set(runtimeObject, a.getRuntimeObject());
+        if (aField == null) {
+            aField = getRuntimeClass().getDeclaredField("a");
+            aField.setAccessible(true);
         }
-        catch (ReflectiveOperationException e) {
-            ShopPlugin.logSevere("Unable to set IChatBaseComponent field in " + getRuntimeClass().getName());
-        }
+        aField.set(runtimeObject, a.getRuntimeObject());
         return runtimeObject;
     }
 }
