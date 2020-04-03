@@ -222,7 +222,7 @@ public final class ChatComponent
     public void sendTo(Player player)
     {
         try {
-            IChatBaseComponent component = ChatSerializer.a(toString());
+            IChatBaseComponent component = IChatBaseComponent.ChatSerializer.a(toString());
             PacketPlayOutChat packet = new PacketPlayOutChat(component);
             packet.a = component;
 

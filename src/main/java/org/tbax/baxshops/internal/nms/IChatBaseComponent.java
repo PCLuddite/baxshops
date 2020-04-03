@@ -18,6 +18,8 @@
  */
 package org.tbax.baxshops.internal.nms;
 
+import java.lang.reflect.Method;
+
 public final class IChatBaseComponent extends NmsObject
 {
     private Object runtimeObject;
@@ -31,5 +33,33 @@ public final class IChatBaseComponent extends NmsObject
     public Object __object()
     {
         return runtimeObject;
+    }
+
+    public static class ChatSerializer extends NmsObject
+    {
+        private static final String RUNTIME_CLASS_NAME = "net.minecraft.server." +
+                MINECRAFT_VERSION + ".IChatBaseComponent$ChatSerializer";
+        private static Method aMethod = null;
+
+        public static IChatBaseComponent a(String text) throws ReflectiveOperationException
+        {
+            Class<?> runtimeClass = __class(RUNTIME_CLASS_NAME);
+            if (aMethod == null) {
+                aMethod = runtimeClass.getMethod("a", String.class);
+            }
+            return new IChatBaseComponent(aMethod.invoke(runtimeClass, text));
+        }
+
+        @Override
+        public String __class_name()
+        {
+            return RUNTIME_CLASS_NAME;
+        }
+
+        @Override
+        public Object __object()
+        {
+            return null;
+        }
     }
 }

@@ -21,7 +21,7 @@ package org.tbax.baxshops.internal.nms;
 public abstract class CraftObject extends RuntimeObject
 {
     @Override
-    protected String __pkg_name()
+    public String __pkg_name()
     {
         return "org.bukkit.craftbukkit." + MINECRAFT_VERSION;
     }

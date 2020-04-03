@@ -32,7 +32,7 @@ public final class CraftPlayer extends CraftObject
     }
 
     @Override
-    protected String __pkg_name()
+    public String __pkg_name()
     {
         return super.__pkg_name() + ".entity";
     }
