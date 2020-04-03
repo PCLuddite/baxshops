@@ -36,7 +36,7 @@ public final class ChatSerializer extends NmsObject
     }
 
     @Override
-    protected String __class_name()
+    public String __class_name()
     {
         return RUNTIME_CLASS_NAME;
     }

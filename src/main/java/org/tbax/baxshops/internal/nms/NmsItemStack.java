@@ -30,7 +30,7 @@ public final class NmsItemStack extends NmsObject
     }
 
     @Override
-    protected String __class_name()
+    public String __class_name()
     {
         return "ItemStack";
     }
