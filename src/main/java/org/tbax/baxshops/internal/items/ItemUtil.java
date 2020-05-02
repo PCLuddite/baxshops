@@ -151,7 +151,7 @@ public final class ItemUtil
                 return EnchantMap.fullListString(enchants);
         }
         else if (isOminousBanner(item)) {
-            return ChatColor.GOLD + "Ominous Banner";
+            return "Ominous Banner";
         }
 
         item = item.clone();
