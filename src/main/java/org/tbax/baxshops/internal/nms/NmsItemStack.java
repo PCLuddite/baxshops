@@ -30,7 +30,7 @@ public final class NmsItemStack extends NmsObject
     }
 
     @Override
-    protected String getRuntimeClassName()
+    public String __class_name()
     {
         return "ItemStack";
     }
@@ -39,13 +39,13 @@ public final class NmsItemStack extends NmsObject
     public String getName() throws ReflectiveOperationException
     {
         if (getNameMethod == null) {
-            getNameMethod = getRuntimeMethod("getName");
+            getNameMethod = __method("getName");
         }
         return (String)getNameMethod.invoke(runtimeObject);
     }
 
     @Override
-    public Object getRuntimeObject()
+    public Object __object()
     {
         return runtimeObject;
     }
