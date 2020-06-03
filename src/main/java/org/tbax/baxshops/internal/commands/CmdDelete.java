@@ -20,18 +20,27 @@
 package org.tbax.baxshops.internal.commands;
 
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.Format;
 import org.tbax.baxshops.commands.CmdActor;
+import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.ShopPlugin;
 
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+
 public final class CmdDelete extends ShopCommand
 {
+    // playerId: shopId
+    private final Map<UUID, UUID> confirmationMap = new ConcurrentHashMap<>();
+
     @Override
     public @NotNull String getName()
     {
@@ -63,7 +72,16 @@ public final class CmdDelete extends ShopCommand
     @Override
     public boolean hasValidArgCount(@NotNull CmdActor actor)
     {
-        return actor.getNumArgs() == 1;
+        if (actor.getNumArgs() == 1) {
+            return true;
+        } else if (actor.getNumArgs() == 2 && actor instanceof ShopCmdActor) {
+            ShopCmdActor shopActor = ((ShopCmdActor)actor);
+            if (shopActor.getPlayer() != null && shopActor.getShop() != null) {
+                // allow 2 args if need to confirm
+                return needsToConfirm(shopActor.getPlayer(), shopActor.getShop());
+            }
+        }
+        return false;
     }
 
     @Override
@@ -91,26 +109,46 @@ public final class CmdDelete extends ShopCommand
     }
 
     @Override
-    public void onShopCommand(@NotNull ShopCmdActor actor)
+    public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         BaxShop shop = actor.getShop();
-        assert shop != null;
         if (shop.getLocations().size() == 1) {
-            if (!shop.isEmpty() && !actor.getShop().hasFlagInfinite()) {
-                actor.sendError("There is still inventory at this shop!");
-                actor.sendError("Please remove all inventory before deleting it.");
+            Player player = actor.getPlayer();
+            if (needsToConfirm(player, shop) && actor.getNumArgs() == 2) {
+                String yesNo = actor.getArgEnum(1, "yes", "no");
+                if ("yes".equalsIgnoreCase(yesNo)) {
+                    if (ShopPlugin.getBaxConfig().hasBackupOnDelete()) {
+                        ShopPlugin.getStateFile().writeToDisk(ShopPlugin.getState());
+                        ShopPlugin.getStateFile().backup();
+                    }
+                    removeShop(actor, shop);
+                    actor.sendWarning("This shop has been deleted. If this is a mistake, try loading a backup.");
+                } else {
+                    actor.sendMessage("Shop will not be deleted");
+                }
+                confirmationMap.remove(player.getUniqueId());
+                ShopPlugin.clearSelection(actor.getPlayer());
             }
             else {
-                removeShop(actor, actor.getShop());
-                actor.sendMessage("%s's shop has been deleted", Format.username(shop.getOwner().getName()));
+                if (shop.isEmpty()) {
+                    removeShop(actor, actor.getShop());
+                    actor.sendMessage("%s's shop has been deleted", Format.username(shop.getOwner().getName()));
+                    ShopPlugin.clearSelection(actor.getPlayer());
+                }
+                else {
+                    actor.sendError("This is the last location of this shop, and it still has inventory.");
+                    actor.sendError("Any inventory will not be recovered. Are you sure you want to delete it?");
+                    actor.sendMessage("Type %s to confirm or %s", Format.command("/shop delete yes"), Format.command("/shop delete no"));
+                    confirmationMap.put(player.getUniqueId(), shop.getId());
+                }
             }
         }
         else {
             ShopPlugin.removeLocation(shop.getId(), actor.getSelection().getLocation());
             changeSignText(actor, actor.getSelection().getLocation());
             actor.sendMessage("This shop location has been closed");
+            ShopPlugin.clearSelection(actor.getPlayer());
         }
-        ShopPlugin.clearSelection(actor.getPlayer());
     }
 
     private void removeShop(ShopCmdActor actor, BaxShop shop)
@@ -138,5 +176,11 @@ public final class CmdDelete extends ShopCommand
         catch (NullPointerException | ClassCastException e) {
             actor.sendError("Unable to change the sign text at " + Format.location(loc));
         }
+    }
+
+    private boolean needsToConfirm(@NotNull OfflinePlayer player, @NotNull BaxShop shop)
+    {
+        UUID shopToConfirm = confirmationMap.get(player.getUniqueId());
+        return shopToConfirm != null && shopToConfirm.equals(shop.getId());
     }
 }

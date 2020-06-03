@@ -90,7 +90,12 @@ public final class CmdCopy extends ShopCommand
                 signType = actor.getItemInHand().getType();
             }
             else {
-                signType = ItemUtil.getDefaultSignType();
+                Material blockType = actor.getSelection().getLocation().getBlock().getType();
+                if (ItemUtil.isSign(blockType)) {
+                    signType = ItemUtil.toInventorySign(blockType);
+                } else {
+                    signType = ItemUtil.getDefaultSignType();
+                }
             }
         }
         else {

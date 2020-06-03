@@ -37,6 +37,7 @@ public final class BaxConfig
     public static final UUID DEFAULT_ERROR_ID = UUID.fromString("3d748006-ddc3-4f1b-a7c9-01fab68d0797");
     public static final String DEFAULT_ERROR_NAME = Resources.ERROR_INLINE;
     public static final boolean DEFAULT_DEPOSIT_DUMMY = false;
+    public static final boolean DEFAULT_BACKUP_ON_DELETE = true;
 
     private final JavaPlugin plugin;
 
@@ -174,5 +175,15 @@ public final class BaxConfig
     public void save()
     {
         plugin.saveConfig();
+    }
+
+    public boolean hasBackupOnDelete()
+    {
+        return getFileConfig().getBoolean("Backup.BackupOnDelete", DEFAULT_BACKUP_ON_DELETE);
+    }
+
+    public void setDefaultBackupOnDelete(boolean value)
+    {
+        getFileConfig().set("Backup.BackupOnDelete", DEFAULT_BACKUP_ON_DELETE);
     }
 }
