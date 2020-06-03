@@ -70,7 +70,7 @@ public final class CmdSetOwner extends ShopCommand
     @Override
     public boolean hasValidArgCount(@NotNull CmdActor actor)
     {
-        return actor.getNumArgs() == 3;
+        return actor.getNumArgs() == 2;
     }
 
     @Override
@@ -101,10 +101,10 @@ public final class CmdSetOwner extends ShopCommand
     public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         BaxShop shop = actor.getShop();
-        StoredPlayer newOwner = actor.getArgPlayer(2);
+        StoredPlayer newOwner = actor.getArgPlayer(1);
         if (newOwner == null) {
             if (actor.isAdmin()) { // only admin can set owner to non-registered player
-                newOwner = actor.getArgPlayerSafe(2);
+                newOwner = actor.getArgPlayerSafe(1);
             }
             else {
                 actor.exitError(Resources.NOT_REGISTERED_PLAYER, actor.getArg(2), "be a shop owner");

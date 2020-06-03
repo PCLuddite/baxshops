@@ -31,20 +31,20 @@ public abstract class RuntimeObject
 
     private final static Map<String, Class<?>> classCache = new HashMap<>();
 
-    protected abstract String getRuntimePackageName();
+    public abstract String __pkg_name();
 
-    protected String getRuntimeClassName()
+    public String __class_name()
     {
         Class<? extends RuntimeObject> cls = getClass();
         return cls.getName().substring(cls.getName().lastIndexOf('.') + 1);
     }
 
-    public final Class<?> getRuntimeClass() throws ReflectiveOperationException
+    public final Class<?> __class() throws ReflectiveOperationException
     {
-        return getRuntimeClass(getRuntimePackageName() + "." + getRuntimeClassName());
+        return __class(__pkg_name() + "." + __class_name());
     }
 
-    public static Class<?> getRuntimeClass(String className) throws ReflectiveOperationException
+    public static Class<?> __class(String className) throws ReflectiveOperationException
     {
         Class<?> cls = classCache.get(className);
         if (cls == null) {
@@ -53,10 +53,10 @@ public abstract class RuntimeObject
         return cls;
     }
 
-    protected final Method getRuntimeMethod(String name, Class<?>... parameterTypes) throws ReflectiveOperationException
+    protected final Method __method(String name, Class<?>... parameterTypes) throws ReflectiveOperationException
     {
-        return getRuntimeClass().getDeclaredMethod(name, parameterTypes);
+        return __class().getDeclaredMethod(name, parameterTypes);
     }
 
-    public abstract Object getRuntimeObject() throws ReflectiveOperationException;
+    public abstract Object __object() throws ReflectiveOperationException;
 }
