@@ -31,13 +31,13 @@ public final class EntityPlayer extends NmsObject
     {
         this.runtimeObject = runtimeObject;
         if (playerConnectionField == null) {
-            playerConnectionField = getRuntimeClass().getField("playerConnection");
+            playerConnectionField = __class().getField("playerConnection");
         }
         playerConnection = new PlayerConnection(playerConnectionField.get(runtimeObject));
     }
 
     @Override
-    public Object getRuntimeObject()
+    public Object __object()
     {
         return runtimeObject;
     }
