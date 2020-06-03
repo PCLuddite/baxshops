@@ -33,14 +33,14 @@ public final class PlayerConnection extends NmsObject
     public void sendPacket(Packet packet) throws ReflectiveOperationException
     {
         if (sendPacketMethod == null) {
-            sendPacketMethod = getRuntimeMethod("sendPacket",
-                    getRuntimeClass(getRuntimePackageName() + ".Packet"));
+            sendPacketMethod = __method("sendPacket",
+                    __class(__pkg_name() + ".Packet"));
         }
-        sendPacketMethod.invoke(runtimeObject, packet.getRuntimeObject());
+        sendPacketMethod.invoke(runtimeObject, packet.__object());
     }
 
     @Override
-    public Object getRuntimeObject()
+    public Object __object()
     {
         return runtimeObject;
     }
