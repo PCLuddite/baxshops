@@ -21,7 +21,7 @@ package org.tbax.baxshops.internal.nms;
 public abstract class NmsObject extends RuntimeObject
 {
     @Override
-    protected String getRuntimePackageName()
+    public String __pkg_name()
     {
         return "net.minecraft.server." + MINECRAFT_VERSION;
     }

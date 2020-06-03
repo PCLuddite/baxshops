@@ -18,8 +18,6 @@
  */
 package org.tbax.baxshops.internal.nms;
 
-import org.tbax.baxshops.internal.ShopPlugin;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
@@ -35,24 +33,19 @@ public final class PacketPlayOutChat extends Packet
     {
         a = component;
         if (ctor == null) {
-            ctor = getRuntimeClass().getConstructor(component.getRuntimeClass());
+            ctor = __class().getConstructor(component.__class());
         }
-        runtimeObject = ctor.newInstance(a.getRuntimeObject());
+        runtimeObject = ctor.newInstance(a.__object());
     }
 
     @Override
-    public Object getRuntimeObject() throws ReflectiveOperationException
+    public Object __object() throws ReflectiveOperationException
     {
-        try {
-            if (aField == null) {
-                aField = getRuntimeClass().getDeclaredField("a");
-                aField.setAccessible(true);
-            }
-            aField.set(runtimeObject, a.getRuntimeObject());
+        if (aField == null) {
+            aField = __class().getDeclaredField("a");
+            aField.setAccessible(true);
         }
-        catch (ReflectiveOperationException e) {
-            ShopPlugin.logSevere("Unable to set IChatBaseComponent field in " + getRuntimeClass().getName());
-        }
+        aField.set(runtimeObject, a.__object());
         return runtimeObject;
     }
 }

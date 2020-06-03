@@ -141,7 +141,7 @@ public final class ItemUtil
                 return EnchantMap.fullListString(enchants);
         }
         else if (isOminousBanner(item)) {
-            return ChatColor.GOLD + "Ominous Banner";
+            return "Ominous Banner";
         }
 
         item = item.clone();
@@ -163,7 +163,7 @@ public final class ItemUtil
     public static NmsItemStack getNmsCopy(ItemStack stack) throws ReflectiveOperationException
     {
         if (asNmsCopyMethod == null) {
-            Class<?> craftItemStackCls = RuntimeObject.getRuntimeClass("org.bukkit.craftbukkit." +
+            Class<?> craftItemStackCls = RuntimeObject.__class("org.bukkit.craftbukkit." +
                     RuntimeObject.MINECRAFT_VERSION + ".inventory.CraftItemStack");
             asNmsCopyMethod = craftItemStackCls.getMethod("asNMSCopy", ItemStack.class);
         }
