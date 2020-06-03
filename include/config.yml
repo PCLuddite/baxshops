@@ -5,8 +5,9 @@
 # |____/  \__,_|/_/\_\|____/ |_| |_| \___/ | .__/ |___/
 #                                          |_|
 # Backup:
-#   Days: 1         # Number of days to keep backups. Set this to -1 to never delete backups or 0 to disable backups
-#   Interval: 60    # The interval (in minutes) to back up
+#   Days: 1               # Number of days to keep backups. Set this to -1 to never delete backups or 0 to disable backups
+#   Interval: 60          # The interval (in minutes) to back up
+#   BackupOnDelete: true  # whether or not to backup automatically any time a shop with inventory is completely deleted
 # SpecialPlayers:
 #  Dummy:           # this name and id will be used as a nonexistent player
 #    name: world
@@ -20,6 +21,7 @@
 Backup:
   Days: 1
   Interval: 60
+  BackupOnDelete: true
 SpecialPlayers:
   Dummy:
     name: world
