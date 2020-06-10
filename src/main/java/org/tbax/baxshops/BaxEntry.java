@@ -398,7 +398,7 @@ public class BaxEntry implements UpgradeableSerializable
             component.append(sellComponent);
         }
 
-        if (!(canBuy() || canBuy())) {
+        if (!canBuy() && !canSell()) {
             component.append(" ");
             ChatComponent nfs = new ChatComponent("(Not for Sale)");
             if (!strikethrough) {
@@ -406,7 +406,7 @@ public class BaxEntry implements UpgradeableSerializable
             }
             component.append(nfs);
         }
-        
+
         return component;
     }
     
