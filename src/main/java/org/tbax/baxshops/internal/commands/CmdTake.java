@@ -19,7 +19,6 @@
 package org.tbax.baxshops.internal.commands;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.*;
@@ -105,14 +104,14 @@ public final class CmdTake extends ShopCommand
         BaxEntry entry;
         assert shop != null;
         if (actor.getNumArgs() == 1) {
-            actor.appendArgs(1, 1);
+            actor.appendArgs("1", "1");
         }
         else if (actor.getNumArgs() == 2) {
-            actor.appendArg(1);
+            actor.appendArg("1");
         }
 
-        entry = actor.getArgEntry(1);
-        BaxQuantity amt = actor.getArgShopQty(2, entry);
+        entry = actor.getArg(1).asEntry();
+        BaxQuantity amt = actor.getArg(2).asShopQty(entry);
 
         if (!shop.hasFlagInfinite()) {
             if (amt.getQuantity() > entry.getAmount()) {
@@ -147,17 +146,17 @@ public final class CmdTake extends ShopCommand
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    public List<String> onTabComplete(@NotNull ShopCmdActor actor, @NotNull Command command,
+                                      @NotNull String alias, List<ShopCmdArg> args)
     {
-        ShopCmdActor actor = (ShopCmdActor)sender;
         if (actor.getShop() != null) {
-            if (args.length == 2) {
+            if (args.size() == 2) {
                 return actor.getShop().getAllItemAliases();
             }
-            else if (args.length == 3) {
+            else if (args.size() == 3) {
                 return Arrays.asList("all", "fill", "most", "stack");
             }
         }
-        return super.onTabComplete(sender, command, alias, args);
+        return super.onTabComplete(actor, command, alias, args);
     }
 }

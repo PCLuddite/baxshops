@@ -21,7 +21,6 @@ package org.tbax.baxshops.internal.commands;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.CommandHelpArgument;
@@ -105,11 +104,11 @@ public final class CmdLollipop extends ShopCommand
     {
         String tastiness = LollipopNotification.DEFAULT_TASTINESS;
         if (actor.getNumArgs() == 3) {
-            if (actor.isArgDouble(2)) {
-                tastiness = LollipopNotification.getStockAdjective(actor.getArgDouble(2));
+            if (actor.getArg(2).isDouble()) {
+                tastiness = LollipopNotification.getStockAdjective(actor.getArg(2).asDouble());
             }
             else {
-                tastiness = actor.getArg(2);
+                tastiness = actor.getArg(2).asString();
             }
         }
 
@@ -117,7 +116,7 @@ public final class CmdLollipop extends ShopCommand
             actor.exitError("Your adjective is too long");
 
         OfflinePlayer sender = actor.getPlayer() == null ? StoredPlayer.DUMMY : actor.getPlayer();
-        StoredPlayer recipient = actor.getArgPlayer(1);
+        StoredPlayer recipient = actor.getArg(1).asPlayer();
         if (recipient == null)
             actor.exitError(Resources.NOT_REGISTERED_PLAYER, actor.getArg(1), "receive a lollipop");
 
@@ -141,9 +140,9 @@ public final class CmdLollipop extends ShopCommand
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    public List<String> onTabComplete(@NotNull ShopCmdActor actor, @NotNull Command command,
+                                      @NotNull String alias, List<ShopCmdArg> args)
     {
-        CmdActor actor = (CmdActor)sender;
         if (actor.getNumArgs() == 2) {
             return ShopPlugin.getRegisteredPlayers().stream()
                     .map(StoredPlayer::getName)
@@ -153,7 +152,7 @@ public final class CmdLollipop extends ShopCommand
             return Arrays.asList(LollipopNotification.STOCK_ADJECTIVES);
         }
         else {
-            return super.onTabComplete(sender, command, alias, args);
+            return super.onTabComplete(actor, command, alias, args);
         }
     }
 }

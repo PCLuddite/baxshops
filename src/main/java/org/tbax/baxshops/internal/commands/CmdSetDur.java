@@ -19,7 +19,6 @@
 package org.tbax.baxshops.internal.commands;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.CommandHelp;
@@ -96,8 +95,8 @@ public final class CmdSetDur extends ShopCommand
     @Override
     public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
-        BaxEntry entry = actor.getArgEntry(1);
-        short damage = actor.getArgShort(2, String.format(Resources.INVALID_DECIMAL, "damage"));
+        BaxEntry entry = actor.getArg(1).asEntry();
+        short damage = actor.getArg(2).asShort( String.format(Resources.INVALID_DECIMAL, "damage"));
         if (damage > 100 || damage < 0) {
             actor.exitError("Damage percentage must be between 0 and 100");
         }
@@ -106,14 +105,14 @@ public final class CmdSetDur extends ShopCommand
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    public List<String> onTabComplete(@NotNull ShopCmdActor actor, @NotNull Command command,
+                                      @NotNull String alias, List<ShopCmdArg> args)
     {
-        ShopCmdActor actor = (ShopCmdActor)sender;
-        if (args.length == 2 && actor.getShop() != null) {
+        if (args.size() == 2 && actor.getShop() != null) {
             return actor.getShop().getAllItemAliases();
         }
         else {
-            return super.onTabComplete(sender, command, alias, args);
+            return super.onTabComplete(actor, command, alias, args);
         }
     }
 }

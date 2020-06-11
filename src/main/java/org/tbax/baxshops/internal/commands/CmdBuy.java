@@ -20,7 +20,6 @@
 package org.tbax.baxshops.internal.commands;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.*;
 import org.tbax.baxshops.commands.BaxCommand;
@@ -117,18 +116,18 @@ public final class CmdBuy extends ShopCommand
     public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException // tested OK 3/16/19
     {
         if (actor.getNumArgs() == 1) {
-            actor.appendArgs(1, 1);
+            actor.appendArgs("1", "1");
         }
-        else if (actor.getNumArgs() == 2) {
-            actor.appendArg(1);
+        if (actor.getNumArgs() == 2) {
+            actor.appendArgs("1");
         }
 
         BaxShop shop = actor.getShop();
-        BaxEntry entry = actor.getArgEntry(1);
+        BaxEntry entry = actor.getArg(1).asEntry();
         if (!entry.canBuy())
             actor.exitError("%s is not for sale", entry.getName());
 
-        BaxQuantity amount = actor.getArgShopQty(2, entry);
+        BaxQuantity amount = actor.getArg(2).asShopQty(entry);
         if (amount.getQuantity() == 0) {
             actor.exitWarning("You purchased nothing");
         }
@@ -182,17 +181,17 @@ public final class CmdBuy extends ShopCommand
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    public List<String> onTabComplete(@NotNull ShopCmdActor actor, @NotNull Command command,
+                                      @NotNull String alias, List<ShopCmdArg> args)
     {
-        ShopCmdActor actor = (ShopCmdActor)sender;
         if (actor.getShop() != null) {
-            if (args.length == 2) {
+            if (args.size() == 2) {
                 return actor.getShop().getAllItemAliases();
             }
-            else if (args.length == 3) {
+            else if (args.size() == 3) {
                 return Arrays.asList("all", "fill", "most", "stack");
             }
         }
-        return super.onTabComplete(sender, command, alias, args);
+        return super.onTabComplete(actor, command, alias, args);
     }
 }

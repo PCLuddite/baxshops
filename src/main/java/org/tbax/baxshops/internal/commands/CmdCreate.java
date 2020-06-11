@@ -25,7 +25,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.*;
@@ -117,7 +116,7 @@ public final class CmdCreate extends ShopCommand
     {
         OfflinePlayer owner;
         if (actor.isAdmin()) {
-            owner = actor.getArgPlayerSafe(1);
+            owner = actor.getArg(1).asPlayerSafe();
         }
         else {
             owner = actor.getPlayer();
@@ -152,7 +151,7 @@ public final class CmdCreate extends ShopCommand
         ShopPlugin.addShop(shop);
 
         if (actor.isAdmin() && actor.getNumArgs() == 3) {
-            shop.setFlagInfinite(actor.getArgBoolean(2));
+            shop.setFlagInfinite(actor.getArg(2).asBoolean());
         }
 
         shop.setFlagSellRequests(shop.hasFlagInfinite());
@@ -195,9 +194,9 @@ public final class CmdCreate extends ShopCommand
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    public List<String> onTabComplete(@NotNull ShopCmdActor actor, @NotNull Command command,
+                                      @NotNull String alias, List<ShopCmdArg> args)
     {
-        ShopCmdActor actor = (ShopCmdActor)sender;
         if (actor.isAdmin()) {
             if (actor.getNumArgs() == 2) {
                 return ShopPlugin.getRegisteredPlayers().stream()
@@ -208,6 +207,6 @@ public final class CmdCreate extends ShopCommand
                 return Arrays.asList("true", "false");
             }
         }
-        return super.onTabComplete(sender, command, alias, args);
+        return super.onTabComplete(actor, command, alias, args);
     }
 }

@@ -21,7 +21,6 @@ package org.tbax.baxshops.internal.commands;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.CommandHelpArgument;
@@ -97,7 +96,7 @@ public final class CmdSetAngle extends ShopCommand
     @Override
     public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
-        String direction = actor.getArgEnum(1,
+        String direction = actor.getArg(1).asEnum(
                 "NORTH", "NORTHEAST", "EAST", "SOUTHEAST", "SOUTH", "SOUTHWEST", "WEST", "NORTHWEST"
         );
 
@@ -129,7 +128,8 @@ public final class CmdSetAngle extends ShopCommand
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    public List<String> onTabComplete(@NotNull ShopCmdActor actor, @NotNull Command command,
+                                      @NotNull String alias, List<ShopCmdArg> args)
     {
         return Arrays.asList(
                 "NORTH", "NORTHEAST", "EAST", "SOUTHEAST", "SOUTH", "SOUTHWEST", "WEST", "NORTHWEST"

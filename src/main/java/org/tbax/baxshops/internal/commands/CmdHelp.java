@@ -101,15 +101,15 @@ public final class CmdHelp extends ShopCommand
     public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         if (actor.getNumArgs() == 1) {
-            actor.appendArg(1); // show page 1 by default
+            actor.appendArg("1"); // show page 1 by default
         }
-        if (actor.isArgInt(1)) {
+        if (actor.getArg(1).isInteger()) {
             actor.getSender().sendMessage("Use this to lookup information on specific commands.");
             actor.getSender().sendMessage(String.format("To lookup a command, use: %s", Format.command("/shop help <command>")));
-            showHelpList(actor, actor.getArgInt(1) - 1);
+            showHelpList(actor, actor.getArg(1).asInteger() - 1);
         }
         else {
-            BaxCommand cmd = ShopPlugin.getCommands().get(actor.getArg(1));
+            BaxCommand cmd = ShopPlugin.getCommands().get(actor.getArg(1).asString());
             if (cmd == null) {
                 actor.exitError(Resources.INVALID_SHOP_ACTION, actor.getArg(1));
             }

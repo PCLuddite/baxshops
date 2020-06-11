@@ -99,13 +99,13 @@ public final class CmdSelect extends ShopCommand
         if (actor.getNumArgs() == 2)
             actor.appendArg("1");
 
-        UUID shopId = actor.getArgUuid(1);
+        UUID shopId = actor.getArg(1).asUuid();
         BaxShop shop = ShopPlugin.getShop(shopId);
         if (shop == null)
             actor.sendError("The given id doesn't match any existing shop");
 
         List<Location> locations = new ArrayList<>(shop.getLocations());
-        int locNbr = actor.getArgInt(2);
+        int locNbr = actor.getArg(2).asInteger();
         if (locNbr < 1 || locNbr > locations.size()) {
             actor.exitError("That's not a valid location");
         }

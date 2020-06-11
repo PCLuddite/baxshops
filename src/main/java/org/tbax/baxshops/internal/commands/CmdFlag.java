@@ -19,7 +19,6 @@
 package org.tbax.baxshops.internal.commands;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.CommandHelpArgument;
@@ -97,7 +96,7 @@ public final class CmdFlag extends ShopCommand
     {
         if (actor.getNumArgs() < 2)
             return false;
-        BaxCommand command = flagCmds.get(actor.getArg(1));
+        BaxCommand command = flagCmds.get(actor.getArg(1).asString());
         return command != null && command.hasValidArgCount(actor);
     }
 
@@ -106,7 +105,7 @@ public final class CmdFlag extends ShopCommand
     {
         if (actor.getNumArgs() < 2)
             return false;
-        ShopCommand command = flagCmds.get(actor.getArg(1));
+        ShopCommand command = flagCmds.get(actor.getArg(1).asString());
         return command != null && command.requiresSelection(actor);
     }
 
@@ -115,7 +114,7 @@ public final class CmdFlag extends ShopCommand
     {
         if (actor.getNumArgs() < 2)
             return false;
-        ShopCommand command = flagCmds.get(actor.getArg(1));
+        ShopCommand command = flagCmds.get(actor.getArg(1).asString());
         return command != null && command.requiresOwner(actor);
     }
 
@@ -124,7 +123,7 @@ public final class CmdFlag extends ShopCommand
     {
         if (actor.getNumArgs() < 2)
             return false;
-        BaxCommand command = flagCmds.get(actor.getArg(1));
+        BaxCommand command = flagCmds.get(actor.getArg(1).asString());
         return command != null && command.requiresPlayer(actor);
     }
 
@@ -133,14 +132,14 @@ public final class CmdFlag extends ShopCommand
     {
         if (actor.getNumArgs() < 2)
             return false;
-        ShopCommand command = flagCmds.get(actor.getArg(1));
+        ShopCommand command = flagCmds.get(actor.getArg(1).asString());
         return command != null && command.requiresItemInHand(actor);
     }
 
     @Override
     public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
-        FlagCmd flagCmd = (FlagCmd)flagCmds.get(actor.getArg(1));
+        FlagCmd flagCmd = (FlagCmd)flagCmds.get(actor.getArg(1).asString());
         if (flagCmd.requiresRealOwner(actor) && actor.getShop() != null && StoredPlayer.DUMMY.equals(actor.getShop().getOwner())) {
             actor.exitError("%s is not a real player and cannot receive notifications.\nThe value of this flag cannot be changed.", actor.getShop().getOwner());
         }
@@ -153,17 +152,17 @@ public final class CmdFlag extends ShopCommand
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    public List<String> onTabComplete(@NotNull ShopCmdActor actor, @NotNull Command command,
+                                      @NotNull String alias, List<ShopCmdArg> args)
     {
-        CmdActor actor = (CmdActor)sender;
-        if (args.length == 2) {
+        if (args.size() == 2) {
             return flagCmds.entrySet().stream()
                     .filter(c -> c.getKey().equals(c.getValue().getName()) && c.getValue().hasPermission(actor))
                     .map(Map.Entry::getKey)
                     .collect(Collectors.toList());
         }
-        else if (args.length > 2) {
-            FlagCmd flagCmd = (FlagCmd)flagCmds.get(actor.getArg(1));
+        else if (args.size() > 2) {
+            FlagCmd flagCmd = (FlagCmd)flagCmds.get(actor.getArg(1).asString());
             if (flagCmd != null) {
                 return flagCmd.onTabComplete(actor, command, alias, args);
             }

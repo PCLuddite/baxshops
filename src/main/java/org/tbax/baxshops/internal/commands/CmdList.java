@@ -91,11 +91,11 @@ public final class CmdList extends ShopCommand
     public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         if (actor.getNumArgs() == 1) {
-            actor.appendArg(1); // show page 1 by default
+            actor.appendArg("1"); // show page 1 by default
         }
 
         if (actor.getShop().getLocations().size() > 1) {
-            int page = actor.getArgInt(1) - 1;
+            int page = actor.getArg(1).asInteger() - 1;
             if (page < 0 || page > actor.getShop().getLocations().size()) {
                 actor.exitError("That's not a valid page number");
             }

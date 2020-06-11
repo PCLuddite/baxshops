@@ -88,7 +88,7 @@ public final class CmdPage extends ShopCommand
     @Override
     public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
-        int page = actor.getArgInt(1);
+        int page = actor.getArg(1).asInteger();
         if (page < 1) {
             page = actor.getShop().getPages();
         }

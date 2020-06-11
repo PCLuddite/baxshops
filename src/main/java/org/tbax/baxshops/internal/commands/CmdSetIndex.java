@@ -19,7 +19,6 @@
 package org.tbax.baxshops.internal.commands;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.CommandHelp;
@@ -97,8 +96,8 @@ public final class CmdSetIndex extends ShopCommand
     public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         assert actor.getShop() != null;
-        int oldIndex = actor.getShop().indexOf(actor.getArgEntry(1));
-        int newIndex = actor.getArgInt(2, String.format(Resources.INVALID_DECIMAL, "new index"));
+        int oldIndex = actor.getShop().indexOf(actor.getArg(1).asEntry());
+        int newIndex = actor.getArg(2).asInteger(String.format(Resources.INVALID_DECIMAL, "new index"));
         if (newIndex > actor.getShop().size()) {
             actor.exitError("You must choose a new index that is less than the number of items in the shop!");
         }
@@ -119,14 +118,14 @@ public final class CmdSetIndex extends ShopCommand
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    public List<String> onTabComplete(@NotNull ShopCmdActor actor, @NotNull Command command,
+                                      @NotNull String alias, List<ShopCmdArg> args)
     {
-        ShopCmdActor actor = (ShopCmdActor)sender;
-        if (args.length == 2 && actor.getShop() != null) {
+        if (args.size() == 2 && actor.getShop() != null) {
             return actor.getShop().getAllItemAliases();
         }
         else {
-            return super.onTabComplete(sender, command, alias, args);
+            return super.onTabComplete(actor, command, alias, args);
         }
     }
 }

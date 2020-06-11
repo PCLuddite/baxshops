@@ -21,7 +21,6 @@ package org.tbax.baxshops.internal.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.*;
@@ -92,13 +91,13 @@ public final class CmdRestock extends ShopCommand
     @Override
     public boolean requiresItemInHand(@NotNull ShopCmdActor actor)
     {
-        return actor.getNumArgs() < 2 || !BaxQuantity.isAny(actor.getArg(1));
+        return actor.getNumArgs() < 2 || !BaxQuantity.isAny(actor.getArg(1).asString());
     }
 
     @Override
     public boolean allowsExclusion(ShopCmdActor actor)
     {
-        return actor.getNumArgs() == 2 && BaxQuantity.isAny(actor.getArg(1));
+        return actor.getNumArgs() == 2 && BaxQuantity.isAny(actor.getArg(1).asString());
     }
 
     @Override
@@ -109,7 +108,7 @@ public final class CmdRestock extends ShopCommand
         }
 
         if (actor.getItemInHand() != null && actor.getNumArgs() == 1) {
-            actor.appendArg(actor.getItemInHand().getAmount()); // restock all in hand if nothing specified
+            actor.appendArg(String.valueOf(actor.getItemInHand().getAmount())); // restock all in hand if nothing specified
         }
 
         ItemStack stack = actor.getItemInHand();
@@ -119,8 +118,8 @@ public final class CmdRestock extends ShopCommand
         }
         assert entry != null;
 
-        BaxQuantity qty = actor.getArgPlayerQty(1);
-        List<BaxEntry> taken = actor.takeArgFromInventory(1);
+        BaxQuantity qty = actor.getArg(1).asPlayerQty();
+        List<BaxEntry> taken = actor.getArg(1).takeFromInventory();
 
         if (requiresItemInHand(actor)) {
             BaxEntry takenItem = taken.get(0);
@@ -154,12 +153,12 @@ public final class CmdRestock extends ShopCommand
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    public List<String> onTabComplete(@NotNull ShopCmdActor actor, @NotNull Command command,
+                                      @NotNull String alias, List<ShopCmdArg> args)
     {
-        CmdActor actor = (CmdActor)sender;
         if (actor.getNumArgs() == 2) {
             return Arrays.asList("all", "any", "most", "stack");
         }
-        return super.onTabComplete(sender, command, alias, args);
+        return super.onTabComplete(actor, command, alias, args);
     }
 }

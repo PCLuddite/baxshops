@@ -115,7 +115,7 @@ public final class CmdDelete extends ShopCommand
         if (shop.getLocations().size() == 1) {
             Player player = actor.getPlayer();
             if (needsToConfirm(player, shop) && actor.getNumArgs() == 2) {
-                String yesNo = actor.getArgEnum(1, "yes", "no");
+                String yesNo = actor.getArg(1).asEnum("yes", "no");
                 if ("yes".equalsIgnoreCase(yesNo)) {
                     if (ShopPlugin.getBaxConfig().hasBackupOnDelete()) {
                         ShopPlugin.getStateFile().writeToDisk(ShopPlugin.getState());

@@ -85,7 +85,7 @@ public final class CmdSerial extends ShopCommand
     @Override
     public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
-        BaxEntry entry = actor.getArgEntry(1);
+        BaxEntry entry = actor.getArg(1).asEntry();
         YamlConfiguration config = new YamlConfiguration();
         config.set("entry", entry);
         actor.getSender().sendMessage(config.saveToString());

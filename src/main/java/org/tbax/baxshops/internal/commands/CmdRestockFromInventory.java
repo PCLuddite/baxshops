@@ -20,7 +20,6 @@ package org.tbax.baxshops.internal.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.*;
@@ -94,14 +93,14 @@ public final class CmdRestockFromInventory extends ShopCommand
     public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         if (actor.getNumArgs() == 2) {
-            actor.appendArg(1);
+            actor.appendArg("1");
         }
 
         if (actor.getShop().hasFlagInfinite()) {
             actor.exitError("This shop does not need to be restocked.");
         }
 
-        BaxEntry entry = actor.getArgEntry(1);
+        BaxEntry entry = actor.getArg(1).asEntry();
 
         ItemStack stack = null;
         for(int index = 0; stack == null && index < actor.getInventory().getSize(); ++index) {
@@ -112,7 +111,7 @@ public final class CmdRestockFromInventory extends ShopCommand
         if (stack == null)
             actor.exitError("You do not have any in your inventory to restock");
 
-        BaxQuantity qty =  new BaxQuantity(actor.getArg(2), actor.getPlayer(), actor.getInventory(), stack);
+        BaxQuantity qty =  new BaxQuantity(actor.getArg(2).asString(), actor.getPlayer(), actor.getInventory(), stack);
         List<BaxEntry> taken = PlayerUtil.takeQtyFromInventory(qty, actor.getShop(), Collections.emptyList());
 
         BaxEntry takenItem = taken.get(0);
@@ -130,9 +129,9 @@ public final class CmdRestockFromInventory extends ShopCommand
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    public List<String> onTabComplete(@NotNull ShopCmdActor actor, @NotNull Command command,
+                                      @NotNull String alias, List<ShopCmdArg> args)
     {
-        ShopCmdActor actor = (ShopCmdActor)sender;
         if (actor.getShop() != null) {
             if (actor.getNumArgs() == 2) {
                 return actor.getShop().getAllItemAliases();

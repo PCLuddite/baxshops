@@ -20,15 +20,18 @@ package org.tbax.baxshops.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.permissions.PermissionAttachmentInfo;
+import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.BaxQuantity;
-import org.tbax.baxshops.Format;
+import org.jetbrains.annotations.Nullable;
 import org.tbax.baxshops.PlayerUtil;
 import org.tbax.baxshops.errors.CommandErrorException;
 import org.tbax.baxshops.errors.CommandMessageException;
@@ -36,181 +39,209 @@ import org.tbax.baxshops.errors.CommandWarningException;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.ShopPlugin;
 import org.tbax.baxshops.internal.versioning.LegacyPlayerUtil;
-import org.tbax.baxshops.serialization.StoredPlayer;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
+import java.util.Set;
 
 @SuppressWarnings("unused")
 public interface CmdActor extends CommandSender
 {
-    void setArgs(String[] args);
-    String[] getArgs();
-    CommandSender getSender();
-    Command getCommand();
-    Player getPlayer();
-    boolean isAdmin();
-    int getNumArgs();
-
-    default boolean cmdIs(String... names)
+    default @NotNull PermissionAttachment addAttachment(@NotNull Plugin plugin)
     {
-        String name = getCmdName();
-        for (String testName : names) {
-            if (testName.equalsIgnoreCase(name))
-                return true;
-        }
-        return false;
-    }
-    String getArg(int index);
-
-    default BaxQuantity getArgPlayerQty(int index)
-    {
-        return new BaxQuantity(getArg(index), getPlayer(), getPlayer().getInventory(), getItemInHand());
+        return getSender().addAttachment(plugin);
     }
 
-    default boolean isArgQty(int index)
+    default  @NotNull PermissionAttachment addAttachment(@NotNull Plugin plugin, @NotNull String s, boolean b)
     {
-        return BaxQuantity.isQuantity(getArg(index));
+        return getSender().addAttachment(plugin, s, b);
     }
 
-    default boolean isArgQtyNotAny(int index)
+    default @Nullable PermissionAttachment addAttachment(@NotNull Plugin plugin, @NotNull String s, boolean b, int i)
     {
-        return BaxQuantity.isQuantityNotAny(getArg(index));
+        return getSender().addAttachment(plugin, s, b, i);
     }
 
-    default int getArgInt(int index) throws PrematureAbortException
+    default  @Nullable PermissionAttachment addAttachment(@NotNull Plugin plugin, int i)
     {
-        return getArgInt(index, String.format("Expecting argument %d to be a whole number", index));
+        return getSender().addAttachment(plugin, i);
     }
 
-    default int getArgInt(int index, String errMsg) throws PrematureAbortException
+    default void appendArg(String arg)
     {
-        try {
-            return Integer.parseInt(getArg(index));
-        }
-        catch(NumberFormatException e) {
-            throw new CommandErrorException(e, errMsg);
+        appendArg(new CommandArgument(arg));
+    }
+
+    default void appendArgs(String... args)
+    {
+        for (String arg : args) {
+            appendArg(arg);
         }
     }
 
-    default boolean isArgInt(int index)
+    void appendArg(CommandArgument arg);
+
+    default void appendArgs(CommandArgument... args)
     {
-        try {
-            Integer.parseInt(getArg(index));
-            return true;
-        }
-        catch(NumberFormatException e) {
-            return false;
+        for (CommandArgument arg : args) {
+            appendArg(arg);
         }
     }
-
-    default boolean isArgDouble(int index)
-    {
-        try {
-            Double.parseDouble(getArg(index));
-            return true;
-        }
-        catch(NumberFormatException e) {
-            return false;
-        }
-    }
-
-    default double getArgRoundedDouble(int index) throws PrematureAbortException
-    {
-        return Math.round(100d * getArgDouble(index)) / 100d;
-    }
-
-    default double getArgRoundedDouble(int index, String errMsg) throws PrematureAbortException
-    {
-        return Math.round(100d * getArgDouble(index, errMsg)) / 100d;
-    }
-
-    default double getArgDouble(int index) throws PrematureAbortException
-    {
-        return getArgDouble(index, String.format("Expecting argument %d to be a number", index));
-    }
-
-    default double getArgDouble(int index, String errMsg) throws PrematureAbortException
-    {
-        try {
-            return Double.parseDouble(getArg(index));
-        }
-        catch (NumberFormatException e) {
-            throw new CommandErrorException(e, errMsg);
-        }
-    }
-
-    default short getArgShort(int index) throws PrematureAbortException
-    {
-        return getArgShort(index, String.format("Expecting argument %d to be a small whole number", index));
-    }
-
-    default short getArgShort(int index, String errMsg) throws PrematureAbortException
-    {
-        try {
-            return Short.parseShort(getArg(index));
-        }
-        catch (NumberFormatException e) {
-            throw new CommandErrorException(e, errMsg);
-        }
-    }
-
-    default boolean getArgBoolean(int index) throws PrematureAbortException
-    {
-        return getArgBoolean(index, String.format("Expecting argument %d to be yes/no", index));
-    }
-
-    default boolean getArgBoolean(int index, String errMsg) throws PrematureAbortException
-    {
-        String arg = getArg(index);
-        if ("true".equalsIgnoreCase(arg) || "false".equalsIgnoreCase(arg))
-            return "true".equalsIgnoreCase(arg);
-        if ("yes".equalsIgnoreCase(arg) || "no".equalsIgnoreCase(arg))
-            return "yes".equalsIgnoreCase(arg);
-        if ("1".equalsIgnoreCase(arg) || "0".equalsIgnoreCase(arg))
-            return "1".equalsIgnoreCase(arg);
-        throw new CommandErrorException(errMsg);
-    }
-
-    default String getArgEnum(int index, String... args) throws PrematureAbortException
-    {
-        return getArgEnum(index, Arrays.asList(args));
-    }
-
-    default String getArgEnum(int index, List<String> args) throws PrematureAbortException
-    {
-        String arg = getArg(index);
-        for (String a : args) {
-            if (a.equalsIgnoreCase(arg)) {
-                return a;
-            }
-        }
-        throw new CommandErrorException("'" + arg + "' must be either " + Format.listOr(args));
-    }
-    
-    void setCmdName(String name);
-    String getCmdName();
-    String getAction();
-    void setAction(String action);
-    
-    /**
-     * Inserts a new first argument in the argument list
-     * @param action the new first argument
-     */
-    void insertAction(String action);
-    
-    /**
-     * Appends an argument to the end of the argument list
-     * @param arg the argument to append
-     */
-    void appendArg(Object arg);
-    void appendArgs(Object... newArgs);
 
     default void exitError(String format, Object... args) throws PrematureAbortException
     {
         throw new CommandErrorException(String.format(format, args));
     }
+
+    default void exitMessage(String format, Object... args) throws PrematureAbortException
+    {
+        throw new CommandMessageException(String.format(format, args));
+    }
+
+    default void exitWarning(String format, Object... args) throws PrematureAbortException
+    {
+        throw new CommandWarningException(String.format(format, args));
+    }
+
+    default String getAction()
+    {
+        return getArgs().size() > 0 ? getArg(0).asString().toLowerCase() : "";
+    }
+
+    CommandArgument getArg(int index);
+
+    @NotNull List<? extends CommandArgument> getArgs();
+
+    Command getCommand();
+
+    String getCommandName();
+
+    default  @NotNull Set<PermissionAttachmentInfo> getEffectivePermissions()
+    {
+        return getSender().getEffectivePermissions();
+    }
+
+    default PlayerInventory getInventory()
+    {
+        if (getPlayer() == null)
+            return null;
+        return getPlayer().getInventory();
+    }
+
+    default ItemStack getItemInHand()
+    {
+        if (getPlayer() == null)
+            return null;
+        ItemStack item = LegacyPlayerUtil.getItemInHand(getPlayer());
+        if (item == null || item.getType() == Material.AIR)
+            return null;
+        return item;
+    }
+
+    @Override
+    default @NotNull String getName()
+    {
+        return getSender().getName();
+    }
+
+    default int getNumArgs()
+    {
+        return getArgs().size();
+    }
+
+    default Player getPlayer()
+    {
+        try {
+            return (Player)getSender();
+        }
+        catch (ClassCastException e) {
+            return null;
+        }
+    }
+
+    CommandSender getSender();
+
+    @Override
+    default @NotNull Server getServer()
+    {
+        return getSender().getServer();
+    }
+
+    default int getSpaceForItem(ItemStack stack)
+    {
+        return PlayerUtil.getSpaceForItem(getPlayer(), stack);
+    }
+
+    default int giveItem(ItemStack item) throws PrematureAbortException
+    {
+        return PlayerUtil.giveItem(getPlayer(), item);
+    }
+
+    default int giveItem(ItemStack item, boolean allOrNothing) throws PrematureAbortException
+    {
+        return PlayerUtil.giveItem(getPlayer(), item, allOrNothing);
+    }
+
+    default boolean hasPermission(@NotNull String permission)
+    {
+        return getSender().hasPermission(permission);
+    }
+
+    default boolean hasPermission(@NotNull Permission permission)
+    {
+        return getSender().hasPermission(permission);
+    }
+
+    default boolean hasRoomForItem(ItemStack stack)
+    {
+        return PlayerUtil.hasRoomForItem(getPlayer(), stack);
+    }
+
+    default boolean isAdmin()
+    {
+        return isOp();
+    }
+
+    default boolean isPermissionSet(@NotNull String permission)
+    {
+        return getSender().isPermissionSet(permission);
+    }
+
+    default boolean isPermissionSet(@NotNull Permission permission)
+    {
+        return getSender().isPermissionSet(permission);
+    }
+
+    @Override
+    default boolean isOp()
+    {
+        return getSender().isOp();
+    }
+
+    default void logError(String format, Object... args)
+    {
+        ShopPlugin.logSevere(String.format(format, args));
+    }
+
+    default void logMessage(String format, Object... args)
+    {
+        ShopPlugin.logInfo(String.format(format, args));
+    }
+
+    default void logWarning(String format, Object... args)
+    {
+        ShopPlugin.logWarning(String.format(format, args));
+    }
+
+    default void recalculatePermissions()
+    {
+        getSender().recalculatePermissions();
+    }
+
+    default void removeAttachment(@NotNull PermissionAttachment permissionAttachment)
+    {
+        getSender().removeAttachment(permissionAttachment);
+    }
+
 
     default void sendError(String msg)
     {
@@ -220,21 +251,6 @@ public interface CmdActor extends CommandSender
     default void sendError(String format, Object... args)
     {
         ShopPlugin.sendInfo(getSender(), ChatColor.RED + String.format(format, args));
-    }
-
-    default void sendWarning(String msg)
-    {
-        ShopPlugin.sendInfo(getSender(), ChatColor.GOLD + msg);
-    }
-
-    default void sendWarning(String format, Object... args)
-    {
-        ShopPlugin.sendInfo(getSender(), ChatColor.GOLD + String.format(format, args));
-    }
-
-    default void exitWarning(String format, Object... args) throws PrematureAbortException
-    {
-        throw new CommandWarningException(String.format(format, args));
     }
 
     @Override
@@ -254,131 +270,40 @@ public interface CmdActor extends CommandSender
         sendMessage(String.format(format, args));
     }
 
-    default void exitMessage(String format, Object... args) throws PrematureAbortException
+    default void sendWarning(String msg)
     {
-        throw new CommandMessageException(String.format(format, args));
+        ShopPlugin.sendInfo(getSender(), ChatColor.GOLD + msg);
     }
 
-    default void logError(String format, Object... args)
+    default void sendWarning(String format, Object... args)
     {
-        ShopPlugin.logSevere(String.format(format, args));
+        ShopPlugin.sendInfo(getSender(), ChatColor.GOLD + String.format(format, args));
     }
 
-    default void logWarning(String format, Object... args)
+    void setAction(String action);
+
+    default void setArg(int index, String value)
     {
-        ShopPlugin.logWarning(String.format(format, args));
+        setArg(index, new CommandArgument(value));
     }
 
-    default void logMessage(String format, Object... args)
-    {
-        ShopPlugin.logInfo(String.format(format, args));
-    }
+    void setArg(int index, CommandArgument value);
 
-    default ItemStack getItemInHand()
-    {
-        if (getPlayer() == null)
-            return null;
-        ItemStack item = LegacyPlayerUtil.getItemInHand(getPlayer());
-        if (item == null || item.getType() == Material.AIR)
-            return null;
-        return item;
-    }
+    void setCommandName(String name);
 
     default void setItemInHand(ItemStack stack)
     {
         LegacyPlayerUtil.setItemInHand(getPlayer(), stack);
     }
 
-    default PlayerInventory getInventory()
+    @Override
+    default void setOp(boolean b)
     {
-        if (getPlayer() == null)
-            return null;
-        return getPlayer().getInventory();
-    }
-
-    void setArg(int index, Object value);
-
-    default int giveItem(ItemStack item) throws PrematureAbortException
-    {
-        return PlayerUtil.giveItem(getPlayer(), item);
-    }
-
-    default int giveItem(ItemStack item, boolean allOrNothing) throws PrematureAbortException
-    {
-        return PlayerUtil.giveItem(getPlayer(), item, allOrNothing);
-    }
-
-    default int getSpaceForItem(ItemStack stack)
-    {
-        return PlayerUtil.getSpaceForItem(getPlayer(), stack);
-    }
-
-    default boolean hasRoomForItem(ItemStack stack)
-    {
-        return PlayerUtil.hasRoomForItem(getPlayer(), stack);
+        getSender().setOp(b);
     }
 
     default boolean tryGiveItem(ItemStack stack)
     {
         return PlayerUtil.tryGiveItem(getPlayer(), stack);
-    }
-
-    @SuppressWarnings("ResultOfMethodCallIgnored")
-    default boolean isArgUuid(int index)
-    {
-        try {
-            UUID.fromString(getArg(index));
-            return true;
-        }
-        catch (IllegalArgumentException e) {
-            return false;
-        }
-    }
-
-    default UUID getArgUuid(int index) throws PrematureAbortException
-    {
-        return getArgUuid(index, String.format("Expecting argument %d to be a UUID", index));
-    }
-
-    default UUID getArgUuid(int index, String errMsg) throws PrematureAbortException
-    {
-        try {
-            return UUID.fromString(getArg(index));
-        }
-        catch (IllegalArgumentException e) {
-            throw new CommandErrorException(e, errMsg);
-        }
-    }
-
-    default OfflinePlayer getArgPlayer(int index) throws PrematureAbortException
-    {
-        try {
-            return ShopPlugin.getState().getOfflinePlayer(getArgUuid(index));
-        }
-        catch (PrematureAbortException e){
-            List<StoredPlayer> players = ShopPlugin.getOfflinePlayer(getArg(index));
-            if (players.isEmpty()) {
-                return null;
-            }
-            else if (players.size() > 1) {
-                StringBuilder sb = new StringBuilder();
-                sb.append("There are multiple players with that name. Please specify the UUID instead.\n");
-                for (StoredPlayer player : players) {
-                    sb.append(Format.keyword(player.getUniqueId().toString())).append('\n');
-                }
-                exitError(sb.toString());
-            }
-            return players.get(0);
-        }
-    }
-
-    default OfflinePlayer getArgPlayerSafe(int index) throws PrematureAbortException
-    {
-        OfflinePlayer player = getArgPlayer(index);
-        if (player == null)
-            return ShopPlugin.getOfflinePlayerSafe(getArg(index)).get(0);
-        if (player == StoredPlayer.ERROR)
-            return ShopPlugin.getOfflinePlayer(getArgUuid(index, "The player could not be found"));
-        return player;
     }
 }

@@ -19,7 +19,6 @@
 package org.tbax.baxshops.internal.commands;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.*;
@@ -96,7 +95,7 @@ public final class CmdEmpty extends ShopCommand
         int startIdx = 0;
 
         if (actor.getNumArgs() == 2)
-            startIdx = actor.getArgEntryIndex(1);
+            startIdx = actor.getArg(1).asEntryIndex();
 
         if (shop.isEmpty())
             actor.exitError("This shop has no inventory");
@@ -128,14 +127,14 @@ public final class CmdEmpty extends ShopCommand
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    public List<String> onTabComplete(@NotNull ShopCmdActor actor, @NotNull Command command,
+                                      @NotNull String alias, List<ShopCmdArg> args)
     {
-        ShopCmdActor actor = (ShopCmdActor)sender;
-        if (actor.getShop() != null && args.length == 2) {
+        if (actor.getShop() != null && args.size() == 2) {
             return IntStream.range(1, actor.getShop().size() + 1)
                     .mapToObj(String::valueOf)
                     .collect(Collectors.toList());
         }
-        return super.onTabComplete(sender, command, alias, args);
+        return super.onTabComplete(actor, command, alias, args);
     }
 }

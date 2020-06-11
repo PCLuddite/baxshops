@@ -19,7 +19,6 @@
 package org.tbax.baxshops.internal.commands;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.CommandHelp;
@@ -101,10 +100,10 @@ public final class CmdSetOwner extends ShopCommand
     public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         BaxShop shop = actor.getShop();
-        StoredPlayer newOwner = actor.getArgPlayer(1);
+        StoredPlayer newOwner = actor.getArg(1).asPlayer();
         if (newOwner == null) {
             if (actor.isAdmin()) { // only admin can set owner to non-registered player
-                newOwner = actor.getArgPlayerSafe(1);
+                newOwner = actor.getArg(1).asPlayerSafe();
             }
             else {
                 actor.exitError(Resources.NOT_REGISTERED_PLAYER, actor.getArg(2), "be a shop owner");
@@ -118,7 +117,8 @@ public final class CmdSetOwner extends ShopCommand
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    public List<String> onTabComplete(@NotNull ShopCmdActor actor, @NotNull Command command,
+                                      @NotNull String alias, List<ShopCmdArg> args)
     {
         return ShopPlugin.getRegisteredPlayers().stream()
                 .map(StoredPlayer::getName)

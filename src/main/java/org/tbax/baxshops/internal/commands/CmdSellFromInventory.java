@@ -19,7 +19,6 @@
 package org.tbax.baxshops.internal.commands;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.*;
@@ -107,10 +106,10 @@ public final class CmdSellFromInventory extends ShopCommand
     public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         if (actor.getNumArgs() == 2) {
-            actor.appendArg(1);
+            actor.appendArg("1");
         }
 
-        BaxEntry entry = actor.getArgEntry(1);
+        BaxEntry entry = actor.getArg(1).asEntry();
         if (!entry.canSell())
             actor.exitError("The owner of the shop isn't buying %s", entry.getName());
 
@@ -123,7 +122,7 @@ public final class CmdSellFromInventory extends ShopCommand
         if (stack == null)
             actor.exitError("You do not have any in your inventory to sell");
 
-        BaxQuantity qty =  new BaxQuantity(actor.getArg(2), actor.getPlayer(), actor.getInventory(), stack);
+        BaxQuantity qty =  new BaxQuantity(actor.getArg(2).asString(), actor.getPlayer(), actor.getInventory(), stack);
 
         if (qty.isAny() || qty.isFill())
             actor.exitError("'" + actor.getArg(2) +  "' is not a valid quantity");
@@ -141,9 +140,9 @@ public final class CmdSellFromInventory extends ShopCommand
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    public List<String> onTabComplete(@NotNull ShopCmdActor actor, @NotNull Command command,
+                                      @NotNull String alias, List<ShopCmdArg> args)
     {
-        ShopCmdActor actor = (ShopCmdActor)sender;
         if (actor.getShop() != null) {
             if (actor.getNumArgs() == 2) {
                 return actor.getShop().getAllItemAliases();

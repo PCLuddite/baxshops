@@ -62,7 +62,7 @@ public final class FlagCmdBuyRequests extends FlagCmd
     public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         BaxShop shop = actor.getShop();
-        boolean value = actor.getArgBoolean(2);
+        boolean value = actor.getArg(2).asBoolean();
         assert shop != null;
         shop.setFlagBuyRequests(value);
         actor.sendMessage(Format.flag("Buy requests") + " for this shop are " + Format.keyword(value ? "enabled" : "disabled"));

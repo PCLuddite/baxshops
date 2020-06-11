@@ -94,7 +94,7 @@ public final class CmdSell extends ShopCommand
     @Override
     public boolean requiresItemInHand(@NotNull ShopCmdActor actor)
     {
-        return actor.getNumArgs() < 2 || !BaxQuantity.isAny(actor.getArg(1));
+        return actor.getNumArgs() < 2 || !BaxQuantity.isAny(actor.getArg(1).asString());
     }
 
     @Override
@@ -112,7 +112,7 @@ public final class CmdSell extends ShopCommand
     @Override
     public boolean allowsExclusion(ShopCmdActor actor)
     {
-        return actor.getNumArgs() == 2 && BaxQuantity.isAny(actor.getArg(1));
+        return actor.getNumArgs() == 2 && BaxQuantity.isAny(actor.getArg(1).asString());
     }
 
     @Override
@@ -120,14 +120,14 @@ public final class CmdSell extends ShopCommand
     {
         if (actor.getNumArgs() == 1) {
             assert actor.getItemInHand() != null;
-            actor.appendArg(actor.getItemInHand().getAmount());
+            actor.appendArg(String.valueOf(actor.getItemInHand().getAmount()));
         }
 
         BaxShop shop = actor.getShop();
         assert shop != null;
         if (requiresItemInHand(actor) && !shop.contains(actor.getItemInHand()))
             actor.exitError("The owner of the shop isn't buying %s", ItemUtil.getName(actor.getItemInHand()));
-        List<BaxEntry> items = actor.peekArgFromInventory(1).stream()
+        List<BaxEntry> items = actor.getArg(1).peekFromInventory().stream()
                 .filter(BaxEntry::canSell)
                 .collect(Collectors.toList());
 
@@ -186,12 +186,12 @@ public final class CmdSell extends ShopCommand
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    public List<String> onTabComplete(@NotNull ShopCmdActor actor, @NotNull Command command,
+                                      @NotNull String alias, List<ShopCmdArg> args)
     {
-        CmdActor actor = (CmdActor)sender;
         if (actor.getNumArgs() == 2) {
             return Arrays.asList("all", "any", "most", "stack");
         }
-        return super.onTabComplete(sender, command, alias, args);
+        return super.onTabComplete(actor, command, alias, args);
     }
 }

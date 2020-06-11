@@ -97,11 +97,11 @@ public final class CmdAdd extends ShopCommand
     public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException // tested OK 3-13-19
     {
         BaxEntry newEntry = new BaxEntry();
-        double retailAmount = actor.getArgRoundedDouble(1, String.format(Resources.INVALID_DECIMAL, "buy price")),
+        double retailAmount = actor.getArg(1).asRoundedDouble(String.format(Resources.INVALID_DECIMAL, "buy price")),
                 refundAmount = 0d;
 
         if (actor.getNumArgs() == 3) {
-            refundAmount = actor.getArgRoundedDouble(2, String.format(Resources.INVALID_DECIMAL, "sell price"));
+            refundAmount = actor.getArg(2).asRoundedDouble(String.format(Resources.INVALID_DECIMAL, "sell price"));
             newEntry.canSell(true);
         }
         else {

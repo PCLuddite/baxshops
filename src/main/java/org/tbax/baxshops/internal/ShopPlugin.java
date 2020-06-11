@@ -34,6 +34,7 @@ import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.Format;
 import org.tbax.baxshops.commands.BaxCommand;
+import org.tbax.baxshops.commands.CommandArgument;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.commands.*;
 import org.tbax.baxshops.internal.items.ItemUtil;
@@ -528,13 +529,19 @@ public final class ShopPlugin extends JavaPlugin
                              @NotNull String label, @NotNull String[] args)
     {
         ShopCmdActor actor = new ShopCmdActor(sender, command, args);
-
-        if (actor.cmdIs(RAW_COMMANDS)) {
-            actor.insertAction(actor.getCmdName());
-            actor.setCmdName("shop");
-        }
-
+        adjustRawCommands(actor);
         return runCommand(actor);
+    }
+
+    private void adjustRawCommands(ShopCmdActor actor)
+    {
+        for(String rawCommand : RAW_COMMANDS) {
+            if (rawCommand.equalsIgnoreCase(actor.getCommandName())) {
+                actor.getArgs().add(0, new ShopCmdArg(actor, actor.getCommandName()));
+                actor.setCommandName("shop");
+                break;
+            }
+        }
     }
 
     @Override
@@ -542,27 +549,23 @@ public final class ShopPlugin extends JavaPlugin
                                       @NotNull String[] args)
     {
         ShopCmdActor actor = new ShopCmdActor(sender, command, args);
-
-        if (actor.cmdIs(RAW_COMMANDS)) {
-            actor.insertAction(actor.getCmdName());
-            actor.setCmdName("shop");
-            args = actor.getArgs();
-        }
+        adjustRawCommands(actor);
+        List<ShopCmdArg> argList = actor.getArgs();
 
         if (actor.getNumArgs() == 1) {
             return commands.entrySet().stream()
                 .filter(c -> c.getKey().equals(c.getValue().getName())
                         && c.getValue().hasPermission(actor)
-                        && c.getKey().startsWith(actor.getArg(0)))
+                        && c.getKey().startsWith(actor.getArg(0).asString()))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
         }
         else if (actor.getNumArgs() > 1) {
-            BaxCommand cmd = commands.get(actor.getArg(0));
+            BaxCommand cmd = commands.get(actor.getArg(0).asString());
             if (cmd == null) return Collections.emptyList();
-            String[] argWords = actor.getArg(actor.getNumArgs() - 1).toLowerCase().split("_");
+            String[] argWords = actor.getArg(actor.getNumArgs() - 1).asString().toLowerCase().split("_");
             String lastWord = argWords[argWords.length - 1];
-            List<String> suggestions = cmd.onTabComplete(actor, command, alias, args);
+            List<String> suggestions = cmd.onTabComplete(actor, command, alias, argList);
             List<String> filtered = new ArrayList<>(suggestions.size());
             for(String suggestion : suggestions) {
                 if (Arrays.stream(suggestion.split("_")).anyMatch(word -> word.startsWith(lastWord))) {
@@ -573,7 +576,7 @@ public final class ShopPlugin extends JavaPlugin
                 for (int i = filtered.size() - 1; i >= 0; --i) {
                     List<String> suggestionWords = Arrays.asList(filtered.get(i).split("_"));
                     boolean found = false;
-                    for (int j = 0; j < args.length - 1 && !found; ++j) {
+                    for (int j = 0; j < argList.size() - 1 && !found; ++j) {
                         if (suggestionWords.contains(argWords[j])) {
                             found = true;
                         }

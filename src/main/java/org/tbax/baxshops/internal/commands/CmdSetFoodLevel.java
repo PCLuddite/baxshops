@@ -95,13 +95,13 @@ public final class CmdSetFoodLevel extends ShopCommand
     @Override
     public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
-        int level = actor.getArgInt(1);
+        int level = actor.getArg(1).asInteger();
         OfflinePlayer player;
         if (actor.getNumArgs() == 2) {
             player = actor.getPlayer();
         }
         else {
-            player = actor.getArgPlayer(1);
+            player = actor.getArg(1).asPlayer();
             if (!player.isOnline()) {
                 actor.exitError("The player must be online to change their hunger level");
             }

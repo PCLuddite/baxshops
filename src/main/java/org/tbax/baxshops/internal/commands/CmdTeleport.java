@@ -20,7 +20,6 @@ package org.tbax.baxshops.internal.commands;
 
 import org.bukkit.Location;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.CommandHelpArgument;
@@ -99,7 +98,7 @@ public final class CmdTeleport extends ShopCommand
     {
         ShopSelection selection = actor.getSelection();
 
-        int loc = actor.getArgInt(1, "Expected a location number. For a list of locations, use /shop list.");
+        int loc = actor.getArg(1).asInteger("Expected a location number. For a list of locations, use /shop list.");
         if (loc < 1 || loc > selection.getShop().getLocations().size()) {
             actor.exitError("That shop location does not exist.");
         }
@@ -116,9 +115,9 @@ public final class CmdTeleport extends ShopCommand
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    public List<String> onTabComplete(@NotNull ShopCmdActor actor, @NotNull Command command,
+                                      @NotNull String alias, List<ShopCmdArg> args)
     {
-        ShopCmdActor actor = (ShopCmdActor)sender;
         if (actor.isAdmin() && actor.getNumArgs() == 2 && actor.getShop() != null) {
             String[] nums = new String[actor.getShop().getLocations().size()];
             for (int i = 0; i < nums.length; ++i) {
@@ -126,6 +125,6 @@ public final class CmdTeleport extends ShopCommand
             }
             return Arrays.asList(nums);
         }
-        return super.onTabComplete(sender, command, alias, args);
+        return super.onTabComplete(actor, command, alias, args);
     }
 }

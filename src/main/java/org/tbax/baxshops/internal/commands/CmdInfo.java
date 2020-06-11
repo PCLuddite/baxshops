@@ -20,7 +20,6 @@ package org.tbax.baxshops.internal.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
@@ -96,7 +95,7 @@ public final class CmdInfo extends ShopCommand
     @Override
     public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
-        BaxEntry entry = actor.getArgEntry(1);
+        BaxEntry entry = actor.getArg(1).asEntry();
         int index = actor.getShop().indexOf(entry) + 1;
         ChatComponent info = ChatComponent.of(Format.header("Entry Information"));
         info.append("\nName: ").append(ChatComponent.of(entry.getName())
@@ -146,14 +145,14 @@ public final class CmdInfo extends ShopCommand
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    public List<String> onTabComplete(@NotNull ShopCmdActor actor, @NotNull Command command,
+                                      @NotNull String alias, List<ShopCmdArg> args)
     {
-        ShopCmdActor actor = (ShopCmdActor)sender;
-        if (args.length == 2 && actor.getShop() != null) {
+        if (args.size() == 2 && actor.getShop() != null) {
             return actor.getShop().getAllItemAliases();
         }
         else {
-            return super.onTabComplete(sender, command, alias, args);
+            return super.onTabComplete(actor, command, alias, args);
         }
     }
 }

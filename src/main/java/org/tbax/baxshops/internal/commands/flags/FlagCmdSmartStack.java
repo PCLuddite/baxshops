@@ -70,7 +70,7 @@ public final class FlagCmdSmartStack extends FlagCmd
     public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         BaxShop shop = actor.getShop();
-        boolean value = actor.getArgBoolean(2, "Usage:\n/shop flag smartstack [true|false]");
+        boolean value = actor.getArg(2).asBoolean("Usage:\n/shop flag smartstack [true|false]");
         assert shop != null;
         shop.setFlagSmartStack(value);
         actor.sendMessage(Format.flag("Smart stacking") + " for this shop is " + Format.keyword(value ? "enabled" : "disabled"));

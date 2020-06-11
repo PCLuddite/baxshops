@@ -19,7 +19,6 @@
 package org.tbax.baxshops.internal.commands.flags;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.CommandHelp;
@@ -27,6 +26,7 @@ import org.tbax.baxshops.Format;
 import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.commands.ShopCmdActor;
+import org.tbax.baxshops.internal.commands.ShopCmdArg;
 
 import java.util.Collections;
 import java.util.List;
@@ -77,7 +77,8 @@ public final class FlagCmdList extends FlagCmd
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    public List<String> onTabComplete(@NotNull ShopCmdActor actor, @NotNull Command command,
+                                      @NotNull String alias, List<ShopCmdArg> args)
     {
         return Collections.emptyList();
     }

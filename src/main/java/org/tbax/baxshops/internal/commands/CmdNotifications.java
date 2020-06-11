@@ -20,7 +20,6 @@
 package org.tbax.baxshops.internal.commands;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.commands.CmdActor;
@@ -85,7 +84,7 @@ public final class CmdNotifications extends ShopCommand
     @Override
     public boolean requiresPlayer(@NotNull CmdActor actor)
     {
-        return !(actor.getNumArgs() == 2 && actor.getArg(1).equalsIgnoreCase("clear"));
+        return !(actor.getNumArgs() == 2 && actor.getArg(1).asString().equalsIgnoreCase("clear"));
     }
 
     @Override
@@ -97,7 +96,7 @@ public final class CmdNotifications extends ShopCommand
     @Override
     public boolean hasPermission(@NotNull CmdActor actor)
     {
-        if (actor.getNumArgs() == 2 && actor.getArg(1).equalsIgnoreCase("clear"))
+        if (actor.getNumArgs() == 2 && actor.getArg(1).asString().equalsIgnoreCase("clear"))
             return actor.isAdmin();
         return true;
     }
@@ -111,7 +110,7 @@ public final class CmdNotifications extends ShopCommand
             }
         }
         else if (actor.getNumArgs() == 2) {
-            if (actor.getArg(1).equalsIgnoreCase("clear")) {
+            if (actor.getArg(1).asString().equalsIgnoreCase("clear")) {
                 actor.getStoredPlayer().clearNotes();
                 actor.getPlayer().sendMessage("Your notifications have been cleared");
             }
@@ -122,12 +121,12 @@ public final class CmdNotifications extends ShopCommand
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    public List<String> onTabComplete(@NotNull ShopCmdActor actor, @NotNull Command command,
+                                      @NotNull String alias, List<ShopCmdArg> args)
     {
-        CmdActor actor = (CmdActor)sender;
         if (actor.isAdmin() && actor.getNumArgs() == 2) {
             return Collections.singletonList("clear");
         }
-        return super.onTabComplete(sender, command, alias, args);
+        return super.onTabComplete(actor, command, alias, args);
     }
 }

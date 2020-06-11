@@ -62,7 +62,7 @@ public final class FlagCmdSellToShop extends FlagCmd
     public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         BaxShop shop = actor.getShop();
-        boolean value = actor.getArgBoolean(2, "Usage:\n/shop flag sell_to_shop [true|false]");
+        boolean value = actor.getArg(2).asBoolean("Usage:\n/shop flag sell_to_shop [true|false]");
         assert shop != null;
         shop.setFlagSellToShop(value);
         actor.sendMessage(Format.flag("Sell to Shop") + " is " + Format.keyword(value ? "enabled" : "disabled"));

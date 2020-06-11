@@ -69,7 +69,7 @@ public final class FlagCmdInfinite extends FlagCmd
     public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         BaxShop shop = actor.getShop();
-        boolean value = actor.getArgBoolean(2, "Usage:\n/shop flag infinite [true|false]");
+        boolean value = actor.getArg(2).asBoolean("Usage:\n/shop flag infinite [true|false]");
         assert shop != null;
         shop.setFlagInfinite(value);
         actor.sendMessage(Format.flag("Infinite items") + " for this shop are " + Format.keyword(value ? "enabled" : "disabled"));

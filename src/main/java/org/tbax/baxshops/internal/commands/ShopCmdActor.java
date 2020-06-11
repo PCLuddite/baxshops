@@ -20,31 +20,24 @@
 package org.tbax.baxshops.internal.commands;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionAttachment;
-import org.bukkit.permissions.PermissionAttachmentInfo;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.tbax.baxshops.BaxEntry;
-import org.tbax.baxshops.BaxQuantity;
 import org.tbax.baxshops.BaxShop;
-import org.tbax.baxshops.PlayerUtil;
 import org.tbax.baxshops.commands.CmdActor;
-import org.tbax.baxshops.errors.CommandErrorException;
+import org.tbax.baxshops.commands.CommandArgument;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
-import org.tbax.baxshops.internal.Resources;
 import org.tbax.baxshops.internal.ShopPlugin;
 import org.tbax.baxshops.internal.ShopSelection;
-import org.tbax.baxshops.internal.items.ItemUtil;
 import org.tbax.baxshops.serialization.StoredPlayer;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 @SuppressWarnings("unused")
 public final class ShopCmdActor implements CmdActor
@@ -52,10 +45,9 @@ public final class ShopCmdActor implements CmdActor
     private final CommandSender sender;
     private final Command command;
     private String name;
-    private String action;
     private String excluded;
 
-    private String[] args;
+    private List<ShopCmdArg> args;
 
     public ShopCmdActor(CommandSender sender, Command command, String[] args)
     {
@@ -65,56 +57,64 @@ public final class ShopCmdActor implements CmdActor
         setArgs(args);
     }
 
-    public void setArgs(String[] args)
+    private void setArgs(String[] argsArray)
     {
-        List<String> argList = new ArrayList<>(args.length);
+        args = new ArrayList<>(argsArray.length);
         int idx = 0;
-        for (; idx < args.length - 1; ++idx) {
-            String arg = args[idx];
+        for (; idx < argsArray.length - 1; ++idx) {
+            String arg = argsArray[idx];
             if (Arrays.asList("-e", "--exclude", "--except").contains(arg)) {
-                excluded = args[++idx];
+                excluded = argsArray[++idx];
             }
             else {
-                argList.add(arg);
+                args.add(new ShopCmdArg(this, arg));
             }
         }
-        if (idx < args.length)
-            argList.add(args[idx]);
-        this.args = argList.toArray(new String[0]);
+        if (idx < argsArray.length)
+            args.add(new ShopCmdArg(this, argsArray[idx]));
+    }
+
+    @Override
+    public void appendArg(String arg)
+    {
+        args.add(new ShopCmdArg(this, arg));
+    }
+
+    @Override
+    public void appendArg(CommandArgument arg)
+    {
+        if (arg instanceof ShopCmdArg) {
+            args.add((ShopCmdArg)arg);
+        }
+        throw new ClassCastException();
     }
 
     public @Nullable List<BaxEntry> getExcluded() throws PrematureAbortException
     {
         if (excluded == null)
             return null;
-        return Collections.singletonList(getEntryFromString(excluded, "Excluded item not found in shop"));
+        return Collections.singletonList(getShop().getEntryFromString(excluded, "Excluded item not found in shop"));
     }
 
-    public String[] getArgs()
+    @Override
+    public @NotNull List<ShopCmdArg> getArgs()
     {
         return args;
     }
 
+    @Override
     public CommandSender getSender()
     {
         return sender;
     }
 
+    @Override
     public Command getCommand()
     {
         return command;
     }
 
-    public Player getPlayer()
-    {
-        try {
-            return (Player) sender;
-        }
-        catch (ClassCastException e) {
-            return null;
-        }
-    }
-
+    @Override
     public boolean isAdmin()
     {
         return sender.hasPermission(Permissions.SHOP_ADMIN);
@@ -124,71 +124,6 @@ public final class ShopCmdActor implements CmdActor
     {
         ShopSelection selection = getSelection();
         return selection != null && selection.isOwner();
-    }
-
-    @Override
-    public boolean isPermissionSet(@NotNull String permission)
-    {
-        return getSender().isPermissionSet(permission);
-    }
-
-    @Override
-    public boolean isPermissionSet(@NotNull Permission permission)
-    {
-        return getSender().isPermissionSet(permission);
-    }
-
-    public boolean hasPermission(@NotNull String permission)
-    {
-        return sender.hasPermission(permission);
-    }
-
-    @Override
-    public boolean hasPermission(@NotNull Permission permission)
-    {
-        return getSender().hasPermission(permission);
-    }
-
-    @Override
-    public @NotNull PermissionAttachment addAttachment(@NotNull Plugin plugin, @NotNull String s, boolean b)
-    {
-        return getSender().addAttachment(plugin, s, b);
-    }
-
-    @Override
-    public @NotNull PermissionAttachment addAttachment(@NotNull Plugin plugin)
-    {
-        return getSender().addAttachment(plugin);
-    }
-
-    @Override
-    public @Nullable PermissionAttachment addAttachment(@NotNull Plugin plugin, @NotNull String s, boolean b, int i)
-    {
-        return getSender().addAttachment(plugin, s, b, i);
-    }
-
-    @Override
-    public @Nullable PermissionAttachment addAttachment(@NotNull Plugin plugin, int i)
-    {
-        return getSender().addAttachment(plugin, i);
-    }
-
-    @Override
-    public void removeAttachment(@NotNull PermissionAttachment permissionAttachment)
-    {
-        getSender().removeAttachment(permissionAttachment);
-    }
-
-    @Override
-    public void recalculatePermissions()
-    {
-        getSender().recalculatePermissions();
-    }
-
-    @Override
-    public @NotNull Set<PermissionAttachmentInfo> getEffectivePermissions()
-    {
-        return getSender().getEffectivePermissions();
     }
 
     public @Nullable ShopSelection getSelection()
@@ -206,74 +141,10 @@ public final class ShopCmdActor implements CmdActor
         }
     }
 
-    public int getNumArgs()
+    @Override
+    public ShopCmdArg getArg(int index)
     {
-        return args.length;
-    }
-
-    public String getArg(int index)
-    {
-        return args[index];
-    }
-
-    public BaxQuantity getArgShopQty(int index, BaxEntry entry) throws PrematureAbortException
-    {
-        if (getShop() == null)
-            throw new CommandErrorException(Resources.NOT_FOUND_SELECTED);
-        if (getShop().hasFlagInfinite() && (BaxQuantity.isAll(args[index]) || BaxQuantity.isMost(args[index])))
-            throw new CommandErrorException("This shop has infinite supplies. You cannot take " + args[index].toLowerCase());
-        return new BaxQuantity(args[index], getPlayer(), getShop().getItemStackInventory(), entry.toItemStack());
-    }
-
-    public BaxEntry getArgEntry(int index) throws PrematureAbortException
-    {
-        return getArgEntry(index, Resources.NOT_FOUND_SHOPITEM);
-    }
-
-    public BaxEntry getArgEntry(int index, String errMsg) throws PrematureAbortException
-    {
-        return getEntryFromString(args[index], errMsg);
-    }
-
-    private BaxEntry getEntryFromString(String arg, String errMsg) throws PrematureAbortException
-    {
-        BaxEntry entry;
-        try {
-            entry = getShop().getEntry(Integer.parseInt(arg) - 1);
-        }
-        catch (NumberFormatException e) {
-            List<BaxEntry> entries = ItemUtil.getItemFromAlias(arg, getShop());
-            if (entries.size() == 0) {
-                throw new CommandErrorException("No item with that name could be found");
-            }
-            else if (entries.size() > 1) {
-                StringBuilder sb = new StringBuilder("There are multiple items that match that name:\n");
-                for (BaxEntry baxEntry : entries) {
-                    sb.append(baxEntry.getName()).append('\n');
-                }
-                throw new CommandErrorException(sb.toString());
-            }
-            else {
-                return entries.get(0);
-            }
-        }
-        catch (IndexOutOfBoundsException e) {
-            throw new CommandErrorException(e, errMsg);
-        }
-        if (entry == null) {
-            throw new CommandErrorException(errMsg);
-        }
-        return entry;
-    }
-
-    public int getArgEntryIndex(int index) throws PrematureAbortException
-    {
-        return getArgEntryIndex(index, Resources.NOT_FOUND_SHOPITEM);
-    }
-
-    public int getArgEntryIndex(int index, String errMsg) throws PrematureAbortException
-    {
-        return getShop().indexOf(getArgEntry(index, errMsg));
+        return args.get(index);
     }
 
     public BaxShop getShop()
@@ -283,117 +154,41 @@ public final class ShopCmdActor implements CmdActor
         return null;
     }
 
-    public void setCmdName(String name)
+    @Override
+    public void setCommandName(String name)
     {
         this.name = name;
     }
 
-    public String getCmdName()
+    @Override
+    public String getCommandName()
     {
         return name;
     }
 
-    /**
-     * Gets the first argument (if present) in lower case
-     * @return the first argument in lower case
-     */
-    public String getAction()
-    {
-        if (action == null) { // lazy initialization
-            action = args.length > 0 ? args[0].toLowerCase() : "";
-        }
-        return action;
-    }
-
-    /**
-     * Inserts a new first argument in the argument list
-     * @param action the new first argument
-     */
-    public void insertAction(String action)
-    {
-        String[] newArgs = new String[args.length + 1];
-        System.arraycopy(args, 0, newArgs, 1, args.length);
-        newArgs[0] = action;
-        args = newArgs;
-    }
-
-    /**
-     * Appends an argument to the end of the argument list
-     * @param arg the argument to append
-     */
-    public void appendArg(Object arg)
-    {
-        appendArgs(arg);
-    }
-
-    public void appendArgs(Object... newArgs)
-    {
-        String[] allArgs = new String[args.length + newArgs.length];
-        System.arraycopy(args, 0, allArgs, 0, args.length);
-        for(int x = 0; x < newArgs.length; ++x) {
-            allArgs[x + args.length] = newArgs[x].toString();
-        }
-        args = allArgs;
-    }
-
-    @Override
-    public @NotNull Server getServer()
-    {
-        return getSender().getServer();
-    }
-
-    @Override
-    public @NotNull String getName()
-    {
-        return getSender().getName();
-    }
-
-    public void setArg(int index, Object value)
-    {
-        args[index] = value.toString();
-    }
-
     public void setAction(String action)
     {
-        this.action = action;
+        setArg(0, action);
     }
 
     @Override
-    public boolean isOp()
+    public void setArg(int index, CommandArgument value)
     {
-        return getSender().isOp();
+        if (value instanceof ShopCmdArg) {
+            setArg(index, (ShopCmdArg)value);
+        }
+        else {
+            setArg(index, new ShopCmdArg(this, value.asString()));
+        }
     }
 
-    @Override
-    public void setOp(boolean b)
+    public void setArg(int index, ShopCmdArg value)
     {
-        getSender().setOp(b);
+        args.set(index, value);
     }
 
     public StoredPlayer getStoredPlayer()
     {
         return ShopPlugin.getState().getOfflinePlayer(getPlayer().getUniqueId());
-    }
-
-    @Override
-    public StoredPlayer getArgPlayer(int index) throws PrematureAbortException
-    {
-        return (StoredPlayer)CmdActor.super.getArgPlayer(index);
-    }
-
-    @Override
-    public StoredPlayer getArgPlayerSafe(int index) throws PrematureAbortException
-    {
-        return (StoredPlayer)CmdActor.super.getArgPlayerSafe(index);
-    }
-
-    public List<BaxEntry> takeArgFromInventory(int index) throws PrematureAbortException
-    {
-        return PlayerUtil.takeQtyFromInventory(getArgPlayerQty(index), getShop(), getExcluded());
-    }
-
-    public List<BaxEntry> peekArgFromInventory(int index) throws PrematureAbortException
-    {
-        return PlayerUtil.peekQtyFromInventory(getArgPlayerQty(index), getShop(), getExcluded());
     }
 }

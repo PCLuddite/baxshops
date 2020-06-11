@@ -19,11 +19,11 @@
 package org.tbax.baxshops.internal.commands.flags;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.commands.ShopCmdActor;
+import org.tbax.baxshops.internal.commands.ShopCmdArg;
 import org.tbax.baxshops.internal.commands.ShopCommand;
 
 import java.util.Arrays;
@@ -70,7 +70,8 @@ public abstract class FlagCmd extends ShopCommand
     public abstract boolean requiresRealOwner(@NotNull CmdActor actor);
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args)
+    public List<String> onTabComplete(@NotNull ShopCmdActor actor, @NotNull Command command,
+                                      @NotNull String alias, List<ShopCmdArg> args)
     {
         return Arrays.asList("true", "false");
     }

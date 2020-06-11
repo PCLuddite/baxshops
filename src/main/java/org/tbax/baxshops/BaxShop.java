@@ -27,6 +27,8 @@ import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
+import org.tbax.baxshops.errors.CommandErrorException;
+import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Resources;
 import org.tbax.baxshops.internal.ShopPlugin;
 import org.tbax.baxshops.internal.ShopSelection;
@@ -630,5 +632,36 @@ public class BaxShop implements UpgradeableSerializable, Collection<BaxEntry>
     public int hashCode()
     {
         return Objects.hash(id);
+    }
+
+    public BaxEntry getEntryFromString(String arg, String errMsg) throws PrematureAbortException
+    {
+        BaxEntry entry;
+        try {
+            entry = getEntry(Integer.parseInt(arg) - 1);
+        }
+        catch (NumberFormatException e) {
+            List<BaxEntry> entries = ItemUtil.getItemFromAlias(arg, this);
+            if (entries.size() == 0) {
+                throw new CommandErrorException("No item with that name could be found");
+            }
+            else if (entries.size() > 1) {
+                StringBuilder sb = new StringBuilder("There are multiple items that match that name:\n");
+                for (BaxEntry baxEntry : entries) {
+                    sb.append(baxEntry.getName()).append('\n');
+                }
+                throw new CommandErrorException(sb.toString());
+            }
+            else {
+                return entries.get(0);
+            }
+        }
+        catch (IndexOutOfBoundsException e) {
+            throw new CommandErrorException(e, errMsg);
+        }
+        if (entry == null) {
+            throw new CommandErrorException(errMsg);
+        }
+        return entry;
     }
 }
