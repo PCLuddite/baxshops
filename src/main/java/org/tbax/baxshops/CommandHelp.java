@@ -93,15 +93,26 @@ public class CommandHelp
         return sb.toString();
     }
 
-    @Override
-    public String toString()
+    public @NotNull String getHeader()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append(Format.header(String.format("Help: /shop %s", cmd.getName()))).append('\n');
+        if (cmd.getName() == null) {
+            sb.append(Format.header(String.format("Help: /%s", cmd.getCommand()))).append('\n');
+        }
+        else {
+            sb.append(Format.header(String.format("Help: /%s %s", cmd.getCommand(), cmd.getName()))).append('\n');
+        }
         sb.append(getUsageString());
         if (cmd.getAliases().length != 0) {
             sb.append('\n').append(ChatColor.BLUE).append("Aliases:").append(ChatColor.GRAY).append(getAliasString());
         }
+        return sb.toString();
+    }
+
+    @Override
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder(getHeader());
         sb.append('\n');
         sb.append('\n');
         if (longDescription != null) {
