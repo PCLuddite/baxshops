@@ -24,6 +24,7 @@ import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.CommandHelpArgument;
 import org.tbax.baxshops.commands.CmdActor;
+import org.tbax.baxshops.commands.CommandArgument;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.Resources;
@@ -104,11 +105,12 @@ public final class CmdSetAmnt extends ShopCommand
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull ShopCmdActor actor, @NotNull Command command,
-                                      @NotNull String alias, List<ShopCmdArg> args)
+    public List<String> onTabComplete(@NotNull CmdActor actor, @NotNull Command command,
+                                      @NotNull String alias, List<? extends CommandArgument> args)
     {
-        if (args.size() == 2 && actor.getShop() != null) {
-            return actor.getShop().getAllItemAliases();
+        ShopCmdActor shopActor = (ShopCmdActor)actor;
+        if (args.size() == 2 && shopActor.getShop() != null) {
+            return shopActor.getShop().getAllItemAliases();
         }
         else {
             return super.onTabComplete(actor, command, alias, args);

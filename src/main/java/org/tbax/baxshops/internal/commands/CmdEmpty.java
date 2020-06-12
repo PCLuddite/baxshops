@@ -23,6 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.*;
 import org.tbax.baxshops.commands.CmdActor;
+import org.tbax.baxshops.commands.CommandArgument;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.Resources;
@@ -127,11 +128,12 @@ public final class CmdEmpty extends ShopCommand
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull ShopCmdActor actor, @NotNull Command command,
-                                      @NotNull String alias, List<ShopCmdArg> args)
+    public List<String> onTabComplete(@NotNull CmdActor actor, @NotNull Command command,
+                                      @NotNull String alias, List<? extends CommandArgument> args)
     {
-        if (actor.getShop() != null && args.size() == 2) {
-            return IntStream.range(1, actor.getShop().size() + 1)
+        ShopCmdActor shopActor = (ShopCmdActor)actor;
+        if (shopActor.getShop() != null && args.size() == 2) {
+            return IntStream.range(1, shopActor.getShop().size() + 1)
                     .mapToObj(String::valueOf)
                     .collect(Collectors.toList());
         }

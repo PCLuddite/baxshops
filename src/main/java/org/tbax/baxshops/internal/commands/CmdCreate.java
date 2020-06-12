@@ -29,6 +29,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.*;
 import org.tbax.baxshops.commands.CmdActor;
+import org.tbax.baxshops.commands.CommandArgument;
 import org.tbax.baxshops.errors.CommandErrorException;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
@@ -194,8 +195,8 @@ public final class CmdCreate extends ShopCommand
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull ShopCmdActor actor, @NotNull Command command,
-                                      @NotNull String alias, List<ShopCmdArg> args)
+    public List<String> onTabComplete(@NotNull CmdActor actor, @NotNull Command command,
+                                      @NotNull String alias, List<? extends CommandArgument> args)
     {
         if (actor.isAdmin()) {
             if (actor.getNumArgs() == 2) {

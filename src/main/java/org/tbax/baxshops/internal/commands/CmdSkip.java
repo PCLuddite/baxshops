@@ -49,7 +49,7 @@ public final class CmdSkip extends ShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(@NotNull CmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull CmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "skip latest notification");
         help.setLongDescription("Skip your most recent notification and add it to the back of your queue");

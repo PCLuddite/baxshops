@@ -24,6 +24,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.*;
 import org.tbax.baxshops.commands.CmdActor;
+import org.tbax.baxshops.commands.CommandArgument;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.items.ItemUtil;
@@ -129,12 +130,13 @@ public final class CmdRestockFromInventory extends ShopCommand
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull ShopCmdActor actor, @NotNull Command command,
-                                      @NotNull String alias, List<ShopCmdArg> args)
+    public List<String> onTabComplete(@NotNull CmdActor actor, @NotNull Command command,
+                                      @NotNull String alias, List<? extends CommandArgument> args)
     {
-        if (actor.getShop() != null) {
+        ShopCmdActor shopActor = (ShopCmdActor)actor;
+        if (shopActor.getShop() != null) {
             if (actor.getNumArgs() == 2) {
-                return actor.getShop().getAllItemAliases();
+                return shopActor.getShop().getAllItemAliases();
             }
             else if (actor.getNumArgs() == 3) {
                 return Arrays.asList("all", "most", "stack");

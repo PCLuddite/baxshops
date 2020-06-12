@@ -23,6 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.*;
 import org.tbax.baxshops.commands.CmdActor;
+import org.tbax.baxshops.commands.CommandArgument;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.Resources;
@@ -52,7 +53,7 @@ public final class CmdTake extends ShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(@NotNull CmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull CmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "take an item from the shop");
         help.setLongDescription("Take an item from a shop. /shop buy is a synonym for this if you are the shop owner.");
@@ -146,12 +147,13 @@ public final class CmdTake extends ShopCommand
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull ShopCmdActor actor, @NotNull Command command,
-                                      @NotNull String alias, List<ShopCmdArg> args)
+    public List<String> onTabComplete(@NotNull CmdActor actor, @NotNull Command command,
+                                      @NotNull String alias, List<? extends CommandArgument> args)
     {
-        if (actor.getShop() != null) {
+        ShopCmdActor shopActor = (ShopCmdActor)actor;
+        if (shopActor.getShop() != null) {
             if (args.size() == 2) {
-                return actor.getShop().getAllItemAliases();
+                return shopActor.getShop().getAllItemAliases();
             }
             else if (args.size() == 3) {
                 return Arrays.asList("all", "fill", "most", "stack");

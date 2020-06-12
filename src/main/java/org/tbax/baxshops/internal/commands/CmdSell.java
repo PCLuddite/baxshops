@@ -20,11 +20,11 @@
 package org.tbax.baxshops.internal.commands;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.*;
 import org.tbax.baxshops.commands.BaxCommand;
 import org.tbax.baxshops.commands.CmdActor;
+import org.tbax.baxshops.commands.CommandArgument;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.Resources;
@@ -186,8 +186,8 @@ public final class CmdSell extends ShopCommand
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull ShopCmdActor actor, @NotNull Command command,
-                                      @NotNull String alias, List<ShopCmdArg> args)
+    public List<String> onTabComplete(@NotNull CmdActor actor, @NotNull Command command,
+                                      @NotNull String alias, List<? extends CommandArgument> args)
     {
         if (actor.getNumArgs() == 2) {
             return Arrays.asList("all", "any", "most", "stack");

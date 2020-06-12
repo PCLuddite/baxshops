@@ -24,13 +24,9 @@ import org.bukkit.command.TabCompleter;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.errors.PrematureAbortException;
-import org.tbax.baxshops.internal.commands.ShopCmdActor;
-import org.tbax.baxshops.internal.commands.ShopCmdArg;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public abstract class BaxCommand implements TabCompleter
 {
@@ -69,15 +65,14 @@ public abstract class BaxCommand implements TabCompleter
     public abstract boolean requiresAdmin();
 
     @Override
-    public final List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
                                       @NotNull String alias, String[] args)
     {
-        return onTabComplete((ShopCmdActor)sender, command, alias,
-                Arrays.stream(args).map(n -> new ShopCmdArg((ShopCmdActor)sender, n)).collect(Collectors.toList()));
+        return onTabComplete((CmdActor)sender, command, alias, ((CmdActor)sender).getArgs());
     }
 
-    public List<String> onTabComplete(@NotNull ShopCmdActor actor, @NotNull Command command,
-                                      @NotNull String alias, List<ShopCmdArg> args)
+    public List<String> onTabComplete(@NotNull CmdActor actor, @NotNull Command command,
+                                      @NotNull String alias, List<? extends CommandArgument> args)
     {
         return Collections.emptyList();
     }

@@ -25,6 +25,7 @@ import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.CommandHelpArgument;
 import org.tbax.baxshops.Format;
 import org.tbax.baxshops.commands.CmdActor;
+import org.tbax.baxshops.commands.CommandArgument;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.ShopSelection;
@@ -53,7 +54,7 @@ public final class CmdTeleport extends ShopCommand
     }
 
     @Override
-    public CommandHelp getHelp(@NotNull CmdActor actor)
+    public @NotNull CommandHelp getHelp(@NotNull CmdActor actor)
     {
         CommandHelp help = new CommandHelp(this, "teleport to a shop location");
         help.setLongDescription("Teleport to a specific shop location. Use /shop list for a list of locations. This can only be done by an admin.");
@@ -115,11 +116,12 @@ public final class CmdTeleport extends ShopCommand
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull ShopCmdActor actor, @NotNull Command command,
-                                      @NotNull String alias, List<ShopCmdArg> args)
+    public List<String> onTabComplete(@NotNull CmdActor actor, @NotNull Command command,
+                                      @NotNull String alias, List<? extends CommandArgument> args)
     {
-        if (actor.isAdmin() && actor.getNumArgs() == 2 && actor.getShop() != null) {
-            String[] nums = new String[actor.getShop().getLocations().size()];
+        ShopCmdActor shopActor = (ShopCmdActor)actor;
+        if (actor.isAdmin() && actor.getNumArgs() == 2 && shopActor.getShop() != null) {
+            String[] nums = new String[shopActor.getShop().getLocations().size()];
             for (int i = 0; i < nums.length; ++i) {
                 nums[i] = String.valueOf(i + 1);
             }

@@ -18,11 +18,17 @@
  */
 package org.tbax.baxshops.internal.commands;
 
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.commands.BaxCommand;
 import org.tbax.baxshops.commands.CmdActor;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public abstract class ShopCommand extends BaxCommand
 {
@@ -50,4 +56,11 @@ public abstract class ShopCommand extends BaxCommand
     }
 
     public abstract void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException;
+
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command,
+                                      @NotNull String alias, String[] args)
+    {
+        return onTabComplete((ShopCmdActor)sender, command, alias,((ShopCmdActor)sender).getArgs());
+    }
 }
