@@ -30,6 +30,8 @@ import java.util.List;
 
 public abstract class BaxCommand implements TabCompleter
 {
+    public abstract String getCommand();
+
     public abstract @NotNull String getName();
 
     public abstract String getPermission();
