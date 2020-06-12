@@ -166,11 +166,6 @@ public final class ShopCmdActor implements CmdActor
         return name;
     }
 
-    public void setAction(String action)
-    {
-        setArg(0, action);
-    }
-
     @Override
     public void setArg(int index, CommandArgument value)
     {

@@ -280,7 +280,10 @@ public interface CmdActor extends CommandSender
         ShopPlugin.sendInfo(getSender(), ChatColor.GOLD + String.format(format, args));
     }
 
-    void setAction(String action);
+    default void setAction(String action)
+    {
+        setArg(0, action);
+    }
 
     default void setArg(int index, String value)
     {
