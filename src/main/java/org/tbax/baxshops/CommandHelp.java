@@ -23,9 +23,9 @@ import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.commands.BaxCommand;
 
 @SuppressWarnings("unused")
-public final class CommandHelp
+public class CommandHelp
 {
-    private BaxCommand cmd;
+    private final BaxCommand cmd;
     private CommandHelpArgument[] args;
     private String longDescription;
     private String shortDescription;

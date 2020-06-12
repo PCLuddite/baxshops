@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013-2019 Timothy Baxendale
+ * Copyright (C) Timothy Baxendale
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -22,11 +22,11 @@ import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")
-public final class CommandHelpArgument
+public class CommandHelpArgument
 {
-    private String description;
-    private String argument;
-    private boolean required;
+    private final String description;
+    private final String argument;
+    private final boolean required;
     private String defaultValue;
 
     public CommandHelpArgument(@NotNull String arg, @NotNull String desc, boolean req)
