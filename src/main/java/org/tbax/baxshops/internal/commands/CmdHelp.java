@@ -139,9 +139,9 @@ public final class CmdHelp extends ShopCommand
         for (; i < max; ++i) {
             CommandHelp help = commands.get(i).getHelp(actor);
             ChatComponent.of("").append(
-                    ChatComponent.of(help.getName(), TextColor.GOLD, ChatTextStyle.UNDERLINED)
+                    ChatComponent.of(help.getAction(), TextColor.GOLD, ChatTextStyle.UNDERLINED)
                             .hoverEvent(HoverEvent.showText(ChatColor.GRAY + "Click for more info"))
-                            .clickEvent(ClickEvent.runCommand("/shop help " + help.getName())))
+                            .clickEvent(ClickEvent.runCommand("/shop help " + help.getAction())))
                     .append(": ")
                     .append(help.getShortDescription())
             .sendTo(actor.getSender());

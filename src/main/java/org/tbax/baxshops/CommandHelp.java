@@ -40,7 +40,7 @@ public class CommandHelp
         this.shortDescription = shortDescription;
     }
 
-    public @NotNull String getName()
+    public @NotNull String getAction()
     {
         return cmd.getAction();
     }
