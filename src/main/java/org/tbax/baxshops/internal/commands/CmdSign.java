@@ -32,7 +32,7 @@ import org.tbax.baxshops.internal.items.ItemUtil;
 public final class CmdSign extends ShopCommand
 {
     @Override
-    public @NotNull String getName()
+    public @org.jetbrains.annotations.Nullable String getAction()
     {
         return "sign";
     }

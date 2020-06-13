@@ -34,7 +34,7 @@ import org.tbax.baxshops.internal.items.ItemUtil;
 public final class CmdAdd extends ShopCommand
 {
     @Override
-    public @NotNull String getName()
+    public @org.jetbrains.annotations.Nullable String getAction()
     {
         return "add";
     }

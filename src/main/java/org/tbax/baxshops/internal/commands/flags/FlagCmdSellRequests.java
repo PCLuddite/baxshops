@@ -42,7 +42,7 @@ public final class FlagCmdSellRequests extends FlagCmd
     }
 
     @Override
-    public @NotNull String getName()
+    public @org.jetbrains.annotations.Nullable String getAction()
     {
         return "sellrequests";
     }

@@ -22,6 +22,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.tbax.baxshops.CommandHelp;
 import org.tbax.baxshops.errors.PrematureAbortException;
 
@@ -32,7 +33,7 @@ public abstract class BaxCommand implements TabCompleter
 {
     public abstract String getCommand();
 
-    public abstract @NotNull String getName();
+    public abstract @Nullable String getAction();
 
     public abstract String getPermission();
 

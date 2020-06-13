@@ -42,7 +42,7 @@ public final class CmdDelete extends ShopCommand
     private final Map<UUID, UUID> confirmationMap = new ConcurrentHashMap<>();
 
     @Override
-    public @NotNull String getName()
+    public @org.jetbrains.annotations.Nullable String getAction()
     {
         return "delete";
     }

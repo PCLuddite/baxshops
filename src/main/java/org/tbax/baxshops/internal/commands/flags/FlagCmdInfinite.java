@@ -37,7 +37,7 @@ public final class FlagCmdInfinite extends FlagCmd
     }
 
     @Override
-    public @NotNull String getName()
+    public @org.jetbrains.annotations.Nullable String getAction()
     {
         return "infinite";
     }

@@ -30,7 +30,7 @@ import java.io.IOException;
 public final class CmdReload extends ShopCommand
 {
     @Override
-    public @NotNull String getName()
+    public @org.jetbrains.annotations.Nullable String getAction()
     {
         return "reload";
     }

@@ -54,7 +54,7 @@ public final class CmdFlag extends ShopCommand
     }
 
     @Override
-    public @NotNull String getName()
+    public @org.jetbrains.annotations.Nullable String getAction()
     {
         return "flag";
     }
@@ -75,13 +75,13 @@ public final class CmdFlag extends ShopCommand
         List<FlagCmd> flags = flagCmds.values().stream()
                 .filter(cmd -> cmd.hasPermission(actor))
                 .distinct()
-                .sorted(Comparator.comparing(BaxCommand::getName))
+                .sorted(Comparator.comparing(BaxCommand::getAction))
                 .map(cmd -> (FlagCmd)cmd)
                 .collect(Collectors.toList());
 
         for (FlagCmd cmd : flags) {
             description.append("\n");
-            description.append(cmd.getName()).append(": ").append(cmd.getHelp(actor).getShortDescription());
+            description.append(cmd.getAction()).append(": ").append(cmd.getHelp(actor).getShortDescription());
         }
 
         help.setLongDescription(description.toString());
@@ -158,7 +158,7 @@ public final class CmdFlag extends ShopCommand
     {
         if (args.size() == 2) {
             return flagCmds.entrySet().stream()
-                    .filter(c -> c.getKey().equals(c.getValue().getName()) && c.getValue().hasPermission(actor))
+                    .filter(c -> c.getKey().equals(c.getValue().getAction()) && c.getValue().hasPermission(actor))
                     .map(Map.Entry::getKey)
                     .collect(Collectors.toList());
         }

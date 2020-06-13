@@ -34,7 +34,7 @@ import java.util.List;
 public final class CmdNotifications extends ShopCommand
 {
     @Override
-    public @NotNull String getName()
+    public @org.jetbrains.annotations.Nullable String getAction()
     {
         return "notifications";
     }

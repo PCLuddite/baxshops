@@ -39,7 +39,7 @@ import java.util.List;
 public final class CmdBuy extends ShopCommand
 {
     @Override
-    public @NotNull String getName()
+    public @org.jetbrains.annotations.Nullable String getAction()
     {
         return "buy";
     }

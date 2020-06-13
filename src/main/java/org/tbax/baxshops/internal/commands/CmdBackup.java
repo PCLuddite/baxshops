@@ -28,7 +28,7 @@ import org.tbax.baxshops.internal.ShopPlugin;
 public final class CmdBackup extends ShopCommand
 {
     @Override
-    public @NotNull String getName()
+    public @org.jetbrains.annotations.Nullable String getAction()
     {
         return "backup";
     }

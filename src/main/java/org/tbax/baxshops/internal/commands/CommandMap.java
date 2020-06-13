@@ -72,7 +72,7 @@ public final class CommandMap implements Map<String, ShopCommand>
     @Override
     public ShopCommand put(String key, ShopCommand value)
     {
-        names.add(value.getName());
+        names.add(value.getAction());
         return cmds.put(key, value);
     }
 
@@ -136,7 +136,7 @@ public final class CommandMap implements Map<String, ShopCommand>
     public void add(@NotNull Class<? extends ShopCommand> cmdClass) throws InstantiationException, IllegalAccessException
     {
         ShopCommand cmd = cmdClass.newInstance();
-        put(cmd.getName(), cmd);
+        put(cmd.getAction(), cmd);
         for (String alias : cmd.getAliases()) {
             put(alias, cmd);
         }

@@ -30,7 +30,7 @@ import java.util.Comparator;
 public final class CmdAlphabetize extends ShopCommand
 {
     @Override
-    public @NotNull String getName()
+    public @org.jetbrains.annotations.Nullable String getAction()
     {
         return "alphabetize";
     }

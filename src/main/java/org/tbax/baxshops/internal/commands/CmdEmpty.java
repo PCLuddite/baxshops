@@ -36,7 +36,7 @@ import java.util.stream.IntStream;
 public final class CmdEmpty extends ShopCommand
 {
     @Override
-    public @NotNull String getName()
+    public @org.jetbrains.annotations.Nullable String getAction()
     {
         return "empty";
     }

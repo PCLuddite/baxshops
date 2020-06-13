@@ -42,7 +42,7 @@ public class CommandHelp
 
     public @NotNull String getName()
     {
-        return cmd.getName();
+        return cmd.getAction();
     }
 
     public String getLongDescription()
@@ -84,7 +84,7 @@ public class CommandHelp
     {
         StringBuilder sb = new StringBuilder();
         sb.append(ChatColor.BLUE).append("Usage: ").append(ChatColor.GRAY).append("/shop ")
-                .append(ChatColor.DARK_AQUA).append(cmd.getName()).append(ChatColor.GRAY);
+                .append(ChatColor.DARK_AQUA).append(cmd.getAction()).append(ChatColor.GRAY);
         if (args != null) {
             for (CommandHelpArgument arg : args) {
                 sb.append(" ").append(arg.getUsageString());
@@ -105,11 +105,11 @@ public class CommandHelp
     public @NotNull String getHeader()
     {
         StringBuilder sb = new StringBuilder();
-        if (cmd.getName() == null) {
+        if (cmd.getAction() == null) {
             sb.append(Format.header(String.format("Help: /%s", cmd.getCommand()))).append('\n');
         }
         else {
-            sb.append(Format.header(String.format("Help: /%s %s", cmd.getCommand(), cmd.getName()))).append('\n');
+            sb.append(Format.header(String.format("Help: /%s %s", cmd.getCommand(), cmd.getAction()))).append('\n');
         }
         sb.append(getUsageString());
         if (cmd.getAliases().length != 0) {

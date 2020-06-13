@@ -34,7 +34,6 @@ import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.Format;
 import org.tbax.baxshops.commands.BaxCommand;
-import org.tbax.baxshops.commands.CommandArgument;
 import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.commands.*;
 import org.tbax.baxshops.internal.items.ItemUtil;
@@ -308,7 +307,7 @@ public final class ShopPlugin extends JavaPlugin
         else if (cmd.useAlternative(actor)) {
             try {
                 cmd = (ShopCommand)cmd.getAlternative().newInstance();
-                actor.setAction(cmd.getName());
+                actor.setAction(cmd.getAction());
             }
             catch (InstantiationException | IllegalAccessException | ClassCastException e) {
                 e.printStackTrace();
@@ -554,7 +553,7 @@ public final class ShopPlugin extends JavaPlugin
 
         if (actor.getNumArgs() == 1) {
             return commands.entrySet().stream()
-                .filter(c -> c.getKey().equals(c.getValue().getName())
+                .filter(c -> c.getKey().equals(c.getValue().getAction())
                         && c.getValue().hasPermission(actor)
                         && c.getKey().startsWith(actor.getArg(0).asString()))
                 .map(Map.Entry::getKey)

@@ -40,7 +40,7 @@ import java.util.Map;
 public final class CmdInfo extends ShopCommand
 {
     @Override
-    public @NotNull String getName()
+    public @org.jetbrains.annotations.Nullable String getAction()
     {
         return "info";
     }

@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
 public final class CmdCreate extends ShopCommand
 {
     @Override
-    public @NotNull String getName()
+    public @org.jetbrains.annotations.Nullable String getAction()
     {
         return "create";
     }

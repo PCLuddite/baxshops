@@ -39,7 +39,7 @@ import java.util.UUID;
 public final class CmdSelect extends ShopCommand
 {
     @Override
-    public @NotNull String getName()
+    public @org.jetbrains.annotations.Nullable String getAction()
     {
         return "select";
     }

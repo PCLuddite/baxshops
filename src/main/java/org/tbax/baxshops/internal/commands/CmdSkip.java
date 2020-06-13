@@ -31,7 +31,7 @@ import org.tbax.baxshops.serialization.StoredPlayer;
 public final class CmdSkip extends ShopCommand
 {
     @Override
-    public @NotNull String getName()
+    public @org.jetbrains.annotations.Nullable String getAction()
     {
         return "skip";
     }

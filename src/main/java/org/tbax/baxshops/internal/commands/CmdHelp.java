@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 public final class CmdHelp extends ShopCommand
 {
     @Override
-    public @NotNull String getName()
+    public @org.jetbrains.annotations.Nullable String getAction()
     {
         return "help";
     }
@@ -129,7 +129,7 @@ public final class CmdHelp extends ShopCommand
         List<BaxCommand> commands = ShopPlugin.getCommands().values().stream()
                 .filter(cmd -> cmd.hasPermission(actor))
                 .distinct()
-                .sorted(Comparator.comparing(BaxCommand::getName))
+                .sorted(Comparator.comparing(BaxCommand::getAction))
                 .collect(Collectors.toList());
         int pages = (int)Math.ceil((double)commands.size() / ShopSelection.ITEMS_PER_PAGE);
         Format.header(page + 1, pages, "/shop help").sendTo(actor.getSender());

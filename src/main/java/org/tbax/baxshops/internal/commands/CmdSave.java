@@ -29,7 +29,7 @@ public final class CmdSave extends ShopCommand
 {
 
     @Override
-    public @NotNull String getName()
+    public @org.jetbrains.annotations.Nullable String getAction()
     {
         return "save";
     }

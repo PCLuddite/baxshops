@@ -30,7 +30,7 @@ import org.tbax.baxshops.internal.Permissions;
 public final class CmdSerial extends ShopCommand
 {
     @Override
-    public @NotNull String getName()
+    public @org.jetbrains.annotations.Nullable String getAction()
     {
         return "serial";
     }
