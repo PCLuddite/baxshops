@@ -26,7 +26,7 @@ public class CommandHelpArgument
 {
     private final String description;
     private final String argument;
-    private final boolean required;
+    private boolean required;
     private String defaultValue;
 
     public CommandHelpArgument(@NotNull String arg, @NotNull String desc, boolean req)
@@ -48,6 +48,11 @@ public class CommandHelpArgument
     public boolean isRequired()
     {
         return required;
+    }
+
+    public void setRequired(boolean required)
+    {
+        this.required = required;
     }
 
     public String getDescription()

@@ -56,8 +56,8 @@ public final class CmdSetFoodLevel extends ShopCommand
                 new CommandHelpArgument("level", "The hunger level out of 20", true),
                 new CommandHelpArgument("player", "the players whose hunger to change", (actor.getSender() == Bukkit.getConsoleSender()))
         );
-        if (!help.getArgs()[1].isRequired()) {
-            help.getArgs()[1].setDefaultValue(actor.getSender().getName());
+        if (!help.getArgs().get(1).isRequired()) {
+            help.getArgs().get(1).setDefaultValue(actor.getSender().getName());
         }
         return help;
     }

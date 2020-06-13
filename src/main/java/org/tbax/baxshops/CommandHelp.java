@@ -22,11 +22,15 @@ import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.commands.BaxCommand;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @SuppressWarnings("unused")
 public class CommandHelp
 {
     private final BaxCommand cmd;
-    private CommandHelpArgument[] args;
+    private List<CommandHelpArgument> args;
     private String longDescription;
     private String shortDescription;
 
@@ -61,14 +65,19 @@ public class CommandHelp
         shortDescription = desc;
     }
 
-    public CommandHelpArgument[] getArgs()
+    public List<CommandHelpArgument> getArgs()
     {
         return args;
     }
 
     public void setArgs(CommandHelpArgument... args)
     {
-        this.args = args;
+        this.args = new ArrayList<>(Arrays.asList(args));
+    }
+
+    public void addArg(CommandHelpArgument arg)
+    {
+        args.add(arg);
     }
 
     public @NotNull String getUsageString()
