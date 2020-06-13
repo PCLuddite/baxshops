@@ -123,8 +123,8 @@ public final class CmdInfo extends ShopCommand
             info.append("\nEnchants: ").append(Format.enchantments(EnchantMap.fullListString(enchmap)));
         }
         info.append("\nQuantity: ").append(entry.getAmount() == 0 ? ChatColor.DARK_RED + "OUT OF STOCK" : Format.number(entry.getAmount()));
+        info.append("\n");
         if (entry.canBuy()) {
-            info.append("\n");
             info.append(ChatComponent.of("[BUY]", TextColor.GREEN, ChatTextStyle.UNDERLINED)
                     .hoverEvent(HoverEvent.showText("Buy for " + entry.getFormattedBuyPrice()))
                     .clickEvent(ClickEvent.suggestCommand("/buy " + index + " "))
