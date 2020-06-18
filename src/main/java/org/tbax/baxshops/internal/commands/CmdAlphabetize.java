@@ -20,8 +20,11 @@ package org.tbax.baxshops.internal.commands;
 
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.BaxEntry;
+import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.CommandHelp;
+import org.tbax.baxshops.CommandHelpArgument;
 import org.tbax.baxshops.commands.CmdActor;
+import org.tbax.baxshops.errors.PrematureAbortException;
 import org.tbax.baxshops.internal.Permissions;
 import org.tbax.baxshops.internal.ShopPlugin;
 
@@ -46,6 +49,7 @@ public final class CmdAlphabetize extends ShopCommand
     {
         CommandHelp help = new CommandHelp(this, "sorts shop inventory alphabetically");
         help.setLongDescription("Sort all inventory in the shop alphabetically");
+        help.addArg(new CommandHelpArgument("index", "the start index to begin sorting", 1));
         return help;
     }
 
@@ -58,7 +62,7 @@ public final class CmdAlphabetize extends ShopCommand
     @Override
     public boolean hasValidArgCount(@NotNull CmdActor actor)
     {
-        return actor.getNumArgs() == 1;
+        return actor.getNumArgs() == 1 || actor.getNumArgs() == 2;
     }
 
     @Override
@@ -86,9 +90,18 @@ public final class CmdAlphabetize extends ShopCommand
     }
 
     @Override
-    public void onShopCommand(@NotNull ShopCmdActor actor)
+    public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
-        actor.getShop().sort(Comparator.comparing(BaxEntry::getName));
+        BaxShop shop = actor.getShop();
+        if (actor.getNumArgs() == 2) {
+            int index = actor.getArg(1).asInteger();
+            if (index < 1 || index > actor.getShop().size()) {
+                actor.exitError(index + " is not a valid entry number");
+            }
+            shop.sort(index - 1, Comparator.comparing(BaxEntry::getName));
+        } else {
+            shop.sort(Comparator.comparing(BaxEntry::getName));
+        }
         ShopPlugin.sendMessage(actor, "Shop inventory is now sorted alphabetically");
     }
 }

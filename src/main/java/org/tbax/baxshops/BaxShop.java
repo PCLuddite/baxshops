@@ -548,7 +548,7 @@ public class BaxShop implements UpgradeableSerializable, Collection<BaxEntry>
     }
 
     @Override
-    public Iterator<BaxEntry> iterator()
+    public @NotNull Iterator<BaxEntry> iterator()
     {
         return inventory.iterator();
     }
@@ -615,8 +615,15 @@ public class BaxShop implements UpgradeableSerializable, Collection<BaxEntry>
             .collect(Collectors.toList());
     }
 
-    public void sort(Comparator<? super BaxEntry> comparator) {
+    public void sort(Comparator<? super BaxEntry> comparator)
+    {
         inventory.sort(comparator);
+    }
+
+    public void sort(int index, Comparator<? super BaxEntry> comparator)
+    {
+        List<BaxEntry> subList = inventory.subList(index, inventory.size());
+        subList.sort(comparator);
     }
 
     @Override
