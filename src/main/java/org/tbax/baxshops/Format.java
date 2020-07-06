@@ -22,8 +22,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.tbax.baxshops.internal.ShopPlugin;
-import org.tbax.baxshops.internal.text.*;
+import org.tbax.baxshops.text.*;
 
 import java.text.DateFormat;
 import java.text.ParseException;

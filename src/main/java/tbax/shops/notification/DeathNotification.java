@@ -21,9 +21,8 @@ package tbax.shops.notification;
 import com.google.gson.JsonObject;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.notification.GeneralNotification;
-import org.tbax.baxshops.internal.serialization.StateLoader;
-import org.tbax.baxshops.internal.serialization.states.StateLoader_00100;
+import org.tbax.bukkit.notification.GeneralNotification;
+import org.tbax.baxshops.serialization.StateLoader;
 
 @Deprecated
 public class DeathNotification implements Notification
@@ -53,7 +52,7 @@ public class DeathNotification implements Notification
     }
 
     @Override
-    public @NotNull org.tbax.baxshops.notification.Notification getNewNote(StateLoader stateLoader)
+    public @NotNull org.tbax.bukkit.notification.Notification getNewNote(StateLoader stateLoader)
     {
         OfflinePlayer player = stateLoader.getPlayerSafe(null, person);
         GeneralNotification n = new GeneralNotification(getMessage(player));
@@ -62,7 +61,7 @@ public class DeathNotification implements Notification
     }
 
     @Override
-    public @NotNull Class<? extends org.tbax.baxshops.notification.Notification> getNewNoteClass()
+    public @NotNull Class<? extends org.tbax.bukkit.notification.Notification> getNewNoteClass()
     {
         return GeneralNotification.class;
     }
