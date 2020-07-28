@@ -24,12 +24,12 @@ package tbax.shops.notification;
 
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.internal.notification.BuyNotification;
-import org.tbax.baxshops.internal.serialization.StateLoader;
-import org.tbax.baxshops.internal.serialization.states.StateLoader_00050;
-import org.tbax.baxshops.internal.serialization.states.StateLoader_00100;
-import org.tbax.baxshops.internal.serialization.states.StateLoader_00200;
-import org.tbax.baxshops.internal.serialization.states.StateLoader_00210;
+import org.tbax.baxshops.notification.BuyNotification;
+import org.tbax.baxshops.serialization.StateLoader;
+import org.tbax.baxshops.serialization.states.StateLoader_00050;
+import org.tbax.baxshops.serialization.states.StateLoader_00100;
+import org.tbax.baxshops.serialization.states.StateLoader_00200;
+import org.tbax.baxshops.serialization.states.StateLoader_00210;
 import tbax.shops.Shop;
 import tbax.shops.ShopEntry;
 
@@ -67,13 +67,13 @@ public class SaleNotification implements Notification
     }
 
     @Override
-    public @NotNull Class<? extends org.tbax.baxshops.notification.Notification> getNewNoteClass()
+    public @NotNull Class<? extends org.tbax.bukkit.notification.Notification> getNewNoteClass()
     {
         return BuyNotification.class;
     }
 
     @Override
-    public @NotNull org.tbax.baxshops.notification.Notification getNewNote(StateLoader stateLoader)
+    public @NotNull org.tbax.bukkit.notification.Notification getNewNote(StateLoader stateLoader)
     {
         if (stateLoader instanceof StateLoader_00050) {
             return new BuyNotification(

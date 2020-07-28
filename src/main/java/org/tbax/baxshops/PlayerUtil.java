@@ -26,16 +26,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.tbax.baxshops.errors.CommandErrorException;
-import org.tbax.baxshops.errors.CommandWarningException;
-import org.tbax.baxshops.errors.PrematureAbortException;
-import org.tbax.baxshops.internal.Resources;
-import org.tbax.baxshops.internal.ShopPlugin;
-import org.tbax.baxshops.internal.notification.DeletedShopClaim;
-import org.tbax.baxshops.internal.notification.SaleClaim;
-import org.tbax.baxshops.internal.items.ItemUtil;
-import org.tbax.baxshops.serialization.StoredPlayer;
-import org.tbax.baxshops.internal.versioning.LegacyPlayerUtil;
+import org.tbax.bukkit.errors.CommandErrorException;
+import org.tbax.bukkit.errors.CommandWarningException;
+import org.tbax.bukkit.errors.PrematureAbortException;
+import org.tbax.baxshops.notification.DeletedShopClaim;
+import org.tbax.baxshops.notification.SaleClaim;
+import org.tbax.baxshops.items.ItemUtil;
+import org.tbax.bukkit.serialization.StoredPlayer;
+import org.tbax.baxshops.versioning.LegacyPlayerUtil;
+import org.tbax.bukkit.MathUtil;
 
 import java.util.*;
 
