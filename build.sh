@@ -23,7 +23,7 @@ if [ "$JAVA_HOME" = "" ]; then
     export JAVA_HOME=${JAVA_HOME%/*}
     export JAVA_HOME=${JAVA_HOME%/*}
 fi
-SHOPS_VER="1.0b3"
+SHOPS_VER="1.0b4"
 VERSION='1_8'
 echo "JAVA_HOME=$JAVA_HOME"
 echo "SHOPS_VER=$SHOPS_VER"
