@@ -20,10 +20,10 @@ package tbax.shops.notification;
 
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.internal.serialization.StateLoader;
-import org.tbax.baxshops.internal.serialization.states.StateLoader_00100;
-import org.tbax.baxshops.internal.serialization.states.StateLoader_00200;
-import org.tbax.baxshops.internal.serialization.states.StateLoader_00210;
+import org.tbax.baxshops.serialization.StateLoader;
+import org.tbax.baxshops.serialization.states.StateLoader_00100;
+import org.tbax.baxshops.serialization.states.StateLoader_00200;
+import org.tbax.baxshops.serialization.states.StateLoader_00210;
 import tbax.shops.ShopEntry;
 
 @Deprecated
@@ -50,9 +50,9 @@ public class BuyClaim implements Notification
     }
 
     @Override
-    public @NotNull org.tbax.baxshops.notification.Notification getNewNote(StateLoader stateLoader)
+    public @NotNull org.tbax.bukkit.notification.Notification getNewNote(StateLoader stateLoader)
     {
-        return new org.tbax.baxshops.internal.notification.BuyClaim(
+        return new org.tbax.baxshops.notification.BuyClaim(
                 stateLoader.getShop(null, shopId).getId(),
                 stateLoader.getPlayerSafe(null, buyer),
                 stateLoader.getPlayerSafe(null, ((StateLoader_00100)stateLoader).getShopOwner(shopId)),
@@ -61,8 +61,8 @@ public class BuyClaim implements Notification
     }
 
     @Override
-    public @NotNull Class<? extends org.tbax.baxshops.notification.Notification> getNewNoteClass()
+    public @NotNull Class<? extends org.tbax.bukkit.notification.Notification> getNewNoteClass()
     {
-        return org.tbax.baxshops.internal.notification.BuyClaim.class;
+        return org.tbax.baxshops.notification.BuyClaim.class;
     }
 }

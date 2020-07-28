@@ -23,8 +23,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonReader;
 import org.bukkit.Location;
-import org.tbax.baxshops.internal.ShopPlugin;
-import org.tbax.baxshops.internal.serialization.states.StateLoader_00100;
+import org.tbax.baxshops.ShopPlugin;
+import org.tbax.baxshops.serialization.states.StateLoader_00100;
 import tbax.shops.BaxShop;
 import tbax.shops.notification.*;
 

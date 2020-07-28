@@ -22,8 +22,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.tbax.baxshops.internal.ShopPlugin;
-import org.tbax.baxshops.internal.text.*;
+import org.tbax.baxshops.text.*;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -202,12 +201,12 @@ public final class Format
 
     public static @NotNull String listOr(List<? extends CharSequence> elements)
     {
-        return String.join(", ", elements.subList(0, elements.size() - 2)) + " or " + elements.get(elements.size() - 1);
+        return String.join(", ", elements.subList(0, elements.size() - 1)) + " or " + elements.get(elements.size() - 1);
     }
 
     public static @NotNull String listAnd(List<? extends CharSequence> elements)
     {
-        return String.join(", ", elements.subList(0, elements.size() - 2)) + " and " + elements.get(elements.size() - 1);
+        return String.join(", ", elements.subList(0, elements.size() - 1)) + " and " + elements.get(elements.size() - 1);
     }
 
     private static final String[] NUMERALS = { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
