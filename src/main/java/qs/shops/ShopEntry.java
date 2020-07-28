@@ -25,9 +25,9 @@ package qs.shops;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.tbax.baxshops.BaxEntry;
-import org.tbax.baxshops.MathUtil;
-import org.tbax.baxshops.internal.ShopPlugin;
-import org.tbax.baxshops.internal.items.ItemUtil;
+import org.tbax.bukkit.MathUtil;
+import org.tbax.baxshops.ShopPlugin;
+import org.tbax.baxshops.items.ItemUtil;
 
 import java.io.Serializable;
 import java.util.HashMap;

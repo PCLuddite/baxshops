@@ -27,18 +27,17 @@ import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.internal.Resources;
-import org.tbax.baxshops.internal.ShopPlugin;
-import org.tbax.baxshops.internal.ShopSelection;
-import org.tbax.baxshops.internal.items.ItemUtil;
-import org.tbax.baxshops.serialization.SafeMap;
-import org.tbax.baxshops.serialization.StoredPlayer;
-import org.tbax.baxshops.internal.serialization.UpgradeableSerializable;
-import org.tbax.baxshops.internal.serialization.UpgradeableSerialization;
-import org.tbax.baxshops.serialization.annotations.DoNotSerialize;
-import org.tbax.baxshops.serialization.annotations.SerializeMethod;
-import org.tbax.baxshops.internal.serialization.states.StateLoader_00300;
-import org.tbax.baxshops.internal.serialization.states.StateLoader_00420;
+import org.tbax.bukkit.errors.CommandErrorException;
+import org.tbax.bukkit.errors.PrematureAbortException;
+import org.tbax.baxshops.items.ItemUtil;
+import org.tbax.bukkit.serialization.SafeMap;
+import org.tbax.bukkit.serialization.StoredPlayer;
+import org.tbax.baxshops.serialization.UpgradeableSerializable;
+import org.tbax.baxshops.serialization.UpgradeableSerialization;
+import org.tbax.bukkit.serialization.annotations.DoNotSerialize;
+import org.tbax.bukkit.serialization.annotations.SerializeMethod;
+import org.tbax.baxshops.serialization.states.StateLoader_00300;
+import org.tbax.baxshops.serialization.states.StateLoader_00420;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -546,7 +545,7 @@ public class BaxShop implements UpgradeableSerializable, Collection<BaxEntry>
     }
 
     @Override
-    public Iterator<BaxEntry> iterator()
+    public @NotNull Iterator<BaxEntry> iterator()
     {
         return inventory.iterator();
     }
@@ -613,8 +612,15 @@ public class BaxShop implements UpgradeableSerializable, Collection<BaxEntry>
             .collect(Collectors.toList());
     }
 
-    public void sort(Comparator<? super BaxEntry> comparator) {
+    public void sort(Comparator<? super BaxEntry> comparator)
+    {
         inventory.sort(comparator);
+    }
+
+    public void sort(int index, Comparator<? super BaxEntry> comparator)
+    {
+        List<BaxEntry> subList = inventory.subList(index, inventory.size());
+        subList.sort(comparator);
     }
 
     @Override
@@ -630,5 +636,36 @@ public class BaxShop implements UpgradeableSerializable, Collection<BaxEntry>
     public int hashCode()
     {
         return Objects.hash(id);
+    }
+
+    public BaxEntry getEntryFromString(String arg, String errMsg) throws PrematureAbortException
+    {
+        BaxEntry entry;
+        try {
+            entry = getEntry(Integer.parseInt(arg) - 1);
+        }
+        catch (NumberFormatException e) {
+            List<BaxEntry> entries = ItemUtil.getItemFromAlias(arg, this);
+            if (entries.size() == 0) {
+                throw new CommandErrorException("No item with that name could be found");
+            }
+            else if (entries.size() > 1) {
+                StringBuilder sb = new StringBuilder("There are multiple items that match that name:\n");
+                for (BaxEntry baxEntry : entries) {
+                    sb.append(baxEntry.getName()).append('\n');
+                }
+                throw new CommandErrorException(sb.toString());
+            }
+            else {
+                return entries.get(0);
+            }
+        }
+        catch (IndexOutOfBoundsException e) {
+            throw new CommandErrorException(e, errMsg);
+        }
+        if (entry == null) {
+            throw new CommandErrorException(errMsg);
+        }
+        return entry;
     }
 }

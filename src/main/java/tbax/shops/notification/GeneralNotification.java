@@ -20,7 +20,7 @@ package tbax.shops.notification;
 
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.internal.serialization.StateLoader;
+import org.tbax.baxshops.serialization.StateLoader;
 
 @Deprecated
 public class GeneralNotification implements Notification
@@ -40,14 +40,14 @@ public class GeneralNotification implements Notification
     }
 
     @Override
-    public org.tbax.baxshops.notification.@NotNull Notification getNewNote(StateLoader stateLoader)
+    public org.tbax.bukkit.notification.@NotNull Notification getNewNote(StateLoader stateLoader)
     {
-        return new org.tbax.baxshops.notification.GeneralNotification(message);
+        return new org.tbax.bukkit.notification.GeneralNotification(message);
     }
 
     @Override
-    public @NotNull Class<? extends org.tbax.baxshops.notification.Notification> getNewNoteClass()
+    public @NotNull Class<? extends org.tbax.bukkit.notification.Notification> getNewNoteClass()
     {
-        return org.tbax.baxshops.notification.GeneralNotification.class;
+        return org.tbax.bukkit.notification.GeneralNotification.class;
     }
 }
