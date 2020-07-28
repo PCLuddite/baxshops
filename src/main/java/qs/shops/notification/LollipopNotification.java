@@ -23,9 +23,8 @@
 package qs.shops.notification;
 
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.internal.serialization.StateLoader;
-import org.tbax.baxshops.serialization.StoredPlayer;
-import org.tbax.baxshops.internal.serialization.states.StateLoader_00000;
+import org.tbax.baxshops.serialization.StateLoader;
+import org.tbax.bukkit.serialization.StoredPlayer;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -67,13 +66,13 @@ public class LollipopNotification implements Notification {
 	// begin modified class
 
 	@Override
-	public @NotNull Class<? extends org.tbax.baxshops.notification.Notification> getNewNoteClass()
+	public @NotNull Class<? extends org.tbax.bukkit.notification.Notification> getNewNoteClass()
 	{
-		return org.tbax.baxshops.internal.notification.LollipopNotification.class;
+		return org.tbax.baxshops.notification.LollipopNotification.class;
 	}
 
 	@Override
-	public @NotNull org.tbax.baxshops.notification.Notification getNewNote(StateLoader stateLoader)
+	public @NotNull org.tbax.bukkit.notification.Notification getNewNote(StateLoader stateLoader)
 	{
 		String adjective = "";
 		for (Entry<Double, String> entry : adjectives.entrySet()) {
@@ -81,7 +80,7 @@ public class LollipopNotification implements Notification {
 				adjective = entry.getValue();
 			}
 		}
-		return new org.tbax.baxshops.internal.notification.LollipopNotification(
+		return new org.tbax.baxshops.notification.LollipopNotification(
 				stateLoader.getPlayerSafe(null, sender),
 				StoredPlayer.ERROR,
 				adjective

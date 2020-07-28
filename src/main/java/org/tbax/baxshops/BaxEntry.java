@@ -19,19 +19,18 @@
  */
 package org.tbax.baxshops;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
-import org.tbax.baxshops.internal.ShopPlugin;
-import org.tbax.baxshops.internal.items.EnchantMap;
-import org.tbax.baxshops.internal.items.ItemUtil;
-import org.tbax.baxshops.internal.serialization.UpgradeableSerializable;
-import org.tbax.baxshops.internal.serialization.UpgradeableSerialization;
-import org.tbax.baxshops.internal.text.*;
-import org.tbax.baxshops.serialization.SafeMap;
+import org.tbax.baxshops.items.EnchantMap;
+import org.tbax.baxshops.items.ItemUtil;
+import org.tbax.baxshops.serialization.UpgradeableSerializable;
+import org.tbax.baxshops.serialization.UpgradeableSerialization;
+import org.tbax.baxshops.text.*;
+import org.tbax.bukkit.serialization.SafeMap;
+import org.tbax.bukkit.MathUtil;
 
 import java.util.Map;
 import java.util.Objects;
@@ -398,7 +397,7 @@ public class BaxEntry implements UpgradeableSerializable
             component.append(sellComponent);
         }
 
-        if (!(canBuy() || canBuy())) {
+        if (!canBuy() && !canSell()) {
             component.append(" ");
             ChatComponent nfs = new ChatComponent("(Not for Sale)");
             if (!strikethrough) {
@@ -406,7 +405,7 @@ public class BaxEntry implements UpgradeableSerializable
             }
             component.append(nfs);
         }
-        
+
         return component;
     }
     
