@@ -78,6 +78,8 @@ public class CommandHelp
 
     public void addArg(CommandHelpArgument arg)
     {
+        if (args == null)
+            args = new ArrayList<>();
         args.add(arg);
     }
 
