@@ -1,7 +1,7 @@
 name: BaxShops
 main: org.tbax.baxshops.ShopPlugin
 description: Create and manage shops with a Vault economy
-api-version: '1.14'
+api-version: '1.16'
 version: '1.0-beta.4'
 commands:
     shop:

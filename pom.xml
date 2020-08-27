@@ -43,27 +43,20 @@
         </repository>
     </repositories>
     <dependencies>
-        <!--Spigot API
-        <dependency>
-               <groupId>org.spigotmc</groupId>
-               <artifactId>spigot-api</artifactId>
-               <version>1.8.8-R0.1-SNAPSHOT</version>
-               <scope>provided</scope>
-        </dependency>-->
-        <!--Bukkit API-->
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.14.2-R0.1-SNAPSHOT</version>
+            <version>1.15-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-       <!--NMS-->
-        <!--dependency>
+        <!-- NMS
+        <dependency>
             <groupId>net.minecraft</groupId>
             <artifactId>spigot</artifactId>
-            <version>1.13.2-R0.1-SNAPSHOT</version>
+            <version>1.16.2</version>
             <scope>provided</scope>
-        </dependency-->
+        </dependency>
+        -->
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>Vault</artifactId>
