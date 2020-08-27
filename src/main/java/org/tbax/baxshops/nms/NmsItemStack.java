@@ -36,12 +36,12 @@ public final class NmsItemStack extends NmsObject
     }
 
     private static Method getNameMethod = null;
-    public ChatMessage getName() throws ReflectiveOperationException
+    public IChatBaseComponent getName() throws ReflectiveOperationException
     {
         if (getNameMethod == null) {
             getNameMethod = __method("getName");
         }
-        return new ChatMessage(getNameMethod.invoke(runtimeObject));
+        return new IChatBaseComponent(getNameMethod.invoke(runtimeObject));
     }
 
     @Override

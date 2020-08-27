@@ -161,7 +161,7 @@ public final class ItemUtil
             item.setItemMeta(meta);
         }
         try {
-            return getNmsCopy(item).getName().getText();
+            return getNmsCopy(item).getName().getString();
         }
         catch (ReflectiveOperationException | ClassCastException e) {
             ShopPlugin.logWarning("Could not get item name for " + item.getType());

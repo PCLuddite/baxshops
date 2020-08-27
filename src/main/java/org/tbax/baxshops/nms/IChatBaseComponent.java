@@ -35,6 +35,15 @@ public final class IChatBaseComponent extends NmsObject
         return runtimeObject;
     }
 
+    private static Method getStringMethod = null;
+    public String getString() throws ReflectiveOperationException
+    {
+        if (getStringMethod == null) {
+            getStringMethod = __method("getString");
+        }
+        return (String)getStringMethod.invoke(runtimeObject);
+    }
+
     public static class ChatSerializer extends NmsObject
     {
         private static final String RUNTIME_CLASS_NAME = "net.minecraft.server." +
