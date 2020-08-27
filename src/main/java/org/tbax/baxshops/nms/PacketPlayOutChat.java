@@ -20,32 +20,25 @@ package org.tbax.baxshops.nms;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.util.UUID;
 
 public final class PacketPlayOutChat extends Packet
 {
-    private Object runtimeObject;
-
-    private static Field aField = null;
-    public IChatBaseComponent a;
+    private final Object runtimeObject;
 
     private static Constructor<?> ctor;
-    public PacketPlayOutChat(IChatBaseComponent component) throws ReflectiveOperationException
+    public PacketPlayOutChat(IChatBaseComponent component, ChatMessageType chatMessageType, UUID uuid)
+            throws ReflectiveOperationException
     {
-        a = component;
         if (ctor == null) {
-            ctor = __class().getConstructor(component.__class());
+            ctor = __class().getConstructor(component.__class(), chatMessageType.__object().getClass(), UUID.class);
         }
-        runtimeObject = ctor.newInstance(a.__object());
+        runtimeObject = ctor.newInstance(component.__object(), chatMessageType.__object(), uuid);
     }
 
     @Override
-    public Object __object() throws ReflectiveOperationException
+    public Object __object()
     {
-        if (aField == null) {
-            aField = __class().getDeclaredField("a");
-            aField.setAccessible(true);
-        }
-        aField.set(runtimeObject, a.__object());
         return runtimeObject;
     }
 }

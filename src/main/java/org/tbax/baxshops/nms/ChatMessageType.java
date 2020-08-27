@@ -18,28 +18,26 @@
  */
 package org.tbax.baxshops.nms;
 
-import java.lang.reflect.Method;
+import org.tbax.baxshops.ShopPlugin;
 
-public final class ChatMessage extends NmsObject
+public final class ChatMessageType extends NmsObject
 {
+    public static ChatMessageType CHAT = new ChatMessageType("CHAT");
+    public static ChatMessageType SYSTEM = new ChatMessageType("SYSTEM");
+    public static ChatMessageType GAME_INFO = new ChatMessageType("GAME_INFO");
+
     private Object runtimeObject;
 
-    public ChatMessage(Object runtimeObject)
-    {
-        this.runtimeObject = runtimeObject;
-    }
-
-    private static Method getTextMethod = null;
-    public String getText() throws ReflectiveOperationException
-    {
-        if (getTextMethod == null) {
-            getTextMethod = __method("getText");
+    private ChatMessageType(String name) {
+        try {
+            runtimeObject = __class().getField(name).get(null);
+        } catch (ReflectiveOperationException e) {
+            ShopPlugin.logWarning(e.getMessage() + " " + __class_name() + "." + name);
         }
-        return (String)getTextMethod.invoke(runtimeObject);
     }
 
     @Override
-    public Object __object()
+    public Object __object() throws ReflectiveOperationException
     {
         return runtimeObject;
     }

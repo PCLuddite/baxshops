@@ -223,8 +223,7 @@ public final class ChatComponent
     {
         try {
             IChatBaseComponent component = IChatBaseComponent.ChatSerializer.a(toString());
-            PacketPlayOutChat packet = new PacketPlayOutChat(component);
-            packet.a = component;
+            PacketPlayOutChat packet = new PacketPlayOutChat(component, ChatMessageType.CHAT, UUID.randomUUID());
 
             CraftPlayer craftPlayer = new CraftPlayer(player);
             PlayerConnection playerConnection = craftPlayer.getHandle().playerConnection;
