@@ -126,8 +126,12 @@ public class SafeMap implements Map<String, Object>
 
     public UUID getUUID(String key, UUID defaultValue)
     {
+        String value = getString(key);
+        if (value == null) {
+            return defaultValue;
+        }
         try {
-            return UUID.fromString(getString(key));
+            return UUID.fromString(value);
         }
         catch (IllegalArgumentException e) {
             return defaultValue;
