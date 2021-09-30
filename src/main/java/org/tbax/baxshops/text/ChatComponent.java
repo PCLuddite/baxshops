@@ -27,6 +27,10 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.tbax.baxshops.ShopPlugin;
 import org.tbax.baxshops.nms.*;
+import org.tbax.baxshops.nms.network.chat.ChatMessageType;
+import org.tbax.baxshops.nms.network.chat.IChatBaseComponent;
+import org.tbax.baxshops.nms.network.protocol.game.PacketPlayOutChat;
+import org.tbax.baxshops.nms.server.network.PlayerConnection;
 
 import java.util.*;
 
@@ -223,7 +227,7 @@ public final class ChatComponent
     {
         try {
             IChatBaseComponent component = IChatBaseComponent.ChatSerializer.a(toString());
-            PacketPlayOutChat packet = new PacketPlayOutChat(component, ChatMessageType.CHAT, UUID.randomUUID());
+            PacketPlayOutChat packet = new PacketPlayOutChat(component, ChatMessageType.a, UUID.randomUUID());
 
             CraftPlayer craftPlayer = new CraftPlayer(player);
             PlayerConnection playerConnection = craftPlayer.getHandle().playerConnection;

@@ -16,13 +16,38 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
  * USA
  */
-package org.tbax.baxshops.nms;
+package org.tbax.baxshops.nms.server.level;
 
-public abstract class NmsObject extends RuntimeObject
+import org.tbax.baxshops.nms.server.network.PlayerConnection;
+import org.tbax.baxshops.nms.RuntimeObject;
+
+import java.lang.reflect.Field;
+
+public final class EntityPlayer extends RuntimeObject
 {
+    private static Field bField;
+    public PlayerConnection playerConnection;
+
     @Override
     public String __pkg_name()
     {
-        return "net.minecraft.server." + MINECRAFT_VERSION;
+        return "net.minecraft.server.level";
+    }
+
+    private Object runtimeObject;
+
+    public EntityPlayer(Object runtimeObject) throws ReflectiveOperationException
+    {
+        this.runtimeObject = runtimeObject;
+        if (bField == null) {
+            bField = __class().getField("b");
+        }
+        playerConnection = new PlayerConnection(bField.get(runtimeObject));
+    }
+
+    @Override
+    public Object __object()
+    {
+        return runtimeObject;
     }
 }

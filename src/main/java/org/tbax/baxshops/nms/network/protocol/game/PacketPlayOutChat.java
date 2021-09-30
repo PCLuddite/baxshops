@@ -16,14 +16,23 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
  * USA
  */
-package org.tbax.baxshops.nms;
+package org.tbax.baxshops.nms.network.protocol.game;
+
+import org.tbax.baxshops.nms.network.chat.ChatMessageType;
+import org.tbax.baxshops.nms.network.chat.IChatBaseComponent;
+import org.tbax.baxshops.nms.network.protocol.Packet;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.util.UUID;
 
 public final class PacketPlayOutChat extends Packet
 {
+    @Override
+    public String __pkg_name()
+    {
+        return "net.minecraft.network.protocol.game";
+    }
+
     private final Object runtimeObject;
 
     private static Constructor<?> ctor;

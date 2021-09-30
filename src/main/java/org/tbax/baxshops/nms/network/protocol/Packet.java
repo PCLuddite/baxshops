@@ -16,8 +16,15 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
  * USA
  */
-package org.tbax.baxshops.nms;
+package org.tbax.baxshops.nms.network.protocol;
 
-public abstract class Packet extends NmsObject
+import org.tbax.baxshops.nms.RuntimeObject;
+
+public abstract class Packet extends RuntimeObject
 {
+    @Override
+    public String __pkg_name()
+    {
+        return "net.minecraft.network.protocol";
+    }
 }

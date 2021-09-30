@@ -19,6 +19,7 @@
 package org.tbax.baxshops.nms;
 
 import org.bukkit.entity.Player;
+import org.tbax.baxshops.nms.server.level.EntityPlayer;
 
 import java.lang.reflect.Method;
 

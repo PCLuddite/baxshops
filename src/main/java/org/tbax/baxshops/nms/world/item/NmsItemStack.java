@@ -16,27 +16,41 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
  * USA
  */
-package org.tbax.baxshops.nms;
+package org.tbax.baxshops.nms.world.item;
+
+import org.tbax.baxshops.nms.RuntimeObject;
+import org.tbax.baxshops.nms.network.chat.IChatBaseComponent;
 
 import java.lang.reflect.Method;
 
-public final class PlayerConnection extends NmsObject
+public final class NmsItemStack extends RuntimeObject
 {
     private Object runtimeObject;
 
-    public PlayerConnection(Object runtimeObject)
+    public NmsItemStack(Object runtimeObject)
     {
         this.runtimeObject = runtimeObject;
     }
 
-    private static Method sendPacketMethod = null;
-    public void sendPacket(Packet packet) throws ReflectiveOperationException
+    @Override
+    public String __pkg_name()
     {
-        if (sendPacketMethod == null) {
-            sendPacketMethod = __method("sendPacket",
-                    __class(__pkg_name() + ".Packet"));
+        return "net.minecraft.world.item";
+    }
+
+    @Override
+    public String __class_name()
+    {
+        return "ItemStack";
+    }
+
+    private static Method getNameMethod = null;
+    public IChatBaseComponent getName() throws ReflectiveOperationException
+    {
+        if (getNameMethod == null) {
+            getNameMethod = __method("getName");
         }
-        sendPacketMethod.invoke(runtimeObject, packet.__object());
+        return new IChatBaseComponent(getNameMethod.invoke(runtimeObject));
     }
 
     @Override

@@ -16,11 +16,13 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
  * USA
  */
-package org.tbax.baxshops.nms;
+package org.tbax.baxshops.nms.network.chat;
+
+import org.tbax.baxshops.nms.RuntimeObject;
 
 import java.lang.reflect.Method;
 
-public final class IChatBaseComponent extends NmsObject
+public final class IChatBaseComponent extends RuntimeObject
 {
     private Object runtimeObject;
 
@@ -35,6 +37,12 @@ public final class IChatBaseComponent extends NmsObject
         return runtimeObject;
     }
 
+    @Override
+    public String __pkg_name()
+    {
+        return "net.minecraft.network.chat";
+    }
+
     private static Method getStringMethod = null;
     public String getString() throws ReflectiveOperationException
     {
@@ -44,10 +52,15 @@ public final class IChatBaseComponent extends NmsObject
         return (String)getStringMethod.invoke(runtimeObject);
     }
 
-    public static class ChatSerializer extends NmsObject
+    public static class ChatSerializer extends RuntimeObject
     {
-        private static final String RUNTIME_CLASS_NAME = "net.minecraft.server." +
-                MINECRAFT_VERSION + ".IChatBaseComponent$ChatSerializer";
+        @Override
+        public String __pkg_name()
+        {
+            return "net.minecraft.network.chat";
+        }
+
+        private static final String RUNTIME_CLASS_NAME = "net.minecraft.network.chat.IChatBaseComponent$ChatSerializer";
         private static Method aMethod = null;
 
         public static IChatBaseComponent a(String text) throws ReflectiveOperationException

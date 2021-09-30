@@ -16,28 +16,35 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
  * USA
  */
-package org.tbax.baxshops.nms;
+package org.tbax.baxshops.nms.network.chat;
 
-import java.lang.reflect.Field;
+import org.tbax.baxshops.ShopPlugin;
+import org.tbax.baxshops.nms.RuntimeObject;
 
-public final class EntityPlayer extends NmsObject
+public final class ChatMessageType extends RuntimeObject
 {
-    private static Field playerConnectionField;
-    public PlayerConnection playerConnection;
+    public static ChatMessageType a = new ChatMessageType("a");
+    public static ChatMessageType b = new ChatMessageType("b");
+    public static ChatMessageType c = new ChatMessageType("c");
+
+    @Override
+    public String __pkg_name()
+    {
+        return "net.minecraft.network.chat";
+    }
 
     private Object runtimeObject;
 
-    public EntityPlayer(Object runtimeObject) throws ReflectiveOperationException
-    {
-        this.runtimeObject = runtimeObject;
-        if (playerConnectionField == null) {
-            playerConnectionField = __class().getField("playerConnection");
+    private ChatMessageType(String name) {
+        try {
+            runtimeObject = __class().getField(name).get(null);
+        } catch (ReflectiveOperationException e) {
+            ShopPlugin.logWarning(e.getMessage() + " " + __class_name() + "." + name);
         }
-        playerConnection = new PlayerConnection(playerConnectionField.get(runtimeObject));
     }
 
     @Override
-    public Object __object()
+    public Object __object() throws ReflectiveOperationException
     {
         return runtimeObject;
     }

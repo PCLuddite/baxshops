@@ -38,7 +38,7 @@ import org.tbax.baxshops.BaxEntry;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.baxshops.Format;
 import org.tbax.baxshops.ShopPlugin;
-import org.tbax.baxshops.nms.NmsItemStack;
+import org.tbax.baxshops.nms.world.item.NmsItemStack;
 import org.tbax.baxshops.nms.RuntimeObject;
 import org.tbax.bukkit.commands.CmdActor;
 import org.tbax.bukkit.errors.PrematureAbortException;

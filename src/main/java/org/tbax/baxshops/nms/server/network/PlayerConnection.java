@@ -16,28 +16,40 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301
  * USA
  */
-package org.tbax.baxshops.nms;
+package org.tbax.baxshops.nms.server.network;
 
-import org.tbax.baxshops.ShopPlugin;
+import org.tbax.baxshops.nms.RuntimeObject;
+import org.tbax.baxshops.nms.network.protocol.Packet;
 
-public final class ChatMessageType extends NmsObject
+import java.lang.reflect.Method;
+
+public final class PlayerConnection extends RuntimeObject
 {
-    public static ChatMessageType CHAT = new ChatMessageType("CHAT");
-    public static ChatMessageType SYSTEM = new ChatMessageType("SYSTEM");
-    public static ChatMessageType GAME_INFO = new ChatMessageType("GAME_INFO");
-
     private Object runtimeObject;
 
-    private ChatMessageType(String name) {
-        try {
-            runtimeObject = __class().getField(name).get(null);
-        } catch (ReflectiveOperationException e) {
-            ShopPlugin.logWarning(e.getMessage() + " " + __class_name() + "." + name);
-        }
+    public PlayerConnection(Object runtimeObject)
+    {
+        this.runtimeObject = runtimeObject;
     }
 
     @Override
-    public Object __object() throws ReflectiveOperationException
+    public String __pkg_name()
+    {
+        return "net.minecraft.server.network";
+    }
+
+    private static Method sendPacketMethod = null;
+    public void sendPacket(Packet packet) throws ReflectiveOperationException
+    {
+        if (sendPacketMethod == null) {
+            sendPacketMethod = __method("sendPacket",
+                    __class("net.minecraft.network.protocol.Packet"));
+        }
+        sendPacketMethod.invoke(runtimeObject, packet.__object());
+    }
+
+    @Override
+    public Object __object()
     {
         return runtimeObject;
     }
