@@ -458,26 +458,33 @@ public final class PlayerUtil
         return qty;
     }
 
-    public static ItemStack findSign(@NotNull Player player) throws PrematureAbortException
+    public static ItemStack findInInventory(@NotNull Player player, List<ItemStack> items)
     {
-        if (ItemUtil.isSign(LegacyPlayerUtil.getItemInHand(player))) {
+        if (items.stream().anyMatch(LegacyPlayerUtil.getItemInHand(player)::isSimilar)) {
             return LegacyPlayerUtil.getItemInHand(player);
         }
 
-        Map<Integer, ? extends ItemStack> signs = ItemUtil.all(player.getInventory(), ItemUtil.getSignTypesAsItems());
-        if (signs.isEmpty()) {
-            return null;
+        for(ItemStack itemStack : player.getInventory()) {
+            return itemStack;
         }
-        else if (signs.size() == 1) {
-            return signs.values().stream().findAny().get();
+        return null;
+    }
+
+    public static ItemStack findSign(@NotNull Player player) throws PrematureAbortException
+    {
+        ItemStack itemInHand = LegacyPlayerUtil.getItemInHand(player);
+        if (ItemUtil.isSign(itemInHand) && !ItemUtil.isShop(itemInHand)) {
+            return itemInHand;
         }
 
-        ItemStack sign = signs.values().stream().findAny().get();
-        for(ItemStack stack : signs.values()) {
-            if (!sign.isSimilar(stack)) {
-                throw new CommandErrorException("There are multiple types of signs in your inventory. Please hold the sign that you want to use.");
+        Inventory inventory = player.getInventory();
+        for (int idx = 0; idx < inventory.getSize(); ++idx) {
+            ItemStack item = inventory.getItem(idx);
+            if (ItemUtil.isSign(item) && !ItemUtil.isShop(item)) {
+                return item;
             }
         }
-        return sign;
+
+        return null;
     }
 }
