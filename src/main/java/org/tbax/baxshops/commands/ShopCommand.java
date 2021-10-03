@@ -27,6 +27,7 @@ import org.tbax.bukkit.errors.PrematureAbortException;
 import org.tbax.baxshops.Permissions;
 
 import java.util.List;
+import java.util.UUID;
 
 public abstract class ShopCommand extends BaxCommand
 {
@@ -66,5 +67,9 @@ public abstract class ShopCommand extends BaxCommand
                                       @NotNull String alias, String[] args)
     {
         return onTabComplete((ShopCmdActor)sender, command, alias,((ShopCmdActor)sender).getArgs());
+    }
+
+    public void clearStaticData(UUID playerId) {
+        // do nothing by default
     }
 }

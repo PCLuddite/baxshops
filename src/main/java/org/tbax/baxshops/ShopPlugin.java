@@ -57,14 +57,15 @@ public final class ShopPlugin extends JavaPlugin
     private static Economy econ;
     private static Logger log;
     private static State state;
-    private static String[] RAW_COMMANDS = { "buy", "sell", "restock", "restockall" };
     private static StateFile stateFile;
+
+    private final static String[] RAW_COMMANDS = { "buy", "sell", "restock", "restockall" };
 
     /**
      * A map containing each player's currently selected shop and other
      * selection data
      */
-    private static Map<UUID, ShopSelection> selectedShops = new HashMap<>();
+    private final static Map<UUID, ShopSelection> selectedShops = new HashMap<>();
 
     private static CommandMap initCommands()
     {
@@ -228,6 +229,7 @@ public final class ShopPlugin extends JavaPlugin
     public static void clearSelection(OfflinePlayer player)
     {
         selectedShops.remove(player.getUniqueId());
+        ShopPlugin.clearStaticData(player.getUniqueId());
     }
 
     public static void sendNotification(UUID playerId, Notification note)
@@ -466,7 +468,7 @@ public final class ShopPlugin extends JavaPlugin
         // run an initial save 5 minutes after starting, then a recurring save
         this.getServer().getScheduler().scheduleSyncRepeatingTask(this,
                 () -> stateFile.writeToDisk(getState()),
-                6000L, stateFile.getConfig().getBackupInterval() * 1200
+                6000L, stateFile.getConfig().getBackupInterval() * 1200L
         );
 
         log.info("BaxShops has loaded successfully!");
@@ -613,5 +615,12 @@ public final class ShopPlugin extends JavaPlugin
     public static StateFile getStateFile()
     {
         return stateFile;
+    }
+
+    public static void clearStaticData(UUID playerId)
+    {
+        for(ShopCommand command : commands.values()) {
+            command.clearStaticData(playerId);
+        }
     }
 }

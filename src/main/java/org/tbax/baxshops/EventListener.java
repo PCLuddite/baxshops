@@ -142,6 +142,7 @@ public class EventListener implements Listener
             player.sendMessage("");
         }
         else {
+            ShopPlugin.clearStaticData(player.getUniqueId());
             if (ShopPlugin.getStateFile().getConfig().isLogNotes()) {
                 ShopPlugin.logInfo(String.format("%s selected shop %s", player.getName(), shop.getId().toString()));
             }
