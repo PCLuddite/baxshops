@@ -42,7 +42,7 @@ public final class PlayerConnection extends RuntimeObject
     public void sendPacket(Packet packet) throws ReflectiveOperationException
     {
         if (sendPacketMethod == null) {
-            sendPacketMethod = __method("sendPacket",
+            sendPacketMethod = __method("a",
                     __class("net.minecraft.network.protocol.Packet"));
         }
         sendPacketMethod.invoke(runtimeObject, packet.__object());

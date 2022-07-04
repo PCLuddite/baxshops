@@ -48,7 +48,7 @@ public final class NmsItemStack extends RuntimeObject
     public IChatBaseComponent getName() throws ReflectiveOperationException
     {
         if (getNameMethod == null) {
-            getNameMethod = __method("getName");
+            getNameMethod = __method("w");
         }
         return new IChatBaseComponent(getNameMethod.invoke(runtimeObject));
     }
