@@ -85,35 +85,34 @@ public final class CmdCopy extends ShopCommand
     public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException // tested OK 3-14-19
     {
         Material signType;
-        if (actor.isAdmin()) {
-            if (ItemUtil.isSign(actor.getItemInHand())) {
-                signType = actor.getItemInHand().getType();
+        ItemStack invSign = null;
+        if (ItemUtil.isSign(actor.getItemInHand()) && !ItemUtil.isShop(actor.getItemInHand())) {
+            invSign = actor.getItemInHand();
+            signType = actor.getItemInHand().getType();
+        }
+        else if (actor.isAdmin()) {
+            Material blockType = actor.getSelection().getLocation().getBlock().getType();
+            if (ItemUtil.isSign(blockType)) {
+                signType = ItemUtil.toInventorySign(blockType);
             }
             else {
-                Material blockType = actor.getSelection().getLocation().getBlock().getType();
-                if (ItemUtil.isSign(blockType)) {
-                    signType = ItemUtil.toInventorySign(blockType);
-                } else {
-                    signType = ItemUtil.getDefaultSignType();
-                }
+                signType = ItemUtil.getDefaultSignType();
             }
         }
         else {
-            PlayerInventory inv = actor.getPlayer().getInventory();
-            ItemStack sign = PlayerUtil.findSign(actor.getPlayer());
-            if (sign == null) {
+            invSign = PlayerUtil.findSign(actor.getPlayer());
+            if (invSign == null) {
                 actor.exitError("You need a sign to copy a shop.");
             }
-            signType = sign.getType();
-            inv.remove(new ItemStack(sign.getType(), 1));
+            signType = invSign.getType();
         }
 
         int overflow = actor.giveItem(actor.getSelection().toItem(signType));
         if (overflow > 0) {
-            actor.sendMessage("Your inventory is full");
-            if (!actor.isAdmin()) {
-                actor.getPlayer().getInventory().addItem(new ItemStack(signType, 1));
-            }
+            actor.sendError("Your inventory is full");
+        }
+        else if (invSign != null && !actor.isAdmin()) {
+            PlayerUtil.takeFromInventory(actor.getInventory(), invSign, 1, false);
         }
     }
 }
