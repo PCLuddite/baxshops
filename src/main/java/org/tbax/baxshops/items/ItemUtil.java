@@ -40,6 +40,8 @@ import org.tbax.baxshops.Format;
 import org.tbax.baxshops.ShopPlugin;
 import org.tbax.baxshops.nms.NmsItemStack;
 import org.tbax.baxshops.nms.RuntimeObject;
+import org.tbax.bukkit.commands.CmdActor;
+import org.tbax.bukkit.errors.PrematureAbortException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -548,5 +550,46 @@ public final class ItemUtil
             }
         }
         return "";
+    }
+
+    public static String[] getSignLines(CmdActor actor) throws PrematureAbortException
+    {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i < actor.getNumArgs(); ++i) {
+            sb.append(actor.getArg(i));
+            sb.append(" ");
+        }
+        int len = sb.length();
+        if (len > 0) {
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        if (len > 60) {
+            actor.exitError("That text will not fit on the sign.");
+        }
+        String[] lines = sb.toString().split("\\|");
+        for (int i = 0; i < lines.length; ++i) {
+            if (lines[i].length() > 15) {
+                actor.exitError("Line %d is too long. Lines can only be 15 characters in length.", i + 1);
+            }
+        }
+        return lines;
+    }
+
+    public static void changeSignText(@NotNull Block b, @NotNull String[] lines)
+    {
+        org.bukkit.block.Sign sign = (org.bukkit.block.Sign)b.getState();
+        if (lines.length < 3) {
+            sign.setLine(0, "");
+            sign.setLine(1, lines[0]);
+            sign.setLine(2, lines.length > 1 ? lines[1] : "");
+            sign.setLine(3, "");
+        }
+        else {
+            sign.setLine(0, lines[0]);
+            sign.setLine(1, lines[1]);
+            sign.setLine(2, lines[2]);
+            sign.setLine(3, lines.length > 3 ? lines[3] : "");
+        }
+        sign.update();
     }
 }
