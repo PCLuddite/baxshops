@@ -25,6 +25,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.tbax.baxshops.BaxShop;
 import org.tbax.bukkit.CommandHelp;
 import org.tbax.baxshops.Format;
@@ -42,7 +43,7 @@ public final class CmdDelete extends ShopCommand
     private final Map<UUID, UUID> confirmationMap = new ConcurrentHashMap<>();
 
     @Override
-    public @org.jetbrains.annotations.Nullable String getAction()
+    public @Nullable String getAction()
     {
         return "delete";
     }
@@ -72,16 +73,14 @@ public final class CmdDelete extends ShopCommand
     @Override
     public boolean hasValidArgCount(@NotNull CmdActor actor)
     {
-        if (actor.getNumArgs() == 1) {
-            return true;
-        } else if (actor.getNumArgs() == 2 && actor instanceof ShopCmdActor) {
+        if (actor instanceof ShopCmdActor) {
             ShopCmdActor shopActor = ((ShopCmdActor)actor);
-            if (shopActor.getPlayer() != null && shopActor.getShop() != null) {
-                // allow 2 args if need to confirm
-                return needsToConfirm(shopActor.getPlayer(), shopActor.getShop());
+            if (needsToConfirm(shopActor.getPlayer(), shopActor.getShop())
+                    || (actor.getNumArgs() == 2 && "all".equalsIgnoreCase(shopActor.getArg(1).asString()))) {
+                return actor.getNumArgs() == 2;
             }
         }
-        return false;
+        return actor.getNumArgs() == 1;
     }
 
     @Override
@@ -112,36 +111,41 @@ public final class CmdDelete extends ShopCommand
     public void onShopCommand(@NotNull ShopCmdActor actor) throws PrematureAbortException
     {
         BaxShop shop = actor.getShop();
-        if (shop.getLocations().size() == 1) {
-            Player player = actor.getPlayer();
-            if (needsToConfirm(player, shop) && actor.getNumArgs() == 2) {
-                String yesNo = actor.getArg(1).asEnum("yes", "no");
-                if ("yes".equalsIgnoreCase(yesNo)) {
-                    if (ShopPlugin.getBaxConfig().hasBackupOnDelete()) {
-                        ShopPlugin.getStateFile().writeToDisk(ShopPlugin.getState());
-                        ShopPlugin.getStateFile().backup();
-                    }
-                    removeShop(actor, shop);
-                    actor.sendWarning("This shop has been deleted. If this is a mistake, try loading a backup.");
-                } else {
-                    actor.sendMessage("Shop will not be deleted");
+        Player player = actor.getPlayer();
+        if (needsToConfirm(player, shop)) {
+            String yesNo = actor.getArg(1).asEnum("yes", "no");
+            if ("yes".equalsIgnoreCase(yesNo)) {
+                if (ShopPlugin.getBaxConfig().hasBackupOnDelete()) {
+                    ShopPlugin.getStateFile().writeToDisk(ShopPlugin.getState());
+                    ShopPlugin.getStateFile().backup();
                 }
-                confirmationMap.remove(player.getUniqueId());
+                removeShop(actor, shop);
+                actor.sendWarning("This shop has been deleted. If this is a mistake, try loading a backup.");
+            }
+            else {
+                actor.sendMessage("Shop will not be deleted");
+            }
+            confirmationMap.remove(player.getUniqueId());
+            ShopPlugin.clearSelection(actor.getPlayer());
+        }
+        else if (shop.getLocations().size() == 1) {
+            if (shop.isEmpty()) {
+                removeShop(actor, actor.getShop());
+                actor.sendMessage("%s's shop has been deleted", Format.username(shop.getOwner().getName()));
                 ShopPlugin.clearSelection(actor.getPlayer());
             }
             else {
-                if (shop.isEmpty()) {
-                    removeShop(actor, actor.getShop());
-                    actor.sendMessage("%s's shop has been deleted", Format.username(shop.getOwner().getName()));
-                    ShopPlugin.clearSelection(actor.getPlayer());
-                }
-                else {
-                    actor.sendError("This is the last location of this shop, and it still has inventory.");
-                    actor.sendError("Any inventory will not be recovered. Are you sure you want to delete it?");
-                    actor.sendMessage("Type %s to confirm or %s", Format.command("/shop delete yes"), Format.command("/shop delete no"));
-                    confirmationMap.put(player.getUniqueId(), shop.getId());
-                }
+                actor.sendError("This is the last location of this shop, and it still has inventory.");
+                actor.sendError("Any inventory will not be recovered. Are you sure you want to delete it?");
+                actor.sendMessage("Type %s to confirm or %s", Format.command("/shop delete yes"), Format.command("/shop delete no"));
+                confirmationMap.put(player.getUniqueId(), shop.getId());
             }
+        }
+        else if (actor.getNumArgs() == 2 && "all".equalsIgnoreCase(actor.getArg(1).asString())) {
+            actor.sendError("You are about to delete all locations of this shop");
+            actor.sendError("Any inventory will not be recovered. Are you sure you want to delete it?");
+            actor.sendMessage("Type %s to confirm or %s", Format.command("/shop delete yes"), Format.command("/shop delete no"));
+            confirmationMap.put(player.getUniqueId(), shop.getId());
         }
         else {
             ShopPlugin.removeLocation(shop.getId(), actor.getSelection().getLocation());
@@ -153,7 +157,7 @@ public final class CmdDelete extends ShopCommand
 
     private void removeShop(ShopCmdActor actor, BaxShop shop)
     {
-        for (Location loc : shop.getLocations()) {
+        for (Location loc : new ArrayList<>(shop.getLocations())) {
             changeSignText(actor, loc);
             ShopPlugin.removeLocation(shop.getId(), loc);
         }
@@ -178,9 +182,17 @@ public final class CmdDelete extends ShopCommand
         }
     }
 
-    private boolean needsToConfirm(@NotNull OfflinePlayer player, @NotNull BaxShop shop)
+    private boolean needsToConfirm(OfflinePlayer player, BaxShop shop)
     {
+        if (player == null || shop == null)
+            return false;
         UUID shopToConfirm = confirmationMap.get(player.getUniqueId());
         return shopToConfirm != null && shopToConfirm.equals(shop.getId());
+    }
+
+    @Override
+    public void clearStaticData(UUID playerId)
+    {
+        confirmationMap.remove(playerId);
     }
 }
