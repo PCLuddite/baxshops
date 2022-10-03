@@ -40,7 +40,7 @@ public class GeneralNotification implements Notification
     }
 
     @Override
-    public org.tbax.bukkit.notification.@NotNull Notification getNewNote(StateLoader stateLoader)
+    public @NotNull org.tbax.bukkit.notification.Notification getNewNote(StateLoader stateLoader)
     {
         return new org.tbax.bukkit.notification.GeneralNotification(message);
     }

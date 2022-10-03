@@ -61,7 +61,7 @@ public class SaleNotificationAuto implements Claimable
     }
 
     @Override
-    public org.tbax.bukkit.notification.@NotNull Notification getNewNote(StateLoader stateLoader)
+    public @NotNull org.tbax.bukkit.notification.Notification getNewNote(StateLoader stateLoader)
     {
         return new SaleClaim(stateLoader.getShop(null, shopId).getId(),
                 stateLoader.getPlayerSafe(null, ((StateLoader_00100)stateLoader).getShopOwner(shopId)),

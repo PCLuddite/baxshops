@@ -71,7 +71,7 @@ public class BuyNotification implements Notification
     }
 
     @Override
-    public org.tbax.bukkit.notification.@NotNull Notification getNewNote(StateLoader stateLoader)
+    public @NotNull org.tbax.bukkit.notification.Notification getNewNote(StateLoader stateLoader)
     {
         if (stateLoader instanceof StateLoader_00050) {
             return new org.tbax.baxshops.notification.BuyNotification(
